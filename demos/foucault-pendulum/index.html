@@ -1,0 +1,1082 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demonstração do Período Inercial - 5 Pêndulos de Foucault</title>
+    <style>
+        :root {
+            --bg-dark: #040711;
+            --card-bg: rgba(13, 20, 36, 0.95);
+            --card-border: rgba(56, 189, 248, 0.35);
+            --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
+            --accent-red: #f43f5e;
+            --accent-green: #34d399;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 10%, #0c1527 0%, var(--bg-dark) 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            padding: 12px 24px;
+            background: rgba(10, 16, 30, 0.95);
+            border-bottom: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            z-index: 20;
+        }
+
+        .title-group h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title-group p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: rgba(56, 189, 248, 0.25);
+            border-color: var(--accent-cyan);
+            color: #fff;
+        }
+
+        .top-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            color: #ffffff;
+            border: none;
+            padding: 8px 18px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 14px rgba(244, 63, 94, 0.4);
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 20px rgba(244, 63, 94, 0.6);
+        }
+
+        .btn-sec {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            padding: 7px 14px;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-sec:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .time-badge {
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 460px 1fr;
+            gap: 14px;
+            padding: 14px;
+            flex: 1;
+            max-width: 1850px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        @media (max-width: 1250px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 6px;
+        }
+
+        .panel-header h2 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .globe-container {
+            position: relative;
+            width: 100%;
+            height: 480px;
+            background: radial-gradient(circle at center, #0c172e 0%, #02040a 100%);
+            border-radius: 10px;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            overflow: hidden;
+        }
+
+        .info-card {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        .formula-tag {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--accent-gold);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        /* 5 Pendulums Grid */
+        .pendulums-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 1500px) {
+            .pendulums-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+        }
+
+        .pendulum-card {
+            background: rgba(8, 12, 22, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 10px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+        }
+
+        .pendulum-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .pendulum-canvas-wrap {
+            width: 100%;
+            height: 160px;
+            position: relative;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .pendulum-subinfo {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 4px;
+        }
+
+        /* Bottom Graphs */
+        .graphs-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .graphs-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .graph-box {
+            position: relative;
+            width: 100%;
+            height: 190px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .speed-control input[type="range"] {
+            -webkit-appearance: none;
+            width: 90px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .speed-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="title-group">
+            <h1>Demonstração Simultânea do Período Inercial</h1>
+            <p>Terra em rotação 3D & 5 Pêndulos de Foucault oscilando nas 5 latitudes</p>
+        </div>
+
+        <div class="nav-links"><a href="../../index.html" class="nav-btn">🏠 Início</a><a href="../foucault-pendulum/index.html" class="nav-btn active">🌍 Pêndulo 3D</a><a href="../rossby-radius/index.html" class="nav-btn">🌊 Raio de Rossby 2D</a></div>
+
+        <div class="top-controls">
+            <div class="speed-control">
+                <span>Velocidade:</span>
+                <input type="range" id="speed-slider" min="600" max="14400" step="600" value="3600">
+                <span id="speed-val" style="color:var(--accent-gold); font-weight:600; min-width:70px;">3600x (1h/s)</span>
+            </div>
+
+            <button class="btn-action" id="btn-play">
+                <span id="play-icon">⏸️</span>
+                <span id="play-text">Pausar</span>
+            </button>
+
+            <button class="btn-sec" id="btn-reset">🔄 Reiniciar</button>
+            <button class="btn-sec" id="btn-clear-trails">🧹 Limpar Rastros</button>
+
+            <div class="time-badge">
+                <span class="badge-dot"></span>
+                <span id="clock-display">00:00 h (Dia 1)</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- GLOBO 3D -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>🌍 Terra Girando em 3D & Pêndulos Instalados</h2>
+            </div>
+            
+            <div class="globe-container">
+                <canvas id="globe-canvas"></canvas>
+            </div>
+
+            <div class="info-card">
+                <strong>Equação do Período Inercial:</strong> <span class="formula-tag">T = 12h / |sin &phi;|</span><br>
+                Velocidade angular de rotação do plano: <span class="formula-tag">&omega; = 30°/h &times; sin(&phi;)</span><br>
+                • <b>Polo Norte (+90°):</b> <span style="color:#38bdf8;">T = 12h (2 voltas completas por dia, horário)</span><br>
+                • <b>30° Norte (+30°):</b> <span style="color:#818cf8;">T = 24h (1 volta completa por dia, horário)</span><br>
+                • <b>Equador (0°):</b> <span style="color:#f43f5e;">T = &infin; (Plano não gira, 0 voltas)</span><br>
+                • <b>30° Sul (-30°):</b> <span style="color:#c084fc;">T = 24h (1 volta completa por dia, anti-horário)</span><br>
+                • <b>Polo Sul (-90°):</b> <span style="color:#34d399;">T = 12h (2 voltas completas por dia, anti-horário)</span>
+            </div>
+        </div>
+
+        <!-- 5 PÊNDULOS E GRÁFICOS -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>🎯 Trajetória no Solo (Roseta / Caminho Médio em Cada Latitude)</h2>
+                <span style="font-size:0.75rem; color:var(--text-muted);">Vista superior do laboratório local</span>
+            </div>
+
+            <!-- GRID DOS 5 PÊNDULOS -->
+            <div class="pendulums-grid">
+                <!-- 1. POLO NORTE -->
+                <div class="pendulum-card" style="border-top: 3px solid #38bdf8;">
+                    <div class="pendulum-header">
+                        <span style="color:#38bdf8;">❄️ Polo Norte (+90°)</span>
+                        <span id="ang-p90" style="color:var(--accent-gold);">0.0°</span>
+                    </div>
+                    <div class="pendulum-canvas-wrap">
+                        <canvas id="canvas-p90"></canvas>
+                    </div>
+                    <div class="pendulum-subinfo">
+                        <span>Período: <b style="color:#38bdf8;">12h</b></span>
+                        <span style="color:#38bdf8;">2x / dia</span>
+                    </div>
+                </div>
+
+                <!-- 2. 30 GRAUS NORTE -->
+                <div class="pendulum-card" style="border-top: 3px solid #818cf8;">
+                    <div class="pendulum-header">
+                        <span style="color:#818cf8;">📐 30° Norte</span>
+                        <span id="ang-p30" style="color:var(--accent-gold);">0.0°</span>
+                    </div>
+                    <div class="pendulum-canvas-wrap">
+                        <canvas id="canvas-p30"></canvas>
+                    </div>
+                    <div class="pendulum-subinfo">
+                        <span>Período: <b style="color:#818cf8;">24h</b></span>
+                        <span style="color:#818cf8;">1x / dia</span>
+                    </div>
+                </div>
+
+                <!-- 3. EQUADOR -->
+                <div class="pendulum-card" style="border-top: 3px solid #f43f5e;">
+                    <div class="pendulum-header">
+                        <span style="color:#f43f5e;">🌴 Equador (0°)</span>
+                        <span id="ang-p0" style="color:var(--accent-gold);">0.0°</span>
+                    </div>
+                    <div class="pendulum-canvas-wrap">
+                        <canvas id="canvas-p0"></canvas>
+                    </div>
+                    <div class="pendulum-subinfo">
+                        <span>Período: <b style="color:#f43f5e;">&infin;</b></span>
+                        <span style="color:#f43f5e;">0x / dia</span>
+                    </div>
+                </div>
+
+                <!-- 4. 30 GRAUS SUL -->
+                <div class="pendulum-card" style="border-top: 3px solid #c084fc;">
+                    <div class="pendulum-header">
+                        <span style="color:#c084fc;">📐 30° Sul</span>
+                        <span id="ang-pm30" style="color:var(--accent-gold);">0.0°</span>
+                    </div>
+                    <div class="pendulum-canvas-wrap">
+                        <canvas id="canvas-pm30"></canvas>
+                    </div>
+                    <div class="pendulum-subinfo">
+                        <span>Período: <b style="color:#c084fc;">24h</b></span>
+                        <span style="color:#c084fc;">1x / dia</span>
+                    </div>
+                </div>
+
+                <!-- 5. POLO SUL -->
+                <div class="pendulum-card" style="border-top: 3px solid #34d399;">
+                    <div class="pendulum-header">
+                        <span style="color:#34d399;">❄️ Polo Sul (-90°)</span>
+                        <span id="ang-pm90" style="color:var(--accent-gold);">0.0°</span>
+                    </div>
+                    <div class="pendulum-canvas-wrap">
+                        <canvas id="canvas-pm90"></canvas>
+                    </div>
+                    <div class="pendulum-subinfo">
+                        <span>Período: <b style="color:#34d399;">12h</b></span>
+                        <span style="color:#34d399;">2x / dia</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRÁFICOS -->
+            <div class="panel-header" style="margin-top: 6px;">
+                <h2>📈 Gráficos Comparativos da Oscilação Inercial</h2>
+            </div>
+            
+            <div class="graphs-container">
+                <div class="graph-box">
+                    <canvas id="graph-angle-canvas"></canvas>
+                </div>
+                <div class="graph-box">
+                    <canvas id="graph-theory-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CONTINENT_BLOBS = [
+            { lat: -15, lon: -55, rLat: 35, rLon: 25 },
+            { lat: 40, lon: -100, rLat: 30, rLon: 45 },
+            { lat: 5, lon: 20, rLat: 35, rLon: 30 },
+            { lat: 50, lon: 15, rLat: 20, rLon: 30 },
+            { lat: 45, lon: 90, rLat: 35, rLon: 55 },
+            { lat: -25, lon: 135, rLat: 18, rLon: 25 },
+            { lat: -82, lon: 0, rLat: 12, rLon: 180 },
+            { lat: 72, lon: -40, rLat: 15, rLon: 20 }
+        ];
+
+        const PENDULUMS = [
+            { id: 'p90',  lat: 90,  name: 'Polo Norte (+90°)', color: '#38bdf8', canvasId: 'canvas-p90',  angElId: 'ang-p90',  trails: [] },
+            { id: 'p30',  lat: 30,  name: '30° Norte',         color: '#818cf8', canvasId: 'canvas-p30',  angElId: 'ang-p30',  trails: [] },
+            { id: 'p0',   lat: 0,   name: 'Equador (0°)',      color: '#f43f5e', canvasId: 'canvas-p0',   angElId: 'ang-p0',   trails: [] },
+            { id: 'pm30', lat: -30, name: '30° Sul',           color: '#c084fc', canvasId: 'canvas-pm30', angElId: 'ang-pm30', trails: [] },
+            { id: 'pm90', lat: -90, name: 'Polo Sul (-90°)',  color: '#34d399', canvasId: 'canvas-pm90', angElId: 'ang-pm90', trails: [] }
+        ];
+
+        const state = {
+            isRunning: true,
+            simulatedSeconds: 0,
+            timeScale: 3600,
+            realAnimTime: 0
+        };
+
+        const btnPlay = document.getElementById('btn-play');
+        const playIcon = document.getElementById('play-icon');
+        const playText = document.getElementById('play-text');
+        const btnReset = document.getElementById('btn-reset');
+        const btnClearTrails = document.getElementById('btn-clear-trails');
+        const speedSlider = document.getElementById('speed-slider');
+        const speedVal = document.getElementById('speed-val');
+        const clockDisplay = document.getElementById('clock-display');
+
+        const globeCanvas = document.getElementById('globe-canvas');
+        const globeCtx = globeCanvas.getContext('2d');
+
+        const graphAngleCanvas = document.getElementById('graph-angle-canvas');
+        const graphAngleCtx = graphAngleCanvas.getContext('2d');
+
+        const graphTheoryCanvas = document.getElementById('graph-theory-canvas');
+        const graphTheoryCtx = graphTheoryCanvas.getContext('2d');
+
+        PENDULUMS.forEach(p => {
+            p.canvas = document.getElementById(p.canvasId);
+            p.ctx = p.canvas.getContext('2d');
+            p.angEl = document.getElementById(p.angElId);
+
+            const phiRad = (p.lat * Math.PI) / 180;
+            const sinPhi = Math.sin(phiRad);
+            p.sinPhi = sinPhi;
+            if (Math.abs(sinPhi) < 0.001) {
+                p.periodHours = Infinity;
+                p.degPerHour = 0;
+            } else {
+                p.periodHours = 12 / Math.abs(sinPhi);
+                p.degPerHour = 30 * sinPhi;
+            }
+        });
+
+        function ensureCanvasSize(cvs) {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = cvs.getBoundingClientRect();
+            const targetW = Math.floor(rect.width * dpr);
+            const targetH = Math.floor(rect.height * dpr);
+
+            if (cvs.width !== targetW || cvs.height !== targetH) {
+                if (targetW > 0 && targetH > 0) {
+                    cvs.width = targetW;
+                    cvs.height = targetH;
+                }
+            }
+        }
+
+        btnPlay.addEventListener('click', () => {
+            state.isRunning = !state.isRunning;
+            if (state.isRunning) {
+                playIcon.textContent = '⏸️';
+                playText.textContent = 'Pausar';
+                btnPlay.style.background = 'linear-gradient(135deg, #f43f5e, #e11d48)';
+            } else {
+                playIcon.textContent = '▶️';
+                playText.textContent = 'Iniciar';
+                btnPlay.style.background = 'linear-gradient(135deg, #38bdf8, #2563eb)';
+            }
+        });
+
+        btnReset.addEventListener('click', () => {
+            state.simulatedSeconds = 0;
+            PENDULUMS.forEach(p => p.trails = []);
+        });
+
+        btnClearTrails.addEventListener('click', () => {
+            PENDULUMS.forEach(p => p.trails = []);
+        });
+
+        speedSlider.addEventListener('input', (e) => {
+            state.timeScale = parseFloat(e.target.value);
+            speedVal.textContent = `${state.timeScale}x (${(state.timeScale / 3600).toFixed(1)}h/s)`;
+        });
+
+        function projectSphere(latDeg, lonDeg, radius, rotRad, cx, cy, tiltRad = 0.18) {
+            const lat = (latDeg * Math.PI) / 180;
+            const lon = (lonDeg * Math.PI) / 180 + rotRad;
+
+            let x0 = radius * Math.cos(lat) * Math.sin(lon);
+            let y0 = -radius * Math.sin(lat);
+            let z0 = radius * Math.cos(lat) * Math.cos(lon);
+
+            let y1 = y0 * Math.cos(tiltRad) - z0 * Math.sin(tiltRad);
+            let z1 = y0 * Math.sin(tiltRad) + z0 * Math.cos(tiltRad);
+
+            return {
+                x: cx + x0,
+                y: cy + y1,
+                z: z1,
+                visible: z1 > 0
+            };
+        }
+
+        let globeRotationAngle = 0;
+
+        function drawGlobe() {
+            ensureCanvasSize(globeCanvas);
+            const ctx = globeCtx;
+            const w = globeCanvas.width;
+            const h = globeCanvas.height;
+            if (!w || !h) return;
+
+            const dpr = window.devicePixelRatio || 1;
+            ctx.clearRect(0, 0, w, h);
+
+            const cx = w / 2;
+            const cy = h / 2;
+            const radius = Math.min(w, h) * 0.36;
+            const tilt = 0.18;
+
+            ctx.fillStyle = '#060913';
+            ctx.fillRect(0, 0, w, h);
+
+            const atmosGrad = ctx.createRadialGradient(cx, cy, radius * 0.95, cx, cy, radius * 1.25);
+            atmosGrad.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
+            atmosGrad.addColorStop(0.7, 'rgba(56, 189, 248, 0.1)');
+            atmosGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+            ctx.fillStyle = atmosGrad;
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius * 1.25, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+            ctx.clip();
+
+            const oceanGrad = ctx.createRadialGradient(cx - radius * 0.35, cy - radius * 0.35, radius * 0.1, cx, cy, radius);
+            oceanGrad.addColorStop(0, '#2563eb');
+            oceanGrad.addColorStop(0.5, '#1d4ed8');
+            oceanGrad.addColorStop(1, '#091533');
+            ctx.fillStyle = oceanGrad;
+            ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
+
+            for (let lat = -80; lat <= 80; lat += 4) {
+                for (let lon = -180; lon < 180; lon += 6) {
+                    let isLand = false;
+                    for (let b of CONTINENT_BLOBS) {
+                        let dLat = (lat - b.lat) / b.rLat;
+                        let dLon = ((lon - b.lon + 540) % 360 - 180) / b.rLon;
+                        if (dLat * dLat + dLon * dLon <= 1.0) {
+                            isLand = true;
+                            break;
+                        }
+                    }
+
+                    if (isLand) {
+                        const pt = projectSphere(lat, lon, radius, globeRotationAngle, cx, cy, tilt);
+                        if (pt.visible) {
+                            const size = 3.5 * dpr * (pt.z / radius);
+                            ctx.fillStyle = '#22c55e';
+                            ctx.beginPath();
+                            ctx.arc(pt.x, pt.y, Math.max(1, size), 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
+                }
+            }
+
+            ctx.lineWidth = 1 * dpr;
+            for (let lat = -75; lat <= 75; lat += 15) {
+                ctx.beginPath();
+                let isFirst = true;
+                for (let lon = -180; lon <= 180; lon += 5) {
+                    const p = projectSphere(lat, lon, radius, globeRotationAngle, cx, cy, tilt);
+                    if (p.visible) {
+                        if (isFirst) { ctx.moveTo(p.x, p.y); isFirst = false; }
+                        else { ctx.lineTo(p.x, p.y); }
+                    } else {
+                        isFirst = true;
+                    }
+                }
+                if (lat === 0) {
+                    ctx.strokeStyle = 'rgba(244, 63, 94, 0.85)';
+                    ctx.lineWidth = 2 * dpr;
+                } else if (Math.abs(lat) === 30) {
+                    ctx.strokeStyle = 'rgba(251, 191, 36, 0.75)';
+                    ctx.lineWidth = 1.5 * dpr;
+                } else {
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+                    ctx.lineWidth = 1 * dpr;
+                }
+                ctx.stroke();
+            }
+
+            for (let lon = 0; lon < 360; lon += 30) {
+                ctx.beginPath();
+                let isFirst = true;
+                for (let lat = -90; lat <= 90; lat += 4) {
+                    const p = projectSphere(lat, lon, radius, globeRotationAngle, cx, cy, tilt);
+                    if (p.visible) {
+                        if (isFirst) { ctx.moveTo(p.x, p.y); isFirst = false; }
+                        else { ctx.lineTo(p.x, p.y); }
+                    } else {
+                        isFirst = true;
+                    }
+                }
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+                ctx.lineWidth = 1 * dpr;
+                ctx.stroke();
+            }
+
+            const shadowGrad = ctx.createRadialGradient(cx - radius * 0.4, cy - radius * 0.4, radius * 0.2, cx + radius * 0.2, cy + radius * 0.2, radius * 1.1);
+            shadowGrad.addColorStop(0, 'rgba(255, 255, 255, 0.08)');
+            shadowGrad.addColorStop(0.6, 'rgba(0, 0, 0, 0)');
+            shadowGrad.addColorStop(1, 'rgba(0, 0, 0, 0.65)');
+            ctx.fillStyle = shadowGrad;
+            ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
+
+            ctx.restore();
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
+            ctx.lineWidth = 2 * dpr;
+            ctx.stroke();
+
+            const poleN = projectSphere(90, 0, radius * 1.25, 0, cx, cy, tilt);
+            const poleS = projectSphere(-90, 0, radius * 1.25, 0, cx, cy, tilt);
+
+            ctx.beginPath();
+            ctx.moveTo(poleN.x, poleN.y);
+            ctx.lineTo(poleS.x, poleS.y);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+            ctx.setLineDash([4 * dpr, 4 * dpr]);
+            ctx.lineWidth = 1.5 * dpr;
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = `bold ${10.5 * dpr}px sans-serif`;
+            ctx.fillText('Norte (+90°)', poleN.x - 30 * dpr, poleN.y - 6 * dpr);
+            ctx.fillText('Sul (-90°)', poleS.x - 25 * dpr, poleS.y + 16 * dpr);
+
+            ctx.fillStyle = '#38bdf8';
+            ctx.font = `${10 * dpr}px sans-serif`;
+            ctx.fillText('⟳ Rotação da Terra (Oeste ➔ Leste)', cx - 80 * dpr, cy + radius + 25 * dpr);
+
+            const simHours = state.simulatedSeconds / 3600;
+            const fastSwingPhase = state.realAnimTime * 4;
+
+            PENDULUMS.forEach(p => {
+                const base3D = projectSphere(p.lat, 0, radius, 0, cx, cy, tilt);
+                const top3D = projectSphere(p.lat, 0, radius + 28 * dpr, 0, cx, cy, tilt);
+
+                const planeDeg = p.degPerHour * simHours;
+                const planeRad = (planeDeg * Math.PI) / 180;
+
+                const swingAmp = 18 * dpr;
+                const swingDisp = Math.sin(fastSwingPhase) * swingAmp;
+                const bobX = base3D.x + Math.cos(planeRad) * swingDisp;
+                const bobY = base3D.y - Math.sin(planeRad) * (swingDisp * 0.35);
+
+                ctx.beginPath();
+                ctx.moveTo(base3D.x - 6 * dpr, base3D.y);
+                ctx.lineTo(top3D.x, top3D.y);
+                ctx.lineTo(base3D.x + 6 * dpr, base3D.y);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+                ctx.lineWidth = 1.4 * dpr;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(top3D.x, top3D.y);
+                ctx.lineTo(bobX, bobY);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+                ctx.lineWidth = 1.2 * dpr;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.arc(base3D.x, base3D.y, 4 * dpr, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(bobX, bobY, 5 * dpr, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1.5 * dpr;
+                ctx.stroke();
+
+                ctx.fillStyle = '#f8fafc';
+                ctx.font = `bold ${11 * dpr}px sans-serif`;
+                const label = `${p.lat > 0 ? '+' : ''}${p.lat}° (${p.periodHours === Infinity ? 'T=∞' : 'T=' + p.periodHours + 'h'})`;
+                ctx.fillText(label, base3D.x + 14 * dpr, base3D.y + 4 * dpr);
+            });
+        }
+
+        function drawLocalPendulums() {
+            const dpr = window.devicePixelRatio || 1;
+            const simHours = state.simulatedSeconds / 3600;
+            const fastSwingPhase = state.realAnimTime * 4;
+
+            PENDULUMS.forEach(p => {
+                ensureCanvasSize(p.canvas);
+                const ctx = p.ctx;
+                const w = p.canvas.width;
+                const h = p.canvas.height;
+                if (!w || !h) return;
+
+                ctx.clearRect(0, 0, w, h);
+
+                const cx = w / 2;
+                const cy = h / 2;
+                const scale = Math.min(w, h) * 0.40;
+
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+                ctx.lineWidth = 1 * dpr;
+                [0.5, 1.0].forEach(r => {
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, scale * r, 0, Math.PI * 2);
+                    ctx.stroke();
+                });
+
+                ctx.beginPath();
+                ctx.moveTo(cx, cy - scale);
+                ctx.lineTo(cx, cy + scale);
+                ctx.moveTo(cx - scale, cy);
+                ctx.lineTo(cx + scale, cy);
+                ctx.stroke();
+
+                const planeDeg = p.degPerHour * simHours;
+                const planeRad = (planeDeg * Math.PI) / 180;
+
+                const rCurrent = Math.sin(fastSwingPhase) * scale;
+                const px = cx + Math.cos(planeRad) * rCurrent;
+                const py = cy - Math.sin(planeRad) * rCurrent;
+
+                if (state.isRunning) {
+                    p.trails.push({ x: px, y: py });
+                    if (p.trails.length > 700) p.trails.shift();
+                }
+
+                if (p.trails.length > 1) {
+                    ctx.beginPath();
+                    ctx.moveTo(p.trails[0].x, p.trails[0].y);
+                    for (let i = 1; i < p.trails.length; i++) {
+                        ctx.lineTo(p.trails[i].x, p.trails[i].y);
+                    }
+                    ctx.strokeStyle = p.color;
+                    ctx.lineWidth = 1.8 * dpr;
+                    ctx.stroke();
+                }
+
+                const lineLen = scale * 1.05;
+                ctx.beginPath();
+                ctx.moveTo(cx - Math.cos(planeRad) * lineLen, cy + Math.sin(planeRad) * lineLen);
+                ctx.lineTo(cx + Math.cos(planeRad) * lineLen, cy - Math.sin(planeRad) * lineLen);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+                ctx.setLineDash([2 * dpr, 2 * dpr]);
+                ctx.lineWidth = 1 * dpr;
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(px, py);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+                ctx.lineWidth = 1.2 * dpr;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.arc(px, py, 5.5 * dpr, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.strokeStyle = p.color;
+                ctx.lineWidth = 2 * dpr;
+                ctx.stroke();
+
+                const normAngle = ((planeDeg % 360) + 360) % 360;
+                p.angEl.textContent = `${normAngle.toFixed(1)}°`;
+            });
+        }
+
+        function drawAngleEvolutionGraph() {
+            ensureCanvasSize(graphAngleCanvas);
+            const ctx = graphAngleCtx;
+            const w = graphAngleCanvas.width;
+            const h = graphAngleCanvas.height;
+            if (!w || !h) return;
+
+            const dpr = window.devicePixelRatio || 1;
+            ctx.clearRect(0, 0, w, h);
+
+            const padL = 40 * dpr;
+            const padR = 15 * dpr;
+            const padT = 24 * dpr;
+            const padB = 25 * dpr;
+            const gw = w - padL - padR;
+            const gh = h - padT - padB;
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = `bold ${10 * dpr}px sans-serif`;
+            ctx.fillText('Rotação Acumulada do Plano θ(t) vs Tempo (24h)', padL, 14 * dpr);
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+            ctx.lineWidth = 1 * dpr;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+            ctx.font = `${8.5 * dpr}px sans-serif`;
+
+            const maxY = 720;
+            [0, 180, 360, 540, 720].forEach(deg => {
+                const y = padT + gh - (deg / maxY) * gh;
+                ctx.beginPath();
+                ctx.moveTo(padL, y);
+                ctx.lineTo(padL + gw, y);
+                ctx.stroke();
+                ctx.fillText(`${deg}°`, 8 * dpr, y + 3 * dpr);
+            });
+
+            [0, 6, 12, 18, 24].forEach(hr => {
+                const x = padL + (hr / 24) * gw;
+                ctx.beginPath();
+                ctx.moveTo(x, padT);
+                ctx.lineTo(x, padT + gh);
+                ctx.stroke();
+                ctx.fillText(`${hr}h`, x - 8 * dpr, padT + gh + 16 * dpr);
+            });
+
+            const simHours = state.simulatedSeconds / 3600;
+            const currentDayHour = simHours % 24;
+
+            PENDULUMS.forEach(p => {
+                ctx.beginPath();
+                ctx.strokeStyle = p.color;
+                ctx.lineWidth = 2 * dpr;
+
+                ctx.moveTo(padL, padT + gh);
+                const currentDeg = Math.abs(p.degPerHour) * currentDayHour;
+                const endX = padL + (currentDayHour / 24) * gw;
+                const endY = padT + gh - (Math.min(currentDeg, maxY) / maxY) * gh;
+
+                ctx.lineTo(endX, endY);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.arc(endX, endY, 4 * dpr, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+            });
+        }
+
+        function drawTheoryGraph() {
+            ensureCanvasSize(graphTheoryCanvas);
+            const ctx = graphTheoryCtx;
+            const w = graphTheoryCanvas.width;
+            const h = graphTheoryCanvas.height;
+            if (!w || !h) return;
+
+            const dpr = window.devicePixelRatio || 1;
+            ctx.clearRect(0, 0, w, h);
+
+            const padL = 40 * dpr;
+            const padR = 15 * dpr;
+            const padT = 24 * dpr;
+            const padB = 25 * dpr;
+            const gw = w - padL - padR;
+            const gh = h - padT - padB;
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = `bold ${10 * dpr}px sans-serif`;
+            ctx.fillText('Curva Teórica do Período Inercial T = 12h / |sin φ|', padL, 14 * dpr);
+
+            const maxPeriod = 48;
+            function mapX(lat) { return padL + ((lat + 90) / 180) * gw; }
+            function mapY(t) { return padT + gh - (Math.min(t, maxPeriod) / maxPeriod) * gh; }
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+            ctx.lineWidth = 1 * dpr;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+            ctx.font = `${8.5 * dpr}px sans-serif`;
+
+            [12, 24, 36, 48].forEach(hVal => {
+                const y = mapY(hVal);
+                ctx.beginPath();
+                ctx.moveTo(padL, y);
+                ctx.lineTo(padL + gw, y);
+                ctx.stroke();
+                ctx.fillText(`${hVal}h`, 10 * dpr, y + 3 * dpr);
+            });
+
+            [-90, -30, 0, 30, 90].forEach(lat => {
+                const x = mapX(lat);
+                ctx.beginPath();
+                ctx.moveTo(x, padT);
+                ctx.lineTo(x, padT + gh);
+                ctx.stroke();
+                ctx.fillText(`${lat}°`, x - 8 * dpr, padT + gh + 16 * dpr);
+            });
+
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.lineWidth = 1.8 * dpr;
+
+            let first = true;
+            for (let lat = -90; lat <= -1; lat += 0.5) {
+                const t = 12 / Math.abs(Math.sin(lat * Math.PI / 180));
+                const x = mapX(lat);
+                const y = mapY(t);
+                if (first) { ctx.moveTo(x, y); first = false; }
+                else { ctx.lineTo(x, y); }
+            }
+            ctx.stroke();
+
+            ctx.beginPath();
+            first = true;
+            for (let lat = 1; lat <= 90; lat += 0.5) {
+                const t = 12 / Math.abs(Math.sin(lat * Math.PI / 180));
+                const x = mapX(lat);
+                const y = mapY(t);
+                if (first) { ctx.moveTo(x, y); first = false; }
+                else { ctx.lineTo(x, y); }
+            }
+            ctx.stroke();
+
+            PENDULUMS.forEach(p => {
+                const x = mapX(p.lat);
+                const y = mapY(p.periodHours);
+
+                ctx.beginPath();
+                ctx.arc(x, y, 5 * dpr, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1.5 * dpr;
+                ctx.stroke();
+            });
+        }
+
+        let lastTime = performance.now();
+
+        function animate(timestamp) {
+            const dt = (timestamp - lastTime) / 1000;
+            lastTime = timestamp;
+
+            state.realAnimTime += dt;
+
+            if (state.isRunning) {
+                const simDt = dt * state.timeScale;
+                state.simulatedSeconds += simDt;
+
+                globeRotationAngle += (simDt / 86400) * Math.PI * 2;
+
+                const totalHours = state.simulatedSeconds / 3600;
+                const day = Math.floor(totalHours / 24) + 1;
+                const hr = Math.floor(totalHours % 24).toString().padStart(2, '0');
+                const min = Math.floor((totalHours % 1) * 60).toString().padStart(2, '0');
+                clockDisplay.textContent = `${hr}:${min} h (Dia ${day})`;
+            }
+
+            drawGlobe();
+            drawLocalPendulums();
+            drawAngleEvolutionGraph();
+            drawTheoryGraph();
+
+            requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+    </script>
+</body>
+</html>
+

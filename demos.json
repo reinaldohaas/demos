@@ -1,0 +1,29 @@
+﻿{
+  "title": "Hub de Demonstrações & Visualizações Científicas",
+  "author": "Reinaldo Haas",
+  "github_repo": "haas/demos",
+  "demos": [
+    {
+      "id": "foucault-pendulum",
+      "title": "Período Inercial & Pêndulo de Foucault 3D",
+      "category": "Geofísica & Mecânica Celeste",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "🌍",
+      "tags": ["Força de Coriolis", "Rotação da Terra", "Pêndulo de Foucault", "3D Canvas", "Roseta"],
+      "description": "Simulação tridimensional da Terra em rotação com 5 pêndulos operando simultaneamente nas latitudes (+90°, +30°, 0°, -30°, -90°), registrando o padrão de roseta no solo e as curvas da taxa angular e período inercial T = 12h / |sin φ|.",
+      "path": "demos/foucault-pendulum/index.html",
+      "date": "2026-08-20"
+    },
+    {
+      "id": "rossby-radius",
+      "title": "Raio de Deformação de Rossby 2D",
+      "category": "Oceanografia & Dinâmica de Fluidos",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "🌊",
+      "tags": ["Ajuste Geostrófico", "Polo Sul", "Shallow Water", "Equações de Águas Rasas", "Coriolis"],
+      "description": "Simulação 2D hidrodinâmica das Equações de Águas Rasas com foco no Polo Sul e latitudes globais, demonstrando o balanço entre a rotação da Terra e gravidade, ajuste geostrófico (L > Rd) e ondas de gravidade (L < Rd).",
+      "path": "demos/rossby-radius/index.html",
+      "date": "2026-08-20"
+    }
+  ]
+}
