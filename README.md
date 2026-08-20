@@ -65,7 +65,7 @@ uv run python server.py
 2. No seu repositório no GitHub, vá em **Settings** > **Pages**.
 3. Em **Branch**, selecione `main` e a pasta `/ (root)`.
 4. Clique em **Save**. Em segundos, seu catálogo e todas as demonstrações estarão online publicamente no endereço:
-   `https://seu-usuario.github.io/demos/`
+   `https://reinaldohaas.github.io/demos/`
 
 ---
 
@@ -89,3 +89,4 @@ demos/
 │       └── index.html
 └── assets/                    # Recursos compartilhados
 ```
+
