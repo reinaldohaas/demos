@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demonstração do Período Inercial - 5 Pêndulos de Foucault</title>
+    <title>Demonstração Simultânea do Período Inercial - 5 Pêndulos em Linha Reta</title>
     <style>
         :root {
             --bg-dark: #040711;
@@ -153,7 +153,7 @@
 
         .main-container {
             display: grid;
-            grid-template-columns: 460px 1fr;
+            grid-template-columns: 500px 1fr;
             gap: 14px;
             padding: 14px;
             flex: 1;
@@ -162,7 +162,7 @@
             width: 100%;
         }
 
-        @media (max-width: 1250px) {
+        @media (max-width: 1300px) {
             .main-container {
                 grid-template-columns: 1fr;
             }
@@ -199,7 +199,7 @@
         .globe-container {
             position: relative;
             width: 100%;
-            height: 480px;
+            height: 500px;
             background: radial-gradient(circle at center, #0c172e 0%, #02040a 100%);
             border-radius: 10px;
             border: 1px solid rgba(56, 189, 248, 0.25);
@@ -232,7 +232,7 @@
             gap: 10px;
         }
 
-        @media (max-width: 1500px) {
+        @media (max-width: 1550px) {
             .pendulums-grid {
                 grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             }
@@ -332,16 +332,49 @@
             background: var(--accent-cyan);
             cursor: pointer;
         }
+
+        .view-legend-overlay {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(10, 16, 30, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.73rem;
+            color: var(--text-muted);
+            backdrop-filter: blur(8px);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .legend-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-line {
+            width: 16px;
+            height: 3px;
+            border-radius: 2px;
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="title-group">
             <h1>Demonstração Simultânea do Período Inercial</h1>
-            <p>Terra em rotação 3D & 5 Pêndulos de Foucault oscilando nas 5 latitudes</p>
+            <p>5 Pêndulos Sincronizados em Linha Reta Inicial & Linha de Oscilação na Superfície da Terra</p>
         </div>
 
-        <div class="nav-links"><a href="../../index.html" class="nav-btn">🏠 Início</a><a href="../foucault-pendulum/index.html" class="nav-btn active">🌍 Pêndulo 3D</a><a href="../rossby-radius/index.html" class="nav-btn">🌊 Raio de Rossby 2D</a></div>
+        <div class="nav-links">
+            <a href="../../index.html" class="nav-btn">🏠 Início / Catálogo</a>
+            <a href="../foucault-pendulum/index.html" class="nav-btn active">🌍 Pêndulo 3D</a>
+            <a href="../rossby-radius/index.html" class="nav-btn">🌊 Raio de Rossby 2D</a>
+        </div>
 
         <div class="top-controls">
             <div class="speed-control">
@@ -355,6 +388,7 @@
                 <span id="play-text">Pausar</span>
             </button>
 
+            <button class="btn-sec" id="btn-sync">🎯 Sincronizar em Linha Reta (t=0)</button>
             <button class="btn-sec" id="btn-reset">🔄 Reiniciar</button>
             <button class="btn-sec" id="btn-clear-trails">🧹 Limpar Rastros</button>
 
@@ -366,24 +400,39 @@
     </header>
 
     <div class="main-container">
-        <!-- GLOBO 3D -->
+        <!-- GLOBO 3D COM CONTINENTES DETALHADOS E LINHAS DE OSCILAÇÃO NA SUPERFÍCIE -->
         <div class="panel">
             <div class="panel-header">
-                <h2>🌍 Terra Girando em 3D & Pêndulos Instalados</h2>
+                <h2>🌍 Terra Girando, Continentes & Linhas de Oscilação na Superfície</h2>
             </div>
             
             <div class="globe-container">
                 <canvas id="globe-canvas"></canvas>
+                <div class="view-legend-overlay">
+                    <div class="legend-row">
+                        <span class="legend-line" style="background:#fbbf24; border-top:1px dashed #fff;"></span>
+                        <span style="color:#fbbf24;">Meridiano Inicial (Linha Reta em t=0)</span>
+                    </div>
+                    <div class="legend-row">
+                        <span class="legend-line" style="background:#38bdf8;"></span>
+                        <span style="color:#38bdf8;">Linha do Plano de Oscilação no Solo</span>
+                    </div>
+                    <div class="legend-row">
+                        <span class="legend-line" style="background:#f43f5e; height:2px;"></span>
+                        <span style="color:#f43f5e;">Curva de Deformação Angular na Superfície</span>
+                    </div>
+                </div>
             </div>
 
             <div class="info-card">
-                <strong>Equação do Período Inercial:</strong> <span class="formula-tag">T = 12h / |sin &phi;|</span><br>
-                Velocidade angular de rotação do plano: <span class="formula-tag">&omega; = 30°/h &times; sin(&phi;)</span><br>
-                • <b>Polo Norte (+90°):</b> <span style="color:#38bdf8;">T = 12h (2 voltas completas por dia, horário)</span><br>
-                • <b>30° Norte (+30°):</b> <span style="color:#818cf8;">T = 24h (1 volta completa por dia, horário)</span><br>
-                • <b>Equador (0°):</b> <span style="color:#f43f5e;">T = &infin; (Plano não gira, 0 voltas)</span><br>
-                • <b>30° Sul (-30°):</b> <span style="color:#c084fc;">T = 24h (1 volta completa por dia, anti-horário)</span><br>
-                • <b>Polo Sul (-90°):</b> <span style="color:#34d399;">T = 12h (2 voltas completas por dia, anti-horário)</span>
+                <strong>Sincronização em Linha Reta:</strong><br>
+                Em $t = 0$, todos os 5 pêndulos são soltos <b>perfeitamente alinhados no mesmo plano meridiano (linha reta Norte-Sul)</b>.<br>
+                Conforme a Terra gira, a força de Coriolis faz cada pêndulo precessar à sua taxa angular <span class="formula-tag">&omega; = 30°/h &times; sin(&phi;)</span>:<br>
+                • <b>Polo Norte (+90°):</b> Gira <b>30°/h</b> no sentido horário.<br>
+                • <b>30° Norte (+30°):</b> Gira <b>15°/h</b> no sentido horário.<br>
+                • <b>Equador (0°):</b> <b>Não gira (0°/h)</b> &rarr; permanece alinhado ao espaço.<br>
+                • <b>30° Sul (-30°):</b> Gira <b>15°/h</b> no sentido anti-horário.<br>
+                • <b>Polo Sul (-90°):</b> Gira <b>30°/h</b> no sentido anti-horário.
             </div>
         </div>
 
@@ -489,17 +538,25 @@
     </div>
 
     <script>
-        const CONTINENT_BLOBS = [
-            { lat: -15, lon: -55, rLat: 35, rLon: 25 },
-            { lat: 40, lon: -100, rLat: 30, rLon: 45 },
-            { lat: 5, lon: 20, rLat: 35, rLon: 30 },
-            { lat: 50, lon: 15, rLat: 20, rLon: 30 },
-            { lat: 45, lon: 90, rLat: 35, rLon: 55 },
-            { lat: -25, lon: 135, rLat: 18, rLon: 25 },
-            { lat: -82, lon: 0, rLat: 12, rLon: 180 },
-            { lat: 72, lon: -40, rLat: 15, rLon: 20 }
+        // POLÍGONOS DOS CONTINENTES DETALHADOS PARA ROTAÇÃO 3D
+        const CONTINENT_POLYGONS = [
+            // América do Sul
+            [ [12, -75], [10, -60], [5, -50], [-5, -35], [-12, -37], [-23, -42], [-35, -55], [-55, -66], [-52, -75], [-35, -73], [-18, -70], [-5, -80], [8, -78], [12, -75] ],
+            // América do Norte
+            [ [10, -75], [18, -90], [25, -80], [30, -81], [35, -75], [45, -60], [55, -55], [60, -65], [70, -70], [75, -100], [70, -140], [60, -165], [55, -135], [38, -123], [30, -115], [20, -105], [15, -92], [10, -75] ],
+            // África
+            [ [36, -5], [37, 10], [32, 32], [22, 38], [12, 51], [2, 45], [-10, 40], [-25, 33], [-34, 25], [-34, 18], [-20, 12], [-5, 10], [5, 1], [5, -10], [15, -17], [28, -12], [36, -5] ],
+            // Europa & Ásia
+            [ [36, -9], [43, -9], [45, 0], [50, 2], [55, 8], [60, 5], [70, 25], [70, 60], [75, 100], [70, 140], [65, 170], [55, 140], [40, 130], [30, 122], [22, 115], [10, 105], [8, 77], [22, 70], [25, 60], [30, 48], [30, 35], [40, 26], [38, 15], [36, -9] ],
+            // Austrália
+            [ [-12, 130], [-15, 145], [-25, 153], [-38, 148], [-35, 115], [-20, 114], [-12, 130] ],
+            // Groenlândia
+            [ [60, -45], [65, -38], [75, -20], [82, -30], [80, -60], [70, -55], [60, -45] ],
+            // Antártica
+            [ [-70, -180], [-68, -120], [-65, -60], [-72, 0], [-68, 60], [-65, 120], [-70, 180] ]
         ];
 
+        // CONFIGURAÇÕES DOS 5 PÊNDULOS INSTALADOS NO MESMO MERIDIANO (LON = 0)
         const PENDULUMS = [
             { id: 'p90',  lat: 90,  name: 'Polo Norte (+90°)', color: '#38bdf8', canvasId: 'canvas-p90',  angElId: 'ang-p90',  trails: [] },
             { id: 'p30',  lat: 30,  name: '30° Norte',         color: '#818cf8', canvasId: 'canvas-p30',  angElId: 'ang-p30',  trails: [] },
@@ -508,6 +565,7 @@
             { id: 'pm90', lat: -90, name: 'Polo Sul (-90°)',  color: '#34d399', canvasId: 'canvas-pm90', angElId: 'ang-pm90', trails: [] }
         ];
 
+        // ESTADO GLOBAL
         const state = {
             isRunning: true,
             simulatedSeconds: 0,
@@ -515,9 +573,11 @@
             realAnimTime: 0
         };
 
+        // ELEMENTOS DOM
         const btnPlay = document.getElementById('btn-play');
         const playIcon = document.getElementById('play-icon');
         const playText = document.getElementById('play-text');
+        const btnSync = document.getElementById('btn-sync');
         const btnReset = document.getElementById('btn-reset');
         const btnClearTrails = document.getElementById('btn-clear-trails');
         const speedSlider = document.getElementById('speed-slider');
@@ -577,6 +637,11 @@
             }
         });
 
+        btnSync.addEventListener('click', () => {
+            state.simulatedSeconds = 0;
+            PENDULUMS.forEach(p => p.trails = []);
+        });
+
         btnReset.addEventListener('click', () => {
             state.simulatedSeconds = 0;
             PENDULUMS.forEach(p => p.trails = []);
@@ -591,6 +656,7 @@
             speedVal.textContent = `${state.timeScale}x (${(state.timeScale / 3600).toFixed(1)}h/s)`;
         });
 
+        // PROJEÇÃO ESFÉRICA 3D (LAT, LON -> X, Y, Z)
         function projectSphere(latDeg, lonDeg, radius, rotRad, cx, cy, tiltRad = 0.18) {
             const lat = (latDeg * Math.PI) / 180;
             const lon = (lonDeg * Math.PI) / 180 + rotRad;
@@ -610,6 +676,7 @@
             };
         }
 
+        // 1. DESENHO DO GLOBO 3D COM CONTINENTES E LINHAS NA SUPERFÍCIE
         let globeRotationAngle = 0;
 
         function drawGlobe() {
@@ -627,9 +694,11 @@
             const radius = Math.min(w, h) * 0.36;
             const tilt = 0.18;
 
+            // Fundo espacial
             ctx.fillStyle = '#060913';
             ctx.fillRect(0, 0, w, h);
 
+            // Atmosfera
             const atmosGrad = ctx.createRadialGradient(cx, cy, radius * 0.95, cx, cy, radius * 1.25);
             atmosGrad.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
             atmosGrad.addColorStop(0.7, 'rgba(56, 189, 248, 0.1)');
@@ -639,11 +708,13 @@
             ctx.arc(cx, cy, radius * 1.25, 0, Math.PI * 2);
             ctx.fill();
 
+            // Esfera recortada
             ctx.save();
             ctx.beginPath();
             ctx.arc(cx, cy, radius, 0, Math.PI * 2);
             ctx.clip();
 
+            // Oceanos
             const oceanGrad = ctx.createRadialGradient(cx - radius * 0.35, cy - radius * 0.35, radius * 0.1, cx, cy, radius);
             oceanGrad.addColorStop(0, '#2563eb');
             oceanGrad.addColorStop(0.5, '#1d4ed8');
@@ -651,31 +722,43 @@
             ctx.fillStyle = oceanGrad;
             ctx.fillRect(cx - radius, cy - radius, radius * 2, radius * 2);
 
-            for (let lat = -80; lat <= 80; lat += 4) {
-                for (let lon = -180; lon < 180; lon += 6) {
-                    let isLand = false;
-                    for (let b of CONTINENT_BLOBS) {
-                        let dLat = (lat - b.lat) / b.rLat;
-                        let dLon = ((lon - b.lon + 540) % 360 - 180) / b.rLon;
-                        if (dLat * dLat + dLon * dLon <= 1.0) {
-                            isLand = true;
-                            break;
-                        }
-                    }
+            // Continentes detalhados girando em 3D
+            ctx.fillStyle = '#22c55e';
+            ctx.strokeStyle = '#16a34a';
+            ctx.lineWidth = 1.2 * dpr;
 
-                    if (isLand) {
-                        const pt = projectSphere(lat, lon, radius, globeRotationAngle, cx, cy, tilt);
-                        if (pt.visible) {
-                            const size = 3.5 * dpr * (pt.z / radius);
-                            ctx.fillStyle = '#22c55e';
-                            ctx.beginPath();
-                            ctx.arc(pt.x, pt.y, Math.max(1, size), 0, Math.PI * 2);
-                            ctx.fill();
-                        }
+            CONTINENT_POLYGONS.forEach(poly => {
+                ctx.beginPath();
+                let started = false;
+                poly.forEach(pt => {
+                    const p = projectSphere(pt[0], pt[1], radius, globeRotationAngle, cx, cy, tilt);
+                    if (p.visible) {
+                        if (!started) { ctx.moveTo(p.x, p.y); started = true; }
+                        else { ctx.lineTo(p.x, p.y); }
                     }
+                });
+                if (started) {
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+                }
+            });
+
+            // Calotas Polares de Gelo (Brancas)
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+            // Polo Norte
+            ctx.beginPath();
+            let isFirstCap = true;
+            for (let lon = -180; lon <= 180; lon += 10) {
+                const p = projectSphere(78, lon, radius, globeRotationAngle, cx, cy, tilt);
+                if (p.visible) {
+                    if (isFirstCap) { ctx.moveTo(p.x, p.y); isFirstCap = false; }
+                    else { ctx.lineTo(p.x, p.y); }
                 }
             }
+            ctx.fill();
 
+            // Paralelos
             ctx.lineWidth = 1 * dpr;
             for (let lat = -75; lat <= 75; lat += 15) {
                 ctx.beginPath();
@@ -702,6 +785,7 @@
                 ctx.stroke();
             }
 
+            // Meridianos
             for (let lon = 0; lon < 360; lon += 30) {
                 ctx.beginPath();
                 let isFirst = true;
@@ -719,6 +803,23 @@
                 ctx.stroke();
             }
 
+            // 1. LINHA RETA INICIAL (MERIDIANO DE INSTALAÇÃO LON = 0 QUE GIRA COM A TERRA)
+            ctx.beginPath();
+            let isFirstMerid = true;
+            for (let lat = -90; lat <= 90; lat += 2) {
+                const p = projectSphere(lat, 0, radius, globeRotationAngle, cx, cy, tilt);
+                if (p.visible) {
+                    if (isFirstMerid) { ctx.moveTo(p.x, p.y); isFirstMerid = false; }
+                    else { ctx.lineTo(p.x, p.y); }
+                }
+            }
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2.2 * dpr;
+            ctx.setLineDash([5 * dpr, 4 * dpr]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Sombra dia / noite
             const shadowGrad = ctx.createRadialGradient(cx - radius * 0.4, cy - radius * 0.4, radius * 0.2, cx + radius * 0.2, cy + radius * 0.2, radius * 1.1);
             shadowGrad.addColorStop(0, 'rgba(255, 255, 255, 0.08)');
             shadowGrad.addColorStop(0.6, 'rgba(0, 0, 0, 0)');
@@ -728,12 +829,14 @@
 
             ctx.restore();
 
+            // Contorno do Globo
             ctx.beginPath();
             ctx.arc(cx, cy, radius, 0, Math.PI * 2);
             ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
             ctx.lineWidth = 2 * dpr;
             ctx.stroke();
 
+            // Eixo Polar
             const poleN = projectSphere(90, 0, radius * 1.25, 0, cx, cy, tilt);
             const poleS = projectSphere(-90, 0, radius * 1.25, 0, cx, cy, tilt);
 
@@ -755,21 +858,51 @@
             ctx.font = `${10 * dpr}px sans-serif`;
             ctx.fillText('⟳ Rotação da Terra (Oeste ➔ Leste)', cx - 80 * dpr, cy + radius + 25 * dpr);
 
+            // 2. DESENHAR AS LINHAS DE OSCILAÇÃO FEITAS NA SUPERFÍCIE EM CADA LATITUDE
             const simHours = state.simulatedSeconds / 3600;
             const fastSwingPhase = state.realAnimTime * 4;
+
+            const surfaceLinePoints = [];
 
             PENDULUMS.forEach(p => {
                 const base3D = projectSphere(p.lat, 0, radius, 0, cx, cy, tilt);
                 const top3D = projectSphere(p.lat, 0, radius + 28 * dpr, 0, cx, cy, tilt);
 
+                // Ângulo de precessão
                 const planeDeg = p.degPerHour * simHours;
                 const planeRad = (planeDeg * Math.PI) / 180;
 
+                // Linha de oscilação desenhada no solo da Terra (Traço azul na superfície)
+                const lineGroundSpan = 30 * dpr;
+                const gx1 = base3D.x - Math.cos(planeRad) * lineGroundSpan;
+                const gy1 = base3D.y + Math.sin(planeRad) * (lineGroundSpan * 0.35);
+                const gx2 = base3D.x + Math.cos(planeRad) * lineGroundSpan;
+                const gy2 = base3D.y - Math.sin(planeRad) * (lineGroundSpan * 0.35);
+
+                // Desenhar linha de solo
+                ctx.beginPath();
+                ctx.moveTo(gx1, gy1);
+                ctx.lineTo(gx2, gy2);
+                ctx.strokeStyle = p.color;
+                ctx.lineWidth = 3 * dpr;
+                ctx.stroke();
+
+                // Extremidades da linha
+                ctx.beginPath();
+                ctx.arc(gx1, gy1, 2.5 * dpr, 0, Math.PI * 2);
+                ctx.arc(gx2, gy2, 2.5 * dpr, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+
+                surfaceLinePoints.push({ x: base3D.x, y: base3D.y, dx: Math.cos(planeRad) * lineGroundSpan, dy: Math.sin(planeRad) * (lineGroundSpan * 0.35) });
+
+                // Posição oscilante instantânea da esfera
                 const swingAmp = 18 * dpr;
                 const swingDisp = Math.sin(fastSwingPhase) * swingAmp;
                 const bobX = base3D.x + Math.cos(planeRad) * swingDisp;
                 const bobY = base3D.y - Math.sin(planeRad) * (swingDisp * 0.35);
 
+                // Torre do pêndulo
                 ctx.beginPath();
                 ctx.moveTo(base3D.x - 6 * dpr, base3D.y);
                 ctx.lineTo(top3D.x, top3D.y);
@@ -778,6 +911,7 @@
                 ctx.lineWidth = 1.4 * dpr;
                 ctx.stroke();
 
+                // Fio
                 ctx.beginPath();
                 ctx.moveTo(top3D.x, top3D.y);
                 ctx.lineTo(bobX, bobY);
@@ -785,11 +919,13 @@
                 ctx.lineWidth = 1.2 * dpr;
                 ctx.stroke();
 
+                // Base
                 ctx.beginPath();
                 ctx.arc(base3D.x, base3D.y, 4 * dpr, 0, Math.PI * 2);
                 ctx.fillStyle = '#ffffff';
                 ctx.fill();
 
+                // Esfera
                 ctx.beginPath();
                 ctx.arc(bobX, bobY, 5 * dpr, 0, Math.PI * 2);
                 ctx.fillStyle = p.color;
@@ -798,13 +934,29 @@
                 ctx.lineWidth = 1.5 * dpr;
                 ctx.stroke();
 
+                // Etiqueta
                 ctx.fillStyle = '#f8fafc';
                 ctx.font = `bold ${11 * dpr}px sans-serif`;
                 const label = `${p.lat > 0 ? '+' : ''}${p.lat}° (${p.periodHours === Infinity ? 'T=∞' : 'T=' + p.periodHours + 'h'})`;
                 ctx.fillText(label, base3D.x + 14 * dpr, base3D.y + 4 * dpr);
             });
+
+            // 3. CURVA DE DEFORMAÇÃO ANGULAR NA SUPERFÍCIE (LIGA AS LINHAS DOS 5 PÊNDULOS)
+            if (surfaceLinePoints.length > 1) {
+                ctx.beginPath();
+                ctx.moveTo(surfaceLinePoints[0].x + surfaceLinePoints[0].dx, surfaceLinePoints[0].y - surfaceLinePoints[0].dy);
+                for (let i = 1; i < surfaceLinePoints.length; i++) {
+                    ctx.lineTo(surfaceLinePoints[i].x + surfaceLinePoints[i].dx, surfaceLinePoints[i].y - surfaceLinePoints[i].dy);
+                }
+                ctx.strokeStyle = 'rgba(244, 63, 94, 0.6)';
+                ctx.lineWidth = 1.8 * dpr;
+                ctx.setLineDash([3 * dpr, 3 * dpr]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
         }
 
+        // 2. DESENHO DOS 5 CANVASES LOCAIS
         function drawLocalPendulums() {
             const dpr = window.devicePixelRatio || 1;
             const simHours = state.simulatedSeconds / 3600;
@@ -838,6 +990,16 @@
                 ctx.lineTo(cx + scale, cy);
                 ctx.stroke();
 
+                // Linha de referência inicial Norte-Sul em t=0 (Dourada)
+                ctx.beginPath();
+                ctx.moveTo(cx, cy - scale * 1.05);
+                ctx.lineTo(cx, cy + scale * 1.05);
+                ctx.strokeStyle = 'rgba(251, 191, 36, 0.35)';
+                ctx.setLineDash([2 * dpr, 2 * dpr]);
+                ctx.lineWidth = 1 * dpr;
+                ctx.stroke();
+                ctx.setLineDash([]);
+
                 const planeDeg = p.degPerHour * simHours;
                 const planeRad = (planeDeg * Math.PI) / 180;
 
@@ -865,7 +1027,7 @@
                 ctx.beginPath();
                 ctx.moveTo(cx - Math.cos(planeRad) * lineLen, cy + Math.sin(planeRad) * lineLen);
                 ctx.lineTo(cx + Math.cos(planeRad) * lineLen, cy - Math.sin(planeRad) * lineLen);
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
                 ctx.setLineDash([2 * dpr, 2 * dpr]);
                 ctx.lineWidth = 1 * dpr;
                 ctx.stroke();
@@ -891,6 +1053,7 @@
             });
         }
 
+        // 3. GRÁFICO 1: EVOLUÇÃO ANGULAR
         function drawAngleEvolutionGraph() {
             ensureCanvasSize(graphAngleCanvas);
             const ctx = graphAngleCtx;
@@ -959,6 +1122,7 @@
             });
         }
 
+        // 4. GRÁFICO 2: CURVA TEÓRICA
         function drawTheoryGraph() {
             ensureCanvasSize(graphTheoryCanvas);
             const ctx = graphTheoryCtx;
@@ -1079,4 +1243,3 @@
     </script>
 </body>
 </html>
-
