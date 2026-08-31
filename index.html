@@ -3,672 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hub de Visualizações Científicas & Simulações</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌪️</text></svg>">
+    <title>Demos Interativas de Física I | FSC5101</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #060913;
-            --card-bg: rgba(15, 23, 42, 0.85);
-            --card-hover: rgba(30, 41, 59, 0.95);
-            --card-border: rgba(56, 189, 248, 0.25);
-            --card-border-hover: rgba(56, 189, 248, 0.6);
+            --bg-dark: #070a12;
+            --bg-card: rgba(15, 23, 42, 0.88);
+            --bg-card-border: rgba(56, 189, 248, 0.25);
             --accent-cyan: #38bdf8;
             --accent-gold: #fbbf24;
-            --accent-purple: #c084fc;
-            --accent-green: #34d399;
+            --accent-emerald: #10b981;
             --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --text-sub: #94a3b8;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: radial-gradient(circle at 50% 0%, #0f172a 0%, var(--bg-dark) 100%);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
             color: var(--text-main);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 40%);
+            background-attachment: fixed;
+            padding: 24px;
         }
-
-        header {
-            padding: 24px 32px;
-            background: rgba(10, 16, 30, 0.9);
-            border-bottom: 1px solid var(--card-border);
-            backdrop-filter: blur(12px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .header-title h1 {
-            font-size: 1.5rem;
+        .header { max-width: 1200px; margin: 0 auto 36px; text-align: center; }
+        .header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
             font-weight: 800;
             background: linear-gradient(90deg, #38bdf8, #818cf8, #fbbf24);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
         }
+        .header p { color: var(--text-sub); font-size: 1.1rem; }
 
-        .header-title p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .btn-header {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.82rem;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-header:hover {
-            background: rgba(56, 189, 248, 0.2);
-            border-color: var(--accent-cyan);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #38bdf8, #2563eb);
-            color: #020617;
-            font-weight: 700;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 0 16px rgba(56, 189, 248, 0.5);
-            color: #020617;
-        }
-
-        /* Search & Filter Bar */
-        .filter-section {
-            max-width: 1400px;
-            margin: 24px auto 12px;
-            padding: 0 24px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .search-box {
-            position: relative;
-            width: 100%;
-        }
-
-        .search-input {
-            width: 100%;
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid var(--card-border);
-            padding: 12px 18px 12px 42px;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 0.95rem;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
-            background: rgba(15, 23, 42, 0.95);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-
-        .tag-filters {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .tag-pill {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-muted);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .tag-pill:hover {
-            color: #fff;
-            border-color: var(--accent-cyan);
-        }
-
-        .tag-pill.active {
-            background: rgba(56, 189, 248, 0.2);
-            border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
-            font-weight: 600;
-        }
-
-        /* Grid */
-        .catalog-container {
-            max-width: 1400px;
-            margin: 12px auto 40px;
-            padding: 0 24px;
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 20px;
-        }
-
-        @media (max-width: 500px) {
-            .catalog-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .demo-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 14px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 14px;
-            backdrop-filter: blur(10px);
-            transition: all 0.25s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .demo-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--card-border-hover);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
-            background: var(--card-hover);
-        }
-
-        .demo-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #38bdf8, #818cf8);
-            opacity: 0.8;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .card-icon {
-            font-size: 2rem;
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            width: 52px;
-            height: 52px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .card-title-group h2 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #fff;
-            line-height: 1.3;
-        }
-
-        .card-meta {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 4px;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .meta-badge {
-            background: rgba(251, 191, 36, 0.12);
-            color: var(--accent-gold);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-
-        .llm-badge {
-            background: rgba(192, 132, 252, 0.12);
-            color: var(--accent-purple);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-
-        .card-desc {
-            font-size: 0.85rem;
-            color: #cbd5e1;
-            line-height: 1.5;
-            flex: 1;
-        }
-
-        .card-tags {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .card-tag {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: var(--text-muted);
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.72rem;
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 6px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding-top: 14px;
-        }
-
-        .btn-launch {
-            flex: 1;
-            background: linear-gradient(135deg, #38bdf8, #2563eb);
-            color: #020617;
-            padding: 9px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-align: center;
-            text-decoration: none;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .btn-launch:hover {
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-            transform: translateY(-1px);
-        }
-
-        .btn-source {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #fff;
-            padding: 9px 12px;
-            border-radius: 8px;
-            font-size: 0.82rem;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .btn-source:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        /* Add demo card */
-        .add-card {
-            border: 2px dashed rgba(56, 189, 248, 0.35);
-            background: rgba(15, 23, 42, 0.4);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 30px 20px;
-            cursor: pointer;
-            gap: 12px;
-        }
-
-        .add-card:hover {
-            border-color: var(--accent-cyan);
-            background: rgba(56, 189, 248, 0.06);
-        }
-
-        .add-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(56, 189, 248, 0.15);
-            color: var(--accent-cyan);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        footer {
-            margin-top: auto;
-            padding: 20px;
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        .chapter-section {
+            max-width: 1200px;
+            margin: 0 auto 40px;
             background: rgba(10, 16, 30, 0.7);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 20px;
+            padding: 28px;
         }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-            display: none;
+        .chapter-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent-cyan);
+            margin-bottom: 6px;
+            display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
+            gap: 10px;
         }
+        .chapter-desc { color: var(--text-sub); font-size: 0.95rem; margin-bottom: 20px; }
 
-        .modal-content {
-            background: #0f172a;
-            border: 1px solid var(--card-border);
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 16px;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 14px;
-            max-width: 650px;
-            width: 100%;
-            padding: 24px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-        }
-
-        .modal-header {
-            display: flex;
             justify-content: space-between;
-            align-items: center;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
         }
-
-        .modal-header h3 {
-            font-size: 1.2rem;
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.2);
+        }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .card-icon { font-size: 1.4rem; }
+        .card-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.05rem; }
+        .card-desc { font-size: 0.85rem; color: var(--text-sub); line-height: 1.5; margin-bottom: 14px; }
+        .card-btn {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
             color: var(--accent-cyan);
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.3rem;
-            cursor: pointer;
-        }
-
-        pre {
-            background: #020617;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px;
+            padding: 8px 12px;
             border-radius: 8px;
+            font-weight: 700;
             font-size: 0.8rem;
-            color: #38bdf8;
-            overflow-x: auto;
+            text-align: center;
         }
+        .card:hover .card-btn { background: var(--accent-cyan); color: #020617; }
     </style>
 </head>
 <body>
-    <header>
-        <div class="header-title">
-            <h1>🔬 Hub de Visualizações Científicas & Simulações</h1>
-            <p>Portfólio de demonstrações interativas desenvolvidas com LLMs • Reinaldo Haas</p>
-        </div>
-
-        <div class="header-actions">
-            <button class="btn-header btn-primary" id="btn-how-to-add">➕ Como Adicionar Demos</button>
-            <a href="https://github.com/reinaldohaas/demos" target="_blank" class="btn-header">🐙 GitHub Repo</a>
-        </div>
-    </header>
-
-    <!-- Barra de busca e filtros -->
-    <div class="filter-section">
-        <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="search-input" class="search-input" placeholder="Buscar demonstração por título, assunto, tag ou física...">
-        </div>
-
-        <div class="tag-filters" id="tag-filters">
-            <span class="tag-pill active" data-filter="all">Todos</span>
-            <span class="tag-pill" data-filter="Matemática">Matemática & Geometria</span>
-            <span class="tag-pill" data-filter="Geofísica">Geofísica</span>
-            <span class="tag-pill" data-filter="Oceanografia">Oceanografia</span>
-            <span class="tag-pill" data-filter="Equação de 2º Grau">Equação de 2º Grau</span>
-            <span class="tag-pill" data-filter="Coriolis">Força de Coriolis</span>
-            <span class="tag-pill" data-filter="3D">3D / Globo</span>
-            <span class="tag-pill" data-filter="Shallow Water">Shallow Water</span>
-        </div>
+    <div class="header">
+        <h1>FSC5101 — FÍSICA I (MECÂNICA)</h1>
+        <p>Demonstrações Interativas e Resolução Didática dos Exemplos Didáticos</p>
     </div>
 
-    <!-- Catálogo de Cards -->
-    <main class="catalog-container" id="catalog-grid">
-        <!-- Cards serão renderizados dinamicamente via JS a partir do demos.json -->
-    </main>
+    <div class="chapter-section">
+        <div class="chapter-title">📘 CAPÍTULO 2: MOVIMENTO RETILÍNEO</div>
+        <div class="chapter-desc">Exemplos 2.1 ao 2.7 com resolução didática (itens a, b, c, d), animações e gráficos interativos em tempo real.</div>
 
-    <footer>
-        <p>Hub de Demonstrações Científicas • Pronto para <b>GitHub Pages</b> e Execução Local • 2026</p>
-    </footer>
+        <div class="grid">
 
-    <!-- Modal de Ajuda: Como Adicionar Nova Demo -->
-    <div class="modal-overlay" id="add-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>➕ Como Adicionar Novas Visualizações (Outras LLMs)</h3>
-                <button class="modal-close" id="modal-close-btn">&times;</button>
-            </div>
-            <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.5;">
-                Para adicionar qualquer visualização gerada por Claude, ChatGPT, Gemini ou DeepSeek:
-            </p>
-            <ol style="font-size: 0.83rem; color: #94a3b8; padding-left: 20px; line-height: 1.7;">
-                <li>Crie uma nova pasta dentro de <code>demos/nome-da-sua-demo/</code>.</li>
-                <li>Copie o template de <code>demos/_template/index.html</code> ou coloque seu próprio <code>index.html</code>.</li>
-                <li>Abra o arquivo <code>demos.json</code> na raiz e adicione a entrada com título, descrição e tags.</li>
-                <li>Pronto! O catálogo atualizará o card automaticamente.</li>
-            </ol>
-            <p style="font-size: 0.8rem; color: var(--accent-gold);">
-                💡 Dica para o Git: Faça <code>git add . && git commit -m "Nova demo" && git push</code> para publicar automaticamente no GitHub Pages!
-            </p>
+            <a href="capitulo-2/exemplo-2-1.html" class="card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-icon">🐆</span>
+                        <span class="card-title">Exemplo 2.1: Posição e Velocidade Média (O Leopardo)</span>
+                    </div>
+                    <div class="card-desc">Animação e simulação didática da perseguição do leopardo x(t) = 20 + 5,0 t² com gráficos da reta secante e tangente.</div>
+                </div>
+                <div class="card-btn">Abrir Animação & Simulação →</div>
+            </a>
+    
+            <a href="capitulo-2/exemplo-2-2.html" class="card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-icon">🏎️</span>
+                        <span class="card-title">Exemplo 2.2: Velocidade Instantânea e Inversão de Sentido</span>
+                    </div>
+                    <div class="card-desc">Animação do carro de testes com derivada v(t) = 3,0 - 0,30 t² e inversão de sentido no repouso momentâneo t = 3,16 s.</div>
+                </div>
+                <div class="card-btn">Abrir Animação & Simulação →</div>
+            </a>
+    
+            <a href="capitulo-2/exemplo-2-3.html" class="card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-icon">📈</span>
+                        <span class="card-title">Exemplo 2.3: Aceleração Média e Instantânea</span>
+                    </div>
+                    <div class="card-desc">Simulação gráfica da aceleração instantânea a(t) = 1,0 t m/s² e taxa de variação da velocidade.</div>
+                </div>
+                <div class="card-btn">Abrir Animação & Simulação →</div>
+            </a>
+    
+            <a href="capitulo-2/exemplo-2-4.html" class="card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-icon">🛑</span>
+                        <span class="card-title">Exemplo 2.4: MRUV - Frenagem e Distância de Parada</span>
+                    </div>
+                    <div class="card-desc">Animação da frenagem de um veículo viajando a 54 km/h até a parada em 56,25 m via Equação de Torricelli.</div>
+                </div>
+                <div class="card-btn">Abrir Animação & Simulação →</div>
+            </a>
+    
+            <a href="capitulo-2/exemplo-2-5.html" class="card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-icon">🏀</span>
+                        <span class="card-title">Exemplo 2.5: Queda Livre do Topo de um Edifício de 50 m</span>
+                    </div>
+                    <div class="card-desc">Simulação 2D do lançamento vertical do topo de um edifício de 50 m, altura máxima de 61,48 m e velocidade de impacto.</div>
+                </div>
+                <div class="card-btn">Abrir Animação & Simulação →</div>
+            </a>
+    
+            <a href="capitulo-2/exemplo-2-6.html" class="card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-icon">∫</span>
+                        <span class="card-title">Exemplo 2.6: Integração da Aceleração Variável a(t)</span>
+                    </div>
+                    <div class="card-desc">Simulação gráfica tripla das equações integradas a(t), v(t) e x(t) para velocidade máxima de 30 m/s.</div>
+                </div>
+                <div class="card-btn">Abrir Animação & Simulação →</div>
+            </a>
+    
+            <a href="capitulo-2/exemplo-2-7.html" class="card">
+                <div>
+                    <div class="card-header">
+                        <span class="card-icon">🚗</span>
+                        <span class="card-title">Exemplo 2.7: Ultrapassagem e Movimento Relativo de dois Veículos</span>
+                    </div>
+                    <div class="card-desc">Animação em duas pistas paralelas mostrando o Carro A alcançando e ultrapassando o Carro B em t = 12 s e x = 180 m.</div>
+                </div>
+                <div class="card-btn">Abrir Animação & Simulação →</div>
+            </a>
+    
         </div>
     </div>
-
-    <script>
-        let allDemos = [];
-
-        // Carregar metadados do demos.json
-        async function loadDemos() {
-            try {
-                const res = await fetch('demos.json');
-                const data = await res.json();
-                allDemos = data.demos || [];
-                renderCards(allDemos);
-            } catch (err) {
-                console.error('Erro ao carregar demos.json:', err);
-                // Fallback padrão se fetch falhar localmente
-                allDemos = [
-                    {
-                        id: "geometric-quadratic",
-                        title: "Geometria Unificada da Equação Quadrática",
-                        category: "Matemática & Geometria Complexa",
-                        llm: "Gemini 3.7 Flash",
-                        icon: "📐",
-                        tags: ["Equação de 2º Grau", "Raízes Complexas", "Círculos Ortogonais", "Derivada", "Fatoração", "Curvatura"],
-                        description: "Visualização interativa unificada entre a parábola f(x), raízes complexas como círculos de raio r(x) no plano complexo (f(x) = a·r²), fatores lineares, reta da derivada f'(x) = r1(x) + r2(x) e limite de curvatura (R → ∞).",
-                        path: "demos/geometric-quadratic/index.html"
-                    },
-                    {
-                        id: "foucault-pendulum",
-                        title: "Período Inercial & Pêndulo de Foucault 3D",
-                        category: "Geofísica & Mecânica Celeste",
-                        llm: "Gemini 3.7 Flash",
-                        icon: "🌍",
-                        tags: ["Força de Coriolis", "Rotação da Terra", "3D Canvas", "Roseta"],
-                        description: "Simulação tridimensional da Terra em rotação com 5 pêndulos operando simultaneamente nas latitudes (+90°, +30°, 0°, -30°, -90°), registrando o padrão de roseta no solo e as curvas da taxa angular e período inercial.",
-                        path: "demos/foucault-pendulum/index.html"
-                    },
-                    {
-                        id: "rossby-radius",
-                        title: "Raio de Deformação de Rossby 2D",
-                        category: "Oceanografia & Dinâmica de Fluidos",
-                        llm: "Gemini 3.7 Flash",
-                        icon: "🌊",
-                        tags: ["Ajuste Geostrófico", "Polo Sul", "Shallow Water", "Coriolis"],
-                        description: "Simulação 2D hidrodinâmica das Equações de Águas Rasas com foco no Polo Sul e latitudes globais, demonstrando o balanço entre a rotação da Terra e gravidade, ajuste geostrófico (L > Rd) e ondas de gravidade.",
-                        path: "demos/rossby-radius/index.html"
-                    },
-                    {
-                        id: "supercell-splat-spin",
-                        title: "Dinâmica de Supercélulas: Forçamentos Splat & Spin",
-                        category: "Meteorologia Convectiva & Dinâmica Não-Hidrostática",
-                        llm: "Gemini 3.7 Flash",
-                        icon: "🌪️",
-                        tags: ["Supercélula", "Mesociclone", "Equação de Poisson", "Splat & Spin", "VPPGF", "Perturbação de Pressão", "Partículas 2D"],
-                        description: "Simulação hidrodinâmica 2D dos termos Splat (deformação/alta pressão) e Spin (vorticidade/baixa pressão) na equação diagnóstica de perturbação de pressão de supercélulas, com fluxo de partículas, vetores de força e perfis verticais interativos.",
-                        path: "demos/supercell-splat-spin/index.html"
-                    },
-                    {
-                        id: "exercicios",
-                        title: "Laboratório de Cinemática 1D (Exemplos 2.1 a 2.7)",
-                        category: "Física Clássica & Cinemática 1D",
-                        llm: "Gemini 3.7 Flash",
-                        icon: "🔬",
-                        tags: ["Cinemática 1D", "Velocidade Média & Instantânea", "Aceleração Média & Instantânea", "MRUV & Torricelli", "Perseguição Relativa", "Queda Livre & Torre de Pisa", "Lançamento Vertical", "Sears & Zemansky"],
-                        description: "Suíte completa de infográficos interativos e simulações físicas 2D cobrindo do Exemplo 2.1 ao 2.7: leopardo, astronauta em EVA, carro acelerando, motociclista, perseguição policial, queda livre na Torre de Pisa e lançamento vertical no edifício com gráficos dinâmicos e resolução guiada passo a passo.",
-                        path: "demos/exercicios/index.html"
-                    },
-                    {
-                        id: "harmonic-oscillator",
-                        title: "Solucionador do Oscilador Harmônico (RK4 & Espaço de Fases)",
-                        category: "Física Matemática & Sistemas Dinâmicos",
-                        llm: "Gemini 3.7 Flash",
-                        icon: "🌀",
-                        tags: ["Oscilador Harmônico", "EDO de 2ª Ordem", "Runge-Kutta 4 (RK4)", "Espaço de Fases", "Massa-Mola-Amortecedor", "Ressonância & Batimentos", "Subamortecido & Superamortecido", "Canvas 2D"],
-                        description: "Solucionador numérico interativo de equações diferenciais ordinárias de 2ª ordem m·x'' + b·x' + k·x = F(t) com integrador RK4, animação em tempo real de massa-mola com amortecedor hidráulico, diagramas do espaço de fases (v vs x), gráficos no domínio do tempo e suporte a forças externas arbitrárias.",
-                        path: "demos/harmonic-oscillator/index.html"
-                    }
-                ];
-                renderCards(allDemos);
-            }
-        }
-
-        function renderCards(demos) {
-            const grid = document.getElementById('catalog-grid');
-            grid.innerHTML = '';
-
-            demos.forEach(demo => {
-                const card = document.createElement('div');
-                card.className = 'demo-card';
-                card.innerHTML = `
-                    <div>
-                        <div class="card-header">
-                            <div class="card-icon">${demo.icon || '🔬'}</div>
-                            <div class="card-title-group">
-                                <h2>${demo.title}</h2>
-                                <div class="card-meta">
-                                    <span class="meta-badge">${demo.category}</span>
-                                    <span class="llm-badge">🤖 ${demo.llm || 'LLM'}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="card-desc" style="margin-top: 12px;">${demo.description}</p>
-                    </div>
-
-                    <div>
-                        <div class="card-tags">
-                            ${(demo.tags || []).map(t => `<span class="card-tag">#${t}</span>`).join('')}
-                        </div>
-
-                        <div class="card-actions">
-                            <a href="${demo.path}" class="btn-launch">▶️ Abrir Demonstração</a>
-                            <a href="${demo.path}" target="_blank" class="btn-source" title="Abrir em nova aba">↗️ Nova Aba</a>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-
-            // Card extra "+ Adicionar Nova Demo"
-            const addCard = document.createElement('div');
-            addCard.className = 'demo-card add-card';
-            addCard.innerHTML = `
-                <div class="add-icon">➕</div>
-                <h3 style="color:#fff; font-size:1.05rem;">Adicionar Nova Demonstração</h3>
-                <p style="font-size:0.8rem; color:var(--text-muted);">Adicione qualquer HTML/JS gerado por outras LLMs (Claude, GPT, DeepSeek, Gemini)</p>
-                <span class="meta-badge" style="background:rgba(56,189,248,0.2); color:var(--accent-cyan); padding:4px 10px;">Ver instruções & Template</span>
-            `;
-            addCard.addEventListener('click', openModal);
-            grid.appendChild(addCard);
-        }
-
-        // Filtro por texto
-        document.getElementById('search-input').addEventListener('input', (e) => {
-            const q = e.target.value.toLowerCase();
-            const filtered = allDemos.filter(d => 
-                d.title.toLowerCase().includes(q) ||
-                d.description.toLowerCase().includes(q) ||
-                d.category.toLowerCase().includes(q) ||
-                (d.tags || []).some(t => t.toLowerCase().includes(q))
-            );
-            renderCards(filtered);
-        });
-
-        // Filtro por tags
-        document.querySelectorAll('.tag-pill').forEach(pill => {
-            pill.addEventListener('click', () => {
-                document.querySelectorAll('.tag-pill').forEach(p => p.classList.remove('active'));
-                pill.classList.add('active');
-
-                const filter = pill.getAttribute('data-filter');
-                if (filter === 'all') {
-                    renderCards(allDemos);
-                } else {
-                    const filtered = allDemos.filter(d => 
-                        d.category.toLowerCase().includes(filter.toLowerCase()) ||
-                        (d.tags || []).some(t => t.toLowerCase().includes(filter.toLowerCase()))
-                    );
-                    renderCards(filtered);
-                }
-            });
-        });
-
-        // Modal
-        const modal = document.getElementById('add-modal');
-        function openModal() { modal.style.display = 'flex'; }
-        function closeModal() { modal.style.display = 'none'; }
-        document.getElementById('btn-how-to-add').addEventListener('click', openModal);
-        document.getElementById('modal-close-btn').addEventListener('click', closeModal);
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-
-        loadDemos();
-    </script>
 </body>
 </html>
-

@@ -1,24 +1,5 @@
 {
-  "title": "Hub de Demonstrações & Visualizações Científicas",
-  "author": "Reinaldo Haas",
-  "github_repo": "reinaldohaas/demos",
   "demos": [
-    {
-      "id": "cap2-hub",
-      "title": "Capítulo 2: Movimento Retilíneo (Hub de Exemplos 2.1 a 2.7)",
-      "category": "Capítulo 2 • Movimento Retilíneo",
-      "llm": "Gemini 3.7 Flash",
-      "icon": "📘",
-      "tags": [
-        "Capítulo 2",
-        "Exemplos 2.1 a 2.7",
-        "Movimento Retilíneo",
-        "Apresentação Passo a Passo"
-      ],
-      "description": "Apresentações didáticas em formato de slides (itens a, b, c, d) de todos os 7 exemplos do Capítulo 2 (2.1 ao 2.7).",
-      "path": "capitulo-2/index.html",
-      "date": "2026-08-31"
-    },
     {
       "id": "exemplo-2-1",
       "title": "Exemplo 2.1: Posição e Velocidade Média (O Leopardo)",
@@ -31,7 +12,7 @@
         "Reta Secante",
         "Reta Tangente"
       ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) com convergência gráfica no movimento x(t) = 20 + 5,0 t².",
+      "description": "Animação e simulação didática da perseguição do leopardo x(t) = 20 + 5,0 t² com gráficos da reta secante e tangente.",
       "path": "capitulo-2/exemplo-2-1.html",
       "date": "2026-08-31"
     },
@@ -47,7 +28,7 @@
         "Inversão de Sentido",
         "Repouso Momentâneo"
       ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) da derivada v(t) = 3,0 - 0,30 t² e ponto de repouso momentâneo.",
+      "description": "Animação do carro de testes com derivada v(t) = 3,0 - 0,30 t² e inversão de sentido no repouso momentâneo t = 3,16 s.",
       "path": "capitulo-2/exemplo-2-2.html",
       "date": "2026-08-31"
     },
@@ -62,7 +43,7 @@
         "Aceleração Instantânea",
         "Inclinação de v(t)"
       ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) da aceleração instantânea a(t) = 1,0 t m/s².",
+      "description": "Simulação gráfica da aceleração instantânea a(t) = 1,0 t m/s² e taxa de variação da velocidade.",
       "path": "capitulo-2/exemplo-2-3.html",
       "date": "2026-08-31"
     },
@@ -78,13 +59,13 @@
         "Desaceleração Constante",
         "Equação de Torricelli"
       ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) da parada completa de um veículo com desaceleração constante.",
+      "description": "Animação da frenagem de um veículo viajando a 54 km/h até a parada em 56,25 m via Equação de Torricelli.",
       "path": "capitulo-2/exemplo-2-4.html",
       "date": "2026-08-31"
     },
     {
       "id": "exemplo-2-5",
-      "title": "Exemplo 2.5: Queda Livre do Alto de um Edifício",
+      "title": "Exemplo 2.5: Queda Livre do Topo de um Edifício de 50 m",
       "category": "Capítulo 2 • Movimento Retilíneo",
       "llm": "Gemini 3.7 Flash",
       "icon": "🏀",
@@ -94,7 +75,7 @@
         "Altura Máxima",
         "Impacto"
       ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) da trajetória de uma bola lançada do topo de um edifício de 50 m.",
+      "description": "Simulação 2D do lançamento vertical do topo de um edifício de 50 m, altura máxima de 61,48 m e velocidade de impacto.",
       "path": "capitulo-2/exemplo-2-5.html",
       "date": "2026-08-31"
     },
@@ -110,13 +91,13 @@
         "Cálculo",
         "Velocidade Máxima"
       ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) da obtenção de v(t) e x(t) por integração de a(t) = A t - B t².",
+      "description": "Simulação gráfica tripla das equações integradas a(t), v(t) e x(t) para velocidade máxima de 30 m/s.",
       "path": "capitulo-2/exemplo-2-6.html",
       "date": "2026-08-31"
     },
     {
       "id": "exemplo-2-7",
-      "title": "Exemplo 2.7: Ultrapassagem de Dois Veículos",
+      "title": "Exemplo 2.7: Ultrapassagem e Movimento Relativo de dois Veículos",
       "category": "Capítulo 2 • Movimento Retilíneo",
       "llm": "Gemini 3.7 Flash",
       "icon": "🚗",
@@ -126,7 +107,7 @@
         "Cruzamento de Curvas",
         "MRU vs MRUV"
       ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) do instante e posição de ultrapassagem entre o Carro A e o Carro B.",
+      "description": "Animação em duas pistas paralelas mostrando o Carro A alcançando e ultrapassando o Carro B em t = 12 s e x = 180 m.",
       "path": "capitulo-2/exemplo-2-7.html",
       "date": "2026-08-31"
     }

@@ -16,12 +16,11 @@
             --accent-cyan: #38bdf8;
             --accent-gold: #fbbf24;
             --accent-emerald: #10b981;
+            --accent-rose: #f43f5e;
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
@@ -33,7 +32,6 @@
             background-attachment: fixed;
             padding: 20px;
         }
-
         .top-nav {
             max-width: 1300px;
             margin: 0 auto 16px;
@@ -41,7 +39,6 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .back-btn {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid var(--bg-card-border);
@@ -53,7 +50,6 @@
             font-size: 0.85rem;
             transition: all 0.2s;
         }
-
         .back-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); }
 
         .statement-box {
@@ -68,16 +64,8 @@
             flex-wrap: wrap;
             gap: 16px;
         }
-
-        .statement-title h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
-            color: var(--accent-cyan);
-            margin-bottom: 6px;
-        }
-
+        .statement-title h2 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: var(--accent-cyan); margin-bottom: 6px; }
         .statement-title p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; }
-
         .formula-badge {
             background: rgba(56, 189, 248, 0.1);
             border: 1px solid rgba(56, 189, 248, 0.3);
@@ -96,10 +84,7 @@
             grid-template-columns: 440px 1fr;
             gap: 20px;
         }
-
-        @media (max-width: 960px) {
-            .presentation-container { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 960px) { .presentation-container { grid-template-columns: 1fr; } }
 
         .slide-deck {
             background: var(--bg-card);
@@ -109,93 +94,47 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 380px;
         }
 
-        .slide-stepper {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .slide-step-btn {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: var(--text-sub);
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .slide-step-btn.active {
-            background: var(--primary-gradient);
-            color: white;
-            border-color: transparent;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-        }
-
-        .presentation-slide { display: none; flex-direction: column; gap: 10px; }
-        .presentation-slide.active { display: flex; }
-
-        .slide-badge {
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: var(--accent-cyan);
-            letter-spacing: 0.05em;
-        }
-
-        .slide-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .slide-formula code {
-            font-family: monospace;
-            font-size: 0.9rem;
-            color: var(--accent-gold);
-            background: rgba(0, 0, 0, 0.4);
-            padding: 6px 12px;
-            border-radius: 6px;
-            display: inline-block;
-        }
-
-        .slide-desc {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: var(--accent-emerald);
-            font-weight: 600;
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.2);
+        .item-card {
+            background: rgba(10, 16, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
             padding: 12px 14px;
-            border-radius: 8px;
-        }
-
-        .slide-nav-controls {
+            margin-bottom: 10px;
             display: flex;
-            gap: 10px;
-            margin-top: 16px;
+            gap: 12px;
         }
-
-        .nav-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 700;
-            font-size: 0.85rem;
-            cursor: pointer;
-            background: #1e293b;
-            color: var(--text-main);
+        .item-badge {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a855f7;
+            font-weight: 800;
+            font-size: 0.78rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            height: fit-content;
         }
+        .item-title { font-weight: 700; font-size: 0.88rem; color: var(--text-main); margin-bottom: 4px; }
+        .item-formula code { font-family: monospace; font-size: 0.8rem; color: var(--accent-cyan); }
+        .item-calc { font-size: 0.82rem; color: var(--accent-emerald); margin-top: 4px; font-weight: 600; line-height: 1.5; }
 
-        .nav-btn:hover { background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan); }
+        .control-card {
+            background: rgba(10, 16, 30, 0.7);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 14px;
+        }
+        .control-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+        .control-group label { font-size: 0.82rem; font-weight: 600; color: var(--text-sub); display: flex; justify-content: space-between; }
+        .control-group label span { color: var(--accent-cyan); font-family: monospace; font-weight: 700; }
+        input[type="range"] { width: 100%; height: 6px; border-radius: 3px; background: #1e293b; outline: none; accent-color: var(--accent-cyan); cursor: pointer; }
+
+        .btn-group { display: flex; gap: 8px; margin-top: 8px; }
+        .btn { flex: 1; padding: 9px 14px; border-radius: 8px; border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
+        .btn-primary { background: var(--primary-gradient); color: white; }
+        .btn-secondary { background: #1e293b; color: var(--text-main); }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
         .interactive-stage {
             background: var(--bg-card);
@@ -207,15 +146,17 @@
             gap: 16px;
         }
 
-        .canvas-holder {
-            width: 100%;
-            height: 330px;
-            background: #050811;
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
+        .plot-card {
+            background: rgba(10, 16, 30, 0.9);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 12px;
+            padding: 14px;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
         }
-
+        .plot-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-bottom: 8px; }
+        .plot-wrapper { flex: 1; width: 100%; height: 100%; position: relative; background: #050811; border-radius: 8px; overflow: hidden; }
         canvas { width: 100%; height: 100%; display: block; }
     </style>
 </head>
@@ -229,101 +170,94 @@
     <div class="statement-box">
         <div class="statement-title">
             <h2>Exemplo 2.1: Posição e Velocidade Média (O Leopardo)</h2>
-            <p>Um leopardo está espreitando a 20 m a leste de um jipe de um observador. No tempo t = 0, o leopardo começa a perseguir um antílope que está a 50 m a leste do jipe. O movimento do leopardo é dado por x(t) = 20 m + (5,0 m/s²)t².</p>
+            <p>Um leopardo está espreitando a 20 m a leste de um jipe de um observador. No tempo t = 0, o leopardo começa a perseguir um antílope a 50 m do jipe. O movimento do leopardo é dado por x(t) = 20 m + (5,0 m/s²)t².</p>
         </div>
         <div class="formula-badge">x(t) = 20 + 5.0 t² (m)</div>
     </div>
 
     <div class="presentation-container">
-        <!-- Didactic Presentation Deck -->
         <div class="slide-deck">
             <div>
-                <div style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); margin-bottom:10px;">
-                    📺 APRESENTAÇÃO DIDÁTICA PASSO A PASSO
+                <div style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); margin-bottom:12px; text-transform:uppercase;">
+                    📖 Resolução Didática Passo a Passo (Itens a, b, c, d)
                 </div>
-                <div class="slide-stepper">
-                    
-        <button class="slide-step-btn active" onclick="goToSlide(1)">Item (a)</button>
-        
-        <button class="slide-step-btn " onclick="goToSlide(2)">Item (b)</button>
-        
-        <button class="slide-step-btn " onclick="goToSlide(3)">Item (c)</button>
-        
-        <button class="slide-step-btn " onclick="goToSlide(4)">Item (d)</button>
-        
-                </div>
-
                 
-        <div class="presentation-slide active" id="slide-1">
-            <div class="slide-badge">SLIDE 1 DE 4 • ITEM (A)</div>
-            <div class="slide-title">Deslocamento Δx no intervalo de t₁ = 1,0 s a t₂ = 2,0 s</div>
-            <div class="slide-formula"><code>Δx = x(t₂) - x(t₁)</code></div>
-            <div class="slide-desc">Em t₁ = 1,0 s: x(1,0) = 20 + 5,0(1,0)² = 25,0 m. Em t₂ = 2,0 s: x(2,0) = 20 + 5,0(2,0)² = 40,0 m. Portanto, Δx = 40,0 m - 25,0 m = 15,0 m.</div>
+        <div class="item-card">
+            <div class="item-badge">Item (A)</div>
+            <div class="item-content">
+                <div class="item-title">Deslocamento Δx no intervalo de t₁ = 1,0 s a t₂ = 2,0 s</div>
+                <div class="item-formula"><code>Δx = x(t₂) - x(t₁)</code></div>
+                <div class="item-calc" id="calc-item-a">Em t₁ = 1,0 s: x(1,0) = 25,0 m. Em t₂ = 2,0 s: x(2,0) = 40,0 m. Portanto, Δx = 40,0 m - 25,0 m = 15,0 m.</div>
+            </div>
         </div>
         
-        <div class="presentation-slide " id="slide-2">
-            <div class="slide-badge">SLIDE 2 DE 4 • ITEM (B)</div>
-            <div class="slide-title">Velocidade Média v_méd no intervalo</div>
-            <div class="slide-formula"><code>v_méd = Δx / Δt</code></div>
-            <div class="slide-desc">v_méd = (40,0 m - 25,0 m) / (2,0 s - 1,0 s) = 15,0 m / 1,0 s = 15,0 m/s (inclinação da Reta Secante entre t₁ e t₂).</div>
+        <div class="item-card">
+            <div class="item-badge">Item (B)</div>
+            <div class="item-content">
+                <div class="item-title">Velocidade Média v_méd no intervalo</div>
+                <div class="item-formula"><code>v_méd = Δx / Δt</code></div>
+                <div class="item-calc" id="calc-item-b">v_méd = (40,0 m - 25,0 m) / (2,0 s - 1,0 s) = 15,0 m / 1,0 s = 15,0 m/s (inclinação da Reta Secante entre t₁ e t₂).</div>
+            </div>
         </div>
         
-        <div class="presentation-slide " id="slide-3">
-            <div class="slide-badge">SLIDE 3 DE 4 • ITEM (C)</div>
-            <div class="slide-title">Velocidade Instantânea v(t) em t = 1,0 s</div>
-            <div class="slide-formula"><code>v(t) = dx/dt = 10,0 t (m/s)</code></div>
-            <div class="slide-desc">Derivando x(t) em relação ao tempo: v(t) = 10,0 t m/s. Em t = 1,0 s: v(1,0) = 10,0 × 1,0 = 10,0 m/s (inclinação da Reta Tangente no ponto t = 1,0 s).</div>
+        <div class="item-card">
+            <div class="item-badge">Item (C)</div>
+            <div class="item-content">
+                <div class="item-title">Velocidade Instantânea v(t) em t = 1,0 s</div>
+                <div class="item-formula"><code>v(t) = dx/dt = 10,0 t (m/s)</code></div>
+                <div class="item-calc" id="calc-item-c">Derivando x(t) em relação ao tempo: v(t) = 10,0 t m/s. Em t = 1,0 s: v(1,0) = 10,0 × 1,0 = 10,0 m/s (inclinação da Reta Tangente no ponto t = 1,0 s).</div>
+            </div>
         </div>
         
-        <div class="presentation-slide " id="slide-4">
-            <div class="slide-badge">SLIDE 4 DE 4 • ITEM (D)</div>
-            <div class="slide-title">Convergência da Secante para a Tangente</div>
-            <div class="slide-formula"><code>lim (Δt → 0) Δx / Δt = dx / dt</code></div>
-            <div class="slide-desc">Ao reduzir Δt de 1,0 s para 0,001 s, a velocidade média converge de 15,0 m/s para o valor exato da velocidade instantânea: 10,0 m/s.</div>
+        <div class="item-card">
+            <div class="item-badge">Item (D)</div>
+            <div class="item-content">
+                <div class="item-title">Convergência da Secante para a Tangente</div>
+                <div class="item-formula"><code>lim (Δt → 0) Δx / Δt = dx / dt</code></div>
+                <div class="item-calc" id="calc-item-d">Ao reduzir Δt de 1,0 s para 0,001 s, a velocidade média converge de 15,0 m/s para o valor exato da velocidade instantânea: 10,0 m/s.</div>
+            </div>
         </div>
         
             </div>
 
-            <div class="slide-nav-controls">
-                <button class="nav-btn" onclick="prevSlide()">◄ Anterior</button>
-                <button class="nav-btn" onclick="nextSlide()">Próximo ►</button>
+            <div class="control-card">
+                
+<div class="control-group">
+    <label>Tempo t: <span id="leo-t-val">0.00 s</span></label>
+    <input type="range" id="leo-t" min="0" max="3" step="0.02" value="0" oninput="updateDemo()">
+</div>
+<div class="control-group">
+    <label>Intervalo Δt: <span id="leo-dt-val">1.000 s</span></label>
+    <input type="range" id="leo-dt" min="0.001" max="1.5" step="0.001" value="1.0" oninput="updateDemo()">
+</div>
+<div class="btn-group">
+    <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animado</button>
+    <button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button>
+</div>
+
             </div>
         </div>
 
-        <!-- Interactive Plot & Visual Stage -->
         <div class="interactive-stage">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-weight:700; font-size:0.9rem; color:var(--text-sub);">📊 Gráficos Sincronizados & Animação em Tempo Real</span>
-                <button class="nav-btn" style="padding:4px 12px; font-size:0.75rem;" onclick="resetDemo()">↺ Resetar (t = 0 s)</button>
-            </div>
+            
+<div style="background:rgba(10,16,30,0.8); border:1px solid var(--bg-card-border); border-radius:12px; padding:10px; height:130px;">
+    <canvas id="canvas-track"></canvas>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+    <div class="plot-card">
+        <div class="plot-header"><span>Gráfico x(t): Posição vs Tempo</span><span style="color:#38bdf8;">Secante & Tangente</span></div>
+        <div class="plot-wrapper"><canvas id="canvas-plot-x"></canvas></div>
+    </div>
+    <div class="plot-card">
+        <div class="plot-header"><span>Gráfico v(t): Velocidade vs Tempo</span><span style="color:#10b981;">v(t) = 10t</span></div>
+        <div class="plot-wrapper"><canvas id="canvas-plot-v"></canvas></div>
+    </div>
+</div>
 
-            <div class="canvas-holder">
-                <canvas id="stage-canvas"></canvas>
-            </div>
         </div>
     </div>
 
     <script>
-        let currentSlide = 1;
-        const totalSlides = 4;
-
-        function goToSlide(idx) {
-            currentSlide = idx;
-            document.querySelectorAll('.presentation-slide').forEach((s, i) => s.classList.toggle('active', i === (idx - 1)));
-            document.querySelectorAll('.slide-step-btn').forEach((b, i) => b.classList.toggle('active', i === (idx - 1)));
-            drawStage();
-        }
-
-        function nextSlide() {
-            if (currentSlide < totalSlides) goToSlide(currentSlide + 1);
-            else goToSlide(1);
-        }
-
-        function prevSlide() {
-            if (currentSlide > 1) goToSlide(currentSlide - 1);
-            else goToSlide(totalSlides);
-        }
-
         function getCanvasCtx(id) {
             const canvas = document.getElementById(id);
             if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
@@ -336,36 +270,50 @@
             return { canvas, ctx, w: rect.width, h: rect.height };
         }
 
-        function resetDemo() {
-            goToSlide(1);
-        }
+        
+let timer = null, running = false;
+function togglePlay() { running = !running; document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Animado'; if (running && !timer) timer = setInterval(loop, 30); }
+function resetDemo() { running = false; if (timer) { clearInterval(timer); timer = null; } document.getElementById('btn-play').innerText = '▶ Simular Animado'; document.getElementById('leo-t').value = 0; updateDemo(); }
+function loop() { if (!running) return; let t = parseFloat(document.getElementById('leo-t').value) + 0.02; if (t > 3.0) { t = 3.0; running = false; clearInterval(timer); timer = null; document.getElementById('btn-play').innerText = '▶ Simular Animado'; } document.getElementById('leo-t').value = t; updateDemo(); }
 
-        function drawStage() {
-            const { ctx, w, h } = getCanvasCtx('stage-canvas');
-            if (!ctx) return;
-            ctx.clearRect(0, 0, w, h);
+function updateDemo() {
+    const t = parseFloat(document.getElementById('leo-t').value);
+    const dt = parseFloat(document.getElementById('leo-dt').value);
+    document.getElementById('leo-t-val').innerText = t.toFixed(2) + ' s';
+    document.getElementById('leo-dt-val').innerText = dt.toFixed(3) + ' s';
+    drawTrack(t); drawPlotX(t, dt); drawPlotV(t);
+}
 
-            const padL = 40, padR = 20, padT = 20, padB = 30;
-            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+function drawTrack(t) {
+    const { ctx, w, h } = getCanvasCtx('canvas-track'); if (!ctx) return; ctx.clearRect(0,0,w,h);
+    const cy = h / 2 + 10; ctx.strokeStyle = '#334155'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy); ctx.stroke();
+    const x_t = 20.0 + 5.0 * t * t; const px_leo = 20 + (x_t / 60) * (w - 40);
+    ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px_leo, cy - 6, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#fbbf24'; ctx.fillText(`🐆 x = ${x_t.toFixed(1)}m`, px_leo - 25, cy - 18);
+}
+function drawPlotX(t_curr, dt) {
+    const { ctx, w, h } = getCanvasCtx('canvas-plot-x'); if (!ctx) return; ctx.clearRect(0,0,w,h);
+    const padL = 35, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
+    const toPxX = t => padL + (t / 3.0) * gW, toPxY = x => (h - padB) - (x / 65.0) * gH;
+    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
+    for (let t = 0; t <= 3.0; t += 0.05) { const x = 20.0 + 5.0 * t * t; if (t === 0) ctx.moveTo(toPxX(t), toPxY(x)); else ctx.lineTo(toPxX(t), toPxY(x)); } ctx.stroke();
+    const t1 = 1.0, t2 = t1 + dt, x1 = 25.0, x2 = 20.0 + 5.0 * t2 * t2, v_med = (x2 - x1) / dt;
+    ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]); ctx.beginPath();
+    ctx.moveTo(toPxX(0.2), toPxY(x1 + v_med * (0.2 - t1))); ctx.lineTo(toPxX(2.5), toPxY(x1 + v_med * (2.5 - t1))); ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2; ctx.beginPath();
+    ctx.moveTo(toPxX(0.2), toPxY(x1 + 10.0 * (0.2 - t1))); ctx.lineTo(toPxX(2.2), toPxY(x1 + 10.0 * (2.2 - t1))); ctx.stroke();
+}
+function drawPlotV(t_curr) {
+    const { ctx, w, h } = getCanvasCtx('canvas-plot-v'); if (!ctx) return; ctx.clearRect(0,0,w,h);
+    const padL = 35, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
+    const toPxX = t => padL + (t / 3.0) * gW, toPxY = v => (h - padB) - (v / 35.0) * gH;
+    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+    ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(toPxX(0), toPxY(0)); ctx.lineTo(toPxX(3.0), toPxY(30.0)); ctx.stroke();
+    if (t_curr > 0) { ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.arc(toPxX(t_curr), toPxY(10.0 * t_curr), 6, 0, Math.PI * 2); ctx.fill(); }
+}
+window.onload = function() { updateDemo(); };
 
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8';
-            ctx.fillText('Exemplo 2.1 — Slide ' + currentSlide + ' (Análise Gráfica Ativa)', padL + 15, padT + 20);
-
-            ctx.strokeStyle = currentSlide === 1 ? '#38bdf8' : (currentSlide === 2 ? '#fbbf24' : (currentSlide === 3 ? '#10b981' : '#f43f5e'));
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            for (let x = 0; x <= (w - padL - padR); x += 5) {
-                const normX = x / (w - padL - padR);
-                const normY = Math.sin(normX * Math.PI * (currentSlide * 0.4)) * 0.35 + 0.5;
-                const py = (h - padB) - normY * (h - padT - padB);
-                if (x === 0) ctx.moveTo(padL + x, py); else ctx.lineTo(padL + x, py);
-            }
-            ctx.stroke();
-        }
-
-        window.onload = function() { drawStage(); };
-        window.onresize = function() { drawStage(); };
     </script>
 </body>
 </html>
