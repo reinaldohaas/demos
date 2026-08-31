@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 2.3: Aceleração Média e Instantânea | FSC5101 Física I</title>
+    <title>Exemplo 2.3: Carro de Testes | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -53,7 +53,6 @@
             transition: all 0.2s;
         }
         .back-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); }
-
         .nav-step-btn {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid var(--bg-card-border);
@@ -67,7 +66,6 @@
         }
         .nav-step-btn.primary { background: var(--primary-gradient); color: white; border-color: transparent; }
         .nav-step-btn:hover { transform: translateY(-1px); opacity: 0.9; }
-        .nav-step-disabled { opacity: 0.4; font-size: 0.85rem; font-weight: 600; color: var(--text-sub); }
 
         .statement-box {
             background: rgba(10, 16, 30, 0.92);
@@ -81,9 +79,8 @@
             flex-wrap: wrap;
             gap: 16px;
         }
-        .statement-title h2 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: var(--accent-cyan); margin-bottom: 6px; }
-        .statement-title p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; }
-
+        .statement-title h2 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: var(--accent-cyan); margin-bottom: 6px; }
+        .statement-title p { font-size: 0.92rem; color: #cbd5e1; line-height: 1.6; }
         .formula-badge {
             background: rgba(56, 189, 248, 0.1);
             border: 1px solid rgba(56, 189, 248, 0.3);
@@ -94,16 +91,14 @@
             color: var(--accent-gold);
             font-weight: 700;
         }
-
         .presentation-container {
             max-width: 1300px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 440px 1fr;
+            grid-template-columns: 460px 1fr;
             gap: 20px;
         }
         @media (max-width: 960px) { .presentation-container { grid-template-columns: 1fr; } }
-
         .slide-deck {
             background: var(--bg-card);
             border: 1px solid var(--bg-card-border);
@@ -113,7 +108,6 @@
             flex-direction: column;
             justify-content: space-between;
         }
-
         .item-card {
             background: rgba(10, 16, 30, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -163,7 +157,6 @@
             flex-direction: column;
             gap: 16px;
         }
-
         .scene-card {
             background: #050811;
             border: 1px solid var(--bg-card-border);
@@ -173,7 +166,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .vector-legend {
             position: absolute;
             top: 8px;
@@ -187,7 +179,6 @@
             border-radius: 6px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
         .plot-card {
             background: rgba(10, 16, 30, 0.9);
             border: 1px solid var(--bg-card-border);
@@ -200,7 +191,6 @@
         .plot-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-bottom: 8px; }
         .plot-wrapper { flex: 1; width: 100%; height: 100%; position: relative; background: #050811; border-radius: 8px; overflow: hidden; }
         canvas { width: 100%; height: 100%; display: block; }
-
         .scene-nav-bar {
             display: flex;
             justify-content: space-between;
@@ -217,85 +207,92 @@
     <div class="top-nav">
         <a href="index.html" class="back-btn">← Voltar ao Hub do Capítulo 2</a>
         <div style="display:flex; gap:10px; align-items:center;">
-            <a href="exemplo-2-2.html" class="nav-step-btn">← Exemplo Anterior</a>
+            <a href="exemplo-2-2.html" class="nav-step-btn">← Exemplo 2.2: Aceleração Média</a>
             <a href="exemplo-2-4.html" class="nav-step-btn primary">Exemplo 2.4: Frenagem →</a>
         </div>
     </div>
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 2.3: Aceleração Média e Instantânea</h2>
-            <p>Um automóvel esportivo desloca-se com velocidade dada por v(t) = 60,0 m/s + (0,50 m/s³)t². Ache a aceleração média e a aceleração instantânea em t = 1,0 s e t = 3,0 s.</p>
+            <h2>Exemplo 2.3: Velocidade Instantânea e Inversão de Sentido (Carro de Testes)</h2>
+            <p>A posição de um carro de testes ao longo do eixo Ox é dada por <strong>x(t) = 3,0 t - 0,10 t³ (m)</strong>. Calcule a velocidade instantânea em função do tempo, as velocidades nos instantes t = 0, t = 2,0 s e t = 5,0 s, e o instante em que o carro para momentaneamente e inverte o sentido do movimento.</p>
         </div>
-        <div class="formula-badge">v(t) = 60 + 0.50 t² (m/s)</div>
+        <div class="formula-badge">x(t) = 3.0 t - 0.10 t³ (m)</div>
     </div>
 
     <div class="presentation-container">
+        <!-- Didactic Resolution Deck -->
         <div class="slide-deck">
             <div>
                 <div style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); margin-bottom:12px; text-transform:uppercase;">
                     📖 Resolução Didática Passo a Passo (Itens a, b, c, d)
                 </div>
-                
-        <div class="item-card">
-            <div class="item-badge">Item (A)</div>
-            <div class="item-content">
-                <div class="item-title">Aceleração Média a_méd no intervalo</div>
-                <div class="item-formula"><code>a_méd = Δv / Δt = [v(2,0) - v(0)] / 2,0</code></div>
-                <div class="item-calc">v(0) = 60,0 m/s; v(2,0) = 62,0 m/s. a_méd = (62,0 - 60,0) / 2,0 = 1,0 m/s².</div>
-            </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (B)</div>
-            <div class="item-content">
-                <div class="item-title">Equação da Aceleração Instantânea a(t)</div>
-                <div class="item-formula"><code>a(t) = dv/dt = 1,0 t (m/s²)</code></div>
-                <div class="item-calc">Derivando a velocidade v(t) em relação ao tempo: a(t) = 1,0 t (m/s²).</div>
-            </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (C)</div>
-            <div class="item-content">
-                <div class="item-title">Aceleração em t = 1,0 s e t = 3,0 s</div>
-                <div class="item-formula"><code>a(1,0) = 1,0 m/s²; a(3,0) = 3,0 m/s²</code></div>
-                <div class="item-calc">A aceleração cresce de forma diretamente proporcional ao tempo: a(1,0) = 1,0 m/s² e a(3,0) = 3,0 m/s².</div>
-            </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (D)</div>
-            <div class="item-content">
-                <div class="item-title">Interpretação Gráfica</div>
-                <div class="item-formula"><code>a(t) = Inclinação da Reta Tangente a v(t)</code></div>
-                <div class="item-calc">A aceleração instantânea é numericamente igual à inclinação da reta tangente ao gráfico de v(t).</div>
-            </div>
-        </div>
-        
+
+                <div class="item-card">
+                    <div class="item-badge">Item (A)</div>
+                    <div class="item-content">
+                        <div class="item-title">Equação da Velocidade Instantânea v(t)</div>
+                        <div class="item-formula"><code>v(t) = dx/dt = 3,0 - 0,30 t² (m/s)</code></div>
+                        <div class="item-calc">Derivando a posição em relação ao tempo: v(t) = 3,0 - 0,30 t² (m/s).</div>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-badge">Item (B)</div>
+                    <div class="item-content">
+                        <div class="item-title">Velocidades em t = 0, t = 2,0 s e t = 5,0 s</div>
+                        <div class="item-formula"><code>v(0)=3,0m/s; v(2,0)=1,8m/s; v(5,0)=-4,5m/s</code></div>
+                        <div class="item-calc">
+                            t = 0 ⟹ v = 3,0 m/s (movendo-se para a direita)<br>
+                            t = 2,0 s ⟹ v = 1,8 m/s<br>
+                            t = 5,0 s ⟹ v = -4,5 m/s (movendo-se para a esquerda).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-badge">Item (C)</div>
+                    <div class="item-content">
+                        <div class="item-title">Instante de Repouso Momentâneo (v = 0)</div>
+                        <div class="item-formula"><code>3,0 - 0,30 t² = 0 ⟹ t² = 10</code></div>
+                        <div class="item-calc">t = √10 = <strong>3,16 s</strong>. A velocidade anula-se e o veículo inverte o sentido.</div>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-badge">Item (D)</div>
+                    <div class="item-content">
+                        <div class="item-title">Posição Máxima x_máx Atingida</div>
+                        <div class="item-formula"><code>x_máx = x(3,16 s) = 6,33 m</code></div>
+                        <div class="item-calc">x_máx = 3,0(3,16) - 0,10(3,16)³ = <strong>6,33 m</strong> (ponto de retorno no eixo Ox).</div>
+                    </div>
+                </div>
             </div>
 
+            <!-- Controls Panel -->
             <div class="control-card">
                 <div class="control-group">
-                    <label>Tempo t: <span id="ex-t-val">0.00 s</span></label>
-                    <input type="range" id="ex-t" min="0" max="4.0" step="0.05" value="0" oninput="updateDemo()">
+                    <label>Tempo t do Veículo: <span id="car-t-val">0.00 s</span></label>
+                    <input type="range" id="car-t" min="0" max="6.0" step="0.05" value="0" oninput="updateDemo()">
                 </div>
                 <div class="btn-group">
-                    <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
+                    <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Correr Veículo (Animado)</button>
                     <button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button>
                 </div>
             </div>
         </div>
 
+        <!-- Interactive Visual Stage -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">📺 Animação Física com Vetores Velocidade $\vec{v}$ e Aceleração $\vec{a}$</span>
+                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">🏎️ Animação do Carro de Testes com Vetores $\vec{{v}}$ e $\vec{{a}}$</span>
                 <div style="display:flex; gap:8px;">
-                    <a href="exemplo-2-2.html" class="nav-step-btn">← Exemplo Anterior</a>
+                    <a href="exemplo-2-2.html" class="nav-step-btn">← Anterior</a>
                     <a href="exemplo-2-4.html" class="nav-step-btn primary">Exemplo 2.4: Frenagem →</a>
                 </div>
             </div>
 
+            <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
                     <span style="color:#10b981;">➔ Vetor Velocidade v(t)</span>
@@ -304,13 +301,21 @@
                 <canvas id="canvas-scene"></canvas>
             </div>
 
+            <!-- Interactive Canvas Plots -->
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
                 <div class="plot-card">
-                    <div class="plot-header"><span>Gráfico Posição x(t)</span></div>
+                    <div class="plot-header">
+                        <span>Gráfico x(t): Posição vs Tempo</span>
+                        <span style="color:#fbbf24;">Pico x = 6,33m em t = 3,16s</span>
+                    </div>
                     <div class="plot-wrapper"><canvas id="canvas-plot-x"></canvas></div>
                 </div>
+
                 <div class="plot-card">
-                    <div class="plot-header"><span>Gráfico Velocidade v(t)</span></div>
+                    <div class="plot-header">
+                        <span>Gráfico v(t): Velocidade vs Tempo</span>
+                        <span style="color:#10b981;">Inversão v = 0</span>
+                    </div>
                     <div class="plot-wrapper"><canvas id="canvas-plot-v"></canvas></div>
                 </div>
             </div>
@@ -318,35 +323,33 @@
     </div>
 
     <script>
-        let timer = null, running = false;
+        let timer = null, running = true; // Auto-play on load!
 
         function togglePlay() {
             running = !running;
-            document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Animação';
+            document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Correr Veículo (Animado)';
             if (running && !timer) timer = setInterval(loop, 30);
         }
 
         function resetDemo() {
             running = false;
             if (timer) { clearInterval(timer); timer = null; }
-            document.getElementById('btn-play').innerText = '▶ Simular Animação';
-            document.getElementById('ex-t').value = 0;
+            document.getElementById('btn-play').innerText = '▶ Correr Veículo (Animado)';
+            document.getElementById('car-t').value = 0;
             updateDemo();
         }
 
         function loop() {
             if (!running) return;
-            const input = document.getElementById('ex-t');
-            let t = parseFloat(input.value) + parseFloat(input.step || 0.05);
-            const maxVal = parseFloat(input.max || 4.0);
-            if (t > maxVal) {
-                t = maxVal;
+            let t = parseFloat(document.getElementById('car-t').value) + 0.05;
+            if (t > 6.0) {
+                t = 6.0;
                 running = false;
                 clearInterval(timer);
                 timer = null;
-                document.getElementById('btn-play').innerText = '▶ Simular Animação';
+                document.getElementById('btn-play').innerText = '▶ Correr Veículo (Animado)';
             }
-            input.value = t;
+            document.getElementById('car-t').value = t;
             updateDemo();
         }
 
@@ -383,57 +386,128 @@
         }
 
         function updateDemo() {
-            const t = parseFloat(document.getElementById('ex-t').value);
-            document.getElementById('ex-t-val').innerText = t.toFixed(2) + ' s';
-            drawScene(t); drawPlotX(t); drawPlotV(t);
+            const t = parseFloat(document.getElementById('car-t').value);
+            document.getElementById('car-t-val').innerText = t.toFixed(2) + ' s';
+
+            drawScene(t);
+            drawPlotX(t);
+            drawPlotV(t);
         }
 
-        
-function drawScene(t) {
-    const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-    const cy = h - 45;
-    ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,w,h);
-    ctx.fillStyle = '#1e293b'; ctx.fillRect(0, cy, w, h - cy);
-    ctx.strokeStyle = '#334155'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
+        function drawScene(t) {
+            const { ctx, w, h } = getCanvasCtx('canvas-scene');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
 
-    const v_t = 60.0 + 0.50 * t * t;
-    const a_t = 1.0 * t;
-    const mapX = t => 40 + (t / 4.0) * (w - 80);
-    const px = mapX(t);
+            const cy = h - 45;
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, w, h);
+            ctx.fillStyle = '#1e293b'; ctx.fillRect(0, cy, w, h - cy);
+            ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
 
-    // Sports Car
-    ctx.fillStyle = '#a855f7'; ctx.fillRect(px - 16, cy - 16, 32, 14);
-    ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#a855f7'; ctx.textAlign = 'center';
-    ctx.fillText(`🏎️ Carro Esportivo v = ${v_t.toFixed(1)}m/s`, px, cy - 42);
+            // Distance Markers (-5m, 0m, 2m, 4m, 6.33m, 8m)
+            const mapX = x => 60 + (x + 6) * ((w - 100) / 16.0);
 
-    // Vector Velocity (Green)
-    drawVectorArrow(ctx, px, cy - 16, (v_t / 60.0) * 40.0, 0, '#10b981', `v = ${v_t.toFixed(1)}m/s`);
+            [-5, 0, 2, 4, 6.33, 8].forEach(mark => {
+                const mx = mapX(mark);
+                ctx.strokeStyle = (mark === 6.33) ? '#fbbf24' : '#475569'; ctx.lineWidth = (mark === 6.33) ? 1.5 : 1;
+                ctx.beginPath(); ctx.moveTo(mx, cy - 5); ctx.lineTo(mx, cy + 5); ctx.stroke();
+                ctx.font = (mark === 6.33) ? 'bold 10px Inter' : '10px Inter';
+                ctx.fillStyle = (mark === 6.33) ? '#fbbf24' : '#64748b'; ctx.textAlign = 'center';
+                ctx.fillText(mark === 6.33 ? '6,33m (Retorno)' : mark + 'm', mx, cy + 18);
+            });
 
-    // Vector Acceleration (Red)
-    if (a_t > 0.05) drawVectorArrow(ctx, px, cy - 28, a_t * 12.0, 0, '#f43f5e', `a = ${a_t.toFixed(1)}m/s²`);
-}
+            // Test Car Position, Velocity, Acceleration
+            const x_t = 3.0 * t - 0.10 * t * t * t;
+            const v_t = 3.0 - 0.30 * t * t;
+            const a_t = -0.60 * t;
+            const px_car = mapX(x_t);
 
-        
-function drawPlotX(t_curr) {
-    const { ctx, w, h } = getCanvasCtx('canvas-plot-x'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-    const padL = 40, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
-    const toPxX = t => padL + (t / 4.0) * gW, toPxY = v => (h - padB) - ((v - 55) / 20.0) * gH;
-    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
-    for (let t = 0; t <= 4.0; t += 0.1) { const v = 60.0 + 0.50 * t * t; if (t === 0) ctx.moveTo(toPxX(t), toPxY(v)); else ctx.lineTo(toPxX(t), toPxY(v)); } ctx.stroke();
-}
+            // Car Body
+            ctx.fillStyle = (v_t < 0) ? '#f43f5e' : '#38bdf8';
+            ctx.fillRect(px_car - 16, cy - 16, 32, 14);
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'center';
+            ctx.fillText(`🏎️ Carro x = ${x_t.toFixed(2)}m`, px_car, cy - 42);
 
-        
-function drawPlotV(t_curr) {
-    const { ctx, w, h } = getCanvasCtx('canvas-plot-v'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-    const padL = 40, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
-    const toPxX = t => padL + (t / 4.0) * gW, toPxY = a => (h - padB) - (a / 5.0) * gH;
-    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-    ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(toPxX(0), toPxY(0)); ctx.lineTo(toPxX(4.0), toPxY(4.0)); ctx.stroke();
-}
+            // Vector Velocity (Green Arrow)
+            drawVectorArrow(ctx, px_car, cy - 16, v_t * 10.0, 0, '#10b981', `v = ${v_t.toFixed(2)}m/s`);
 
+            // Vector Acceleration (Red Arrow)
+            drawVectorArrow(ctx, px_car, cy - 28, a_t * 10.0, 0, '#f43f5e', `a = ${a_t.toFixed(2)}m/s²`);
+        }
 
-        window.onload = function() { updateDemo(); };
+        function drawPlotX(t_curr) {
+            const { ctx, w, h } = getCanvasCtx('canvas-plot-x');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            const padL = 40, padR = 15, padT = 15, padB = 25;
+            const gW = w - padL - padR, gH = h - padT - padB;
+
+            const toPxX = t => padL + (t / 6.0) * gW;
+            const toPxY = x => (h - padB) - ((x + 10) / 20.0) * gH;
+
+            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+
+            // Position Curve
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
+            for (let t = 0; t <= 6.0; t += 0.1) {
+                const x = 3.0 * t - 0.10 * t * t * t;
+                if (t === 0) ctx.moveTo(toPxX(t), toPxY(x)); else ctx.lineTo(toPxX(t), toPxY(x));
+            }
+            ctx.stroke();
+
+            // Peak Marker (x_max = 6.33m at t = 3.16s)
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath();
+            ctx.arc(toPxX(3.16), toPxY(6.33), 5, 0, Math.PI * 2); ctx.fill();
+
+            // Current Time Marker
+            if (t_curr > 0) {
+                const x_curr = 3.0 * t_curr - 0.10 * t_curr * t_curr * t_curr;
+                ctx.fillStyle = '#f43f5e'; ctx.beginPath();
+                ctx.arc(toPxX(t_curr), toPxY(x_curr), 5, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+
+        function drawPlotV(t_curr) {
+            const { ctx, w, h } = getCanvasCtx('canvas-plot-v');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            const padL = 40, padR = 15, padT = 15, padB = 25;
+            const gW = w - padL - padR, gH = h - padT - padB;
+
+            const toPxX = t => padL + (t / 6.0) * gW;
+            const toPxY = v => (h - padB) - ((v + 6) / 10.0) * gH;
+
+            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+
+            // Velocity Parabola v(t) = 3.0 - 0.30 t^2
+            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath();
+            for (let t = 0; t <= 6.0; t += 0.1) {
+                const v = 3.0 - 0.30 * t * t;
+                if (t === 0) ctx.moveTo(toPxX(t), toPxY(v)); else ctx.lineTo(toPxX(t), toPxY(v));
+            }
+            ctx.stroke();
+
+            // Zero Velocity Crossing Marker
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath();
+            ctx.arc(toPxX(3.16), toPxY(0), 5, 0, Math.PI * 2); ctx.fill();
+
+            // Current Time Marker
+            if (t_curr > 0) {
+                const v_curr = 3.0 - 0.30 * t_curr * t_curr;
+                ctx.fillStyle = '#f43f5e'; ctx.beginPath();
+                ctx.arc(toPxX(t_curr), toPxY(v_curr), 5, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+
+        window.onload = function() {
+            updateDemo();
+            timer = setInterval(loop, 30); // Auto-play on load!
+        };
         window.onresize = function() { updateDemo(); };
     </script>
 </body>
