@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 2.2: Velocidade Instantânea e Inversão de Sentido | FSC5101 Física I</title>
+    <title>Exemplo 2.2: Velocidade Instantânea e Inversão do Sentido | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -228,8 +228,8 @@
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 2.2: Velocidade Instantânea e Inversão de Sentido</h2>
-            <p>A posição de um veículo de testes ao longo do eixo Ox é dada por x(t) = 3,0 t - 0,10 t³ (m). Determine a velocidade instantânea em função do tempo e o instante em que o veículo para momentaneamente.</p>
+            <h2>Exemplo 2.2: Velocidade Instantânea e Inversão do Sentido</h2>
+            <p>A posição de um carro de testes ao longo do eixo Ox é dada por x(t) = 3,0 t - 0,10 t³ (m). Calcule a velocidade instantânea em função do tempo, as velocidades nos instantes t = 0, t = 2,0 s e t = 5,0 s, e o instante em que o carro para momentaneamente.</p>
         </div>
         <div class="formula-badge">x(t) = 3.0 t - 0.10 t³ (m)</div>
     </div>
@@ -258,28 +258,28 @@
             <div class="slide-badge">SLIDE 1 DE 4 • ITEM (A)</div>
             <div class="slide-title">Equação da Velocidade Instantânea v(t)</div>
             <div class="slide-formula"><code>v(t) = dx/dt = 3,0 - 0,30 t² (m/s)</code></div>
-            <div class="slide-desc">Derivando a posição em relação ao tempo: v(t) = 3,0 - 0,30 t² m/s.</div>
+            <div class="slide-desc">Derivando a posição em relação ao tempo: v(t) = 3,0 - 0,30 t² (m/s).</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
             <div class="slide-badge">SLIDE 2 DE 4 • ITEM (B)</div>
+            <div class="slide-title">Velocidade nos Instantes t = 0, t = 2,0 s e t = 5,0 s</div>
+            <div class="slide-formula"><code>v(0) = 3,0 m/s; v(2,0) = 1,8 m/s; v(5,0) = -4,5 m/s</code></div>
+            <div class="slide-desc">Em t = 0: v = 3,0 m/s. Em t = 2,0 s: v = 3,0 - 0,30(4) = 1,8 m/s. Em t = 5,0 s: v = 3,0 - 0,30(25) = -4,5 m/s (movimento em sentido oposto).</div>
+        </div>
+        
+        <div class="presentation-slide " id="slide-3">
+            <div class="slide-badge">SLIDE 3 DE 4 • ITEM (C)</div>
             <div class="slide-title">Instante de Repouso Momentâneo (v = 0)</div>
             <div class="slide-formula"><code>3,0 - 0,30 t² = 0 ⟹ t² = 10</code></div>
             <div class="slide-desc">t = √10 = 3,16 s. Neste instante a velocidade é nula e o veículo inverte o sentido do movimento.</div>
         </div>
         
-        <div class="presentation-slide " id="slide-3">
-            <div class="slide-badge">SLIDE 3 DE 4 • ITEM (C)</div>
-            <div class="slide-title">Posição Máxima x_máx</div>
-            <div class="slide-formula"><code>x(3,16) = 3,0(3,16) - 0,10(3,16)³</code></div>
-            <div class="slide-desc">x_máx = 9,49 - 3,16 = 6,33 m (ponto de inflexão no gráfico x vs t).</div>
-        </div>
-        
         <div class="presentation-slide " id="slide-4">
             <div class="slide-badge">SLIDE 4 DE 4 • ITEM (D)</div>
-            <div class="slide-title">Velocidade em t = 5,0 s</div>
-            <div class="slide-formula"><code>v(5,0) = 3,0 - 0,30(5,0)²</code></div>
-            <div class="slide-desc">v(5,0) = 3,0 - 7,5 = -4,5 m/s (movendo-se no sentido negativo de Ox).</div>
+            <div class="slide-title">Posição Máxima Atingida x_máx</div>
+            <div class="slide-formula"><code>x_máx = 3,0(3,16) - 0,10(3,16)³</code></div>
+            <div class="slide-desc">x_máx = 9,49 - 3,16 = 6,33 m. Representa a posição máxima atingida à direita no eixo Ox.</div>
         </div>
         
             </div>
@@ -345,7 +345,6 @@
             if (!ctx) return;
             ctx.clearRect(0, 0, w, h);
 
-            // Draw grid & axes
             const padL = 40, padR = 20, padT = 20, padB = 30;
             ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
@@ -353,7 +352,6 @@
             ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8';
             ctx.fillText('Exemplo 2.2 — Slide ' + currentSlide + ' (Análise Gráfica Ativa)', padL + 15, padT + 20);
 
-            // Draw kinematic curves
             ctx.strokeStyle = currentSlide === 1 ? '#38bdf8' : (currentSlide === 2 ? '#fbbf24' : (currentSlide === 3 ? '#10b981' : '#f43f5e'));
             ctx.lineWidth = 3;
             ctx.beginPath();

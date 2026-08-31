@@ -229,7 +229,7 @@
     <div class="statement-box">
         <div class="statement-title">
             <h2>Exemplo 2.6: Integração da Aceleração Variável a(t)</h2>
-            <p>A aceleração de um veículo de testes varia com o tempo segundo a(t) = A t - B t², onde A = 1,50 m/s³ e B = 0,12 m/s⁴. Sabendo que v₀ = 0 e x₀ = 0 em t = 0, determine v(t) e x(t).</p>
+            <p>Sueli está dirigindo um carro em um trecho retilíneo. No tempo t = 0, quando se move a v₀ = 10 m/s no sentido positivo de Ox, ela passa por um poste a x₀ = 50 m. Sua aceleração é a(t) = A - B t, onde A = 2,0 m/s² e B = 0,10 m/s³. Determine v(t), x(t) e a velocidade máxima.</p>
         </div>
         <div class="formula-badge">v(t) = v₀ + ∫ a(t) dt</div>
     </div>
@@ -257,29 +257,29 @@
         <div class="presentation-slide active" id="slide-1">
             <div class="slide-badge">SLIDE 1 DE 4 • ITEM (A)</div>
             <div class="slide-title">Equação da Velocidade v(t) por Integração</div>
-            <div class="slide-formula"><code>v(t) = ∫ (A t - B t²) dt</code></div>
-            <div class="slide-desc">v(t) = ½ A t² - ⅓ B t³ = 0,75 t² - 0,040 t³ (m/s).</div>
+            <div class="slide-formula"><code>v(t) = v₀ + ∫ (A - B t) dt</code></div>
+            <div class="slide-desc">v(t) = 10 + 2,0 t - 0,050 t² (m/s).</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
             <div class="slide-badge">SLIDE 2 DE 4 • ITEM (B)</div>
             <div class="slide-title">Equação da Posição x(t) por Integração</div>
-            <div class="slide-formula"><code>x(t) = ∫ v(t) dt</code></div>
-            <div class="slide-desc">x(t) = ¼(0,75) t³ - ⅕(0,040) t⁴ = 0,25 t³ - 0,010 t⁴ (m).</div>
+            <div class="slide-formula"><code>x(t) = x₀ + ∫ v(t) dt</code></div>
+            <div class="slide-desc">x(t) = 50 + 10 t + 1,0 t² - 0,0167 t³ (m).</div>
         </div>
         
         <div class="presentation-slide " id="slide-3">
             <div class="slide-badge">SLIDE 3 DE 4 • ITEM (C)</div>
-            <div class="slide-title">Instante de Aceleração Nula (a = 0)</div>
-            <div class="slide-formula"><code>A t - B t² = 0 ⟹ t = A / B</code></div>
-            <div class="slide-desc">t = 1,50 / 0,12 = 12,5 s.</div>
+            <div class="slide-title">Instante de Velocidade Máxima (a = 0)</div>
+            <div class="slide-formula"><code>2,0 - 0,10 t = 0 ⟹ t = 20 s</code></div>
+            <div class="slide-desc">A velocidade é máxima em t = 20 s, quando a aceleração cai a zero.</div>
         </div>
         
         <div class="presentation-slide " id="slide-4">
             <div class="slide-badge">SLIDE 4 DE 4 • ITEM (D)</div>
-            <div class="slide-title">Velocidade Máxima atingida v_máx</div>
-            <div class="slide-formula"><code>v(12,5) = 0,75(12,5)² - 0,040(12,5)³</code></div>
-            <div class="slide-desc">v_máx = 117,19 - 78,13 = 39,06 m/s.</div>
+            <div class="slide-title">Velocidade Máxima e Posição correspondente</div>
+            <div class="slide-formula"><code>v_máx = v(20); x(20)</code></div>
+            <div class="slide-desc">v_máx = 10 + 2,0(20) - 0,050(400) = 30 m/s. Posição x(20) = 517 m.</div>
         </div>
         
             </div>
@@ -345,7 +345,6 @@
             if (!ctx) return;
             ctx.clearRect(0, 0, w, h);
 
-            // Draw grid & axes
             const padL = 40, padR = 20, padT = 20, padB = 30;
             ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
@@ -353,7 +352,6 @@
             ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8';
             ctx.fillText('Exemplo 2.6 — Slide ' + currentSlide + ' (Análise Gráfica Ativa)', padL + 15, padT + 20);
 
-            // Draw kinematic curves
             ctx.strokeStyle = currentSlide === 1 ? '#38bdf8' : (currentSlide === 2 ? '#fbbf24' : (currentSlide === 3 ? '#10b981' : '#f43f5e'));
             ctx.lineWidth = 3;
             ctx.beginPath();

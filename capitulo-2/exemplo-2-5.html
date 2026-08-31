@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 2.5: Queda Livre de um Objeto do Alto de Edifício | FSC5101 Física I</title>
+    <title>Exemplo 2.5: Queda Livre de uma Bola Lançada do Topo de um Edifício | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -228,8 +228,8 @@
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 2.5: Queda Livre de um Objeto do Alto de Edifício</h2>
-            <p>Uma bola é lançada verticalmente para cima a partir do topo de um edifício de 50,0 m de altura com v₀ = 15,0 m/s (g = 9,80 m/s²). Determine a altura máxima, o tempo para atingir o solo e a velocidade de impacto.</p>
+            <h2>Exemplo 2.5: Queda Livre de uma Bola Lançada do Topo de um Edifício</h2>
+            <p>Uma bola é lançada verticalmente para cima do topo de um edifício de 50,0 m de altura com velocidade inicial v₀ = 15,0 m/s (adote g = 9,80 m/s²). Determine a altura máxima acima do topo, o tempo para retornar ao nível de lançamento, o tempo para atingir o solo e a velocidade de impacto.</p>
         </div>
         <div class="formula-badge">y(t) = v₀ t - ½ g t²</div>
     </div>
@@ -263,14 +263,14 @@
         
         <div class="presentation-slide " id="slide-2">
             <div class="slide-badge">SLIDE 2 DE 4 • ITEM (B)</div>
-            <div class="slide-title">Tempo para Retornar ao Nível do Topo</div>
+            <div class="slide-title">Tempo para Retornar à Altura do Topo (y = 0)</div>
             <div class="slide-formula"><code>t = 2 v₀ / g</code></div>
-            <div class="slide-desc">t = 2 × 1,53 s = 3,06 s (velocidade v = -15,0 m/s).</div>
+            <div class="slide-desc">t = 2 × 1,53 s = 3,06 s (velocidade v = -15,0 m/s ao passar pelo topo descendo).</div>
         </div>
         
         <div class="presentation-slide " id="slide-3">
             <div class="slide-badge">SLIDE 3 DE 4 • ITEM (C)</div>
-            <div class="slide-title">Tempo de Queda até o Solo (y = -50,0 m)</div>
+            <div class="slide-title">Tempo para Atingir o Solo (y = -50,0 m)</div>
             <div class="slide-formula"><code>-50,0 = 15,0 t - 4,90 t²</code></div>
             <div class="slide-desc">4,90 t² - 15,0 t - 50,0 = 0 ⟹ t = 5,00 s.</div>
         </div>
@@ -279,7 +279,7 @@
             <div class="slide-badge">SLIDE 4 DE 4 • ITEM (D)</div>
             <div class="slide-title">Velocidade de Impacto no Solo</div>
             <div class="slide-formula"><code>v = v₀ - g t = 15,0 - 9,80(5,00)</code></div>
-            <div class="slide-desc">v = 15,0 - 49,0 = -34,0 m/s (|v| = 34,0 m/s).</div>
+            <div class="slide-desc">v = 15,0 - 49,0 = -34,0 m/s (módulo da velocidade = 34,0 m/s).</div>
         </div>
         
             </div>
@@ -345,7 +345,6 @@
             if (!ctx) return;
             ctx.clearRect(0, 0, w, h);
 
-            // Draw grid & axes
             const padL = 40, padR = 20, padT = 20, padB = 30;
             ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
@@ -353,7 +352,6 @@
             ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8';
             ctx.fillText('Exemplo 2.5 — Slide ' + currentSlide + ' (Análise Gráfica Ativa)', padL + 15, padT + 20);
 
-            // Draw kinematic curves
             ctx.strokeStyle = currentSlide === 1 ? '#38bdf8' : (currentSlide === 2 ? '#fbbf24' : (currentSlide === 3 ? '#10b981' : '#f43f5e'));
             ctx.lineWidth = 3;
             ctx.beginPath();

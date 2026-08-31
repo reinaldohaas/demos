@@ -229,7 +229,7 @@
     <div class="statement-box">
         <div class="statement-title">
             <h2>Exemplo 2.1: Posição e Velocidade Média (O Leopardo)</h2>
-            <p>Um leopardo está espreitando a 20 m a leste de um jipe de um observador. No instante t = 0, o leopardo começa a perseguir um antílope a 50 m do jipe. O movimento do leopardo é dado por x(t) = 20 + 5,0 t² (m).</p>
+            <p>Um leopardo está espreitando a 20 m a leste de um jipe de um observador. No tempo t = 0, o leopardo começa a perseguir um antílope que está a 50 m a leste do jipe. O movimento do leopardo é dado por x(t) = 20 m + (5,0 m/s²)t².</p>
         </div>
         <div class="formula-badge">x(t) = 20 + 5.0 t² (m)</div>
     </div>
@@ -256,30 +256,30 @@
                 
         <div class="presentation-slide active" id="slide-1">
             <div class="slide-badge">SLIDE 1 DE 4 • ITEM (A)</div>
-            <div class="slide-title">Deslocamento Δx nos intervalos de tempo</div>
+            <div class="slide-title">Deslocamento Δx no intervalo de t₁ = 1,0 s a t₂ = 2,0 s</div>
             <div class="slide-formula"><code>Δx = x(t₂) - x(t₁)</code></div>
-            <div class="slide-desc">Em t₁=1,0s: x(1,0) = 25,0m. Em t₂=2,0s: x(2,0) = 40,0m. Δx = 40,0m - 25,0m = 15,0 m.</div>
+            <div class="slide-desc">Em t₁ = 1,0 s: x(1,0) = 20 + 5,0(1,0)² = 25,0 m. Em t₂ = 2,0 s: x(2,0) = 20 + 5,0(2,0)² = 40,0 m. Portanto, Δx = 40,0 m - 25,0 m = 15,0 m.</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
             <div class="slide-badge">SLIDE 2 DE 4 • ITEM (B)</div>
-            <div class="slide-title">Velocidade Média v_méd</div>
+            <div class="slide-title">Velocidade Média v_méd no intervalo</div>
             <div class="slide-formula"><code>v_méd = Δx / Δt</code></div>
-            <div class="slide-desc">v_méd = 15,0 m / 1,0 s = 15,0 m/s (inclinação da Reta Secante entre t₁ e t₂).</div>
+            <div class="slide-desc">v_méd = (40,0 m - 25,0 m) / (2,0 s - 1,0 s) = 15,0 m / 1,0 s = 15,0 m/s (inclinação da Reta Secante entre t₁ e t₂).</div>
         </div>
         
         <div class="presentation-slide " id="slide-3">
             <div class="slide-badge">SLIDE 3 DE 4 • ITEM (C)</div>
-            <div class="slide-title">Velocidade Instantânea v(t)</div>
+            <div class="slide-title">Velocidade Instantânea v(t) em t = 1,0 s</div>
             <div class="slide-formula"><code>v(t) = dx/dt = 10,0 t (m/s)</code></div>
-            <div class="slide-desc">Derivando a posição: v(1,0) = 10,0 × 1,0 = 10,0 m/s (inclinação da Reta Tangente em t₁).</div>
+            <div class="slide-desc">Derivando x(t) em relação ao tempo: v(t) = 10,0 t m/s. Em t = 1,0 s: v(1,0) = 10,0 × 1,0 = 10,0 m/s (inclinação da Reta Tangente no ponto t = 1,0 s).</div>
         </div>
         
         <div class="presentation-slide " id="slide-4">
             <div class="slide-badge">SLIDE 4 DE 4 • ITEM (D)</div>
             <div class="slide-title">Convergência da Secante para a Tangente</div>
-            <div class="slide-formula"><code>lim (Δt → 0) Δx/Δt = dx/dt</code></div>
-            <div class="slide-desc">Quando Δt reduz-se de 1,0s para 0,001s, a velocidade média converge para a derivada exata 10,0 m/s.</div>
+            <div class="slide-formula"><code>lim (Δt → 0) Δx / Δt = dx / dt</code></div>
+            <div class="slide-desc">Ao reduzir Δt de 1,0 s para 0,001 s, a velocidade média converge de 15,0 m/s para o valor exato da velocidade instantânea: 10,0 m/s.</div>
         </div>
         
             </div>
@@ -345,7 +345,6 @@
             if (!ctx) return;
             ctx.clearRect(0, 0, w, h);
 
-            // Draw grid & axes
             const padL = 40, padR = 20, padT = 20, padB = 30;
             ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
@@ -353,7 +352,6 @@
             ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8';
             ctx.fillText('Exemplo 2.1 — Slide ' + currentSlide + ' (Análise Gráfica Ativa)', padL + 15, padT + 20);
 
-            // Draw kinematic curves
             ctx.strokeStyle = currentSlide === 1 ? '#38bdf8' : (currentSlide === 2 ? '#fbbf24' : (currentSlide === 3 ? '#10b981' : '#f43f5e'));
             ctx.lineWidth = 3;
             ctx.beginPath();

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 2.7: Ultrapassagem e Movimento Relativo de Carros | FSC5101 Física I</title>
+    <title>Exemplo 2.7: Ultrapassagem e Movimento Relativo de dois Veículos | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -228,8 +228,8 @@
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 2.7: Ultrapassagem e Movimento Relativo de Carros</h2>
-            <p>No instante t = 0, o Carro A parte do repouso (x = 0) com aceleração constante a_A = 2,50 m/s². No mesmo instante t = 0, o Carro B passa por x = 0 com velocidade constante v_B = 15,0 m/s. Encontre o instante e a posição da ultrapassagem.</p>
+            <h2>Exemplo 2.7: Ultrapassagem e Movimento Relativo de dois Veículos</h2>
+            <p>No instante t = 0, o Carro A parte do repouso em x = 0 com aceleração constante a_A = 2,50 m/s². No mesmo instante t = 0, o Carro B passa por x = 0 viajando com velocidade constante v_B = 15,0 m/s. Determine o tempo e a posição em que o Carro A ultrapassa o Carro B.</p>
         </div>
         <div class="formula-badge">x_A(t) = x_B(t)</div>
     </div>
@@ -256,7 +256,7 @@
                 
         <div class="presentation-slide active" id="slide-1">
             <div class="slide-badge">SLIDE 1 DE 4 • ITEM (A)</div>
-            <div class="slide-title">Equações Horárias dos Dois Veículos</div>
+            <div class="slide-title">Equações Horárias dos dois Veículos</div>
             <div class="slide-formula"><code>x_A(t) = ½ a_A t²; x_B(t) = v_B t</code></div>
             <div class="slide-desc">x_A(t) = 1,25 t² (m); x_B(t) = 15,0 t (m).</div>
         </div>
@@ -272,14 +272,14 @@
             <div class="slide-badge">SLIDE 3 DE 4 • ITEM (C)</div>
             <div class="slide-title">Posição da Ultrapassagem x_ult</div>
             <div class="slide-formula"><code>x_ult = x_B(12,0) = 15,0 × 12,0</code></div>
-            <div class="slide-desc">x_ult = 180,0 m.</div>
+            <div class="slide-desc">x_ult = 180,0 m (ponto de interseção nos gráficos x vs t).</div>
         </div>
         
         <div class="presentation-slide " id="slide-4">
             <div class="slide-badge">SLIDE 4 DE 4 • ITEM (D)</div>
             <div class="slide-title">Velocidades dos Veículos na Ultrapassagem</div>
             <div class="slide-formula"><code>v_A(12,0) = a_A t = 2,50 × 12,0</code></div>
-            <div class="slide-desc">v_A = 30,0 m/s (o dobro da velocidade constante v_B = 15,0 m/s).</div>
+            <div class="slide-desc">v_A = 30,0 m/s (o dobro da velocidade do Carro B, v_B = 15,0 m/s).</div>
         </div>
         
             </div>
@@ -345,7 +345,6 @@
             if (!ctx) return;
             ctx.clearRect(0, 0, w, h);
 
-            // Draw grid & axes
             const padL = 40, padR = 20, padT = 20, padB = 30;
             ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
@@ -353,7 +352,6 @@
             ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8';
             ctx.fillText('Exemplo 2.7 — Slide ' + currentSlide + ' (Análise Gráfica Ativa)', padL + 15, padT + 20);
 
-            // Draw kinematic curves
             ctx.strokeStyle = currentSlide === 1 ? '#38bdf8' : (currentSlide === 2 ? '#fbbf24' : (currentSlide === 3 ? '#10b981' : '#f43f5e'));
             ctx.lineWidth = 3;
             ctx.beginPath();

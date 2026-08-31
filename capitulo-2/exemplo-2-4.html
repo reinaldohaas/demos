@@ -229,7 +229,7 @@
     <div class="statement-box">
         <div class="statement-title">
             <h2>Exemplo 2.4: MRUV - Frenagem e Distância de Parada</h2>
-            <p>Um automóvel viajando a v₀ = 15,0 m/s (54 km/h) aplica os freios com desaceleração constante a = -2,0 m/s². Determine o tempo de parada e a distância percorrida.</p>
+            <p>Um automóvel viaja a v₀ = 15,0 m/s (54 km/h) quando o motorista aplica os freios, produzindo uma desaceleração constante a = -2,0 m/s². Determine o tempo necessário para parar e a distância percorrida durante a frenagem.</p>
         </div>
         <div class="formula-badge">v² = v₀² + 2 a Δx</div>
     </div>
@@ -265,21 +265,21 @@
             <div class="slide-badge">SLIDE 2 DE 4 • ITEM (B)</div>
             <div class="slide-title">Distância de Parada Δx</div>
             <div class="slide-formula"><code>Δx = v₀ t + ½ a t²</code></div>
-            <div class="slide-desc">Δx = 15,0(7,50) + ½(-2,0)(7,50)² = 112,5 - 56,25 = 56,25 m.</div>
+            <div class="slide-desc">Δx = (15,0)(7,50) + ½(-2,0)(7,50)² = 112,5 - 56,25 = 56,25 m.</div>
         </div>
         
         <div class="presentation-slide " id="slide-3">
             <div class="slide-badge">SLIDE 3 DE 4 • ITEM (C)</div>
-            <div class="slide-title">Verificação por Torricelli</div>
-            <div class="slide-formula"><code>v² = v₀² + 2 a Δx ⟹ 0 = 225 - 4 Δx</code></div>
-            <div class="slide-desc">Δx = 225 / 4 = 56,25 m (resultado idêntico).</div>
+            <div class="slide-title">Verificação via Equação de Torricelli</div>
+            <div class="slide-formula"><code>v² = v₀² + 2 a Δx ⟹ 0 = (15,0)² + 2(-2,0)Δx</code></div>
+            <div class="slide-desc">0 = 225 - 4,0 Δx ⟹ Δx = 225 / 4,0 = 56,25 m (resultado confirmado).</div>
         </div>
         
         <div class="presentation-slide " id="slide-4">
             <div class="slide-badge">SLIDE 4 DE 4 • ITEM (D)</div>
-            <div class="slide-title">Velocidade Média no Percurso</div>
-            <div class="slide-formula"><code>v_méd = (v₀ + v) / 2 = 7,5 m/s</code></div>
-            <div class="slide-desc">Δx = v_méd × t = 7,5 m/s × 7,5 s = 56,25 m.</div>
+            <div class="slide-title">Velocidade Média Durante a Frenagem</div>
+            <div class="slide-formula"><code>v_méd = (v₀ + v) / 2 = 7,50 m/s</code></div>
+            <div class="slide-desc">Δx = v_méd × t = 7,50 m/s × 7,50 s = 56,25 m.</div>
         </div>
         
             </div>
@@ -345,7 +345,6 @@
             if (!ctx) return;
             ctx.clearRect(0, 0, w, h);
 
-            // Draw grid & axes
             const padL = 40, padR = 20, padT = 20, padB = 30;
             ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
@@ -353,7 +352,6 @@
             ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8';
             ctx.fillText('Exemplo 2.4 — Slide ' + currentSlide + ' (Análise Gráfica Ativa)', padL + 15, padT + 20);
 
-            // Draw kinematic curves
             ctx.strokeStyle = currentSlide === 1 ? '#38bdf8' : (currentSlide === 2 ? '#fbbf24' : (currentSlide === 3 ? '#10b981' : '#f43f5e'));
             ctx.lineWidth = 3;
             ctx.beginPath();

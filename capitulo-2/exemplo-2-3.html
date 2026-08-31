@@ -229,7 +229,7 @@
     <div class="statement-box">
         <div class="statement-title">
             <h2>Exemplo 2.3: Aceleração Média e Instantânea</h2>
-            <p>Um automóvel esportivo desloca-se com velocidade dada por v(t) = 60,0 + 0,50 t² (m/s). Calcule a aceleração média entre 0 e 2,0 s e a aceleração instantânea em t = 1,0 s e t = 3,0 s.</p>
+            <p>Um automóvel esportivo desloca-se com velocidade dada por v(t) = 60,0 m/s + (0,50 m/s³)t². Ache a aceleração média entre t₁ = 0 e t₂ = 2,0 s e a aceleração instantânea em t = 1,0 s e t = 3,0 s.</p>
         </div>
         <div class="formula-badge">v(t) = 60 + 0.50 t² (m/s)</div>
     </div>
@@ -256,30 +256,30 @@
                 
         <div class="presentation-slide active" id="slide-1">
             <div class="slide-badge">SLIDE 1 DE 4 • ITEM (A)</div>
-            <div class="slide-title">Aceleração Média a_méd</div>
+            <div class="slide-title">Aceleração Média a_méd no intervalo</div>
             <div class="slide-formula"><code>a_méd = Δv / Δt = [v(2,0) - v(0)] / 2,0</code></div>
-            <div class="slide-desc">v(0)=60,0 m/s; v(2,0)=62,0 m/s. a_méd = (62,0 - 60,0) / 2,0 = 1,0 m/s².</div>
+            <div class="slide-desc">v(0) = 60,0 m/s; v(2,0) = 60,0 + 0,50(4,0) = 62,0 m/s. a_méd = (62,0 - 60,0) / 2,0 = 1,0 m/s².</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
             <div class="slide-badge">SLIDE 2 DE 4 • ITEM (B)</div>
-            <div class="slide-title">Aceleração Instantânea a(t)</div>
+            <div class="slide-title">Equação da Aceleração Instantânea a(t)</div>
             <div class="slide-formula"><code>a(t) = dv/dt = 1,0 t (m/s²)</code></div>
-            <div class="slide-desc">Derivando a velocidade v(t): a(t) = 1,0 t m/s².</div>
+            <div class="slide-desc">Derivando a velocidade v(t) em relação ao tempo: a(t) = 1,0 t (m/s²).</div>
         </div>
         
         <div class="presentation-slide " id="slide-3">
             <div class="slide-badge">SLIDE 3 DE 4 • ITEM (C)</div>
             <div class="slide-title">Aceleração em t = 1,0 s e t = 3,0 s</div>
             <div class="slide-formula"><code>a(1,0) = 1,0 m/s²; a(3,0) = 3,0 m/s²</code></div>
-            <div class="slide-desc">A aceleração cresce linearmente com o tempo: em 1,0s vale 1,0 m/s² e em 3,0s vale 3,0 m/s².</div>
+            <div class="slide-desc">A aceleração cresce de forma diretamente proporcional ao tempo: a(1,0) = 1,0 m/s² e a(3,0) = 3,0 m/s².</div>
         </div>
         
         <div class="presentation-slide " id="slide-4">
             <div class="slide-badge">SLIDE 4 DE 4 • ITEM (D)</div>
-            <div class="slide-title">Análise Gráfica v(t) e a(t)</div>
-            <div class="slide-formula"><code>Aceleração = Inclinação de v(t)</code></div>
-            <div class="slide-desc">A reta tangente à curva v(t) possui inclinação igual a a(t).</div>
+            <div class="slide-title">Interpretação Gráfica</div>
+            <div class="slide-formula"><code>a(t) = Inclinação da Reta Tangente a v(t)</code></div>
+            <div class="slide-desc">A aceleração instantânea é numericamente igual à inclinação da reta tangente ao gráfico de v(t).</div>
         </div>
         
             </div>
@@ -345,7 +345,6 @@
             if (!ctx) return;
             ctx.clearRect(0, 0, w, h);
 
-            // Draw grid & axes
             const padL = 40, padR = 20, padT = 20, padB = 30;
             ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
@@ -353,7 +352,6 @@
             ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8';
             ctx.fillText('Exemplo 2.3 — Slide ' + currentSlide + ' (Análise Gráfica Ativa)', padL + 15, padT + 20);
 
-            // Draw kinematic curves
             ctx.strokeStyle = currentSlide === 1 ? '#38bdf8' : (currentSlide === 2 ? '#fbbf24' : (currentSlide === 3 ? '#10b981' : '#f43f5e'));
             ctx.lineWidth = 3;
             ctx.beginPath();
