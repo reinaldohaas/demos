@@ -162,7 +162,7 @@
             border: 1px solid var(--bg-card-border);
             border-radius: 12px;
             padding: 10px;
-            height: 150px;
+            height: 155px;
             position: relative;
             overflow: hidden;
         }
@@ -261,7 +261,7 @@
 
         <!-- Interactive Visual Stage -->
         <div class="interactive-stage">
-            <!-- Savanna Scene Animation -->
+            <!-- Savanna Scene Animation with Fleeing Antelope -->
             <div class="scene-card">
                 <canvas id="canvas-scene"></canvas>
             </div>
@@ -347,17 +347,16 @@
             if (!ctx) return;
             ctx.clearRect(0, 0, w, h);
 
-            // Ground & Savanna Environment
             const cy = h - 35;
             ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, w, h);
             ctx.fillStyle = '#1e293b'; ctx.fillRect(0, cy, w, h - cy);
             ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
             ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
 
-            // Distance Markers (0m, 20m, 50m, 65m)
-            const mapX = x => 40 + (x / 70.0) * (w - 80);
+            // Distance Markers (0m, 20m, 25m, 40m, 50m, 65m, 75m)
+            const mapX = x => 40 + (x / 75.0) * (w - 80);
 
-            [0, 20, 25, 40, 50, 65].forEach(mark => {
+            [0, 20, 25, 40, 50, 65, 75].forEach(mark => {
                 const mx = mapX(mark);
                 ctx.strokeStyle = '#475569'; ctx.lineWidth = 1;
                 ctx.beginPath(); ctx.moveTo(mx, cy - 5); ctx.lineTo(mx, cy + 5); ctx.stroke();
@@ -372,24 +371,34 @@
             ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
             ctx.fillText('🚙 Jipe (0m)', px_jeep, cy - 30);
 
-            // Antelope at x = 50m
-            const px_ant = mapX(50);
-            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(px_ant, cy - 12, 8, 0, Math.PI * 2); ctx.fill();
-            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
-            ctx.fillText('🦌 Antílope (50m)', px_ant, cy - 22);
+            // Antelope FLEEING: Starts at x = 50m, flees to the right as t increases!
+            // Equation of Antelope Fleeing: x_ant(t) = 50 + 2.0 t^2 (m)
+            const x_ant = 50.0 + 2.0 * t * t;
+            const px_ant = mapX(x_ant);
+            const ant_bound = Math.abs(Math.sin(t * 12)) * 8; // Animated leg bounding jump height
 
-            // Leopard at position x(t) = 20 + 5.0 t^2
+            // Antelope Trail
+            ctx.strokeStyle = 'rgba(16, 185, 129, 0.3)'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(mapX(50), cy - 12); ctx.lineTo(px_ant, cy - 12 - ant_bound); ctx.stroke();
+
+            // Antelope Animated Marker
+            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(px_ant, cy - 12 - ant_bound, 8, 0, Math.PI * 2); ctx.fill();
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
+            ctx.fillText(`🦌 Antílope em Fuga! x = ${x_ant.toFixed(1)}m`, px_ant, cy - 24 - ant_bound);
+
+            // Leopard CHARGING: x(t) = 20 + 5.0 t^2
             const x_leo = 20.0 + 5.0 * t * t;
             const px_leo = mapX(x_leo);
+            const leo_bound = Math.abs(Math.sin(t * 15)) * 6; // Animated sprint bound
 
-            // Motion Trail
-            ctx.strokeStyle = 'rgba(251, 191, 36, 0.3)'; ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.moveTo(mapX(20), cy - 12); ctx.lineTo(px_leo, cy - 12); ctx.stroke();
+            // Motion Trail for Leopard
+            ctx.strokeStyle = 'rgba(251, 191, 36, 0.35)'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(mapX(20), cy - 12); ctx.lineTo(px_leo, cy - 12 - leo_bound); ctx.stroke();
 
-            // Leopard Sprite/Marker
-            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px_leo, cy - 12, 10, 0, Math.PI * 2); ctx.fill();
+            // Leopard Animated Marker
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px_leo, cy - 12 - leo_bound, 10, 0, Math.PI * 2); ctx.fill();
             ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'center';
-            ctx.fillText(`🐆 Leopardo x = ${x_leo.toFixed(1)}m`, px_leo, cy - 26);
+            ctx.fillText(`🐆 Leopardo x = ${x_leo.toFixed(1)}m`, px_leo, cy - 26 - leo_bound);
         }
 
         function drawPlotX(t_curr, dt) {
@@ -401,7 +410,7 @@
             const gW = w - padL - padR, gH = h - padT - padB;
 
             const toPxX = t => padL + (t / 3.0) * gW;
-            const toPxY = x => (h - padB) - (x / 70.0) * gH;
+            const toPxY = x => (h - padB) - (x / 75.0) * gH;
 
             // Grid & Axes
             ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
