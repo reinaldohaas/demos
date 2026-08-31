@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 2.2: Aceleração Média da Astronauta | FSC5101 Física I</title>
+    <title>Exemplo 2.2: Aceleração Média | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -20,9 +20,7 @@
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
@@ -34,7 +32,6 @@
             background-attachment: fixed;
             padding: 20px;
         }
-
         .top-nav {
             max-width: 1300px;
             margin: 0 auto 16px;
@@ -44,7 +41,6 @@
             flex-wrap: wrap;
             gap: 12px;
         }
-
         .back-btn {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid var(--bg-card-border);
@@ -71,6 +67,7 @@
         }
         .nav-step-btn.primary { background: var(--primary-gradient); color: white; border-color: transparent; }
         .nav-step-btn:hover { transform: translateY(-1px); opacity: 0.9; }
+        .nav-step-disabled { opacity: 0.4; font-size: 0.85rem; font-weight: 600; color: var(--text-sub); }
 
         .statement-box {
             background: rgba(10, 16, 30, 0.92);
@@ -84,30 +81,27 @@
             flex-wrap: wrap;
             gap: 16px;
         }
-
         .statement-title h2 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: var(--accent-cyan); margin-bottom: 6px; }
         .statement-title p { font-size: 0.92rem; color: #cbd5e1; line-height: 1.6; }
 
-        .data-table-mini {
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 8px;
-            padding: 8px 14px;
-            font-size: 0.82rem;
+        .formula-badge {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-family: 'Outfit', monospace;
+            font-size: 1.1rem;
             color: var(--accent-gold);
-            font-family: monospace;
+            font-weight: 700;
         }
-        .data-table-mini table { border-collapse: collapse; }
-        .data-table-mini td { padding: 3px 8px; }
 
         .presentation-container {
             max-width: 1300px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 460px 1fr;
+            grid-template-columns: 480px 1fr;
             gap: 20px;
         }
-
         @media (max-width: 960px) { .presentation-container { grid-template-columns: 1fr; } }
 
         .slide-deck {
@@ -124,12 +118,11 @@
             background: rgba(10, 16, 30, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 10px;
-            padding: 12px 14px;
-            margin-bottom: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
             display: flex;
             gap: 12px;
         }
-
         .item-badge {
             background: rgba(99, 102, 241, 0.2);
             color: #a855f7;
@@ -139,10 +132,9 @@
             border-radius: 6px;
             height: fit-content;
         }
-
-        .item-title { font-weight: 700; font-size: 0.88rem; color: var(--text-main); margin-bottom: 4px; }
-        .item-formula code { font-family: monospace; font-size: 0.8rem; color: var(--accent-cyan); }
-        .item-calc { font-size: 0.82rem; color: var(--accent-emerald); margin-top: 4px; font-weight: 600; line-height: 1.5; }
+        .item-title { font-weight: 700; font-size: 0.9rem; color: var(--text-main); margin-bottom: 6px; }
+        .item-formula code { font-family: monospace; font-size: 0.82rem; color: var(--accent-cyan); }
+        .item-calc { font-size: 0.83rem; color: #cbd5e1; margin-top: 6px; font-weight: 500; line-height: 1.6; }
 
         .control-card {
             background: rgba(10, 16, 30, 0.7);
@@ -151,7 +143,6 @@
             padding: 16px;
             margin-top: 14px;
         }
-
         .control-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
         .control-group label { font-size: 0.82rem; font-weight: 600; color: var(--text-sub); display: flex; justify-content: space-between; }
         .control-group label span { color: var(--accent-cyan); font-family: monospace; font-weight: 700; }
@@ -174,13 +165,18 @@
         }
 
         .scene-card {
-            background: #02040a;
+            background: #050811;
             border: 1px solid var(--bg-card-border);
             border-radius: 12px;
             padding: 10px;
-            height: 155px;
+            height: 440px;
             position: relative;
             overflow: hidden;
+        }
+        .scene-card canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
         }
 
         .vector-legend {
@@ -197,20 +193,6 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .plot-card-fig210 {
-            background: #050811;
-            border: 1px solid var(--bg-card-border);
-            border-radius: 12px;
-            padding: 16px;
-            height: 380px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .plot-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: 700; color: var(--text-sub); margin-bottom: 10px; }
-        .plot-wrapper { flex: 1; width: 100%; height: 100%; position: relative; background: #02040a; border-radius: 8px; overflow: hidden; }
-        canvas { width: 100%; height: 100%; display: block; }
-
         .scene-nav-bar {
             display: flex;
             justify-content: space-between;
@@ -220,13 +202,6 @@
             padding: 12px 18px;
             border-radius: 12px;
         }
-    
-        .scene-card canvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-        }
-
     </style>
 </head>
 <body>
@@ -234,24 +209,17 @@
     <div class="top-nav">
         <a href="index.html" class="back-btn">← Voltar ao Hub do Capítulo 2</a>
         <div style="display:flex; gap:10px; align-items:center;">
-            <a href="exemplo-2-1.html" class="nav-step-btn">← Exemplo 2.1: O Leopardo</a>
-            <a href="exemplo-2-3.html" class="nav-step-btn primary">Exemplo 2.3: Carro Esportivo →</a>
+            <a href="exemplo-2-1.html" class="nav-step-btn">← Exemplo Anterior</a>
+            <a href="exemplo-2-3.html" class="nav-step-btn primary">Exemplo 2.3: Inversão de Sentido →</a>
         </div>
     </div>
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 2.2: ACELERAÇÃO MÉDIA (A Astronauta no Espaço)</h2>
-            <p>Uma astronauta saiu de um ônibus espacial em órbita no espaço para testar uma nova unidade de manobra pessoal. À medida que ela se move em linha reta, seu companheiro a bordo do ônibus espacial mede sua velocidade a cada intervalo de 2,0 s, começando em t = 1,0 s. Calcule a aceleração média e verifique se a velocidade da astronauta aumenta ou diminui para cada um dos quatro intervalos de tempo.</p>
+            <h2>Exemplo 2.2: Aceleração Média</h2>
+            <p>Uma astronauta a bordo de um ônibus espacial mede sua velocidade a cada intervalo de 2,0 s com uma unidade pessoal de manobra. Aceleração média calculada em quatro intervalos sucessivos de tempo e verificação se a velocidade aumenta ou diminui.</p>
         </div>
-        <div class="data-table-mini">
-            <table>
-                <tr><td>t = 1,0 s: <strong>v = +0,8 m/s</strong></td><td>t = 9,0 s: <strong>v = -0,4 m/s</strong></td></tr>
-                <tr><td>t = 3,0 s: <strong>v = +1,2 m/s</strong></td><td>t = 11,0 s: <strong>v = -1,0 m/s</strong></td></tr>
-                <tr><td>t = 5,0 s: <strong>v = +1,6 m/s</strong></td><td>t = 13,0 s: <strong>v = -1,6 m/s</strong></td></tr>
-                <tr><td>t = 7,0 s: <strong>v = +1,2 m/s</strong></td><td>t = 15,0 s: <strong>v = -0,8 m/s</strong></td></tr>
-            </table>
-        </div>
+        <div class="formula-badge">a_méd-x = Δv_x / Δt</div>
     </div>
 
     <div class="presentation-container">
@@ -259,55 +227,56 @@
         <div class="slide-deck">
             <div>
                 <div style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); margin-bottom:12px; text-transform:uppercase;">
-                    📖 Resolução Didática Passo a Passo (Itens a, b, c, d)
+                    📖 Resolução Didática Passo a Passo com Explicações Detalhadas
                 </div>
+                
+        <div class="item-card">
+            <div class="item-badge">Intervalo (A)</div>
+            <div class="item-content">
+                <div class="item-title">t₁ = 1,0 s (v = 0,8 m/s) até t₂ = 3,0 s (v = 1,2 m/s)</div>
+                <div class="item-formula"><code>a_méd-x = (1,2 - 0,8) / (3,0 - 1,0) = +0,4 / 2,0</code></div>
+                <div class="item-calc">🔹 <b>Passo 1:</b> Variação de velocidade Δv_x = +0,4 m/s em Δt = 2,0 s.<br>🔹 <b>Passo 2:</b> a_méd-x = <b>+0,20 m/s²</b>.<br>🔹 <b>Análise:</b> A aceleração é positiva e o módulo da velocidade aumenta no sentido +x.</div>
+            </div>
+        </div>
 
-                <div class="item-card">
-                    <div class="item-badge">Item (A)</div>
-                    <div class="item-content">
-                        <div class="item-title">t₁ = 1,0 s até t₂ = 3,0 s</div>
-                        <div class="item-formula"><code>a_{mx} = (1,2 - 0,8) / (3,0 - 1,0) = +0,2 m/s²</code></div>
-                        <div class="item-calc">Sinais iguais (v_x > 0 e a_{mx} > 0) ⟹ A velocidade da astronauta <strong>aumenta</strong> (movimento acelerado no sentido positivo).</div>
-                    </div>
-                </div>
+        <div class="item-card">
+            <div class="item-badge">Intervalo (B)</div>
+            <div class="item-content">
+                <div class="item-title">t₁ = 5,0 s (v = 1,6 m/s) até t₂ = 7,0 s (v = 1,2 m/s)</div>
+                <div class="item-formula"><code>a_méd-x = (1,2 - 1,6) / (7,0 - 5,0) = -0,4 / 2,0</code></div>
+                <div class="item-calc">🔹 <b>Passo 1:</b> Variação de velocidade Δv_x = -0,4 m/s em Δt = 2,0 s.<br>🔹 <b>Passo 2:</b> a_méd-x = <b>-0,20 m/s²</b>.<br>🔹 <b>Análise:</b> A aceleração é negativa e o módulo da velocidade diminui (frenagem no sentido +x).</div>
+            </div>
+        </div>
 
-                <div class="item-card">
-                    <div class="item-badge">Item (B)</div>
-                    <div class="item-content">
-                        <div class="item-title">t₁ = 5,0 s até t₂ = 7,0 s</div>
-                        <div class="item-formula"><code>a_{mx} = (1,2 - 1,6) / (7,0 - 5,0) = -0,2 m/s²</code></div>
-                        <div class="item-calc">Sinais opostos (v_x > 0 e a_{mx} < 0) ⟹ A velocidade da astronauta <strong>diminui</strong> (movimento retardado no sentido positivo).</div>
-                    </div>
-                </div>
+        <div class="item-card">
+            <div class="item-badge">Intervalo (C)</div>
+            <div class="item-content">
+                <div class="item-title">t₁ = 9,0 s (v = -0,4 m/s) até t₂ = 11,0 s (v = -1,0 m/s)</div>
+                <div class="item-formula"><code>a_méd-x = (-1,0 - (-0,4)) / (11,0 - 9,0) = -0,6 / 2,0</code></div>
+                <div class="item-calc">🔹 <b>Passo 1:</b> Variação de velocidade Δv_x = -0,6 m/s em Δt = 2,0 s.<br>🔹 <b>Passo 2:</b> a_méd-x = <b>-0,30 m/s²</b>.<br>🔹 <b>Análise:</b> A aceleração é negativa e a velocidade é negativa; o módulo aumenta de 0,4 m/s para 1,0 m/s no sentido -x!</div>
+            </div>
+        </div>
 
-                <div class="item-card">
-                    <div class="item-badge">Item (C)</div>
-                    <div class="item-content">
-                        <div class="item-title">t₁ = 9,0 s até t₂ = 11,0 s</div>
-                        <div class="item-formula"><code>a_{mx} = (-1,0 - (-0,4)) / (11,0 - 9,0) = -0,3 m/s²</code></div>
-                        <div class="item-calc">Sinais iguais (v_x < 0 e a_{mx} < 0) ⟹ A velocidade da astronauta <strong>aumenta em módulo</strong> no sentido negativo!</div>
-                    </div>
-                </div>
-
-                <div class="item-card">
-                    <div class="item-badge">Item (D)</div>
-                    <div class="item-content">
-                        <div class="item-title">t₁ = 13,0 s até t₂ = 15,0 s</div>
-                        <div class="item-formula"><code>a_{mx} = (-0,8 - (-1,6)) / (15,0 - 13,0) = +0,4 m/s²</code></div>
-                        <div class="item-calc">Sinais opostos (v_x < 0 e a_{mx} > 0) ⟹ A velocidade da astronauta <strong>diminui em módulo</strong> (frenagem para retorno).</div>
-                    </div>
-                </div>
+        <div class="item-card">
+            <div class="item-badge">Intervalo (D)</div>
+            <div class="item-content">
+                <div class="item-title">t₁ = 13,0 s (v = -1,6 m/s) até t₂ = 15,0 s (v = -0,8 m/s)</div>
+                <div class="item-formula"><code>a_méd-x = (-0,8 - (-1,6)) / (15,0 - 13,0) = +0,8 / 2,0</code></div>
+                <div class="item-calc">🔹 <b>Passo 1:</b> Variação de velocidade Δv_x = +0,8 m/s em Δt = 2,0 s.<br>🔹 <b>Passo 2:</b> a_méd-x = <b>+0,40 m/s²</b>.<br>🔹 <b>Análise:</b> A aceleração é positiva e a velocidade é negativa; o módulo da velocidade diminui de 1,6 m/s para 0,8 m/s (frenagem no sentido -x).</div>
+            </div>
+        </div>
+        
             </div>
 
             <!-- Controls Panel -->
             <div class="control-card">
                 <div class="control-group">
-                    <label>Tempo t da Astronauta: <span id="astro-t-val">1.00 s</span></label>
-                    <input type="range" id="astro-t" min="1.0" max="15.0" step="0.05" value="1.0" oninput="updateDemo()">
+                    <label>Ajuste do Tempo t: <span id="ex-t-val">0.00 s</span></label>
+                    <input type="range" id="ex-t" min="0" max="15.0" step="0.2" value="0" oninput="updateDemo()">
                 </div>
                 <div class="btn-group">
-                    <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Astronauta (Animado)</button>
-                    <button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 1.0 s)</button>
+                    <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
+                    <button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button>
                 </div>
             </div>
         </div>
@@ -315,29 +284,20 @@
         <!-- Interactive Visual Stage -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">👩‍🚀 Simulação do Movimento no Ônibus Espacial com Vetores $\vec{{v}}_x$ e $\vec{{a}}_{{mx}}$</span>
+                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa com Vetores Velocidade $\vec{v}$ e Aceleração $\vec{a}$</span>
                 <div style="display:flex; gap:8px;">
-                    <a href="exemplo-2-1.html" class="nav-step-btn">← Anterior</a>
-                    <a href="exemplo-2-3.html" class="nav-step-btn primary">Exemplo 2.3: Carro Esportivo →</a>
+                    <a href="exemplo-2-1.html" class="nav-step-btn">← Exemplo Anterior</a>
+                    <a href="exemplo-2-3.html" class="nav-step-btn primary">Exemplo 2.3: Inversão de Sentido →</a>
                 </div>
             </div>
 
-            <!-- Space Scene Canvas -->
+            <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
-                    <span style="color:#10b981;">➔ Vetor Velocidade v_x</span>
-                    <span style="color:#f43f5e;">➔ Aceleração Média a_mx</span>
+                    <span style="color:#10b981;">➔ Vetor Velocidade v</span>
+                    <span style="color:#f43f5e;">➔ Vetor Aceleração a</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
-            </div>
-
-            <!-- Figure 2.10 Dual Canvas (Upper v_x vs t / Lower a_mx vs t) -->
-            <div class="plot-card-fig210">
-                <div class="plot-header">
-                    <span>Figura 2.10: Gráfico Superior $v_x(t)$ (m/s) & Gráfico Inferior $a_{mx}(t)$ ($	ext{m/s}^2$)</span>
-                    <span style="color:#fbbf24;">Inclinação da Reta = Aceleração Média $a_{mx}$</span>
-                </div>
-                <div class="plot-wrapper"><canvas id="canvas-fig210"></canvas></div>
             </div>
         </div>
     </div>
@@ -347,33 +307,35 @@
 
         function togglePlay() {
             running = !running;
-            document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Astronauta (Animado)';
+            document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Animação';
             if (running && !timer) timer = setInterval(loop, 30);
         }
 
         function resetDemo() {
             running = false;
             if (timer) { clearInterval(timer); timer = null; }
-            document.getElementById('btn-play').innerText = '▶ Simular Astronauta (Animado)';
-            document.getElementById('astro-t').value = 1.0;
+            document.getElementById('btn-play').innerText = '▶ Simular Animação';
+            document.getElementById('ex-t').value = 0;
             updateDemo();
         }
 
         function loop() {
             if (!running) return;
-            let t = parseFloat(document.getElementById('astro-t').value) + 0.05;
-            if (t > 15.0) {
-                t = 15.0;
+            const input = document.getElementById('ex-t');
+            let t = parseFloat(input.value) + parseFloat(input.step || 0.2);
+            const maxVal = parseFloat(input.max || 15.0);
+            if (t > maxVal) {
+                t = maxVal;
                 running = false;
                 clearInterval(timer);
                 timer = null;
-                document.getElementById('btn-play').innerText = '▶ Simular Astronauta (Animado)';
+                document.getElementById('btn-play').innerText = '▶ Simular Animação';
             }
-            document.getElementById('astro-t').value = t;
+            input.value = t;
             updateDemo();
         }
 
-                function getCanvasCtx(id) {
+        function getCanvasCtx(id) {
             const canvas = document.getElementById(id);
             if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
             const rect = canvas.getBoundingClientRect();
@@ -402,196 +364,58 @@
             ctx.closePath(); ctx.fill();
 
             if (label) {
-                ctx.font = 'bold 10px Inter'; ctx.textAlign = 'center';
+                ctx.font = 'bold 11px Inter'; ctx.textAlign = 'center';
                 ctx.fillText(label, x + dx * 0.5, y + dy - 6);
             }
         }
 
-        function getAstronautState(t) {
-            let vx = 0, amx = 0;
-            if (t >= 1.0 && t <= 3.0) {
-                vx = 0.8 + (1.2 - 0.8) * ((t - 1.0) / 2.0); amx = 0.2;
-            } else if (t > 3.0 && t < 5.0) {
-                vx = 1.2 + (1.6 - 1.2) * ((t - 3.0) / 2.0); amx = 0.2;
-            } else if (t >= 5.0 && t <= 7.0) {
-                vx = 1.6 + (1.2 - 1.6) * ((t - 5.0) / 2.0); amx = -0.2;
-            } else if (t > 7.0 && t < 9.0) {
-                vx = 1.2 + (-0.4 - 1.2) * ((t - 7.0) / 2.0); amx = -0.8;
-            } else if (t >= 9.0 && t <= 11.0) {
-                vx = -0.4 + (-1.0 - (-0.4)) * ((t - 9.0) / 2.0); amx = -0.3;
-            } else if (t > 11.0 && t < 13.0) {
-                vx = -1.0 + (-1.6 - (-1.0)) * ((t - 11.0) / 2.0); amx = -0.3;
-            } else if (t >= 13.0 && t <= 15.0) {
-                vx = -1.6 + (-0.8 - (-1.6)) * ((t - 13.0) / 2.0); amx = 0.4;
-            } else {
-                vx = 0.8; amx = 0;
-            }
-            return { vx, amx };
-        }
-
         function updateDemo() {
-            const t = parseFloat(document.getElementById('astro-t').value);
-            document.getElementById('astro-t-val').innerText = t.toFixed(2) + ' s';
-
+            const t = parseFloat(document.getElementById('ex-t').value);
+            document.getElementById('ex-t-val').innerText = t.toFixed(2) + ' s';
             drawScene(t);
-            drawFig210(t);
         }
 
+        
         function drawScene(t) {
-            const { ctx, w, h } = getCanvasCtx('canvas-scene');
-            if (!ctx) return;
-            ctx.clearRect(0, 0, w, h);
+            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = '#070a14'; ctx.fillRect(0,0,w,h);
 
-            // Deep Space Background
-            ctx.fillStyle = '#02040a'; ctx.fillRect(0, 0, w, h);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-            for (let i = 0; i < 30; i++) {
-                const sx = (i * 47) % w; const sy = (i * 29) % (h - 30);
-                ctx.fillRect(sx, sy, (i % 2) + 1, (i % 2) + 1);
+            // Shaded Shuttle Body
+            ctx.fillStyle = '#1e293b'; ctx.fillRect(10, h/2 - 40, 70, 80);
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
+            ctx.fillText('🛸 Ônibus', 45, h/2);
+
+            const times = [1, 3, 5, 7, 9, 11, 13, 15];
+            const speeds = [0.8, 1.2, 1.6, 1.2, -0.4, -1.0, -1.6, -0.8];
+            
+            // Interpolate speed for time t
+            let vx = 0.8;
+            if (t <= 1) vx = 0.8;
+            else if (t >= 15) vx = -0.8;
+            else {
+                for (let i = 0; i < times.length - 1; i++) {
+                    if (t >= times[i] && t <= times[i+1]) {
+                        const ratio = (t - times[i]) / (times[i+1] - times[i]);
+                        vx = speeds[i] + ratio * (speeds[i+1] - speeds[i]);
+                        break;
+                    }
+                }
             }
 
-            const cy = h - 35;
-            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 2;
-            ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
+            const astroX = 120 + t * 25;
+            ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.arc(astroX, h/2, 12, 0, Math.PI*2); ctx.fill();
+            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
+            ctx.fillText(`👩‍🚀 Astronauta (t = ${t.toFixed(1)}s)`, astroX + 16, h/2 - 15);
+            ctx.fillText(`v_x = ${vx.toFixed(2)} m/s`, astroX + 16, h/2 + 5);
 
-            const { vx, amx } = getAstronautState(t);
-            const px_shuttle = 70;
-            const px_astro = px_shuttle + 80 + Math.sin(t * 0.4) * 120 + t * 8;
-
-            // Space Shuttle at Origin
-            ctx.fillStyle = '#38bdf8'; ctx.fillRect(px_shuttle - 25, cy - 25, 50, 25);
-            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'center';
-            ctx.fillText('🚀 Ônibus Espacial', px_shuttle, cy - 32);
-
-            // Astronaut Sprite
-            ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.arc(px_astro, cy - 14, 10, 0, Math.PI * 2); ctx.fill();
-            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#a855f7'; ctx.textAlign = 'center';
-            ctx.fillText(`👩‍🚀 Astronauta v_x = ${vx.toFixed(2)} m/s`, px_astro, cy - 42);
-
-            // Velocity Vector (Green Arrow)
-            drawVectorArrow(ctx, px_astro, cy - 14, vx * 35.0, 0, '#10b981', `v_x = ${vx.toFixed(2)}m/s`);
-
-            // Acceleration Vector (Red Arrow)
-            if (Math.abs(amx) > 0.05) {
-                drawVectorArrow(ctx, px_astro, cy - 28, amx * 80.0, 0, '#f43f5e', `a_mx = ${amx.toFixed(1)}m/s²`);
-            }
+            drawVectorArrow(ctx, astroX, h/2, vx * 40.0, 0, '#10b981', `v`);
         }
-
-        function drawFig210(t_curr) {
-            const { ctx, w, h } = getCanvasCtx('canvas-fig210');
-            if (!ctx) return;
-            ctx.clearRect(0, 0, w, h);
-
-            const padL = 60, padR = 25, padT = 30, padB = 40;
-            const midY = h / 2 + 10;
-            const gW = w - padL - padR;
-            const upperH = midY - padT - 20;
-            const lowerH = h - padB - midY - 20;
-
-            const toPxX = t => padL + ((t - 0) / 16.0) * gW;
-            const toPxY_upper = v => (midY - 20) - ((v - 0) / 2.0) * upperH;
-            const toPxY_lower = a => (h - padB - 10) - ((a - (-0.5)) / 1.2) * lowerH;
-
-            // Background & Separator Line
-            ctx.fillStyle = '#050811'; ctx.fillRect(0, 0, w, h);
-
-            // Upper Axis (vx vs t)
-            ctx.strokeStyle = '#334155'; ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.moveTo(padL, midY - 20); ctx.lineTo(w - padR, midY - 20); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, midY - 20); ctx.stroke();
-
-            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'right';
-            ctx.fillText('v_x (m/s)', padL - 10, padT + 5);
-
-            [1.5, 1.0, 0.5, 0, -0.5, -1.0, -1.5].forEach(v => {
-                const py = toPxY_upper(v);
-                ctx.strokeStyle = '#1e293b'; ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(w - padR, py); ctx.stroke();
-                ctx.fillStyle = '#64748b'; ctx.font = '10px Inter'; ctx.fillText(v.toFixed(1), padL - 8, py + 3);
-            });
-
-            // Lower Axis (amx vs t)
-            ctx.strokeStyle = '#334155'; ctx.lineWidth = 1;
-            const zeroY_lower = toPxY_lower(0);
-            ctx.beginPath(); ctx.moveTo(padL, zeroY_lower); ctx.lineTo(w - padR, zeroY_lower); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(padL, midY + 10); ctx.lineTo(padL, h - padB); ctx.stroke();
-
-            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#f43f5e'; ctx.textAlign = 'right';
-            ctx.fillText('a_mx (m/s²)', padL - 10, midY + 25);
-
-            [0.5, 0, -0.5].forEach(a => {
-                const py = toPxY_lower(a);
-                ctx.strokeStyle = '#1e293b'; ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(w - padR, py); ctx.stroke();
-                ctx.fillStyle = '#64748b'; ctx.font = '10px Inter'; ctx.fillText(a.toFixed(1), padL - 8, py + 3);
-            });
-
-            // Time Ticks (0, 5, 10, 15 s)
-            [0, 5, 10, 15].forEach(t => {
-                const px = toPxX(t);
-                ctx.strokeStyle = '#334155'; ctx.beginPath();
-                ctx.moveTo(px, midY - 25); ctx.lineTo(px, midY - 15);
-                ctx.moveTo(px, zeroY_lower - 5); ctx.lineTo(px, zeroY_lower + 5);
-                ctx.stroke();
-
-                ctx.font = '11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
-                ctx.fillText(t + ' s', px, midY - 5);
-                ctx.fillText(t + ' s', px, h - padB + 18);
-            });
-
-            // 4 Segments Data from Figure 2.10
-            const segments = [
-                { t1: 1.0, v1: 0.8, t2: 3.0, v2: 1.2, a: 0.2 },
-                { t1: 5.0, v1: 1.6, t2: 7.0, v2: 1.2, a: -0.2 },
-                { t1: 9.0, v1: -0.4, t2: 11.0, v2: -1.0, a: -0.3 },
-                { t1: 13.0, v1: -1.6, t2: 15.0, v2: -0.8, a: 0.4 }
-            ];
-
-            segments.forEach((seg, idx) => {
-                const px1 = toPxX(seg.t1), py1 = toPxY_upper(seg.v1);
-                const px2 = toPxX(seg.t2), py2 = toPxY_upper(seg.v2);
-
-                // Vertical dashed projection lines
-                ctx.strokeStyle = '#475569'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
-                ctx.beginPath();
-                ctx.moveTo(px1, py1); ctx.lineTo(px1, toPxY_lower(seg.a));
-                ctx.moveTo(px2, py2); ctx.lineTo(px2, toPxY_lower(seg.a));
-                ctx.stroke(); ctx.setLineDash([]);
-
-                // Upper Line Segment in vx(t)
-                ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3;
-                ctx.beginPath(); ctx.moveTo(px1, py1); ctx.lineTo(px2, py2); ctx.stroke();
-
-                ctx.fillStyle = '#fbbf24';
-                ctx.beginPath(); ctx.arc(px1, py1, 4, 0, Math.PI * 2); ctx.fill();
-                ctx.beginPath(); ctx.arc(px2, py2, 4, 0, Math.PI * 2); ctx.fill();
-
-                // Lower Step Bar in amx(t)
-                const py_a = toPxY_lower(seg.a);
-                ctx.strokeStyle = '#f43f5e'; ctx.lineWidth = 4;
-                ctx.beginPath(); ctx.moveTo(px1, py_a); ctx.lineTo(px2, py_a); ctx.stroke();
-            });
-
-            // Text Box from Figure 2.10
-            ctx.font = '11px Inter'; ctx.fillStyle = '#cbd5e1'; ctx.textAlign = 'left';
-            ctx.fillText('A inclinação da linha que liga dois pontos em um gráfico', padL + 180, midY + 40);
-            ctx.fillText('da velocidade versus tempo fornece a aceleração média', padL + 180, midY + 56);
-            ctx.fillText('entre esses dois pontos.', padL + 180, midY + 72);
-
-            // Highlight Active Cursor Point
-            if (t_curr >= 1.0 && t_curr <= 15.0) {
-                const { vx, amx } = getAstronautState(t_curr);
-                const px_curr = toPxX(t_curr);
-                const py_v_curr = toPxY_upper(vx);
-
-                ctx.strokeStyle = '#10b981'; ctx.lineWidth = 1.5; ctx.setLineDash([2, 2]);
-                ctx.beginPath(); ctx.moveTo(px_curr, padT); ctx.lineTo(px_curr, h - padB); ctx.stroke(); ctx.setLineDash([]);
-
-                ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(px_curr, py_v_curr, 6, 0, Math.PI * 2); ctx.fill();
-            }
-        }
+        
 
         window.onload = function() {
             updateDemo();
-            timer = setInterval(loop, 30);
+            timer = setInterval(loop, 30); // Auto-play!
         };
         window.onresize = function() { updateDemo(); };
     </script>

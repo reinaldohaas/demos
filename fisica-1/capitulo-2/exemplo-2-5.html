@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 2.5: Queda Livre de uma Bola Lançada do Topo de um Edifício | FSC5101 Física I</title>
+    <title>Exemplo 2.5: Queda Livre de um Corpo | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -81,8 +81,8 @@
             flex-wrap: wrap;
             gap: 16px;
         }
-        .statement-title h2 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: var(--accent-cyan); margin-bottom: 6px; }
-        .statement-title p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; }
+        .statement-title h2 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: var(--accent-cyan); margin-bottom: 6px; }
+        .statement-title p { font-size: 0.92rem; color: #cbd5e1; line-height: 1.6; }
 
         .formula-badge {
             background: rgba(56, 189, 248, 0.1);
@@ -99,7 +99,7 @@
             max-width: 1300px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 440px 1fr;
+            grid-template-columns: 480px 1fr;
             gap: 20px;
         }
         @media (max-width: 960px) { .presentation-container { grid-template-columns: 1fr; } }
@@ -118,8 +118,8 @@
             background: rgba(10, 16, 30, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 10px;
-            padding: 12px 14px;
-            margin-bottom: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
             display: flex;
             gap: 12px;
         }
@@ -132,9 +132,9 @@
             border-radius: 6px;
             height: fit-content;
         }
-        .item-title { font-weight: 700; font-size: 0.88rem; color: var(--text-main); margin-bottom: 4px; }
-        .item-formula code { font-family: monospace; font-size: 0.8rem; color: var(--accent-cyan); }
-        .item-calc { font-size: 0.82rem; color: var(--accent-emerald); margin-top: 4px; font-weight: 600; line-height: 1.5; }
+        .item-title { font-weight: 700; font-size: 0.9rem; color: var(--text-main); margin-bottom: 6px; }
+        .item-formula code { font-family: monospace; font-size: 0.82rem; color: var(--accent-cyan); }
+        .item-calc { font-size: 0.83rem; color: #cbd5e1; margin-top: 6px; font-weight: 500; line-height: 1.6; }
 
         .control-card {
             background: rgba(10, 16, 30, 0.7);
@@ -169,9 +169,14 @@
             border: 1px solid var(--bg-card-border);
             border-radius: 12px;
             padding: 10px;
-            height: 180px;
+            height: 440px;
             position: relative;
             overflow: hidden;
+        }
+        .scene-card canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
         }
 
         .vector-legend {
@@ -182,24 +187,11 @@
             gap: 14px;
             font-size: 0.75rem;
             font-weight: 700;
-            background: rgba(0, 0, 0, 0.65);
+            background: rgba(0, 0, 0, 0.7);
             padding: 4px 10px;
             border-radius: 6px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        .plot-card {
-            background: rgba(10, 16, 30, 0.9);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 12px;
-            padding: 14px;
-            height: 250px;
-            display: flex;
-            flex-direction: column;
-        }
-        .plot-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-bottom: 8px; }
-        .plot-wrapper { flex: 1; width: 100%; height: 100%; position: relative; background: #050811; border-radius: 8px; overflow: hidden; }
-        canvas { width: 100%; height: 100%; display: block; }
 
         .scene-nav-bar {
             display: flex;
@@ -210,13 +202,6 @@
             padding: 12px 18px;
             border-radius: 12px;
         }
-    
-        .scene-card canvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-        }
-
     </style>
 </head>
 <body>
@@ -231,61 +216,48 @@
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 2.5: Queda Livre de uma Bola Lançada do Topo de um Edifício</h2>
-            <p>Uma bola é lançada verticalmente para cima do topo de um edifício de 50,0 m de altura com v₀ = 15,0 m/s (g = 9,80 m/s²). Determine a altura máxima e a velocidade de impacto no solo.</p>
+            <h2>Exemplo 2.5: Queda Livre de um Corpo</h2>
+            <p>Uma bola é lançada verticalmente para cima a partir do topo de um edifício de 50,0 m com velocidade inicial v₀ = 15,0 m/s. Determine o instante e a altura máxima atingida, o tempo total de queda e a velocidade ao atingir o solo.</p>
         </div>
-        <div class="formula-badge">y(t) = v₀ t - ½ g t²</div>
+        <div class="formula-badge">y(t) = y₀ + v₀y t - ½ g t²</div>
     </div>
 
     <div class="presentation-container">
+        <!-- Didactic Resolution Deck -->
         <div class="slide-deck">
             <div>
                 <div style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); margin-bottom:12px; text-transform:uppercase;">
-                    📖 Resolução Didática Passo a Passo (Itens a, b, c, d)
+                    📖 Resolução Didática Passo a Passo com Explicações Detalhadas
                 </div>
                 
         <div class="item-card">
             <div class="item-badge">Item (A)</div>
             <div class="item-content">
-                <div class="item-title">Tempo e Altura Máxima Acima do Topo</div>
-                <div class="item-formula"><code>t_sub = v₀ / g; h_máx = v₀² / (2g)</code></div>
-                <div class="item-calc">t_sub = 15,0 / 9,80 = 1,53 s. h_máx = (15,0)² / (2×9,80) = 11,48 m (61,48 m do solo).</div>
+                <div class="item-title">Altura Máxima Atingida (v_y = 0)</div>
+                <div class="item-formula"><code>v_y = v₀y - g t ⟹ 0 = 15,0 - 9,80 t ⟹ t_pico = 1,53 s</code><br><code>Δy = v₀y² / (2g) = 15,0² / (2 × 9,80) = 11,48 m</code></div>
+                <div class="item-calc">🔹 <b>Passo 1:</b> No ponto mais alto v_y = 0 m/s em t = 1,53 s.<br>🔹 <b>Passo 2:</b> A bola sobe 11,48 m acima do telhado.<br>🔹 <b>Passo 3:</b> Altura máxima total em relação ao solo y_máx = 50,0 + 11,48 = <b>61,48 m</b>.</div>
             </div>
         </div>
-        
+
         <div class="item-card">
             <div class="item-badge">Item (B)</div>
             <div class="item-content">
-                <div class="item-title">Tempo para Retornar à Altura do Topo (y = 0)</div>
-                <div class="item-formula"><code>t = 2 v₀ / g</code></div>
-                <div class="item-calc">t = 2 × 1,53 s = 3,06 s (velocidade v = -15,0 m/s ao passar pelo topo descendo).</div>
-            </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (C)</div>
-            <div class="item-content">
-                <div class="item-title">Tempo para Atingir o Solo (y = -50,0 m)</div>
-                <div class="item-formula"><code>-50,0 = 15,0 t - 4,90 t²</code></div>
-                <div class="item-calc">4,90 t² - 15,0 t - 50,0 = 0 ⟹ t = 5,00 s.</div>
-            </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (D)</div>
-            <div class="item-content">
-                <div class="item-title">Velocidade de Impacto no Solo</div>
-                <div class="item-formula"><code>v = v₀ - g t = 15,0 - 9,80(5,00)</code></div>
-                <div class="item-calc">v = 15,0 - 49,0 = -34,0 m/s (módulo da velocidade = 34,0 m/s).</div>
+                <div class="item-title">Tempo Total de Voo e Velocidade de Impacto no Solo (y = 0)</div>
+                <div class="item-formula"><code>y = 50,0 + 15,0 t - 4,90 t² = 0 ⟹ 4,90 t² - 15,0 t - 50,0 = 0</code></div>
+                <div class="item-calc">
+                    🔹 <b>Passo 1:</b> Bhaskara: t = [15,0 ± √(225 + 980)] / 9,80 = [15,0 + 34,71] / 9,80 = <b>5,07 s</b>.<br>
+                    🔹 <b>Passo 2:</b> Velocidade de impacto: v_y = 15,0 - 9,80(5,07) = <b>-34,7 m/s</b>.
+                </div>
             </div>
         </div>
         
             </div>
 
+            <!-- Controls Panel -->
             <div class="control-card">
                 <div class="control-group">
-                    <label>Tempo t: <span id="ex-t-val">0.00 s</span></label>
-                    <input type="range" id="ex-t" min="0" max="5.0" step="0.04" value="0" oninput="updateDemo()">
+                    <label>Ajuste do Tempo t: <span id="ex-t-val">0.00 s</span></label>
+                    <input type="range" id="ex-t" min="0" max="5.07" step="0.05" value="0" oninput="updateDemo()">
                 </div>
                 <div class="btn-group">
                     <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
@@ -294,38 +266,29 @@
             </div>
         </div>
 
+        <!-- Interactive Visual Stage -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">📺 Animação Física com Vetores Velocidade $\vec{v}$ e Aceleração $\vec{a}$</span>
+                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa com Vetores Velocidade $\vec{v}$ e Aceleração $\vec{a}$</span>
                 <div style="display:flex; gap:8px;">
                     <a href="exemplo-2-4.html" class="nav-step-btn">← Exemplo Anterior</a>
                     <a href="exemplo-2-6.html" class="nav-step-btn primary">Exemplo 2.6: Integração →</a>
                 </div>
             </div>
 
+            <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
-                    <span style="color:#10b981;">➔ Vetor Velocidade v(t)</span>
+                    <span style="color:#10b981;">➔ Vetor Velocidade v</span>
                     <span style="color:#f43f5e;">➔ Vetor Aceleração a</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
-            </div>
-
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-                <div class="plot-card">
-                    <div class="plot-header"><span>Gráfico Posição x(t)</span></div>
-                    <div class="plot-wrapper"><canvas id="canvas-plot-x"></canvas></div>
-                </div>
-                <div class="plot-card">
-                    <div class="plot-header"><span>Gráfico Velocidade v(t)</span></div>
-                    <div class="plot-wrapper"><canvas id="canvas-plot-v"></canvas></div>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
-        let timer = null, running = false;
+        let timer = null, running = true; // Auto-play on load!
 
         function togglePlay() {
             running = !running;
@@ -344,8 +307,8 @@
         function loop() {
             if (!running) return;
             const input = document.getElementById('ex-t');
-            let t = parseFloat(input.value) + parseFloat(input.step || 0.04);
-            const maxVal = parseFloat(input.max || 5.0);
+            let t = parseFloat(input.value) + parseFloat(input.step || 0.05);
+            const maxVal = parseFloat(input.max || 5.07);
             if (t > maxVal) {
                 t = maxVal;
                 running = false;
@@ -357,7 +320,7 @@
             updateDemo();
         }
 
-                function getCanvasCtx(id) {
+        function getCanvasCtx(id) {
             const canvas = document.getElementById(id);
             if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
             const rect = canvas.getBoundingClientRect();
@@ -386,7 +349,7 @@
             ctx.closePath(); ctx.fill();
 
             if (label) {
-                ctx.font = 'bold 10px Inter'; ctx.textAlign = 'center';
+                ctx.font = 'bold 11px Inter'; ctx.textAlign = 'center';
                 ctx.fillText(label, x + dx * 0.5, y + dy - 6);
             }
         }
@@ -394,60 +357,41 @@
         function updateDemo() {
             const t = parseFloat(document.getElementById('ex-t').value);
             document.getElementById('ex-t-val').innerText = t.toFixed(2) + ' s';
-            drawScene(t); drawPlotX(t); drawPlotV(t);
+            drawScene(t);
         }
 
         
-function drawScene(t) {
-    const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-    const groundY = h - 30; const topY = groundY - 100;
-    ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,w,h);
+        function drawScene(t) {
+            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = '#070a14'; ctx.fillRect(0,0,w,h);
 
-    // Building
-    ctx.fillStyle = '#334155'; ctx.fillRect(60, topY, 90, 100);
-    ctx.strokeStyle = '#475569'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(10, groundY); ctx.lineTo(w - 10, groundY); ctx.stroke();
+            const padB = 30, padL = 80;
+            const toPxY = y => (h - padB) - (y / 70.0) * (h - padB - 30);
 
-    const y_curr = 15.0 * t - 4.90 * t * t;
-    const v_curr = 15.0 - 9.80 * t;
-    const a_curr = -9.80;
+            // Building Structure (50m)
+            const bY = toPxY(50.0);
+            ctx.fillStyle = '#1e293b'; ctx.fillRect(padL - 40, bY, 60, (h - padB) - bY);
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.strokeRect(padL - 40, bY, 60, (h - padB) - bY);
 
-    const ballY = topY - (y_curr / 20.0) * 60;
-    const px_ball = 180;
+            // Ball Position
+            const y_t = Math.max(0, 50.0 + 15.0 * t - 4.90 * t * t);
+            const vy_t = 15.0 - 9.80 * t;
+            const ballY = toPxY(y_t);
 
-    // Ball
-    ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px_ball, ballY, 8, 0, Math.PI * 2); ctx.fill();
-    ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'left';
-    ctx.fillText(`🏀 y = ${y_curr.toFixed(1)}m`, px_ball + 15, ballY);
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(padL + 50, ballY, 8, 0, Math.PI*2); ctx.fill();
+            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'left';
+            ctx.fillText(`🏀 Bola (y = ${y_t.toFixed(1)}m)`, padL + 65, ballY);
 
-    // Vector Velocity (Green vertical arrow)
-    drawVectorArrow(ctx, px_ball, ballY, 0, -v_curr * 1.5, '#10b981', `vy = ${v_curr.toFixed(1)}m/s`);
-
-    // Vector Acceleration (Red vertical arrow down)
-    drawVectorArrow(ctx, px_ball + 25, ballY, 0, 9.80 * 2.0, '#f43f5e', `g = 9,8m/s²`);
-}
-
+            drawVectorArrow(ctx, padL + 50, ballY, 0, -vy_t * 4.0, '#10b981', `v = ${vy_t.toFixed(1)}m/s`);
+            drawVectorArrow(ctx, padL + 90, ballY, 0, 9.80 * 2.5, '#f43f5e', `g`);
+        }
         
-function drawPlotX(t_curr) {
-    const { ctx, w, h } = getCanvasCtx('canvas-plot-x'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-    const padL = 40, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
-    const toPxX = t => padL + (t / 5.0) * gW, toPxY = y => (h - padB) - ((y + 55) / 75.0) * gH;
-    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
-    for (let t = 0; t <= 5.0; t += 0.05) { const y = 15.0 * t - 4.90 * t * t; if (t === 0) ctx.moveTo(toPxX(t), toPxY(y)); else ctx.lineTo(toPxX(t), toPxY(y)); } ctx.stroke();
-    ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(toPxX(1.53), toPxY(11.48), 5, 0, Math.PI * 2); ctx.fill();
-}
 
-        
-function drawPlotV(t_curr) {
-    const { ctx, w, h } = getCanvasCtx('canvas-plot-v'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-    const padL = 40, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
-    const toPxX = t => padL + (t / 5.0) * gW, toPxY = v => (h - padB) - ((v + 35) / 55.0) * gH;
-    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-    ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(toPxX(0), toPxY(15.0)); ctx.lineTo(toPxX(5.0), toPxY(-34.0)); ctx.stroke();
-}
-
-
-        window.onload = function() { updateDemo(); };
+        window.onload = function() {
+            updateDemo();
+            timer = setInterval(loop, 30); // Auto-play!
+        };
         window.onresize = function() { updateDemo(); };
     </script>
 </body>

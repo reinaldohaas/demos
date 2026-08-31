@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 2.7: Ultrapassagem e Movimento Relativo de dois Veículos | FSC5101 Física I</title>
+    <title>Exemplo 2.7: Movimento com Dois Veículos (Ultrapassagem) | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -81,8 +81,8 @@
             flex-wrap: wrap;
             gap: 16px;
         }
-        .statement-title h2 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: var(--accent-cyan); margin-bottom: 6px; }
-        .statement-title p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; }
+        .statement-title h2 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: var(--accent-cyan); margin-bottom: 6px; }
+        .statement-title p { font-size: 0.92rem; color: #cbd5e1; line-height: 1.6; }
 
         .formula-badge {
             background: rgba(56, 189, 248, 0.1);
@@ -99,7 +99,7 @@
             max-width: 1300px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 440px 1fr;
+            grid-template-columns: 480px 1fr;
             gap: 20px;
         }
         @media (max-width: 960px) { .presentation-container { grid-template-columns: 1fr; } }
@@ -118,8 +118,8 @@
             background: rgba(10, 16, 30, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 10px;
-            padding: 12px 14px;
-            margin-bottom: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
             display: flex;
             gap: 12px;
         }
@@ -132,9 +132,9 @@
             border-radius: 6px;
             height: fit-content;
         }
-        .item-title { font-weight: 700; font-size: 0.88rem; color: var(--text-main); margin-bottom: 4px; }
-        .item-formula code { font-family: monospace; font-size: 0.8rem; color: var(--accent-cyan); }
-        .item-calc { font-size: 0.82rem; color: var(--accent-emerald); margin-top: 4px; font-weight: 600; line-height: 1.5; }
+        .item-title { font-weight: 700; font-size: 0.9rem; color: var(--text-main); margin-bottom: 6px; }
+        .item-formula code { font-family: monospace; font-size: 0.82rem; color: var(--accent-cyan); }
+        .item-calc { font-size: 0.83rem; color: #cbd5e1; margin-top: 6px; font-weight: 500; line-height: 1.6; }
 
         .control-card {
             background: rgba(10, 16, 30, 0.7);
@@ -169,9 +169,14 @@
             border: 1px solid var(--bg-card-border);
             border-radius: 12px;
             padding: 10px;
-            height: 180px;
+            height: 440px;
             position: relative;
             overflow: hidden;
+        }
+        .scene-card canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
         }
 
         .vector-legend {
@@ -182,24 +187,11 @@
             gap: 14px;
             font-size: 0.75rem;
             font-weight: 700;
-            background: rgba(0, 0, 0, 0.65);
+            background: rgba(0, 0, 0, 0.7);
             padding: 4px 10px;
             border-radius: 6px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        .plot-card {
-            background: rgba(10, 16, 30, 0.9);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 12px;
-            padding: 14px;
-            height: 250px;
-            display: flex;
-            flex-direction: column;
-        }
-        .plot-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-bottom: 8px; }
-        .plot-wrapper { flex: 1; width: 100%; height: 100%; position: relative; background: #050811; border-radius: 8px; overflow: hidden; }
-        canvas { width: 100%; height: 100%; display: block; }
 
         .scene-nav-bar {
             display: flex;
@@ -210,13 +202,6 @@
             padding: 12px 18px;
             border-radius: 12px;
         }
-    
-        .scene-card canvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-        }
-
     </style>
 </head>
 <body>
@@ -231,61 +216,49 @@
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 2.7: Ultrapassagem e Movimento Relativo de dois Veículos</h2>
-            <p>No instante t = 0, o Carro A parte do repouso em x = 0 com aceleração constante a_A = 2,50 m/s². No mesmo instante t = 0, o Carro B passa por x = 0 viajando com velocidade constante v_B = 15,0 m/s. Determine o tempo e a posição da ultrapassagem.</p>
+            <h2>Exemplo 2.7: Movimento com Dois Veículos (Ultrapassagem)</h2>
+            <p>Um Carro A arranca do repouso com aceleração constante a_A = 2,50 m/s². No mesmo instante, um Carro B o ultrapassa com velocidade constante v_B = 15,0 m/s. Determine o instante e a posição em que o Carro A alcança o Carro B.</p>
         </div>
         <div class="formula-badge">x_A(t) = x_B(t)</div>
     </div>
 
     <div class="presentation-container">
+        <!-- Didactic Resolution Deck -->
         <div class="slide-deck">
             <div>
                 <div style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); margin-bottom:12px; text-transform:uppercase;">
-                    📖 Resolução Didática Passo a Passo (Itens a, b, c, d)
+                    📖 Resolução Didática Passo a Passo com Explicações Detalhadas
                 </div>
                 
         <div class="item-card">
             <div class="item-badge">Item (A)</div>
             <div class="item-content">
-                <div class="item-title">Equações Horárias dos dois Veículos</div>
-                <div class="item-formula"><code>x_A(t) = ½ a_A t²; x_B(t) = v_B t</code></div>
-                <div class="item-calc">x_A(t) = 1,25 t² (m); x_B(t) = 15,0 t (m).</div>
+                <div class="item-title">Instante t e Posição de Encontro x_A = x_B</div>
+                <div class="item-formula"><code>x_A(t) = ½ (2,50) t² = 1,25 t²</code><br><code>x_B(t) = 15,0 t</code></div>
+                <div class="item-calc">
+                    🔹 <b>Passo 1:</b> Igualar as posições: 1,25 t² = 15,0 t.<br>
+                    🔹 <b>Passo 2:</b> Como t ≠ 0 ⟹ 1,25 t = 15,0 ⟹ t = 15,0 / 1,25 = <b>12,0 s</b>.<br>
+                    🔹 <b>Passo 3:</b> Posição de ultrapassagem: x = 15,0 × 12,0 = <b>180,0 m</b>.
+                </div>
             </div>
         </div>
-        
+
         <div class="item-card">
             <div class="item-badge">Item (B)</div>
             <div class="item-content">
-                <div class="item-title">Instante da Ultrapassagem t_ult</div>
-                <div class="item-formula"><code>1,25 t² = 15,0 t ⟹ t (1,25 t - 15,0) = 0</code></div>
-                <div class="item-calc">t_ult = 15,0 / 1,25 = 12,0 s.</div>
-            </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (C)</div>
-            <div class="item-content">
-                <div class="item-title">Posição da Ultrapassagem x_ult</div>
-                <div class="item-formula"><code>x_ult = x_B(12,0) = 15,0 × 12,0</code></div>
-                <div class="item-calc">x_ult = 180,0 m (ponto de interseção nos gráficos x vs t).</div>
-            </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (D)</div>
-            <div class="item-content">
-                <div class="item-title">Velocidades dos Veículos na Ultrapassagem</div>
-                <div class="item-formula"><code>v_A(12,0) = a_A t = 2,50 × 12,0</code></div>
-                <div class="item-calc">v_A = 30,0 m/s (o dobro da velocidade do Carro B, v_B = 15,0 m/s).</div>
+                <div class="item-title">Velocidade dos Carros no Instante do Encontro</div>
+                <div class="item-formula"><code>v_A = a_A t = 2,50 × 12,0 = 30,0 m/s (108 km/h)</code><br><code>v_B = 15,0 m/s (54 km/h)</code></div>
+                <div class="item-calc">🔹 <b>Passo 1:</b> Carro A atinge v_A = <b>30,0 m/s</b> (o dobro da velocidade do Carro B!).<br>🔹 <b>Passo 2:</b> Carro B mantém v_B = <b>15,0 m/s</b>.</div>
             </div>
         </div>
         
             </div>
 
+            <!-- Controls Panel -->
             <div class="control-card">
                 <div class="control-group">
-                    <label>Tempo t: <span id="ex-t-val">0.00 s</span></label>
-                    <input type="range" id="ex-t" min="0" max="15.0" step="0.1" value="0" oninput="updateDemo()">
+                    <label>Ajuste do Tempo t: <span id="ex-t-val">0.00 s</span></label>
+                    <input type="range" id="ex-t" min="0" max="14.0" step="0.1" value="0" oninput="updateDemo()">
                 </div>
                 <div class="btn-group">
                     <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
@@ -294,38 +267,29 @@
             </div>
         </div>
 
+        <!-- Interactive Visual Stage -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">📺 Animação Física com Vetores Velocidade $\vec{v}$ e Aceleração $\vec{a}$</span>
+                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa com Vetores Velocidade $\vec{v}$ e Aceleração $\vec{a}$</span>
                 <div style="display:flex; gap:8px;">
                     <a href="exemplo-2-6.html" class="nav-step-btn">← Exemplo Anterior</a>
                     <a href="index.html" class="nav-step-btn primary">🎉 Finalizar Capítulo 2 →</a>
                 </div>
             </div>
 
+            <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
-                    <span style="color:#10b981;">➔ Vetor Velocidade v(t)</span>
+                    <span style="color:#10b981;">➔ Vetor Velocidade v</span>
                     <span style="color:#f43f5e;">➔ Vetor Aceleração a</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
-            </div>
-
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-                <div class="plot-card">
-                    <div class="plot-header"><span>Gráfico Posição x(t)</span></div>
-                    <div class="plot-wrapper"><canvas id="canvas-plot-x"></canvas></div>
-                </div>
-                <div class="plot-card">
-                    <div class="plot-header"><span>Gráfico Velocidade v(t)</span></div>
-                    <div class="plot-wrapper"><canvas id="canvas-plot-v"></canvas></div>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
-        let timer = null, running = false;
+        let timer = null, running = true; // Auto-play on load!
 
         function togglePlay() {
             running = !running;
@@ -345,7 +309,7 @@
             if (!running) return;
             const input = document.getElementById('ex-t');
             let t = parseFloat(input.value) + parseFloat(input.step || 0.1);
-            const maxVal = parseFloat(input.max || 15.0);
+            const maxVal = parseFloat(input.max || 14.0);
             if (t > maxVal) {
                 t = maxVal;
                 running = false;
@@ -357,7 +321,7 @@
             updateDemo();
         }
 
-                function getCanvasCtx(id) {
+        function getCanvasCtx(id) {
             const canvas = document.getElementById(id);
             if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
             const rect = canvas.getBoundingClientRect();
@@ -386,7 +350,7 @@
             ctx.closePath(); ctx.fill();
 
             if (label) {
-                ctx.font = 'bold 10px Inter'; ctx.textAlign = 'center';
+                ctx.font = 'bold 11px Inter'; ctx.textAlign = 'center';
                 ctx.fillText(label, x + dx * 0.5, y + dy - 6);
             }
         }
@@ -394,60 +358,49 @@
         function updateDemo() {
             const t = parseFloat(document.getElementById('ex-t').value);
             document.getElementById('ex-t-val').innerText = t.toFixed(2) + ' s';
-            drawScene(t); drawPlotX(t); drawPlotV(t);
+            drawScene(t);
         }
 
         
-function drawScene(t) {
-    const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-    const cyA = h / 3, cyB = (2 * h) / 3;
-    ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,w,h);
-    ctx.strokeStyle = '#334155'; ctx.lineWidth = 2; ctx.beginPath();
-    ctx.moveTo(20, cyA); ctx.lineTo(w - 20, cyA); ctx.moveTo(20, cyB); ctx.lineTo(w - 20, cyB); ctx.stroke();
+        function drawScene(t) {
+            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = '#070a14'; ctx.fillRect(0,0,w,h);
 
-    const xA = 1.25 * t * t; const vA = 2.50 * t; const aA = 2.50;
-    const xB = 15.0 * t; const vB = 15.0;
+            const padL = 60, padB = 30, gW = w - padL - 30;
+            const toPxX = x => padL + (x / 200.0) * gW;
 
-    const mapX = x => 20 + (x / 220.0) * (w - 40);
-    const pxA = mapX(xA); const pxB = mapX(xB);
+            // Two Parallel Lanes
+            ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(padL, h/2 - 30); ctx.lineTo(w - 20, h/2 - 30); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(padL, h/2 + 30); ctx.lineTo(w - 20, h/2 + 30); ctx.stroke();
 
-    // Car A (Blue)
-    ctx.fillStyle = '#38bdf8'; ctx.fillRect(pxA - 12, cyA - 10, 24, 10);
-    ctx.font = 'bold 10px Inter'; ctx.fillStyle = '#38bdf8'; ctx.fillText(`🚗 Carro A (${xA.toFixed(0)}m)`, pxA, cyA - 28);
-    drawVectorArrow(ctx, pxA, cyA - 10, vA * 2.0, 0, '#10b981', `vA = ${vA.toFixed(1)}m/s`);
-    drawVectorArrow(ctx, pxA, cyA - 20, aA * 6.0, 0, '#f43f5e', `aA = 2,5m/s²`);
+            const xA = 1.25 * t * t;
+            const xB = 15.0 * t;
+            const vA = 2.50 * t;
+            const vB = 15.0;
 
-    // Car B (Yellow)
-    ctx.fillStyle = '#fbbf24'; ctx.fillRect(pxB - 12, cyB - 10, 24, 10);
-    ctx.font = 'bold 10px Inter'; ctx.fillStyle = '#fbbf24'; ctx.fillText(`🚙 Carro B (${xB.toFixed(0)}m)`, pxB, cyB - 28);
-    drawVectorArrow(ctx, pxB, cyB - 10, vB * 2.0, 0, '#10b981', `vB = 15,0m/s`);
-}
+            const pxA = toPxX(xA), pxB = toPxX(xB);
 
+            // Car A (Accelerated - Red)
+            ctx.fillStyle = '#f43f5e'; ctx.fillRect(pxA - 15, h/2 - 45, 30, 12);
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#f43f5e'; ctx.textAlign = 'left';
+            ctx.fillText(`🏎️ Carro A (${xA.toFixed(1)}m)`, pxA + 18, h/2 - 40);
+
+            // Car B (Constant speed - Cyan)
+            ctx.fillStyle = '#38bdf8'; ctx.fillRect(pxB - 15, h/2 + 18, 30, 12);
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
+            ctx.fillText(`🚗 Carro B (${xB.toFixed(1)}m)`, pxB + 18, h/2 + 25);
+
+            drawVectorArrow(ctx, pxA, h/2 - 39, vA * 3.0, 0, '#10b981', `vA = ${vA.toFixed(1)}m/s`);
+            drawVectorArrow(ctx, pxB, h/2 + 24, vB * 3.0, 0, '#10b981', `vB = 15m/s`);
+        }
         
-function drawPlotX(t_curr) {
-    const { ctx, w, h } = getCanvasCtx('canvas-plot-x'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-    const padL = 40, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
-    const toPxX = t => padL + (t / 15.0) * gW, toPxY = x => (h - padB) - (x / 220.0) * gH;
-    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
-    for (let t = 0; t <= 15.0; t += 0.2) { const xA = 1.25 * t * t; if (t === 0) ctx.moveTo(toPxX(t), toPxY(xA)); else ctx.lineTo(toPxX(t), toPxY(xA)); } ctx.stroke();
-    ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2.5; ctx.beginPath();
-    ctx.moveTo(toPxX(0), toPxY(0)); ctx.lineTo(toPxX(15.0), toPxY(225.0)); ctx.stroke();
-    ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(toPxX(12.0), toPxY(180.0), 5, 0, Math.PI * 2); ctx.fill();
-}
 
-        
-function drawPlotV(t_curr) {
-    const { ctx, w, h } = getCanvasCtx('canvas-plot-v'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-    const padL = 40, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
-    const toPxX = t => padL + (t / 15.0) * gW, toPxY = v => (h - padB) - (v / 40.0) * gH;
-    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(toPxX(0), toPxY(0)); ctx.lineTo(toPxX(15.0), toPxY(37.5)); ctx.stroke();
-    ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(toPxX(0), toPxY(15.0)); ctx.lineTo(toPxX(15.0), toPxY(15.0)); ctx.stroke();
-}
-
-
-        window.onload = function() { updateDemo(); };
+        window.onload = function() {
+            updateDemo();
+            timer = setInterval(loop, 30); // Auto-play!
+        };
         window.onresize = function() { updateDemo(); };
     </script>
 </body>
