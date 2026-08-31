@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 2.1: Velocidade Média e Instantânea (O Leopardo) | FSC5101 Física I</title>
+    <title>Exemplo 2.2: Queda Livre e Lançamento Vertical | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -228,10 +228,10 @@
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 2.1: Velocidade Média e Instantânea (O Leopardo)</h2>
-            <p>Um leopardo está espreitando a 20 m a leste de um jipe. No instante t = 0, o leopardo começa a perseguir um antílope a 50 m do jipe. O movimento do leopardo é dado por x(t) = 20 + 5,0 t² (m).</p>
+            <h2>Exemplo 2.2: Queda Livre e Lançamento Vertical</h2>
+            <p>Uma bola é lançada verticalmente para cima a partir do solo (y₀ = 0) com velocidade inicial v₀ = 20,0 m/s sob gravidade g = 9,80 m/s².</p>
         </div>
-        <div class="formula-badge">x(t) = 20 + 5.0 t² (m)</div>
+        <div class="formula-badge">y(t) = v₀ t - ½ g t²</div>
     </div>
 
     <div class="presentation-container">
@@ -256,30 +256,30 @@
                 
         <div class="presentation-slide active" id="slide-1">
             <div class="slide-badge">SLIDE 1 DE 4 • ITEM (A)</div>
-            <div class="slide-title">Deslocamento Δx nos intervalos de tempo</div>
-            <div class="slide-formula"><code>Δx = x(t₂) - x(t₁)</code></div>
-            <div class="slide-desc">Em t₁=1,0s: x(1,0) = 25,0m. Em t₂=2,0s: x(2,0) = 40,0m. Δx = 40,0m - 25,0m = 15,0 m.</div>
+            <div class="slide-title">Tempo para atingir a Altura Máxima</div>
+            <div class="slide-formula"><code>t_subida = v₀ / g</code></div>
+            <div class="slide-desc">t_subida = 20,0 m/s / 9,80 m/s² = 2,04 s.</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
             <div class="slide-badge">SLIDE 2 DE 4 • ITEM (B)</div>
-            <div class="slide-title">Velocidade Média v_méd</div>
-            <div class="slide-formula"><code>v_méd = Δx / Δt</code></div>
-            <div class="slide-desc">v_méd = 15,0 m / 1,0 s = 15,0 m/s (inclinação da Reta Secante entre t₁ e t₂).</div>
+            <div class="slide-title">Altura Máxima h_máx</div>
+            <div class="slide-formula"><code>h_máx = v₀² / (2g)</code></div>
+            <div class="slide-desc">h_máx = (20,0)² / (2 × 9,80) = 400 / 19,6 = 20,41 m.</div>
         </div>
         
         <div class="presentation-slide " id="slide-3">
             <div class="slide-badge">SLIDE 3 DE 4 • ITEM (C)</div>
-            <div class="slide-title">Velocidade Instantânea v(t)</div>
-            <div class="slide-formula"><code>v(t) = dx/dt = 10,0 t (m/s)</code></div>
-            <div class="slide-desc">Derivando a posição: v(1,0) = 10,0 × 1,0 = 10,0 m/s (inclinação da Reta Tangente em t₁).</div>
+            <div class="slide-title">Tempo Total no Ar</div>
+            <div class="slide-formula"><code>t_total = 2 t_subida</code></div>
+            <div class="slide-desc">t_total = 2 × 2,04 s = 4,08 s.</div>
         </div>
         
         <div class="presentation-slide " id="slide-4">
             <div class="slide-badge">SLIDE 4 DE 4 • ITEM (D)</div>
-            <div class="slide-title">Convergência da Secante para a Tangente</div>
-            <div class="slide-formula"><code>lim (Δt → 0) Δx/Δt = dx/dt</code></div>
-            <div class="slide-desc">Quando Δt reduz-se de 1,0s para 0,001s, a velocidade média converge para a derivada exata 10,0 m/s.</div>
+            <div class="slide-title">Velocidade ao Retornar ao Solo</div>
+            <div class="slide-formula"><code>v_final = -v₀</code></div>
+            <div class="slide-desc">Pela simetria da gravidade, v_final = -20,0 m/s (mesmo módulo, sentido oposto).</div>
         </div>
         
             </div>
@@ -351,7 +351,7 @@
             // Draw Didactic Graphics depending on current example & slide
             ctx.font = 'bold 14px Inter';
             ctx.fillStyle = '#38bdf8';
-            ctx.fillText('Exemplo 2.1 — Slide ' + currentSlide + ' (Item Ativo)', 55, 45);
+            ctx.fillText('Exemplo 2.2 — Slide ' + currentSlide + ' (Item Ativo)', 55, 45);
 
             // Draw sample curve
             ctx.strokeStyle = currentSlide === 1 ? '#38bdf8' : (currentSlide === 2 ? '#fbbf24' : '#10b981');

@@ -4,116 +4,117 @@
   "github_repo": "reinaldohaas/demos",
   "demos": [
     {
-      "id": "geometric-quadratic",
-      "title": "Geometria Unificada da Equação Quadrática",
-      "category": "Matemática & Geometria Complexa",
+      "id": "exemplo-1-1",
+      "title": "Exemplo 1.1: Vetores e Soma Vetorial 2D",
+      "category": "Capítulo 1 • Vetores",
       "llm": "Gemini 3.7 Flash",
       "icon": "📐",
       "tags": [
-        "Equação de 2º Grau",
-        "Raízes Complexas",
-        "Círculos Ortogonais",
-        "Derivada",
-        "Fatoração",
-        "Curvatura",
-        "SVG Dinâmico"
+        "Vetores",
+        "Produto Escalar",
+        "Produto Vetorial",
+        "Decomposição 2D"
       ],
-      "description": "Visualização interativa unificada entre a parábola f(x), raízes complexas como círculos de raio r(x) no plano complexo (f(x) = a·r²), fatores lineares, reta da derivada f'(x) = r1(x) + r2(x) e limite de curvatura (R → ∞).",
-      "path": "geometric-quadratic/index.html",
-      "date": "2026-08-24"
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) da soma vetorial R = A + B, módulo, direção, produto escalar e produto vetorial.",
+      "path": "exercicios/exemplo-1-1.html",
+      "date": "2026-08-31"
     },
     {
-      "id": "foucault-pendulum",
-      "title": "Período Inercial & Pêndulo de Foucault 3D",
-      "category": "Geofísica & Mecânica Celeste",
+      "id": "exemplo-2-1",
+      "title": "Exemplo 2.1: Velocidade Média e Instantânea (O Leopardo)",
+      "category": "Capítulo 2 • Movimento Retilíneo",
       "llm": "Gemini 3.7 Flash",
-      "icon": "🌍",
+      "icon": "🐆",
       "tags": [
-        "Força de Coriolis",
-        "Rotação da Terra",
-        "Pêndulo de Foucault",
-        "3D Canvas",
-        "Roseta"
+        "O Leopardo",
+        "Velocidade Média",
+        "Reta Secante",
+        "Reta Tangente",
+        "Derivada"
       ],
-      "description": "Simulação tridimensional da Terra em rotação com 5 pêndulos operando simultaneamente nas latitudes (+90°, +30°, 0°, -30°, -90°), registrando o padrão de roseta no solo e as curvas da taxa angular e período inercial T = 12h / |sin φ|.",
-      "path": "foucault-pendulum/index.html",
-      "date": "2026-08-20"
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) com convergência da reta secante para a tangente no gráfico x(t) = 20 + 5,0 t².",
+      "path": "exercicios/exemplo-2-1.html",
+      "date": "2026-08-31"
     },
     {
-      "id": "rossby-radius",
-      "title": "Raio de Deformação de Rossby 2D",
-      "category": "Oceanografia & Dinâmica de Fluidos",
+      "id": "exemplo-2-2",
+      "title": "Exemplo 2.2: Queda Livre e Lançamento Vertical",
+      "category": "Capítulo 2 • Movimento Retilíneo",
       "llm": "Gemini 3.7 Flash",
-      "icon": "🌊",
+      "icon": "🏀",
       "tags": [
-        "Ajuste Geostrófico",
-        "Polo Sul",
-        "Shallow Water",
-        "Equações de Águas Rasas",
-        "Coriolis"
+        "Queda Livre",
+        "Gravidade",
+        "Altura Máxima",
+        "Tempo de Voo"
       ],
-      "description": "Simulação 2D hidrodinâmica das Equações de Águas Rasas com foco no Polo Sul e latitudes globais, demonstrando o balanço entre a rotação da Terra e gravidade, ajuste geostrófico (L > Rd) e ondas de gravidade (L < Rd).",
-      "path": "rossby-radius/index.html",
-      "date": "2026-08-20"
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) do lançamento vertical sob aceleração da gravidade constante g = 9,80 m/s².",
+      "path": "exercicios/exemplo-2-2.html",
+      "date": "2026-08-31"
     },
     {
-      "id": "supercell-splat-spin",
-      "title": "Dinâmica de Supercélulas: Forçamentos Splat & Spin",
-      "category": "Meteorologia Convectiva & Dinâmica Não-Hidrostática",
+      "id": "exemplo-3-1",
+      "title": "Exemplo 3.1: Movimento de Projéteis 2D",
+      "category": "Capítulo 3 • Movimento 2D",
       "llm": "Gemini 3.7 Flash",
-      "icon": "🌪️",
+      "icon": "🚀",
       "tags": [
-        "Supercélula",
-        "Mesociclone",
-        "Equação de Poisson",
-        "Splat & Spin",
-        "VPPGF",
-        "Perturbação de Pressão",
-        "Partículas 2D"
+        "Lançamento Oblíquo",
+        "Parábola",
+        "Alcance Horizontal",
+        "Altura Máxima"
       ],
-      "description": "Simulação hidrodinâmica 2D dos termos Splat (deformação/alta pressão) e Spin (vorticidade/baixa pressão) na equação diagnóstica de perturbação de pressão de supercélulas, com fluxo de partículas, vetores de força e perfis verticais interativos.",
-      "path": "supercell-splat-spin/index.html",
-      "date": "2026-08-24"
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) da trajetória parabólica, alcance R e altura máxima H de projéteis.",
+      "path": "exercicios/exemplo-3-1.html",
+      "date": "2026-08-31"
     },
     {
-      "id": "exercicios",
-      "title": "Laboratório de Cinemática 1D (Exemplos 2.1 a 2.7)",
-      "category": "Física Clássica & Cinemática 1D",
+      "id": "exemplo-3-2",
+      "title": "Exemplo 3.2: Movimento Circular Uniforme (MCU)",
+      "category": "Capítulo 3 • Movimento 2D",
       "llm": "Gemini 3.7 Flash",
-      "icon": "🔬",
+      "icon": "🔄",
       "tags": [
-        "Cinemática 1D",
-        "Velocidade Média & Instantânea",
-        "Aceleração Média & Instantânea",
-        "MRUV & Torricelli",
-        "Perseguição Relativa",
-        "Queda Livre & Torre de Pisa",
-        "Lançamento Vertical",
-        "Sears & Zemansky"
+        "MCU",
+        "Aceleração Centrípeta",
+        "Velocidade Angular",
+        "Período"
       ],
-      "description": "Suíte completa de infográficos interativos e simulações físicas 2D cobrindo do Exemplo 2.1 ao 2.7: leopardo, astronauta em EVA, carro acelerando, motociclista, perseguição policial, queda livre na Torre de Pisa e lançamento vertical no edifício com gráficos dinâmicos e resolução guiada passo a passo.",
-      "path": "exercicios/index.html",
-      "date": "2026-08-26"
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) da velocidade angular ω, período T e aceleração centrípeta a_c.",
+      "path": "exercicios/exemplo-3-2.html",
+      "date": "2026-08-31"
     },
     {
-      "id": "harmonic-oscillator",
-      "title": "Solucionador do Oscilador Harmônico (RK4 & Espaço de Fases)",
-      "category": "Física Matemática & Sistemas Dinâmicos",
+      "id": "exemplo-4-1",
+      "title": "Exemplo 4.1: Leis de Newton em Plano Inclinado",
+      "category": "Capítulo 4 • Leis de Newton",
       "llm": "Gemini 3.7 Flash",
-      "icon": "🌀",
+      "icon": "📐",
       "tags": [
-        "Oscilador Harmônico",
-        "EDO de 2ª Ordem",
-        "Runge-Kutta 4 (RK4)",
-        "Espaço de Fases",
-        "Massa-Mola-Amortecedor",
-        "Ressonância & Batimentos",
-        "Subamortecido & Superamortecido",
-        "Canvas 2D"
+        "Plano Inclinado",
+        "Atrito Cinético",
+        "Força Normal",
+        "Leis de Newton"
       ],
-      "description": "Solucionador numérico interativo de equações diferenciais ordinárias de 2ª ordem m·x'' + b·x' + k·x = F(t) com integrador RK4, animação em tempo real de massa-mola com amortecedor hidráulico, diagramas do espaço de fases (v vs x), gráficos no domínio do tempo e suporte a forças externas arbitrárias.",
-      "path": "harmonic-oscillator/index.html",
-      "date": "2026-08-26"
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) das forças de atrito, força normal e aceleração ao longo da rampa.",
+      "path": "exercicios/exemplo-4-1.html",
+      "date": "2026-08-31"
+    },
+    {
+      "id": "exemplo-5-1",
+      "title": "Exemplo 5.1: Conservação da Energia Mecânica",
+      "category": "Capítulo 5 • Conservação de Energia",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "⚡",
+      "tags": [
+        "Energia Potencial",
+        "Energia Cinética",
+        "Conservação de Energia",
+        "Trabalho"
+      ],
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) da conversão entre energia potencial U_i e energia cinética K_f.",
+      "path": "exercicios/exemplo-5-1.html",
+      "date": "2026-08-31"
     }
   ]
 }

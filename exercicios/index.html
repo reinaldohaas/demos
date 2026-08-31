@@ -3,24 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Exercícios & Simulações Interativas | FSC5101 Física I</title>
+    <title>Catálogo Didático dos 7 Exemplos | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #070a12;
-            --bg-card: rgba(15, 23, 42, 0.85);
-            --bg-card-border: rgba(56, 189, 248, 0.2);
+            --bg-card: rgba(15, 23, 42, 0.88);
+            --bg-card-border: rgba(56, 189, 248, 0.25);
             --accent-cyan: #38bdf8;
             --accent-gold: #fbbf24;
-            --accent-purple: #c084fc;
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
@@ -32,13 +29,11 @@
             background-attachment: fixed;
             padding: 24px;
         }
-
         .header {
             max-width: 1200px;
             margin: 0 auto 36px;
             text-align: center;
         }
-
         .header h1 {
             font-family: 'Outfit', sans-serif;
             font-size: 2.6rem;
@@ -48,11 +43,7 @@
             -webkit-text-fill-color: transparent;
             margin-bottom: 8px;
         }
-
-        .header p {
-            color: var(--text-sub);
-            font-size: 1.05rem;
-        }
+        .header p { color: var(--text-sub); font-size: 1.05rem; }
 
         .grid {
             max-width: 1200px;
@@ -61,7 +52,6 @@
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
         }
-
         .card {
             background: var(--bg-card);
             border: 1px solid var(--bg-card-border);
@@ -71,41 +61,17 @@
             flex-direction: column;
             justify-content: space-between;
             transition: all 0.25s ease;
-            backdrop-filter: blur(12px);
             text-decoration: none;
             color: inherit;
         }
-
         .card:hover {
             transform: translateY(-4px);
             border-color: var(--accent-cyan);
             box-shadow: 0 12px 30px rgba(56, 189, 248, 0.25);
         }
-
-        .card-tag {
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--accent-cyan);
-            margin-bottom: 8px;
-        }
-
-        .card-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 8px;
-        }
-
-        .card-desc {
-            font-size: 0.88rem;
-            color: var(--text-sub);
-            line-height: 1.5;
-            margin-bottom: 16px;
-        }
-
+        .card-tag { font-size: 0.75rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 8px; }
+        .card-title { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+        .card-desc { font-size: 0.88rem; color: var(--text-sub); line-height: 1.5; margin-bottom: 16px; }
         .card-btn {
             background: rgba(56, 189, 248, 0.1);
             border: 1px solid rgba(56, 189, 248, 0.3);
@@ -115,59 +81,81 @@
             font-weight: 700;
             font-size: 0.85rem;
             text-align: center;
-            transition: all 0.2s;
         }
-
-        .card:hover .card-btn {
-            background: var(--accent-cyan);
-            color: #020617;
-        }
+        .card:hover .card-btn { background: var(--accent-cyan); color: #020617; }
     </style>
 </head>
 <body>
-
     <div class="header">
         <h1>FSC5101 — Física I (MECÂNICA)</h1>
-        <p>Catálogo Didático de Exercícios & Simulações Físicas Passo a Passo</p>
+        <p>Catálogo Didático dos 7 Exemplos com Apresentação Passo a Passo (Itens a, b, c, d)</p>
     </div>
 
     <div class="grid">
-        <!-- Card 1: Exemplo 2.1 -->
+
+        <a href="exemplo-1-1.html" class="card">
+            <div>
+                <div class="card-tag">Capítulo 1 • Unidades, Grandezas Físicas e Vetores</div>
+                <div class="card-title">Exemplo 1.1: Vetores e Soma Vetorial no Plano 2D</div>
+                <div class="card-desc">Um marinheiro realiza dois deslocamentos sucessivos no plano xy: o vetor A = (3,0i + 4,0j) m e o vetor B = (4,0i - 2,0j) m. Determine a soma vetorial R = A + B, o produto escalar A · B e o produto vetorial A × B.</div>
+            </div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+        </a>
+    
         <a href="exemplo-2-1.html" class="card">
             <div>
                 <div class="card-tag">Capítulo 2 • Movimento Retilíneo</div>
-                <div class="card-title">🐆 Exemplo 2.1: O Leopardo</div>
-                <div class="card-desc">
-                    Estudo didático da velocidade média e instantânea com converência da reta secante para a tangente no gráfico x(t) = 20 + 5,0 t².
-                </div>
+                <div class="card-title">Exemplo 2.1: Velocidade Média e Instantânea (O Leopardo)</div>
+                <div class="card-desc">Um leopardo está espreitando a 20 m a leste de um jipe. No instante t = 0, o leopardo começa a perseguir um antílope a 50 m do jipe. O movimento do leopardo é dado por x(t) = 20 + 5,0 t² (m).</div>
             </div>
-            <div class="card-btn">Abrir Simulação Passo a Passo →</div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
         </a>
-
-        <!-- Card 2: Vetores 2D -->
-        <a href="exemplo-2-1.html" class="card">
-            <div>
-                <div class="card-tag">Capítulo 1 • Vetores no Plano</div>
-                <div class="card-title">📐 Exercício 1.1: Vetores no Plano 2D</div>
-                <div class="card-desc">
-                    Decomposição vetorial, módulo, direção, produto escalar A · B e produto vetorial A × B.
-                </div>
-            </div>
-            <div class="card-btn">Abrir Simulação Passo a Passo →</div>
-        </a>
-
-        <!-- Card 3: MRU / MRUV -->
-        <a href="exemplo-2-1.html" class="card">
+    
+        <a href="exemplo-2-2.html" class="card">
             <div>
                 <div class="card-tag">Capítulo 2 • Movimento Retilíneo</div>
-                <div class="card-title">🚗 Exercício 2.2: MRU e MRUV</div>
-                <div class="card-desc">
-                    Equações horárias da posição x(t), velocidade v(t) e aceleração a(t) com gráficos sincronizados.
-                </div>
+                <div class="card-title">Exemplo 2.2: Queda Livre e Lançamento Vertical</div>
+                <div class="card-desc">Uma bola é lançada verticalmente para cima a partir do solo (y₀ = 0) com velocidade inicial v₀ = 20,0 m/s sob gravidade g = 9,80 m/s².</div>
             </div>
-            <div class="card-btn">Abrir Simulação Passo a Passo →</div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
         </a>
+    
+        <a href="exemplo-3-1.html" class="card">
+            <div>
+                <div class="card-tag">Capítulo 3 • Movimento em 2D e 3D</div>
+                <div class="card-title">Exemplo 3.1: Movimento de Projéteis (Lançamento Oblíquo 2D)</div>
+                <div class="card-desc">Um projétil é disparado do solo com velocidade v₀ = 25,0 m/s a um ângulo θ = 45,0° acima da horizontal sob g = 9,80 m/s².</div>
+            </div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+        </a>
+    
+        <a href="exemplo-3-2.html" class="card">
+            <div>
+                <div class="card-tag">Capítulo 3 • Movimento em 2D e 3D</div>
+                <div class="card-title">Exemplo 3.2: Movimento Circular Uniforme (MCU)</div>
+                <div class="card-desc">Uma partícula descreve uma órbita circular de raio R = 5,0 m com velocidade escalar constante v = 10,0 m/s.</div>
+            </div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+        </a>
+    
+        <a href="exemplo-4-1.html" class="card">
+            <div>
+                <div class="card-tag">Capítulo 4 • Leis de Newton do Movimento</div>
+                <div class="card-title">Exemplo 4.1: Leis de Newton em Plano Inclinado com Atrito</div>
+                <div class="card-desc">Um bloco de massa m = 2,0 kg desliza sobre um plano inclinado de θ = 30,0° com coeficiente de atrito cinético μ_k = 0,20 (g = 9,80 m/s²).</div>
+            </div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+        </a>
+    
+        <a href="exemplo-5-1.html" class="card">
+            <div>
+                <div class="card-tag">Capítulo 5 • Aplicações e Conservação de Energia</div>
+                <div class="card-title">Exemplo 5.1: Trabalho e Conservação da Energia Mecânica</div>
+                <div class="card-desc">Um bloco de massa m = 3,0 kg é solto do repouso do topo de uma pista sem atrito de altura h = 10,0 m (g = 9,80 m/s²).</div>
+            </div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+        </a>
+    
     </div>
-
 </body>
 </html>
