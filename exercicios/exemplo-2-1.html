@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo 2.1: Velocidade Média e Instantânea (O Leopardo) | FSC5101 Física I</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070a12;
+            --bg-card: rgba(15, 23, 42, 0.85);
+            --bg-card-border: rgba(56, 189, 248, 0.2);
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
+            --accent-rose: #f43f5e;
+            --accent-emerald: #10b981;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 45%);
+            background-attachment: fixed;
+            padding: 20px;
+        }
+
+        .top-nav {
+            max-width: 1300px;
+            margin: 0 auto 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--bg-card-border);
+            color: var(--accent-cyan);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: var(--accent-cyan);
+        }
+
+        .header {
+            max-width: 1300px;
+            margin: 0 auto 20px;
+        }
+
+        .statement-box {
+            background: rgba(10, 16, 30, 0.9);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .statement-title h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            margin-bottom: 6px;
+        }
+
+        .statement-title p {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .formula-badge {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-family: 'Outfit', monospace;
+            font-size: 1.1rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .main-grid {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 960px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+
+        .left-col { display: flex; flex-direction: column; gap: 16px; }
+        .right-col { display: flex; flex-direction: column; gap: 16px; }
+
+        .card-box {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 14px;
+            padding: 18px;
+            backdrop-filter: blur(12px);
+        }
+
+        .card-box h3 {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .didactic-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .item-card {
+            background: rgba(10, 16, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 12px 14px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .item-badge {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a855f7;
+            font-weight: 800;
+            font-size: 0.78rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .item-content { flex: 1; }
+
+        .item-title {
+            font-weight: 700;
+            font-size: 0.88rem;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .item-formula code {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+        }
+
+        .item-calc {
+            font-size: 0.82rem;
+            color: var(--accent-emerald);
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+
+        .control-group label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .control-group label span {
+            color: var(--accent-cyan);
+            font-family: monospace;
+            font-weight: 700;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #1e293b;
+            outline: none;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .btn-group { display: flex; gap: 8px; margin-top: 8px; }
+
+        .btn {
+            flex: 1;
+            padding: 9px 14px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary { background: var(--primary-gradient); color: white; }
+        .btn-secondary { background: #1e293b; color: var(--text-main); }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .plot-card {
+            background: rgba(10, 16, 30, 0.9);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 12px;
+            padding: 14px;
+            height: 270px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .plot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+        }
+
+        .plot-canvas-wrapper {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: #050811;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        canvas { width: 100%; height: 100%; display: block; }
+
+        .pill-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-sub);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .pill-btn.active {
+            background: rgba(56, 189, 248, 0.2);
+            color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <a href="index.html" class="back-btn">← Catálogo de Exercícios</a>
+        <span style="font-size:0.85rem; color:var(--text-sub);">FSC5101 Física I • Mecânica</span>
+    </div>
+
+    <div class="header">
+        <div class="statement-box">
+            <div class="statement-title">
+                <h2>Exemplo 2.1: Velocidade Média e Instantânea (O Leopardo)</h2>
+                <p>Um leopardo está espreitando a 20 m a leste de um jipe. No instante t = 0, o leopardo começa a perseguir um antílope a 50 m do jipe. O movimento do leopardo é dado por x(t) = 20 + 5,0 t² (m).</p>
+            </div>
+            <div class="formula-badge">x(t) = 20 + 5.0 t² (m)</div>
+        </div>
+    </div>
+
+    <div class="main-grid">
+        <div class="left-col">
+            <div class="card-box">
+                <h3>📖 Resolução Didática Passo a Passo</h3>
+                <div class="didactic-section">
+                    
+        <div class="item-card">
+            <div class="item-badge">Item (a)</div>
+            <div class="item-content">
+                <div class="item-title">Deslocamento Δx nos intervalos de tempo</div>
+                <div class="item-formula"><code>Δx = x(t₂) - x(t₁)</code></div>
+                <div class="item-calc" id="calc-item-a">Para t₁=1s e t₂=2s: Δx = 40,0m - 25,0m = 15,0 m</div>
+            </div>
+        </div>
+        
+        <div class="item-card">
+            <div class="item-badge">Item (b)</div>
+            <div class="item-content">
+                <div class="item-title">Velocidade Média v_méd</div>
+                <div class="item-formula"><code>v_méd = Δx / Δt</code></div>
+                <div class="item-calc" id="calc-item-b">v_méd = 15,0 m / 1,0 s = 15,0 m/s</div>
+            </div>
+        </div>
+        
+        <div class="item-card">
+            <div class="item-badge">Item (c)</div>
+            <div class="item-content">
+                <div class="item-title">Velocidade Instantânea v(t)</div>
+                <div class="item-formula"><code>v(t) = dx/dt = 10,0 t (m/s)</code></div>
+                <div class="item-calc" id="calc-item-c">Em t₁=1,0s: v(1,0) = 10,0 × 1,0 = 10,0 m/s</div>
+            </div>
+        </div>
+        
+        <div class="item-card">
+            <div class="item-badge">Item (d)</div>
+            <div class="item-content">
+                <div class="item-title">Convergência da Secante para a Tangente</div>
+                <div class="item-formula"><code>lim (Δt → 0) Δx/Δt = dx/dt</code></div>
+                <div class="item-calc" id="calc-item-d">Quando Δt → 0, a inclinação da secante aproxima-se de 10,0 m/s</div>
+            </div>
+        </div>
+        
+                </div>
+            </div>
+
+            <div class="card-box">
+                <h3>⚙️ Controles & Variáveis</h3>
+                
+<div class="control-group">
+    <label>Tempo t: <span id="leo-t-val">0.00 s</span></label>
+    <input type="range" id="leo-t" min="0" max="3" step="0.02" value="0" oninput="updateLeopard()">
+</div>
+<div class="control-group">
+    <label>Intervalo Δt: <span id="leo-dt-val">1.000 s</span></label>
+    <input type="range" id="leo-dt" min="0.001" max="1.5" step="0.001" value="1.0" oninput="updateLeopard()">
+</div>
+<div style="display:flex; gap:4px; margin-bottom:10px;">
+    <button class="pill-btn active" onclick="setDtPreset(1.0)">Δt=1.0s</button>
+    <button class="pill-btn" onclick="setDtPreset(0.5)">Δt=0.5s</button>
+    <button class="pill-btn" onclick="setDtPreset(0.1)">Δt=0.1s</button>
+    <button class="pill-btn" onclick="setDtPreset(0.01)">Δt=0.01s</button>
+    <button class="pill-btn" onclick="setDtPreset(0.001)">Δt=0.001s</button>
+</div>
+<div class="btn-group">
+    <button class="btn btn-primary" id="btn-play-leo" onclick="toggleLeopard()">▶ Simular</button>
+    <button class="btn btn-secondary" onclick="resetEx1Leopard()">↺ Resetar (t = 0 s)</button>
+</div>
+
+            </div>
+        </div>
+
+        <div class="right-col">
+            
+<div class="card-box" style="height:140px; padding:10px;">
+    <canvas id="canvas-track"></canvas>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+    <div class="plot-card">
+        <div class="plot-header">
+            <span>Gráfico x(t): Posição vs Tempo</span>
+            <span style="color:#38bdf8; font-size:0.75rem;">Secante & Tangente</span>
+        </div>
+        <div class="plot-canvas-wrapper"><canvas id="canvas-plot-x"></canvas></div>
+    </div>
+    <div class="plot-card">
+        <div class="plot-header">
+            <span>Gráfico v(t): Velocidade vs Tempo</span>
+            <span style="color:#10b981; font-size:0.75rem;">v(t) = 10t</span>
+        </div>
+        <div class="plot-canvas-wrapper"><canvas id="canvas-plot-v"></canvas></div>
+    </div>
+</div>
+
+        </div>
+    </div>
+
+    <script>
+        function getCanvasCtx(id) {
+            const canvas = document.getElementById(id);
+            if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
+            const rect = canvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return { canvas, ctx, w: rect.width, h: rect.height };
+        }
+
+        
+let leo_timer = null, leo_running = false;
+
+function setDtPreset(val) {
+    document.getElementById('leo-dt').value = val;
+    document.querySelectorAll('.pill-btn').forEach(b => b.classList.toggle('active', b.innerText.includes(`=${val}s`)));
+    updateLeopard();
+}
+
+function toggleLeopard() {
+    leo_running = !leo_running;
+    document.getElementById('btn-play-leo').innerText = leo_running ? '⏸ Pausar' : '▶ Simular';
+    if (leo_running && !leo_timer) leo_timer = setInterval(loopLeopard, 30);
+}
+
+function resetEx1Leopard() {
+    leo_running = false;
+    if (leo_timer) { clearInterval(leo_timer); leo_timer = null; }
+    document.getElementById('btn-play-leo').innerText = '▶ Simular';
+    document.getElementById('leo-t').value = 0; // Strict t = 0 s
+    updateLeopard();
+}
+
+function loopLeopard() {
+    if (!leo_running) return;
+    let t = parseFloat(document.getElementById('leo-t').value) + 0.02;
+    if (t > 3.0) { t = 3.0; leo_running = false; clearInterval(leo_timer); leo_timer = null; document.getElementById('btn-play-leo').innerText = '▶ Simular'; }
+    document.getElementById('leo-t').value = t;
+    updateLeopard();
+}
+
+function updateLeopard() {
+    const t = parseFloat(document.getElementById('leo-t').value);
+    const dt = parseFloat(document.getElementById('leo-dt').value);
+
+    document.getElementById('leo-t-val').innerText = t.toFixed(2) + ' s';
+    document.getElementById('leo-dt-val').innerText = dt.toFixed(3) + ' s';
+
+    const t1 = 1.0, t2 = t1 + dt;
+    const x1 = 20.0 + 5.0 * t1 * t1, x2 = 20.0 + 5.0 * t2 * t2;
+    const dx = x2 - x1, v_med = dx / dt;
+
+    document.getElementById('calc-item-a').innerText = `Δx = x(${t2.toFixed(3)}) - x(1,0) = ${x2.toFixed(2)}m - 25,0m = ${dx.toFixed(2)} m`;
+    document.getElementById('calc-item-b').innerText = `v_méd = ${dx.toFixed(2)}m / ${dt.toFixed(3)}s = ${v_med.toFixed(2)} m/s`;
+    document.getElementById('calc-item-c').innerText = `v(1,0) = 10,0 × 1,0 = 10,0 m/s (Derivada exata)`;
+    document.getElementById('calc-item-d').innerText = `Diferença (v_méd - v_inst) = ${(v_med - 10.0).toFixed(4)} m/s`;
+
+    drawTrack(t);
+    drawPlotX(t, dt);
+    drawPlotV(t);
+}
+
+function drawTrack(t) {
+    const { ctx, w, h } = getCanvasCtx('canvas-track');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, w, h);
+    const cy = h / 2 + 10;
+    ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy); ctx.stroke();
+
+    for (let m = 0; m <= 60; m += 10) {
+        const px = 20 + (m / 60) * (w - 40);
+        ctx.strokeStyle = '#475569'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(px, cy - 4); ctx.lineTo(px, cy + 4); ctx.stroke();
+        ctx.font = '10px Inter'; ctx.fillStyle = '#64748b'; ctx.fillText(m + 'm', px - 8, cy + 16);
+    }
+
+    const x_t = 20.0 + 5.0 * t * t;
+    const px_leo = 20 + (x_t / 60) * (w - 40);
+    ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px_leo, cy - 6, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#fbbf24'; ctx.fillText(`🐆 x = ${x_t.toFixed(1)}m`, px_leo - 25, cy - 18);
+}
+
+function drawPlotX(t_curr, dt) {
+    const { ctx, w, h } = getCanvasCtx('canvas-plot-x');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, w, h);
+    const padL = 35, padR = 15, padT = 15, padB = 25;
+    const graphW = w - padL - padR, graphH = h - padT - padB;
+    const toPxX = t => padL + (t / 3.0) * graphW;
+    const toPxY = x => (h - padB) - (x / 65.0) * graphH;
+
+    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+
+    // Quadratic Curve x(t)
+    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
+    for (let t = 0; t <= 3.0; t += 0.05) {
+        const x = 20.0 + 5.0 * t * t;
+        if (t === 0) ctx.moveTo(toPxX(t), toPxY(x)); else ctx.lineTo(toPxX(t), toPxY(x));
+    }
+    ctx.stroke();
+
+    // Secant Line in Amber
+    const t1 = 1.0, t2 = t1 + dt, x1 = 25.0, x2 = 20.0 + 5.0 * t2 * t2;
+    const v_med = (x2 - x1) / dt;
+    ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]); ctx.beginPath();
+    ctx.moveTo(toPxX(0.2), toPxY(x1 + v_med * (0.2 - t1)));
+    ctx.lineTo(toPxX(2.5), toPxY(x1 + v_med * (2.5 - t1))); ctx.stroke(); ctx.setLineDash([]);
+
+    // Tangent Line in Emerald
+    ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2; ctx.beginPath();
+    ctx.moveTo(toPxX(0.2), toPxY(x1 + 10.0 * (0.2 - t1)));
+    ctx.lineTo(toPxX(2.2), toPxY(x1 + 10.0 * (2.2 - t1))); ctx.stroke();
+
+    ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(toPxX(t1), toPxY(x1), 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(toPxX(t2), toPxY(x2), 5, 0, Math.PI * 2); ctx.fill();
+}
+
+function drawPlotV(t_curr) {
+    const { ctx, w, h } = getCanvasCtx('canvas-plot-v');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, w, h);
+    const padL = 35, padR = 15, padT = 15, padB = 25;
+    const graphW = w - padL - padR, graphH = h - padT - padB;
+    const toPxX = t => padL + (t / 3.0) * graphW;
+    const toPxY = v => (h - padB) - (v / 35.0) * graphH;
+
+    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+
+    ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath();
+    ctx.moveTo(toPxX(0), toPxY(0)); ctx.lineTo(toPxX(3.0), toPxY(30.0)); ctx.stroke();
+
+    if (t_curr > 0) {
+        ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.arc(toPxX(t_curr), toPxY(10.0 * t_curr), 6, 0, Math.PI * 2); ctx.fill();
+    }
+}
+
+window.onload = function() { updateLeopard(); };
+
+    </script>
+</body>
+</html>
