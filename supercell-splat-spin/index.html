@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório Interativo: Dinâmica de Supercélulas - Sondagem Skew-T, Splat, Spin e Expansão</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌪️</text></svg>">
+    
+    <style>
+        :root {
+            --bg-dark: #050812;
+            --card-bg: rgba(13, 20, 36, 0.96);
+            --card-border: rgba(56, 189, 248, 0.35);
+            --accent-cyan: #38bdf8;
+            --accent-purple: #a855f7;
+            --accent-gold: #fbbf24;
+            --accent-orange: #f97316;
+            --accent-red: #f43f5e;
+            --accent-green: #34d399;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 10%, #0c1527 0%, var(--bg-dark) 100%);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            padding: 6px 18px;
+            background: rgba(10, 16, 30, 0.95);
+            border-bottom: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .title-group h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #38bdf8, #a855f7, #fbbf24, #f43f5e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title-group p {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+        }
+
+        .header-badges {
+            display: flex;
+            gap: 8px;
+            font-size: 0.76rem;
+        }
+
+        .h-badge {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--card-border);
+            padding: 3px 8px;
+            border-radius: 6px;
+            color: var(--text-muted);
+        }
+
+        .h-badge strong {
+            color: #fff;
+            font-family: 'Consolas', monospace;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            padding: 5px 12px;
+            font-size: 0.76rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(56, 189, 248, 0.25);
+            border-color: var(--accent-cyan);
+        }
+
+        /* Barra de Roteiro Didático (Storyboard Stepper) */
+        .story-stepper {
+            background: rgba(14, 21, 38, 0.95);
+            border-bottom: 1px solid var(--card-border);
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            overflow-x: auto;
+        }
+
+        .step-pill {
+            flex: 1;
+            min-width: 135px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 5px 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .step-pill:hover {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--accent-cyan);
+        }
+
+        .step-pill.active {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.4), rgba(168, 85, 247, 0.3));
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+        }
+
+        .step-num {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+        }
+
+        .step-title {
+            font-size: 0.74rem;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 310px 1fr 380px;
+            gap: 8px;
+            padding: 8px;
+            flex: 1;
+            height: calc(100vh - 102px);
+            overflow: hidden;
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                overflow-y: auto;
+            }
+        }
+
+        .panel {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .narrative-card {
+            background: rgba(56, 189, 248, 0.06);
+            border-left: 3px solid var(--accent-cyan);
+            border-radius: 0 8px 8px 0;
+            padding: 8px;
+            font-size: 0.74rem;
+            line-height: 1.45;
+            color: #e2e8f0;
+        }
+
+        .narrative-card strong {
+            color: var(--accent-cyan);
+        }
+
+        .control-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            padding: 6px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .slider-label-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .slider-val {
+            color: var(--accent-cyan);
+            font-weight: 700;
+            font-family: 'Consolas', monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: #1e293b;
+            outline: none;
+            cursor: pointer;
+            accent-color: var(--accent-cyan);
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        button {
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--card-border);
+            background: #162038;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        button:hover {
+            background: #203055;
+            border-color: var(--accent-cyan);
+        }
+
+        button.primary {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            border: none;
+            grid-column: span 2;
+        }
+
+        button.primary:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+        }
+
+        .viewport-box {
+            background: #020612;
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #main-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .overlay-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(10, 16, 30, 0.92);
+            border: 1px solid var(--card-border);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.74rem;
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .badge-pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        .layer-bar {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            display: flex;
+            gap: 4px;
+            background: rgba(10, 16, 30, 0.9);
+            border: 1px solid var(--card-border);
+            padding: 3px;
+            border-radius: 6px;
+            backdrop-filter: blur(6px);
+        }
+
+        .toggle-btn {
+            padding: 4px 7px;
+            font-size: 0.68rem;
+            border-radius: 4px;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+        }
+
+        .toggle-btn.on {
+            background: #1e293b;
+            color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+        }
+
+        /* Seletor de Visão do Painel Lateral (Abas) */
+        .tab-bar {
+            display: flex;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 3px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 4px 6px;
+            font-size: 0.68rem;
+            border-radius: 4px;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: #1e293b;
+            color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
+        }
+
+        /* Modos de Exibição Lateral */
+        .lateral-view {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+            height: 100%;
+        }
+
+        .gauge-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px;
+        }
+
+        .gauge-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .gauge-box .lbl {
+            font-size: 0.62rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .gauge-box .val {
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: 'Consolas', monospace;
+            margin-top: 1px;
+        }
+
+        #profileCanvas {
+            width: 100%;
+            height: 100%;
+            min-height: 380px;
+            background: #020612;
+            border-radius: 6px;
+            border: 1px solid var(--card-border);
+            flex: 1;
+        }
+
+        #tensorCanvas {
+            width: 100%;
+            height: 220px;
+            background: #020612;
+            border-radius: 6px;
+            border: 1px solid var(--card-border);
+        }
+
+        .forces-bar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            padding: 6px;
+        }
+
+        .force-row {
+            display: flex;
+            align-items: center;
+            font-size: 0.68rem;
+            gap: 5px;
+        }
+
+        .force-lbl {
+            width: 110px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .force-bar-track {
+            flex: 1;
+            height: 6px;
+            background: #1e293b;
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .force-bar-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        .force-val {
+            width: 60px;
+            text-align: right;
+            font-family: 'Consolas', monospace;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="title-group">
+            <h1>🌪️ Laboratório Interativo: Dinâmica de Supercélulas</h1>
+            <p>Sondagem Termodinâmica Skew-T, Forçamentos Splat & Spin, Meso-Centros e Expansão Barométrica</p>
+        </div>
+        <div class="header-badges">
+            <div class="h-badge">Altitude: <strong id="topZ">250 m</strong></div>
+            <div class="h-badge">Updraft: <strong id="topW" style="color:var(--accent-green);">2.0 m/s</strong></div>
+            <div class="h-badge">Expansão: <strong id="topExp" style="color:var(--accent-gold);">1.00x</strong></div>
+            <div class="h-badge">P_Total: <strong id="topPTotal">983.5 hPa</strong></div>
+        </div>
+        <div>
+            <a href="../../index.html" class="nav-btn">🏠 Voltar ao Catálogo</a>
+        </div>
+    </header>
+
+    <!-- Barra de Roteiro Didático Interativo (Passo a Passo) -->
+    <div class="story-stepper">
+        <div class="step-pill active" id="stepPill1" onclick="setStoryStep(1)">
+            <span class="step-num">Etapa 1</span>
+            <span class="step-title">1. CAPE & CIN (Sondagem Skew-T)</span>
+        </div>
+        <div class="step-pill" id="stepPill2" onclick="setStoryStep(2)">
+            <span class="step-num">Etapa 2</span>
+            <span class="step-title">2. Splat Solo (Meso-Alta)</span>
+        </div>
+        <div class="step-pill" id="stepPill3" onclick="setStoryStep(3)">
+            <span class="step-num">Etapa 3</span>
+            <span class="step-title">3. Spin Mesociclone (Meso-Baixa)</span>
+        </div>
+        <div class="step-pill" id="stepPill4" onclick="setStoryStep(4)">
+            <span class="step-num">Etapa 4</span>
+            <span class="step-title">4. Expansão Barométrica (Volume)</span>
+        </div>
+        <div class="step-pill" id="stepPill5" onclick="setStoryStep(5)">
+            <span class="step-num">Etapa 5</span>
+            <span class="step-title">5. Bigorna / Tropopausa (Splat Topo)</span>
+        </div>
+        <div class="step-pill" id="stepPill6" onclick="setStoryStep(6)">
+            <span class="step-num">Etapa 6</span>
+            <span class="step-title">⚙️ Modo Laboratório Livre</span>
+        </div>
+    </div>
+
+    <div class="main-container">
+        
+        <!-- Painel Esquerdo: Explicação do Roteiro e Controles -->
+        <div class="panel">
+            <div class="section-title">📖 Roteiro Didático: <span id="storyStepTitle" style="color:#fff;">1. CAPE & CIN</span></div>
+            <div class="narrative-card" id="storyNarrative">
+                <!-- Conteúdo dinâmico da narrativa do passo -->
+            </div>
+
+            <div class="section-title" style="margin-top: 4px;">🎮 Controles de Execução</div>
+            <div class="btn-group">
+                <button class="primary" id="btnPlay" onclick="togglePlay()">⏸ Pausar Subida</button>
+            </div>
+            <div class="btn-group">
+                <button onclick="stepForward()">⏭ Passo (+1)</button>
+                <button onclick="resetSim()">↺ Reiniciar Subida</button>
+            </div>
+
+            <div class="section-title" style="margin-top: 4px;">⚡ Parâmetros Interativos</div>
+            
+            <!-- CAPE -->
+            <div class="control-box">
+                <div class="slider-label-row">
+                    <span>CAPE (Energia Convectiva)</span>
+                    <span class="slider-val" id="lblCape" style="color:var(--accent-green);">2500 J/kg</span>
+                </div>
+                <input type="range" id="slCape" min="0" max="4500" step="100" value="2500" oninput="onParamChange()">
+            </div>
+
+            <!-- CIN -->
+            <div class="control-box">
+                <div class="slider-label-row">
+                    <span>CIN (Inibição Convectiva na Base)</span>
+                    <span class="slider-val" id="lblCin" style="color:var(--accent-red);">50 J/kg</span>
+                </div>
+                <input type="range" id="slCin" min="0" max="250" step="10" value="50" oninput="onParamChange()">
+            </div>
+
+            <!-- Splat Solo -->
+            <div class="control-box">
+                <div class="slider-label-row">
+                    <span>Splat Solo (Meso-Alta de Superfície)</span>
+                    <span class="slider-val" id="lblSplatSfc">6.5</span>
+                </div>
+                <input type="range" id="slSplatSfc" min="0" max="10" step="0.1" value="6.5" oninput="onParamChange()">
+            </div>
+
+            <!-- Spin Mesociclone -->
+            <div class="control-box">
+                <div class="slider-label-row">
+                    <span>Spin Mesociclone (Meso-Baixa / Rotação)</span>
+                    <span class="slider-val" id="lblSpinPeak" style="color:var(--accent-purple);">7.5</span>
+                </div>
+                <input type="range" id="slSpinPeak" min="0" max="12" step="0.1" value="7.5" oninput="onParamChange()">
+            </div>
+
+            <!-- Splat Bigorna -->
+            <div class="control-box">
+                <div class="slider-label-row">
+                    <span>Splat Bigorna (Meso-Alta Topo)</span>
+                    <span class="slider-val" id="lblSplatTop" style="color:var(--accent-orange);">8.0</span>
+                </div>
+                <input type="range" id="slSplatTop" min="0" max="12" step="0.1" value="8.0" oninput="onParamChange()">
+            </div>
+
+            <div class="control-box">
+                <div class="slider-label-row">
+                    <span>Velocidade da Animação</span>
+                    <span class="slider-val" id="lblSpeed">1.0x</span>
+                </div>
+                <input type="range" id="slSpeed" min="0.2" max="3.0" step="0.1" value="1.0" oninput="onSpeedChange()">
+            </div>
+        </div>
+
+        <!-- Centro: Visualizador Gráfico 2D da Tempestade -->
+        <div class="viewport-box">
+            <canvas id="main-canvas"></canvas>
+
+            <div class="overlay-badge">
+                <div class="badge-pulse" id="badgePulse"></div>
+                <span id="txtRegime">Regime: Base / CIN & Splat Solo (Convergência)</span>
+            </div>
+
+            <div class="layer-bar">
+                <button class="toggle-btn on" id="btnSquare" onclick="toggleLayer('square')">Elemento Fluido Deformável & Expansivo</button>
+                <button class="toggle-btn on" id="btnMesoCenters" onclick="toggleLayer('mesoCenters')">Meso-Centros [H] e [B]</button>
+                <button class="toggle-btn on" id="btnIsobars" onclick="toggleLayer('isobars')">Isolinhas de Perturbação p'</button>
+                <button class="toggle-btn on" id="btnParticles" onclick="toggleLayer('particles')">Partículas de Fluxo</button>
+                <button class="toggle-btn on" id="btnVectors" onclick="toggleLayer('vectors')">Vetores de Força (VPPGF & B)</button>
+            </div>
+        </div>
+
+        <!-- Painel Direito: Abas Dinâmicas (Sondagem Skew-T Total, Deformômetro, Forças) -->
+        <div class="panel">
+            
+            <!-- Barra de Abas do Painel Lateral -->
+            <div class="tab-bar">
+                <div class="tab-btn active" id="tabBtnSounding" onclick="setLateralTab('sounding')">🌡️ Sondagem Skew-T</div>
+                <div class="tab-btn" id="tabBtnTensor" onclick="setLateralTab('tensor')">📐 Deformômetro</div>
+                <div class="tab-btn" id="tabBtnForces" onclick="setLateralTab('forces')">⚖️ Forças & Telemetria</div>
+            </div>
+
+            <!-- VISÃO 1: SONDAGEM TERMODINÂMICA COMPLETA EM ALTURA TOTAL -->
+            <div class="lateral-view" id="viewSounding">
+                <div class="section-title">
+                    <span>🌡️ Sondagem Termodinâmica (T vs Altitude / P)</span>
+                    <span style="font-size:0.65rem; color:var(--text-muted);">Skew-T / Emagrama</span>
+                </div>
+                <canvas id="profileCanvas"></canvas>
+                <div style="font-size:0.68rem; color:var(--text-muted); display:flex; justify-content:space-between; padding:2px 4px; background:rgba(0,0,0,0.3); border-radius:4px;">
+                    <span>T_parcela: <strong id="lblTParcel" style="color:var(--accent-green);">+28.0°C</strong></span>
+                    <span>T_amb: <strong id="lblTAmb" style="color:var(--accent-orange);">+28.0°C</strong></span>
+                    <span>ΔT: <strong id="lblDeltaT" style="color:#fff;">0.0°C</strong></span>
+                    <span>Empuxo B: <strong id="lblBuoyB" style="color:var(--accent-green);">+0.05</strong></span>
+                </div>
+            </div>
+
+            <!-- VISÃO 2: DEFORMÔMETRO TENSORIAL & EXPANSÃO DE VOLUME -->
+            <div class="lateral-view" id="viewTensor" style="display:none;">
+                <div class="section-title">📐 Deformômetro Tensorial & Expansão</div>
+                <canvas id="tensorCanvas"></canvas>
+                <div style="font-size:0.72rem; color:var(--text-muted); display:flex; flex-direction:column; gap:4px; background:rgba(0,0,0,0.3); padding:8px; border-radius:6px;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span>Volume da Parcela (Expansão):</span>
+                        <strong id="txtVol" style="color:var(--accent-gold);">1.00x</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between;">
+                        <span>Fator Achatamento Vertical (S<sub>z</sub>):</span>
+                        <strong id="txtSz" style="color:var(--accent-orange);">0.45x</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between;">
+                        <span>Fator Estiramento Horizontal (S<sub>x</sub>):</span>
+                        <strong id="txtSx" style="color:var(--accent-cyan);">1.85x</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between;">
+                        <span>Ângulo de Rotação (Spin θ):</span>
+                        <strong id="txtRot" style="color:var(--accent-purple);">0°</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VISÃO 3: BALANÇO DE FORÇAS & DECOMPOSIÇÃO DE PRESSÕES -->
+            <div class="lateral-view" id="viewForces" style="display:none;">
+                <div class="section-title">⚖️ Balanço Vertical de Forças (dw/dt)</div>
+                <div class="forces-bar-container">
+                    <div class="force-row">
+                        <span class="force-lbl">VPPGF Dinâmico (p′<sub>dyn</sub>):</span>
+                        <div class="force-bar-track"><div class="force-bar-fill" id="barVppgfDyn" style="background:var(--accent-cyan);"></div></div>
+                        <span class="force-val" id="valVppgfDyn" style="color:var(--accent-cyan);">+0.35 m/s²</span>
+                    </div>
+                    <div class="force-row">
+                        <span class="force-lbl">VPPGF Empuxo (p′<sub>B</sub>):</span>
+                        <div class="force-bar-track"><div class="force-bar-fill" id="barVppgfBuoy" style="background:var(--accent-gold);"></div></div>
+                        <span class="force-val" id="valVppgfBuoy" style="color:var(--accent-gold);">-0.05 m/s²</span>
+                    </div>
+                    <div class="force-row">
+                        <span class="force-lbl">Empuxo Térmico (B):</span>
+                        <div class="force-bar-track"><div class="force-bar-fill" id="barBuoyDirect" style="background:var(--accent-green);"></div></div>
+                        <span class="force-val" id="valBuoyDirect" style="color:var(--accent-green);">+0.05 m/s²</span>
+                    </div>
+                    <div class="force-row" style="border-top:1px solid rgba(255,255,255,0.08); padding-top:3px; margin-top:1px;">
+                        <span class="force-lbl" style="font-weight:bold; color:#fff;">Aceleração Total (a<sub>z</sub>):</span>
+                        <div class="force-bar-track"><div class="force-bar-fill" id="barAccelTotal" style="background:#fff;"></div></div>
+                        <span class="force-val" id="valAccelTotal" style="color:#fff;">+0.35 m/s²</span>
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-top:4px;">📊 Decomposição de Pressões Instantânea</div>
+                <div class="gauge-grid">
+                    <div class="gauge-box">
+                        <div class="lbl">P Hidrostática (p̄)</div>
+                        <div class="val" id="gPHydro" style="color:#94a3b8;">983 hPa</div>
+                    </div>
+                    <div class="gauge-box">
+                        <div class="lbl">P′ Spin (Meso-Baixa)</div>
+                        <div class="val" id="gPSpin" style="color:var(--accent-purple);">-0.0 hPa</div>
+                    </div>
+                    <div class="gauge-box">
+                        <div class="lbl">P′ Splat (Meso-Alta)</div>
+                        <div class="val" id="gPSplat" style="color:var(--accent-orange);">+12.6 hPa</div>
+                    </div>
+                    <div class="gauge-box">
+                        <div class="lbl">P′ Dinâmica Total</div>
+                        <div class="val" id="gPDyn" style="color:var(--accent-cyan);">+12.6 hPa</div>
+                    </div>
+                    <div class="gauge-box">
+                        <div class="lbl">P′ Empuxo (p′<sub>B</sub>)</div>
+                        <div class="val" id="gPBuoy" style="color:var(--accent-gold);">-0.4 hPa</div>
+                    </div>
+                    <div class="gauge-box">
+                        <div class="lbl">Empuxo Térmico B</div>
+                        <div class="val" id="gB" style="color:var(--accent-green);">+0.05</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // --- ESTADO GLOBAL DA SIMULAÇÃO (AUTOPLAY ATIVO POR PADRÃO) ---
+        const state = {
+            running: true, // Começa rodando automaticamente!
+            loop: true,    // Subida contínua em loop
+            time: 0.0,
+            step: 0,
+            speed: 1.0,
+            storyStep: 1,
+            lateralTab: 'sounding',
+            
+            // Estado da Parcela de Ar
+            z: 250.0,
+            w: 4.5, // Velocidade inicial positiva suficiente para romper o solo
+            x: 0.0,
+            accel: 0.0,
+            history: [],
+
+            // Elemento Fluido Quadrado Deformável e Expansivo
+            squareBaseSize: 550.0, // metros (ao nível do solo)
+            squareAngle: 0.0,      // Rotação (Spin)
+            stretchX: 1.8,         // Deformação em X (Splat)
+            stretchZ: 0.45,        // Deformação em Z (Splat)
+            expansionFactor: 1.0,  // Expansão barométrica por queda de densidade
+
+            params: {
+                cape: 2500,     // J/kg (Energia Convectiva)
+                cin: 50,        // J/kg (Inibição Convectiva)
+                splatSfc: 6.5,
+                spinPeak: 7.5,
+                mesoZ: 5200.0,
+                splatTop: 8.0,
+                tropoZ: 11000.0
+            },
+            layers: {
+                square: true,
+                mesoCenters: true,
+                isobars: true,
+                particles: true,
+                vectors: true
+            }
+        };
+
+        // --- SISTEMA DE ABAS DINÂMICAS DO PAINEL LATERAL ---
+        function setLateralTab(tab) {
+            state.lateralTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('viewSounding').style.display = (tab === 'sounding') ? 'flex' : 'none';
+            document.getElementById('viewTensor').style.display = (tab === 'tensor') ? 'flex' : 'none';
+            document.getElementById('viewForces').style.display = (tab === 'forces') ? 'flex' : 'none';
+
+            if (tab === 'sounding') {
+                document.getElementById('tabBtnSounding').classList.add('active');
+                setTimeout(resizeProfiles, 10);
+            } else if (tab === 'tensor') {
+                document.getElementById('tabBtnTensor').classList.add('active');
+            } else if (tab === 'forces') {
+                document.getElementById('tabBtnForces').classList.add('active');
+            }
+        }
+
+        // --- HISTÓRIAS DO ROTEIRO DIDÁTICO COM TROCA CONTEXTUAL ---
+        const storyData = {
+            1: {
+                title: "1. Termodinâmica: CAPE e CIN",
+                text: "O painel lateral exibe a <strong>Sondagem Termodinâmica Skew-T Completa</strong>. <strong>CIN (Inibição Convectiva)</strong> cria a área vermelha na base. Acima do Nível de Convecção Livre (LFC), o <strong>CAPE</strong> gera a área verde de empuxo positivo acelerando a parcela até o Nível de Equilíbrio (EL).",
+                tab: 'sounding',
+                setup: () => {
+                    state.params.cape = 2500;
+                    state.params.cin = 40;
+                    state.params.splatSfc = 4.0;
+                    state.params.spinPeak = 3.0;
+                    syncSliders();
+                }
+            },
+            2: {
+                title: "2. Forçamento Splat no Solo (Meso-Alta)",
+                text: "O painel lateral trocou para o <strong>Deformômetro Tensorial</strong>. O impacto contra o solo gera o termo <strong>Splat (|S|²)</strong>, criando a 🔴 <strong>Meso-Alta de Superfície (+12.6 hPa)</strong> e achatando o elemento quadrado horizontalmente (<i>S<sub>x</sub> &gt; 1, S<sub>z</sub> &lt; 1</i>).",
+                tab: 'tensor',
+                setup: () => {
+                    state.params.splatSfc = 8.5;
+                    state.params.spinPeak = 3.0;
+                    syncSliders();
+                }
+            },
+            3: {
+                title: "3. Forçamento Spin no Mesociclone (Meso-Baixa)",
+                text: "O painel lateral trocou para o <strong>Balanço de Forças & Pressões</strong>. A rotação concentrada induz o termo <strong>Spin (|ω|²)</strong>, cavando a 🔵 <strong>Meso-Baixa do Mesociclone (-28 hPa)</strong>. Essa queda de pressão gera uma potente <strong>sucção vertical (VPPGF)</strong> que gira o quadrado e puxa o ar da base para cima!",
+                tab: 'forces',
+                setup: () => {
+                    state.params.splatSfc = 5.0;
+                    state.params.spinPeak = 9.5;
+                    syncSliders();
+                }
+            },
+            4: {
+                title: "4. Expansão Barométrica da Parcela ao Subir",
+                text: "O painel lateral exibe o <strong>Expansômetro de Volume</strong>. Conforme a parcela sobe de 1013 hPa até ~200 hPa na tropopausa, a pressão e densidade (<i>ρ(z)</i>) caem. Pela Lei dos Gases Ideais, <strong>o volume da parcela se expande em até 3.5×</strong>, fazendo o quadrado crescer substancialmente.",
+                tab: 'tensor',
+                setup: () => {
+                    state.params.cape = 3000;
+                    state.params.spinPeak = 7.5;
+                    syncSliders();
+                }
+            },
+            5: {
+                title: "5. Bigorna / Tropopausa (Splat de Topo)",
+                text: "Ao atingir a tropopausa estável (~11 km), a parcela colide com a estratosfera. Ocorre estagnação violenta (<strong>Splat de Topo</strong>), criando a 🔴 <strong>Meso-Alta da Bigorna (+19 hPa)</strong>. O elemento expandido é esmagado verticalmente e espalhado horizontalmente.",
+                tab: 'tensor',
+                setup: () => {
+                    state.params.splatTop = 9.5;
+                    state.params.cape = 2800;
+                    syncSliders();
+                }
+            },
+            6: {
+                title: "6. Laboratório Livre (Sandbox Total)",
+                text: "Você tem controle total! Ajuste livremente o <strong>CAPE, CIN, Splat e Spin</strong> nos sliders e navegue pelas abas do painel lateral (Sondagem, Deformômetro ou Forças) para analisar qualquer aspecto da tempestade.",
+                tab: 'sounding',
+                setup: () => {}
+            }
+        };
+
+        function setStoryStep(step) {
+            state.storyStep = step;
+            document.querySelectorAll('.step-pill').forEach((p, idx) => {
+                p.classList.toggle('active', idx + 1 === step);
+            });
+            let s = storyData[step];
+            document.getElementById('storyStepTitle').innerText = s.title;
+            document.getElementById('storyNarrative').innerHTML = s.text;
+            
+            // Troca a aba lateral para o modo conveniente do passo
+            if (s.tab) setLateralTab(s.tab);
+
+            s.setup();
+            resetSim();
+        }
+
+        function syncSliders() {
+            document.getElementById('slCape').value = state.params.cape;
+            document.getElementById('slCin').value = state.params.cin;
+            document.getElementById('slSplatSfc').value = state.params.splatSfc;
+            document.getElementById('slSpinPeak').value = state.params.spinPeak;
+            document.getElementById('slSplatTop').value = state.params.splatTop;
+
+            document.getElementById('lblCape').innerText = state.params.cape + " J/kg";
+            document.getElementById('lblCin').innerText = state.params.cin + " J/kg";
+            document.getElementById('lblSplatSfc').innerText = state.params.splatSfc.toFixed(1);
+            document.getElementById('lblSpinPeak').innerText = state.params.spinPeak.toFixed(1);
+            document.getElementById('lblSplatTop').innerText = state.params.splatTop.toFixed(1);
+
+            drawProfiles();
+            draw();
+            drawTensorMeter();
+        }
+
+        // --- SISTEMA DE PARTÍCULAS DO ESCOAMENTO ---
+        const NUM_P = 280;
+        const particles = [];
+        for (let i = 0; i < NUM_P; i++) {
+            particles.push({
+                x: (Math.random() - 0.5) * 16000,
+                z: Math.random() * 13500,
+                life: Math.random() * 100,
+                maxLife: 70 + Math.random() * 60,
+                size: 1 + Math.random() * 2
+            });
+        }
+
+        // --- MODELO FÍSICO METEOROLÓGICO ---
+
+        function calcHydrostaticPressure(alt) {
+            const p0 = 1013.25; // hPa
+            const H = 8400.0;   // m
+            return p0 * Math.exp(-alt / H);
+        }
+
+        function calcDensity(alt) {
+            const rho0 = 1.225; // kg/m³
+            return rho0 * Math.exp(-alt / 8400.0);
+        }
+
+        function calcExpansionFactor(alt) {
+            let rho0 = 1.225;
+            let rho = calcDensity(alt);
+            return Math.sqrt(rho0 / rho);
+        }
+
+        function calcSplat(alt) {
+            let sfc = state.params.splatSfc * Math.exp(-Math.pow(alt / 1200.0, 2.0));
+            let top = state.params.splatTop / (1.0 + Math.exp(-(alt - (state.params.tropoZ - 400.0)) / 700.0));
+            return sfc + top;
+        }
+
+        function calcSpin(alt) {
+            return state.params.spinPeak * Math.exp(-Math.pow((alt - state.params.mesoZ) / 1900.0, 2.0));
+        }
+
+        function calcDynPressure(alt) {
+            let spin = calcSpin(alt);
+            let splat = calcSplat(alt);
+            let pSpin = -0.5 * Math.pow(spin, 2.0);
+            let pSplat = 0.3 * Math.pow(splat, 2.0);
+            return { pSpin, pSplat, pDyn: pSpin + pSplat, spin, splat };
+        }
+
+        function calcLFC() {
+            return 600.0 + (state.params.cin / 250.0) * 1000.0;
+        }
+
+        function calcEL() {
+            return 9800.0 + (state.params.cape / 4500.0) * 2200.0;
+        }
+
+        function calcBuoyancy(alt) {
+            let lfc = calcLFC();
+            let el = calcEL();
+
+            if (alt < lfc) {
+                let cinIntensity = (state.params.cin / 80.0) * 0.35;
+                let norm = Math.max(0.0, 1.0 - alt / lfc);
+                return -cinIntensity * norm;
+            } else if (alt >= lfc && alt <= el) {
+                let capeFactor = (state.params.cape / 2500.0) * 0.30;
+                let normAlt = (alt - lfc) / (el - lfc);
+                return capeFactor * Math.sin(normAlt * Math.PI);
+            } else {
+                return -0.50 * Math.min(1.5, (alt - el) / 1200.0);
+            }
+        }
+
+        function getSoundingTemperatures(alt) {
+            let tSfc = 28.0;
+            let tTropo = -58.0;
+            let lapseRate = 6.8 / 1000.0;
+            let tEnv = Math.max(tTropo, tSfc - lapseRate * alt);
+
+            let lfc = calcLFC();
+            if (alt < lfc) {
+                let cinDelta = (state.params.cin / 100.0) * 3.5;
+                tEnv += cinDelta * (1.0 - alt / lfc);
+            }
+
+            let B = calcBuoyancy(alt);
+            let deltaT = B * 26.5;
+            let tParcel = tEnv + deltaT;
+
+            return { tEnv, tParcel, deltaT, lfc, el: calcEL(), B };
+        }
+
+        function calcBuoyancyPressure(alt) {
+            let bMax = (state.params.cape / 2500.0) * 0.25;
+            let centerZ = 6000.0;
+            return -2.5 * Math.sin((alt - centerZ) / 3500.0) * (bMax / 0.22);
+        }
+
+        function calcForces(alt) {
+            let dz = 25.0;
+            let rho = calcDensity(alt);
+
+            let pDynUp = calcDynPressure(alt + dz).pDyn;
+            let pDynDown = calcDynPressure(Math.max(0, alt - dz)).pDyn;
+            let dpDyn_dz = (pDynUp - pDynDown) / (2.0 * dz);
+            let vppgfDyn = -(1.0 / rho) * (dpDyn_dz * 100.0) * 0.55;
+
+            let pBUp = calcBuoyancyPressure(alt + dz);
+            let pBDown = calcBuoyancyPressure(Math.max(0, alt - dz));
+            let dpB_dz = (pBUp - pBDown) / (2.0 * dz);
+            let vppgfBuoy = -(1.0 / rho) * (dpB_dz * 100.0) * 0.40;
+
+            let B = calcBuoyancy(alt);
+            let aTotal = vppgfDyn + vppgfBuoy + B;
+
+            return { vppgfDyn, vppgfBuoy, B, aTotal };
+        }
+
+        function getStormFlow(x, alt) {
+            let spin = calcSpin(alt);
+            let updraft = 5.0 + (spin * 7.0) * Math.exp(-Math.pow(x / 2500.0, 2.0));
+            let vx = 0.0;
+            let vz = updraft;
+
+            if (alt < 3000) {
+                vx = -Math.sign(x) * (5.0 + (3000 - alt) / 250.0);
+            } else if (alt > 9500) {
+                vx = Math.sign(x || 1) * (18.0 + (alt - 9500) / 90.0);
+                vz = Math.max(0.4, updraft * Math.exp(-(alt - 9500) / 900.0));
+            } else {
+                vx = -Math.sin(alt / 350.0) * (spin * 3.5);
+            }
+            return { vx, vz };
+        }
+
+        // --- SETUP DOS CANVAS ---
+        const mainCanvas = document.getElementById('main-canvas');
+        const mainCtx = mainCanvas.getContext('2d');
+        const tensorCanvas = document.getElementById('tensorCanvas');
+        const tensorCtx = tensorCanvas.getContext('2d');
+        const profCanvas = document.getElementById('profileCanvas');
+        const profCtx = profCanvas.getContext('2d');
+
+        function resize() {
+            mainCanvas.width = mainCanvas.parentElement.clientWidth;
+            mainCanvas.height = mainCanvas.parentElement.clientHeight;
+            resizeProfiles();
+        }
+
+        function resizeProfiles() {
+            if (profCanvas && profCanvas.parentElement) {
+                profCanvas.width = profCanvas.parentElement.clientWidth - 4;
+                profCanvas.height = profCanvas.parentElement.clientHeight - 40;
+                drawProfiles();
+            }
+        }
+
+        window.addEventListener('resize', resize);
+        setTimeout(resize, 50);
+
+        function toPx(x, z) {
+            const w = mainCanvas.width;
+            const h = mainCanvas.height;
+            const px = w / 2 + x * (w / 20000.0);
+            const py = h - 30 - z * ((h - 60) / 14000.0);
+            return { px, py };
+        }
+
+        // --- RENDERIZAÇÃO DO CORTE 2D DA TEMPESTADE ---
+        function draw() {
+            mainCtx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+            const w = mainCanvas.width;
+            const h = mainCanvas.height;
+
+            // 1. Campo de Fundo com Gradiente de Pressão Dinâmica
+            let grad = mainCtx.createLinearGradient(0, 0, 0, h);
+            grad.addColorStop(0.04, "rgba(244, 63, 94, 0.32)");
+            grad.addColorStop(0.18, "rgba(249, 115, 22, 0.18)");
+            grad.addColorStop(0.50, "rgba(56, 189, 248, 0.35)");
+            grad.addColorStop(0.65, "rgba(168, 85, 247, 0.28)");
+            grad.addColorStop(0.95, "rgba(249, 115, 22, 0.28)");
+            mainCtx.fillStyle = grad;
+            mainCtx.fillRect(0, 0, w, h);
+
+            // Solo
+            mainCtx.fillStyle = "#0a101f";
+            mainCtx.fillRect(0, h - 30, w, 30);
+            mainCtx.strokeStyle = "rgba(56, 189, 248, 0.3)";
+            mainCtx.beginPath();
+            mainCtx.moveTo(0, h - 30);
+            mainCtx.lineTo(w, h - 30);
+            mainCtx.stroke();
+
+            mainCtx.fillStyle = "#64748b";
+            mainCtx.font = "11px monospace";
+            mainCtx.fillText("SUPERFÍCIE (z = 0 m | p̄ = 1013 hPa)", 15, h - 11);
+            mainCtx.fillText("TROPOPAUSA / BIGORNA (z = 11.000 m | p̄ = 225 hPa)", 15, toPx(0, 11000).py - 8);
+
+            // Mesociclone Glow (Vórtice)
+            let mesoY = toPx(0, state.params.mesoZ).py;
+            let mesoGrad = mainCtx.createRadialGradient(w/2, mesoY, 10, w/2, mesoY, 230);
+            mesoGrad.addColorStop(0, "rgba(168, 85, 247, 0.55)");
+            mesoGrad.addColorStop(0.45, "rgba(56, 189, 248, 0.20)");
+            mesoGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+            mainCtx.fillStyle = mesoGrad;
+            mainCtx.beginPath();
+            mainCtx.arc(w/2, mesoY, 230, 0, Math.PI * 2);
+            mainCtx.fill();
+
+            // Bigorna
+            let tropoY = toPx(0, state.params.tropoZ).py;
+            mainCtx.strokeStyle = "rgba(251, 191, 36, 0.4)";
+            mainCtx.setLineDash([5, 5]);
+            mainCtx.beginPath();
+            mainCtx.moveTo(0, tropoY);
+            mainCtx.lineTo(w, tropoY);
+            mainCtx.stroke();
+            mainCtx.setLineDash([]);
+
+            // 2. Isolinhas Curvas de Perturbação de Pressão (Isobars 2D)
+            if (state.layers.isobars) {
+                draw2DIsobars(mainCtx);
+            }
+
+            // 3. Centros Meso-Altas [H] e Meso-Baixas [B]
+            if (state.layers.mesoCenters) {
+                drawMesoCenters(mainCtx);
+            }
+
+            // 4. Partículas de Fluxo 2D
+            if (state.layers.particles) {
+                for (let p of particles) {
+                    let flow = getStormFlow(p.x, p.z);
+                    p.x += flow.vx * 3.0;
+                    p.z += flow.vz * 3.0;
+                    p.life++;
+
+                    if (p.life > p.maxLife || p.z > 14000 || Math.abs(p.x) > 10000) {
+                        p.x = (Math.random() - 0.5) * 8000;
+                        p.z = Math.random() * 1200;
+                        p.life = 0;
+                    }
+
+                    let pos = toPx(p.x, p.z);
+                    let alpha = Math.sin((p.life / p.maxLife) * Math.PI);
+                    
+                    if (p.z < 2500) mainCtx.fillStyle = `rgba(249, 115, 22, ${alpha * 0.75})`;
+                    else if (p.z < 8500) mainCtx.fillStyle = `rgba(56, 189, 248, ${alpha * 0.9})`;
+                    else mainCtx.fillStyle = `rgba(244, 63, 94, ${alpha * 0.75})`;
+
+                    mainCtx.beginPath();
+                    mainCtx.arc(pos.px, pos.py, p.size, 0, Math.PI * 2);
+                    mainCtx.fill();
+                }
+            }
+
+            // 5. Trajetória da Parcela
+            if (state.history.length > 1) {
+                mainCtx.strokeStyle = "rgba(52, 211, 153, 0.5)";
+                mainCtx.lineWidth = 2.5;
+                mainCtx.beginPath();
+                for (let i = 0; i < state.history.length; i++) {
+                    let hp = toPx(state.history[i].x, state.history[i].z);
+                    if (i === 0) mainCtx.moveTo(hp.px, hp.py);
+                    else mainCtx.lineTo(hp.px, hp.py);
+                }
+                mainCtx.stroke();
+            }
+
+            // 6. Elemento Fluido Quadrado Deformável e Expansivo
+            let ppos = toPx(state.x, state.z);
+            let scaleMeterToPx = (mainCanvas.height - 60) / 14000.0;
+
+            if (state.layers.square) {
+                let currentSize = state.squareBaseSize * state.expansionFactor * scaleMeterToPx;
+                drawDeformableSquare(mainCtx, ppos.px, ppos.py, currentSize, state.stretchX, state.stretchZ, state.squareAngle);
+            }
+
+            // 7. Vetores de Força Decompostos (VPPGF Dinâmico, VPPGF Empuxo, B, Total)
+            if (state.layers.vectors) {
+                let forces = calcForces(state.z);
+
+                drawForceArrow(mainCtx, ppos.px - 16, ppos.py, forces.vppgfDyn * 45.0, "#38bdf8", `F_dyn`);
+                drawForceArrow(mainCtx, ppos.px - 6, ppos.py, forces.vppgfBuoy * 45.0, "#fbbf24", `F_Pb`);
+                drawForceArrow(mainCtx, ppos.px + 6, ppos.py, forces.B * 45.0, "#34d399", `B`);
+                drawForceArrow(mainCtx, ppos.px + 18, ppos.py, forces.aTotal * 45.0, "#ffffff", `a_total`, true);
+
+                let vLen = Math.min(85, state.w * 1.5);
+                drawArrow(mainCtx, ppos.px, ppos.py, ppos.px, ppos.py - vLen, "#34d399", `w=${state.w.toFixed(1)}m/s`);
+            }
+
+            // Rótulo da Parcela
+            mainCtx.fillStyle = "#ffffff";
+            mainCtx.font = "bold 11px sans-serif";
+            mainCtx.fillText(`Elemento Fluido (z = ${state.z.toFixed(0)}m | Vol: ${(state.expansionFactor * state.expansionFactor).toFixed(2)}x)`, ppos.px + 35, ppos.py + 4);
+        }
+
+        // Desenha as Isolinhas Curvas de Pressão 2D (Isobars)
+        function draw2DIsobars(ctx) {
+            ctx.save();
+            ctx.lineWidth = 1.2;
+            ctx.font = "9px monospace";
+
+            const w = mainCanvas.width;
+            const cx = w / 2;
+
+            let mesoY = toPx(0, state.params.mesoZ).py;
+            const lowContours = [
+                { rx: 60, rz: 30, val: "-28 hPa", color: "#c084fc" },
+                { rx: 110, rz: 55, val: "-20 hPa", color: "#a855f7" },
+                { rx: 170, rz: 85, val: "-12 hPa", color: "#38bdf8" },
+                { rx: 240, rz: 120, val: "-5 hPa", color: "#0284c7" }
+            ];
+
+            for (let iso of lowContours) {
+                ctx.strokeStyle = iso.color;
+                ctx.fillStyle = iso.color;
+                ctx.setLineDash([4, 3]);
+                ctx.beginPath();
+                ctx.ellipse(cx, mesoY, iso.rx, iso.rz, 0, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.fillText(iso.val, cx + iso.rx - 25, mesoY - iso.rz + 6);
+            }
+
+            let sfcY = toPx(0, 0).py;
+            const sfcContours = [
+                { rx: 160, rz: 40, val: "+12 hPa", color: "#f97316" },
+                { rx: 230, rz: 65, val: "+6 hPa", color: "#fb923c" }
+            ];
+
+            for (let iso of sfcContours) {
+                ctx.strokeStyle = iso.color;
+                ctx.fillStyle = iso.color;
+                ctx.setLineDash([5, 3]);
+                ctx.beginPath();
+                ctx.ellipse(cx, sfcY, iso.rx, iso.rz, 0, Math.PI, Math.PI * 2);
+                ctx.stroke();
+                ctx.fillText(iso.val, cx + iso.rx - 25, sfcY - iso.rz + 12);
+            }
+
+            let topY = toPx(0, 11200).py;
+            const topContours = [
+                { rx: 180, rz: 35, val: "+18 hPa", color: "#f43f5e" },
+                { rx: 260, rz: 55, val: "+8 hPa", color: "#fb7185" }
+            ];
+
+            for (let iso of topContours) {
+                ctx.strokeStyle = iso.color;
+                ctx.fillStyle = iso.color;
+                ctx.setLineDash([5, 3]);
+                ctx.beginPath();
+                ctx.ellipse(cx, topY, iso.rx, iso.rz, 0, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.fillText(iso.val, cx + iso.rx - 25, topY - iso.rz + 8);
+            }
+
+            ctx.restore();
+        }
+
+        // Desenha as Meso-Altas [H] e Meso-Baixas [B]
+        function drawMesoCenters(ctx) {
+            let sfcPos = toPx(0, 450);
+            drawMesoCenterBadge(ctx, sfcPos.px, sfcPos.py, "H", "+12.6 hPa", "#f97316", "MESO-ALTA DE SUPERFÍCIE (Splat)");
+
+            let mesoPos = toPx(0, state.params.mesoZ);
+            drawMesoCenterBadge(ctx, mesoPos.px, mesoPos.py, "B", "-28.1 hPa", "#38bdf8", "MESO-BAIXA DO MESOCICLONE (Spin)");
+
+            drawSuctionArrow(ctx, sfcPos.px, sfcPos.py - 25, mesoPos.px, mesoPos.py + 30, "SUCÇÃO VPPGF ASCENDENTE (a_z > 0)");
+
+            let topPos = toPx(0, 11400);
+            drawMesoCenterBadge(ctx, topPos.px, topPos.py, "H", "+19.2 hPa", "#f43f5e", "MESO-ALTA DA BIGORNA (Splat)");
+
+            drawBrakingArrow(ctx, mesoPos.px, mesoPos.py - 30, topPos.px, topPos.py + 25, "DESACELERAÇÃO VPPGF / BLOQUEIO (a_z < 0)");
+        }
+
+        function drawMesoCenterBadge(ctx, x, y, type, pVal, color, subtitle) {
+            ctx.save();
+            ctx.shadowBlur = 16;
+            ctx.shadowColor = color;
+            ctx.fillStyle = type === 'H' ? "rgba(249, 115, 22, 0.25)" : "rgba(56, 189, 248, 0.25)";
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2.5;
+
+            ctx.beginPath();
+            ctx.arc(x, y, 20, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 18px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(type, x, y - 2);
+
+            ctx.font = "bold 11px monospace";
+            ctx.fillStyle = color;
+            ctx.fillText(pVal, x, y + 28);
+
+            ctx.font = "9px sans-serif";
+            ctx.fillStyle = "#e2e8f0";
+            ctx.fillText(subtitle, x, y + 42);
+
+            ctx.restore();
+        }
+
+        function drawSuctionArrow(ctx, x1, y1, x2, y2, label) {
+            ctx.save();
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.65)";
+            ctx.fillStyle = "rgba(56, 189, 248, 0.9)";
+            ctx.lineWidth = 2.5;
+            ctx.setLineDash([5, 4]);
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            let angle = Math.atan2(y2 - y1, x2 - x1);
+            ctx.beginPath();
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(x2 - 9 * Math.cos(angle - Math.PI / 6), y2 - 9 * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(x2 - 9 * Math.cos(angle + Math.PI / 6), y2 - 9 * Math.sin(angle + Math.PI / 6));
+            ctx.fill();
+
+            let midY = (y1 + y2) / 2;
+            ctx.fillStyle = "#38bdf8";
+            ctx.font = "bold 9px monospace";
+            ctx.textAlign = "left";
+            ctx.fillText(`↑ ${label}`, x1 + 16, midY);
+
+            ctx.restore();
+        }
+
+        function drawBrakingArrow(ctx, x1, y1, x2, y2, label) {
+            ctx.save();
+            ctx.strokeStyle = "rgba(244, 63, 94, 0.65)";
+            ctx.fillStyle = "rgba(244, 63, 94, 0.9)";
+            ctx.lineWidth = 2.5;
+            ctx.setLineDash([5, 4]);
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            let angle = Math.atan2(y2 - y1, x2 - x1);
+            ctx.beginPath();
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(x2 - 9 * Math.cos(angle - Math.PI / 6), y2 - 9 * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(x2 - 9 * Math.cos(angle + Math.PI / 6), y2 - 9 * Math.sin(angle + Math.PI / 6));
+            ctx.fill();
+
+            let midY = (y1 + y2) / 2;
+            ctx.fillStyle = "#f43f5e";
+            ctx.font = "bold 9px monospace";
+            ctx.textAlign = "left";
+            ctx.fillText(`↓ ${label}`, x1 + 16, midY);
+
+            ctx.restore();
+        }
+
+        function drawDeformableSquare(ctx, cx, cy, currentSize, sx, sz, angle) {
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(angle);
+
+            let halfW = (currentSize / 2) * sx;
+            let halfH = (currentSize / 2) * sz;
+
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "#38bdf8";
+
+            ctx.fillStyle = "rgba(56, 189, 248, 0.35)";
+            ctx.strokeStyle = "#38bdf8";
+            ctx.lineWidth = 2;
+
+            ctx.beginPath();
+            ctx.rect(-halfW, -halfH, halfW * 2, halfH * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let i = 1; i <= 3; i++) {
+                let fx = -halfW + (halfW * 2 * i) / 4;
+                ctx.moveTo(fx, -halfH); ctx.lineTo(fx, halfH);
+            }
+            for (let j = 1; j <= 3; j++) {
+                let fy = -halfH + (halfH * 2 * j) / 4;
+                ctx.moveTo(-halfW, fy); ctx.lineTo(halfW, fy);
+            }
+            ctx.stroke();
+
+            ctx.fillStyle = "#fbbf24";
+            ctx.beginPath();
+            ctx.arc(-halfW, -halfH, 3.5, 0, Math.PI * 2);
+            ctx.arc(halfW, -halfH, 3.5, 0, Math.PI * 2);
+            ctx.arc(halfW, halfH, 3.5, 0, Math.PI * 2);
+            ctx.arc(-halfW, halfH, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#fff";
+            ctx.beginPath();
+            ctx.arc(0, 0, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function drawForceArrow(ctx, x, y, len, color, label, isBold = false) {
+            if (Math.abs(len) < 2) return;
+            drawArrow(ctx, x, y, x, y - len, color, label, isBold);
+        }
+
+        function drawArrow(ctx, fx, fy, tx, ty, color, label, isBold = false) {
+            let headlen = isBold ? 8 : 6;
+            let dx = tx - fx;
+            let dy = ty - fy;
+            let angle = Math.atan2(dy, dx);
+            
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = isBold ? 3 : 2;
+
+            ctx.beginPath();
+            ctx.moveTo(fx, fy);
+            ctx.lineTo(tx, ty);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(tx, ty);
+            ctx.lineTo(tx - headlen * Math.cos(angle - Math.PI / 6), ty - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(tx - headlen * Math.cos(angle + Math.PI / 6), ty - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.fill();
+
+            if (label) {
+                ctx.font = isBold ? "bold 10px monospace" : "9px monospace";
+                ctx.fillText(label, tx + 4, ty);
+            }
+        }
+
+        // --- DEFORMÔMETRO TENSORIAL & EXPANSÃO (PAINEL DIREITO) ---
+        function drawTensorMeter() {
+            if (state.lateralTab !== 'tensor') return;
+            tensorCtx.clearRect(0, 0, tensorCanvas.width, tensorCanvas.height);
+            const tw = tensorCanvas.width;
+            const th = tensorCanvas.height;
+
+            tensorCtx.fillStyle = "#050812";
+            tensorCtx.fillRect(0, 0, tw, th);
+
+            tensorCtx.strokeStyle = "#1e293b";
+            tensorCtx.lineWidth = 1;
+            tensorCtx.beginPath();
+            tensorCtx.moveTo(tw/2, 10); tensorCtx.lineTo(tw/2, th - 10);
+            tensorCtx.moveTo(20, th/2); tensorCtx.lineTo(tw - 20, th/2);
+            tensorCtx.stroke();
+
+            // Elemento de referência inicial (Quadrado no solo = 1.0x)
+            tensorCtx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+            tensorCtx.setLineDash([3, 3]);
+            tensorCtx.strokeRect(tw/2 - 35, th/2 - 35, 70, 70);
+            tensorCtx.setLineDash([]);
+
+            // Elemento Fluido com Expansão de Volume e Deformação Tensorial
+            tensorCtx.save();
+            tensorCtx.translate(tw/2, th/2);
+            tensorCtx.rotate(state.squareAngle);
+
+            let baseR = 35 * state.expansionFactor;
+            let halfW = baseR * state.stretchX;
+            let halfH = baseR * state.stretchZ;
+
+            let dyn = calcDynPressure(state.z);
+            if (dyn.spin > dyn.splat) {
+                tensorCtx.fillStyle = "rgba(168, 85, 247, 0.4)";
+                tensorCtx.strokeStyle = "#a855f7";
+            } else {
+                tensorCtx.fillStyle = "rgba(249, 115, 22, 0.4)";
+                tensorCtx.strokeStyle = "#f97316";
+            }
+
+            tensorCtx.lineWidth = 2;
+            tensorCtx.beginPath();
+            tensorCtx.rect(-halfW, -halfH, halfW * 2, halfH * 2);
+            tensorCtx.fill();
+            tensorCtx.stroke();
+
+            tensorCtx.strokeStyle = "rgba(255, 255, 255, 0.45)";
+            tensorCtx.lineWidth = 1;
+            tensorCtx.beginPath();
+            tensorCtx.moveTo(-halfW/3, -halfH); tensorCtx.lineTo(-halfW/3, halfH);
+            tensorCtx.moveTo(halfW/3, -halfH); tensorCtx.lineTo(halfW/3, halfH);
+            tensorCtx.moveTo(-halfW, -halfH/3); tensorCtx.lineTo(halfW, -halfH/3);
+            tensorCtx.moveTo(-halfW, halfH/3); tensorCtx.lineTo(halfW, halfH/3);
+            tensorCtx.stroke();
+
+            tensorCtx.fillStyle = "#fbbf24";
+            tensorCtx.beginPath();
+            tensorCtx.arc(-halfW, -halfH, 3, 0, Math.PI * 2);
+            tensorCtx.arc(halfW, -halfH, 3, 0, Math.PI * 2);
+            tensorCtx.arc(halfW, halfH, 3, 0, Math.PI * 2);
+            tensorCtx.arc(-halfW, halfH, 3, 0, Math.PI * 2);
+            tensorCtx.fill();
+
+            tensorCtx.restore();
+
+            tensorCtx.fillStyle = "#94a3b8";
+            tensorCtx.font = "9px monospace";
+            tensorCtx.fillText("Quadrado Referência no Solo (1.0x)", 10, 16);
+            tensorCtx.fillStyle = "#fbbf24";
+            tensorCtx.fillText(`Expansão: ${(state.expansionFactor * state.expansionFactor).toFixed(2)}x`, tw - 120, 16);
+        }
+
+        // --- GRÁFICOS DE RADIOSSONDAGEM TERMODINÂMICA COMPLETA (SKEW-T EM ALTURA TOTAL) ---
+        function drawProfiles() {
+            if (state.lateralTab !== 'sounding') return;
+            profCtx.clearRect(0, 0, profCanvas.width, profCanvas.height);
+            const pw = profCanvas.width;
+            const ph = profCanvas.height;
+
+            profCtx.fillStyle = "#030611";
+            profCtx.fillRect(0, 0, pw, ph);
+
+            // Escala de Temperatura (°C): -65°C a +35°C
+            const tMin = -65.0;
+            const tMax = 35.0;
+            const toX = (t) => 38 + ((t - tMin) / (tMax - tMin)) * (pw - 55);
+            const toY = (alt) => ph - 22 - (alt / 14000.0) * (ph - 35);
+
+            // Grade de Pressão Atmosférica (hPa) no Eixo Y
+            const pressureLevels = [
+                { p: 1000, z: 100 },
+                { p: 850,  z: 1500 },
+                { p: 700,  z: 3000 },
+                { p: 500,  z: 5500 },
+                { p: 300,  z: 9200 },
+                { p: 200,  z: 11800 },
+                { p: 150,  z: 13600 }
+            ];
+
+            profCtx.strokeStyle = "#162035";
+            profCtx.lineWidth = 1;
+            profCtx.beginPath();
+            for (let pl of pressureLevels) {
+                let y = toY(pl.z);
+                profCtx.moveTo(38, y); profCtx.lineTo(pw - 12, y);
+            }
+            // Isotermas Verticais (°C)
+            for (let t = -60; t <= 30; t += 15) {
+                let x = toX(t);
+                profCtx.moveTo(x, 10); profCtx.lineTo(x, ph - 22);
+            }
+            profCtx.stroke();
+
+            // Rótulos de Pressão (Eixo Y Esquerdo)
+            profCtx.fillStyle = "#64748b";
+            profCtx.font = "8.5px monospace";
+            profCtx.textAlign = "right";
+            for (let pl of pressureLevels) {
+                profCtx.fillText(`${pl.p}hPa`, 34, toY(pl.z) + 3);
+            }
+
+            // Rótulos de Temperatura (Eixo X Inferior)
+            profCtx.textAlign = "center";
+            for (let t = -60; t <= 30; t += 20) {
+                profCtx.fillText(`${t}°`, toX(t), ph - 8);
+            }
+
+            // Isoterma de 0°C (Destaque Azul Claro)
+            let zeroX = toX(0);
+            profCtx.strokeStyle = "rgba(56, 189, 248, 0.35)";
+            profCtx.setLineDash([3, 3]);
+            profCtx.beginPath();
+            profCtx.moveTo(zeroX, 10); profCtx.lineTo(zeroX, ph - 22);
+            profCtx.stroke();
+            profCtx.setLineDash([]);
+
+            let lfc = calcLFC();
+            let el = calcEL();
+            let yLFC = toY(lfc);
+            let yEL = toY(el);
+
+            // 1. ÁREA DE CIN (Sombreado Vermelho na Base: T_parcel < T_env)
+            profCtx.fillStyle = "rgba(244, 63, 94, 0.45)";
+            profCtx.beginPath();
+            let sfcSound = getSoundingTemperatures(0);
+            profCtx.moveTo(toX(sfcSound.tEnv), toY(0));
+            for (let alt = 0; alt <= lfc; alt += 40) {
+                let s = getSoundingTemperatures(alt);
+                profCtx.lineTo(toX(s.tEnv), toY(alt));
+            }
+            for (let alt = lfc; alt >= 0; alt -= 40) {
+                let s = getSoundingTemperatures(alt);
+                profCtx.lineTo(toX(s.tParcel), toY(alt));
+            }
+            profCtx.closePath();
+            profCtx.fill();
+
+            // 2. ÁREA DE CAPE (Sombreado Verde Fluorescente na Troposfera Livre: T_parcel > T_env)
+            if (state.params.cape > 0) {
+                profCtx.fillStyle = "rgba(52, 211, 153, 0.38)";
+                profCtx.beginPath();
+                for (let alt = lfc; alt <= el; alt += 80) {
+                    let s = getSoundingTemperatures(alt);
+                    profCtx.lineTo(toX(s.tEnv), toY(alt));
+                }
+                for (let alt = el; alt >= lfc; alt -= 80) {
+                    let s = getSoundingTemperatures(alt);
+                    profCtx.lineTo(toX(s.tParcel), toY(alt));
+                }
+                profCtx.closePath();
+                profCtx.fill();
+            }
+
+            // 3. Linhas Marcadoras do LFC e EL com Etiquetas
+            profCtx.strokeStyle = "rgba(251, 191, 36, 0.85)";
+            profCtx.lineWidth = 1.4;
+            profCtx.setLineDash([4, 3]);
+            profCtx.beginPath();
+            profCtx.moveTo(38, yLFC); profCtx.lineTo(pw - 12, yLFC);
+            profCtx.stroke();
+
+            profCtx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+            profCtx.beginPath();
+            profCtx.moveTo(38, yEL); profCtx.lineTo(pw - 12, yEL);
+            profCtx.stroke();
+            profCtx.setLineDash([]);
+
+            // 4. Curva de Temperatura do Ambiente T_env (Linha Vermelha/Laranja)
+            profCtx.strokeStyle = "#f97316";
+            profCtx.lineWidth = 2.2;
+            profCtx.beginPath();
+            for (let alt = 0; alt <= 14000; alt += 150) {
+                let s = getSoundingTemperatures(alt);
+                let x = toX(s.tEnv);
+                let y = toY(alt);
+                if (alt === 0) profCtx.moveTo(x, y);
+                else profCtx.lineTo(x, y);
+            }
+            profCtx.stroke();
+
+            // 5. Curva de Temperatura da Parcela T_parcel (Linha Verde Sólida)
+            profCtx.strokeStyle = "#34d399";
+            profCtx.lineWidth = 2.6;
+            profCtx.beginPath();
+            for (let alt = 0; alt <= 14000; alt += 150) {
+                let s = getSoundingTemperatures(alt);
+                let x = toX(s.tParcel);
+                let y = toY(alt);
+                if (alt === 0) profCtx.moveTo(x, y);
+                else profCtx.lineTo(x, y);
+            }
+            profCtx.stroke();
+
+            // 6. Indicador de Altitude Atual da Parcela
+            let curY = toY(state.z);
+            let curSound = getSoundingTemperatures(state.z);
+            profCtx.strokeStyle = "#fbbf24";
+            profCtx.lineWidth = 2;
+            profCtx.beginPath();
+            profCtx.moveTo(38, curY);
+            profCtx.lineTo(pw - 12, curY);
+            profCtx.stroke();
+
+            profCtx.fillStyle = "#fff";
+            profCtx.beginPath();
+            profCtx.arc(toX(curSound.tParcel), curY, 4, 0, Math.PI * 2);
+            profCtx.fill();
+
+            // Rótulos explicativos
+            profCtx.textAlign = "left";
+            profCtx.fillStyle = "#f97316"; profCtx.font = "bold 9px monospace";
+            profCtx.fillText("━ T_ambiente", 42, 16);
+            profCtx.fillStyle = "#34d399";
+            profCtx.fillText("━ T_parcela", 115, 16);
+
+            profCtx.fillStyle = "#fbbf24";
+            profCtx.fillText(`LFC: ${lfc.toFixed(0)}m`, pw - 90, yLFC - 4);
+            profCtx.fillStyle = "#e2e8f0";
+            profCtx.fillText(`EL: ${el.toFixed(0)}m`, pw - 85, yEL - 4);
+
+            profCtx.fillStyle = "#f43f5e";
+            profCtx.fillText(`■ CIN (${state.params.cin} J/kg)`, 42, ph - 26);
+            profCtx.fillStyle = "#34d399";
+            profCtx.fillText(`■ CAPE (${state.params.cape} J/kg)`, 155, ph - 26);
+        }
+
+        // --- ATUALIZAÇÃO FÍSICA NO TEMPO ---
+        function updatePhysics(dt) {
+            let forces = calcForces(state.z);
+            let dyn = calcDynPressure(state.z);
+
+            state.accel = forces.aTotal;
+
+            // 1. Cinemática da Parcela com Velocidade Mínima de Disparo e Loop Suave
+            state.w += state.accel * dt;
+            
+            // Garante que a convecção não trave totalmente na base
+            if (state.z < 800 && state.w < 1.5) {
+                state.w = Math.max(1.5, state.w + 1.0 * dt);
+            }
+
+            // Ao atingir o topo da bigorna (>12.000m), reinicia o ciclo suavemente se loop ativo
+            if (state.z > 12200 || (state.w < 0.2 && state.z > 10500)) {
+                if (state.loop) {
+                    state.z = 250.0;
+                    state.w = 4.5;
+                    state.x = (Math.random() - 0.5) * 1000;
+                    state.history = [];
+                } else {
+                    state.w = 0.0;
+                    state.running = false;
+                    document.getElementById('btnPlay').innerText = "▶ Reiniciar Subida";
+                }
+            }
+
+            state.z += state.w * dt;
+            let flow = getStormFlow(state.x, state.z);
+            state.x += flow.vx * 0.8 * dt;
+
+            // 2. Expansão Barométrica da Parcela (Aumenta com a Altitude)
+            state.expansionFactor = calcExpansionFactor(state.z);
+
+            // 3. Deformação Tensorial Visível do Quadrado (Splat)
+            let targetSx, targetSz;
+            if (state.z < 1800) {
+                targetSx = 1.0 + (dyn.splat * 0.22);
+                targetSz = 1.0 / (1.0 + (dyn.splat * 0.25));
+            } else if (state.z > 9200) {
+                targetSx = 1.0 + (dyn.splat * 0.25);
+                targetSz = 1.0 / (1.0 + (dyn.splat * 0.28));
+            } else {
+                targetSx = 0.85 / (1.0 + (dyn.spin * 0.05));
+                targetSz = 1.0 + (dyn.spin * 0.08);
+            }
+
+            state.stretchX += (targetSx - state.stretchX) * 0.25;
+            state.stretchZ += (targetSz - state.stretchZ) * 0.25;
+
+            // 4. Rotação (Spin) Contínua do Quadrado
+            state.squareAngle += (dyn.spin * 0.55 + 0.05) * dt;
+
+            state.time += dt;
+            state.history.push({ x: state.x, z: state.z, w: state.w });
+            if (state.history.length > 500) state.history.shift();
+
+            updateUI(forces, dyn);
+        }
+
+        function updateUI(forces, dyn) {
+            let hydroP = calcHydrostaticPressure(state.z);
+            let pBuoy = calcBuoyancyPressure(state.z);
+            let snd = getSoundingTemperatures(state.z);
+
+            document.getElementById('topZ').innerText = state.z.toFixed(0) + ' m';
+            document.getElementById('topW').innerText = state.w.toFixed(1) + ' m/s';
+            document.getElementById('topExp').innerText = (state.expansionFactor * state.expansionFactor).toFixed(2) + 'x';
+            document.getElementById('topPTotal').innerText = (hydroP + dyn.pDyn + pBuoy).toFixed(1) + ' hPa';
+
+            document.getElementById('gPHydro').innerText = hydroP.toFixed(0) + ' hPa';
+            document.getElementById('gPSpin').innerText = dyn.pSpin.toFixed(1) + ' hPa';
+            document.getElementById('gPSplat').innerText = '+' + dyn.pSplat.toFixed(1) + ' hPa';
+            document.getElementById('gPDyn').innerText = (dyn.pDyn >= 0 ? '+' : '') + dyn.pDyn.toFixed(1) + ' hPa';
+            document.getElementById('gPBuoy').innerText = (pBuoy >= 0 ? '+' : '') + pBuoy.toFixed(1) + ' hPa';
+            document.getElementById('gB').innerText = (forces.B >= 0 ? '+' : '') + forces.B.toFixed(2) + ' m/s²';
+
+            // Dados da Sondagem
+            document.getElementById('lblTParcel').innerText = (snd.tParcel >= 0 ? '+' : '') + snd.tParcel.toFixed(1) + '°C';
+            document.getElementById('lblTAmb').innerText = (snd.tEnv >= 0 ? '+' : '') + snd.tEnv.toFixed(1) + '°C';
+            document.getElementById('lblDeltaT').innerText = (snd.deltaT >= 0 ? '+' : '') + snd.deltaT.toFixed(1) + '°C';
+            document.getElementById('lblBuoyB').innerText = (snd.B >= 0 ? '+' : '') + snd.B.toFixed(2);
+
+            // Barras de Força
+            updateForceBar('barVppgfDyn', 'valVppgfDyn', forces.vppgfDyn, 1.8, 'var(--accent-cyan)');
+            updateForceBar('barVppgfBuoy', 'valVppgfBuoy', forces.vppgfBuoy, 1.8, 'var(--accent-gold)');
+            updateForceBar('barBuoyDirect', 'valBuoyDirect', forces.B, 1.8, 'var(--accent-green)');
+            updateForceBar('barAccelTotal', 'valAccelTotal', forces.aTotal, 1.8, '#ffffff');
+
+            document.getElementById('txtVol').innerText = (state.expansionFactor * state.expansionFactor).toFixed(2) + 'x';
+            document.getElementById('txtSz').innerText = state.stretchZ.toFixed(2) + 'x';
+            document.getElementById('txtSx').innerText = state.stretchX.toFixed(2) + 'x';
+            document.getElementById('txtRot').innerText = ((state.squareAngle * 180 / Math.PI) % 360).toFixed(0) + '°';
+
+            let reg = "Regime: Ascensão Livre";
+            if (state.z < 1600) reg = "Regime: 🔴 Meso-Alta [H] & CIN (Achatamento Splat no Solo)";
+            else if (dyn.spin > 4.5) reg = "Regime: 🔵 Meso-Baixa [B] Mesociclone (Spin, Sucção VPPGF & Expansão)";
+            else if (state.z > 9200) reg = "Regime: 🔴 Meso-Alta [H] na Bigorna (Expansão Máxima + Achatamento Splat)";
+            document.getElementById('txtRegime').innerText = reg;
+        }
+
+        function updateForceBar(barId, valId, val, maxVal, color) {
+            let pct = Math.min(100, (Math.abs(val) / maxVal) * 100);
+            let bar = document.getElementById(barId);
+            bar.style.width = pct + '%';
+            bar.style.background = color;
+            document.getElementById(valId).innerText = (val >= 0 ? '+' : '') + val.toFixed(2) + ' m/s²';
+        }
+
+        // Loop de Animação
+        let lastT = 0;
+        function loop(timestamp) {
+            if (!lastT) lastT = timestamp;
+            let dt = (timestamp - lastT) / 1000.0;
+            lastT = timestamp;
+
+            if (state.running) {
+                updatePhysics(dt * 3.5 * state.speed);
+            }
+
+            draw();
+            drawTensorMeter();
+            drawProfiles();
+            requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
+
+        // --- CONTROLES E INTERAÇÃO ---
+        function togglePlay() {
+            state.running = !state.running;
+            document.getElementById('btnPlay').innerText = state.running ? "⏸ Pausar Subida" : "▶ Continuar Subida";
+            document.getElementById('badgePulse').style.background = state.running ? "var(--accent-green)" : "#94a3b8";
+        }
+
+        function stepForward() {
+            state.running = false;
+            document.getElementById('btnPlay').innerText = "▶ Continuar Subida";
+            updatePhysics(1.5);
+        }
+
+        function resetSim() {
+            state.time = 0.0;
+            state.step = 0;
+            state.z = 250.0;
+            state.w = 4.5;
+            state.x = 0.0;
+            state.squareAngle = 0.0;
+            state.stretchX = 1.8;
+            state.stretchZ = 0.45;
+            state.expansionFactor = 1.0;
+            state.history = [];
+            state.running = true; // Reinicia rodando
+            document.getElementById('btnPlay').innerText = "⏸ Pausar Subida";
+            updateUI(calcForces(250.0), calcDynPressure(250.0));
+        }
+
+        function onParamChange() {
+            state.params.cape = parseFloat(document.getElementById('slCape').value);
+            state.params.cin = parseFloat(document.getElementById('slCin').value);
+            state.params.splatSfc = parseFloat(document.getElementById('slSplatSfc').value);
+            state.params.spinPeak = parseFloat(document.getElementById('slSpinPeak').value);
+            state.params.splatTop = parseFloat(document.getElementById('slSplatTop').value);
+
+            document.getElementById('lblCape').innerText = state.params.cape + " J/kg";
+            document.getElementById('lblCin').innerText = state.params.cin + " J/kg";
+            document.getElementById('lblSplatSfc').innerText = state.params.splatSfc.toFixed(1);
+            document.getElementById('lblSpinPeak').innerText = state.params.spinPeak.toFixed(1);
+            document.getElementById('lblSplatTop').innerText = state.params.splatTop.toFixed(1);
+
+            drawProfiles();
+            draw();
+            drawTensorMeter();
+            updateUI(calcForces(state.z), calcDynPressure(state.z));
+        }
+
+        function onSpeedChange() {
+            state.speed = parseFloat(document.getElementById('slSpeed').value);
+            document.getElementById('lblSpeed').innerText = state.speed.toFixed(1) + 'x';
+        }
+
+        function toggleLayer(layer) {
+            state.layers[layer] = !state.layers[layer];
+            document.getElementById('btn' + layer.charAt(0).toUpperCase() + layer.slice(1)).classList.toggle('on');
+        }
+
+        // Inicializa no Passo 1 do Roteiro e inicia a simulação imediatamente
+        setStoryStep(1);
+    </script>
+</body>
+</html>

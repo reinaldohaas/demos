@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geometria da Equação de 2º Grau: Raízes, Círculos, Fatores e Derivada</title>
+  
+  <!-- Google Fonts & KaTeX for beautiful typography & math -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="if(window.renderMathInElement) renderMathInElement(document.body);"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-dark">
+
+  <!-- TOP APP HEADER -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-badge">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M7 16c2-4 4-8 5-8s3 4 5 8"></path>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+        </svg>
+      </div>
+      <div>
+        <h1>Geometria Unificada da Equação Quadrática</h1>
+        <p class="subtitle">Raízes Complexas, Círculos Ortogonais, Fatoração Linear, Derivada e Limite de Curvatura</p>
+      </div>
+    </div>
+
+    <div class="header-presets">
+      <span class="preset-label">Exemplos Prontos:</span>
+      <button class="btn-preset active" id="preset-complex" title="Exemplo Inicial Obrigatório: Raízes Complexas">
+        <span class="preset-name">Complexo (\(\Delta < 0\))</span>
+        <span class="preset-formula">\(x^2 - 4x + 5\)</span>
+      </button>
+      <button class="btn-preset" id="preset-double" title="Caso k = 0: Raiz Real Dupla">
+        <span class="preset-name">Dupla (\(\Delta = 0\))</span>
+        <span class="preset-formula">\(x^2 - 4x + 4\)</span>
+      </button>
+      <button class="btn-preset" id="preset-real" title="Caso Raízes Reais Distintas">
+        <span class="preset-name">Reais (\(\Delta > 0\))</span>
+        <span class="preset-formula">\(x^2 - 4x + 3\)</span>
+      </button>
+      <button class="btn-preset" id="preset-inverted" title="Parábola com concavidade para baixo">
+        <span class="preset-name">Invertida (\(a < 0\))</span>
+        <span class="preset-formula">\(-x^2 + 4x - 5\)</span>
+      </button>
+    </div>
+
+    <div class="header-actions">
+      <button id="btn-theme" class="icon-btn" title="Alternar Tema Claro/Escuro">
+        <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="app-layout">
+    
+    <!-- LEFT SIDEBAR: CONTROLS & DYNAMIC MATH CARDS -->
+    <aside class="sidebar">
+      
+      <!-- CONTROLS CARD -->
+      <section class="card controls-card">
+        <div class="card-header">
+          <h2>1. Parâmetros da Equação</h2>
+          <button id="btn-reset" class="btn-sm btn-ghost" title="Restaurar valores padrão">Resetar</button>
+        </div>
+
+        <div class="equation-live-box">
+          <div class="main-equation" id="latex-main-eq">
+            \(f(x) = ax^2 + bx + c\)
+          </div>
+        </div>
+
+        <!-- Slider & Numeric inputs for a, b, c -->
+        <div class="param-group">
+          <div class="param-row">
+            <label for="slider-a" class="param-label color-param-a">Coeficiente <strong>a</strong>:</label>
+            <input type="number" id="num-a" step="0.1" value="1.0" class="num-input">
+          </div>
+          <input type="range" id="slider-a" min="-5" max="5" step="0.1" value="1.0" class="range-slider">
+          <div class="slider-ticks"><span>-5</span><span>0</span><span>+5</span></div>
+        </div>
+
+        <div class="param-group">
+          <div class="param-row">
+            <label for="slider-b" class="param-label color-param-b">Coeficiente <strong>b</strong>:</label>
+            <input type="number" id="num-b" step="0.1" value="-4.0" class="num-input">
+          </div>
+          <input type="range" id="slider-b" min="-10" max="10" step="0.1" value="-4.0" class="range-slider">
+          <div class="slider-ticks"><span>-10</span><span>0</span><span>+10</span></div>
+        </div>
+
+        <div class="param-group">
+          <div class="param-row">
+            <label for="slider-c" class="param-label color-param-c">Coeficiente <strong>c</strong>:</label>
+            <input type="number" id="num-c" step="0.1" value="5.0" class="num-input">
+          </div>
+          <input type="range" id="slider-c" min="-10" max="10" step="0.1" value="5.0" class="range-slider">
+          <div class="slider-ticks"><span>-10</span><span>0</span><span>+10</span></div>
+        </div>
+
+        <!-- Point X on axis slider -->
+        <div class="param-group highlight-box">
+          <div class="param-row">
+            <label for="slider-x" class="param-label">Ponto de Teste no Eixo Real <strong>\(x\)</strong>:</label>
+            <input type="number" id="num-x" step="0.05" value="2.00" class="num-input highlight-input">
+          </div>
+          <input type="range" id="slider-x" min="-4" max="8" step="0.05" value="2.00" class="range-slider accent-slider">
+          <div class="slider-ticks"><span>-4</span><span>h = 2</span><span>+8</span></div>
+        </div>
+      </section>
+
+      <!-- DYNAMIC MATHEMATICAL STATUS CARD -->
+      <section class="card math-status-card">
+        <div class="card-header">
+          <h2>2. Valores Calculados em Tempo Real</h2>
+          <span id="badge-delta-state" class="badge badge-complex">\(\Delta < 0\) (Complexo)</span>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-label">Discriminante \(\Delta = b^2 - 4ac\):</span>
+            <span class="stat-value" id="val-delta">-4.00</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Vértice \(h = -\frac{b}{2a}\):</span>
+            <span class="stat-value" id="val-h">2.00</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Parâmetro \(k = \frac{\sqrt{|\Delta|}}{2|a|}\):</span>
+            <span class="stat-value" id="val-k">1.00</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Vértice \(V = (h, f(h))\):</span>
+            <span class="stat-value" id="val-vertex">(2.00, 1.00)</span>
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <div class="formula-title">Raízes \(z_{1,2} = h \pm ik\) / \(x_{1,2}\):</div>
+          <div class="formula-content" id="latex-roots">
+            \(z_1 = 2.00 + 1.00i,\quad z_2 = 2.00 - 1.00i\)
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <div class="formula-title">Fatoração:</div>
+          <div class="formula-content" id="latex-factorization">
+            \(f(x) = 1.0(x - (2+i))(x - (2-i))\)
+          </div>
+        </div>
+
+        <div class="formula-box">
+          <div class="formula-title">Derivada \(f'(x) = 2ax + b\):</div>
+          <div class="formula-content" id="latex-derivative">
+            \(f'(x) = 2.00x - 4.00\)
+          </div>
+        </div>
+
+        <div class="formula-box metric-box">
+          <div class="formula-title">Identidade do Raio \(r(x) = |X - z_1|\):</div>
+          <div class="formula-content" id="latex-radius-identity">
+            \(r^2 = (x - h)^2 + k^2 \implies f(x) = a \cdot r^2\)
+          </div>
+          <div class="metric-live-readout" id="metric-readout">
+            \(r = 1.000 \implies r^2 = 1.000 \implies a \cdot r^2 = 1.000 = f(2.0)\)
+          </div>
+        </div>
+      </section>
+
+      <!-- DISPLAY & VISIBILITY TOGGLES -->
+      <section class="card visibility-card">
+        <div class="card-header">
+          <h2>3. Elementos Visíveis</h2>
+        </div>
+        <div class="toggle-grid">
+          <label class="toggle-label">
+            <input type="checkbox" id="chk-parabola" checked>
+            <span class="toggle-custom color-box-parabola"></span>
+            Parábola \(y = f(x)\)
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="chk-derivative" checked>
+            <span class="toggle-custom color-box-derivative"></span>
+            Derivada \(f'(x)\)
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="chk-factor1" checked>
+            <span class="toggle-custom color-box-f1"></span>
+            Fator 1 \(r_1(x)\)
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="chk-factor2" checked>
+            <span class="toggle-custom color-box-f2"></span>
+            Fator 2 \(r_2(x)\)
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="chk-circles" checked>
+            <span class="toggle-custom color-box-circles"></span>
+            Círculos Complexos \(C_1, C_2\)
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="chk-tangents" checked>
+            <span class="toggle-custom color-box-tangent"></span>
+            Projeções / Raios de \(X\)
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="chk-product-rect" checked>
+            <span class="toggle-custom color-box-product"></span>
+            Retângulo do Produto \(r_1 \cdot r_2\)
+          </label>
+          <label class="toggle-label">
+            <input type="checkbox" id="chk-grid" checked>
+            <span class="toggle-custom color-box-grid"></span>
+            Grade e Coordenadas
+          </label>
+        </div>
+      </section>
+
+      <!-- CURVATURE / INFINITE RADIUS SLIDER (SECTION 9 & 11) -->
+      <section class="card curvature-card">
+        <div class="card-header">
+          <h2>4. Curvatura e Limite da Reta (\(R \to \infty\))</h2>
+          <span class="badge badge-info" id="badge-curv">Círculo \(\to\) Reta</span>
+        </div>
+        <p class="card-desc">
+          Uma reta pode ser interpretada geometricamente como o limite de um círculo quando o raio \(R \to \infty\) e a curvatura \(\kappa = \frac{1}{R} \to 0\).
+        </p>
+        <div class="param-group">
+          <div class="param-row">
+            <label for="slider-radius-limit" class="param-label">Raio do Círculo \(R\):</label>
+            <span class="stat-value" id="val-radius-limit">R = 5.0</span>
+          </div>
+          <input type="range" id="slider-radius-limit" min="1" max="100" step="0.5" value="5" class="range-slider">
+          <div class="slider-ticks"><span>R = 1 (\(\kappa = 1.0\))</span><span>R = 25</span><span>R = \(\infty\) (\(\kappa = 0\))</span></div>
+        </div>
+        <div class="curvature-readout" id="latex-curvature-readout">
+          \(\kappa = \frac{1}{R} = 0.200 \implies\) Círculo tangenciando o fator linear
+        </div>
+      </section>
+
+    </aside>
+
+    <!-- RIGHT / MAIN: DUAL GRAPHICAL VISUALIZER -->
+    <section class="visualizer-container">
+      
+      <!-- ANIMATION & VIEW CONTROL BAR -->
+      <div class="toolbar">
+        <div class="toolbar-section mode-buttons">
+          <button class="btn-tab active" id="tab-dual" data-mode="dual">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="18" rx="1"/><rect x="13" y="3" width="8" height="18" rx="1"/></svg>
+            Vista Dupla Sincronizada
+          </button>
+          <button class="btn-tab" id="tab-real" data-mode="real">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 19h18M5 19c2-8 6-14 7-14s5 6 7 14"/></svg>
+            Plano Real \((x, y)\)
+          </button>
+          <button class="btn-tab" id="tab-complex" data-mode="complex">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><circle cx="12" cy="16" r="4"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+            Plano Complexo \((Re, Im)\)
+          </button>
+        </div>
+
+        <div class="toolbar-section action-animations">
+          <button class="btn-action btn-anim" id="btn-anim-circles" title="Percorre o eixo real variando x e desenhando os círculos">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Animar Construção
+          </button>
+
+          <button class="btn-action btn-anim" id="btn-anim-multiply" title="Demonstra x -> r1, r2 -> r1*r2 = f(x)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            Multiplicar Fatores
+          </button>
+
+          <button class="btn-action btn-anim" id="btn-anim-derivative" title="Mostra r1(x) + r2(x) = f'(x)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Soma dos Fatores \(\to\) Derivada
+          </button>
+
+          <button class="btn-action btn-anim" id="btn-anim-lim-radius" title="Animação do limite de raio infinito R -> infinito">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/></svg>
+            Da Reta ao Círculo
+          </button>
+
+          <button class="btn-action btn-anim" id="btn-anim-collapse" title="Animação contínua de k > 0 para k = 0 e k < 0 (transição delta)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="12" r="2"/></svg>
+            Transição \(\Delta\) (\(k \to 0\))
+          </button>
+
+          <button class="btn-action btn-danger" id="btn-stop-anim" style="display: none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12"/></svg>
+            Parar Animação
+          </button>
+        </div>
+
+        <div class="toolbar-section zoom-controls">
+          <button class="icon-btn-sm" id="btn-zoom-in" title="Aumentar Zoom">+</button>
+          <button class="icon-btn-sm" id="btn-zoom-out" title="Diminuir Zoom">−</button>
+          <button class="icon-btn-sm" id="btn-zoom-reset" title="Restaurar Visão">⟲</button>
+        </div>
+      </div>
+
+      <!-- ANIMATION BANNER STATUS (Displays current animation phase) -->
+      <div id="anim-banner" class="anim-banner" style="display: none;">
+        <span class="anim-spinner"></span>
+        <span id="anim-banner-text">Executando animação...</span>
+        <button id="btn-banner-close" class="btn-sm btn-ghost">✕</button>
+      </div>
+
+      <!-- GRAPH VIEWPORTS (SVG) -->
+      <div class="graphs-wrapper" id="graphs-wrapper">
+        
+        <!-- GRAPH 1: REAL PLANE (XY) -->
+        <div class="graph-card" id="card-graph-real">
+          <div class="graph-header">
+            <div class="graph-title">
+              <span class="dot-indicator dot-real"></span>
+              <strong>Plano Real \((x, y)\)</strong> — Parábola, Fatores Lineares e Derivada
+            </div>
+            <div class="graph-legend">
+              <span class="legend-item"><span class="legend-dot color-parabola"></span> \(f(x)\)</span>
+              <span class="legend-item"><span class="legend-dot color-derivative"></span> \(f'(x)\)</span>
+              <span class="legend-item"><span class="legend-dot color-f1"></span> \(r_1(x)\)</span>
+              <span class="legend-item"><span class="legend-dot color-f2"></span> \(r_2(x)\)</span>
+              <span class="legend-item"><span class="legend-dot color-point-x"></span> Ponto \(X=(x,0)\)</span>
+            </div>
+          </div>
+          <div class="svg-container" id="svg-container-real">
+            <svg id="svg-real" class="interactive-svg" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="svg-overlay-hint">Arraste o ponto dourado \(X\) ou clique no gráfico</div>
+          </div>
+        </div>
+
+        <!-- GRAPH 2: COMPLEX PLANE (Re, Im) & CIRCLE GEOMETRY -->
+        <div class="graph-card" id="card-graph-complex">
+          <div class="graph-header">
+            <div class="graph-title">
+              <span class="dot-indicator dot-complex"></span>
+              <strong>Plano Complexo \((\text{Re}, \text{Im})\)</strong> — Centros \(z_1, z_2\) e Círculos de Raio \(r\)
+            </div>
+            <div class="graph-legend">
+              <span class="legend-item"><span class="legend-dot color-z1"></span> \(z_1 = h+ik\)</span>
+              <span class="legend-item"><span class="legend-dot color-z2"></span> \(z_2 = h-ik\)</span>
+              <span class="legend-item"><span class="legend-dot color-circles"></span> Círculos \(|X - z| = r\)</span>
+              <span class="legend-item"><span class="legend-dot color-point-x"></span> Ponto Real \(X\)</span>
+            </div>
+          </div>
+          <div class="svg-container" id="svg-container-complex">
+            <svg id="svg-complex" class="interactive-svg" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="svg-overlay-hint">Círculos passam por \(X=(x,0)\) com raio \(r = \sqrt{(x-h)^2 + k^2}\)</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PEDAGOGICAL DEEP DIVE ACCORDIONS & EXPLANATIONS -->
+      <div class="pedagogical-panel">
+        
+        <div class="accordion-item">
+          <details open>
+            <summary class="accordion-summary">
+              <span class="summary-icon">✨</span>
+              <strong>A Identidade Central Unificada: \(f(x) = a|x - z_1|^2 = a \cdot r^2\)</strong>
+            </summary>
+            <div class="accordion-content">
+              <div class="content-grid-2">
+                <div>
+                  <p>
+                    Toda equação de segundo grau \(f(x) = ax^2 + bx + c\) com coeficientes reais pode ser escrita na forma canônica:
+                  </p>
+                  <div class="math-callout">
+                    \[f(x) = a\left[(x - h)^2 \pm k^2\right] = a(x - z_1)(x - z_2)\]
+                  </div>
+                  <p>
+                    No caso de raízes complexas conjugadas (\(\Delta < 0\)), temos \(z_1 = h + ik\) e \(z_2 = h - ik\). Para qualquer ponto real \(X = (x, 0)\):
+                  </p>
+                  <div class="math-callout">
+                    \[|X - z_1| = |X - z_2| = \sqrt{(x - h)^2 + k^2} = r(x)\]
+                    \[\boxed{f(x) = a \cdot r(x)^2}\]
+                  </div>
+                </div>
+                <div class="insight-box">
+                  <h4>💡 Significado Geométrico</h4>
+                  <p>
+                    A altura da parábola em qualquer ponto \(x\) é exatamente proporcional ao <strong>quadrado do raio</strong> dos dois círculos centrados nas raízes complexas que passam por \(X = (x, 0)\).
+                  </p>
+                  <p>
+                    No vértice (\(x = h\)), o raio atinge seu valor mínimo \(r_{\min} = k\), e a altura da parábola é \(f(h) = a k^2\).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="accordion-item">
+          <details>
+            <summary class="accordion-summary">
+              <span class="summary-icon">✖️</span>
+              <strong>Fatoração e Multiplicação: \(f(x) = r_1(x) \cdot r_2(x)\)</strong>
+            </summary>
+            <div class="accordion-content">
+              <p>
+                Quando as raízes são reais (\(\Delta \ge 0\)), a parábola é a <strong>multiplicação ponto a ponto</strong> de duas funções afins (retas):
+              </p>
+              <div class="math-callout">
+                \[r_1(x) = a(x - x_1), \quad r_2(x) = (x - x_2) \implies f(x) = r_1(x) \cdot r_2(x)\]
+              </div>
+              <p>
+                As raízes \(x_1\) e \(x_2\) são os pontos onde uma das retas cruza zero. O produto de dois números positivos é positivo; o produto de dois números negativos é positivo (fora das raízes); e o produto de um positivo por um negativo é negativo (entre as raízes).
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <div class="accordion-item">
+          <details>
+            <summary class="accordion-summary">
+              <span class="summary-icon">➕</span>
+              <strong>A Derivada como Soma das Inclinações: \(f'(x) = r_1(x) + r_2(x)\)</strong>
+            </summary>
+            <div class="accordion-content">
+              <p>
+                Pela regra do produto, se \(f(x) = a(x - x_1)(x - x_2)\), então:
+              </p>
+              <div class="math-callout">
+                \[f'(x) = \frac{d}{dx}\left[a(x - x_1)(x - x_2)\right] = a(x - x_2) + a(x - x_1) = r_1(x) + r_2(x) = 2ax + b\]
+              </div>
+              <p>
+                Geometricamente, a reta da derivada tem inclinação \(2a\) (exatamente o dobro da inclinação \(a\) de cada reta fatorial) e sua altura em qualquer ponto \(x\) é a <strong>soma vetorial das alturas das duas retas</strong>.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <div class="accordion-item">
+          <details>
+            <summary class="accordion-summary">
+              <span class="summary-icon">⭕</span>
+              <strong>Da Reta ao Círculo: Limite de Curvatura (\(R \to \infty\))</strong>
+            </summary>
+            <div class="accordion-content">
+              <p>
+                Na geometria diferencial e na esfera de Riemann, uma reta é um círculo com centro no infinito e raio \(R \to \infty\). A curvatura é \(\kappa = \frac{1}{R}\).
+              </p>
+              <p>
+                Quando \(\Delta < 0\), a interação ocorre via círculos de raio finito \(r\) no plano complexo. Quando \(\Delta \to 0\), os círculos colapsam no eixo real (\(k \to 0\)). Quando \(\Delta > 0\), os fatores lineares atuam como a versão reta (curvatura zero) dessa mesma estrutura geométrica subjacente.
+              </p>
+            </div>
+          </details>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <span>Visualização interativa da Geometria da Equação de 2º Grau &bull; HTML5 + CSS3 + Vanilla JavaScript &bull; SVG Dinâmico</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

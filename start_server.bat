@@ -4,9 +4,16 @@ cd /d "%~dp0"
 echo ========================================================
 echo Iniciando Servidor Local de Demonstracoes...
 echo ========================================================
-python server.py
-if %ERRORLEVEL% NEQ 0 (
-    echo Python padrao nao encontrado, tentando via uv...
-    uv run python server.py
+where node >nul 2>nul
+if %ERRORLEVEL% EQU 0 (
+    node server.js
+    goto :end
 )
+where uv >nul 2>nul
+if %ERRORLEVEL% EQU 0 (
+    uv run python server.py
+    goto :end
+)
+python server.py
+:end
 pause

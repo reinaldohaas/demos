@@ -1,17 +1,42 @@
-﻿{
+{
   "title": "Hub de Demonstrações & Visualizações Científicas",
   "author": "Reinaldo Haas",
   "github_repo": "reinaldohaas/demos",
   "demos": [
+    {
+      "id": "geometric-quadratic",
+      "title": "Geometria Unificada da Equação Quadrática",
+      "category": "Matemática & Geometria Complexa",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "📐",
+      "tags": [
+        "Equação de 2º Grau",
+        "Raízes Complexas",
+        "Círculos Ortogonais",
+        "Derivada",
+        "Fatoração",
+        "Curvatura",
+        "SVG Dinâmico"
+      ],
+      "description": "Visualização interativa unificada entre a parábola f(x), raízes complexas como círculos de raio r(x) no plano complexo (f(x) = a·r²), fatores lineares, reta da derivada f'(x) = r1(x) + r2(x) e limite de curvatura (R → ∞).",
+      "path": "geometric-quadratic/index.html",
+      "date": "2026-08-24"
+    },
     {
       "id": "foucault-pendulum",
       "title": "Período Inercial & Pêndulo de Foucault 3D",
       "category": "Geofísica & Mecânica Celeste",
       "llm": "Gemini 3.7 Flash",
       "icon": "🌍",
-      "tags": ["Força de Coriolis", "Rotação da Terra", "Pêndulo de Foucault", "3D Canvas", "Roseta"],
+      "tags": [
+        "Força de Coriolis",
+        "Rotação da Terra",
+        "Pêndulo de Foucault",
+        "3D Canvas",
+        "Roseta"
+      ],
       "description": "Simulação tridimensional da Terra em rotação com 5 pêndulos operando simultaneamente nas latitudes (+90°, +30°, 0°, -30°, -90°), registrando o padrão de roseta no solo e as curvas da taxa angular e período inercial T = 12h / |sin φ|.",
-      "path": "demos/foucault-pendulum/index.html",
+      "path": "foucault-pendulum/index.html",
       "date": "2026-08-20"
     },
     {
@@ -20,11 +45,75 @@
       "category": "Oceanografia & Dinâmica de Fluidos",
       "llm": "Gemini 3.7 Flash",
       "icon": "🌊",
-      "tags": ["Ajuste Geostrófico", "Polo Sul", "Shallow Water", "Equações de Águas Rasas", "Coriolis"],
+      "tags": [
+        "Ajuste Geostrófico",
+        "Polo Sul",
+        "Shallow Water",
+        "Equações de Águas Rasas",
+        "Coriolis"
+      ],
       "description": "Simulação 2D hidrodinâmica das Equações de Águas Rasas com foco no Polo Sul e latitudes globais, demonstrando o balanço entre a rotação da Terra e gravidade, ajuste geostrófico (L > Rd) e ondas de gravidade (L < Rd).",
-      "path": "demos/rossby-radius/index.html",
+      "path": "rossby-radius/index.html",
       "date": "2026-08-20"
+    },
+    {
+      "id": "supercell-splat-spin",
+      "title": "Dinâmica de Supercélulas: Forçamentos Splat & Spin",
+      "category": "Meteorologia Convectiva & Dinâmica Não-Hidrostática",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "🌪️",
+      "tags": [
+        "Supercélula",
+        "Mesociclone",
+        "Equação de Poisson",
+        "Splat & Spin",
+        "VPPGF",
+        "Perturbação de Pressão",
+        "Partículas 2D"
+      ],
+      "description": "Simulação hidrodinâmica 2D dos termos Splat (deformação/alta pressão) e Spin (vorticidade/baixa pressão) na equação diagnóstica de perturbação de pressão de supercélulas, com fluxo de partículas, vetores de força e perfis verticais interativos.",
+      "path": "supercell-splat-spin/index.html",
+      "date": "2026-08-24"
+    },
+    {
+      "id": "exercicios",
+      "title": "Laboratório de Cinemática 1D (Exemplos 2.1 a 2.7)",
+      "category": "Física Clássica & Cinemática 1D",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "🔬",
+      "tags": [
+        "Cinemática 1D",
+        "Velocidade Média & Instantânea",
+        "Aceleração Média & Instantânea",
+        "MRUV & Torricelli",
+        "Perseguição Relativa",
+        "Queda Livre & Torre de Pisa",
+        "Lançamento Vertical",
+        "Sears & Zemansky"
+      ],
+      "description": "Suíte completa de infográficos interativos e simulações físicas 2D cobrindo do Exemplo 2.1 ao 2.7: leopardo, astronauta em EVA, carro acelerando, motociclista, perseguição policial, queda livre na Torre de Pisa e lançamento vertical no edifício com gráficos dinâmicos e resolução guiada passo a passo.",
+      "path": "exercicios/index.html",
+      "date": "2026-08-26"
+    },
+    {
+      "id": "harmonic-oscillator",
+      "title": "Solucionador do Oscilador Harmônico (RK4 & Espaço de Fases)",
+      "category": "Física Matemática & Sistemas Dinâmicos",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "🌀",
+      "tags": [
+        "Oscilador Harmônico",
+        "EDO de 2ª Ordem",
+        "Runge-Kutta 4 (RK4)",
+        "Espaço de Fases",
+        "Massa-Mola-Amortecedor",
+        "Ressonância & Batimentos",
+        "Subamortecido & Superamortecido",
+        "Canvas 2D"
+      ],
+      "description": "Solucionador numérico interativo de equações diferenciais ordinárias de 2ª ordem m·x'' + b·x' + k·x = F(t) com integrador RK4, animação em tempo real de massa-mola com amortecedor hidráulico, diagramas do espaço de fases (v vs x), gráficos no domínio do tempo e suporte a forças externas arbitrárias.",
+      "path": "harmonic-oscillator/index.html",
+      "date": "2026-08-26"
     }
   ]
 }
-

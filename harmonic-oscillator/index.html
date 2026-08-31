@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solucionador do Oscilador Harmônico: m·x'' + b·x' + k·x = F(t)</title>
+    
+    <!-- Google Fonts & KaTeX -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}]});"></script>
+
+    <style>
+        :root {
+            --bg-dark: #050813;
+            --card-bg: rgba(13, 20, 38, 0.94);
+            --card-border: rgba(56, 189, 248, 0.25);
+            --card-border-hover: rgba(56, 189, 248, 0.6);
+            --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
+            --accent-amber: #f59e0b;
+            --accent-red: #f43f5e;
+            --accent-green: #10b981;
+            --accent-purple: #c084fc;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 0%, #0c1836 0%, var(--bg-dark) 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* TOP HEADER */
+        header {
+            padding: 12px 24px;
+            background: rgba(8, 14, 28, 0.95);
+            border-bottom: 1px solid var(--card-border);
+            backdrop-filter: blur(14px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(192, 132, 252, 0.25));
+            border: 1px solid var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+        }
+
+        .header-left h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.01em;
+        }
+
+        .header-left p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(56, 189, 248, 0.25);
+            border-color: var(--accent-cyan);
+        }
+
+        /* PRESETS BAR */
+        .presets-bar {
+            background: rgba(10, 16, 32, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px 16px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            align-items: center;
+        }
+
+        .preset-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        .btn-preset {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-muted);
+            padding: 5px 11px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+
+        .btn-preset:hover {
+            background: rgba(56, 189, 248, 0.15);
+            color: #fff;
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-preset.active {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(192, 132, 252, 0.25));
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        /* MAIN LAYOUT */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 16px;
+            padding: 16px;
+            max-width: 1780px;
+            margin: 0 auto;
+            width: 100%;
+            flex: 1;
+        }
+
+        @media (max-width: 1100px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .card-header h2 {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .formula-card {
+            background: linear-gradient(135deg, rgba(16, 28, 58, 0.9), rgba(10, 16, 32, 0.95));
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 10px;
+            padding: 12px 14px;
+            text-align: center;
+        }
+
+        .formula-highlight {
+            font-size: 1.15rem;
+            color: var(--accent-gold);
+            margin: 4px 0;
+            font-weight: 600;
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* FORM CONTROLS */
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .control-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .control-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .control-val {
+            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+            color: var(--accent-cyan);
+        }
+
+        input[type="number"], input[type="text"] {
+            background: #0d1527;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-family: 'Fira Code', monospace;
+            outline: none;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        input[type="number"]:focus, input[type="text"]:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 5px;
+            border-radius: 3px;
+            background: #1e293b;
+            outline: none;
+            accent-color: var(--accent-cyan);
+            cursor: pointer;
+        }
+
+        .btn-solve {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            border: none;
+            font-weight: 700;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            margin-top: 4px;
+        }
+
+        .btn-solve:hover {
+            box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+            transform: translateY(-1px);
+        }
+
+        /* TELEMETRY */
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .meter-box {
+            background: rgba(10, 16, 30, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 8px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .meter-title {
+            font-size: 0.66rem;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            letter-spacing: 0.04em;
+        }
+
+        .meter-value {
+            font-size: 1.05rem;
+            font-weight: 700;
+            font-family: 'Fira Code', monospace;
+            color: #fff;
+        }
+
+        .meter-sub {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+
+        /* REGIME BADGE */
+        .regime-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            font-family: 'Fira Code', monospace;
+            margin-top: 4px;
+        }
+
+        .regime-under {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+        }
+
+        .regime-critical {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+        }
+
+        .regime-over {
+            background: rgba(244, 63, 94, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(244, 63, 94, 0.4);
+        }
+
+        /* MAIN STAGE */
+        .stage-area {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .concept-banner {
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .concept-icon {
+            font-size: 1.6rem;
+        }
+
+        .concept-text h4 {
+            font-size: 0.88rem;
+            color: var(--accent-gold);
+            margin-bottom: 2px;
+        }
+
+        .concept-text p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.35;
+        }
+
+        /* MASS SPRING CANVAS */
+        .simulation-container {
+            background: #040711;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sim-header {
+            padding: 8px 14px;
+            background: rgba(10, 16, 32, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sim-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sim-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-play {
+            background: linear-gradient(135deg, var(--accent-cyan), #0284c7);
+            color: #030712;
+            border: none;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .btn-play:hover {
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 5px 9px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        #mass-spring-canvas {
+            width: 100%;
+            height: 180px;
+            display: block;
+        }
+
+        /* GRAPHS GRID */
+        .graphs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .graphs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .graph-box {
+            background: #040711;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .graph-header {
+            padding: 7px 12px;
+            background: rgba(10, 16, 32, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .graph-header h3 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .graph-legend {
+            display: flex;
+            gap: 8px;
+            font-size: 0.7rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .legend-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+        }
+
+        .graph-canvas {
+            width: 100%;
+            height: 280px;
+            display: block;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 12px 24px;
+            background: rgba(6, 10, 20, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.74rem;
+            color: var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        footer a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP HEADER -->
+    <header>
+        <div class="header-left">
+            <div class="header-icon">🌀</div>
+            <div>
+                <h1>Solucionador Interativo para Oscilador Harmônico</h1>
+                <p>Equação Diferencial: \(m\,\ddot{x} + b\,\dot{x} + k\,x = F(t)\) — Sistema Massa-Mola, RK4 & Espaço de Fases</p>
+            </div>
+        </div>
+
+        <div>
+            <a href="../../index.html" class="nav-btn">
+                <span>🏠</span> Catálogo Geral
+            </a>
+        </div>
+    </header>
+
+    <!-- PRESETS BAR -->
+    <nav class="presets-bar">
+        <span class="preset-label">Exemplos Rápidos:</span>
+        <button class="btn-preset active" id="preset-under">🌀 Subamortecido (\(b=0.5\))</button>
+        <button class="btn-preset" id="preset-crit">🎯 Amortecimento Crítico (\(b=2\sqrt{km}\))</button>
+        <button class="btn-preset" id="preset-over">🛡️ Superamortecido (\(b=3.5\))</button>
+        <button class="btn-preset" id="preset-undamped">〰️ Harmônico Simples (\(b=0\))</button>
+        <button class="btn-preset" id="preset-resonance">⚡ Ressonância Forçada (\(F = 1.5\cos(t)\))</button>
+        <button class="btn-preset" id="preset-beats">🎵 Batimentos (\(F = 1.2\cos(1.15t)\))</button>
+    </nav>
+
+    <!-- MAIN APP LAYOUT -->
+    <main class="main-layout">
+        
+        <!-- SIDEBAR CONTROLS & DIAGNOSTICS -->
+        <aside class="sidebar">
+            
+            <!-- FORMULA CARD -->
+            <div class="formula-card">
+                <div style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">EDO de 2ª Ordem</div>
+                <div class="formula-highlight">\(m\ddot{x} + b\dot{x} + kx = F(t)\)</div>
+                <div style="font-size:0.7rem; color:var(--text-dim);">Sistema de 1ª Ordem: \(\dot{x} = v, \quad \dot{v} = \frac{F(t) - bv - kx}{m}\)</div>
+            </div>
+
+            <!-- CONTROLS CARD -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>⚙️ Parâmetros Físicos & Condições</h2>
+                    <button id="btn-reset" class="btn-secondary" style="padding:2px 8px; font-size:0.72rem;">Resetar</button>
+                </div>
+
+                <div class="control-group">
+                    
+                    <!-- m, b, k -->
+                    <div class="control-grid-2">
+                        <div class="control-item">
+                            <label class="control-label-row"><span>Massa \(m\) (kg):</span></label>
+                            <input type="number" id="inp-m" value="1.0" min="0.01" step="0.1">
+                        </div>
+                        <div class="control-item">
+                            <label class="control-label-row"><span>Amortecimento \(b\):</span></label>
+                            <input type="number" id="inp-b" value="0.5" min="0.0" step="0.1">
+                        </div>
+                    </div>
+
+                    <div class="control-grid-2">
+                        <div class="control-item">
+                            <label class="control-label-row"><span>Constante \(k\) (N/m):</span></label>
+                            <input type="number" id="inp-k" value="1.0" min="0.01" step="0.1">
+                        </div>
+                        <div class="control-item">
+                            <label class="control-label-row"><span>Tempo Final \(t_f\) (s):</span></label>
+                            <input type="number" id="inp-tf" value="40.0" min="1.0" step="5.0">
+                        </div>
+                    </div>
+
+                    <!-- x0, v0 -->
+                    <div class="control-grid-2">
+                        <div class="control-item">
+                            <label class="control-label-row"><span>Posição Inicial \(x_0\) (m):</span></label>
+                            <input type="number" id="inp-x0" value="1.0" step="0.1">
+                        </div>
+                        <div class="control-item">
+                            <label class="control-label-row"><span>Velocidade \(v_0\) (m/s):</span></label>
+                            <input type="number" id="inp-v0" value="0.0" step="0.1">
+                        </div>
+                    </div>
+
+                    <!-- External Force String -->
+                    <div class="control-item">
+                        <label class="control-label-row">
+                            <span>Força Externa \(F(t)\):</span>
+                            <span style="font-size:0.68rem; color:var(--text-dim);">ex: 0, 5*cos(2*t), sin(t)</span>
+                        </label>
+                        <input type="text" id="inp-f" value="0" placeholder="Ex: 5*cos(2*t) ou 0">
+                    </div>
+
+                    <button id="btn-solve" class="btn-solve">
+                        <span>🚀</span> Resolver e Graficar (RK4)
+                    </button>
+                </div>
+            </div>
+
+            <!-- ANALYTICAL DIAGNOSTICS & TELEMETRY -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>📊 Diagnóstico Analítico & Telemetria</h2>
+                </div>
+                
+                <div id="regime-container" style="margin-bottom:8px;">
+                    <div class="regime-badge regime-under" id="regime-badge">🌀 SUBAMORTECIDO (ζ < 1)</div>
+                </div>
+
+                <div class="telemetry-grid">
+                    <div class="meter-box">
+                        <span class="meter-title">Freq. Natural \(\omega_0\)</span>
+                        <span class="meter-value" id="tel-w0" style="color:#38bdf8;">1.000 rad/s</span>
+                        <span class="meter-sub">\(f_0 = 0.159\text{ Hz}\)</span>
+                    </div>
+                    <div class="meter-box">
+                        <span class="meter-title">Fator Amortecimento \(\gamma\)</span>
+                        <span class="meter-value" id="tel-gamma" style="color:#fbbf24;">0.250 s⁻¹</span>
+                        <span class="meter-sub">\(\gamma = b/(2m)\)</span>
+                    </div>
+                    <div class="meter-box">
+                        <span class="meter-title">Freq. Amortecida \(\omega_d\)</span>
+                        <span class="meter-value" id="tel-wd" style="color:#34d399;">0.968 rad/s</span>
+                        <span class="meter-sub">\(\sqrt{\omega_0^2 - \gamma^2}\)</span>
+                    </div>
+                    <div class="meter-box">
+                        <span class="meter-title">Fator de Qualidade \(Q\)</span>
+                        <span class="meter-value" id="tel-q" style="color:#c084fc;">2.000</span>
+                        <span class="meter-sub">\(Q = \omega_0 m / b\)</span>
+                    </div>
+                </div>
+
+                <div class="telemetry-grid" style="margin-top:8px;">
+                    <div class="meter-box">
+                        <span class="meter-title">Posição Atual \(x(t)\)</span>
+                        <span class="meter-value" id="tel-cur-x" style="color:#38bdf8;">1.000 m</span>
+                        <span class="meter-sub" id="tel-cur-t">em t = 0.00 s</span>
+                    </div>
+                    <div class="meter-box">
+                        <span class="meter-title">Velocidade \(\dot{x}(t)\)</span>
+                        <span class="meter-value" id="tel-cur-v" style="color:#fbbf24;">0.000 m/s</span>
+                        <span class="meter-sub" id="tel-cur-energy">E = 0.500 J</span>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- MAIN STAGE -->
+        <section class="stage-area">
+            
+            <!-- CONCEPT BANNER -->
+            <div class="concept-banner">
+                <div class="concept-icon">💡</div>
+                <div class="concept-text">
+                    <h4>Espaço de Fases & Dinâmica Não-Linear do Oscilador</h4>
+                    <p>
+                        O <strong>Espaço de Fases</strong> mapeia a velocidade \(\dot{x}\) em função da posição \(x\). Sistemas sem amortecimento formam elipses fechadas conservativas (energia constante), enquanto o amortecimento atrai as trajetórias em espiral até o repouso no ponto de equilíbrio \((0,0)\). Forçamentos periódicos induzem ciclos limite e fenômenos de ressonância.
+                    </p>
+                </div>
+            </div>
+
+            <!-- PHYSICAL MASS-SPRING SIMULATION CANVAS -->
+            <div class="simulation-container">
+                <div class="sim-header">
+                    <div class="sim-title">
+                        <span>⚙️</span> Sistema Físico Massa-Mola-Amortecedor em Tempo Real
+                    </div>
+                    <div class="sim-controls">
+                        <button id="btn-play" class="btn-play">▶ Iniciar Animação</button>
+                        <button id="btn-restart" class="btn-secondary">↺ Reiniciar</button>
+                        <button id="btn-speed" class="btn-secondary">1.0x</button>
+                    </div>
+                </div>
+                <canvas id="mass-spring-canvas"></canvas>
+            </div>
+
+            <!-- DUAL GRAPHS -->
+            <div class="graphs-grid">
+                
+                <!-- GRAPH 1: TIME DOMAIN (x and v vs t) -->
+                <div class="graph-box">
+                    <div class="graph-header">
+                        <h3>Posição \(x(t)\) e Velocidade \(\dot{x}(t)\) vs Tempo</h3>
+                        <div class="graph-legend">
+                            <div class="legend-item"><div class="legend-dot" style="background:#38bdf8;"></div> Posição \(x\)</div>
+                            <div class="legend-item"><div class="legend-dot" style="background:#fbbf24;"></div> Velocidade \(\dot{x}\)</div>
+                            <div class="legend-item"><div class="legend-dot" style="background:rgba(192,132,252,0.6);"></div> Força \(F(t)\)</div>
+                        </div>
+                    </div>
+                    <canvas id="time-canvas" class="graph-canvas"></canvas>
+                </div>
+
+                <!-- GRAPH 2: PHASE SPACE (v vs x) -->
+                <div class="graph-box">
+                    <div class="graph-header">
+                        <h3>Diagrama do Espaço de Fases (\(\dot{x}\) vs \(x\))</h3>
+                        <div class="graph-legend">
+                            <div class="legend-item"><div class="legend-dot" style="background:#34d399;"></div> Trajetória de Fase</div>
+                            <div class="legend-item"><div class="legend-dot" style="background:#f43f5e;"></div> Condição Inicial \((x_0, v_0)\)</div>
+                        </div>
+                    </div>
+                    <canvas id="phase-canvas" class="graph-canvas"></canvas>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div>
+            Adaptado e expandido a partir do <strong>Google Colab: Solucionador Interativo do Oscilador Harmônico</strong>.
+        </div>
+        <div>
+            Autor: <a href="https://github.com/reinaldohaas" target="_blank">Reinaldo Haas</a>
+        </div>
+    </footer>
+
+    <!-- ENGINE JAVASCRIPT -->
+    <script>
+        // APPLICATION PARAMETERS
+        const params = {
+            m: 1.0,
+            b: 0.5,
+            k: 1.0,
+            t0: 0.0,
+            tf: 40.0,
+            x0: 1.0,
+            v0: 0.0,
+            fString: "0"
+        };
+
+        // ANIMATION & TIMELINE STATE
+        let solution = null; // Contains t, x, v, f arrays
+        let animTime = 0.0;
+        let isPlaying = false;
+        let playbackSpeed = 1.0;
+        let lastTimestamp = null;
+
+        // CANVAS ELEMENTS
+        const springCanvas = document.getElementById('mass-spring-canvas');
+        const springCtx = springCanvas.getContext('2d');
+        const timeCanvas = document.getElementById('time-canvas');
+        const timeCtx = timeCanvas.getContext('2d');
+        const phaseCanvas = document.getElementById('phase-canvas');
+        const phaseCtx = phaseCanvas.getContext('2d');
+
+        // DPI SETUP
+        function setupDPI(canvas, ctx) {
+            const rect = canvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.resetTransform();
+            ctx.scale(dpr, dpr);
+            return { W: rect.width, H: rect.height };
+        }
+
+        function handleResize() {
+            setupDPI(springCanvas, springCtx);
+            setupDPI(timeCanvas, timeCtx);
+            setupDPI(phaseCanvas, phaseCtx);
+            renderAll();
+        }
+        window.addEventListener('resize', handleResize);
+
+        // SAFE MATH PARSER FOR F(t)
+        function createForceFunction(exprStr) {
+            let sanitized = exprStr.trim();
+            if (!sanitized) return (t) => 0;
+
+            // Replace common python / math syntax
+            sanitized = sanitized.replace(/\bnp\.sin\b/g, 'Math.sin')
+                                 .replace(/\bnp\.cos\b/g, 'Math.cos')
+                                 .replace(/\bnp\.tan\b/g, 'Math.tan')
+                                 .replace(/\bnp\.exp\b/g, 'Math.exp')
+                                 .replace(/\bnp\.sqrt\b/g, 'Math.sqrt')
+                                 .replace(/\bnp\.abs\b/g, 'Math.abs')
+                                 .replace(/\bnp\.pi\b/g, 'Math.PI')
+                                 .replace(/\bsin\b/g, 'Math.sin')
+                                 .replace(/\bcos\b/g, 'Math.cos')
+                                 .replace(/\btan\b/g, 'Math.tan')
+                                 .replace(/\bexp\b/g, 'Math.exp')
+                                 .replace(/\bsqrt\b/g, 'Math.sqrt')
+                                 .replace(/\babs\b/g, 'Math.abs')
+                                 .replace(/\bpi\b/gi, 'Math.PI')
+                                 .replace(/\^/g, '**');
+
+            try {
+                const fn = new Function('t', `try { return Number(${sanitized}); } catch(e) { return 0; }`);
+                // Test run
+                const test = fn(0);
+                if (isNaN(test)) return (t) => 0;
+                return fn;
+            } catch (e) {
+                console.warn('Erro na expressão de F(t), usando 0:', e);
+                return (t) => 0;
+            }
+        }
+
+        // RUNGE-KUTTA 4TH ORDER SOLVER (RK4)
+        function solveODE() {
+            const m = params.m;
+            const b = params.b;
+            const k = params.k;
+            const t0 = params.t0;
+            const tf = params.tf;
+            const x0 = params.x0;
+            const v0 = params.v0;
+            const F_fn = createForceFunction(params.fString);
+
+            // ODE System:
+            // dxdt = v
+            // dvdt = (F(t) - b*v - k*x) / m
+            const f_ode = (t, x, v) => {
+                const force = F_fn(t);
+                const dv = (force - b * v - k * x) / m;
+                return { dx: v, dv: dv };
+            };
+
+            const numSteps = Math.max(800, Math.floor((tf - t0) * 80));
+            const dt = (tf - t0) / numSteps;
+
+            const tArr = new Float64Array(numSteps + 1);
+            const xArr = new Float64Array(numSteps + 1);
+            const vArr = new Float64Array(numSteps + 1);
+            const fArr = new Float64Array(numSteps + 1);
+
+            let t = t0;
+            let x = x0;
+            let v = v0;
+
+            tArr[0] = t;
+            xArr[0] = x;
+            vArr[0] = v;
+            fArr[0] = F_fn(t);
+
+            for (let i = 0; i < numSteps; i++) {
+                // k1
+                const k1 = f_ode(t, x, v);
+
+                // k2
+                const t_k2 = t + 0.5 * dt;
+                const x_k2 = x + 0.5 * dt * k1.dx;
+                const v_k2 = v + 0.5 * dt * k1.dv;
+                const k2 = f_ode(t_k2, x_k2, v_k2);
+
+                // k3
+                const t_k3 = t + 0.5 * dt;
+                const x_k3 = x + 0.5 * dt * k2.dx;
+                const v_k3 = v + 0.5 * dt * k2.dv;
+                const k3 = f_ode(t_k3, x_k3, v_k3);
+
+                // k4
+                const t_k4 = t + dt;
+                const x_k4 = x + dt * k3.dx;
+                const v_k4 = v + dt * k3.dv;
+                const k4 = f_ode(t_k4, x_k4, v_k4);
+
+                x += (dt / 6.0) * (k1.dx + 2.0 * k2.dx + 2.0 * k3.dx + k4.dx);
+                v += (dt / 6.0) * (k1.dv + 2.0 * k2.dv + 2.0 * k3.dv + k4.dv);
+                t += dt;
+
+                tArr[i + 1] = t;
+                xArr[i + 1] = x;
+                vArr[i + 1] = v;
+                fArr[i + 1] = F_fn(t);
+            }
+
+            solution = { t: tArr, x: xArr, v: vArr, f: fArr, dt: dt, count: numSteps + 1 };
+            updateDiagnostics();
+            renderAll();
+        }
+
+        // UPDATE ANALYTICAL METRICS
+        function updateDiagnostics() {
+            const m = params.m;
+            const b = params.b;
+            const k = params.k;
+
+            const w0 = Math.sqrt(k / m);
+            const gamma = b / (2.0 * m);
+            const zeta = b / (2.0 * Math.sqrt(k * m));
+            const Q = w0 / (2.0 * gamma);
+
+            let wdStr = "-";
+            if (w0 > gamma) {
+                const wd = Math.sqrt(w0 * w0 - gamma * gamma);
+                wdStr = wd.toFixed(3) + " rad/s";
+            }
+
+            document.getElementById('tel-w0').textContent = w0.toFixed(3) + " rad/s";
+            document.getElementById('tel-gamma').textContent = gamma.toFixed(3) + " s⁻¹";
+            document.getElementById('tel-wd').textContent = wdStr;
+            document.getElementById('tel-q').textContent = isFinite(Q) ? Q.toFixed(2) : "∞ (Sem Amort.)";
+
+            const badge = document.getElementById('regime-badge');
+            if (b === 0) {
+                badge.className = "regime-badge regime-under";
+                badge.textContent = "〰️ NÃO-AMORTECIDO (MHS Puro, ζ = 0)";
+            } else if (Math.abs(zeta - 1.0) < 0.01) {
+                badge.className = "regime-badge regime-critical";
+                badge.textContent = "🎯 CRITICAMENTE AMORTECIDO (ζ = 1.0)";
+            } else if (zeta < 1.0) {
+                badge.className = "regime-badge regime-under";
+                badge.textContent = `🌀 SUBAMORTECIDO (ζ = ${zeta.toFixed(2)} < 1)`;
+            } else {
+                badge.className = "regime-badge regime-over";
+                badge.textContent = `🛡️ SUPERAMORTECIDO (ζ = ${zeta.toFixed(2)} > 1)`;
+            }
+        }
+
+        // GET STATE AT TIME T VIA INTERPOLATION
+        function getStateAtTime(timeT) {
+            if (!solution) return { x: params.x0, v: params.v0, f: 0 };
+            const count = solution.count;
+            const tArr = solution.t;
+            if (timeT <= tArr[0]) return { x: solution.x[0], v: solution.v[0], f: solution.f[0] };
+            if (timeT >= tArr[count - 1]) return { x: solution.x[count - 1], v: solution.v[count - 1], f: solution.f[count - 1] };
+
+            const idx = Math.floor((timeT - tArr[0]) / solution.dt);
+            const clampedIdx = Math.max(0, Math.min(count - 2, idx));
+            const frac = (timeT - tArr[clampedIdx]) / solution.dt;
+
+            const x = solution.x[clampedIdx] + frac * (solution.x[clampedIdx + 1] - solution.x[clampedIdx]);
+            const v = solution.v[clampedIdx] + frac * (solution.v[clampedIdx + 1] - solution.v[clampedIdx]);
+            const f = solution.f[clampedIdx] + frac * (solution.f[clampedIdx + 1] - solution.f[clampedIdx]);
+
+            return { x, v, f };
+        }
+
+        // 1. RENDER PHYSICAL ANIMATION (MASS-SPRING-DAMPER)
+        function renderMassSpring() {
+            const rect = springCanvas.getBoundingClientRect();
+            const W = rect.width;
+            const H = rect.height;
+
+            springCtx.clearRect(0, 0, W, H);
+
+            // Background
+            springCtx.fillStyle = '#060a16';
+            springCtx.fillRect(0, 0, W, H);
+
+            const groundY = H - 35;
+            const wallX = 60;
+            const cy = groundY - 45;
+
+            // Ground & Wall
+            springCtx.fillStyle = '#1e293b';
+            springCtx.fillRect(0, groundY, W, H - groundY);
+
+            // Wall on the left
+            springCtx.fillStyle = '#334155';
+            springCtx.fillRect(0, 20, wallX, groundY - 20);
+            // Wall stripes
+            springCtx.strokeStyle = 'rgba(255,255,255,0.15)';
+            springCtx.lineWidth = 2;
+            for (let y = 30; y < groundY; y += 16) {
+                springCtx.beginPath();
+                springCtx.moveTo(wallX - 18, y + 10);
+                springCtx.lineTo(wallX, y);
+                springCtx.stroke();
+            }
+
+            // Current State
+            const state = getStateAtTime(animTime);
+            const currentX = state.x;
+            const currentV = state.v;
+            const currentF = state.f;
+
+            // Coordinate mapping (scale factor: 1 meter = 40 pixels)
+            const eqX = W * 0.48;
+            const massX = eqX + currentX * 45;
+            const massW = 55;
+            const massH = 45;
+
+            // Equilibrium Reference Line
+            springCtx.strokeStyle = 'rgba(251, 191, 36, 0.35)';
+            springCtx.setLineDash([4, 4]);
+            springCtx.beginPath();
+            springCtx.moveTo(eqX, 20);
+            springCtx.lineTo(eqX, groundY + 15);
+            springCtx.stroke();
+            springCtx.setLineDash([]);
+            springCtx.fillStyle = '#fbbf24';
+            springCtx.font = '10px Fira Code';
+            springCtx.textAlign = 'center';
+            springCtx.fillText('x = 0 (Equilíbrio)', eqX, 16);
+
+            // Coiled Spring (Top half: cy - 14)
+            const springY = cy - 14;
+            const springStartX = wallX;
+            const springEndX = massX - massW / 2;
+            const springLen = Math.max(20, springEndX - springStartX);
+            const coils = 12;
+
+            springCtx.strokeStyle = '#38bdf8';
+            springCtx.lineWidth = 2.5;
+            springCtx.beginPath();
+            springCtx.moveTo(springStartX, springY);
+            const coilStep = (springLen - 16) / coils;
+            springCtx.lineTo(springStartX + 8, springY);
+            for (let c = 0; c < coils; c++) {
+                const cx = springStartX + 8 + (c + 0.5) * coilStep;
+                const cyOffset = (c % 2 === 0 ? -12 : 12);
+                springCtx.lineTo(cx, springY + cyOffset);
+            }
+            springCtx.lineTo(springEndX - 8, springY);
+            springCtx.lineTo(springEndX, springY);
+            springCtx.stroke();
+
+            // Hydraulic Damper (Bottom half: cy + 14)
+            const damperY = cy + 14;
+            const cylinderW = 60;
+            const cylStartX = wallX;
+            const pistonEndX = massX - massW / 2;
+
+            // Damper Cylinder Housing
+            springCtx.strokeStyle = '#94a3b8';
+            springCtx.lineWidth = 2;
+            springCtx.beginPath();
+            springCtx.moveTo(cylStartX, damperY);
+            springCtx.lineTo(cylStartX + 20, damperY);
+            springCtx.stroke();
+
+            springCtx.fillStyle = 'rgba(30, 41, 59, 0.8)';
+            springCtx.strokeStyle = '#64748b';
+            springCtx.strokeRect(cylStartX + 20, damperY - 10, cylinderW, 20);
+            springCtx.fillRect(cylStartX + 20, damperY - 10, cylinderW, 20);
+
+            // Damper Piston Rod
+            const pistonHeadX = Math.max(cylStartX + 25, Math.min(cylStartX + 15 + cylinderW - 6, cylStartX + 20 + (pistonEndX - (cylStartX + 20)) * 0.4));
+            springCtx.strokeStyle = '#cbd5e1';
+            springCtx.lineWidth = 2.5;
+            springCtx.beginPath();
+            springCtx.moveTo(pistonHeadX, damperY);
+            springCtx.lineTo(pistonEndX, damperY);
+            springCtx.stroke();
+
+            // Piston head
+            springCtx.fillStyle = '#94a3b8';
+            springCtx.fillRect(pistonHeadX - 2, damperY - 8, 4, 16);
+
+            // Mass Block
+            springCtx.fillStyle = 'linear-gradient(135deg, #1e293b, #0f172a)';
+            springCtx.fillStyle = '#38bdf8';
+            springCtx.strokeStyle = '#fff';
+            springCtx.lineWidth = 2;
+            springCtx.fillRect(massX - massW / 2, groundY - massH, massW, massH);
+            springCtx.strokeRect(massX - massW / 2, groundY - massH, massW, massH);
+
+            // Mass label
+            springCtx.fillStyle = '#050814';
+            springCtx.font = 'bold 12px Fira Code';
+            springCtx.textAlign = 'center';
+            springCtx.fillText(`m=${params.m}kg`, massX, groundY - massH / 2 + 4);
+
+            // Wheels on Mass
+            springCtx.fillStyle = '#0f172a';
+            springCtx.strokeStyle = '#64748b';
+            springCtx.beginPath();
+            springCtx.arc(massX - 16, groundY - 3, 5, 0, Math.PI * 2);
+            springCtx.arc(massX + 16, groundY - 3, 5, 0, Math.PI * 2);
+            springCtx.fill();
+            springCtx.stroke();
+
+            // Force & Velocity Vectors on Mass
+            // Velocity Vector (Green)
+            if (Math.abs(currentV) > 0.02) {
+                const vArrLen = currentV * 25;
+                springCtx.strokeStyle = '#10b981';
+                springCtx.lineWidth = 3;
+                springCtx.beginPath();
+                springCtx.moveTo(massX, groundY - massH - 12);
+                springCtx.lineTo(massX + vArrLen, groundY - massH - 12);
+                springCtx.stroke();
+
+                springCtx.fillStyle = '#34d399';
+                springCtx.font = 'bold 10px Fira Code';
+                springCtx.textAlign = currentV >= 0 ? 'left' : 'right';
+                springCtx.fillText(`v = ${currentV.toFixed(2)} m/s`, massX + vArrLen + (currentV >= 0 ? 6 : -6), groundY - massH - 9);
+            }
+
+            // External Force Vector F(t) (Purple)
+            if (Math.abs(currentF) > 0.05) {
+                const fArrLen = currentF * 20;
+                springCtx.strokeStyle = '#c084fc';
+                springCtx.lineWidth = 2.5;
+                springCtx.beginPath();
+                springCtx.moveTo(massX, groundY - massH - 28);
+                springCtx.lineTo(massX + fArrLen, groundY - massH - 28);
+                springCtx.stroke();
+
+                springCtx.fillStyle = '#c084fc';
+                springCtx.font = 'bold 10px Fira Code';
+                springCtx.textAlign = currentF >= 0 ? 'left' : 'right';
+                springCtx.fillText(`F(t) = ${currentF.toFixed(2)} N`, massX + fArrLen + (currentF >= 0 ? 6 : -6), groundY - massH - 25);
+            }
+
+            // Metric Scale at ground
+            springCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            springCtx.beginPath();
+            springCtx.moveTo(eqX - 150, groundY + 12);
+            springCtx.lineTo(eqX + 150, groundY + 12);
+            springCtx.stroke();
+
+            for (let d = -3; d <= 3; d++) {
+                const mx = eqX + d * 45;
+                springCtx.beginPath();
+                springCtx.moveTo(mx, groundY + 12);
+                springCtx.lineTo(mx, groundY + 18);
+                springCtx.stroke();
+
+                springCtx.fillStyle = '#94a3b8';
+                springCtx.font = '9px Fira Code';
+                springCtx.textAlign = 'center';
+                springCtx.fillText(`${d > 0 ? '+' : ''}${d}m`, mx, groundY + 28);
+            }
+
+            // Live telemetry update
+            const energy = 0.5 * params.m * currentV * currentV + 0.5 * params.k * currentX * currentX;
+            document.getElementById('tel-cur-x').textContent = (currentX >= 0 ? '+' : '') + currentX.toFixed(3) + " m";
+            document.getElementById('tel-cur-v').textContent = (currentV >= 0 ? '+' : '') + currentV.toFixed(3) + " m/s";
+            document.getElementById('tel-cur-t').textContent = `em t = ${animTime.toFixed(2)} s`;
+            document.getElementById('tel-cur-energy').textContent = `E = ${energy.toFixed(3)} J`;
+        }
+
+        // 2. RENDER TIME DOMAIN GRAPH (x(t), v(t) and F(t) vs t)
+        function renderTimeGraph() {
+            const rect = timeCanvas.getBoundingClientRect();
+            const W = rect.width;
+            const H = rect.height;
+
+            timeCtx.clearRect(0, 0, W, H);
+            if (!solution) return;
+
+            const pL = 46, pR = 20, pT = 20, pB = 30;
+            const gW = W - pL - pR;
+            const gH = H - pT - pB;
+
+            const tMin = params.t0;
+            const tMax = params.tf;
+
+            // Find bounds for Y
+            let yMin = -2.0, yMax = 2.0;
+            for (let i = 0; i < solution.count; i++) {
+                if (solution.x[i] < yMin) yMin = solution.x[i];
+                if (solution.x[i] > yMax) yMax = solution.x[i];
+                if (solution.v[i] < yMin) yMin = solution.v[i];
+                if (solution.v[i] > yMax) yMax = solution.v[i];
+            }
+            const margin = (yMax - yMin) * 0.15 || 0.5;
+            yMin -= margin;
+            yMax += margin;
+
+            function toX(t) { return pL + ((t - tMin) / (tMax - tMin)) * gW; }
+            function toY(y) { return pT + gH - ((y - yMin) / (yMax - yMin)) * gH; }
+
+            // Grid & Box
+            timeCtx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+            timeCtx.strokeRect(pL, pT, gW, gH);
+
+            // Zero line
+            if (yMin < 0 && yMax > 0) {
+                timeCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                timeCtx.beginPath();
+                timeCtx.moveTo(pL, toY(0));
+                timeCtx.lineTo(pL + gW, toY(0));
+                timeCtx.stroke();
+            }
+
+            // Curve: F(t) Force (translucent purple)
+            timeCtx.strokeStyle = 'rgba(192, 132, 252, 0.45)';
+            timeCtx.lineWidth = 1.5;
+            timeCtx.beginPath();
+            for (let i = 0; i < solution.count; i++) {
+                const sx = toX(solution.t[i]);
+                const sy = toY(solution.f[i]);
+                if (i === 0) timeCtx.moveTo(sx, sy); else timeCtx.lineTo(sx, sy);
+            }
+            timeCtx.stroke();
+
+            // Curve: Velocity v(t) (dashed gold)
+            timeCtx.strokeStyle = '#fbbf24';
+            timeCtx.lineWidth = 2;
+            timeCtx.setLineDash([4, 3]);
+            timeCtx.beginPath();
+            for (let i = 0; i < solution.count; i++) {
+                const sx = toX(solution.t[i]);
+                const sy = toY(solution.v[i]);
+                if (i === 0) timeCtx.moveTo(sx, sy); else timeCtx.lineTo(sx, sy);
+            }
+            timeCtx.stroke();
+            timeCtx.setLineDash([]);
+
+            // Curve: Position x(t) (cyan solid)
+            timeCtx.strokeStyle = '#38bdf8';
+            timeCtx.lineWidth = 2.5;
+            timeCtx.beginPath();
+            for (let i = 0; i < solution.count; i++) {
+                const sx = toX(solution.t[i]);
+                const sy = toY(solution.x[i]);
+                if (i === 0) timeCtx.moveTo(sx, sy); else timeCtx.lineTo(sx, sy);
+            }
+            timeCtx.stroke();
+
+            // Vertical Time Scrubber Line
+            const curSX = toX(animTime);
+            timeCtx.strokeStyle = 'rgba(236, 72, 153, 0.85)';
+            timeCtx.lineWidth = 2;
+            timeCtx.beginPath();
+            timeCtx.moveTo(curSX, pT);
+            timeCtx.lineTo(curSX, pT + gH);
+            timeCtx.stroke();
+
+            const curState = getStateAtTime(animTime);
+            timeCtx.fillStyle = '#38bdf8';
+            timeCtx.beginPath();
+            timeCtx.arc(curSX, toY(curState.x), 5, 0, Math.PI * 2);
+            timeCtx.fill();
+
+            timeCtx.fillStyle = '#fbbf24';
+            timeCtx.beginPath();
+            timeCtx.arc(curSX, toY(curState.v), 4.5, 0, Math.PI * 2);
+            timeCtx.fill();
+
+            // Axis labels
+            timeCtx.fillStyle = '#94a3b8';
+            timeCtx.font = '10px Inter';
+            timeCtx.fillText('Amplitude', pL, pT - 6);
+            timeCtx.textAlign = 'right';
+            timeCtx.fillText('Tempo t (s)', pL + gW, pT + gH + 20);
+            timeCtx.textAlign = 'left';
+        }
+
+        // 3. RENDER PHASE SPACE GRAPH (v vs x)
+        function renderPhaseGraph() {
+            const rect = phaseCanvas.getBoundingClientRect();
+            const W = rect.width;
+            const H = rect.height;
+
+            phaseCtx.clearRect(0, 0, W, H);
+            if (!solution) return;
+
+            const pL = 46, pR = 20, pT = 20, pB = 30;
+            const gW = W - pL - pR;
+            const gH = H - pT - pB;
+
+            let xMin = -2.0, xMax = 2.0;
+            let vMin = -2.0, vMax = 2.0;
+            for (let i = 0; i < solution.count; i++) {
+                if (solution.x[i] < xMin) xMin = solution.x[i];
+                if (solution.x[i] > xMax) xMax = solution.x[i];
+                if (solution.v[i] < vMin) vMin = solution.v[i];
+                if (solution.v[i] > vMax) vMax = solution.v[i];
+            }
+            const marginX = (xMax - xMin) * 0.15 || 0.5;
+            const marginV = (vMax - vMin) * 0.15 || 0.5;
+            xMin -= marginX; xMax += marginX;
+            vMin -= marginV; vMax += marginV;
+
+            function toX(x) { return pL + ((x - xMin) / (xMax - xMin)) * gW; }
+            function toY(v) { return pT + gH - ((v - vMin) / (vMax - vMin)) * gH; }
+
+            // Grid
+            phaseCtx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+            phaseCtx.strokeRect(pL, pT, gW, gH);
+
+            // Axes (x=0 and v=0)
+            phaseCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            phaseCtx.beginPath();
+            phaseCtx.moveTo(pL, toY(0)); phaseCtx.lineTo(pL + gW, toY(0)); // x-axis
+            phaseCtx.moveTo(toX(0), pT); phaseCtx.lineTo(toX(0), pT + gH); // v-axis
+            springCtx.stroke();
+
+            // Phase Trajectory Curve
+            phaseCtx.strokeStyle = '#34d399';
+            phaseCtx.lineWidth = 2.2;
+            phaseCtx.beginPath();
+            for (let i = 0; i < solution.count; i++) {
+                const sx = toX(solution.x[i]);
+                const sy = toY(solution.v[i]);
+                if (i === 0) phaseCtx.moveTo(sx, sy); else phaseCtx.lineTo(sx, sy);
+            }
+            phaseCtx.stroke();
+
+            // Initial Condition (x0, v0) - Red Marker
+            const initSX = toX(params.x0);
+            const initSY = toY(params.v0);
+            phaseCtx.fillStyle = '#f43f5e';
+            phaseCtx.beginPath();
+            phaseCtx.arc(initSX, initSY, 5.5, 0, Math.PI * 2);
+            phaseCtx.fill();
+            phaseCtx.strokeStyle = '#fff';
+            phaseCtx.lineWidth = 1.5;
+            phaseCtx.stroke();
+
+            phaseCtx.fillStyle = '#f43f5e';
+            phaseCtx.font = '9.5px Fira Code';
+            phaseCtx.fillText(`(x0, v0)`, initSX + 8, initSY - 6);
+
+            // Current State Marker
+            const curState = getStateAtTime(animTime);
+            const curSX = toX(curState.x);
+            const curSY = toY(curState.v);
+
+            phaseCtx.fillStyle = '#ec4899';
+            phaseCtx.beginPath();
+            phaseCtx.arc(curSX, curSY, 6, 0, Math.PI * 2);
+            phaseCtx.fill();
+            phaseCtx.strokeStyle = '#fff';
+            phaseCtx.lineWidth = 2;
+            phaseCtx.stroke();
+
+            // Labels
+            phaseCtx.fillStyle = '#94a3b8';
+            phaseCtx.font = '10px Inter';
+            phaseCtx.fillText('Velocidade v = dx/dt', pL, pT - 6);
+            phaseCtx.textAlign = 'right';
+            phaseCtx.fillText('Posição x(t)', pL + gW, pT + gH + 20);
+            phaseCtx.textAlign = 'left';
+        }
+
+        // RENDER ALL
+        function renderAll() {
+            renderMassSpring();
+            renderTimeGraph();
+            renderPhaseGraph();
+        }
+
+        // ANIMATION LOOP
+        function runAnimation(timestamp) {
+            if (isPlaying) {
+                if (!lastTimestamp) lastTimestamp = timestamp;
+                const dtSec = (timestamp - lastTimestamp) / 1000;
+                lastTimestamp = timestamp;
+
+                animTime += dtSec * playbackSpeed;
+                if (animTime >= params.tf) {
+                    animTime = params.tf;
+                    isPlaying = false;
+                    document.getElementById('btn-play').innerHTML = '▶ Reiniciar';
+                }
+                renderAll();
+            }
+            requestAnimationFrame(runAnimation);
+        }
+        requestAnimationFrame(runAnimation);
+
+        // SYNC PARAMS FROM DOM
+        function syncParamsFromDOM() {
+            params.m = parseFloat(document.getElementById('inp-m').value) || 1.0;
+            params.b = parseFloat(document.getElementById('inp-b').value) || 0.0;
+            params.k = parseFloat(document.getElementById('inp-k').value) || 1.0;
+            params.tf = parseFloat(document.getElementById('inp-tf').value) || 40.0;
+            params.x0 = parseFloat(document.getElementById('inp-x0').value) || 0.0;
+            params.v0 = parseFloat(document.getElementById('inp-v0').value) || 0.0;
+            params.fString = document.getElementById('inp-f').value || "0";
+            solveODE();
+        }
+
+        // EVENT LISTENERS
+        document.getElementById('btn-solve').addEventListener('click', () => {
+            syncParamsFromDOM();
+        });
+
+        // Auto solve on input changes
+        ['inp-m', 'inp-b', 'inp-k', 'inp-tf', 'inp-x0', 'inp-v0', 'inp-f'].forEach(id => {
+            document.getElementById(id).addEventListener('change', syncParamsFromDOM);
+        });
+
+        document.getElementById('btn-play').addEventListener('click', () => {
+            if (animTime >= params.tf) animTime = 0;
+            isPlaying = !isPlaying;
+            lastTimestamp = null;
+            document.getElementById('btn-play').innerHTML = isPlaying ? '⏸ Pausar' : '▶ Iniciar Animação';
+        });
+
+        document.getElementById('btn-restart').addEventListener('click', () => {
+            animTime = 0;
+            isPlaying = false;
+            lastTimestamp = null;
+            document.getElementById('btn-play').innerHTML = '▶ Iniciar Animação';
+            renderAll();
+        });
+
+        document.getElementById('btn-speed').addEventListener('click', () => {
+            const speeds = [0.25, 0.5, 1.0, 2.0, 4.0];
+            const idx = (speeds.indexOf(playbackSpeed) + 1) % speeds.length;
+            playbackSpeed = speeds[idx];
+            document.getElementById('btn-speed').textContent = playbackSpeed + 'x';
+        });
+
+        document.getElementById('btn-reset').addEventListener('click', () => {
+            document.getElementById('inp-m').value = "1.0";
+            document.getElementById('inp-b').value = "0.5";
+            document.getElementById('inp-k').value = "1.0";
+            document.getElementById('inp-tf').value = "40.0";
+            document.getElementById('inp-x0').value = "1.0";
+            document.getElementById('inp-v0').value = "0.0";
+            document.getElementById('inp-f').value = "0";
+            animTime = 0;
+            isPlaying = false;
+            document.getElementById('btn-play').innerHTML = '▶ Iniciar Animação';
+            syncParamsFromDOM();
+        });
+
+        // PRESET BUTTONS
+        const presets = {
+            'preset-under': { m: 1.0, b: 0.5, k: 1.0, tf: 40.0, x0: 1.0, v0: 0.0, f: "0" },
+            'preset-crit': { m: 1.0, b: 2.0, k: 1.0, tf: 20.0, x0: 1.0, v0: 0.0, f: "0" },
+            'preset-over': { m: 1.0, b: 3.5, k: 1.0, tf: 25.0, x0: 1.0, v0: 0.0, f: "0" },
+            'preset-undamped': { m: 1.0, b: 0.0, k: 1.0, tf: 30.0, x0: 1.0, v0: 0.0, f: "0" },
+            'preset-resonance': { m: 1.0, b: 0.1, k: 1.0, tf: 50.0, x0: 0.0, v0: 0.0, f: "1.5*cos(t)" },
+            'preset-beats': { m: 1.0, b: 0.02, k: 1.0, tf: 80.0, x0: 0.0, v0: 0.0, f: "1.2*cos(1.15*t)" }
+        };
+
+        Object.keys(presets).forEach(btnId => {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.btn-preset').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const p = presets[btnId];
+                document.getElementById('inp-m').value = p.m;
+                document.getElementById('inp-b').value = p.b;
+                document.getElementById('inp-k').value = p.k;
+                document.getElementById('inp-tf').value = p.tf;
+                document.getElementById('inp-x0').value = p.x0;
+                document.getElementById('inp-v0').value = p.v0;
+                document.getElementById('inp-f').value = p.f;
+
+                animTime = 0;
+                syncParamsFromDOM();
+            });
+        });
+
+        // INITIAL LOAD
+        handleResize();
+        syncParamsFromDOM();
+    </script>
+</body>
+</html>
