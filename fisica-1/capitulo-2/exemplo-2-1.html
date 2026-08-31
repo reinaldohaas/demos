@@ -162,9 +162,23 @@
             border: 1px solid var(--bg-card-border);
             border-radius: 12px;
             padding: 10px;
-            height: 155px;
+            height: 175px;
             position: relative;
             overflow: hidden;
+        }
+
+        .vector-legend {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            display: flex;
+            gap: 14px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .plot-card {
@@ -261,8 +275,12 @@
 
         <!-- Interactive Visual Stage -->
         <div class="interactive-stage">
-            <!-- Savanna Scene Animation with Fleeing Antelope -->
+            <!-- Savanna Scene Animation with Fleeing Antelope & Vectors -->
             <div class="scene-card">
+                <div class="vector-legend">
+                    <span style="color:#10b981;">➔ Vetor Velocidade v(t)</span>
+                    <span style="color:#f43f5e;">➔ Vetor Aceleração a</span>
+                </div>
                 <canvas id="canvas-scene"></canvas>
             </div>
 
@@ -330,6 +348,38 @@
             return { canvas, ctx, w: rect.width, h: rect.height };
         }
 
+        function drawVectorArrow(ctx, x, y, dx, dy, color, label) {
+            const len = Math.hypot(dx, dy);
+            if (len < 2) return;
+            const angle = Math.atan2(dy, dx);
+            const headLen = Math.min(10, len * 0.35);
+
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 2.5;
+
+            // Shaft
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + dx, y + dy);
+            ctx.stroke();
+
+            // Arrowhead
+            ctx.beginPath();
+            ctx.moveTo(x + dx, y + dy);
+            ctx.lineTo(x + dx - headLen * Math.cos(angle - Math.PI / 6), y + dy - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(x + dx - headLen * Math.cos(angle + Math.PI / 6), y + dy - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+
+            // Label
+            if (label) {
+                ctx.font = 'bold 10px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(label, x + dx * 0.5, y + dy - 6);
+            }
+        }
+
         function updateDemo() {
             const t = parseFloat(document.getElementById('leo-t').value);
             const dt = parseFloat(document.getElementById('leo-dt').value);
@@ -347,7 +397,7 @@
             if (!ctx) return;
             ctx.clearRect(0, 0, w, h);
 
-            const cy = h - 35;
+            const cy = h - 40;
             ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, w, h);
             ctx.fillStyle = '#1e293b'; ctx.fillRect(0, cy, w, h - cy);
             ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
@@ -371,34 +421,47 @@
             ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
             ctx.fillText('🚙 Jipe (0m)', px_jeep, cy - 30);
 
-            // Antelope FLEEING: Starts at x = 50m, flees to the right as t increases!
-            // Equation of Antelope Fleeing: x_ant(t) = 50 + 2.0 t^2 (m)
+            // Antelope FLEEING: x_ant(t) = 50 + 2.0 t^2
             const x_ant = 50.0 + 2.0 * t * t;
+            const v_ant = 4.0 * t; // Velocity of antelope
+            const a_ant = 4.0;     // Acceleration of antelope
             const px_ant = mapX(x_ant);
-            const ant_bound = Math.abs(Math.sin(t * 12)) * 8; // Animated leg bounding jump height
+            const ant_bound = Math.abs(Math.sin(t * 12)) * 6;
 
-            // Antelope Trail
-            ctx.strokeStyle = 'rgba(16, 185, 129, 0.3)'; ctx.lineWidth = 3;
-            ctx.beginPath(); ctx.moveTo(mapX(50), cy - 12); ctx.lineTo(px_ant, cy - 12 - ant_bound); ctx.stroke();
-
-            // Antelope Animated Marker
+            // Antelope Marker
             ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(px_ant, cy - 12 - ant_bound, 8, 0, Math.PI * 2); ctx.fill();
             ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
-            ctx.fillText(`🦌 Antílope em Fuga! x = ${x_ant.toFixed(1)}m`, px_ant, cy - 24 - ant_bound);
+            ctx.fillText(`🦌 Antílope x = ${x_ant.toFixed(1)}m`, px_ant, cy - 42 - ant_bound);
 
-            // Leopard CHARGING: x(t) = 20 + 5.0 t^2
+            // Velocity Vector for Antelope (Green)
+            if (v_ant > 0.1) {
+                drawVectorArrow(ctx, px_ant, cy - 12 - ant_bound, v_ant * 3.5, 0, '#10b981', `v = ${v_ant.toFixed(1)}m/s`);
+            }
+            // Acceleration Vector for Antelope (Red)
+            drawVectorArrow(ctx, px_ant, cy - 24 - ant_bound, a_ant * 4.0, 0, '#f43f5e', `a = ${a_ant.toFixed(1)}m/s²`);
+
+            // Leopard CHARGING: x_leo(t) = 20 + 5.0 t^2
             const x_leo = 20.0 + 5.0 * t * t;
+            const v_leo = 10.0 * t; // Velocity of leopard
+            const a_leo = 10.0;     // Acceleration of leopard
             const px_leo = mapX(x_leo);
-            const leo_bound = Math.abs(Math.sin(t * 15)) * 6; // Animated sprint bound
+            const leo_bound = Math.abs(Math.sin(t * 15)) * 6;
 
             // Motion Trail for Leopard
             ctx.strokeStyle = 'rgba(251, 191, 36, 0.35)'; ctx.lineWidth = 4;
             ctx.beginPath(); ctx.moveTo(mapX(20), cy - 12); ctx.lineTo(px_leo, cy - 12 - leo_bound); ctx.stroke();
 
-            // Leopard Animated Marker
+            // Leopard Marker
             ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px_leo, cy - 12 - leo_bound, 10, 0, Math.PI * 2); ctx.fill();
             ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'center';
-            ctx.fillText(`🐆 Leopardo x = ${x_leo.toFixed(1)}m`, px_leo, cy - 26 - leo_bound);
+            ctx.fillText(`🐆 Leopardo x = ${x_leo.toFixed(1)}m`, px_leo, cy - 44 - leo_bound);
+
+            // Velocity Vector for Leopard (Green)
+            if (v_leo > 0.1) {
+                drawVectorArrow(ctx, px_leo, cy - 12 - leo_bound, v_leo * 3.5, 0, '#10b981', `v = ${v_leo.toFixed(1)}m/s`);
+            }
+            // Acceleration Vector for Leopard (Red)
+            drawVectorArrow(ctx, px_leo, cy - 26 - leo_bound, a_leo * 3.5, 0, '#f43f5e', `a = ${a_leo.toFixed(1)}m/s²`);
         }
 
         function drawPlotX(t_curr, dt) {
