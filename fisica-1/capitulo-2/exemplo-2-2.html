@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 2.2: Gráfico da Astronauta (Figura 2.10) | FSC5101 Física I</title>
+    <title>Exemplo 2.2: Aceleração Média da Astronauta | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -88,16 +88,17 @@
         .statement-title h2 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: var(--accent-cyan); margin-bottom: 6px; }
         .statement-title p { font-size: 0.92rem; color: #cbd5e1; line-height: 1.6; }
 
-        .formula-badge {
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-family: 'Outfit', monospace;
-            font-size: 1.1rem;
+        .data-table-mini {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.82rem;
             color: var(--accent-gold);
-            font-weight: 700;
+            font-family: monospace;
         }
+        .data-table-mini table { border-collapse: collapse; }
+        .data-table-mini td { padding: 3px 8px; }
 
         .presentation-container {
             max-width: 1300px;
@@ -177,7 +178,7 @@
             border: 1px solid var(--bg-card-border);
             border-radius: 12px;
             padding: 10px;
-            height: 140px;
+            height: 155px;
             position: relative;
             overflow: hidden;
         }
@@ -201,7 +202,7 @@
             border: 1px solid var(--bg-card-border);
             border-radius: 12px;
             padding: 16px;
-            height: 400px;
+            height: 380px;
             display: flex;
             flex-direction: column;
         }
@@ -233,10 +234,17 @@
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Figura 2.10 & Exemplo 2.2: Gráficos de Velocidade $v_x(t)$ e Aceleração Média $a_{mx}(t)$ da Astronauta</h2>
-            <p><strong>Figura 2.10:</strong> Gráficos de velocidade <em>versus</em> tempo (parte superior) e aceleração média <em>versus</em> tempo (parte inferior) para a astronauta em quatro intervalos de tempo sucessivos. A inclinação da linha que liga dois pontos no gráfico $v_x(t)$ fornece a aceleração média $a_{mx} = \Delta v_x / \Delta t$.</p>
+            <h2>Exemplo 2.2: ACELERAÇÃO MÉDIA (A Astronauta no Espaço)</h2>
+            <p>Uma astronauta saiu de um ônibus espacial em órbita no espaço para testar uma nova unidade de manobra pessoal. À medida que ela se move em linha reta, seu companheiro a bordo do ônibus espacial mede sua velocidade a cada intervalo de 2,0 s, começando em t = 1,0 s. Calcule a aceleração média e verifique se a velocidade da astronauta aumenta ou diminui para cada um dos quatro intervalos de tempo.</p>
         </div>
-        <div class="formula-badge">a_{mx} = Δv_x / Δt</div>
+        <div class="data-table-mini">
+            <table>
+                <tr><td>t = 1,0 s: <strong>v = +0,8 m/s</strong></td><td>t = 9,0 s: <strong>v = -0,4 m/s</strong></td></tr>
+                <tr><td>t = 3,0 s: <strong>v = +1,2 m/s</strong></td><td>t = 11,0 s: <strong>v = -1,0 m/s</strong></td></tr>
+                <tr><td>t = 5,0 s: <strong>v = +1,6 m/s</strong></td><td>t = 13,0 s: <strong>v = -1,6 m/s</strong></td></tr>
+                <tr><td>t = 7,0 s: <strong>v = +1,2 m/s</strong></td><td>t = 15,0 s: <strong>v = -0,8 m/s</strong></td></tr>
+            </table>
+        </div>
     </div>
 
     <div class="presentation-container">
@@ -244,42 +252,42 @@
         <div class="slide-deck">
             <div>
                 <div style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); margin-bottom:12px; text-transform:uppercase;">
-                    📖 Análise dos 4 Intervalos da Figura 2.10
+                    📖 Resolução Didática Passo a Passo (Itens a, b, c, d)
                 </div>
 
                 <div class="item-card">
-                    <div class="item-badge">1.0 s a 3.0 s</div>
+                    <div class="item-badge">Item (A)</div>
                     <div class="item-content">
-                        <div class="item-title">Aceleração Positiva (Ganho de Velocidade)</div>
-                        <div class="item-formula"><code>Δv_x = 1,2 - 0,8 = +0,4 m/s; Δt = 2,0 s</code></div>
-                        <div class="item-calc">a_{mx} = +0,4 / 2,0 = <strong>+0,2 m/s²</strong> (barra superior positiva).</div>
+                        <div class="item-title">t₁ = 1,0 s até t₂ = 3,0 s</div>
+                        <div class="item-formula"><code>a_{mx} = (1,2 - 0,8) / (3,0 - 1,0) = +0,2 m/s²</code></div>
+                        <div class="item-calc">Sinais iguais (v_x > 0 e a_{mx} > 0) ⟹ A velocidade da astronauta <strong>aumenta</strong> (movimento acelerado no sentido positivo).</div>
                     </div>
                 </div>
 
                 <div class="item-card">
-                    <div class="item-badge">5.0 s a 7.0 s</div>
+                    <div class="item-badge">Item (B)</div>
                     <div class="item-content">
-                        <div class="item-title">Desaceleração Positiva (Redução de Velocidade)</div>
-                        <div class="item-formula"><code>Δv_x = 1,2 - 1,6 = -0,4 m/s; Δt = 2,0 s</code></div>
-                        <div class="item-calc">a_{mx} = -0,4 / 2,0 = <strong>-0,2 m/s²</strong> (barra inferior negativa).</div>
+                        <div class="item-title">t₁ = 5,0 s até t₂ = 7,0 s</div>
+                        <div class="item-formula"><code>a_{mx} = (1,2 - 1,6) / (7,0 - 5,0) = -0,2 m/s²</code></div>
+                        <div class="item-calc">Sinais opostos (v_x > 0 e a_{mx} < 0) ⟹ A velocidade da astronauta <strong>diminui</strong> (movimento retardado no sentido positivo).</div>
                     </div>
                 </div>
 
                 <div class="item-card">
-                    <div class="item-badge">9.0 s a 11.0 s</div>
+                    <div class="item-badge">Item (C)</div>
                     <div class="item-content">
-                        <div class="item-title">Aceleração no Sentido Negativo (Aumento de Velocidade para Esquerda)</div>
-                        <div class="item-formula"><code>Δv_x = -1,0 - (-0,4) = -0,6 m/s; Δt = 2,0 s</code></div>
-                        <div class="item-calc">a_{mx} = -0,6 / 2,0 = <strong>-0,3 m/s²</strong> (barra inferior negativa).</div>
+                        <div class="item-title">t₁ = 9,0 s até t₂ = 11,0 s</div>
+                        <div class="item-formula"><code>a_{mx} = (-1,0 - (-0,4)) / (11,0 - 9,0) = -0,3 m/s²</code></div>
+                        <div class="item-calc">Sinais iguais (v_x < 0 e a_{mx} < 0) ⟹ A velocidade da astronauta <strong>aumenta em módulo</strong> no sentido negativo!</div>
                     </div>
                 </div>
 
                 <div class="item-card">
-                    <div class="item-badge">13.0 s a 15.0 s</div>
+                    <div class="item-badge">Item (D)</div>
                     <div class="item-content">
-                        <div class="item-title">Frenagem no Sentido Negativo (Retorno ao Repouso)</div>
-                        <div class="item-formula"><code>Δv_x = -0,8 - (-1,6) = +0,8 m/s; Δt = 2,0 s</code></div>
-                        <div class="item-calc">a_{mx} = +0,8 / 2,0 = <strong>+0,4 m/s²</strong> (barra superior positiva).</div>
+                        <div class="item-title">t₁ = 13,0 s até t₂ = 15,0 s</div>
+                        <div class="item-formula"><code>a_{mx} = (-0,8 - (-1,6)) / (15,0 - 13,0) = +0,4 m/s²</code></div>
+                        <div class="item-calc">Sinais opostos (v_x < 0 e a_{mx} > 0) ⟹ A velocidade da astronauta <strong>diminui em módulo</strong> (frenagem para retorno).</div>
                     </div>
                 </div>
             </div>
@@ -300,7 +308,7 @@
         <!-- Interactive Visual Stage -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">👩‍🚀 Movimento da Astronauta no Espaço com Vetores $\vec{{v}}_x$ e $\vec{{a}}_{{mx}}$</span>
+                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">👩‍🚀 Simulação do Movimento no Ônibus Espacial com Vetores $\vec{{v}}_x$ e $\vec{{a}}_{{mx}}$</span>
                 <div style="display:flex; gap:8px;">
                     <a href="exemplo-2-1.html" class="nav-step-btn">← Anterior</a>
                     <a href="exemplo-2-3.html" class="nav-step-btn primary">Exemplo 2.3: Carro Esportivo →</a>
@@ -391,28 +399,21 @@
         }
 
         function getAstronautState(t) {
-            // Calculate vx and amx based on the 4 segments in Figure 2.10
             let vx = 0, amx = 0;
             if (t >= 1.0 && t <= 3.0) {
-                vx = 0.8 + (1.2 - 0.8) * ((t - 1.0) / 2.0);
-                amx = 0.2;
+                vx = 0.8 + (1.2 - 0.8) * ((t - 1.0) / 2.0); amx = 0.2;
             } else if (t > 3.0 && t < 5.0) {
-                vx = 1.2; amx = 0;
+                vx = 1.2 + (1.6 - 1.2) * ((t - 3.0) / 2.0); amx = 0.2;
             } else if (t >= 5.0 && t <= 7.0) {
-                vx = 1.6 + (1.2 - 1.6) * ((t - 5.0) / 2.0);
-                amx = -0.2;
+                vx = 1.6 + (1.2 - 1.6) * ((t - 5.0) / 2.0); amx = -0.2;
             } else if (t > 7.0 && t < 9.0) {
-                vx = 1.2 + (-0.4 - 1.2) * ((t - 7.0) / 2.0);
-                amx = 0;
+                vx = 1.2 + (-0.4 - 1.2) * ((t - 7.0) / 2.0); amx = -0.8;
             } else if (t >= 9.0 && t <= 11.0) {
-                vx = -0.4 + (-1.0 - (-0.4)) * ((t - 9.0) / 2.0);
-                amx = -0.3;
+                vx = -0.4 + (-1.0 - (-0.4)) * ((t - 9.0) / 2.0); amx = -0.3;
             } else if (t > 11.0 && t < 13.0) {
-                vx = -1.0 + (-1.6 - (-1.0)) * ((t - 11.0) / 2.0);
-                amx = 0;
+                vx = -1.0 + (-1.6 - (-1.0)) * ((t - 11.0) / 2.0); amx = -0.3;
             } else if (t >= 13.0 && t <= 15.0) {
-                vx = -1.6 + (-0.8 - (-1.6)) * ((t - 13.0) / 2.0);
-                amx = 0.4;
+                vx = -1.6 + (-0.8 - (-1.6)) * ((t - 13.0) / 2.0); amx = 0.4;
             } else {
                 vx = 0.8; amx = 0;
             }
@@ -445,8 +446,13 @@
             ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
 
             const { vx, amx } = getAstronautState(t);
-            const mapX = val => w / 2 + (val / 2.0) * (w / 3);
-            const px_astro = w / 2 + Math.sin(t * 0.5) * 80;
+            const px_shuttle = 70;
+            const px_astro = px_shuttle + 80 + Math.sin(t * 0.4) * 120 + t * 8;
+
+            // Space Shuttle at Origin
+            ctx.fillStyle = '#38bdf8'; ctx.fillRect(px_shuttle - 25, cy - 25, 50, 25);
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'center';
+            ctx.fillText('🚀 Ônibus Espacial', px_shuttle, cy - 32);
 
             // Astronaut Sprite
             ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.arc(px_astro, cy - 14, 10, 0, Math.PI * 2); ctx.fill();
@@ -454,7 +460,7 @@
             ctx.fillText(`👩‍🚀 Astronauta v_x = ${vx.toFixed(2)} m/s`, px_astro, cy - 42);
 
             // Velocity Vector (Green Arrow)
-            drawVectorArrow(ctx, px_astro, cy - 14, vx * 30.0, 0, '#10b981', `v_x = ${vx.toFixed(2)}m/s`);
+            drawVectorArrow(ctx, px_astro, cy - 14, vx * 35.0, 0, '#10b981', `v_x = ${vx.toFixed(2)}m/s`);
 
             // Acceleration Vector (Red Arrow)
             if (Math.abs(amx) > 0.05) {
@@ -541,7 +547,7 @@
                 ctx.moveTo(px2, py2); ctx.lineTo(px2, toPxY_lower(seg.a));
                 ctx.stroke(); ctx.setLineDash([]);
 
-                // Upper Line Segment in vx(t) (Solid Black/White line with endpoints)
+                // Upper Line Segment in vx(t)
                 ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3;
                 ctx.beginPath(); ctx.moveTo(px1, py1); ctx.lineTo(px2, py2); ctx.stroke();
 
@@ -549,13 +555,13 @@
                 ctx.beginPath(); ctx.arc(px1, py1, 4, 0, Math.PI * 2); ctx.fill();
                 ctx.beginPath(); ctx.arc(px2, py2, 4, 0, Math.PI * 2); ctx.fill();
 
-                // Lower Step Bar in amx(t) (Bold Horizontal Bar)
+                // Lower Step Bar in amx(t)
                 const py_a = toPxY_lower(seg.a);
                 ctx.strokeStyle = '#f43f5e'; ctx.lineWidth = 4;
                 ctx.beginPath(); ctx.moveTo(px1, py_a); ctx.lineTo(px2, py_a); ctx.stroke();
             });
 
-            // Annotated Text Box from Figure 2.10
+            // Text Box from Figure 2.10
             ctx.font = '11px Inter'; ctx.fillStyle = '#cbd5e1'; ctx.textAlign = 'left';
             ctx.fillText('A inclinação da linha que liga dois pontos em um gráfico', padL + 180, midY + 40);
             ctx.fillText('da velocidade versus tempo fornece a aceleração média', padL + 180, midY + 56);
