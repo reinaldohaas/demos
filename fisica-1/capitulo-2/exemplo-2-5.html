@@ -38,6 +38,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
         }
         .back-btn {
             background: rgba(255, 255, 255, 0.08);
@@ -51,6 +53,21 @@
             transition: all 0.2s;
         }
         .back-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); }
+
+        .nav-step-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--bg-card-border);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .nav-step-btn.primary { background: var(--primary-gradient); color: white; border-color: transparent; }
+        .nav-step-btn:hover { transform: translateY(-1px); opacity: 0.9; }
+        .nav-step-disabled { opacity: 0.4; font-size: 0.85rem; font-weight: 600; color: var(--text-sub); }
 
         .statement-box {
             background: rgba(10, 16, 30, 0.92);
@@ -66,6 +83,7 @@
         }
         .statement-title h2 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: var(--accent-cyan); margin-bottom: 6px; }
         .statement-title p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; }
+
         .formula-badge {
             background: rgba(56, 189, 248, 0.1);
             border: 1px solid rgba(56, 189, 248, 0.3);
@@ -146,6 +164,30 @@
             gap: 16px;
         }
 
+        .scene-card {
+            background: #050811;
+            border: 1px solid var(--bg-card-border);
+            border-radius: 12px;
+            padding: 10px;
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vector-legend {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            display: flex;
+            gap: 14px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .plot-card {
             background: rgba(10, 16, 30, 0.9);
             border: 1px solid var(--bg-card-border);
@@ -158,19 +200,32 @@
         .plot-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-bottom: 8px; }
         .plot-wrapper { flex: 1; width: 100%; height: 100%; position: relative; background: #050811; border-radius: 8px; overflow: hidden; }
         canvas { width: 100%; height: 100%; display: block; }
+
+        .scene-nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 16, 30, 0.8);
+            border: 1px solid var(--bg-card-border);
+            padding: 12px 18px;
+            border-radius: 12px;
+        }
     </style>
 </head>
 <body>
 
     <div class="top-nav">
-        <a href="index.html" class="back-btn">← Voltar ao Catálogo do Capítulo 2</a>
-        <span style="font-size:0.85rem; color:var(--text-sub);">Capítulo 2 • Movimento Retilíneo</span>
+        <a href="index.html" class="back-btn">← Voltar ao Hub do Capítulo 2</a>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <a href="exemplo-2-4.html" class="nav-step-btn">← Exemplo Anterior</a>
+            <a href="exemplo-2-6.html" class="nav-step-btn primary">Exemplo 2.6: Integração →</a>
+        </div>
     </div>
 
     <div class="statement-box">
         <div class="statement-title">
             <h2>Exemplo 2.5: Queda Livre de uma Bola Lançada do Topo de um Edifício</h2>
-            <p>Uma bola é lançada verticalmente para cima do topo de um edifício de 50,0 m de altura com velocidade inicial v₀ = 15,0 m/s (adote g = 9,80 m/s²). Determine a altura máxima acima do topo, o tempo para retornar ao nível de lançamento, o tempo para atingir o solo e a velocidade de impacto.</p>
+            <p>Uma bola é lançada verticalmente para cima do topo de um edifício de 50,0 m de altura com v₀ = 15,0 m/s (g = 9,80 m/s²). Determine a altura máxima e a velocidade de impacto no solo.</p>
         </div>
         <div class="formula-badge">y(t) = v₀ t - ½ g t²</div>
     </div>
@@ -221,27 +276,80 @@
             </div>
 
             <div class="control-card">
-                
-        <div class="control-group"><label>Tempo t: <span id="gen-t-val">0.00 s</span></label><input type="range" id="gen-t" min="0" max="10" step="0.1" value="0" oninput="updateDemo()"></div>
-        <div class="btn-group"><button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animado</button><button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button></div>
-        
+                <div class="control-group">
+                    <label>Tempo t: <span id="ex-t-val">0.00 s</span></label>
+                    <input type="range" id="ex-t" min="0" max="5.0" step="0.04" value="0" oninput="updateDemo()">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
+                    <button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button>
+                </div>
             </div>
         </div>
 
         <div class="interactive-stage">
-            
-        <div style="background:rgba(10,16,30,0.8); border:1px solid var(--bg-card-border); border-radius:12px; padding:10px; height:140px;">
-            <canvas id="canvas-stage"></canvas>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-            <div class="plot-card"><div class="plot-header"><span>Gráfico Principal</span></div><div class="plot-wrapper"><canvas id="canvas-plot-1"></canvas></div></div>
-            <div class="plot-card"><div class="plot-header"><span>Gráfico Secundário</span></div><div class="plot-wrapper"><canvas id="canvas-plot-2"></canvas></div></div>
-        </div>
-        
+            <div class="scene-nav-bar">
+                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">📺 Animação Física com Vetores Velocidade $\vec{v}$ e Aceleração $\vec{a}$</span>
+                <div style="display:flex; gap:8px;">
+                    <a href="exemplo-2-4.html" class="nav-step-btn">← Exemplo Anterior</a>
+                    <a href="exemplo-2-6.html" class="nav-step-btn primary">Exemplo 2.6: Integração →</a>
+                </div>
+            </div>
+
+            <div class="scene-card">
+                <div class="vector-legend">
+                    <span style="color:#10b981;">➔ Vetor Velocidade v(t)</span>
+                    <span style="color:#f43f5e;">➔ Vetor Aceleração a</span>
+                </div>
+                <canvas id="canvas-scene"></canvas>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div class="plot-card">
+                    <div class="plot-header"><span>Gráfico Posição x(t)</span></div>
+                    <div class="plot-wrapper"><canvas id="canvas-plot-x"></canvas></div>
+                </div>
+                <div class="plot-card">
+                    <div class="plot-header"><span>Gráfico Velocidade v(t)</span></div>
+                    <div class="plot-wrapper"><canvas id="canvas-plot-v"></canvas></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
+        let timer = null, running = false;
+
+        function togglePlay() {
+            running = !running;
+            document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Animação';
+            if (running && !timer) timer = setInterval(loop, 30);
+        }
+
+        function resetDemo() {
+            running = false;
+            if (timer) { clearInterval(timer); timer = null; }
+            document.getElementById('btn-play').innerText = '▶ Simular Animação';
+            document.getElementById('ex-t').value = 0;
+            updateDemo();
+        }
+
+        function loop() {
+            if (!running) return;
+            const input = document.getElementById('ex-t');
+            let t = parseFloat(input.value) + parseFloat(input.step || 0.04);
+            const maxVal = parseFloat(input.max || 5.0);
+            if (t > maxVal) {
+                t = maxVal;
+                running = false;
+                clearInterval(timer);
+                timer = null;
+                document.getElementById('btn-play').innerText = '▶ Simular Animação';
+            }
+            input.value = t;
+            updateDemo();
+        }
+
         function getCanvasCtx(id) {
             const canvas = document.getElementById(id);
             if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
@@ -254,37 +362,84 @@
             return { canvas, ctx, w: rect.width, h: rect.height };
         }
 
-        
-        let timer = null, running = false;
-        function togglePlay() { running = !running; document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Animado'; if (running && !timer) timer = setInterval(loop, 30); }
-        function resetDemo() { running = false; if (timer) { clearInterval(timer); timer = null; } document.getElementById('btn-play').innerText = '▶ Simular Animado'; document.getElementById('gen-t').value = 0; updateDemo(); }
-        function loop() { if (!running) return; let t = parseFloat(document.getElementById('gen-t').value) + 0.1; if (t > 10.0) { t = 10.0; running = false; clearInterval(timer); timer = null; document.getElementById('btn-play').innerText = '▶ Simular Animado'; } document.getElementById('gen-t').value = t; updateDemo(); }
+        function drawVectorArrow(ctx, x, y, dx, dy, color, label) {
+            const len = Math.hypot(dx, dy);
+            if (len < 2) return;
+            const angle = Math.atan2(dy, dx);
+            const headLen = Math.min(10, len * 0.35);
+
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); ctx.stroke();
+
+            ctx.beginPath(); ctx.moveTo(x + dx, y + dy);
+            ctx.lineTo(x + dx - headLen * Math.cos(angle - Math.PI / 6), y + dy - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(x + dx - headLen * Math.cos(angle + Math.PI / 6), y + dy - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath(); ctx.fill();
+
+            if (label) {
+                ctx.font = 'bold 10px Inter'; ctx.textAlign = 'center';
+                ctx.fillText(label, x + dx * 0.5, y + dy - 6);
+            }
+        }
 
         function updateDemo() {
-            const t = parseFloat(document.getElementById('gen-t').value); document.getElementById('gen-t-val').innerText = t.toFixed(2) + ' s';
-            drawStage(t); drawPlot1(t); drawPlot2(t);
+            const t = parseFloat(document.getElementById('ex-t').value);
+            document.getElementById('ex-t-val').innerText = t.toFixed(2) + ' s';
+            drawScene(t); drawPlotX(t); drawPlotV(t);
         }
-        function drawStage(t) {
-            const { ctx, w, h } = getCanvasCtx('canvas-stage'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-            const cy = h / 2; ctx.strokeStyle = '#334155'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy); ctx.stroke();
-            const px = 20 + (t / 10.0) * (w - 40); ctx.fillStyle = '#38bdf8'; ctx.fillRect(px - 12, cy - 10, 24, 10);
-        }
-        function drawPlot1(t) {
-            const { ctx, w, h } = getCanvasCtx('canvas-plot-1'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-            const padL = 35, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
-            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
-            ctx.moveTo(padL, h - padB); ctx.lineTo(padL + (t / 10.0) * gW, (h - padB) - (t / 10.0) * gH); ctx.stroke();
-        }
-        function drawPlot2(t) {
-            const { ctx, w, h } = getCanvasCtx('canvas-plot-2'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-            const padL = 35, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
-            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath();
-            ctx.moveTo(padL, h - padB); ctx.lineTo(padL + (t / 10.0) * gW, (h - padB) - (t / 10.0) * gH); ctx.stroke();
-        }
-        window.onload = function() { updateDemo(); };
+
         
+function drawScene(t) {
+    const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return; ctx.clearRect(0,0,w,h);
+    const groundY = h - 30; const topY = groundY - 100;
+    ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,w,h);
+
+    // Building
+    ctx.fillStyle = '#334155'; ctx.fillRect(60, topY, 90, 100);
+    ctx.strokeStyle = '#475569'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(10, groundY); ctx.lineTo(w - 10, groundY); ctx.stroke();
+
+    const y_curr = 15.0 * t - 4.90 * t * t;
+    const v_curr = 15.0 - 9.80 * t;
+    const a_curr = -9.80;
+
+    const ballY = topY - (y_curr / 20.0) * 60;
+    const px_ball = 180;
+
+    // Ball
+    ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px_ball, ballY, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'left';
+    ctx.fillText(`🏀 y = ${y_curr.toFixed(1)}m`, px_ball + 15, ballY);
+
+    // Vector Velocity (Green vertical arrow)
+    drawVectorArrow(ctx, px_ball, ballY, 0, -v_curr * 1.5, '#10b981', `vy = ${v_curr.toFixed(1)}m/s`);
+
+    // Vector Acceleration (Red vertical arrow down)
+    drawVectorArrow(ctx, px_ball + 25, ballY, 0, 9.80 * 2.0, '#f43f5e', `g = 9,8m/s²`);
+}
+
+        
+function drawPlotX(t_curr) {
+    const { ctx, w, h } = getCanvasCtx('canvas-plot-x'); if (!ctx) return; ctx.clearRect(0,0,w,h);
+    const padL = 40, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
+    const toPxX = t => padL + (t / 5.0) * gW, toPxY = y => (h - padB) - ((y + 55) / 75.0) * gH;
+    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
+    for (let t = 0; t <= 5.0; t += 0.05) { const y = 15.0 * t - 4.90 * t * t; if (t === 0) ctx.moveTo(toPxX(t), toPxY(y)); else ctx.lineTo(toPxX(t), toPxY(y)); } ctx.stroke();
+    ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(toPxX(1.53), toPxY(11.48), 5, 0, Math.PI * 2); ctx.fill();
+}
+
+        
+function drawPlotV(t_curr) {
+    const { ctx, w, h } = getCanvasCtx('canvas-plot-v'); if (!ctx) return; ctx.clearRect(0,0,w,h);
+    const padL = 40, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
+    const toPxX = t => padL + (t / 5.0) * gW, toPxY = v => (h - padB) - ((v + 35) / 55.0) * gH;
+    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+    ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(toPxX(0), toPxY(15.0)); ctx.lineTo(toPxX(5.0), toPxY(-34.0)); ctx.stroke();
+}
+
+
+        window.onload = function() { updateDemo(); };
+        window.onresize = function() { updateDemo(); };
     </script>
 </body>
 </html>
