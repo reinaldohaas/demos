@@ -2,10 +2,228 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=fisica-1/index.html">
-    <title>Demos de Física I | Redirecionando...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Geral de Demonstrativos e Simulações Físicas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070a12;
+            --bg-card: rgba(15, 23, 42, 0.88);
+            --bg-card-border: rgba(56, 189, 248, 0.25);
+            --accent-cyan: #38bdf8;
+            --accent-purple: #a855f7;
+            --accent-gold: #fbbf24;
+            --accent-emerald: #10b981;
+            --accent-rose: #f43f5e;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.18) 0%, transparent 50%);
+            background-attachment: fixed;
+            padding: 30px 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .header p { color: var(--text-sub); font-size: 1.1rem; }
+
+        .subject-section {
+            background: rgba(10, 16, 30, 0.75);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+        .subject-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.2);
+        }
+        .card-icon { font-size: 1.8rem; margin-bottom: 8px; }
+        .card-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--text-main); margin-bottom: 6px; }
+        .card-desc { font-size: 0.85rem; color: var(--text-sub); line-height: 1.5; margin-bottom: 14px; }
+        .card-btn {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.82rem;
+            text-align: center;
+        }
+        .card:hover .card-btn { background: var(--accent-cyan); color: #020617; }
+    </style>
 </head>
 <body>
-    <p>Redirecionando para o catálogo de Física I: <a href="fisica-1/index.html">fisica-1/index.html</a></p>
+    <div class="container">
+        <div class="header">
+            <h1>🌐 PORTAL DE DEMONSTRAÇÕES E SIMULAÇÕES FÍSICAS</h1>
+            <p>Catálogo Geral Organizado por Assuntos e Áreas da Física e Matemática</p>
+        </div>
+
+        <!-- FÍSICA I - MECÂNICA -->
+        <div class="subject-section">
+            <div class="subject-title">📘 1. Física I — Mecânica Clássica (Sears & Zemansky)</div>
+            <div class="grid">
+                <a href="fisica-1/index.html" class="card">
+                    <div>
+                        <div class="card-icon">📚</div>
+                        <div class="card-title">Catálogo Completo de Física I</div>
+                        <div class="card-desc">Hub geral com todos os exemplos interativos dos Capítulos 1, 2, 3, 4 e 5.</div>
+                    </div>
+                    <div class="card-btn">Abrir Índice Geral de Física I →</div>
+                </a>
+                <a href="fisica-1/capitulo-1/index.html" class="card">
+                    <div>
+                        <div class="card-icon">📐</div>
+                        <div class="card-title">Capítulo 1: Unidades, Grandezas e Vetores</div>
+                        <div class="card-desc">Exemplos 1.1 ao 1.12 com conversão de unidades, produto escalar e vetorial.</div>
+                    </div>
+                    <div class="card-btn">Abrir Capítulo 1 →</div>
+                </a>
+                <a href="fisica-1/capitulo-2/index.html" class="card">
+                    <div>
+                        <div class="card-icon">📘</div>
+                        <div class="card-title">Capítulo 2: Movimento Retilíneo</div>
+                        <div class="card-desc">Exemplos 2.1 ao 2.7 (O Leopardo, Astronauta, Frenagem, Queda Livre e Integração).</div>
+                    </div>
+                    <div class="card-btn">Abrir Capítulo 2 →</div>
+                </a>
+                <a href="fisica-1/capitulo-3/index.html" class="card">
+                    <div>
+                        <div class="card-icon">🚀</div>
+                        <div class="card-title">Capítulo 3: Movimento em 2D e 3D</div>
+                        <div class="card-desc">Exemplos 3.1 ao 3.8 (Projéteis, MCU, Movimento Não-Uniforme e Velocidade Relativa).</div>
+                    </div>
+                    <div class="card-btn">Abrir Capítulo 3 →</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- MECÂNICA AVANÇADA & GEOFÍSICA -->
+        <div class="subject-section">
+            <div class="subject-title">🌐 2. Mecânica Avançada & Geofísica</div>
+            <div class="grid">
+                <a href="foucault-pendulum/index.html" class="card">
+                    <div>
+                        <div class="card-icon">🕰️</div>
+                        <div class="card-title">Pêndulo de Foucault</div>
+                        <div class="card-desc">Simulação 3D/2D da rotação da Terra e precessão do plano de oscilação do pêndulo em função da latitude.</div>
+                    </div>
+                    <div class="card-btn">Abrir Pêndulo de Foucault →</div>
+                </a>
+                <a href="rossby-radius/index.html" class="card">
+                    <div>
+                        <div class="card-icon">🌊</div>
+                        <div class="card-title">Raio de Deformação de Rossby</div>
+                        <div class="card-desc">Fluidos geofísicos, ajuste geostrófico, rotação e ondas atmosféricas/oceânicas.</div>
+                    </div>
+                    <div class="card-btn">Abrir Raio de Rossby →</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- OSCILAÇÕES & ONDAS -->
+        <div class="subject-section">
+            <div class="subject-title">🌊 3. Oscilações, Ondas e Sistemas Dinâmicos</div>
+            <div class="grid">
+                <a href="harmonic-oscillator/index.html" class="card">
+                    <div>
+                        <div class="card-icon">〰️</div>
+                        <div class="card-title">Oscilador Harmônico Simples e Amortecido</div>
+                        <div class="card-desc">Massa-mola, amortecimento subcrítico, crítico e supercrítico com gráficos de fase e energia.</div>
+                    </div>
+                    <div class="card-btn">Abrir Oscilador Harmônico →</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- METEOROLOGIA & TEMPESTADES -->
+        <div class="subject-section">
+            <div class="subject-title">🌪️ 4. Meteorologia & Tempestades Severas</div>
+            <div class="grid">
+                <a href="supercell-splat-spin/index.html" class="card">
+                    <div>
+                        <div class="card-icon">🌀</div>
+                        <div class="card-title">Supercélulas & Vorticidade</div>
+                        <div class="card-desc">Dinâmica de correntes ascendentes, inclinação de vorticidade horizontal e cisalhamento do vento.</div>
+                    </div>
+                    <div class="card-btn">Abrir Supercélula & Spin →</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- GEOMETRIA & ÁLGEBRA -->
+        <div class="subject-section">
+            <div class="subject-title">📐 5. Geometria Computacional & Matemática</div>
+            <div class="grid">
+                <a href="geometric-quadratic/index.html" class="card">
+                    <div>
+                        <div class="card-icon">📊</div>
+                        <div class="card-title">Geometria Quadrática Interativa</div>
+                        <div class="card-desc">Formas quadráticas, parábolas, superfícies 2D/3D e interpretação geométrica.</div>
+                    </div>
+                    <div class="card-btn">Abrir Geometria Quadrática →</div>
+                </a>
+                <a href="exercicios/index.html" class="card">
+                    <div>
+                        <div class="card-icon">📝</div>
+                        <div class="card-title">Banco de Exercícios Interativos</div>
+                        <div class="card-desc">Conjuntos de problemas práticos com verificação de respostas em tempo real.</div>
+                    </div>
+                    <div class="card-btn">Abrir Exercícios →</div>
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
