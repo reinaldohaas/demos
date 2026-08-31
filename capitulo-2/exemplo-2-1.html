@@ -187,7 +187,7 @@
             <div class="item-content">
                 <div class="item-title">Deslocamento Δx no intervalo de t₁ = 1,0 s a t₂ = 2,0 s</div>
                 <div class="item-formula"><code>Δx = x(t₂) - x(t₁)</code></div>
-                <div class="item-calc" id="calc-item-a">Em t₁ = 1,0 s: x(1,0) = 25,0 m. Em t₂ = 2,0 s: x(2,0) = 40,0 m. Portanto, Δx = 40,0 m - 25,0 m = 15,0 m.</div>
+                <div class="item-calc">Em t₁ = 1,0 s: x(1,0) = 25,0 m. Em t₂ = 2,0 s: x(2,0) = 40,0 m. Portanto, Δx = 40,0 m - 25,0 m = 15,0 m.</div>
             </div>
         </div>
         
@@ -196,7 +196,7 @@
             <div class="item-content">
                 <div class="item-title">Velocidade Média v_méd no intervalo</div>
                 <div class="item-formula"><code>v_méd = Δx / Δt</code></div>
-                <div class="item-calc" id="calc-item-b">v_méd = (40,0 m - 25,0 m) / (2,0 s - 1,0 s) = 15,0 m / 1,0 s = 15,0 m/s (inclinação da Reta Secante entre t₁ e t₂).</div>
+                <div class="item-calc">v_méd = (40,0 m - 25,0 m) / (2,0 s - 1,0 s) = 15,0 m / 1,0 s = 15,0 m/s (inclinação da Reta Secante entre t₁ e t₂).</div>
             </div>
         </div>
         
@@ -205,7 +205,7 @@
             <div class="item-content">
                 <div class="item-title">Velocidade Instantânea v(t) em t = 1,0 s</div>
                 <div class="item-formula"><code>v(t) = dx/dt = 10,0 t (m/s)</code></div>
-                <div class="item-calc" id="calc-item-c">Derivando x(t) em relação ao tempo: v(t) = 10,0 t m/s. Em t = 1,0 s: v(1,0) = 10,0 × 1,0 = 10,0 m/s (inclinação da Reta Tangente no ponto t = 1,0 s).</div>
+                <div class="item-calc">Derivando x(t) em relação ao tempo: v(t) = 10,0 t m/s. Em t = 1,0 s: v(1,0) = 10,0 × 1,0 = 10,0 m/s (inclinação da Reta Tangente no ponto t = 1,0 s).</div>
             </div>
         </div>
         
@@ -214,7 +214,7 @@
             <div class="item-content">
                 <div class="item-title">Convergência da Secante para a Tangente</div>
                 <div class="item-formula"><code>lim (Δt → 0) Δx / Δt = dx / dt</code></div>
-                <div class="item-calc" id="calc-item-d">Ao reduzir Δt de 1,0 s para 0,001 s, a velocidade média converge de 15,0 m/s para o valor exato da velocidade instantânea: 10,0 m/s.</div>
+                <div class="item-calc">Ao reduzir Δt de 1,0 s para 0,001 s, a velocidade média converge de 15,0 m/s para o valor exato da velocidade instantânea: 10,0 m/s.</div>
             </div>
         </div>
         
@@ -222,38 +222,23 @@
 
             <div class="control-card">
                 
-<div class="control-group">
-    <label>Tempo t: <span id="leo-t-val">0.00 s</span></label>
-    <input type="range" id="leo-t" min="0" max="3" step="0.02" value="0" oninput="updateDemo()">
-</div>
-<div class="control-group">
-    <label>Intervalo Δt: <span id="leo-dt-val">1.000 s</span></label>
-    <input type="range" id="leo-dt" min="0.001" max="1.5" step="0.001" value="1.0" oninput="updateDemo()">
-</div>
-<div class="btn-group">
-    <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animado</button>
-    <button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button>
-</div>
-
+        <div class="control-group"><label>Tempo t: <span id="leo-t-val">0.00 s</span></label><input type="range" id="leo-t" min="0" max="3" step="0.02" value="0" oninput="updateDemo()"></div>
+        <div class="control-group"><label>Intervalo Δt: <span id="leo-dt-val">1.000 s</span></label><input type="range" id="leo-dt" min="0.001" max="1.5" step="0.001" value="1.0" oninput="updateDemo()"></div>
+        <div class="btn-group"><button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animado</button><button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button></div>
+        
             </div>
         </div>
 
         <div class="interactive-stage">
             
-<div style="background:rgba(10,16,30,0.8); border:1px solid var(--bg-card-border); border-radius:12px; padding:10px; height:130px;">
-    <canvas id="canvas-track"></canvas>
-</div>
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-    <div class="plot-card">
-        <div class="plot-header"><span>Gráfico x(t): Posição vs Tempo</span><span style="color:#38bdf8;">Secante & Tangente</span></div>
-        <div class="plot-wrapper"><canvas id="canvas-plot-x"></canvas></div>
-    </div>
-    <div class="plot-card">
-        <div class="plot-header"><span>Gráfico v(t): Velocidade vs Tempo</span><span style="color:#10b981;">v(t) = 10t</span></div>
-        <div class="plot-wrapper"><canvas id="canvas-plot-v"></canvas></div>
-    </div>
-</div>
-
+        <div style="background:rgba(10,16,30,0.8); border:1px solid var(--bg-card-border); border-radius:12px; padding:10px; height:130px;">
+            <canvas id="canvas-track"></canvas>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div class="plot-card"><div class="plot-header"><span>Gráfico x(t): Posição vs Tempo</span><span style="color:#38bdf8;">Secante & Tangente</span></div><div class="plot-wrapper"><canvas id="canvas-plot-x"></canvas></div></div>
+            <div class="plot-card"><div class="plot-header"><span>Gráfico v(t): Velocidade vs Tempo</span><span style="color:#10b981;">v(t) = 10t</span></div><div class="plot-wrapper"><canvas id="canvas-plot-v"></canvas></div></div>
+        </div>
+        
         </div>
     </div>
 
@@ -271,49 +256,46 @@
         }
 
         
-let timer = null, running = false;
-function togglePlay() { running = !running; document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Animado'; if (running && !timer) timer = setInterval(loop, 30); }
-function resetDemo() { running = false; if (timer) { clearInterval(timer); timer = null; } document.getElementById('btn-play').innerText = '▶ Simular Animado'; document.getElementById('leo-t').value = 0; updateDemo(); }
-function loop() { if (!running) return; let t = parseFloat(document.getElementById('leo-t').value) + 0.02; if (t > 3.0) { t = 3.0; running = false; clearInterval(timer); timer = null; document.getElementById('btn-play').innerText = '▶ Simular Animado'; } document.getElementById('leo-t').value = t; updateDemo(); }
+        let timer = null, running = false;
+        function togglePlay() { running = !running; document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Animado'; if (running && !timer) timer = setInterval(loop, 30); }
+        function resetDemo() { running = false; if (timer) { clearInterval(timer); timer = null; } document.getElementById('btn-play').innerText = '▶ Simular Animado'; document.getElementById('leo-t').value = 0; updateDemo(); }
+        function loop() { if (!running) return; let t = parseFloat(document.getElementById('leo-t').value) + 0.02; if (t > 3.0) { t = 3.0; running = false; clearInterval(timer); timer = null; document.getElementById('btn-play').innerText = '▶ Simular Animado'; } document.getElementById('leo-t').value = t; updateDemo(); }
 
-function updateDemo() {
-    const t = parseFloat(document.getElementById('leo-t').value);
-    const dt = parseFloat(document.getElementById('leo-dt').value);
-    document.getElementById('leo-t-val').innerText = t.toFixed(2) + ' s';
-    document.getElementById('leo-dt-val').innerText = dt.toFixed(3) + ' s';
-    drawTrack(t); drawPlotX(t, dt); drawPlotV(t);
-}
-
-function drawTrack(t) {
-    const { ctx, w, h } = getCanvasCtx('canvas-track'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-    const cy = h / 2 + 10; ctx.strokeStyle = '#334155'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy); ctx.stroke();
-    const x_t = 20.0 + 5.0 * t * t; const px_leo = 20 + (x_t / 60) * (w - 40);
-    ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px_leo, cy - 6, 8, 0, Math.PI * 2); ctx.fill();
-    ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#fbbf24'; ctx.fillText(`🐆 x = ${x_t.toFixed(1)}m`, px_leo - 25, cy - 18);
-}
-function drawPlotX(t_curr, dt) {
-    const { ctx, w, h } = getCanvasCtx('canvas-plot-x'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-    const padL = 35, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
-    const toPxX = t => padL + (t / 3.0) * gW, toPxY = x => (h - padB) - (x / 65.0) * gH;
-    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
-    for (let t = 0; t <= 3.0; t += 0.05) { const x = 20.0 + 5.0 * t * t; if (t === 0) ctx.moveTo(toPxX(t), toPxY(x)); else ctx.lineTo(toPxX(t), toPxY(x)); } ctx.stroke();
-    const t1 = 1.0, t2 = t1 + dt, x1 = 25.0, x2 = 20.0 + 5.0 * t2 * t2, v_med = (x2 - x1) / dt;
-    ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]); ctx.beginPath();
-    ctx.moveTo(toPxX(0.2), toPxY(x1 + v_med * (0.2 - t1))); ctx.lineTo(toPxX(2.5), toPxY(x1 + v_med * (2.5 - t1))); ctx.stroke(); ctx.setLineDash([]);
-    ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2; ctx.beginPath();
-    ctx.moveTo(toPxX(0.2), toPxY(x1 + 10.0 * (0.2 - t1))); ctx.lineTo(toPxX(2.2), toPxY(x1 + 10.0 * (2.2 - t1))); ctx.stroke();
-}
-function drawPlotV(t_curr) {
-    const { ctx, w, h } = getCanvasCtx('canvas-plot-v'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-    const padL = 35, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
-    const toPxX = t => padL + (t / 3.0) * gW, toPxY = v => (h - padB) - (v / 35.0) * gH;
-    ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-    ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(toPxX(0), toPxY(0)); ctx.lineTo(toPxX(3.0), toPxY(30.0)); ctx.stroke();
-    if (t_curr > 0) { ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.arc(toPxX(t_curr), toPxY(10.0 * t_curr), 6, 0, Math.PI * 2); ctx.fill(); }
-}
-window.onload = function() { updateDemo(); };
-
+        function updateDemo() {
+            const t = parseFloat(document.getElementById('leo-t').value); const dt = parseFloat(document.getElementById('leo-dt').value);
+            document.getElementById('leo-t-val').innerText = t.toFixed(2) + ' s'; document.getElementById('leo-dt-val').innerText = dt.toFixed(3) + ' s';
+            drawTrack(t); drawPlotX(t, dt); drawPlotV(t);
+        }
+        function drawTrack(t) {
+            const { ctx, w, h } = getCanvasCtx('canvas-track'); if (!ctx) return; ctx.clearRect(0,0,w,h);
+            const cy = h / 2 + 10; ctx.strokeStyle = '#334155'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy); ctx.stroke();
+            const x_t = 20.0 + 5.0 * t * t; const px_leo = 20 + (x_t / 60) * (w - 40);
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px_leo, cy - 6, 8, 0, Math.PI * 2); ctx.fill();
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#fbbf24'; ctx.fillText(`🐆 x = ${x_t.toFixed(1)}m`, px_leo - 25, cy - 18);
+        }
+        function drawPlotX(t_curr, dt) {
+            const { ctx, w, h } = getCanvasCtx('canvas-plot-x'); if (!ctx) return; ctx.clearRect(0,0,w,h);
+            const padL = 35, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
+            const toPxX = t => padL + (t / 3.0) * gW, toPxY = x => (h - padB) - (x / 65.0) * gH;
+            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
+            for (let t = 0; t <= 3.0; t += 0.05) { const x = 20.0 + 5.0 * t * t; if (t === 0) ctx.moveTo(toPxX(t), toPxY(x)); else ctx.lineTo(toPxX(t), toPxY(x)); } ctx.stroke();
+            const t1 = 1.0, t2 = t1 + dt, x1 = 25.0, x2 = 20.0 + 5.0 * t2 * t2, v_med = (x2 - x1) / dt;
+            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]); ctx.beginPath();
+            ctx.moveTo(toPxX(0.2), toPxY(x1 + v_med * (0.2 - t1))); ctx.lineTo(toPxX(2.5), toPxY(x1 + v_med * (2.5 - t1))); ctx.stroke(); ctx.setLineDash([]);
+            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2; ctx.beginPath();
+            ctx.moveTo(toPxX(0.2), toPxY(x1 + 10.0 * (0.2 - t1))); ctx.lineTo(toPxX(2.2), toPxY(x1 + 10.0 * (2.2 - t1))); ctx.stroke();
+        }
+        function drawPlotV(t_curr) {
+            const { ctx, w, h } = getCanvasCtx('canvas-plot-v'); if (!ctx) return; ctx.clearRect(0,0,w,h);
+            const padL = 35, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
+            const toPxX = t => padL + (t / 3.0) * gW, toPxY = v => (h - padB) - (v / 35.0) * gH;
+            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(toPxX(0), toPxY(0)); ctx.lineTo(toPxX(3.0), toPxY(30.0)); ctx.stroke();
+            if (t_curr > 0) { ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.arc(toPxX(t_curr), toPxY(10.0 * t_curr), 6, 0, Math.PI * 2); ctx.fill(); }
+        }
+        window.onload = function() { updateDemo(); };
+        
     </script>
 </body>
 </html>
