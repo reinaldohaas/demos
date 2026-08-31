@@ -317,7 +317,7 @@
         <!-- Right Column: Interactive Stage + Controls Panel Together! -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.92rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa (Vetores Separados: Velocidade Acima | Aceleração Abaixo)</span>
+                <span style="font-size:0.92rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa com Telemetria HUD no Canto Superior Esquerdo</span>
                 <div style="display:flex; gap:8px;">
                     <a href="exemplo-2-2.html" class="nav-step-btn">← Exemplo Anterior</a>
                     <a href="exemplo-2-4.html" class="nav-step-btn primary">Exemplo 2.4: MRUV Frenagem →</a>
@@ -327,8 +327,8 @@
             <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
-                    <span style="color:#10b981;">➔ Vetor Velocidade v (Acima)</span>
-                    <span style="color:#f43f5e;">➔ Vetor Aceleração a (Abaixo)</span>
+                    <span style="color:#10b981;">➔ Vetor Velocidade v</span>
+                    <span style="color:#f43f5e;">➔ Vetor Aceleração a</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
             </div>
@@ -417,7 +417,7 @@
                 // Draw solid background pill behind label to prevent crowding/overlapping!
                 ctx.font = 'bold 12px Inter';
                 const textWidth = ctx.measureText(label).width;
-                ctx.fillStyle = 'rgba(5, 8, 17, 0.9)';
+                ctx.fillStyle = 'rgba(5, 8, 17, 0.92)';
                 ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
                 ctx.strokeStyle = color; ctx.lineWidth = 1;
                 ctx.strokeRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
@@ -439,28 +439,40 @@
             ctx.clearRect(0,0,w,h);
             ctx.fillStyle = '#070a14'; ctx.fillRect(0,0,w,h);
 
-            const padL = 60, padB = 40, gW = w - padL - 40;
+            const padL = 60, padB = 60, gW = w - padL - 40;
             const toPxX = x => padL + (x / 7.0) * gW;
+            const trackY = h - padB;
 
             ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
-            ctx.beginPath(); ctx.moveTo(padL, h - padB); ctx.lineTo(w - 20, h - padB); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(padL, trackY); ctx.lineTo(w - 20, trackY); ctx.stroke();
 
             const x_t = 3.0 * t - 0.10 * t * t * t;
             const v_t = 3.0 - 0.30 * t * t;
             const a_t = -0.60 * t;
 
             const carX = toPxX(x_t);
-            const carY = h - padB - 20;
 
-            ctx.fillStyle = '#38bdf8'; ctx.fillRect(carX - 16, carY - 10, 32, 16);
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
-            ctx.fillText(`🏎️ Carro (x = ${x_t.toFixed(2)}m)`, carX + 20, carY - 18);
+            ctx.fillStyle = '#38bdf8'; ctx.fillRect(carX - 16, trackY - 14, 32, 14);
+            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'center';
+            ctx.fillText(`🏎️ Carro`, carX, trackY - 24);
 
-            // SEPARATED VECTORS: Velocity ABOVE (carY - 22), Acceleration BELOW (carY + 22)
-            drawVectorArrow(ctx, carX, carY - 22, v_t * 25.0, 0, '#10b981', `v = ${v_t.toFixed(2)}m/s (acima)`);
-            drawVectorArrow(ctx, carX, carY + 22, a_t * 25.0, 0, '#f43f5e', `a = ${a_t.toFixed(2)}m/s² (abaixo)`);
+            // Clean Vector Arrows: v ABOVE, a BELOW
+            drawVectorArrow(ctx, carX, trackY - 45, v_t * 25.0, 0, '#10b981', `v = ${v_t.toFixed(2)} m/s`);
+            drawVectorArrow(ctx, carX, trackY + 30, a_t * 25.0, 0, '#f43f5e', `a = ${a_t.toFixed(2)} m/s²`, true);
+
+            // TOP-LEFT HUD DASHBOARD
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(16, 16, 210, 85);
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)'; ctx.lineWidth = 1;
+            ctx.strokeRect(16, 16, 210, 85);
+
+            ctx.font = 'bold 11px Inter'; ctx.textAlign = 'left';
+            ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(2)} s`, 26, 36);
+            ctx.fillStyle = '#fbbf24'; ctx.fillText(`📍 Posição x: ${x_t.toFixed(2)} m`, 26, 54);
+            ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Velocidade v: ${v_t.toFixed(2)} m/s`, 26, 72);
+            ctx.fillStyle = '#f43f5e'; ctx.fillText(`🔴 Aceleração a: ${a_t.toFixed(2)} m/s²`, 26, 90);
         }
-        
+
 
         window.onload = function() {
             updateDemo();

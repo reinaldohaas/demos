@@ -350,7 +350,7 @@
         <!-- Right Column: Interactive Stage + Controls Panel Together! -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.92rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa (Vetores Separados: Velocidade Acima | Aceleração Abaixo)</span>
+                <span style="font-size:0.92rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa com Telemetria HUD no Canto Superior Esquerdo</span>
                 <div style="display:flex; gap:8px;">
                     <a href="exemplo-2-1.html" class="nav-step-btn">← Exemplo Anterior</a>
                     <a href="exemplo-2-3.html" class="nav-step-btn primary">Exemplo 2.3: Inversão de Sentido →</a>
@@ -360,8 +360,8 @@
             <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
-                    <span style="color:#10b981;">➔ Vetor Velocidade v (Acima)</span>
-                    <span style="color:#f43f5e;">➔ Vetor Aceleração a (Abaixo)</span>
+                    <span style="color:#10b981;">➔ Vetor Velocidade v</span>
+                    <span style="color:#f43f5e;">➔ Vetor Aceleração a</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
             </div>
@@ -450,7 +450,7 @@
                 // Draw solid background pill behind label to prevent crowding/overlapping!
                 ctx.font = 'bold 12px Inter';
                 const textWidth = ctx.measureText(label).width;
-                ctx.fillStyle = 'rgba(5, 8, 17, 0.9)';
+                ctx.fillStyle = 'rgba(5, 8, 17, 0.92)';
                 ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
                 ctx.strokeStyle = color; ctx.lineWidth = 1;
                 ctx.strokeRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
@@ -497,15 +497,23 @@
             const astroY = h / 2;
 
             ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.arc(astroX, astroY, 13, 0, Math.PI*2); ctx.fill();
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
-            ctx.fillText(`👩‍🚀 Astronauta (t = ${t.toFixed(1)}s)`, astroX + 18, astroY - 20);
-            ctx.fillText(`v_x = ${vx.toFixed(2)} m/s`, astroX + 18, astroY + 5);
+            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'center';
+            ctx.fillText(`👩‍🚀 Astronauta`, astroX, astroY - 24);
 
-            // SEPARATED VECTORS: Velocity ABOVE (astroY - 25), Acceleration BELOW (astroY + 25)
-            drawVectorArrow(ctx, astroX, astroY - 25, vx * 45.0, 0, '#10b981', `v_x = ${vx.toFixed(2)}m/s (acima)`);
-            drawVectorArrow(ctx, astroX, astroY + 25, (vx >= 0 ? 10 : -10), 0, '#f43f5e', `sentido aceleração (abaixo)`);
+            // Clean Vector Arrow (Above)
+            drawVectorArrow(ctx, astroX, astroY - 45, vx * 45.0, 0, '#10b981', `v = ${vx.toFixed(2)} m/s`);
+
+            // TOP-LEFT HUD TELEMETRY DASHBOARD
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(16, 16, 210, 65);
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)'; ctx.lineWidth = 1;
+            ctx.strokeRect(16, 16, 210, 65);
+
+            ctx.font = 'bold 11px Inter'; ctx.textAlign = 'left';
+            ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(1)} s`, 26, 36);
+            ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Velocidade v_x: ${vx.toFixed(2)} m/s`, 26, 56);
         }
-        
+
 
         window.onload = function() {
             updateDemo();

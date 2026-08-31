@@ -316,7 +316,7 @@
         <!-- Right Column: Interactive Stage + Controls Panel Together! -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.92rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa (Vetores Separados: Velocidade Acima | Aceleração Abaixo)</span>
+                <span style="font-size:0.92rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa com Telemetria HUD no Canto Superior Esquerdo</span>
                 <div style="display:flex; gap:8px;">
                     <a href="exemplo-2-4.html" class="nav-step-btn">← Exemplo Anterior</a>
                     <a href="exemplo-2-6.html" class="nav-step-btn primary">Exemplo 2.6: Integração →</a>
@@ -326,8 +326,8 @@
             <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
-                    <span style="color:#10b981;">➔ Vetor Velocidade v (Acima)</span>
-                    <span style="color:#f43f5e;">➔ Vetor Aceleração a (Abaixo)</span>
+                    <span style="color:#10b981;">➔ Vetor Velocidade v</span>
+                    <span style="color:#f43f5e;">➔ Vetor Aceleração a</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
             </div>
@@ -416,7 +416,7 @@
                 // Draw solid background pill behind label to prevent crowding/overlapping!
                 ctx.font = 'bold 12px Inter';
                 const textWidth = ctx.measureText(label).width;
-                ctx.fillStyle = 'rgba(5, 8, 17, 0.9)';
+                ctx.fillStyle = 'rgba(5, 8, 17, 0.92)';
                 ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
                 ctx.strokeStyle = color; ctx.lineWidth = 1;
                 ctx.strokeRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
@@ -438,7 +438,7 @@
             ctx.clearRect(0,0,w,h);
             ctx.fillStyle = '#070a14'; ctx.fillRect(0,0,w,h);
 
-            const padB = 40, padL = 80;
+            const padB = 40, padL = 100;
             const toPxY = y => (h - padB) - (y / 70.0) * (h - padB - 30);
 
             // Building Structure (50m)
@@ -449,18 +449,30 @@
             // Ball Position
             const y_t = Math.max(0, 50.0 + 15.0 * t - 4.90 * t * t);
             const vy_t = 15.0 - 9.80 * t;
-            const ballX = padL + 50;
+            const ballX = padL + 60;
             const ballY = toPxY(y_t);
 
             ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(ballX, ballY, 9, 0, Math.PI*2); ctx.fill();
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'left';
-            ctx.fillText(`🏀 Bola (y = ${y_t.toFixed(1)}m)`, ballX + 20, ballY);
+            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'left';
+            ctx.fillText(`🏀 Bola`, ballX + 16, ballY + 4);
 
-            // SEPARATED VECTORS: Velocity LEFT (ballX - 25), Gravity RIGHT (ballX + 25)
-            drawVectorArrow(ctx, ballX - 25, ballY, 0, -vy_t * 4.0, '#10b981', `v = ${vy_t.toFixed(1)}m/s (esquerda)`);
-            drawVectorArrow(ctx, ballX + 25, ballY, 0, 9.80 * 2.5, '#f43f5e', `g = 9.8m/s² (direita)`);
+            // SEPARATED VERTICAL VECTORS: v LEFT (ballX - 35), g RIGHT (ballX + 45)
+            drawVectorArrow(ctx, ballX - 35, ballY, 0, -vy_t * 4.0, '#10b981', `v = ${vy_t.toFixed(1)} m/s`);
+            drawVectorArrow(ctx, ballX + 45, ballY, 0, 9.80 * 2.5, '#f43f5e', `g = 9,8 m/s²`, true);
+
+            // TOP-RIGHT HUD DASHBOARD
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(w - 230, 16, 210, 85);
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)'; ctx.lineWidth = 1;
+            ctx.strokeRect(w - 230, 16, 210, 85);
+
+            ctx.font = 'bold 11px Inter'; ctx.textAlign = 'left';
+            ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(2)} s`, w - 220, 36);
+            ctx.fillStyle = '#fbbf24'; ctx.fillText(`📍 Altura y: ${y_t.toFixed(1)} m`, w - 220, 54);
+            ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Velocidade v_y: ${vy_t.toFixed(1)} m/s`, w - 220, 72);
+            ctx.fillStyle = '#f43f5e'; ctx.fillText(`🔴 Gravidade g: 9,8 m/s²`, w - 220, 90);
         }
-        
+
 
         window.onload = function() {
             updateDemo();

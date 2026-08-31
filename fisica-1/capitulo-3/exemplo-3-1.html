@@ -461,13 +461,13 @@
             const ox = toPxX(0), oy = toPxY(0);
 
             // Position Vector r(t) (Gold from Origin)
-            drawVectorArrow(ctx, ox, oy, px - ox, py - oy, '#fbbf24', `r = ${Math.hypot(x_t, y_t).toFixed(2)}m`);
+            drawVectorArrow(ctx, ox, oy, px - ox, py - oy, '#fbbf24', `r = ${Math.hypot(x_t, y_t).toFixed(2)} m`);
 
             // Velocity Vector v(t) (Green Tangent)
-            drawVectorArrow(ctx, px, py, vx_t * 30.0, -vy_t * 30.0, '#10b981', `v = ${Math.hypot(vx_t, vy_t).toFixed(2)}m/s`);
+            drawVectorArrow(ctx, px, py + 25, vx_t * 30.0, -vy_t * 30.0, '#10b981', `v = ${Math.hypot(vx_t, vy_t).toFixed(2)} m/s`);
 
             // Acceleration Vector a(t) (Red)
-            drawVectorArrow(ctx, px, py, ax_t * 50.0, -ay_t * 50.0, '#f43f5e', `a = ${Math.hypot(ax_t, ay_t).toFixed(2)}m/s²`);
+            drawVectorArrow(ctx, px, py - 25, ax_t * 50.0, -ay_t * 50.0, '#f43f5e', `a = ${Math.hypot(ax_t, ay_t).toFixed(2)} m/s²`, true);
 
             // Mars Rover Robot Icon & Badge
             ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px, py, 9, 0, Math.PI * 2); ctx.fill();

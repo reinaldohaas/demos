@@ -354,7 +354,7 @@
         <!-- Right Column: Interactive Stage + Controls Panel Together! -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.92rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa (Vetores Separados: Velocidade Acima | Aceleração Abaixo)</span>
+                <span style="font-size:0.92rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa com Telemetria HUD no Canto Superior Esquerdo</span>
                 <div style="display:flex; gap:8px;">
                     <span class="nav-step-disabled">← Primeiro Exemplo</span>
                     <a href="exemplo-2-2.html" class="nav-step-btn primary">Exemplo 2.2: Aceleração Média →</a>
@@ -364,8 +364,8 @@
             <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
-                    <span style="color:#10b981;">➔ Vetor Velocidade v (Acima)</span>
-                    <span style="color:#f43f5e;">➔ Vetor Aceleração a (Abaixo)</span>
+                    <span style="color:#10b981;">➔ Vetor Velocidade v</span>
+                    <span style="color:#f43f5e;">➔ Vetor Aceleração a</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
             </div>
@@ -454,7 +454,7 @@
                 // Draw solid background pill behind label to prevent crowding/overlapping!
                 ctx.font = 'bold 12px Inter';
                 const textWidth = ctx.measureText(label).width;
-                ctx.fillStyle = 'rgba(5, 8, 17, 0.9)';
+                ctx.fillStyle = 'rgba(5, 8, 17, 0.92)';
                 ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
                 ctx.strokeStyle = color; ctx.lineWidth = 1;
                 ctx.strokeRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
@@ -476,44 +476,60 @@
             ctx.clearRect(0,0,w,h);
             ctx.fillStyle = '#070a14'; ctx.fillRect(0,0,w,h);
 
-            const padL = 60, padB = 40, gW = w - padL - 30;
+            const padL = 60, padB = 70, gW = w - padL - 40;
             const toPxX = x => padL + (x / 60.0) * gW;
+            const trackY = h - padB;
 
             // Track Line
             ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
-            ctx.beginPath(); ctx.moveTo(padL, h - padB); ctx.lineTo(w - 20, h - padB); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(padL, trackY); ctx.lineTo(w - 20, trackY); ctx.stroke();
 
             // Track Ticks (0m, 10m, 20m, 30m, 40m, 50m)
             for (let mark = 0; mark <= 50; mark += 10) {
                 const mx = toPxX(mark);
-                ctx.beginPath(); ctx.moveTo(mx, h - padB); ctx.lineTo(mx, h - padB + 8); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(mx, trackY); ctx.lineTo(mx, trackY + 8); ctx.stroke();
                 ctx.font = '11px Inter'; ctx.fillStyle = '#64748b'; ctx.textAlign = 'center';
-                ctx.fillText(`${mark}m`, mx, h - padB + 22);
+                ctx.fillText(`${mark}m`, mx, trackY + 22);
             }
 
-            // Antelope (Stationary at 50m)
-            const antX = toPxX(50.0);
-            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(antX, h - padB - 15, 12, 0, Math.PI*2); ctx.fill();
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
-            ctx.fillText('🦌 Antílope (50m)', antX, h - padB - 34);
-
-            // Leopard Position, Velocity, Acceleration
+            // Calculations for current time t
             const x_t = 20.0 + 5.0 * t * t;
             const v_t = 10.0 * t;
             const a_t = 10.0;
+
             const leoX = toPxX(x_t);
-            const leoY = h - padB - 15;
+            const antX = toPxX(50.0);
 
-            // Leopard Icon
-            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(leoX, leoY, 13, 0, Math.PI*2); ctx.fill();
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'left';
-            ctx.fillText(`🐆 Leopardo (x = ${x_t.toFixed(1)}m)`, leoX + 18, leoY - 15);
+            // Antelope (Stationary at 50m)
+            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(antX, trackY - 14, 12, 0, Math.PI*2); ctx.fill();
+            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
+            ctx.fillText('🦌 Antílope (50m)', antX, trackY - 32);
 
-            // SEPARATED VECTORS: Velocity ABOVE (leoY - 22), Acceleration BELOW (leoY + 22)
-            drawVectorArrow(ctx, leoX, leoY - 22, v_t * 5.0, 0, '#10b981', `v = ${v_t.toFixed(1)}m/s (acima)`);
-            drawVectorArrow(ctx, leoX, leoY + 22, a_t * 4.0, 0, '#f43f5e', `a = ${a_t.toFixed(1)}m/s² (abaixo)`);
+            // Leopard Icon (Moving)
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(leoX, trackY - 14, 13, 0, Math.PI*2); ctx.fill();
+            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'center';
+            ctx.fillText('🐆 Leopardo', leoX, trackY - 32);
+
+            // Clean Vector Arrows WITH NO OVERLAPPING TEXT BOXES
+            // Velocity Vector v(t) (Green, drawn above track)
+            drawVectorArrow(ctx, leoX, trackY - 50, v_t * 4.5, 0, '#10b981', `v = ${v_t.toFixed(1)} m/s`);
+
+            // Acceleration Vector a(t) (Red, drawn below track)
+            drawVectorArrow(ctx, leoX, trackY + 38, a_t * 4.0, 0, '#f43f5e', `a = ${a_t.toFixed(1)} m/s²`, true);
+
+            // TOP-LEFT HUD TELEMETRY DASHBOARD (Never collides with sprites!)
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(16, 16, 210, 85);
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)'; ctx.lineWidth = 1;
+            ctx.strokeRect(16, 16, 210, 85);
+
+            ctx.font = 'bold 11px Inter'; ctx.textAlign = 'left';
+            ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(2)} s`, 26, 36);
+            ctx.fillStyle = '#fbbf24'; ctx.fillText(`📍 Posição x: ${x_t.toFixed(2)} m`, 26, 54);
+            ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Velocidade v: ${v_t.toFixed(1)} m/s`, 26, 72);
+            ctx.fillStyle = '#f43f5e'; ctx.fillText(`🔴 Aceleração a: ${a_t.toFixed(1)} m/s²`, 26, 90);
         }
-        
+
 
         window.onload = function() {
             updateDemo();
