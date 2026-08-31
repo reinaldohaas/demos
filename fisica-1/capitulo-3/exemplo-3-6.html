@@ -197,6 +197,13 @@
             padding: 12px 18px;
             border-radius: 12px;
         }
+    
+        .scene-card canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+
     </style>
 </head>
 <body>
@@ -321,16 +328,18 @@
             updateDemo();
         }
 
-        function getCanvasCtx(id) {
+                function getCanvasCtx(id) {
             const canvas = document.getElementById(id);
             if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
             const rect = canvas.getBoundingClientRect();
+            const w = rect.width > 0 ? rect.width : (canvas.clientWidth || 600);
+            const h = rect.height > 0 ? rect.height : (canvas.clientHeight || 400);
             const dpr = window.devicePixelRatio || 1;
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
+            canvas.width = Math.floor(w * dpr);
+            canvas.height = Math.floor(h * dpr);
             const ctx = canvas.getContext('2d');
             ctx.scale(dpr, dpr);
-            return { canvas, ctx, w: rect.width, h: rect.height };
+            return { canvas, ctx, w, h };
         }
 
         function drawVectorArrow(ctx, x, y, dx, dy, color, label) {

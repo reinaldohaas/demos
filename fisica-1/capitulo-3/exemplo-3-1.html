@@ -169,9 +169,14 @@
             border: 1px solid var(--bg-card-border);
             border-radius: 12px;
             padding: 10px;
-            height: 420px;
+            height: 440px;
             position: relative;
             overflow: hidden;
+        }
+        .scene-card canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
         }
 
         .vector-legend {
@@ -270,7 +275,7 @@
         <!-- Interactive Visual Stage -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa com Vetores Velocidade $\vec{v}$ e Aceleração $\vec{a}$</span>
+                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa com Vetores Posição $\vec{{r}}$, Velocidade $\vec{{v}}$ e Aceleração $\vec{{a}}$</span>
                 <div style="display:flex; gap:8px;">
                     <span class="nav-step-disabled">← Primeiro Exemplo</span>
                     <a href="exemplo-3-2.html" class="nav-step-btn primary">Exemplo 3.2: Aceleração 2D →</a>
@@ -280,8 +285,9 @@
             <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
-                    <span style="color:#10b981;">➔ Vetor Velocidade v</span>
-                    <span style="color:#f43f5e;">➔ Vetor Aceleração a</span>
+                    <span style="color:#fbbf24;">➔ Posição r</span>
+                    <span style="color:#10b981;">➔ Velocidade v</span>
+                    <span style="color:#f43f5e;">➔ Aceleração a</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
             </div>
@@ -325,12 +331,14 @@
             const canvas = document.getElementById(id);
             if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
             const rect = canvas.getBoundingClientRect();
+            const w = rect.width > 0 ? rect.width : (canvas.clientWidth || 600);
+            const h = rect.height > 0 ? rect.height : (canvas.clientHeight || 400);
             const dpr = window.devicePixelRatio || 1;
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
+            canvas.width = Math.floor(w * dpr);
+            canvas.height = Math.floor(h * dpr);
             const ctx = canvas.getContext('2d');
             ctx.scale(dpr, dpr);
-            return { canvas, ctx, w: rect.width, h: rect.height };
+            return { canvas, ctx, w, h };
         }
 
         function drawVectorArrow(ctx, x, y, dx, dy, color, label) {
@@ -348,7 +356,7 @@
             ctx.closePath(); ctx.fill();
 
             if (label) {
-                ctx.font = 'bold 10px Inter'; ctx.textAlign = 'center';
+                ctx.font = 'bold 11px Inter'; ctx.textAlign = 'center';
                 ctx.fillText(label, x + dx * 0.5, y + dy - 6);
             }
         }
@@ -359,26 +367,46 @@
             drawScene(t);
         }
 
-        
         function drawScene(t) {
-            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-            const padL = 50, padB = 30, gW = w - padL - 20, gH = h - padB - 20;
-            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,w,h);
-            const toPxX = x => padL + (x / 8.0) * gW, toPxY = y => (h - padB) - (y / 8.0) * gH;
+            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = '#070a14'; ctx.fillRect(0,0,w,h);
 
-            // Grid
+            const padL = 50, padB = 40, gW = w - padL - 30, gH = h - padB - 30;
+            const toPxX = x => padL + (x / 7.0) * gW;
+            const toPxY = y => (h - padB) - (y / 7.0) * gH;
+
+            // Draw Cartesian Grid & Ticks
             ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.moveTo(padL, 10); ctx.lineTo(padL, h - padB); ctx.lineTo(w - 10, h - padB); ctx.stroke();
+            for (let gridVal = 0; gridVal <= 7; gridVal++) {
+                const gx = toPxX(gridVal), gy = toPxY(gridVal);
+                ctx.beginPath(); ctx.moveTo(gx, 10); ctx.lineTo(gx, h - padB); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(w - 10, gy); ctx.stroke();
 
-            // Mars Rover Trajectory
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
+                ctx.font = '10px Inter'; ctx.fillStyle = '#64748b'; ctx.textAlign = 'center';
+                ctx.fillText(`${gridVal}m`, gx, h - padB + 16);
+                ctx.textAlign = 'right';
+                ctx.fillText(`${gridVal}m`, padL - 8, gy + 4);
+            }
+
+            // Axes lines
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(padL, 10); ctx.lineTo(padL, h - padB); ctx.lineTo(w - 10, h - padB); ctx.stroke();
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
+            ctx.fillText('Eixo X (m)', w - 65, h - padB + 28);
+            ctx.fillText('Eixo Y (m)', padL - 40, 20);
+
+            // Mars Rover Trajectory Path
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)'; ctx.lineWidth = 2.5; ctx.setLineDash([4, 4]);
+            ctx.beginPath();
             for (let tau = 0; tau <= 4.0; tau += 0.05) {
                 const rx = 2.0 + 0.25 * tau * tau;
                 const ry = 1.0 * tau + 0.025 * tau * tau * tau;
                 if (tau === 0) ctx.moveTo(toPxX(rx), toPxY(ry)); else ctx.lineTo(toPxX(rx), toPxY(ry));
             }
-            ctx.stroke();
+            ctx.stroke(); ctx.setLineDash([]);
 
+            // Calculations for current time t
             const x_t = 2.0 + 0.25 * t * t;
             const y_t = 1.0 * t + 0.025 * t * t * t;
             const vx_t = 0.50 * t;
@@ -387,19 +415,25 @@
             const ay_t = 0.15 * t;
 
             const px = toPxX(x_t), py = toPxY(y_t);
+            const ox = toPxX(0), oy = toPxY(0);
 
-            // Rover Marker
-            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px, py, 8, 0, Math.PI * 2); ctx.fill();
-            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'left';
-            ctx.fillText(`🤖 Robô Marte (${x_t.toFixed(2)}m, ${y_t.toFixed(2)}m)`, px + 12, py);
+            // Position Vector r(t) (Gold from Origin)
+            drawVectorArrow(ctx, ox, oy, px - ox, py - oy, '#fbbf24', `r = ${Math.hypot(x_t, y_t).toFixed(2)}m`);
 
-            // Velocity Vector (Green)
-            drawVectorArrow(ctx, px, py, vx_t * 25.0, -vy_t * 25.0, '#10b981', `v = ${Math.hypot(vx_t, vy_t).toFixed(2)}m/s`);
+            // Velocity Vector v(t) (Green Tangent)
+            drawVectorArrow(ctx, px, py, vx_t * 30.0, -vy_t * 30.0, '#10b981', `v = ${Math.hypot(vx_t, vy_t).toFixed(2)}m/s`);
 
-            // Acceleration Vector (Red)
-            drawVectorArrow(ctx, px, py, ax_t * 40.0, -ay_t * 40.0, '#f43f5e', `a = ${Math.hypot(ax_t, ay_t).toFixed(2)}m/s²`);
+            // Acceleration Vector a(t) (Red)
+            drawVectorArrow(ctx, px, py, ax_t * 50.0, -ay_t * 50.0, '#f43f5e', `a = ${Math.hypot(ax_t, ay_t).toFixed(2)}m/s²`);
+
+            // Mars Rover Robot Icon & Badge
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px, py, 9, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#0f172a'; ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'left';
+            ctx.fillText(`🤖 Robô Marte (t = ${t.toFixed(2)}s)`, px + 12, py - 10);
+            ctx.font = '11px Inter'; ctx.fillStyle = '#94a3b8';
+            ctx.fillText(`x = ${x_t.toFixed(2)}m, y = ${y_t.toFixed(2)}m`, px + 12, py + 8);
         }
-        
 
         window.onload = function() {
             updateDemo();

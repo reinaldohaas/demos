@@ -217,6 +217,13 @@
         }
 
         canvas { width: 100%; height: 100%; display: block; }
+    
+        .scene-card canvas {
+            width: 100% !important;
+            height: 100% !important;
+            display: block;
+        }
+
     </style>
 </head>
 <body>
@@ -324,16 +331,18 @@
             else goToSlide(totalSlides);
         }
 
-        function getCanvasCtx(id) {
+                function getCanvasCtx(id) {
             const canvas = document.getElementById(id);
             if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
             const rect = canvas.getBoundingClientRect();
+            const w = rect.width > 0 ? rect.width : (canvas.clientWidth || 600);
+            const h = rect.height > 0 ? rect.height : (canvas.clientHeight || 400);
             const dpr = window.devicePixelRatio || 1;
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
+            canvas.width = Math.floor(w * dpr);
+            canvas.height = Math.floor(h * dpr);
             const ctx = canvas.getContext('2d');
             ctx.scale(dpr, dpr);
-            return { canvas, ctx, w: rect.width, h: rect.height };
+            return { canvas, ctx, w, h };
         }
 
         function resetDemo() {
