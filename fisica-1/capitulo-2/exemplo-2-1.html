@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 2.1: Posição e Velocidade Média (O Leopardo) | FSC5101 Física I</title>
+    <title>Exemplo 2.1: O Leopardo | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -20,7 +20,9 @@
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
@@ -32,6 +34,7 @@
             background-attachment: fixed;
             padding: 20px;
         }
+
         .top-nav {
             max-width: 1300px;
             margin: 0 auto 16px;
@@ -39,6 +42,7 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .back-btn {
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid var(--bg-card-border);
@@ -50,6 +54,7 @@
             font-size: 0.85rem;
             transition: all 0.2s;
         }
+
         .back-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); }
 
         .statement-box {
@@ -64,8 +69,10 @@
             flex-wrap: wrap;
             gap: 16px;
         }
+
         .statement-title h2 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: var(--accent-cyan); margin-bottom: 6px; }
         .statement-title p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; }
+
         .formula-badge {
             background: rgba(56, 189, 248, 0.1);
             border: 1px solid rgba(56, 189, 248, 0.3);
@@ -84,6 +91,7 @@
             grid-template-columns: 440px 1fr;
             gap: 20px;
         }
+
         @media (max-width: 960px) { .presentation-container { grid-template-columns: 1fr; } }
 
         .slide-deck {
@@ -105,6 +113,7 @@
             display: flex;
             gap: 12px;
         }
+
         .item-badge {
             background: rgba(99, 102, 241, 0.2);
             color: #a855f7;
@@ -114,6 +123,7 @@
             border-radius: 6px;
             height: fit-content;
         }
+
         .item-title { font-weight: 700; font-size: 0.88rem; color: var(--text-main); margin-bottom: 4px; }
         .item-formula code { font-family: monospace; font-size: 0.8rem; color: var(--accent-cyan); }
         .item-calc { font-size: 0.82rem; color: var(--accent-emerald); margin-top: 4px; font-weight: 600; line-height: 1.5; }
@@ -125,6 +135,7 @@
             padding: 16px;
             margin-top: 14px;
         }
+
         .control-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
         .control-group label { font-size: 0.82rem; font-weight: 600; color: var(--text-sub); display: flex; justify-content: space-between; }
         .control-group label span { color: var(--accent-cyan); font-family: monospace; font-weight: 700; }
@@ -146,6 +157,16 @@
             gap: 16px;
         }
 
+        .scene-card {
+            background: #050811;
+            border: 1px solid var(--bg-card-border);
+            border-radius: 12px;
+            padding: 10px;
+            height: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+
         .plot-card {
             background: rgba(10, 16, 30, 0.9);
             border: 1px solid var(--bg-card-border);
@@ -155,6 +176,7 @@
             display: flex;
             flex-direction: column;
         }
+
         .plot-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 700; color: var(--text-sub); margin-bottom: 8px; }
         .plot-wrapper { flex: 1; width: 100%; height: 100%; position: relative; background: #050811; border-radius: 8px; overflow: hidden; }
         canvas { width: 100%; height: 100%; display: block; }
@@ -163,86 +185,139 @@
 <body>
 
     <div class="top-nav">
-        <a href="index.html" class="back-btn">← Voltar ao Catálogo do Capítulo 2</a>
+        <a href="../index.html" class="back-btn">← Voltar ao Catálogo do Capítulo 2</a>
         <span style="font-size:0.85rem; color:var(--text-sub);">Capítulo 2 • Movimento Retilíneo</span>
     </div>
 
     <div class="statement-box">
         <div class="statement-title">
             <h2>Exemplo 2.1: Posição e Velocidade Média (O Leopardo)</h2>
-            <p>Um leopardo está espreitando a 20 m a leste de um jipe de um observador. No tempo t = 0, o leopardo começa a perseguir um antílope a 50 m do jipe. O movimento do leopardo é dado por x(t) = 20 m + (5,0 m/s²)t².</p>
+            <p>Um leopardo está espreitando a 20 m a leste de um jipe de um observador. No tempo t = 0, o leopardo começa a perseguir um antílope que está a 50 m a leste do jipe. O movimento do leopardo é dado por x(t) = 20 m + (5,0 m/s²)t².</p>
         </div>
         <div class="formula-badge">x(t) = 20 + 5.0 t² (m)</div>
     </div>
 
     <div class="presentation-container">
+        <!-- Didactic Resolution Deck -->
         <div class="slide-deck">
             <div>
                 <div style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); margin-bottom:12px; text-transform:uppercase;">
                     📖 Resolução Didática Passo a Passo (Itens a, b, c, d)
                 </div>
-                
-        <div class="item-card">
-            <div class="item-badge">Item (A)</div>
-            <div class="item-content">
-                <div class="item-title">Deslocamento Δx no intervalo de t₁ = 1,0 s a t₂ = 2,0 s</div>
-                <div class="item-formula"><code>Δx = x(t₂) - x(t₁)</code></div>
-                <div class="item-calc">Em t₁ = 1,0 s: x(1,0) = 25,0 m. Em t₂ = 2,0 s: x(2,0) = 40,0 m. Portanto, Δx = 40,0 m - 25,0 m = 15,0 m.</div>
-            </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (B)</div>
-            <div class="item-content">
-                <div class="item-title">Velocidade Média v_méd no intervalo</div>
-                <div class="item-formula"><code>v_méd = Δx / Δt</code></div>
-                <div class="item-calc">v_méd = (40,0 m - 25,0 m) / (2,0 s - 1,0 s) = 15,0 m / 1,0 s = 15,0 m/s (inclinação da Reta Secante entre t₁ e t₂).</div>
-            </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (C)</div>
-            <div class="item-content">
-                <div class="item-title">Velocidade Instantânea v(t) em t = 1,0 s</div>
-                <div class="item-formula"><code>v(t) = dx/dt = 10,0 t (m/s)</code></div>
-                <div class="item-calc">Derivando x(t) em relação ao tempo: v(t) = 10,0 t m/s. Em t = 1,0 s: v(1,0) = 10,0 × 1,0 = 10,0 m/s (inclinação da Reta Tangente no ponto t = 1,0 s).</div>
-            </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (D)</div>
-            <div class="item-content">
-                <div class="item-title">Convergência da Secante para a Tangente</div>
-                <div class="item-formula"><code>lim (Δt → 0) Δx / Δt = dx / dt</code></div>
-                <div class="item-calc">Ao reduzir Δt de 1,0 s para 0,001 s, a velocidade média converge de 15,0 m/s para o valor exato da velocidade instantânea: 10,0 m/s.</div>
-            </div>
-        </div>
-        
+
+                <div class="item-card">
+                    <div class="item-badge">Item (A)</div>
+                    <div class="item-content">
+                        <div class="item-title">Deslocamento Δx no intervalo t₁ = 1,0 s a t₂ = 2,0 s</div>
+                        <div class="item-formula"><code>Δx = x(t₂) - x(t₁)</code></div>
+                        <div class="item-calc">x(1,0) = 25,0 m; x(2,0) = 40,0 m ⟹ Δx = 40,0 m - 25,0 m = 15,0 m.</div>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-badge">Item (B)</div>
+                    <div class="item-content">
+                        <div class="item-title">Velocidade Média v_méd no intervalo</div>
+                        <div class="item-formula"><code>v_méd = Δx / Δt</code></div>
+                        <div class="item-calc">v_méd = 15,0 m / 1,0 s = 15,0 m/s (Inclinação da Reta Secante amarela).</div>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-badge">Item (C)</div>
+                    <div class="item-content">
+                        <div class="item-title">Velocidade Instantânea v(t) em t = 1,0 s</div>
+                        <div class="item-formula"><code>v(t) = dx/dt = 10,0 t (m/s)</code></div>
+                        <div class="item-calc">v(1,0) = 10,0 × 1,0 = 10,0 m/s (Inclinação da Reta Tangente verde).</div>
+                    </div>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-badge">Item (D)</div>
+                    <div class="item-content">
+                        <div class="item-title">Convergência da Secante para a Tangente</div>
+                        <div class="item-formula"><code>lim (Δt → 0) Δx / Δt = dx / dt</code></div>
+                        <div class="item-calc">Quando Δt reduz-se a 0,001 s, v_méd converge de 15,0 m/s para a derivada exata 10,0 m/s.</div>
+                    </div>
+                </div>
             </div>
 
+            <!-- Controls Panel -->
             <div class="control-card">
-                
-        <div class="control-group"><label>Tempo t: <span id="leo-t-val">0.00 s</span></label><input type="range" id="leo-t" min="0" max="3" step="0.02" value="0" oninput="updateDemo()"></div>
-        <div class="control-group"><label>Intervalo Δt: <span id="leo-dt-val">1.000 s</span></label><input type="range" id="leo-dt" min="0.001" max="1.5" step="0.001" value="1.0" oninput="updateDemo()"></div>
-        <div class="btn-group"><button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animado</button><button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button></div>
-        
+                <div class="control-group">
+                    <label>Tempo t: <span id="leo-t-val">0.00 s</span></label>
+                    <input type="range" id="leo-t" min="0" max="3" step="0.02" value="0" oninput="updateDemo()">
+                </div>
+                <div class="control-group">
+                    <label>Intervalo Δt: <span id="leo-dt-val">1.000 s</span></label>
+                    <input type="range" id="leo-dt" min="0.001" max="1.5" step="0.001" value="1.0" oninput="updateDemo()">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
+                    <button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button>
+                </div>
             </div>
         </div>
 
+        <!-- Interactive Visual Stage -->
         <div class="interactive-stage">
-            
-        <div style="background:rgba(10,16,30,0.8); border:1px solid var(--bg-card-border); border-radius:12px; padding:10px; height:130px;">
-            <canvas id="canvas-track"></canvas>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-            <div class="plot-card"><div class="plot-header"><span>Gráfico x(t): Posição vs Tempo</span><span style="color:#38bdf8;">Secante & Tangente</span></div><div class="plot-wrapper"><canvas id="canvas-plot-x"></canvas></div></div>
-            <div class="plot-card"><div class="plot-header"><span>Gráfico v(t): Velocidade vs Tempo</span><span style="color:#10b981;">v(t) = 10t</span></div><div class="plot-wrapper"><canvas id="canvas-plot-v"></canvas></div></div>
-        </div>
-        
+            <!-- Savanna Scene Animation -->
+            <div class="scene-card">
+                <canvas id="canvas-scene"></canvas>
+            </div>
+
+            <!-- Real-Time Interactive Canvas Plots -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div class="plot-card">
+                    <div class="plot-header">
+                        <span>Gráfico x(t): Posição vs Tempo</span>
+                        <span style="color:#38bdf8;">Secante & Tangente</span>
+                    </div>
+                    <div class="plot-wrapper"><canvas id="canvas-plot-x"></canvas></div>
+                </div>
+
+                <div class="plot-card">
+                    <div class="plot-header">
+                        <span>Gráfico v(t): Velocidade vs Tempo</span>
+                        <span style="color:#10b981;">v(t) = 10,0 t</span>
+                    </div>
+                    <div class="plot-wrapper"><canvas id="canvas-plot-v"></canvas></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
+        let timer = null, running = false;
+
+        function togglePlay() {
+            running = !running;
+            document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Animação';
+            if (running && !timer) timer = setInterval(loop, 30);
+        }
+
+        function resetDemo() {
+            running = false;
+            if (timer) { clearInterval(timer); timer = null; }
+            document.getElementById('btn-play').innerText = '▶ Simular Animação';
+            document.getElementById('leo-t').value = 0;
+            updateDemo();
+        }
+
+        function loop() {
+            if (!running) return;
+            let t = parseFloat(document.getElementById('leo-t').value) + 0.02;
+            if (t > 3.0) {
+                t = 3.0;
+                running = false;
+                clearInterval(timer);
+                timer = null;
+                document.getElementById('btn-play').innerText = '▶ Simular Animação';
+            }
+            document.getElementById('leo-t').value = t;
+            updateDemo();
+        }
+
         function getCanvasCtx(id) {
             const canvas = document.getElementById(id);
             if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
@@ -255,47 +330,147 @@
             return { canvas, ctx, w: rect.width, h: rect.height };
         }
 
-        
-        let timer = null, running = false;
-        function togglePlay() { running = !running; document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Animado'; if (running && !timer) timer = setInterval(loop, 30); }
-        function resetDemo() { running = false; if (timer) { clearInterval(timer); timer = null; } document.getElementById('btn-play').innerText = '▶ Simular Animado'; document.getElementById('leo-t').value = 0; updateDemo(); }
-        function loop() { if (!running) return; let t = parseFloat(document.getElementById('leo-t').value) + 0.02; if (t > 3.0) { t = 3.0; running = false; clearInterval(timer); timer = null; document.getElementById('btn-play').innerText = '▶ Simular Animado'; } document.getElementById('leo-t').value = t; updateDemo(); }
-
         function updateDemo() {
-            const t = parseFloat(document.getElementById('leo-t').value); const dt = parseFloat(document.getElementById('leo-dt').value);
-            document.getElementById('leo-t-val').innerText = t.toFixed(2) + ' s'; document.getElementById('leo-dt-val').innerText = dt.toFixed(3) + ' s';
-            drawTrack(t); drawPlotX(t, dt); drawPlotV(t);
+            const t = parseFloat(document.getElementById('leo-t').value);
+            const dt = parseFloat(document.getElementById('leo-dt').value);
+
+            document.getElementById('leo-t-val').innerText = t.toFixed(2) + ' s';
+            document.getElementById('leo-dt-val').innerText = dt.toFixed(3) + ' s';
+
+            drawScene(t);
+            drawPlotX(t, dt);
+            drawPlotV(t);
         }
-        function drawTrack(t) {
-            const { ctx, w, h } = getCanvasCtx('canvas-track'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-            const cy = h / 2 + 10; ctx.strokeStyle = '#334155'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy); ctx.stroke();
-            const x_t = 20.0 + 5.0 * t * t; const px_leo = 20 + (x_t / 60) * (w - 40);
-            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px_leo, cy - 6, 8, 0, Math.PI * 2); ctx.fill();
-            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#fbbf24'; ctx.fillText(`🐆 x = ${x_t.toFixed(1)}m`, px_leo - 25, cy - 18);
+
+        function drawScene(t) {
+            const { ctx, w, h } = getCanvasCtx('canvas-scene');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            // Ground & Savanna Environment
+            const cy = h - 35;
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, w, h);
+            ctx.fillStyle = '#1e293b'; ctx.fillRect(0, cy, w, h - cy);
+            ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
+
+            // Distance Markers (0m, 20m, 50m, 65m)
+            const mapX = x => 40 + (x / 70.0) * (w - 80);
+
+            [0, 20, 25, 40, 50, 65].forEach(mark => {
+                const mx = mapX(mark);
+                ctx.strokeStyle = '#475569'; ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.moveTo(mx, cy - 5); ctx.lineTo(mx, cy + 5); ctx.stroke();
+                ctx.font = '10px Inter'; ctx.fillStyle = '#64748b'; ctx.textAlign = 'center';
+                ctx.fillText(mark + 'm', mx, cy + 18);
+            });
+
+            // Observer Jeep at x = 0m
+            const px_jeep = mapX(0);
+            ctx.fillStyle = '#475569'; ctx.fillRect(px_jeep - 16, cy - 18, 32, 18);
+            ctx.fillStyle = '#0f172a'; ctx.fillRect(px_jeep - 10, cy - 24, 20, 8);
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
+            ctx.fillText('🚙 Jipe (0m)', px_jeep, cy - 30);
+
+            // Antelope at x = 50m
+            const px_ant = mapX(50);
+            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(px_ant, cy - 12, 8, 0, Math.PI * 2); ctx.fill();
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
+            ctx.fillText('🦌 Antílope (50m)', px_ant, cy - 22);
+
+            // Leopard at position x(t) = 20 + 5.0 t^2
+            const x_leo = 20.0 + 5.0 * t * t;
+            const px_leo = mapX(x_leo);
+
+            // Motion Trail
+            ctx.strokeStyle = 'rgba(251, 191, 36, 0.3)'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(mapX(20), cy - 12); ctx.lineTo(px_leo, cy - 12); ctx.stroke();
+
+            // Leopard Sprite/Marker
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px_leo, cy - 12, 10, 0, Math.PI * 2); ctx.fill();
+            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'center';
+            ctx.fillText(`🐆 Leopardo x = ${x_leo.toFixed(1)}m`, px_leo, cy - 26);
         }
+
         function drawPlotX(t_curr, dt) {
-            const { ctx, w, h } = getCanvasCtx('canvas-plot-x'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-            const padL = 35, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
-            const toPxX = t => padL + (t / 3.0) * gW, toPxY = x => (h - padB) - (x / 65.0) * gH;
-            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+            const { ctx, w, h } = getCanvasCtx('canvas-plot-x');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            const padL = 40, padR = 15, padT = 15, padB = 25;
+            const gW = w - padL - padR, gH = h - padT - padB;
+
+            const toPxX = t => padL + (t / 3.0) * gW;
+            const toPxY = x => (h - padB) - (x / 70.0) * gH;
+
+            // Grid & Axes
+            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+
+            // Parabolic Curve x(t) = 20 + 5.0 t^2
             ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
-            for (let t = 0; t <= 3.0; t += 0.05) { const x = 20.0 + 5.0 * t * t; if (t === 0) ctx.moveTo(toPxX(t), toPxY(x)); else ctx.lineTo(toPxX(t), toPxY(x)); } ctx.stroke();
-            const t1 = 1.0, t2 = t1 + dt, x1 = 25.0, x2 = 20.0 + 5.0 * t2 * t2, v_med = (x2 - x1) / dt;
+            for (let t = 0; t <= 3.0; t += 0.05) {
+                const x = 20.0 + 5.0 * t * t;
+                if (t === 0) ctx.moveTo(toPxX(t), toPxY(x)); else ctx.lineTo(toPxX(t), toPxY(x));
+            }
+            ctx.stroke();
+
+            // Secant Line (Yellow Dashed) between t1 = 1.0s and t2 = t1 + dt
+            const t1 = 1.0, t2 = t1 + dt;
+            const x1 = 25.0, x2 = 20.0 + 5.0 * t2 * t2;
+            const v_med = (x2 - x1) / dt;
+
             ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2; ctx.setLineDash([4, 4]); ctx.beginPath();
-            ctx.moveTo(toPxX(0.2), toPxY(x1 + v_med * (0.2 - t1))); ctx.lineTo(toPxX(2.5), toPxY(x1 + v_med * (2.5 - t1))); ctx.stroke(); ctx.setLineDash([]);
+            ctx.moveTo(toPxX(0.2), toPxY(x1 + v_med * (0.2 - t1)));
+            ctx.lineTo(toPxX(2.5), toPxY(x1 + v_med * (2.5 - t1)));
+            ctx.stroke(); ctx.setLineDash([]);
+
+            // Tangent Line (Green Solid) at t1 = 1.0s (slope v = 10.0 m/s)
             ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2; ctx.beginPath();
-            ctx.moveTo(toPxX(0.2), toPxY(x1 + 10.0 * (0.2 - t1))); ctx.lineTo(toPxX(2.2), toPxY(x1 + 10.0 * (2.2 - t1))); ctx.stroke();
+            ctx.moveTo(toPxX(0.2), toPxY(x1 + 10.0 * (0.2 - t1)));
+            ctx.lineTo(toPxX(2.2), toPxY(x1 + 10.0 * (2.2 - t1)));
+            ctx.stroke();
+
+            // Current Time Marker
+            if (t_curr > 0) {
+                const x_curr = 20.0 + 5.0 * t_curr * t_curr;
+                ctx.fillStyle = '#f43f5e'; ctx.beginPath();
+                ctx.arc(toPxX(t_curr), toPxY(x_curr), 5, 0, Math.PI * 2); ctx.fill();
+            }
         }
+
         function drawPlotV(t_curr) {
-            const { ctx, w, h } = getCanvasCtx('canvas-plot-v'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-            const padL = 35, padR = 15, padT = 15, padB = 25, gW = w - padL - padR, gH = h - padT - padB;
-            const toPxX = t => padL + (t / 3.0) * gW, toPxY = v => (h - padB) - (v / 35.0) * gH;
-            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(toPxX(0), toPxY(0)); ctx.lineTo(toPxX(3.0), toPxY(30.0)); ctx.stroke();
-            if (t_curr > 0) { ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.arc(toPxX(t_curr), toPxY(10.0 * t_curr), 6, 0, Math.PI * 2); ctx.fill(); }
+            const { ctx, w, h } = getCanvasCtx('canvas-plot-v');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            const padL = 40, padR = 15, padT = 15, padB = 25;
+            const gW = w - padL - padR, gH = h - padT - padB;
+
+            const toPxX = t => padL + (t / 3.0) * gW;
+            const toPxY = v => (h - padB) - (v / 35.0) * gH;
+
+            // Grid & Axes
+            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+
+            // Linear Speed v(t) = 10,0 t
+            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath();
+            ctx.moveTo(toPxX(0), toPxY(0)); ctx.lineTo(toPxX(3.0), toPxY(30.0)); ctx.stroke();
+
+            // Area under curve up to t_curr
+            if (t_curr > 0) {
+                ctx.fillStyle = 'rgba(16, 185, 129, 0.15)'; ctx.beginPath();
+                ctx.moveTo(toPxX(0), toPxY(0)); ctx.lineTo(toPxX(t_curr), toPxY(10.0 * t_curr));
+                ctx.lineTo(toPxX(t_curr), toPxY(0)); ctx.closePath(); ctx.fill();
+
+                ctx.fillStyle = '#f43f5e'; ctx.beginPath();
+                ctx.arc(toPxX(t_curr), toPxY(10.0 * t_curr), 5, 0, Math.PI * 2); ctx.fill();
+            }
         }
+
         window.onload = function() { updateDemo(); };
-        
+        window.onresize = function() { updateDemo(); };
     </script>
 </body>
 </html>
