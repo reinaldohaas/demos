@@ -204,6 +204,47 @@
             display: block;
         }
 
+    
+        .controls-panel-inline {
+            background: rgba(10, 16, 30, 0.85);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .controls-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .control-group-inline {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 200px;
+        }
+        .control-group-inline label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            display: flex;
+            justify-content: space-between;
+        }
+        .control-group-inline label span {
+            color: var(--accent-cyan);
+            font-family: monospace;
+            font-weight: 800;
+            font-size: 1.05rem;
+        }
+        .btn-group-inline {
+            display: flex;
+            gap: 10px;
+        }
+        
     </style>
 </head>
 <body>
@@ -260,18 +301,6 @@
         </div>
         
             </div>
-
-            <!-- Controls Panel -->
-            <div class="control-card">
-                <div class="control-group">
-                    <label>Tempo t: <span id="ex-t-val">0.00 s</span></label>
-                    <input type="range" id="ex-t" min="0" max="4.52" step="0.05" value="0" oninput="updateDemo()">
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
-                    <button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button>
-                </div>
-            </div>
         </div>
 
         <!-- Interactive Visual Stage -->
@@ -291,6 +320,20 @@
                     <span style="color:#f43f5e;">➔ Vetor Aceleração a</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
+            </div>
+        
+            <!-- CONTROLS PANEL DIRECTLY ATTACHED TO ANIMATION STAGE -->
+            <div class="controls-panel-inline">
+                <div class="controls-row">
+                    <div class="btn-group-inline">
+                        <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
+                        <button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button>
+                    </div>
+                    <div class="control-group-inline">
+                        <label>Controle do Tempo t: <span id="ex-t-val">0.00 s</span></label>
+                        <input type="range" id="ex-t" min="0" max="4.0" step="0.05" value="0" oninput="updateDemo()">
+                    </div>
+                </div>
             </div>
         </div>
     </div>

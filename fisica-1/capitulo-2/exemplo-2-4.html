@@ -100,7 +100,7 @@
             max-width: 1350px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 520px 1fr;
+            grid-template-columns: 500px 1fr;
             gap: 22px;
         }
         @media (max-width: 1024px) { .presentation-container { grid-template-columns: 1fr; } }
@@ -110,9 +110,6 @@
             border: 1px solid var(--bg-card-border);
             border-radius: 16px;
             padding: 22px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
 
         .item-card {
@@ -138,24 +135,6 @@
         .item-formula code { font-family: monospace; font-size: 0.95rem; color: var(--accent-cyan); font-weight: 700; }
         .item-calc { font-size: 0.96rem; color: #e2e8f0; margin-top: 8px; font-weight: 500; line-height: 1.7; }
 
-        .control-card {
-            background: rgba(10, 16, 30, 0.75);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 12px;
-            padding: 18px;
-            margin-top: 16px;
-        }
-        .control-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-        .control-group label { font-size: 0.95rem; font-weight: 700; color: var(--text-sub); display: flex; justify-content: space-between; }
-        .control-group label span { color: var(--accent-cyan); font-family: monospace; font-weight: 800; font-size: 1.05rem; }
-        input[type="range"] { width: 100%; height: 8px; border-radius: 4px; background: #1e293b; outline: none; accent-color: var(--accent-cyan); cursor: pointer; }
-
-        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
-        .btn { flex: 1; padding: 11px 16px; border-radius: 8px; border: none; font-weight: 700; font-size: 0.92rem; cursor: pointer; transition: all 0.2s ease; }
-        .btn-primary { background: var(--primary-gradient); color: white; }
-        .btn-secondary { background: #1e293b; color: var(--text-main); }
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
-
         .interactive-stage {
             background: var(--bg-card);
             border: 1px solid var(--bg-card-border);
@@ -163,7 +142,7 @@
             padding: 22px;
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 16px;
         }
 
         .scene-card {
@@ -189,11 +168,74 @@
             gap: 16px;
             font-size: 0.82rem;
             font-weight: 700;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 6px 12px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 6px 14px;
             border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
+
+        .controls-panel-inline {
+            background: rgba(10, 16, 30, 0.85);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .controls-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .control-group-inline {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 200px;
+        }
+        .control-group-inline label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            display: flex;
+            justify-content: space-between;
+        }
+        .control-group-inline label span {
+            color: var(--accent-cyan);
+            font-family: monospace;
+            font-weight: 800;
+            font-size: 1.05rem;
+        }
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #1e293b;
+            outline: none;
+            accent-color: var(--accent-cyan);
+            cursor: pointer;
+        }
+
+        .btn-group-inline {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .btn-primary { background: var(--primary-gradient); color: white; }
+        .btn-secondary { background: #1e293b; color: var(--text-main); }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
         .scene-nav-bar {
             display: flex;
@@ -225,13 +267,12 @@
     </div>
 
     <div class="presentation-container">
-        <!-- Didactic Resolution Deck -->
+        <!-- Left Column: Didactic Resolution Deck -->
         <div class="slide-deck">
-            <div>
-                <div style="font-size:0.88rem; font-weight:800; color:var(--accent-cyan); margin-bottom:14px; text-transform:uppercase; letter-spacing:0.5px;">
-                    📖 Resolução Didática Passo a Passo (com Identificação de Variáveis)
-                </div>
-                
+            <div style="font-size:0.88rem; font-weight:800; color:var(--accent-cyan); margin-bottom:14px; text-transform:uppercase; letter-spacing:0.5px;">
+                📖 Resolução Didática Passo a Passo (com Identificação de Variáveis)
+            </div>
+            
         <div class="item-card">
             <div class="item-badge">Item (A)</div>
             <div class="item-content">
@@ -268,25 +309,12 @@
             </div>
         </div>
         
-            </div>
-
-            <!-- Controls Panel -->
-            <div class="control-card">
-                <div class="control-group">
-                    <label>Ajuste do Tempo t: <span id="ex-t-val">0.00 s</span></label>
-                    <input type="range" id="ex-t" min="0" max="7.5" step="0.1" value="0" oninput="updateDemo()">
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
-                    <button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button>
-                </div>
-            </div>
         </div>
 
-        <!-- Interactive Visual Stage -->
+        <!-- Right Column: Interactive Stage + Controls Panel Together! -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.92rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa com Vetores Separated (Velocidade Acima | Aceleração Abaixo)</span>
+                <span style="font-size:0.92rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa (Vetores Separados: Velocidade Acima | Aceleração Abaixo)</span>
                 <div style="display:flex; gap:8px;">
                     <a href="exemplo-2-3.html" class="nav-step-btn">← Exemplo Anterior</a>
                     <a href="exemplo-2-5.html" class="nav-step-btn primary">Exemplo 2.5: Queda Livre →</a>
@@ -300,6 +328,20 @@
                     <span style="color:#f43f5e;">➔ Vetor Aceleração a (Abaixo)</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
+            </div>
+
+            <!-- CONTROLS PANEL DIRECTLY ATTACHED TO ANIMATION STAGE -->
+            <div class="controls-panel-inline">
+                <div class="controls-row">
+                    <div class="btn-group-inline">
+                        <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
+                        <button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button>
+                    </div>
+                    <div class="control-group-inline">
+                        <label>Controle do Tempo t: <span id="ex-t-val">0.00 s</span></label>
+                        <input type="range" id="ex-t" min="0" max="7.5" step="0.1" value="0" oninput="updateDemo()">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -351,13 +393,13 @@
             return { canvas, ctx, w, h };
         }
 
-        function drawVectorArrow(ctx, x, y, dx, dy, color, label) {
+        function drawVectorArrow(ctx, x, y, dx, dy, color, label, labelBelow = false) {
             const len = Math.hypot(dx, dy);
             if (len < 2) return;
             const angle = Math.atan2(dy, dx);
             const headLen = Math.min(10, len * 0.35);
 
-            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2.5;
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2.8;
             ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); ctx.stroke();
 
             ctx.beginPath(); ctx.moveTo(x + dx, y + dy);
@@ -366,8 +408,19 @@
             ctx.closePath(); ctx.fill();
 
             if (label) {
-                ctx.font = 'bold 11px Inter'; ctx.textAlign = 'center';
-                ctx.fillText(label, x + dx * 0.5, y + dy - 6);
+                const labelX = x + dx * 0.5;
+                const labelY = labelBelow ? (y + dy + 18) : (y + dy - 10);
+                
+                // Draw solid background pill behind label to prevent crowding/overlapping!
+                ctx.font = 'bold 12px Inter';
+                const textWidth = ctx.measureText(label).width;
+                ctx.fillStyle = 'rgba(5, 8, 17, 0.9)';
+                ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
+                ctx.strokeStyle = color; ctx.lineWidth = 1;
+                ctx.strokeRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
+
+                ctx.fillStyle = color; ctx.textAlign = 'center';
+                ctx.fillText(label, labelX, labelY);
             }
         }
 
