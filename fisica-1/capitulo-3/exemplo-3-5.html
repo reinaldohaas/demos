@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 3.1: Vetor Posição e Velocidade em Duas Dimensões | FSC5101 Física I</title>
+    <title>Exemplo 3.5: Movimento Circular Uniforme (MCU) | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -204,17 +204,17 @@
     <div class="top-nav">
         <a href="index.html" class="back-btn">← Voltar ao Hub do Capítulo 3</a>
         <div style="display:flex; gap:10px; align-items:center;">
-            <span class="nav-step-disabled">← Primeiro Exemplo</span>
-            <a href="exemplo-3-2.html" class="nav-step-btn primary">Exemplo 3.2: Aceleração 2D →</a>
+            <a href="exemplo-3-4.html" class="nav-step-btn">← Exemplo Anterior</a>
+            <a href="exemplo-3-6.html" class="nav-step-btn primary">Exemplo 3.6: MCU Não-Uniforme →</a>
         </div>
     </div>
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 3.1: Vetor Posição e Velocidade em Duas Dimensões</h2>
-            <p>Um veículo robótico de exploração planetária se move no plano xy. Sua posição varia com o tempo conforme r(t) = [2,0 m + (0,25 m/s²)t²]i + [(1,0 m/s)t + (0,025 m/s³)t³]j. Determine o vetor posição e o vetor velocidade em t = 2,0 s.</p>
+            <h2>Exemplo 3.5: Movimento Circular Uniforme (MCU)</h2>
+            <p>Um veículo espacial ou participante em uma centrífuga de testes gira em uma trajetória circular de raio R = 5,0 m com período T = 4,0 s. Calcule a velocidade escalar e a aceleração centrípeta.</p>
         </div>
-        <div class="formula-badge">r(t) = [2.0 + 0.25 t²] i + [1.0 t + 0.025 t³] j</div>
+        <div class="formula-badge">a_c = v² / R = 4π² R / T²</div>
     </div>
 
     <div class="presentation-container">
@@ -228,27 +228,18 @@
         <div class="item-card">
             <div class="item-badge">Item (A)</div>
             <div class="item-content">
-                <div class="item-title">Componentes x, y e módulo do vetor posição em t = 2,0 s</div>
-                <div class="item-formula"><code>x(2,0) = 3,0 m; y(2,0) = 2,2 m</code></div>
-                <div class="item-calc">r = √(3,0² + 2,2²) = 3,72 m a um ângulo θ = 36,3° acima do eixo x.</div>
+                <div class="item-title">Velocidade Escolar Constante v</div>
+                <div class="item-formula"><code>v = 2 π R / T</code></div>
+                <div class="item-calc">v = 2 × 3,1416 × 5,0 / 4,0 = 7,85 m/s.</div>
             </div>
         </div>
         
         <div class="item-card">
             <div class="item-badge">Item (B)</div>
             <div class="item-content">
-                <div class="item-title">Componentes da velocidade instantânea em t = 2,0 s</div>
-                <div class="item-formula"><code>v_x = dx/dt = 0,50 t; v_y = dy/dt = 1,0 + 0,075 t²</code></div>
-                <div class="item-calc">Em t = 2,0 s: v_x = 1,0 m/s; v_y = 1,30 m/s.</div>
-            </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (C)</div>
-            <div class="item-content">
-                <div class="item-title">Módulo e direção do vetor velocidade v</div>
-                <div class="item-formula"><code>v = √(v_x² + v_y²); tan θ = v_y / v_x</code></div>
-                <div class="item-calc">v = √(1,0² + 1,30²) = 1,64 m/s a um ângulo θ = 52,4°.</div>
+                <div class="item-title">Aceleração Centrípeta a_c</div>
+                <div class="item-formula"><code>a_c = v² / R = 4 π² R / T²</code></div>
+                <div class="item-calc">a_c = (7,85)² / 5,0 = 12,34 m/s² (equivalente a 1,26 g).</div>
             </div>
         </div>
         
@@ -258,7 +249,7 @@
             <div class="control-card">
                 <div class="control-group">
                     <label>Tempo t: <span id="ex-t-val">0.00 s</span></label>
-                    <input type="range" id="ex-t" min="0" max="4.0" step="0.05" value="0" oninput="updateDemo()">
+                    <input type="range" id="ex-t" min="0" max="4.0" step="0.04" value="0" oninput="updateDemo()">
                 </div>
                 <div class="btn-group">
                     <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
@@ -272,8 +263,8 @@
             <div class="scene-nav-bar">
                 <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa com Vetores Velocidade $\vec{v}$ e Aceleração $\vec{a}$</span>
                 <div style="display:flex; gap:8px;">
-                    <span class="nav-step-disabled">← Primeiro Exemplo</span>
-                    <a href="exemplo-3-2.html" class="nav-step-btn primary">Exemplo 3.2: Aceleração 2D →</a>
+                    <a href="exemplo-3-4.html" class="nav-step-btn">← Exemplo Anterior</a>
+                    <a href="exemplo-3-6.html" class="nav-step-btn primary">Exemplo 3.6: MCU Não-Uniforme →</a>
                 </div>
             </div>
 
@@ -308,7 +299,7 @@
         function loop() {
             if (!running) return;
             const input = document.getElementById('ex-t');
-            let t = parseFloat(input.value) + parseFloat(input.step || 0.05);
+            let t = parseFloat(input.value) + parseFloat(input.step || 0.04);
             const maxVal = parseFloat(input.max || 4.0);
             if (t > maxVal) {
                 t = maxVal;
@@ -362,42 +353,33 @@
         
         function drawScene(t) {
             const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-            const padL = 50, padB = 30, gW = w - padL - 20, gH = h - padB - 20;
+            const cx = w / 2, cy = h / 2, R = 55;
             ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,w,h);
-            const toPxX = x => padL + (x / 8.0) * gW, toPxY = y => (h - padB) - (y / 8.0) * gH;
 
-            // Grid
-            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 1;
-            ctx.beginPath(); ctx.moveTo(padL, 10); ctx.lineTo(padL, h - padB); ctx.lineTo(w - 10, h - padB); ctx.stroke();
+            // Circular Path
+            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
 
-            // Mars Rover Trajectory
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5; ctx.beginPath();
-            for (let tau = 0; tau <= 4.0; tau += 0.05) {
-                const rx = 2.0 + 0.25 * tau * tau;
-                const ry = 1.0 * tau + 0.025 * tau * tau * tau;
-                if (tau === 0) ctx.moveTo(toPxX(rx), toPxY(ry)); else ctx.lineTo(toPxX(rx), toPxY(ry));
-            }
-            ctx.stroke();
+            const angle = (2 * Math.PI / 4.0) * t;
+            const px = cx + R * Math.cos(angle);
+            const py = cy - R * Math.sin(angle);
 
-            const x_t = 2.0 + 0.25 * t * t;
-            const y_t = 1.0 * t + 0.025 * t * t * t;
-            const vx_t = 0.50 * t;
-            const vy_t = 1.0 + 0.075 * t * t;
-            const ax_t = 0.50;
-            const ay_t = 0.15 * t;
+            // Tangential velocity vector direction
+            const vx = -7.85 * Math.sin(angle);
+            const vy = 7.85 * Math.cos(angle);
 
-            const px = toPxX(x_t), py = toPxY(y_t);
+            // Centripetal acceleration vector (towards center)
+            const ax = -cx + px; const ay = -cy + py;
 
-            // Rover Marker
-            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(px, py, 8, 0, Math.PI * 2); ctx.fill();
-            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'left';
-            ctx.fillText(`🤖 Robô Marte (${x_t.toFixed(2)}m, ${y_t.toFixed(2)}m)`, px + 12, py);
+            // Object
+            ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.arc(px, py, 8, 0, Math.PI * 2); ctx.fill();
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#a855f7'; ctx.textAlign = 'center';
+            ctx.fillText(`🛸 Centrífuga (v = 7.85 m/s)`, px, py - 18);
 
-            // Velocity Vector (Green)
-            drawVectorArrow(ctx, px, py, vx_t * 25.0, -vy_t * 25.0, '#10b981', `v = ${Math.hypot(vx_t, vy_t).toFixed(2)}m/s`);
+            // Velocity Vector (Green Tangent)
+            drawVectorArrow(ctx, px, py, vx * 3.5, -vy * 3.5, '#10b981', `v`);
 
-            // Acceleration Vector (Red)
-            drawVectorArrow(ctx, px, py, ax_t * 40.0, -ay_t * 40.0, '#f43f5e', `a = ${Math.hypot(ax_t, ay_t).toFixed(2)}m/s²`);
+            // Centripetal Acceleration Vector (Red Center)
+            drawVectorArrow(ctx, px, py, (cx - px) * 0.5, (cy - py) * 0.5, '#f43f5e', `a_c = 12.3m/s²`);
         }
         
 

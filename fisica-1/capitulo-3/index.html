@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 3: Movimento em 2D e 3D | FSC5101 Física I</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070a12;
+            --bg-card: rgba(15, 23, 42, 0.88);
+            --bg-card-border: rgba(56, 189, 248, 0.25);
+            --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 45%);
+            background-attachment: fixed;
+            padding: 24px;
+        }
+        .header { max-width: 1200px; margin: 0 auto 32px; }
+        .back-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--bg-card-border);
+            color: var(--accent-cyan);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+        .header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+            margin-bottom: 6px;
+        }
+        .header p { color: var(--text-sub); font-size: 1rem; }
+
+        .grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 18px;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.25);
+        }
+        .card-num { font-size: 0.78rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 4px; }
+        .card-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.15rem; margin-bottom: 8px; color: var(--text-main); }
+        .card-desc { font-size: 0.86rem; color: var(--text-sub); line-height: 1.5; margin-bottom: 16px; }
+        .card-btn {
+            background: var(--accent-cyan);
+            color: #020617;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-btn">← Voltar ao Índice Geral de Física I</a>
+        <h1>Capítulo 3: Movimento em Duas ou Três Dimensões</h1>
+        <p>Demonstrações e Resoluções Didáticas dos Exemplos 3.1 ao 3.8 (Sears & Zemansky 12ª Ed.)</p>
+    </div>
+
+    <div class="grid">
+        <a href="exemplo-3-1.html" class="card">
+            <div>
+                <div class="card-num">Exemplo 3.1</div>
+                <div class="card-title">Vetor Posição e Velocidade em Duas Dimensões</div>
+                <div class="card-desc">Movimento do veículo robótico em Marte com r(t), cálculo de v_x, v_y, módulo v e direção.</div>
+            </div>
+            <div class="card-btn">Abrir Exemplo 3.1 →</div>
+        </a>
+
+        <a href="exemplo-3-2.html" class="card">
+            <div>
+                <div class="card-num">Exemplo 3.2</div>
+                <div class="card-title">Aceleração em Duas Dimensões</div>
+                <div class="card-desc">Aceleração média e instantânea a(t) = 0,50 i + 0,15 t j no veículo em Marte.</div>
+            </div>
+            <div class="card-btn">Abrir Exemplo 3.2 →</div>
+        </a>
+
+        <a href="exemplo-3-3.html" class="card">
+            <div>
+                <div class="card-num">Exemplo 3.3</div>
+                <div class="card-title">Movimento de Projéteis</div>
+                <div class="card-desc">Chute de bola a partir do solo (v₀ = 11 m/s, α₀ = 53,1°), altura máxima 3,95 m e alcance 11,85 m.</div>
+            </div>
+            <div class="card-btn">Abrir Exemplo 3.3 →</div>
+        </a>
+
+        <a href="exemplo-3-4.html" class="card">
+            <div>
+                <div class="card-num">Exemplo 3.4</div>
+                <div class="card-title">Lançamento de Resgate em Altitude</div>
+                <div class="card-desc">Avião de resgate soltando pacote a 100 m de altura e v₀x = 40 m/s com alcance 180,7 m.</div>
+            </div>
+            <div class="card-btn">Abrir Exemplo 3.4 →</div>
+        </a>
+
+        <a href="exemplo-3-5.html" class="card">
+            <div>
+                <div class="card-num">Exemplo 3.5</div>
+                <div class="card-title">Movimento Circular Uniforme (MCU)</div>
+                <div class="card-desc">Centrífuga de raio R = 5,0 m e período T = 4,0 s, velocidade v = 7,85 m/s e aceleração centrípeta a_c = 12,3 m/s².</div>
+            </div>
+            <div class="card-btn">Abrir Exemplo 3.5 →</div>
+        </a>
+
+        <a href="exemplo-3-6.html" class="card">
+            <div>
+                <div class="card-num">Exemplo 3.6</div>
+                <div class="card-title">Movimento Circular Não-Uniforme</div>
+                <div class="card-desc">Carro em curva de raio 50 m com aceleração radial a_r e tangencial a_t = 2,0 m/s².</div>
+            </div>
+            <div class="card-btn">Abrir Exemplo 3.6 →</div>
+        </a>
+
+        <a href="exemplo-3-7.html" class="card">
+            <div>
+                <div class="card-num">Exemplo 3.7</div>
+                <div class="card-title">Velocidade Relativa em Duas Dimensões (Barco no Rio)</div>
+                <div class="card-desc">Barco navegando a 4,0 m/s em rio com correnteza de 2,0 m/s, travessia direta e ângulo de proa a 30°.</div>
+            </div>
+            <div class="card-btn">Abrir Exemplo 3.7 →</div>
+        </a>
+
+        <a href="exemplo-3-8.html" class="card">
+            <div>
+                <div class="card-num">Exemplo 3.8</div>
+                <div class="card-title">Velocidade Relativa com Vento Cruzado</div>
+                <div class="card-desc">Avião (240 km/h) voando para o norte sob vento de 100 km/h vindo do oeste e ângulo de correção a 24,6°.</div>
+            </div>
+            <div class="card-btn">Abrir Exemplo 3.8 →</div>
+        </a>
+    </div>
+</body>
+</html>
