@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 1.1: Conversão de Unidades de Velocidade | FSC5101 Física I</title>
+    <title>Exemplo 1.5: Soma Vetorial (Método Gráfico / Geométrico) | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -204,17 +204,17 @@
     <div class="top-nav">
         <a href="index.html" class="back-btn">← Voltar ao Hub do Capítulo 1</a>
         <div style="display:flex; gap:10px; align-items:center;">
-            <span class="nav-step-disabled">← Primeiro Exemplo</span>
-            <a href="exemplo-1-2.html" class="nav-step-btn primary">Exemplo 1.2: Volume →</a>
+            <a href="exemplo-1-4.html" class="nav-step-btn">← Exemplo Anterior</a>
+            <a href="exemplo-1-6.html" class="nav-step-btn primary">Exemplo 1.6: Componentes →</a>
         </div>
     </div>
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 1.1: Conversão de Unidades de Velocidade</h2>
-            <p>O recorde mundial de velocidade no solo é de 1228,0 km/h, estabelecido por Andy Green com o Thrust SSC (carro a jato). Expresse esta velocidade em metros por segundo (m/s).</p>
+            <h2>Exemplo 1.5: Soma Vetorial (Método Gráfico / Geométrico)</h2>
+            <p>Uma esquiadora percorre 1,0 km do sul para o norte (vetor A) e depois 2,0 km de oeste para leste (vetor B) em um campo plano. A que distância ela está do ponto de partida e em que direção?</p>
         </div>
-        <div class="formula-badge">1228,0 km/h = 341,11 m/s</div>
+        <div class="formula-badge">R = √(A² + B²), tan φ = B / A</div>
     </div>
 
     <div class="presentation-container">
@@ -228,27 +228,18 @@
         <div class="item-card">
             <div class="item-badge">Item (A)</div>
             <div class="item-content">
-                <div class="item-title">Fator de Conversão de Comprimento</div>
-                <div class="item-formula"><code>1 km = 1000 m</code></div>
-                <div class="item-calc">1228,0 km/h × (1000 m / 1 km) = 1.228.000 m/h.</div>
+                <div class="item-title">Módulo do Deslocamento Resultante R</div>
+                <div class="item-formula"><code>R = √(A² + B²)</code></div>
+                <div class="item-calc">R = √(1,0² + 2,0²) = √5,0 = 2,24 km ≈ 2,2 km.</div>
             </div>
         </div>
         
         <div class="item-card">
             <div class="item-badge">Item (B)</div>
             <div class="item-content">
-                <div class="item-title">Fator de Conversão de Tempo</div>
-                <div class="item-formula"><code>1 h = 3600 s</code></div>
-                <div class="item-calc">1.228.000 m/h × (1 h / 3600 s) = 341,11 m/s.</div>
-            </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (C)</div>
-            <div class="item-content">
-                <div class="item-title">Avaliação e Precisão</div>
-                <div class="item-formula"><code>5 algarismos significativos</code></div>
-                <div class="item-calc">341,11 m/s corresponde a aproximadamente Mach 1,0 (superando a barreira do som no solo!).</div>
+                <div class="item-title">Direção do Vetor Resultante φ</div>
+                <div class="item-formula"><code>tan φ = B / A = 2,0 / 1,0 = 2,0</code></div>
+                <div class="item-calc">φ = arctan(2,0) = 63,4° a leste do norte.</div>
             </div>
         </div>
         
@@ -258,7 +249,7 @@
             <div class="control-card">
                 <div class="control-group">
                     <label>Ajuste do Parâmetro: <span id="ex-t-val">0.00</span></label>
-                    <input type="range" id="ex-t" min="0" max="341.11" step="5.0" value="0" oninput="updateDemo()">
+                    <input type="range" id="ex-t" min="0" max="2.0" step="0.05" value="0" oninput="updateDemo()">
                 </div>
                 <div class="btn-group">
                     <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
@@ -272,8 +263,8 @@
             <div class="scene-nav-bar">
                 <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D/3D Silenciosa com Vetores e Grandezas Físicas</span>
                 <div style="display:flex; gap:8px;">
-                    <span class="nav-step-disabled">← Primeiro Exemplo</span>
-                    <a href="exemplo-1-2.html" class="nav-step-btn primary">Exemplo 1.2: Volume →</a>
+                    <a href="exemplo-1-4.html" class="nav-step-btn">← Exemplo Anterior</a>
+                    <a href="exemplo-1-6.html" class="nav-step-btn primary">Exemplo 1.6: Componentes →</a>
                 </div>
             </div>
 
@@ -309,8 +300,8 @@
         function loop() {
             if (!running) return;
             const input = document.getElementById('ex-t');
-            let t = parseFloat(input.value) + parseFloat(input.step || 5.0);
-            const maxVal = parseFloat(input.max || 341.11);
+            let t = parseFloat(input.value) + parseFloat(input.step || 0.05);
+            const maxVal = parseFloat(input.max || 2.0);
             if (t > maxVal) {
                 t = maxVal;
                 running = false;
@@ -361,26 +352,24 @@
         }
 
         
-        function drawScene(val) {
+        function drawScene(t) {
             const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return; ctx.clearRect(0,0,w,h);
             ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,w,h);
 
-            const kmh = val * 3.6;
-            const progress = val / 341.11;
-            const carX = 40 + progress * (w - 120);
+            const ox = 120, oy = h - 80;
+            const scale = 80;
 
-            // Track Ground
-            ctx.strokeStyle = '#334155'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, h - 60); ctx.lineTo(w, h - 60); ctx.stroke();
+            const ax = 0, ay = -1.0 * scale;
+            const bx = 2.0 * scale, by = 0;
 
-            // Thrust SSC Jet Car
-            ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.roundRect(carX, h - 85, 70, 20, 5); ctx.fill();
-            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(carX + 10, h - 60, 6, 0, Math.PI*2); ctx.arc(carX + 60, h - 60, 6, 0, Math.PI*2); ctx.fill();
+            // Vector A (North)
+            drawVectorArrow(ctx, ox, oy, 0, ay, '#38bdf8', 'A = 1.0 km (Norte)');
 
-            // Flame exhaust
-            ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.moveTo(carX, h - 80); ctx.lineTo(carX - 25 * (val/341.11), h - 75); ctx.lineTo(carX, h - 70); ctx.fill();
+            // Vector B (East)
+            drawVectorArrow(ctx, ox, oy + ay, bx, 0, '#a855f7', 'B = 2.0 km (Leste)');
 
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'center';
-            ctx.fillText(`🚀 Thrust SSC: ${val.toFixed(2)} m/s (${kmh.toFixed(1)} km/h)`, carX + 35, h - 100);
+            // Resultant R
+            drawVectorArrow(ctx, ox, oy, bx, ay, '#fbbf24', 'R = 2.24 km (63.4°)');
         }
         
 
