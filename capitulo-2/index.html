@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 2: Movimento Retilíneo | FSC5101 Física I</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070a12;
+            --bg-card: rgba(15, 23, 42, 0.88);
+            --bg-card-border: rgba(56, 189, 248, 0.25);
+            --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 40%);
+            background-attachment: fixed;
+            padding: 24px;
+        }
+
+        .top-nav {
+            max-width: 1200px;
+            margin: 0 auto 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--bg-card-border);
+            color: var(--accent-cyan);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); }
+
+        .header {
+            max-width: 1200px;
+            margin: 0 auto 36px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .header p { color: var(--text-sub); font-size: 1.05rem; }
+
+        .grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 16px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 12px 30px rgba(56, 189, 248, 0.25);
+        }
+
+        .card-tag { font-size: 0.75rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 8px; }
+        .card-title { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+        .card-desc { font-size: 0.88rem; color: var(--text-sub); line-height: 1.5; margin-bottom: 16px; }
+        .card-btn {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: var(--accent-cyan);
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .card:hover .card-btn { background: var(--accent-cyan); color: #020617; }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <a href="../index.html" class="back-btn">← Voltar ao Hub Principal de Demos</a>
+        <span style="font-size:0.85rem; color:var(--text-sub);">FSC5101 Física I • Mecânica</span>
+    </div>
+
+    <div class="header">
+        <h1>CAPÍTULO 2 — MOVIMENTO RETILÍNEO</h1>
+        <p>Apresentações Didáticas Interativas dos Exemplos 2.1 ao 2.7 (Passo a Passo com Slides)</p>
+    </div>
+
+    <div class="grid">
+
+        <a href="exemplo-2-1.html" class="card">
+            <div>
+                <div class="card-tag">Capítulo 2 • Movimento Retilíneo</div>
+                <div class="card-title">Exemplo 2.1: Posição e Velocidade Média (O Leopardo)</div>
+                <div class="card-desc">Um leopardo está espreitando a 20 m a leste de um jipe de um observador. No instante t = 0, o leopardo começa a perseguir um antílope a 50 m do jipe. O movimento do leopardo é dado por x(t) = 20 + 5,0 t² (m).</div>
+            </div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+        </a>
+    
+        <a href="exemplo-2-2.html" class="card">
+            <div>
+                <div class="card-tag">Capítulo 2 • Movimento Retilíneo</div>
+                <div class="card-title">Exemplo 2.2: Velocidade Instantânea e Inversão de Sentido</div>
+                <div class="card-desc">A posição de um veículo de testes ao longo do eixo Ox é dada por x(t) = 3,0 t - 0,10 t³ (m). Determine a velocidade instantânea em função do tempo e o instante em que o veículo para momentaneamente.</div>
+            </div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+        </a>
+    
+        <a href="exemplo-2-3.html" class="card">
+            <div>
+                <div class="card-tag">Capítulo 2 • Movimento Retilíneo</div>
+                <div class="card-title">Exemplo 2.3: Aceleração Média e Instantânea</div>
+                <div class="card-desc">Um automóvel esportivo desloca-se com velocidade dada por v(t) = 60,0 + 0,50 t² (m/s). Calcule a aceleração média entre 0 e 2,0 s e a aceleração instantânea em t = 1,0 s e t = 3,0 s.</div>
+            </div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+        </a>
+    
+        <a href="exemplo-2-4.html" class="card">
+            <div>
+                <div class="card-tag">Capítulo 2 • Movimento Retilíneo</div>
+                <div class="card-title">Exemplo 2.4: MRUV - Frenagem e Distância de Parada</div>
+                <div class="card-desc">Um automóvel viajando a v₀ = 15,0 m/s (54 km/h) aplica os freios com desaceleração constante a = -2,0 m/s². Determine o tempo de parada e a distância percorrida.</div>
+            </div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+        </a>
+    
+        <a href="exemplo-2-5.html" class="card">
+            <div>
+                <div class="card-tag">Capítulo 2 • Movimento Retilíneo</div>
+                <div class="card-title">Exemplo 2.5: Queda Livre de um Objeto do Alto de Edifício</div>
+                <div class="card-desc">Uma bola é lançada verticalmente para cima a partir do topo de um edifício de 50,0 m de altura com v₀ = 15,0 m/s (g = 9,80 m/s²). Determine a altura máxima, o tempo para atingir o solo e a velocidade de impacto.</div>
+            </div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+        </a>
+    
+        <a href="exemplo-2-6.html" class="card">
+            <div>
+                <div class="card-tag">Capítulo 2 • Movimento Retilíneo</div>
+                <div class="card-title">Exemplo 2.6: Integração da Aceleração Variável a(t)</div>
+                <div class="card-desc">A aceleração de um veículo de testes varia com o tempo segundo a(t) = A t - B t², onde A = 1,50 m/s³ e B = 0,12 m/s⁴. Sabendo que v₀ = 0 e x₀ = 0 em t = 0, determine v(t) e x(t).</div>
+            </div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+        </a>
+    
+        <a href="exemplo-2-7.html" class="card">
+            <div>
+                <div class="card-tag">Capítulo 2 • Movimento Retilíneo</div>
+                <div class="card-title">Exemplo 2.7: Ultrapassagem e Movimento Relativo de Carros</div>
+                <div class="card-desc">No instante t = 0, o Carro A parte do repouso (x = 0) com aceleração constante a_A = 2,50 m/s². No mesmo instante t = 0, o Carro B passa por x = 0 com velocidade constante v_B = 15,0 m/s. Encontre o instante e a posição da ultrapassagem.</div>
+            </div>
+            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+        </a>
+    
+    </div>
+</body>
+</html>

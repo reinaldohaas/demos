@@ -4,24 +4,24 @@
   "github_repo": "reinaldohaas/demos",
   "demos": [
     {
-      "id": "exemplo-1-1",
-      "title": "Exemplo 1.1: Vetores e Soma Vetorial 2D",
-      "category": "Capítulo 1 • Vetores",
+      "id": "cap2-hub",
+      "title": "Capítulo 2: Movimento Retilíneo (Hub de Exemplos 2.1 a 2.7)",
+      "category": "Capítulo 2 • Movimento Retilíneo",
       "llm": "Gemini 3.7 Flash",
-      "icon": "📐",
+      "icon": "📘",
       "tags": [
-        "Vetores",
-        "Produto Escalar",
-        "Produto Vetorial",
-        "Decomposição 2D"
+        "Capítulo 2",
+        "Exemplos 2.1 a 2.7",
+        "Movimento Retilíneo",
+        "Apresentação Passo a Passo"
       ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) da soma vetorial R = A + B, módulo, direção, produto escalar e produto vetorial.",
-      "path": "exercicios/exemplo-1-1.html",
+      "description": "Apresentações didáticas em formato de slides (itens a, b, c, d) de todos os 7 exemplos do Capítulo 2 (2.1 ao 2.7).",
+      "path": "capitulo-2/index.html",
       "date": "2026-08-31"
     },
     {
       "id": "exemplo-2-1",
-      "title": "Exemplo 2.1: Velocidade Média e Instantânea (O Leopardo)",
+      "title": "Exemplo 2.1: Posição e Velocidade Média (O Leopardo)",
       "category": "Capítulo 2 • Movimento Retilíneo",
       "llm": "Gemini 3.7 Flash",
       "icon": "🐆",
@@ -29,91 +29,105 @@
         "O Leopardo",
         "Velocidade Média",
         "Reta Secante",
-        "Reta Tangente",
-        "Derivada"
+        "Reta Tangente"
       ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) com convergência da reta secante para a tangente no gráfico x(t) = 20 + 5,0 t².",
-      "path": "exercicios/exemplo-2-1.html",
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) com convergência gráfica no movimento x(t) = 20 + 5,0 t².",
+      "path": "capitulo-2/exemplo-2-1.html",
       "date": "2026-08-31"
     },
     {
       "id": "exemplo-2-2",
-      "title": "Exemplo 2.2: Queda Livre e Lançamento Vertical",
+      "title": "Exemplo 2.2: Velocidade Instantânea e Inversão de Sentido",
+      "category": "Capítulo 2 • Movimento Retilíneo",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "🏎️",
+      "tags": [
+        "Velocidade Instantânea",
+        "Derivada",
+        "Inversão de Sentido",
+        "Repouso Momentâneo"
+      ],
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) da derivada v(t) = 3,0 - 0,30 t² e ponto de repouso momentâneo.",
+      "path": "capitulo-2/exemplo-2-2.html",
+      "date": "2026-08-31"
+    },
+    {
+      "id": "exemplo-2-3",
+      "title": "Exemplo 2.3: Aceleração Média e Instantânea",
+      "category": "Capítulo 2 • Movimento Retilíneo",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "📈",
+      "tags": [
+        "Aceleração Média",
+        "Aceleração Instantânea",
+        "Inclinação de v(t)"
+      ],
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) da aceleração instantânea a(t) = 1,0 t m/s².",
+      "path": "capitulo-2/exemplo-2-3.html",
+      "date": "2026-08-31"
+    },
+    {
+      "id": "exemplo-2-4",
+      "title": "Exemplo 2.4: MRUV - Frenagem e Distância de Parada",
+      "category": "Capítulo 2 • Movimento Retilíneo",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "🛑",
+      "tags": [
+        "MRUV",
+        "Frenagem",
+        "Desaceleração Constante",
+        "Equação de Torricelli"
+      ],
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) da parada completa de um veículo com desaceleração constante.",
+      "path": "capitulo-2/exemplo-2-4.html",
+      "date": "2026-08-31"
+    },
+    {
+      "id": "exemplo-2-5",
+      "title": "Exemplo 2.5: Queda Livre do Alto de um Edifício",
       "category": "Capítulo 2 • Movimento Retilíneo",
       "llm": "Gemini 3.7 Flash",
       "icon": "🏀",
       "tags": [
         "Queda Livre",
-        "Gravidade",
+        "Lançamento Vertical",
         "Altura Máxima",
-        "Tempo de Voo"
+        "Impacto"
       ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) do lançamento vertical sob aceleração da gravidade constante g = 9,80 m/s².",
-      "path": "exercicios/exemplo-2-2.html",
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) da trajetória de uma bola lançada do topo de um edifício de 50 m.",
+      "path": "capitulo-2/exemplo-2-5.html",
       "date": "2026-08-31"
     },
     {
-      "id": "exemplo-3-1",
-      "title": "Exemplo 3.1: Movimento de Projéteis 2D",
-      "category": "Capítulo 3 • Movimento 2D",
+      "id": "exemplo-2-6",
+      "title": "Exemplo 2.6: Integração da Aceleração Variável a(t)",
+      "category": "Capítulo 2 • Movimento Retilíneo",
       "llm": "Gemini 3.7 Flash",
-      "icon": "🚀",
+      "icon": "∫",
       "tags": [
-        "Lançamento Oblíquo",
-        "Parábola",
-        "Alcance Horizontal",
-        "Altura Máxima"
+        "Integração",
+        "Aceleração Variável",
+        "Cálculo",
+        "Velocidade Máxima"
       ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) da trajetória parabólica, alcance R e altura máxima H de projéteis.",
-      "path": "exercicios/exemplo-3-1.html",
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) da obtenção de v(t) e x(t) por integração de a(t) = A t - B t².",
+      "path": "capitulo-2/exemplo-2-6.html",
       "date": "2026-08-31"
     },
     {
-      "id": "exemplo-3-2",
-      "title": "Exemplo 3.2: Movimento Circular Uniforme (MCU)",
-      "category": "Capítulo 3 • Movimento 2D",
+      "id": "exemplo-2-7",
+      "title": "Exemplo 2.7: Ultrapassagem de Dois Veículos",
+      "category": "Capítulo 2 • Movimento Retilíneo",
       "llm": "Gemini 3.7 Flash",
-      "icon": "🔄",
+      "icon": "🚗",
       "tags": [
-        "MCU",
-        "Aceleração Centrípeta",
-        "Velocidade Angular",
-        "Período"
+        "Ultrapassagem",
+        "Movimento Relativo",
+        "Cruzamento de Curvas",
+        "MRU vs MRUV"
       ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) da velocidade angular ω, período T e aceleração centrípeta a_c.",
-      "path": "exercicios/exemplo-3-2.html",
-      "date": "2026-08-31"
-    },
-    {
-      "id": "exemplo-4-1",
-      "title": "Exemplo 4.1: Leis de Newton em Plano Inclinado",
-      "category": "Capítulo 4 • Leis de Newton",
-      "llm": "Gemini 3.7 Flash",
-      "icon": "📐",
-      "tags": [
-        "Plano Inclinado",
-        "Atrito Cinético",
-        "Força Normal",
-        "Leis de Newton"
-      ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) das forças de atrito, força normal e aceleração ao longo da rampa.",
-      "path": "exercicios/exemplo-4-1.html",
-      "date": "2026-08-31"
-    },
-    {
-      "id": "exemplo-5-1",
-      "title": "Exemplo 5.1: Conservação da Energia Mecânica",
-      "category": "Capítulo 5 • Conservação de Energia",
-      "llm": "Gemini 3.7 Flash",
-      "icon": "⚡",
-      "tags": [
-        "Energia Potencial",
-        "Energia Cinética",
-        "Conservação de Energia",
-        "Trabalho"
-      ],
-      "description": "Apresentação didática passo a passo (itens a, b, c, d) da conversão entre energia potencial U_i e energia cinética K_f.",
-      "path": "exercicios/exemplo-5-1.html",
+      "description": "Apresentação didática passo a passo (itens a, b, c, d) do instante e posição de ultrapassagem entre o Carro A e o Carro B.",
+      "path": "capitulo-2/exemplo-2-7.html",
       "date": "2026-08-31"
     }
   ]
