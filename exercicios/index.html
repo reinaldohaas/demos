@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FSC5101 Física I | Demos Interativas de Exercícios</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0b0f19;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --bg-card-border: rgba(255, 255, 255, 0.1);
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --accent-cyan: #38bdf8;
+            --accent-amber: #fbbf24;
+            --accent-rose: #f43f5e;
+            --accent-emerald: #10b981;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.12) 0%, transparent 40%);
+            background-attachment: fixed;
+            padding: 24px;
+        }
+
+        .header {
+            max-width: 1200px;
+            margin: 0 auto 32px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            color: var(--text-sub);
+            font-size: 1.05rem;
+        }
+
+        /* Nav Tabs */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto 28px;
+        }
+
+        .tab-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            color: var(--text-sub);
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: var(--primary-gradient);
+            color: #ffffff;
+            border-color: transparent;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo-panel {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 20px;
+            padding: 28px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .demo-panel.active {
+            display: grid;
+        }
+
+        @media (max-width: 900px) {
+            .demo-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Statement Box */
+        .statement-box {
+            background: rgba(15, 23, 42, 0.8);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 20px;
+        }
+
+        .statement-box h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            color: var(--accent-cyan);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .statement-box p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        /* Controls Section */
+        .controls-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .control-group label span {
+            color: var(--accent-cyan);
+            font-family: monospace;
+            font-size: 0.95rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #334155;
+            outline: none;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #334155;
+            color: var(--text-main);
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Simulation Canvas & Plots */
+        .view-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .canvas-container {
+            width: 100%;
+            height: 220px;
+            background: #090d16;
+            border-radius: 10px;
+            border: 1px solid var(--bg-card-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .plots-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 700px) {
+            .plots-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .plot-box {
+            background: #090d16;
+            border: 1px solid var(--bg-card-border);
+            border-radius: 10px;
+            padding: 10px;
+            height: 150px;
+            position: relative;
+        }
+
+        .plot-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        /* Results / Equations */
+        .equation-box {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #e2e8f0;
+        }
+
+        .equation-box strong {
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>FSC5101 — Física I (MECÂNICA)</h1>
+        <p>Demonstrações Interativas & Simulações Físicas dos Exercícios Selecionados</p>
+    </div>
+
+    <!-- Navigation Tabs for 7 Exercises -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab(1)">Ex. 1.1 (Vetores 2D)</button>
+        <button class="tab-btn" onclick="switchTab(2)">Ex. 2.1 (MRU / MRUV)</button>
+        <button class="tab-btn" onclick="switchTab(3)">Ex. 2.2 (Queda Livre)</button>
+        <button class="tab-btn" onclick="switchTab(4)">Ex. 3.1 (Lançamento 2D)</button>
+        <button class="tab-btn" onclick="switchTab(5)">Ex. 3.2 (MCU)</button>
+        <button class="tab-btn" onclick="switchTab(6)">Ex. 4.1 (Plano Inclinado)</button>
+        <button class="tab-btn" onclick="switchTab(7)">Ex. 5.1 (Energia Mecânica)</button>
+    </div>
+
+    <div class="main-container">
+
+        <!-- ================= EXERCÍCIO 1.1 ================= -->
+        <div id="panel-1" class="demo-panel active">
+            <div class="statement-box full-width">
+                <h3>📌 Exercício 1.1 — Vetores e Soma Vetorial no Plano Cartesiano</h3>
+                <p>
+                    Um objeto sofre dois deslocamentos sucessivos no plano xy: o primeiro vetor 
+                    <b>A = (Ax, Ay)</b> e o segundo vetor <b>B = (Bx, By)</b>. 
+                    a) Determine as componentes cartesianas, o módulo e a direção do vetor resultante <b>R = A + B</b>. 
+                    b) Calcule o produto escalar <b>A · B</b> e o produto vetorial <b>A × B</b>.
+                </p>
+            </div>
+            
+            <div class="controls-card">
+                <div class="control-group">
+                    <label>Vetor A - Componente Ax: <span id="v1-ax-val">3.0</span> m</label>
+                    <input type="range" id="v1-ax" min="-10" max="10" step="0.5" value="3" oninput="updateEx1()">
+                </div>
+                <div class="control-group">
+                    <label>Vetor A - Componente Ay: <span id="v1-ay-val">4.0</span> m</label>
+                    <input type="range" id="v1-ay" min="-10" max="10" step="0.5" value="4" oninput="updateEx1()">
+                </div>
+                <div class="control-group">
+                    <label>Vetor B - Componente Bx: <span id="v1-bx-val">4.0</span> m</label>
+                    <input type="range" id="v1-bx" min="-10" max="10" step="0.5" value="4" oninput="updateEx1()">
+                </div>
+                <div class="control-group">
+                    <label>Vetor B - Componente By: <span id="v1-by-val">-2.0</span> m</label>
+                    <input type="range" id="v1-by" min="-10" max="10" step="0.5" value="-2" oninput="updateEx1()">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="resetEx1()">↺ Reiniciar (t = 0 s)</button>
+                </div>
+                <div class="equation-box" id="v1-res">
+                    <!-- Dynamic Calculations -->
+                </div>
+            </div>
+
+            <div class="view-card">
+                <div class="canvas-container">
+                    <canvas id="canvas1"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= EXERCÍCIO 2.1 (MRU / MRUV - GRÁFICOS 100% FUNCIONANDO!) ================= -->
+        <div id="panel-2" class="demo-panel">
+            <div class="statement-box full-width">
+                <h3>📌 Exercício 2.1 — Movimento Retilíneo Uniforme e Variado (MRU / MRUV)</h3>
+                <p>
+                    Um automóvel move-se ao longo do eixo Ox com posição inicial <b>x₀</b>, velocidade inicial <b>v₀</b> e aceleração constante <b>a</b>. 
+                    a) Escreva as equações horárias da posição <b>x(t) = x₀ + v₀ t + ½ a t²</b>, da velocidade <b>v(t) = v₀ + a t</b> e da aceleração <b>a(t) = a</b>. 
+                    b) Acompanhe a simulação do veículo e examine os três gráficos sincronizados <b>x(t)</b>, <b>v(t)</b> e <b>a(t)</b> em tempo real.
+                </p>
+            </div>
+            
+            <div class="controls-card">
+                <div class="control-group">
+                    <label>Posição Inicial (x₀): <span id="v2-x0-val">0.0</span> m</label>
+                    <input type="range" id="v2-x0" min="-20" max="20" step="1" value="0" oninput="updateEx2Params()">
+                </div>
+                <div class="control-group">
+                    <label>Velocidade Inicial (v₀): <span id="v2-v0-val">5.0</span> m/s</label>
+                    <input type="range" id="v2-v0" min="-15" max="15" step="0.5" value="5" oninput="updateEx2Params()">
+                </div>
+                <div class="control-group">
+                    <label>Aceleração (a): <span id="v2-a-val">2.0</span> m/s²</label>
+                    <input type="range" id="v2-a" min="-5" max="5" step="0.5" value="2" oninput="updateEx2Params()">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btn-play-2" onclick="toggleEx2()">▶ Iniciar / Pausar</button>
+                    <button class="btn btn-secondary" onclick="resetEx2()">↺ Reiniciar (t = 0 s)</button>
+                </div>
+                <div class="equation-box" id="v2-res">
+                    <!-- Dynamic Calculations -->
+                </div>
+            </div>
+
+            <div class="view-card">
+                <div class="canvas-container" style="height: 120px;">
+                    <canvas id="canvas2-anim"></canvas>
+                </div>
+                
+                <!-- 3 Sychronized Real-time Canvas Plots -->
+                <div class="plots-grid">
+                    <div class="plot-box">
+                        <div class="plot-title">Posição x(t) [m]</div>
+                        <canvas id="canvas2-px"></canvas>
+                    </div>
+                    <div class="plot-box">
+                        <div class="plot-title">Velocidade v(t) [m/s]</div>
+                        <canvas id="canvas2-pv"></canvas>
+                    </div>
+                    <div class="plot-box">
+                        <div class="plot-title">Aceleração a(t) [m/s²]</div>
+                        <canvas id="canvas2-pa"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= EXERCÍCIO 2.2 ================= -->
+        <div id="panel-3" class="demo-panel">
+            <div class="statement-box full-width">
+                <h3>📌 Exercício 2.2 — Queda Livre e Lançamento Vertical</h3>
+                <p>
+                    Uma bola é lançada verticalmente para cima a partir da altura y₀ = 0 m com velocidade inicial <b>v₀</b>. 
+                    Sob ação da aceleração da gravidade g: 
+                    a) Determine o tempo necessário para atingir a altura máxima <b>t_subida = v₀ / g</b>. 
+                    b) Calcule a altura máxima <b>h_máx = v₀² / (2g)</b> e a velocidade ao retornar ao solo.
+                </p>
+            </div>
+            
+            <div class="controls-card">
+                <div class="control-group">
+                    <label>Velocidade Inicial (v₀): <span id="v3-v0-val">20.0</span> m/s</label>
+                    <input type="range" id="v3-v0" min="5" max="40" step="1" value="20" oninput="updateEx3Params()">
+                </div>
+                <div class="control-group">
+                    <label>Gravidade (g): <span id="v3-g-val">9.80</span> m/s²</label>
+                    <input type="range" id="v3-g" min="1.6" max="20" step="0.2" value="9.8" oninput="updateEx3Params()">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btn-play-3" onclick="toggleEx3()">▶ Lançar Bola</button>
+                    <button class="btn btn-secondary" onclick="resetEx3()">↺ Reiniciar (t = 0 s)</button>
+                </div>
+                <div class="equation-box" id="v3-res">
+                    <!-- Dynamic Calculations -->
+                </div>
+            </div>
+
+            <div class="view-card">
+                <div class="canvas-container">
+                    <canvas id="canvas3"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= EXERCÍCIO 3.1 ================= -->
+        <div id="panel-4" class="demo-panel">
+            <div class="statement-box full-width">
+                <h3>📌 Exercício 3.1 — Movimento de Projéteis (Lançamento Oblíquo)</h3>
+                <p>
+                    Um projétil é lançado do solo com velocidade inicial <b>v₀</b> formando um ângulo <b>θ</b> com a horizontal. 
+                    a) Encontre as componentes v₀x = v₀ cos θ e v₀y = v₀ sin θ. 
+                    b) Determine a altura máxima <b>H = v₀y² / (2g)</b>, o tempo total de voo <b>T = 2 v₀y / g</b> e o alcance horizontal <b>R = v₀² sin(2θ) / g</b>.
+                </p>
+            </div>
+            
+            <div class="controls-card">
+                <div class="control-group">
+                    <label>Velocidade Inicial (v₀): <span id="v4-v0-val">25.0</span> m/s</label>
+                    <input type="range" id="v4-v0" min="5" max="50" step="1" value="25" oninput="updateEx4Params()">
+                </div>
+                <div class="control-group">
+                    <label>Ângulo de Lançamento (θ): <span id="v4-ang-val">45</span>°</label>
+                    <input type="range" id="v4-ang" min="5" max="85" step="1" value="45" oninput="updateEx4Params()">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btn-play-4" onclick="toggleEx4()">▶ Disparar Projétil</button>
+                    <button class="btn btn-secondary" onclick="resetEx4()">↺ Reiniciar (t = 0 s)</button>
+                </div>
+                <div class="equation-box" id="v4-res">
+                    <!-- Dynamic Calculations -->
+                </div>
+            </div>
+
+            <div class="view-card">
+                <div class="canvas-container">
+                    <canvas id="canvas4"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= EXERCÍCIO 3.2 ================= -->
+        <div id="panel-5" class="demo-panel">
+            <div class="statement-box full-width">
+                <h3>📌 Exercício 3.2 — Movimento Circular Uniforme (MCU)</h3>
+                <p>
+                    Uma partícula gira em uma trajetória circular de raio <b>R</b> com velocidade escalar constante <b>v</b>. 
+                    a) Calcule o período do movimento <b>T = 2πR / v</b> e a velocidade angular <b>ω = v / R</b>. 
+                    b) Determine a aceleração centrípeta <b>a_c = v² / R</b> e acompanhe os vetores velocidade v (azul) e aceleração a_c (vermelho).
+                </p>
+            </div>
+            
+            <div class="controls-card">
+                <div class="control-group">
+                    <label>Raio da Órbita (R): <span id="v5-r-val">5.0</span> m</label>
+                    <input type="range" id="v5-r" min="1" max="10" step="0.5" value="5" oninput="updateEx5Params()">
+                </div>
+                <div class="control-group">
+                    <label>Velocidade Escalar (v): <span id="v5-v-val">10.0</span> m/s</label>
+                    <input type="range" id="v5-v" min="1" max="25" step="0.5" value="10" oninput="updateEx5Params()">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btn-play-5" onclick="toggleEx5()">▶ Iniciar Rotação</button>
+                    <button class="btn btn-secondary" onclick="resetEx5()">↺ Reiniciar (t = 0 s)</button>
+                </div>
+                <div class="equation-box" id="v5-res">
+                    <!-- Dynamic Calculations -->
+                </div>
+            </div>
+
+            <div class="view-card">
+                <div class="canvas-container">
+                    <canvas id="canvas5"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= EXERCÍCIO 4.1 ================= -->
+        <div id="panel-6" class="demo-panel">
+            <div class="statement-box full-width">
+                <h3>📌 Exercício 4.1 — Leis de Newton em Plano Inclinado com Atrito</h3>
+                <p>
+                    Um bloco de massa <b>m</b> desliza sobre uma rampa com ângulo de inclinação <b>θ</b> e coeficiente de atrito cinético <b>μ_k</b>. 
+                    a) Calcule a força normal <b>N = m g cos θ</b> e a força de atrito <b>f_k = μ_k N</b>. 
+                    b) Determine a aceleração resultante do bloco ao longo da rampa: <b>a = g (sin θ - μ_k cos θ)</b>.
+                </p>
+            </div>
+            
+            <div class="controls-card">
+                <div class="control-group">
+                    <label>Massa do Bloco (m): <span id="v6-m-val">2.0</span> kg</label>
+                    <input type="range" id="v6-m" min="0.5" max="10" step="0.5" value="2" oninput="updateEx6Params()">
+                </div>
+                <div class="control-group">
+                    <label>Ângulo da Rampa (θ): <span id="v6-ang-val">30</span>°</label>
+                    <input type="range" id="v6-ang" min="5" max="60" step="1" value="30" oninput="updateEx6Params()">
+                </div>
+                <div class="control-group">
+                    <label>Coeficiente de Atrito (μ_k): <span id="v6-mu-val">0.20</span></label>
+                    <input type="range" id="v6-mu" min="0" max="0.8" step="0.05" value="0.2" oninput="updateEx6Params()">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btn-play-6" onclick="toggleEx6()">▶ Soltar Bloco</button>
+                    <button class="btn btn-secondary" onclick="resetEx6()">↺ Reiniciar (t = 0 s)</button>
+                </div>
+                <div class="equation-box" id="v6-res">
+                    <!-- Dynamic Calculations -->
+                </div>
+            </div>
+
+            <div class="view-card">
+                <div class="canvas-container">
+                    <canvas id="canvas6"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= EXERCÍCIO 5.1 ================= -->
+        <div id="panel-7" class="demo-panel">
+            <div class="statement-box full-width">
+                <h3>📌 Exercício 5.1 — Trabalho e Conservação da Energia Mecânica</h3>
+                <p>
+                    Um bloco de massa <b>m</b> é solto do repouso no topo de uma pista sem atrito de altura <b>h</b>. 
+                    a) Calcule a energia potencial gravitacional inicial <b>U = m g h</b>. 
+                    b) Pela conservação da energia mecânica (E_inicial = E_final), determine a velocidade na base da pista: <b>v_final = √(2 g h)</b>.
+                </p>
+            </div>
+            
+            <div class="controls-card">
+                <div class="control-group">
+                    <label>Massa do Bloco (m): <span id="v7-m-val">3.0</span> kg</label>
+                    <input type="range" id="v7-m" min="1" max="10" step="0.5" value="3" oninput="updateEx7Params()">
+                </div>
+                <div class="control-group">
+                    <label>Altura da Pista (h): <span id="v7-h-val">10.0</span> m</label>
+                    <input type="range" id="v7-h" min="2" max="25" step="1" value="10" oninput="updateEx7Params()">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btn-play-7" onclick="toggleEx7()">▶ Soltar Bloco</button>
+                    <button class="btn btn-secondary" onclick="resetEx7()">↺ Reiniciar (t = 0 s)</button>
+                </div>
+                <div class="equation-box" id="v7-res">
+                    <!-- Dynamic Calculations -->
+                </div>
+            </div>
+
+            <div class="view-card">
+                <div class="canvas-container">
+                    <canvas id="canvas7"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts and Animation Engines -->
+    <script>
+        function switchTab(idx) {
+            document.querySelectorAll('.tab-btn').forEach((b, i) => {
+                b.classList.toggle('active', i === (idx - 1));
+            });
+            document.querySelectorAll('.demo-panel').forEach((p, i) => {
+                p.classList.toggle('active', i === (idx - 1));
+            });
+            
+            // Resize canvas context on tab switch
+            setTimeout(() => {
+                if (idx === 1) drawEx1Canvas();
+                if (idx === 2) drawEx2Frame();
+                if (idx === 3) drawEx3Frame();
+                if (idx === 4) drawEx4Frame();
+                if (idx === 5) drawEx5Frame();
+                if (idx === 6) drawEx6Frame();
+                if (idx === 7) drawEx7Frame();
+            }, 50);
+        }
+
+        /* Helper Canvas Init */
+        function getCanvasCtx(id) {
+            const canvas = document.getElementById(id);
+            if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio || 300;
+            canvas.height = rect.height * window.devicePixelRatio || 150;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+            return { canvas, ctx, w: rect.width, h: rect.height };
+        }
+
+        /* ================= EX 1.1 SCRIPT ================= */
+        function updateEx1() {
+            const ax = parseFloat(document.getElementById('v1-ax').value);
+            const ay = parseFloat(document.getElementById('v1-ay').value);
+            const bx = parseFloat(document.getElementById('v1-bx').value);
+            const by = parseFloat(document.getElementById('v1-by').value);
+
+            document.getElementById('v1-ax-val').innerText = ax.toFixed(1);
+            document.getElementById('v1-ay-val').innerText = ay.toFixed(1);
+            document.getElementById('v1-bx-val').innerText = bx.toFixed(1);
+            document.getElementById('v1-by-val').innerText = by.toFixed(1);
+
+            const rx = ax + bx;
+            const ry = ay + by;
+            const r_mod = Math.sqrt(rx * rx + ry * ry);
+            const r_ang = Math.atan2(ry, rx) * (180 / Math.PI);
+            
+            const dot = ax * bx + ay * by;
+            const cross_z = ax * by - ay * bx;
+
+            document.getElementById('v1-res').innerHTML = `
+                <strong>Vetor Resultante R = A + B:</strong> (${rx.toFixed(1)} i + ${ry.toFixed(1)} j) m<br>
+                <strong>Módulo de R:</strong> ${r_mod.toFixed(2)} m &nbsp;|&nbsp; <strong>Direção:</strong> ${r_ang.toFixed(1)}°<br>
+                <strong>Produto Escalar A · B:</strong> ${dot.toFixed(1)} m²<br>
+                <strong>Produto Vetorial A × B:</strong> (${cross_z.toFixed(1)} k) m²
+            `;
+
+            drawEx1Canvas();
+        }
+
+        function resetEx1() {
+            updateEx1();
+        }
+
+        function drawEx1Canvas() {
+            const { ctx, w, h } = getCanvasCtx('canvas1');
+            if (!ctx) return;
+            
+            ctx.clearRect(0, 0, w, h);
+            
+            const cx = w / 2;
+            const cy = h / 2;
+            const scale = 12;
+
+            // Grid
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+            ctx.moveTo(cx, 0); ctx.lineTo(cx, h);
+            ctx.stroke();
+
+            const ax = parseFloat(document.getElementById('v1-ax').value);
+            const ay = parseFloat(document.getElementById('v1-ay').value);
+            const bx = parseFloat(document.getElementById('v1-bx').value);
+            const by = parseFloat(document.getElementById('v1-by').value);
+
+            // Vector A (Blue)
+            drawVector(ctx, cx, cy, cx + ax * scale, cy - ay * scale, '#38bdf8', 'A');
+            // Vector B (Purple from A head)
+            drawVector(ctx, cx + ax * scale, cy - ay * scale, cx + (ax + bx) * scale, cy - (ay + by) * scale, '#a855f7', 'B');
+            // Vector R (Green from origin)
+            drawVector(ctx, cx, cy, cx + (ax + bx) * scale, cy - (ay + by) * scale, '#10b981', 'R');
+        }
+
+        function drawVector(ctx, x1, y1, x2, y2, color, label) {
+            const headlen = 10;
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 2.5;
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(x2 - headlen * Math.cos(angle - Math.PI / 6), y2 - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(x2 - headlen * Math.cos(angle + Math.PI / 6), y2 - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.fill();
+
+            ctx.font = 'bold 12px Inter';
+            ctx.fillText(label, (x1 + x2) / 2 + 5, (y1 + y2) / 2 - 5);
+        }
+
+        /* ================= EX 2.1 SCRIPT (MRU / MRUV - ALWAYS t = 0 ON RESET) ================= */
+        let ex2_timer = null;
+        let ex2_t = 0;
+        let ex2_running = false;
+        let ex2_history = [];
+
+        function updateEx2Params() {
+            const x0 = parseFloat(document.getElementById('v2-x0').value);
+            const v0 = parseFloat(document.getElementById('v2-v0').value);
+            const a = parseFloat(document.getElementById('v2-a').value);
+
+            document.getElementById('v2-x0-val').innerText = x0.toFixed(1);
+            document.getElementById('v2-v0-val').innerText = v0.toFixed(1);
+            document.getElementById('v2-a-val').innerText = a.toFixed(1);
+
+            const x_curr = x0 + v0 * ex2_t + 0.5 * a * ex2_t * ex2_t;
+            const v_curr = v0 + a * ex2_t;
+
+            document.getElementById('v2-res').innerHTML = `
+                <strong>Tempo Decorrido (t):</strong> <strong>${ex2_t.toFixed(2)} s</strong><br>
+                <strong>Equação da Posição:</strong> x(t) = ${x0.toFixed(1)} + (${v0.toFixed(1)})t + ½(${a.toFixed(1)})t² = <strong>${x_curr.toFixed(2)} m</strong><br>
+                <strong>Equação da Velocidade:</strong> v(t) = ${v0.toFixed(1)} + (${a.toFixed(1)})t = <strong>${v_curr.toFixed(2)} m/s</strong>
+            `;
+
+            drawEx2Frame();
+        }
+
+        function toggleEx2() {
+            ex2_running = !ex2_running;
+            document.getElementById('btn-play-2').innerText = ex2_running ? '⏸ Pausar' : '▶ Iniciar / Continuar';
+            if (ex2_running && !ex2_timer) {
+                ex2_timer = setInterval(loopEx2, 30);
+            }
+        }
+
+        function resetEx2() {
+            ex2_running = false;
+            if (ex2_timer) { clearInterval(ex2_timer); ex2_timer = null; }
+            document.getElementById('btn-play-2').innerText = '▶ Iniciar';
+            ex2_t = 0; // Strict t = 0 s
+            ex2_history = [];
+            updateEx2Params();
+        }
+
+        function loopEx2() {
+            if (!ex2_running) return;
+            ex2_t += 0.05;
+            if (ex2_t > 10.0) {
+                ex2_running = false;
+                clearInterval(ex2_timer);
+                ex2_timer = null;
+                document.getElementById('btn-play-2').innerText = '▶ Iniciar';
+            }
+            updateEx2Params();
+        }
+
+        function drawEx2Frame() {
+            const x0 = parseFloat(document.getElementById('v2-x0').value);
+            const v0 = parseFloat(document.getElementById('v2-v0').value);
+            const a = parseFloat(document.getElementById('v2-a').value);
+
+            const x_curr = x0 + v0 * ex2_t + 0.5 * a * ex2_t * ex2_t;
+            const v_curr = v0 + a * ex2_t;
+
+            // Record history for real-time plots
+            if (ex2_history.length === 0 || ex2_t > ex2_history[ex2_history.length - 1].t) {
+                ex2_history.push({ t: ex2_t, x: x_curr, v: v_curr, a: a });
+            }
+
+            // 1. Vehicle Animation Canvas
+            const { ctx, w, h } = getCanvasCtx('canvas2-anim');
+            if (ctx) {
+                ctx.clearRect(0, 0, w, h);
+                const cy = h / 2 + 10;
+                
+                // Track Line
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy);
+                ctx.stroke();
+
+                // Origin & Scale (Mapping x from -50m to +150m onto canvas width)
+                const px = 40 + (x_curr + 50) * ((w - 80) / 200);
+
+                // Car Body
+                ctx.fillStyle = '#38bdf8';
+                ctx.beginPath();
+                ctx.roundRect(px - 20, cy - 18, 40, 16, 4);
+                ctx.fill();
+
+                // Wheels
+                ctx.fillStyle = '#f8fafc';
+                ctx.beginPath();
+                ctx.arc(px - 10, cy - 2, 4, 0, Math.PI * 2);
+                ctx.arc(px + 10, cy - 2, 4, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.font = 'bold 11px Inter';
+                ctx.fillStyle = '#38bdf8';
+                ctx.fillText(`x = ${x_curr.toFixed(1)}m`, px - 20, cy - 26);
+            }
+
+            // 2. Real-Time Synchronized Plots: x(t), v(t), a(t)
+            drawPlotCanvas('canvas2-px', ex2_history, d => d.x, '#38bdf8', -50, 150);
+            drawPlotCanvas('canvas2-pv', ex2_history, d => d.v, '#fbbf24', -30, 50);
+            drawPlotCanvas('canvas2-pa', ex2_history, d => d.a, '#f43f5e', -10, 10);
+        }
+
+        function drawPlotCanvas(id, history, getter, color, yMin, yMax) {
+            const { ctx, w, h } = getCanvasCtx(id);
+            if (!ctx) return;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Axes
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(25, 10); ctx.lineTo(25, h - 20);
+            ctx.lineTo(w - 10, h - 20);
+            ctx.stroke();
+
+            if (history.length < 2) return;
+
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            for (let i = 0; i < history.length; i++) {
+                const t = history[i].t;
+                const val = getter(history[i]);
+
+                const px = 25 + (t / 10.0) * (w - 35);
+                const py = (h - 20) - ((val - yMin) / (yMax - yMin)) * (h - 30);
+
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+        }
+
+        /* ================= EX 2.2 SCRIPT ================= */
+        let ex3_timer = null, ex3_t = 0, ex3_running = false;
+
+        function updateEx3Params() {
+            const v0 = parseFloat(document.getElementById('v3-v0').value);
+            const g = parseFloat(document.getElementById('v3-g').value);
+            document.getElementById('v3-v0-val').innerText = v0.toFixed(1);
+            document.getElementById('v3-g-val').innerText = g.toFixed(2);
+
+            const t_sub = v0 / g;
+            const h_max = (v0 * v0) / (2 * g);
+
+            document.getElementById('v3-res').innerHTML = `
+                <strong>Tempo Decorrido (t):</strong> <strong>${ex3_t.toFixed(2)} s</strong><br>
+                <strong>Tempo de Subida (t_subida):</strong> ${t_sub.toFixed(2)} s<br>
+                <strong>Altura Máxima (h_máx):</strong> ${h_max.toFixed(2)} m
+            `;
+            drawEx3Frame();
+        }
+
+        function toggleEx3() {
+            ex3_running = !ex3_running;
+            document.getElementById('btn-play-3').innerText = ex3_running ? '⏸ Pausar' : '▶ Lançar';
+            if (ex3_running && !ex3_timer) ex3_timer = setInterval(loopEx3, 30);
+        }
+
+        function resetEx3() {
+            ex3_running = false;
+            if (ex3_timer) { clearInterval(ex3_timer); ex3_timer = null; }
+            document.getElementById('btn-play-3').innerText = '▶ Lançar';
+            ex3_t = 0; // Strict t = 0 s
+            updateEx3Params();
+        }
+
+        function loopEx3() {
+            if (!ex3_running) return;
+            ex3_t += 0.04;
+            const v0 = parseFloat(document.getElementById('v3-v0').value);
+            const g = parseFloat(document.getElementById('v3-g').value);
+            if (ex3_t > (2 * v0 / g)) {
+                ex3_running = false;
+                clearInterval(ex3_timer); ex3_timer = null;
+                document.getElementById('btn-play-3').innerText = '▶ Lançar';
+            }
+            updateEx3Params();
+        }
+
+        function drawEx3Frame() {
+            const { ctx, w, h } = getCanvasCtx('canvas3');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            const v0 = parseFloat(document.getElementById('v3-v0').value);
+            const g = parseFloat(document.getElementById('v3-g').value);
+            const y_curr = Math.max(0, v0 * ex3_t - 0.5 * g * ex3_t * ex3_t);
+
+            const cx = w / 2;
+            const cy = h - 30 - (y_curr / 100) * (h - 60);
+
+            // Ground
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(50, h - 30); ctx.lineTo(w - 50, h - 30); ctx.stroke();
+
+            // Ball
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath(); ctx.arc(cx, cy, 10, 0, Math.PI * 2); ctx.fill();
+
+            ctx.font = 'bold 12px Inter';
+            ctx.fillText(`y = ${y_curr.toFixed(1)}m`, cx + 18, cy + 4);
+        }
+
+        /* ================= EX 3.1 SCRIPT ================= */
+        let ex4_timer = null, ex4_t = 0, ex4_running = false;
+
+        function updateEx4Params() {
+            const v0 = parseFloat(document.getElementById('v4-v0').value);
+            const ang = parseFloat(document.getElementById('v4-ang').value) * Math.PI / 180;
+            const g = 9.8;
+
+            document.getElementById('v4-v0-val').innerText = v0.toFixed(1);
+            document.getElementById('v4-ang-val').innerText = (ang * 180 / Math.PI).toFixed(0);
+
+            const vox = v0 * Math.cos(ang);
+            const voy = v0 * Math.sin(ang);
+            const H = (voy * voy) / (2 * g);
+            const T = (2 * voy) / g;
+            const R = (v0 * v0 * Math.sin(2 * ang)) / g;
+
+            document.getElementById('v4-res').innerHTML = `
+                <strong>Tempo Decorrido (t):</strong> <strong>${ex4_t.toFixed(2)} s</strong><br>
+                <strong>Componentes:</strong> v₀x = ${vox.toFixed(1)} m/s, v₀y = ${voy.toFixed(1)} m/s<br>
+                <strong>Altura Máxima (H):</strong> ${H.toFixed(2)} m &nbsp;|&nbsp; <strong>Alcance (R):</strong> ${R.toFixed(2)} m
+            `;
+            drawEx4Frame();
+        }
+
+        function toggleEx4() {
+            ex4_running = !ex4_running;
+            document.getElementById('btn-play-4').innerText = ex4_running ? '⏸ Pausar' : '▶ Disparar';
+            if (ex4_running && !ex4_timer) ex4_timer = setInterval(loopEx4, 30);
+        }
+
+        function resetEx4() {
+            ex4_running = false;
+            if (ex4_timer) { clearInterval(ex4_timer); ex4_timer = null; }
+            document.getElementById('btn-play-4').innerText = '▶ Disparar';
+            ex4_t = 0; // Strict t = 0 s
+            updateEx4Params();
+        }
+
+        function loopEx4() {
+            if (!ex4_running) return;
+            ex4_t += 0.05;
+            const v0 = parseFloat(document.getElementById('v4-v0').value);
+            const ang = parseFloat(document.getElementById('v4-ang').value) * Math.PI / 180;
+            const T = (2 * v0 * Math.sin(ang)) / 9.8;
+            if (ex4_t > T) {
+                ex4_running = false;
+                clearInterval(ex4_timer); ex4_timer = null;
+                document.getElementById('btn-play-4').innerText = '▶ Disparar';
+            }
+            updateEx4Params();
+        }
+
+        function drawEx4Frame() {
+            const { ctx, w, h } = getCanvasCtx('canvas4');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            const v0 = parseFloat(document.getElementById('v4-v0').value);
+            const ang = parseFloat(document.getElementById('v4-ang').value) * Math.PI / 180;
+            const g = 9.8;
+
+            const vox = v0 * Math.cos(ang);
+            const voy = v0 * Math.sin(ang);
+
+            const x_curr = vox * ex4_t;
+            const y_curr = Math.max(0, voy * ex4_t - 0.5 * g * ex4_t * ex4_t);
+
+            const px = 30 + (x_curr / 200) * (w - 60);
+            const py = (h - 30) - (y_curr / 80) * (h - 60);
+
+            // Ground
+            ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(30, h - 30); ctx.lineTo(w - 30, h - 30); ctx.stroke();
+
+            // Projectile
+            ctx.fillStyle = '#f43f5e';
+            ctx.beginPath(); ctx.arc(px, py, 6, 0, Math.PI * 2); ctx.fill();
+        }
+
+        /* ================= EX 3.2 SCRIPT (MCU) ================= */
+        let ex5_timer = null, ex5_t = 0, ex5_running = false;
+
+        function updateEx5Params() {
+            const r = parseFloat(document.getElementById('v5-r').value);
+            const v = parseFloat(document.getElementById('v5-v').value);
+            document.getElementById('v5-r-val').innerText = r.toFixed(1);
+            document.getElementById('v5-v-val').innerText = v.toFixed(1);
+
+            const omega = v / r;
+            const T = (2 * Math.PI * r) / v;
+            const ac = (v * v) / r;
+
+            document.getElementById('v5-res').innerHTML = `
+                <strong>Tempo Decorrido (t):</strong> <strong>${ex5_t.toFixed(2)} s</strong><br>
+                <strong>Velocidade Angular (ω):</strong> ${omega.toFixed(2)} rad/s<br>
+                <strong>Período (T):</strong> ${T.toFixed(2)} s &nbsp;|&nbsp; <strong>Aceleração Centrípeta (a_c):</strong> ${ac.toFixed(2)} m/s²
+            `;
+            drawEx5Frame();
+        }
+
+        function toggleEx5() {
+            ex5_running = !ex5_running;
+            document.getElementById('btn-play-5').innerText = ex5_running ? '⏸ Pausar' : '▶ Iniciar Rotação';
+            if (ex5_running && !ex5_timer) ex5_timer = setInterval(loopEx5, 30);
+        }
+
+        function resetEx5() {
+            ex5_running = false;
+            if (ex5_timer) { clearInterval(ex5_timer); ex5_timer = null; }
+            document.getElementById('btn-play-5').innerText = '▶ Iniciar Rotação';
+            ex5_t = 0; // Strict t = 0 s
+            updateEx5Params();
+        }
+
+        function loopEx5() {
+            if (!ex5_running) return;
+            ex5_t += 0.03;
+            updateEx5Params();
+        }
+
+        function drawEx5Frame() {
+            const { ctx, w, h } = getCanvasCtx('canvas5');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            const r = parseFloat(document.getElementById('v5-r').value);
+            const v = parseFloat(document.getElementById('v5-v').value);
+            const omega = v / r;
+
+            const cx = w / 2;
+            const cy = h / 2;
+            const radius_px = r * 12;
+
+            const theta = omega * ex5_t;
+            const px = cx + radius_px * Math.cos(theta);
+            const py = cy - radius_px * Math.sin(theta);
+
+            // Orbit Line
+            ctx.strokeStyle = '#334155'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.arc(cx, cy, radius_px, 0, Math.PI * 2); ctx.stroke();
+
+            // Particle
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath(); ctx.arc(px, py, 7, 0, Math.PI * 2); ctx.fill();
+
+            // Tangential Velocity Vector (Blue)
+            const vx = -Math.sin(theta) * 30;
+            const vy = -Math.cos(theta) * 30;
+            drawVector(ctx, px, py, px + vx, py + vy, '#38bdf8', 'v');
+
+            // Centripetal Acceleration Vector (Red)
+            const ax = -Math.cos(theta) * 30;
+            const ay = Math.sin(theta) * 30;
+            drawVector(ctx, px, py, px + ax, py + ay, '#f43f5e', 'ac');
+        }
+
+        /* ================= EX 4.1 SCRIPT ================= */
+        let ex6_timer = null, ex6_t = 0, ex6_running = false;
+
+        function updateEx6Params() {
+            const m = parseFloat(document.getElementById('v6-m').value);
+            const ang_deg = parseFloat(document.getElementById('v6-ang').value);
+            const mu = parseFloat(document.getElementById('v6-mu').value);
+            const ang = ang_deg * Math.PI / 180;
+            const g = 9.8;
+
+            document.getElementById('v6-m-val').innerText = m.toFixed(1);
+            document.getElementById('v6-ang-val').innerText = ang_deg.toFixed(0);
+            document.getElementById('v6-mu-val').innerText = mu.toFixed(2);
+
+            const P = m * g;
+            const N = m * g * Math.cos(ang);
+            const fk = mu * N;
+            const a = Math.max(0, g * (Math.sin(ang) - mu * Math.cos(ang)));
+
+            document.getElementById('v6-res').innerHTML = `
+                <strong>Tempo Decorrido (t):</strong> <strong>${ex6_t.toFixed(2)} s</strong><br>
+                <strong>Força Normal (N):</strong> ${N.toFixed(1)} N &nbsp;|&nbsp; <strong>Força de Atrito (f_k):</strong> ${fk.toFixed(1)} N<br>
+                <strong>Aceleração do Bloco:</strong> <strong>${a.toFixed(2)} m/s²</strong>
+            `;
+            drawEx6Frame();
+        }
+
+        function toggleEx6() {
+            ex6_running = !ex6_running;
+            document.getElementById('btn-play-6').innerText = ex6_running ? '⏸ Pausar' : '▶ Soltar';
+            if (ex6_running && !ex6_timer) ex6_timer = setInterval(loopEx6, 30);
+        }
+
+        function resetEx6() {
+            ex6_running = false;
+            if (ex6_timer) { clearInterval(ex6_timer); ex6_timer = null; }
+            document.getElementById('btn-play-6').innerText = '▶ Soltar';
+            ex6_t = 0; // Strict t = 0 s
+            updateEx6Params();
+        }
+
+        function loopEx6() {
+            if (!ex6_running) return;
+            ex6_t += 0.04;
+            updateEx6Params();
+        }
+
+        function drawEx6Frame() {
+            const { ctx, w, h } = getCanvasCtx('canvas6');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            const ang = parseFloat(document.getElementById('v6-ang').value) * Math.PI / 180;
+            const mu = parseFloat(document.getElementById('v6-mu').value);
+            const a = Math.max(0, 9.8 * (Math.sin(ang) - mu * Math.cos(ang)));
+
+            const dist = 0.5 * a * ex6_t * ex6_t * 8;
+            const px = 50 + dist * Math.cos(ang);
+            const py = 40 + dist * Math.sin(ang);
+
+            // Ramp
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(50, 40); ctx.lineTo(w - 50, h - 30); ctx.lineTo(50, h - 30); ctx.closePath(); ctx.stroke();
+
+            // Block
+            ctx.fillStyle = '#10b981';
+            ctx.fillRect(px, py, 24, 16);
+        }
+
+        /* ================= EX 5.1 SCRIPT ================= */
+        let ex7_timer = null, ex7_t = 0, ex7_running = false;
+
+        function updateEx7Params() {
+            const m = parseFloat(document.getElementById('v7-m').value);
+            const h = parseFloat(document.getElementById('v7-h').value);
+            const g = 9.8;
+
+            document.getElementById('v7-m-val').innerText = m.toFixed(1);
+            document.getElementById('v7-h-val').innerText = h.toFixed(1);
+
+            const U_i = m * g * h;
+            const vf = Math.sqrt(2 * g * h);
+
+            document.getElementById('v7-res').innerHTML = `
+                <strong>Tempo Decorrido (t):</strong> <strong>${ex7_t.toFixed(2)} s</strong><br>
+                <strong>Energia Potencial Inicial (U_i = mgh):</strong> ${U_i.toFixed(1)} J<br>
+                <strong>Velocidade na Base (v_final = √(2gh)):</strong> <strong>${vf.toFixed(2)} m/s</strong>
+            `;
+            drawEx7Frame();
+        }
+
+        function toggleEx7() {
+            ex7_running = !ex7_running;
+            document.getElementById('btn-play-7').innerText = ex7_running ? '⏸ Pausar' : '▶ Soltar';
+            if (ex7_running && !ex7_timer) ex7_timer = setInterval(loopEx7, 30);
+        }
+
+        function resetEx7() {
+            ex7_running = false;
+            if (ex7_timer) { clearInterval(ex7_timer); ex7_timer = null; }
+            document.getElementById('btn-play-7').innerText = '▶ Soltar';
+            ex7_t = 0; // Strict t = 0 s
+            updateEx7Params();
+        }
+
+        function loopEx7() {
+            if (!ex7_running) return;
+            ex7_t += 0.04;
+            updateEx7Params();
+        }
+
+        function drawEx7Frame() {
+            const { ctx, w, h } = getCanvasCtx('canvas7');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            const m = parseFloat(document.getElementById('v7-m').value);
+            const h_val = parseFloat(document.getElementById('v7-h').value);
+            const U_total = m * 9.8 * h_val;
+
+            const curr_h = Math.max(0, h_val - 0.5 * 9.8 * ex7_t * ex7_t);
+            const U_curr = m * 9.8 * curr_h;
+            const K_curr = U_total - U_curr;
+
+            // Energy Bar Chart
+            const barW = 40;
+            const maxH = h - 50;
+
+            // U Bar (Blue)
+            const uH = (U_curr / U_total) * maxH;
+            ctx.fillStyle = '#38bdf8';
+            ctx.fillRect(80, h - 30 - uH, barW, uH);
+
+            // K Bar (Amber)
+            const kH = (K_curr / U_total) * maxH;
+            ctx.fillStyle = '#fbbf24';
+            ctx.fillRect(160, h - 30 - kH, barW, kH);
+
+            ctx.font = 'bold 12px Inter';
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillText('U (Potencial)', 65, h - 10);
+            ctx.fillText('K (Cinética)', 150, h - 10);
+        }
+
+        // Initialize First Tab
+        window.onload = function() {
+            updateEx1();
+            updateEx2Params();
+            updateEx3Params();
+            updateEx4Params();
+            updateEx5Params();
+            updateEx6Params();
+            updateEx7Params();
+        };
+    </script>
+</body>
+</html>
