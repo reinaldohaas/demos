@@ -15,6 +15,7 @@
             --accent-cyan: #38bdf8;
             --accent-gold: #fbbf24;
             --accent-emerald: #10b981;
+            --accent-rose: #f43f5e;
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
         }
@@ -78,14 +79,14 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 16px;
         }
         .card {
             background: var(--bg-card);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
-            padding: 16px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -99,7 +100,7 @@
             box-shadow: 0 8px 20px rgba(56, 189, 248, 0.2);
         }
         .card-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; color: var(--text-main); }
-        .card-desc { font-size: 0.84rem; color: var(--text-sub); line-height: 1.5; margin-bottom: 12px; }
+        .card-desc { font-size: 0.84rem; color: var(--text-sub); line-height: 1.5; margin-bottom: 14px; }
         .card-btn {
             background: rgba(56, 189, 248, 0.08);
             color: var(--accent-cyan);
@@ -115,7 +116,7 @@
 <body>
     <div class="header">
         <h1>FSC5101 — FÍSICA I (MECÂNICA)</h1>
-        <p>Demonstrações e Exemplos Interativos Organizados por Capítulo</p>
+        <p>Demonstrações e Exemplos Interativos Organizados por Capítulo (Sears & Zemansky 12ª Ed.)</p>
     </div>
 
     <!-- CAPÍTULO 1 -->
@@ -142,31 +143,52 @@
         </div>
         <div class="grid">
             <a href="capitulo-2/exemplo-2-1.html" class="card">
-                <div><div class="card-title">Exemplo 2.1: O Leopardo (x(t) = 20 + 5t²)</div><div class="card-desc">Velocidade média, reta secante e tangente.</div></div>
+                <div>
+                    <div class="card-title">Exemplo 2.1: O Leopardo (x(t) = 20 + 5.0 t²)</div>
+                    <div class="card-desc">Velocidade média, reta secante e tangente no ataque ao antílope.</div>
+                </div>
                 <div class="card-btn">Abrir Exemplo 2.1 →</div>
             </a>
             <a href="capitulo-2/exemplo-2-2.html" class="card">
-                <div><div class="card-title">Exemplo 2.2: Carro de Testes</div><div class="card-desc">Derivada v(t), velocidade instantânea e inversão em t = 3,16 s.</div></div>
+                <div>
+                    <div class="card-title">Exemplo 2.2: Aceleração Média (A Astronauta - Figura 2.10)</div>
+                    <div class="card-desc">Aceleração média a_mx em 4 intervalos sucessivos com gráficos duplos de velocidade v_x(t) e aceleração.</div>
+                </div>
                 <div class="card-btn">Abrir Exemplo 2.2 →</div>
             </a>
             <a href="capitulo-2/exemplo-2-3.html" class="card">
-                <div><div class="card-title">Exemplo 2.3: Carro Esportivo</div><div class="card-desc">Aceleração média e instantânea a(t) = 1,0 t.</div></div>
+                <div>
+                    <div class="card-title">Exemplo 2.3: Velocidade Instantânea e Inversão (Carro de Testes)</div>
+                    <div class="card-desc">Posição x(t) = 3,0 t - 0,10 t³, velocidade instantânea v(t) e ponto de retorno em t = 3,16 s (x = 6,33 m).</div>
+                </div>
                 <div class="card-btn">Abrir Exemplo 2.3 →</div>
             </a>
             <a href="capitulo-2/exemplo-2-4.html" class="card">
-                <div><div class="card-title">Exemplo 2.4: Frenagem e Parada</div><div class="card-desc">MRUV com desaceleração constante -2 m/s² e Torricelli.</div></div>
+                <div>
+                    <div class="card-title">Exemplo 2.4: MRUV - Frenagem e Distância de Parada</div>
+                    <div class="card-desc">Sedan a 54 km/h freando com desaceleração constante -2 m/s² e equação de Torricelli (56,25 m).</div>
+                </div>
                 <div class="card-btn">Abrir Exemplo 2.4 →</div>
             </a>
             <a href="capitulo-2/exemplo-2-5.html" class="card">
-                <div><div class="card-title">Exemplo 2.5: Queda Livre Edifício 50 m</div><div class="card-desc">Trajetória vertical 2D, altura máxima 61,48 m e impacto.</div></div>
+                <div>
+                    <div class="card-title">Exemplo 2.5: Queda Livre do Topo de um Edifício (50 m)</div>
+                    <div class="card-desc">Trajetória vertical 2D, altura máxima 61,48 m, tempo até o solo t = 5,0 s e velocidade de impacto -34 m/s.</div>
+                </div>
                 <div class="card-btn">Abrir Exemplo 2.5 →</div>
             </a>
             <a href="capitulo-2/exemplo-2-6.html" class="card">
-                <div><div class="card-title">Exemplo 2.6: Integração da Aceleração</div><div class="card-desc">Cálculo de v(t) e x(t) por integração de a(t) = A - B t.</div></div>
+                <div>
+                    <div class="card-title">Exemplo 2.6: Integração da Aceleração Variável a(t)</div>
+                    <div class="card-desc">Sueli acelerando com a(t) = 2,0 - 0,10 t, cálculo de v(t) e x(t) por integração e velocidade máxima em t = 20 s.</div>
+                </div>
                 <div class="card-btn">Abrir Exemplo 2.6 →</div>
             </a>
             <a href="capitulo-2/exemplo-2-7.html" class="card">
-                <div><div class="card-title">Exemplo 2.7: Ultrapassagem de Veículos</div><div class="card-desc">Movimento relativo Carro A vs Carro B em t = 12 s.</div></div>
+                <div>
+                    <div class="card-title">Exemplo 2.7: Ultrapassagem e Movimento Relativo</div>
+                    <div class="card-desc">Carro A acelerando a 2,5 m/s² vs Carro B a velocidade constante 15 m/s, ponto de ultrapassagem em t = 12 s (180 m).</div>
+                </div>
                 <div class="card-btn">Abrir Exemplo 2.7 →</div>
             </a>
         </div>
