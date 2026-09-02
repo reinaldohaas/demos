@@ -161,6 +161,20 @@
             display: block;
         }
 
+        .vector-legend {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            display: flex;
+            gap: 16px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
         .controls-panel-inline {
             background: rgba(10, 16, 30, 0.85);
             border: 1px solid var(--bg-card-border);
@@ -341,7 +355,7 @@
         <!-- Right Column: Interactive Stage STARTS AT t = 0.00 s -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 3D HTML5 com Caixa Isométrica e Eixos Cartesianos X, Y, Z</span>
+                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 3D HTML5 com Vetores r (Posição), v (Velocidade) e a (Aceleração)</span>
                 <div style="display:flex; gap:8px;">
                     <a href="exemplo-2-5.html" class="nav-step-btn">← Anterior</a>
                     <a href="exemplo-2-7.html" class="nav-step-btn primary">Exemplo 2.7: Ultrapassagem →</a>
@@ -350,6 +364,11 @@
 
             <!-- Scene Canvas -->
             <div class="scene-card">
+                <div class="vector-legend">
+                    <span style="color:#fbbf24;">➔ Posição r (Amarelo)</span>
+                    <span style="color:#10b981;">➔ Velocidade v (Verde)</span>
+                    <span style="color:#f43f5e;">➔ Aceleração a (Vermelho)</span>
+                </div>
                 <canvas id="canvas-scene"></canvas>
             </div>
 
@@ -427,16 +446,12 @@
             return { canvas, ctx, w, h };
         }
 
-        
         function draw3DCartesianBox(ctx, w, h, maxX = 60, maxY = 40, maxZ = 30) {
             const padL = 70, padB = 70, padR = 40, padT = 60;
             const gW = w - padL - padR - 60;
             const gH = h - padB - padT - 40;
 
-            // Perspective projection constants
-            const angleZ = Math.PI / 6; // 30 degrees
-            const scaleZ = 1.2;
-
+            const angleZ = Math.PI / 6;
             const originX = padL;
             const originY = h - padB;
 
@@ -446,41 +461,29 @@
                 return { x: px, y: py };
             };
 
-            // 1. Draw Back Wireframe Faces of 3D Box
             ctx.strokeStyle = 'rgba(51, 65, 85, 0.4)'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
-            
-            // Floor Grid (XZ plane)
             for (let z = 0; z <= maxZ; z += maxZ / 3) {
                 const p1 = project3D(0, 0, z);
                 const p2 = project3D(maxX, 0, z);
                 ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
             }
-            for (let x = 0; x <= maxX; x += maxX / 4) {
-                const p1 = project3D(x, 0, 0);
-                const p2 = project3D(x, 0, maxZ);
-                ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-            }
             ctx.setLineDash([]);
 
-            // 2. Draw Main Axis Lines (X in Blue, Y in Green, Z in Purple)
             const pO = project3D(0, 0, 0);
             const pX = project3D(maxX, 0, 0);
             const pY = project3D(0, maxY, 0);
             const pZ = project3D(0, 0, maxZ);
 
-            // Eixo X (Blue)
             ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5;
             ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pX.x, pX.y); ctx.stroke();
             ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
             ctx.fillText('Eixo X (+m)', pX.x + 8, pX.y + 4);
 
-            // Eixo Y (Green)
             ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5;
             ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pY.x, pY.y); ctx.stroke();
             ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
             ctx.fillText('Eixo Y (+m)', pY.x, pY.y - 10);
 
-            // Eixo Z (Purple / Depth)
             ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2.5;
             ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pZ.x, pZ.y); ctx.stroke();
             ctx.fillStyle = '#a855f7'; ctx.textAlign = 'right';
@@ -488,7 +491,6 @@
 
             return { project3D, originX, originY };
         }
-
 
         function drawVectorArrow(ctx, x, y, dx, dy, color, label, labelBelow = false) {
             const len = Math.hypot(dx, dy);

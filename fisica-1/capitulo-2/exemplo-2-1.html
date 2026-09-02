@@ -161,6 +161,20 @@
             display: block;
         }
 
+        .vector-legend {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            display: flex;
+            gap: 16px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
         .controls-panel-inline {
             background: rgba(10, 16, 30, 0.85);
             border: 1px solid var(--bg-card-border);
@@ -366,7 +380,7 @@
         <!-- Right Column: Interactive Stage STARTS AT t = 0.00 s -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 3D HTML5 com Caixa Isométrica e Eixos Cartesianos X, Y, Z</span>
+                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 3D HTML5 com Vetores r (Posição), v (Velocidade) e a (Aceleração)</span>
                 <div style="display:flex; gap:8px;">
                     <span class="nav-step-disabled">← Primeiro Exemplo</span>
                     <a href="exemplo-2-2.html" class="nav-step-btn primary">Exemplo 2.2: Aceleração Média →</a>
@@ -375,6 +389,11 @@
 
             <!-- Scene Canvas -->
             <div class="scene-card">
+                <div class="vector-legend">
+                    <span style="color:#fbbf24;">➔ Posição r (Amarelo)</span>
+                    <span style="color:#10b981;">➔ Velocidade v (Verde)</span>
+                    <span style="color:#f43f5e;">➔ Aceleração a (Vermelho)</span>
+                </div>
                 <canvas id="canvas-scene"></canvas>
             </div>
 
@@ -452,16 +471,12 @@
             return { canvas, ctx, w, h };
         }
 
-        
         function draw3DCartesianBox(ctx, w, h, maxX = 60, maxY = 40, maxZ = 30) {
             const padL = 70, padB = 70, padR = 40, padT = 60;
             const gW = w - padL - padR - 60;
             const gH = h - padB - padT - 40;
 
-            // Perspective projection constants
-            const angleZ = Math.PI / 6; // 30 degrees
-            const scaleZ = 1.2;
-
+            const angleZ = Math.PI / 6;
             const originX = padL;
             const originY = h - padB;
 
@@ -471,41 +486,29 @@
                 return { x: px, y: py };
             };
 
-            // 1. Draw Back Wireframe Faces of 3D Box
             ctx.strokeStyle = 'rgba(51, 65, 85, 0.4)'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
-            
-            // Floor Grid (XZ plane)
             for (let z = 0; z <= maxZ; z += maxZ / 3) {
                 const p1 = project3D(0, 0, z);
                 const p2 = project3D(maxX, 0, z);
                 ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
             }
-            for (let x = 0; x <= maxX; x += maxX / 4) {
-                const p1 = project3D(x, 0, 0);
-                const p2 = project3D(x, 0, maxZ);
-                ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-            }
             ctx.setLineDash([]);
 
-            // 2. Draw Main Axis Lines (X in Blue, Y in Green, Z in Purple)
             const pO = project3D(0, 0, 0);
             const pX = project3D(maxX, 0, 0);
             const pY = project3D(0, maxY, 0);
             const pZ = project3D(0, 0, maxZ);
 
-            // Eixo X (Blue)
             ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5;
             ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pX.x, pX.y); ctx.stroke();
             ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
             ctx.fillText('Eixo X (+m)', pX.x + 8, pX.y + 4);
 
-            // Eixo Y (Green)
             ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5;
             ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pY.x, pY.y); ctx.stroke();
             ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
             ctx.fillText('Eixo Y (+m)', pY.x, pY.y - 10);
 
-            // Eixo Z (Purple / Depth)
             ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2.5;
             ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pZ.x, pZ.y); ctx.stroke();
             ctx.fillStyle = '#a855f7'; ctx.textAlign = 'right';
@@ -513,7 +516,6 @@
 
             return { project3D, originX, originY };
         }
-
 
         function drawVectorArrow(ctx, x, y, dx, dy, color, label, labelBelow = false) {
             const len = Math.hypot(dx, dy);
@@ -676,8 +678,9 @@
             const v_t = 10.0 * t;
             const a_t = 10.0;
 
-            const leo3D = project3D(x_t, 10, 15);
-            const ant3D = project3D(50.0, 10, 15);
+            const pO = project3D(0, 0, 0);
+            const leo3D = project3D(x_t, 12, 15);
+            const ant3D = project3D(50.0, 12, 15);
             const shadow3D = project3D(x_t, 0, 15);
 
             // Dashed 3D Projection Lines to Floor (Caixa 3D Projection)
@@ -692,30 +695,34 @@
             // Antelope 3D Position
             ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(ant3D.x, ant3D.y, 14, 0, Math.PI*2); ctx.fill();
             ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
-            ctx.fillText('🦌 Antílope (x = 50m)', ant3D.x, ant3D.y - 24);
+            ctx.fillText('🦌 Antílope (50m)', ant3D.x, ant3D.y - 24);
 
             // Leopard 3D Position
             ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(leo3D.x, leo3D.y, 15, 0, Math.PI*2); ctx.fill();
             ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'center';
             ctx.fillText('🐆 Leopardo', leo3D.x, leo3D.y - 24);
 
-            // SPACED VECTORS: Velocity 50px ABOVE, Acceleration 40px BELOW
-            if (v_t > 0.1) {
-                drawVectorArrow(ctx, leo3D.x, leo3D.y - 55, v_t * 4.5, 0, '#10b981', `v = ${v_t.toFixed(1)} m/s`);
-            }
+            // === ALL 3 FUNDAMENTAL VECTORS RENDERED WITH ZERO CROWDING ===
+            // 1. VETOR POSIÇÃO r(t) (GOLD / AMARELO - Desde a Origem 0,0,0 até a Posição)
+            drawVectorArrow(ctx, pO.x, pO.y, leo3D.x - pO.x, leo3D.y - pO.y, '#fbbf24', `r = ${x_t.toFixed(1)} m`);
+
+            // 2. VETOR VELOCIDADE v(t) (GREEN / VERDE - 55px acima do objeto)
+            drawVectorArrow(ctx, leo3D.x, leo3D.y - 55, v_t * 4.5, 0, '#10b981', `v = ${v_t.toFixed(1)} m/s`);
+
+            // 3. VETOR ACELERAÇÃO a(t) (RED / VERMELHO - 40px abaixo do objeto)
             drawVectorArrow(ctx, leo3D.x, leo3D.y + 40, a_t * 4.0, 0, '#f43f5e', `a = ${a_t.toFixed(1)} m/s²`, true);
 
             // TOP-LEFT HUD TELEMETRY DASHBOARD
             ctx.fillStyle = 'rgba(15, 23, 42, 0.94)';
-            ctx.fillRect(18, 18, 240, 95);
+            ctx.fillRect(18, 18, 250, 95);
             ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)'; ctx.lineWidth = 1.5;
-            ctx.strokeRect(18, 18, 240, 95);
+            ctx.strokeRect(18, 18, 250, 95);
 
             ctx.font = 'bold 12px Inter'; ctx.textAlign = 'left';
             ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(2)} s`, 28, 38);
-            ctx.fillStyle = '#fbbf24'; ctx.fillText(`📍 Posição x: ${x_t.toFixed(2)} m`, 28, 58);
-            ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Velocidade v: ${v_t.toFixed(1)} m/s`, 28, 78);
-            ctx.fillStyle = '#f43f5e'; ctx.fillText(`🔴 Aceleração a: ${a_t.toFixed(1)} m/s²`, 28, 98);
+            ctx.fillStyle = '#fbbf24'; ctx.fillText(`🟡 Vetor Posição r: ${x_t.toFixed(2)} m`, 28, 58);
+            ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Vetor Velocidade v: ${v_t.toFixed(1)} m/s`, 28, 78);
+            ctx.fillStyle = '#f43f5e'; ctx.fillText(`🔴 Vetor Aceleração a: ${a_t.toFixed(1)} m/s²`, 28, 98);
         }
 
 
