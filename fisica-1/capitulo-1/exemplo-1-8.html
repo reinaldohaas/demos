@@ -238,7 +238,8 @@
             color: var(--accent-cyan);
             font-family: monospace;
             font-weight: 800;
-            font-size: 1.05rem;
+            font-size: 1.15rem;
+            line-height: 1.7;
         }
         .btn-group-inline {
             display: flex;
@@ -328,7 +329,7 @@
     </div>
 
     <script>
-        let timer = null, running = true; // Auto-play on load!
+        let timer = null, running = false; // Auto-play on load!
 
         function togglePlay() {
             running = !running;

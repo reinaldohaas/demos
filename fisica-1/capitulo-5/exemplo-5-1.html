@@ -258,7 +258,8 @@
             color: var(--accent-cyan);
             font-family: monospace;
             font-weight: 800;
-            font-size: 1.05rem;
+            font-size: 1.15rem;
+            line-height: 1.7;
         }
         .btn-group-inline {
             display: flex;
@@ -422,7 +423,8 @@
             ctx.stroke();
         }
 
-        window.onload = function() { drawStage(); };
+        window.onload = function() {
+            document.getElementById('ex-t').value = 0; drawStage(); };
         window.onresize = function() { drawStage(); };
     </script>
 </body>
