@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 2.2: Aceleração Média | FSC5101 Física I</title>
+    <title>Exemplo 2.2 | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
             --bg-dark: #070a12;
@@ -69,7 +70,6 @@
         }
         .nav-step-btn.primary { background: var(--primary-gradient); color: white; border-color: transparent; }
         .nav-step-btn:hover { transform: translateY(-1px); opacity: 0.9; }
-        .nav-step-disabled { opacity: 0.4; font-size: 0.88rem; font-weight: 600; color: var(--text-sub); }
 
         .statement-box {
             background: rgba(10, 16, 30, 0.92);
@@ -254,15 +254,15 @@
     <div class="top-nav">
         <a href="index.html" class="back-btn">← Voltar ao Hub do Capítulo 2</a>
         <div style="display:flex; gap:8px; align-items:center;">
-            <a href="exemplo-2-1.html" class="nav-step-btn">← Anterior</a>
-            <a href="exemplo-2-3.html" class="nav-step-btn primary">Exemplo 2.3: Inversão de Sentido →</a>
+            <a href="exemplo-2-1.html" class="nav-step-btn">← Exemplo 2.1</a>
+            <a href="exemplo-2-3.html" class="nav-step-btn primary">Exemplo 2.3 →</a>
         </div>
     </div>
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 2.2: Aceleração Média</h2>
-            <p>Uma astronauta a bordo de um ônibus espacial mede sua velocidade a cada intervalo de 2,0 s com uma unidade pessoal de manobra. Aceleração média calculada em quatro intervalos sucessivos de tempo e verificação se a velocidade aumenta ou diminui.</p>
+            <h2><i class="fa-solid fa-user-astronaut" style="color:#a855f7;"></i> Exemplo 2.2: A Astronauta em Movimento Retilíneo</h2>
+            <p>Uma astronauta executa uma caminhada no espaço conectada por um cabo à nave espacial (origem x = 0). Sua posição é dada por x(t) = 1,0 + 0,80 t - 0,040 t². Calcule sua posição inicial, velocidade em t = 0s, 5s, 10s e 15s, e sua aceleração.</p>
             <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
                 <div style="display: flex; gap: 6px; align-items: center;">
                     <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
@@ -289,7 +289,7 @@
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
         </div>
-        <div class="formula-badge">a_méd-x = Δv_x / Δt</div>
+        <div class="formula-badge">x(t) = 1,0 + 0,80t - 0,040t²</div>
     </div>
 
     <div class="presentation-container">
@@ -299,94 +299,79 @@
                 📖 Resolução Didática Passo a Passo
             </div>
             
-        <div class="item-card">
-            <div class="item-badge">Intervalo (A)</div>
-            <div class="item-content">
-                <div class="item-title">t₁ = 1,0 s (v₁ = 0,8 m/s) até t₂ = 3,0 s (v₂ = 1,2 m/s)</div>
-                <div class="item-formula"><code>a_méd-x = (v₂ - v₁) / (t₂ - t₁)</code></div>
-                <div class="item-calc">
-                    📌 <b>Passo 1: Identificação das Variáveis Disponíveis:</b><br>
-                    • Velocidade inicial: v₁ = 0,8 m/s em t₁ = 1,0 s<br>
-                    • Velocidade final: v₂ = 1,2 m/s em t₂ = 3,0 s<br><br>
-                    🔹 <b>Passo 2: Variação da Velocidade e Tempo:</b><br>
-                    Δv_x = 1,2 - 0,8 = +0,4 m/s em Δt = 3,0 - 1,0 = 2,0 s.<br><br>
-                    🔹 <b>Passo 3: Cálculo da Aceleração Média:</b><br>
-                    a_méd-x = +0,4 m/s / 2,0 s = <b>+0,20 m/s²</b>.<br>
-                    <i>(Conclusão: A aceleração é positiva e o módulo da velocidade aumenta no sentido +x).</i>
+            <div class="item-card">
+                <div class="item-badge">IDENTIFICAÇÃO DE VARIÁVEIS</div>
+                <div>
+                    <div class="item-title">Variáveis e Equação do Movimento da Astronauta:</div>
+                    <div class="item-calc">
+                        • Equação da Posição: <code>x(t) = 1,0 + 0,80 t - 0,040 t²</code> (m)<br>
+                        • Posição da Nave Espacial (Origem O): <code>x = 0,0 m</code><br>
+                        • Cabo de Segurança Ligando a Astronauta à Nave.
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="item-card">
-            <div class="item-badge">Intervalo (B)</div>
-            <div class="item-content">
-                <div class="item-title">t₁ = 5,0 s (v₁ = 1,6 m/s) até t₂ = 7,0 s (v₂ = 1,2 m/s)</div>
-                <div class="item-formula"><code>a_méd-x = (1,2 - 1,6) / (7,0 - 5,0)</code></div>
-                <div class="item-calc">
-                    📌 <b>Passo 1: Identificação das Variáveis Disponíveis:</b><br>
-                    • Velocidade inicial: v₁ = 1,6 m/s em t₁ = 5,0 s<br>
-                    • Velocidade final: v₂ = 1,2 m/s em t₂ = 7,0 s<br><br>
-                    🔹 <b>Passo 2: Variação da Velocidade e Tempo:</b><br>
-                    Δv_x = 1,2 - 1,6 = -0,4 m/s em Δt = 2,0 s.<br><br>
-                    🔹 <b>Passo 3: Cálculo da Aceleração Média:</b><br>
-                    a_méd-x = -0,4 m/s / 2,0 s = <b>-0,20 m/s²</b>.<br>
-                    <i>(Conclusão: A aceleração é negativa e o módulo da velocidade diminui - desaceleração no sentido +x).</i>
+            <div class="item-card">
+                <div class="item-badge">ITEM (a)</div>
+                <div>
+                    <div class="item-title">Posição Inicial da Astronauta em t = 0 s</div>
+                    <div class="item-formula"><code>x(0) = 1,0 + 0,80(0) - 0,040(0)²</code></div>
+                    <div class="item-calc">
+                        x(0) = <b>1,0 m</b> (A astronauta começa a 1,0 m da nave).
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="item-card">
-            <div class="item-badge">Intervalo (C)</div>
-            <div class="item-content">
-                <div class="item-title">t₁ = 9,0 s (v₁ = -0,4 m/s) até t₂ = 11,0 s (v₂ = -1,0 m/s)</div>
-                <div class="item-formula"><code>a_méd-x = (-1,0 - (-0,4)) / (11,0 - 9,0)</code></div>
-                <div class="item-calc">
-                    📌 <b>Passo 1: Identificação das Variáveis Disponíveis:</b><br>
-                    • Velocidade inicial: v₁ = -0,4 m/s em t₁ = 9,0 s<br>
-                    • Velocidade final: v₂ = -1,0 m/s em t₂ = 11,0 s<br><br>
-                    🔹 <b>Passo 2: Variação da Velocidade e Tempo:</b><br>
-                    Δv_x = -1,0 - (-0,4) = -0,6 m/s em Δt = 2,0 s.<br><br>
-                    🔹 <b>Passo 3: Cálculo da Aceleração Média:</b><br>
-                    a_méd-x = -0,6 m/s / 2,0 s = <b>-0,30 m/s²</b>.<br>
-                    <i>(Conclusão: A aceleração e a velocidade são ambas negativas; o módulo da velocidade aumenta no sentido -x).</i>
+            <div class="item-card">
+                <div class="item-badge">ITEM (b)</div>
+                <div>
+                    <div class="item-title">Velocidade Instantânea v(t) em t = 0s, 5s, 10s e 15s</div>
+                    <div class="item-formula"><code>v(t) = dx/dt = 0,80 - 0,080 t</code></div>
+                    <div class="item-calc">
+                        1) Para t = 0 s: v(0) = <b>0,80 m/s</b> (afastando-se da nave).<br>
+                        2) Para t = 5,0 s: v(5,0) = 0,80 - 0,080(5,0) = <b>0,40 m/s</b>.<br>
+                        3) Para t = 10,0 s: v(10,0) = 0,80 - 0,080(10,0) = <b>0,0 m/s</b> (parada momentânea a x = 5,0 m!).<br>
+                        4) Para t = 15,0 s: v(15,0) = 0,80 - 0,080(15,0) = <b>-0,40 m/s</b> (retornando à nave!).
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="item-card">
-            <div class="item-badge">Intervalo (D)</div>
-            <div class="item-content">
-                <div class="item-title">t₁ = 13,0 s (v₁ = -1,6 m/s) até t₂ = 15,0 s (v₂ = -0,8 m/s)</div>
-                <div class="item-formula"><code>a_méd-x = (-0,8 - (-1,6)) / (15,0 - 13,0)</code></div>
-                <div class="item-calc">
-                    📌 <b>Passo 1: Identificação das Variáveis Disponíveis:</b><br>
-                    • Velocidade inicial: v₁ = -1,6 m/s em t₁ = 13,0 s<br>
-                    • Velocidade final: v₂ = -0,8 m/s em t₂ = 15,0 s<br><br>
-                    🔹 <b>Passo 2: Variação da Velocidade e Tempo:</b><br>
-                    Δv_x = -0,8 - (-1,6) = +0,8 m/s em Δt = 2,0 s.<br><br>
-                    🔹 <b>Passo 3: Cálculo da Aceleração Média:</b><br>
-                    a_méd-x = +0,8 m/s / 2,0 s = <b>+0,40 m/s²</b>.<br>
-                    <i>(Conclusão: A aceleração é positiva e a velocidade é negativa; o módulo diminui de 1,6 m/s para 0,8 m/s - desaceleração no sentido -x).</i>
+            <div class="item-card">
+                <div class="item-badge">ITEM (c)</div>
+                <div>
+                    <div class="item-title">Aceleração Instantânea a(t)</div>
+                    <div class="item-formula"><code>a(t) = dv/dt = -0,080 m/s²</code></div>
+                    <div class="item-calc">
+                        a = <b>-0,080 m/s²</b> (Aceleração constante negativa, puxando a astronauta de volta para a nave!).
+                    </div>
                 </div>
             </div>
-        </div>
-        
+
+            <!-- PUBLIC PHYSICS SIMULATIONS & REFERENCES BOX -->
+            <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 14px; margin-top: 14px;">
+                <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; margin-bottom:8px;">🌐 SIMULAÇÕES PÚBLICAS RECOMENDADAS:</div>
+                <ul style="font-size:0.85rem; color:#cbd5e1; padding-left:18px; line-height:1.6;">
+                    <li><a href="https://phet.colorado.edu/sims/html/moving-man/latest/moving-man_all.html" target="_blank" style="color:#fbbf24; font-weight:700; text-decoration:none;">🔗 PhET Colorado - The Moving Man (Posição, Velocidade e Aceleração)</a></li>
+                    <li><a href="https://www.geogebra.org/m/vcbqfzkf" target="_blank" style="color:#38bdf8; font-weight:700; text-decoration:none;">🔗 GeoGebra - Cinemática Vetorial 1D e 2D Interativa</a></li>
+                </ul>
+            </div>
+
         </div>
 
         <!-- Right Column: Interactive Stage STARTS AT t = 0.00 s -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Alcance em t ≈ 2.45 s (x = 50.0m) | Sistema Cartesiano X-Y</span>
+                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D com Zero Empilhamento de Vetores e Eixos X-Y</span>
                 <div style="display:flex; gap:8px;">
-                    <a href="exemplo-2-1.html" class="nav-step-btn">← Anterior</a>
-                    <a href="exemplo-2-3.html" class="nav-step-btn primary">Exemplo 2.3: Inversão de Sentido →</a>
+                    <a href="exemplo-2-1.html" class="nav-step-btn">← Exemplo 2.1</a>
+                    <a href="exemplo-2-3.html" class="nav-step-btn primary">Exemplo 2.3 →</a>
                 </div>
             </div>
 
             <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
-                    <span style="color:#fbbf24;">📍 Origem O</span>
+                    <span style="color:#fbbf24;">📍 Origem O (Nave)</span>
                     <span style="color:#38bdf8;">➔ Deslocamento Δx</span>
                     <span style="color:#10b981;">➔ Velocidade v</span>
                     <span style="color:#f43f5e;">➔ Aceleração a</span>
@@ -403,7 +388,7 @@
                     </div>
                     <div class="control-group-inline">
                         <label>Controle do Tempo t: <span id="ex-t-val">0.00 s</span></label>
-                        <input type="range" id="ex-t" min="0" max="15.0" step="0.2" value="0" oninput="updateDemo()">
+                        <input type="range" id="ex-t" min="0" max="15.0" step="0.1" value="0" oninput="updateDemo()">
                     </div>
                 </div>
             </div>
@@ -442,7 +427,7 @@
         function loop() {
             if (!running) return;
             const input = document.getElementById('ex-t');
-            let t = parseFloat(input.value) + parseFloat(input.step || 0.2);
+            let t = parseFloat(input.value) + parseFloat(input.step || 0.1);
             const maxVal = parseFloat(input.max || 15.0);
             if (t >= maxVal) {
                 t = maxVal;
@@ -619,42 +604,111 @@
         function drawScene(t) {
             const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
             ctx.clearRect(0,0,w,h);
-            ctx.fillStyle = '#070a14'; ctx.fillRect(0,0,w,h);
+            ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
 
-            // Shaded Shuttle Body
-            ctx.fillStyle = '#1e293b'; ctx.fillRect(10, h/2 - 40, 70, 80);
-            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
-            ctx.fillText('🛸 Ônibus', 45, h/2);
+            // Canvas Layout Dimensions
+            const padL = 90, padB = 90, padR = 60, padT = 70;
+            const gW = w - padL - padR;
+            const gH = h - padB - padT;
 
-            const times = [1, 3, 5, 7, 9, 11, 13, 15];
-            const speeds = [0.8, 1.2, 1.6, 1.2, -0.4, -1.0, -1.6, -0.8];
-            
-            let vx = 0.8;
-            if (t <= 1) vx = 0.8;
-            else if (t >= 15) vx = -0.8;
-            else {
-                for (let i = 0; i < times.length - 1; i++) {
-                    if (t >= times[i] && t <= times[i+1]) {
-                        const ratio = (t - times[i]) / (times[i+1] - times[i]);
-                        vx = speeds[i] + ratio * (speeds[i+1] - speeds[i]);
-                        break;
-                    }
-                }
+            const maxX = 6.0; // max distance 6.0 meters
+            const maxY = 2.0;
+
+            const toPxX = x => padL + (x / maxX) * gW;
+            const toPxY = y => (h - padB) - (y / maxY) * gH;
+
+            const originX = toPxX(0);
+            const originY = toPxY(0);
+
+            // 1. GRID LINES
+            ctx.strokeStyle = 'rgba(51, 65, 85, 0.3)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+            for (let x = 0; x <= maxX; x += 1) {
+                const px = toPxX(x);
+                ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, h - padB); ctx.stroke();
+            }
+            ctx.setLineDash([]);
+
+            // 2. EIXOS CARTESIANOS X e Y
+            // Eixo X (Horizontal - Azul)
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(padL - 10, originY); ctx.lineTo(w - padR + 15, originY); ctx.stroke();
+            drawVectorArrow(ctx, w - padR + 5, originY, 15, 0, '#38bdf8', '');
+            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
+            ctx.fillText('Eixo X (m)', w - padR + 24, originY + 4);
+
+            // Eixo Y (Vertical - Verde)
+            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(originX, h - padB + 10); ctx.lineTo(originX, padT - 15); ctx.stroke();
+            drawVectorArrow(ctx, originX, padT - 5, 0, -15, '#10b981', '');
+            ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
+            ctx.fillText('Eixo Y (m)', originX, padT - 25);
+
+            // Ticks no Eixo X (0m, 1m, 2m, 3m, 4m, 5m, 6m)
+            for (let x = 0; x <= maxX; x += 1) {
+                const px = toPxX(x);
+                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(px, originY - 5); ctx.lineTo(px, originY + 5); ctx.stroke();
+                ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
+                ctx.fillText(`${x}m`, px, originY + 22);
             }
 
-            const astroX = 130 + t * 22;
-            const astroY = h / 2;
+            // 3. SETA INDICADORA DA ORIGEM O (0,0 - NAVE ESPACIAL)
+            // Desenhar caixa da Nave Espacial na Origem
+            ctx.fillStyle = '#1e293b'; ctx.fillRect(originX - 35, originY - 25, 35, 50);
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.strokeRect(originX - 35, originY - 25, 35, 50);
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'center';
+            ctx.fillText('🚀 Nave (x=0)', originX - 17, originY + 4);
 
-            ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.arc(astroX, astroY, 13, 0, Math.PI*2); ctx.fill();
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
-            ctx.fillText(`👩‍🚀 Astronauta (t = ${t.toFixed(1)}s)`, astroX + 18, astroY - 20);
-            ctx.fillText(`v_x = ${vx.toFixed(2)} m/s`, astroX + 18, astroY + 5);
+            // Calculations for current time t
+            const x_t = 1.0 + 0.80 * t - 0.040 * t * t;
+            const v_t = 0.80 - 0.080 * t;
+            const a_t = -0.080;
 
-            // SEPARATED VECTORS: Velocity ABOVE (astroY - 25), Acceleration BELOW (astroY + 25)
-            drawVectorArrow(ctx, astroX, astroY - 25, vx * 45.0, 0, '#10b981', `v_x = ${vx.toFixed(2)}m/s (acima)`);
-            drawVectorArrow(ctx, astroX, astroY + 25, (vx >= 0 ? 10 : -10), 0, '#f43f5e', `sentido aceleração (abaixo)`);
+            const astroX = toPxX(x_t);
+            const astroY = originY;
+
+            // Cabo de segurança entre Nave e Astronauta
+            ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 2; ctx.setLineDash([2, 2]);
+            ctx.beginPath(); ctx.moveTo(originX, originY); ctx.lineTo(astroX, astroY); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Astronaut Icon Position
+            ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.arc(astroX, astroY, 15, 0, Math.PI*2); ctx.fill();
+            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#f8fafc'; ctx.textAlign = 'center';
+            ctx.fillText('👩‍🚀 Astronauta', astroX, astroY - 26);
+
+            // === ZERO OVERLAP VECTORS WITH EXPLICIT Y OFFSETS ===
+            // 1. VETOR POSIÇÃO r(t) (Dourado - Na linha de base y + 35px)
+            drawVectorArrow(ctx, originX, originY + 35, astroX - originX, 0, '#fbbf24', `r = ${x_t.toFixed(2)} m`, true);
+
+            // 2. VETOR DESLOCAMENTO Δx (Azul Ciano - Em y - 30px se t > 0)
+            if (t > 0.1) {
+                const x0_px = toPxX(1.0);
+                drawVectorArrow(ctx, x0_px, originY - 30, astroX - x0_px, 0, '#38bdf8', `Δx = ${(x_t - 1.0).toFixed(2)} m`);
+            }
+
+            // 3. VETOR VELOCIDADE v(t) (Verde - Bem acima em y - 70px)
+            if (Math.abs(v_t) > 0.01) {
+                drawVectorArrow(ctx, astroX, astroY - 70, v_t * 120.0, 0, '#10b981', `v = ${v_t.toFixed(2)} m/s`);
+            }
+
+            // 4. VETOR ACELERAÇÃO a(t) (Vermelho - Bem abaixo em y + 65px)
+            drawVectorArrow(ctx, astroX, astroY + 65, a_t * 1500.0, 0, '#f43f5e', `a = ${a_t.toFixed(3)} m/s²`, true);
+
+            // TOP-LEFT HUD TELEMETRY DASHBOARD
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.94)';
+            ctx.fillRect(18, 18, 270, 115);
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)'; ctx.lineWidth = 1.5;
+            ctx.strokeRect(18, 18, 270, 115);
+
+            ctx.font = 'bold 12px Inter'; ctx.textAlign = 'left';
+            ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(2)} s`, 28, 36);
+            ctx.fillStyle = '#fbbf24'; ctx.fillText(`🟡 Vetor Posição x: ${x_t.toFixed(2)} m`, 28, 54);
+            ctx.fillStyle = '#38bdf8'; ctx.fillText(`🔹 Vetor Deslocamento Δx: ${(x_t - 1.0).toFixed(2)} m`, 28, 72);
+            ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Vetor Velocidade v: ${v_t.toFixed(2)} m/s`, 28, 90);
+            ctx.fillStyle = '#f43f5e'; ctx.fillText(`🔴 Vetor Aceleração a: ${a_t.toFixed(3)} m/s²`, 28, 108);
         }
-        
+
 
         window.onload = function() {
             document.getElementById('ex-t').value = 0;
