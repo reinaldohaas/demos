@@ -3,21 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Geral de Demonstrativos e Simulações</title>
+    <title>Portal de Disciplinas e Demonstrações</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #070a12;
-            --bg-card: rgba(15, 23, 42, 0.88);
+            --bg-card: rgba(15, 23, 42, 0.9);
             --bg-card-border: rgba(56, 189, 248, 0.25);
             --accent-cyan: #38bdf8;
-            --accent-purple: #a855f7;
             --accent-gold: #fbbf24;
-            --accent-emerald: #10b981;
             --text-main: #f8fafc;
-            --text-sub: #94a3b8;
+            --text-sub: #cbd5e1;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -29,10 +27,10 @@
                 radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
                 radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.18) 0%, transparent 50%);
             background-attachment: fixed;
-            padding: 30px 20px;
+            padding: 40px 20px;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 40px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 45px; }
         .header h1 {
             font-family: 'Outfit', sans-serif;
             font-size: 2.8rem;
@@ -40,166 +38,95 @@
             background: linear-gradient(90deg, #38bdf8, #818cf8, #fbbf24);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
-        .header p { color: var(--text-sub); font-size: 1.1rem; }
+        .header p { color: var(--text-sub); font-size: 1.15rem; }
 
-        .subject-section {
-            background: rgba(10, 16, 30, 0.75);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 32px;
-        }
-        .subject-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent-cyan);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-            padding-bottom: 10px;
-        }
-
-        .grid {
+        .discipline-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 16px;
+            gap: 24px;
         }
-        .card {
+        .discipline-card {
             background: var(--bg-card);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 18px;
+            border: 1px solid var(--bg-card-border);
+            border-radius: 18px;
+            padding: 28px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             text-decoration: none;
             color: inherit;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
         }
-        .card:hover {
-            transform: translateY(-3px);
+        .discipline-card:hover {
+            transform: translateY(-5px);
             border-color: var(--accent-cyan);
-            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.2);
+            box-shadow: 0 14px 35px rgba(56, 189, 248, 0.25);
         }
-        .card-icon { font-size: 1.8rem; margin-bottom: 8px; }
-        .card-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--text-main); margin-bottom: 6px; }
-        .card-desc { font-size: 0.85rem; color: var(--text-sub); line-height: 1.5; margin-bottom: 14px; }
+        .card-icon { font-size: 2.6rem; margin-bottom: 14px; }
+        .card-title { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--text-main); margin-bottom: 10px; }
+        .card-desc { font-size: 0.95rem; color: var(--text-sub); line-height: 1.6; margin-bottom: 20px; }
         .card-btn {
-            background: rgba(56, 189, 248, 0.1);
+            background: rgba(56, 189, 248, 0.12);
             color: var(--accent-cyan);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 0.82rem;
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.92rem;
             text-align: center;
         }
-        .card:hover .card-btn { background: var(--accent-cyan); color: #020617; }
+        .discipline-card:hover .card-btn { background: var(--accent-cyan); color: #020617; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🌐 PORTAL DE DEMONSTRAÇÕES E SIMULAÇÕES</h1>
-            <p>Catálogo Geral de Demonstrações Organizado por Áreas (Física I, Mesoescala, Geofísica, Oscilações)</p>
+            <h1>🌐 PORTAL DE DISCIPLINAS E DEMONSTRAÇÕES</h1>
+            <p>Selecione a disciplina desejada para acessar seus capítulos e exercícios interativos</p>
         </div>
 
-        <!-- FÍSICA I - MECÂNICA -->
-        <div class="subject-section">
-            <div class="subject-title">📘 1. Física I — Mecânica Clássica (Sears & Zemansky)</div>
-            <div class="grid">
-                <a href="fisica-1/index.html" class="card">
-                    <div>
-                        <div class="card-icon">📚</div>
-                        <div class="card-title">Catálogo Completo de Física I</div>
-                        <div class="card-desc">Hub geral com todos os exemplos interativos dos Capítulos 1, 2, 3, 4 e 5.</div>
-                    </div>
-                    <div class="card-btn">Abrir Hub de Física I →</div>
-                </a>
-                <a href="fisica-1/capitulo-1/index.html" class="card">
-                    <div>
-                        <div class="card-icon">📐</div>
-                        <div class="card-title">Capítulo 1: Unidades, Grandezas e Vetores</div>
-                        <div class="card-desc">Exemplos 1.1 ao 1.12 com conversão de unidades e produto vetorial.</div>
-                    </div>
-                    <div class="card-btn">Abrir Capítulo 1 →</div>
-                </a>
-                <a href="fisica-1/capitulo-2/index.html" class="card">
-                    <div>
-                        <div class="card-icon">📘</div>
-                        <div class="card-title">Capítulo 2: Movimento Retilíneo</div>
-                        <div class="card-desc">Exemplos 2.1 ao 2.7 (O Leopardo, Astronauta, Frenagem, Queda Livre e Integração).</div>
-                    </div>
-                    <div class="card-btn">Abrir Capítulo 2 →</div>
-                </a>
-                <a href="fisica-1/capitulo-3/index.html" class="card">
-                    <div>
-                        <div class="card-icon">🚀</div>
-                        <div class="card-title">Capítulo 3: Movimento em 2D e 3D</div>
-                        <div class="card-desc">Exemplos 3.1 ao 3.8 (Projéteis, MCU, Veículo em Marte e Velocidade Relativa).</div>
-                    </div>
-                    <div class="card-btn">Abrir Capítulo 3 →</div>
-                </a>
-            </div>
-        </div>
+        <div class="discipline-grid">
+            <!-- DISCIPLINA 1: FÍSICA I -->
+            <a href="fisica-1/index.html" class="discipline-card">
+                <div>
+                    <div class="card-icon">📘</div>
+                    <div class="card-title">Física I (Mecânica Clássica)</div>
+                    <div class="card-desc">Sears & Zemansky (12ª Ed.). Mecânica vetorial, movimento retilíneo, movimento 2D/3D e Leis de Newton.</div>
+                </div>
+                <div class="card-btn">Abrir Capítulos de Física I →</div>
+            </a>
 
-        <!-- METEOROLOGIA & MESOESCALA -->
-        <div class="subject-section">
-            <div class="subject-title">🌪️ 2. Meteorologia & Mesoescala</div>
-            <div class="grid">
-                <a href="mesoescala/supercell-splat-spin/index.html" class="card">
-                    <div>
-                        <div class="card-icon">🌀</div>
-                        <div class="card-title">Supercélulas & Vorticidade (Mesoescala)</div>
-                        <div class="card-desc">Dinâmica de tempestades severas em mesoescala, correntes ascendentes e cisalhamento.</div>
-                    </div>
-                    <div class="card-btn">Abrir Supercélulas (Mesoescala) →</div>
-                </a>
-                <a href="mesoescala/rossby-radius/index.html" class="card">
-                    <div>
-                        <div class="card-icon">🌊</div>
-                        <div class="card-title">Raio de Deformação de Rossby</div>
-                        <div class="card-desc">Fluidos geofísicos, ajuste geostrófico, rotação e ondas atmosféricas/oceânicas.</div>
-                    </div>
-                    <div class="card-btn">Abrir Raio de Rossby →</div>
-                </a>
-            </div>
-        </div>
+            <!-- DISCIPLINA 2: METEOROLOGIA & MESOESCALA -->
+            <a href="mesoescala/supercell-splat-spin/index.html" class="discipline-card">
+                <div>
+                    <div class="card-icon">🌪️</div>
+                    <div class="card-title">Meteorologia & Mesoescala</div>
+                    <div class="card-desc">Dinâmica de tempestades severas em mesoescala, supercélulas, vorticidade e correntes ascendentes.</div>
+                </div>
+                <div class="card-btn">Abrir Meteorologia & Mesoescala →</div>
+            </a>
 
-        <!-- MECÂNICA AVANÇADA, OSCILAÇÕES & GEOMETRIA -->
-        <div class="subject-section">
-            <div class="subject-title">🌐 3. Mecânica Avançada, Oscilações & Geometria</div>
-            <div class="grid">
-                <a href="foucault-pendulum/index.html" class="card">
-                    <div>
-                        <div class="card-icon">🕰️</div>
-                        <div class="card-title">Pêndulo de Foucault</div>
-                        <div class="card-desc">Simulação 3D/2D da rotação da Terra e precessão do plano de oscilação do pêndulo.</div>
-                    </div>
-                    <div class="card-btn">Abrir Pêndulo de Foucault →</div>
-                </a>
-                <a href="harmonic-oscillator/index.html" class="card">
-                    <div>
-                        <div class="card-icon">〰️</div>
-                        <div class="card-title">Oscilador Harmônico Simples e Amortecido</div>
-                        <div class="card-desc">Massa-mola, amortecimento subcrítico, crítico e supercrítico.</div>
-                    </div>
-                    <div class="card-btn">Abrir Oscilador Harmônico →</div>
-                </a>
-                <a href="geometric-quadratic/index.html" class="card">
-                    <div>
-                        <div class="card-icon">📊</div>
-                        <div class="card-title">Geometria Quadrática Interativa</div>
-                        <div class="card-desc">Formas quadráticas, parábolas e superfícies 2D/3D.</div>
-                    </div>
-                    <div class="card-btn">Abrir Geometria Quadrática →</div>
-                </a>
-            </div>
+            <!-- DISCIPLINA 3: GEOFÍSICA & FLUIDOS -->
+            <a href="mesoescala/rossby-radius/index.html" class="discipline-card">
+                <div>
+                    <div class="card-icon">🌊</div>
+                    <div class="card-title">Geofísica & Fluidos em Rotação</div>
+                    <div class="card-desc">Ajuste geostrófico, Raio de Deformação de Rossby e ondas atmosféricas/oceânicas.</div>
+                </div>
+                <div class="card-btn">Abrir Geofísica & Fluidos →</div>
+            </a>
+
+            <!-- DISCIPLINA 4: MECÂNICA AVANÇADA & PÊNDULO -->
+            <a href="foucault-pendulum/index.html" class="discipline-card">
+                <div>
+                    <div class="card-icon">🕰️</div>
+                    <div class="card-title">Pêndulo de Foucault</div>
+                    <div class="card-desc">Simulação 3D/2D da rotação da Terra e precessão do plano de oscilação do pêndulo por latitude.</div>
+                </div>
+                <div class="card-btn">Abrir Pêndulo de Foucault →</div>
+            </a>
         </div>
     </div>
 </body>

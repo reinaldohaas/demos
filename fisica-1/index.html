@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Física I | FSC5101 Catálogo de Exercícios</title>
+    <title>Física I — Capítulos do Livro | FSC5101</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #070a12;
-            --bg-card: rgba(15, 23, 42, 0.88);
+            --bg-card: rgba(15, 23, 42, 0.9);
             --bg-card-border: rgba(56, 189, 248, 0.25);
             --accent-cyan: #38bdf8;
             --accent-gold: #fbbf24;
-            --accent-emerald: #10b981;
             --text-main: #f8fafc;
-            --text-sub: #94a3b8;
+            --text-sub: #cbd5e1;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -25,261 +24,134 @@
             color: var(--text-main);
             min-height: 100vh;
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.18) 0%, transparent 50%),
-                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 40%);
+                radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.18) 0%, transparent 50%);
             background-attachment: fixed;
-            padding: 24px;
+            padding: 40px 20px;
         }
-        .header { max-width: 1000px; margin: 0 auto 30px; text-align: center; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .back-nav { margin-bottom: 24px; }
+        .back-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--bg-card-border);
+            color: var(--accent-cyan);
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.92rem;
+        }
+
+        .header { text-align: center; margin-bottom: 40px; }
         .header h1 {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.6rem;
             font-weight: 800;
             background: linear-gradient(90deg, #38bdf8, #818cf8, #fbbf24);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
         }
-        .header p { color: var(--text-sub); font-size: 1rem; }
+        .header p { color: var(--text-sub); font-size: 1.1rem; }
 
-        .chapter-box {
-            max-width: 1000px;
-            margin: 0 auto 24px;
-            background: rgba(10, 16, 30, 0.7);
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 22px;
+        }
+        .chapter-card {
+            background: var(--bg-card);
             border: 1px solid var(--bg-card-border);
-            border-radius: 14px;
-            padding: 20px 24px;
-        }
-        .chapter-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.35rem;
-            color: var(--accent-cyan);
-            font-weight: 700;
-            margin-bottom: 16px;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-            padding-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .chapter-link {
-            font-size: 0.8rem;
-            color: var(--accent-gold);
-            text-decoration: none;
-            font-weight: 700;
-        }
-        .chapter-link:hover { text-decoration: underline; }
-
-        .exercise-list {
+            border-radius: 16px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-        }
-        .ex-item {
-            display: flex;
             justify-content: space-between;
-            align-items: center;
-            background: var(--bg-card);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 12px 18px;
             text-decoration: none;
             color: inherit;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
         }
-        .ex-item:hover {
-            transform: translateX(4px);
+        .chapter-card:hover {
+            transform: translateY(-4px);
             border-color: var(--accent-cyan);
-            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 12px 30px rgba(56, 189, 248, 0.22);
         }
-        .ex-title {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--text-main);
-        }
-        .ex-btn {
+        .card-num { font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 8px; }
+        .card-title { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.25rem; color: var(--text-main); margin-bottom: 10px; }
+        .card-desc { font-size: 0.92rem; color: var(--text-sub); line-height: 1.6; margin-bottom: 18px; }
+        .card-btn {
             background: rgba(56, 189, 248, 0.1);
             color: var(--accent-cyan);
             border: 1px solid rgba(56, 189, 248, 0.3);
-            padding: 6px 14px;
-            border-radius: 6px;
+            padding: 10px 16px;
+            border-radius: 8px;
             font-weight: 700;
-            font-size: 0.8rem;
-            white-space: nowrap;
+            font-size: 0.88rem;
+            text-align: center;
         }
-        .ex-item:hover .ex-btn {
-            background: var(--accent-cyan);
-            color: #020617;
-        }
+        .chapter-card:hover .card-btn { background: var(--accent-cyan); color: #020617; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>FSC5101 — FÍSICA I (MECÂNICA)</h1>
-        <p>Catálogo de Exercícios e Demonstrações Interativas por Capítulo</p>
-    </div>
+    <div class="container">
+        <div class="back-nav">
+            <a href="../index.html" class="back-btn">← Voltar às Disciplinas</a>
+        </div>
 
-    <!-- CAPÍTULO 1 -->
-    <div class="chapter-box">
-        <div class="chapter-title">
-            <span>📐 Capítulo 1: Unidades, Grandezas Físicas e Vetores</span>
-            <a href="capitulo-1/index.html" class="chapter-link">Hub do Capítulo 1 →</a>
+        <div class="header">
+            <h1>📘 FSC5101 — FÍSICA I (MECÂNICA)</h1>
+            <p>Selecione um dos capítulos abaixo para abrir a lista de exercícios e demonstrações interativas</p>
         </div>
-        <div class="exercise-list">
-            <a href="capitulo-1/exemplo-1-1.html" class="ex-item">
-                <span class="ex-title">Exemplo 1.1: Conversão de Unidades de Velocidade</span>
-                <span class="ex-btn">Abrir Exemplo 1.1 →</span>
-            </a>
-            <a href="capitulo-1/exemplo-1-2.html" class="ex-item">
-                <span class="ex-title">Exemplo 1.2: Conversão de Unidades de Volume</span>
-                <span class="ex-btn">Abrir Exemplo 1.2 →</span>
-            </a>
-            <a href="capitulo-1/exemplo-1-3.html" class="ex-item">
-                <span class="ex-title">Exemplo 1.3: Algarismos Significativos na Multiplicação</span>
-                <span class="ex-btn">Abrir Exemplo 1.3 →</span>
-            </a>
-            <a href="capitulo-1/exemplo-1-4.html" class="ex-item">
-                <span class="ex-title">Exemplo 1.4: Uma Estimativa de Ordem de Grandeza</span>
-                <span class="ex-btn">Abrir Exemplo 1.4 →</span>
-            </a>
-            <a href="capitulo-1/exemplo-1-5.html" class="ex-item">
-                <span class="ex-title">Exemplo 1.5: Soma Vetorial (Método Gráfico / Geométrico)</span>
-                <span class="ex-btn">Abrir Exemplo 1.5 →</span>
-            </a>
-            <a href="capitulo-1/exemplo-1-6.html" class="ex-item">
-                <span class="ex-title">Exemplo 1.6: Cálculo das Componentes de um Vetor</span>
-                <span class="ex-btn">Abrir Exemplo 1.6 →</span>
-            </a>
-            <a href="capitulo-1/exemplo-1-7.html" class="ex-item">
-                <span class="ex-title">Exemplo 1.7: Soma de Vetores Usando Componentes</span>
-                <span class="ex-btn">Abrir Exemplo 1.7 →</span>
-            </a>
-            <a href="capitulo-1/exemplo-1-8.html" class="ex-item">
-                <span class="ex-title">Exemplo 1.8: Soma de Vetores em Três Dimensões</span>
-                <span class="ex-btn">Abrir Exemplo 1.8 →</span>
-            </a>
-            <a href="capitulo-1/exemplo-1-9.html" class="ex-item">
-                <span class="ex-title">Exemplo 1.9: Uso de Vetores Unitários</span>
-                <span class="ex-btn">Abrir Exemplo 1.9 →</span>
-            </a>
-            <a href="capitulo-1/exemplo-1-10.html" class="ex-item">
-                <span class="ex-title">Exemplo 1.10: Cálculo do Produto Escalar</span>
-                <span class="ex-btn">Abrir Exemplo 1.10 →</span>
-            </a>
-            <a href="capitulo-1/exemplo-1-11.html" class="ex-item">
-                <span class="ex-title">Exemplo 1.11: Cálculo de Ângulos Usando o Produto Escalar</span>
-                <span class="ex-btn">Abrir Exemplo 1.11 →</span>
-            </a>
-            <a href="capitulo-1/exemplo-1-12.html" class="ex-item">
-                <span class="ex-title">Exemplo 1.12: Cálculo de um Produto Vetorial</span>
-                <span class="ex-btn">Abrir Exemplo 1.12 →</span>
-            </a>
-        </div>
-    </div>
 
-    <!-- CAPÍTULO 2 -->
-    <div class="chapter-box">
-        <div class="chapter-title">
-            <span>📘 Capítulo 2: Movimento Retilíneo</span>
-            <a href="capitulo-2/index.html" class="chapter-link">Hub do Capítulo 2 →</a>
-        </div>
-        <div class="exercise-list">
-            <a href="capitulo-2/exemplo-2-1.html" class="ex-item">
-                <span class="ex-title">Exemplo 2.1: Velocidade Média e Velocidade Instantânea</span>
-                <span class="ex-btn">Abrir Exemplo 2.1 →</span>
+        <div class="chapter-grid">
+            <!-- CAPÍTULO 1 -->
+            <a href="capitulo-1/index.html" class="chapter-card">
+                <div>
+                    <div class="card-num">Capítulo 1</div>
+                    <div class="card-title">Unidades, Grandezas Físicas e Vetores</div>
+                    <div class="card-desc">Exemplos 1.1 ao 1.12. Conversão de unidades, produto escalar, produto vetorial e vetores unitários em 2D/3D.</div>
+                </div>
+                <div class="card-btn">Abrir Exercícios do Capítulo 1 →</div>
             </a>
-            <a href="capitulo-2/exemplo-2-2.html" class="ex-item">
-                <span class="ex-title">Exemplo 2.2: Aceleração Média</span>
-                <span class="ex-btn">Abrir Exemplo 2.2 →</span>
-            </a>
-            <a href="capitulo-2/exemplo-2-3.html" class="ex-item">
-                <span class="ex-title">Exemplo 2.3: Velocidade Instantânea e Aceleração Instantânea</span>
-                <span class="ex-btn">Abrir Exemplo 2.3 →</span>
-            </a>
-            <a href="capitulo-2/exemplo-2-4.html" class="ex-item">
-                <span class="ex-title">Exemplo 2.4: Movimento com Aceleração Constante</span>
-                <span class="ex-btn">Abrir Exemplo 2.4 →</span>
-            </a>
-            <a href="capitulo-2/exemplo-2-5.html" class="ex-item">
-                <span class="ex-title">Exemplo 2.5: Queda Livre de um Corpo</span>
-                <span class="ex-btn">Abrir Exemplo 2.5 →</span>
-            </a>
-            <a href="capitulo-2/exemplo-2-6.html" class="ex-item">
-                <span class="ex-title">Exemplo 2.6: Integração da Aceleração Variável com o Tempo</span>
-                <span class="ex-btn">Abrir Exemplo 2.6 →</span>
-            </a>
-            <a href="capitulo-2/exemplo-2-7.html" class="ex-item">
-                <span class="ex-title">Exemplo 2.7: Movimento com Dois Veículos</span>
-                <span class="ex-btn">Abrir Exemplo 2.7 →</span>
-            </a>
-        </div>
-    </div>
 
-    <!-- CAPÍTULO 3 -->
-    <div class="chapter-box">
-        <div class="chapter-title">
-            <span>🚀 Capítulo 3: Movimento em Duas ou Três Dimensões</span>
-            <a href="capitulo-3/index.html" class="chapter-link">Hub do Capítulo 3 →</a>
-        </div>
-        <div class="exercise-list">
-            <a href="capitulo-3/exemplo-3-1.html" class="ex-item">
-                <span class="ex-title">Exemplo 3.1: Vetor Posição e Velocidade em Duas Dimensões</span>
-                <span class="ex-btn">Abrir Exemplo 3.1 →</span>
+            <!-- CAPÍTULO 2 -->
+            <a href="capitulo-2/index.html" class="chapter-card">
+                <div>
+                    <div class="card-num">Capítulo 2</div>
+                    <div class="card-title">Movimento Retilíneo</div>
+                    <div class="card-desc">Exemplos 2.1 ao 2.7. O Leopardo, A Astronauta, Frenagem de Veículos, Queda Livre e Integração de Aceleração.</div>
+                </div>
+                <div class="card-btn">Abrir Exercícios do Capítulo 2 →</div>
             </a>
-            <a href="capitulo-3/exemplo-3-2.html" class="ex-item">
-                <span class="ex-title">Exemplo 3.2: Aceleração em Duas Dimensões</span>
-                <span class="ex-btn">Abrir Exemplo 3.2 →</span>
-            </a>
-            <a href="capitulo-3/exemplo-3-3.html" class="ex-item">
-                <span class="ex-title">Exemplo 3.3: Movimento de Projéteis</span>
-                <span class="ex-btn">Abrir Exemplo 3.3 →</span>
-            </a>
-            <a href="capitulo-3/exemplo-3-4.html" class="ex-item">
-                <span class="ex-title">Exemplo 3.4: Lançamento de Resgate em Altitude</span>
-                <span class="ex-btn">Abrir Exemplo 3.4 →</span>
-            </a>
-            <a href="capitulo-3/exemplo-3-5.html" class="ex-item">
-                <span class="ex-title">Exemplo 3.5: Movimento Circular Uniforme (MCU)</span>
-                <span class="ex-btn">Abrir Exemplo 3.5 →</span>
-            </a>
-            <a href="capitulo-3/exemplo-3-6.html" class="ex-item">
-                <span class="ex-title">Exemplo 3.6: Movimento Circular Não-Uniforme</span>
-                <span class="ex-btn">Abrir Exemplo 3.6 →</span>
-            </a>
-            <a href="capitulo-3/exemplo-3-7.html" class="ex-item">
-                <span class="ex-title">Exemplo 3.7: Velocidade Relativa em Duas Dimensões (Barco no Rio)</span>
-                <span class="ex-btn">Abrir Exemplo 3.7 →</span>
-            </a>
-            <a href="capitulo-3/exemplo-3-8.html" class="ex-item">
-                <span class="ex-title">Exemplo 3.8: Velocidade Relativa com Vento Cruzado</span>
-                <span class="ex-btn">Abrir Exemplo 3.8 →</span>
-            </a>
-        </div>
-    </div>
 
-    <!-- CAPÍTULO 4 -->
-    <div class="chapter-box">
-        <div class="chapter-title">
-            <span>⚖️ Capítulo 4: Leis de Newton do Movimento</span>
-        </div>
-        <div class="exercise-list">
-            <a href="capitulo-4/exemplo-4-1.html" class="ex-item">
-                <span class="ex-title">Exemplo 4.1: Plano Inclinado com Atrito</span>
-                <span class="ex-btn">Abrir Exemplo 4.1 →</span>
+            <!-- CAPÍTULO 3 -->
+            <a href="capitulo-3/index.html" class="chapter-card">
+                <div>
+                    <div class="card-num">Capítulo 3</div>
+                    <div class="card-title">Movimento em Duas e Três Dimensões</div>
+                    <div class="card-desc">Exemplos 3.1 ao 3.8. Veículo em Marte, Lançamento de Projéteis, Movimento Circular Uniforme e Velocidade Relativa.</div>
+                </div>
+                <div class="card-btn">Abrir Exercícios do Capítulo 3 →</div>
             </a>
-        </div>
-    </div>
 
-    <!-- CAPÍTULO 5 -->
-    <div class="chapter-box">
-        <div class="chapter-title">
-            <span>⚡ Capítulo 5: Aplicação das Leis de Newton e Energia</span>
-        </div>
-        <div class="exercise-list">
-            <a href="capitulo-5/exemplo-5-1.html" class="ex-item">
-                <span class="ex-title">Exemplo 5.1: Conservação da Energia Mecânica</span>
-                <span class="ex-btn">Abrir Exemplo 5.1 →</span>
+            <!-- CAPÍTULO 4 -->
+            <a href="capitulo-4/index.html" class="chapter-card">
+                <div>
+                    <div class="card-num">Capítulo 4</div>
+                    <div class="card-title">Leis de Newton do Movimento</div>
+                    <div class="card-desc">Exemplo 4.1. Princípios de dinâmica, diagramas de corpo livre e forças resultantes.</div>
+                </div>
+                <div class="card-btn">Abrir Exercícios do Capítulo 4 →</div>
+            </a>
+
+            <!-- CAPÍTULO 5 -->
+            <a href="capitulo-5/index.html" class="chapter-card">
+                <div>
+                    <div class="card-num">Capítulo 5</div>
+                    <div class="card-title">Aplicações das Leis de Newton e Energia</div>
+                    <div class="card-desc">Exemplo 5.1. Trabalho, conservação da energia mecânica e dinâmicas avançadas.</div>
+                </div>
+                <div class="card-btn">Abrir Exercícios do Capítulo 5 →</div>
             </a>
         </div>
     </div>
