@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 2.2: A Astronauta com Gráficos x-t, v-t, a-t | FSC5101 Física I</title>
+    <title>Exemplo 2.2: Aceleração Média da Astronauta (Sears & Zemansky) | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
@@ -112,28 +112,40 @@
             padding: 18px;
         }
 
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 0.88rem;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 6px 10px;
+            text-align: center;
+        }
+        .data-table th { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); font-weight: 700; }
+
         .item-card {
             background: rgba(10, 16, 30, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            padding: 14px 16px;
-            margin-bottom: 12px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
             display: flex;
-            gap: 12px;
+            gap: 10px;
         }
         .item-badge {
             background: rgba(99, 102, 241, 0.25);
             color: #a855f7;
             font-weight: 800;
-            font-size: 0.82rem;
+            font-size: 0.80rem;
             padding: 4px 8px;
             border-radius: 6px;
             height: fit-content;
             white-space: nowrap;
         }
-        .item-title { font-weight: 700; font-size: 0.98rem; color: var(--text-main); margin-bottom: 6px; }
-        .item-formula code { font-family: monospace; font-size: 0.88rem; color: var(--accent-cyan); font-weight: 700; }
-        .item-calc { font-size: 0.90rem; color: #e2e8f0; margin-top: 6px; font-weight: 500; line-height: 1.65; }
+        .item-title { font-weight: 700; font-size: 0.95rem; color: var(--text-main); margin-bottom: 4px; }
+        .item-calc { font-size: 0.88rem; color: #e2e8f0; line-height: 1.6; }
 
         .interactive-stage {
             background: var(--bg-card);
@@ -150,7 +162,7 @@
             border: 1px solid var(--bg-card-border);
             border-radius: 10px;
             padding: 8px;
-            height: 380px;
+            height: 280px;
             position: relative;
             overflow: hidden;
         }
@@ -160,10 +172,9 @@
             display: block;
         }
 
-        /* GRAPHS PANEL STYLING */
         .graphs-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 12px;
         }
         @media (max-width: 900px) { .graphs-container { grid-template-columns: 1fr; } }
@@ -173,7 +184,7 @@
             border: 1px solid rgba(56, 189, 248, 0.3);
             border-radius: 10px;
             padding: 8px;
-            height: 220px;
+            height: 260px;
             display: flex;
             flex-direction: column;
         }
@@ -185,20 +196,6 @@
             margin-bottom: 4px;
             display: flex;
             justify-content: space-between;
-        }
-
-        .vector-legend {
-            position: absolute;
-            top: 10px;
-            right: 14px;
-            display: flex;
-            gap: 12px;
-            font-size: 0.80rem;
-            font-weight: 700;
-            background: rgba(0, 0, 0, 0.88);
-            padding: 6px 14px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .controls-panel-inline {
@@ -246,10 +243,7 @@
             cursor: pointer;
         }
 
-        .btn-group-inline {
-            display: flex;
-            gap: 8px;
-        }
+        .btn-group-inline { display: flex; gap: 8px; }
         .btn {
             padding: 8px 14px;
             border-radius: 6px;
@@ -287,17 +281,17 @@
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2><i class="fa-solid fa-user-astronaut" style="color:#a855f7;"></i> Exemplo 2.2: A Astronauta com Gráficos Cinemáticos x-t, v-t, a-t</h2>
-            <p>Uma astronauta realiza uma caminhada espacial conectada a um cabo à nave (origem x = 0). Sua posição é x(t) = 1,0 + 0,80 t - 0,040 t². Acompanhe a animação 2D e os 3 gráficos cinemáticos sincronizados em tempo real.</p>
+            <h2><i class="fa-solid fa-user-astronaut" style="color:#a855f7;"></i> Exemplo 2.2: Aceleração Média da Astronauta (Sears & Zemansky - Figura 2.10)</h2>
+            <p>Uma astronauta em órbita realiza testes com sua unidade de manobra pessoal. Sua velocidade instantânea v_x é medida a cada intervalo de 2,0 s a partir de t = 1,0 s. Calcule a aceleração média a_{mx} = Δv_x / Δt para cada intervalo e analise o movimento.</p>
             <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
                 <div style="display: flex; gap: 6px; align-items: center;">
                     <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
-                        🔊 Ouvir Voz
+                        🔊 Ouvir Explicação por Voz
                     </button>
                     <button id="btn-voice-pause" onclick="pauseVoiceNarration()" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
                         ⏸️ Pausar
                     </button>
-                    <button id="btn-voice-stop" onclick="stopVoiceNarration()" style="background: #ef4444; color: white; border: none; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
+                    <button id="btn-voice-stop" onclick="stopVoiceNarration()" style="background: #ef4444; color: white; border: none; font-weight: 700; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
                         ⏹️ Parar
                     </button>
                 </div>
@@ -315,108 +309,118 @@
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
         </div>
-        <div class="formula-badge">x(t) = 1,0 + 0,80t - 0,040t²</div>
+        <div class="formula-badge">a_{mx} = rac{v_{2x} - v_{1x}}{t_2 - t_1} = rac{\Delta v_x}{\Delta t}</div>
     </div>
 
     <div class="presentation-container">
-        <!-- Left Column: Didactic Resolution Deck -->
+        <!-- Left Column: Didactic Resolution Deck with Book Table -->
         <div class="slide-deck">
-            <div style="font-size:0.88rem; font-weight:800; color:var(--accent-cyan); margin-bottom:12px; text-transform:uppercase;">
+            <div style="font-size:0.88rem; font-weight:800; color:var(--accent-cyan); margin-bottom:8px; text-transform:uppercase;">
+                📋 Tabela de Dados Medidos (Sears & Zemansky Ed. 12)
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr><th>Tempo t (s)</th><th>Velocidade v_x (m/s)</th><th>Tempo t (s)</th><th>Velocidade v_x (m/s)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1,0 s</td><td>+0,8 m/s</td><td>9,0 s</td><td>-0,4 m/s</td></tr>
+                    <tr><td>3,0 s</td><td>+1,2 m/s</td><td>11,0 s</td><td>-1,0 m/s</td></tr>
+                    <tr><td>5,0 s</td><td>+1,6 m/s</td><td>13,0 s</td><td>-1,6 m/s</td></tr>
+                    <tr><td>7,0 s</td><td>+1,2 m/s</td><td>15,0 s</td><td>-0,8 m/s</td></tr>
+                </tbody>
+            </table>
+
+            <div style="font-size:0.88rem; font-weight:800; color:var(--accent-cyan); margin:14px 0 8px; text-transform:uppercase;">
                 📖 Resolução Didática Passo a Passo
             </div>
-            
+
             <div class="item-card">
-                <div class="item-badge">VARIÁVEIS</div>
+                <div class="item-badge">INTERVALO (a)</div>
                 <div>
-                    <div class="item-title">Equação do Movimento:</div>
+                    <div class="item-title">t₁ = 1,0s até t₂ = 3,0s</div>
                     <div class="item-calc">
-                        • Posição: <code>x(t) = 1,0 + 0,80 t - 0,040 t²</code> (m)<br>
-                        • Velocidade: <code>v(t) = 0,80 - 0,080 t</code> (m/s)<br>
-                        • Aceleração: <code>a = -0,080 m/s²</code> (constante)
+                        a_{mx} = (1,2 - 0,8) / (3,0 - 1,0) = 0,4 / 2,0 = <b>+0,2 m/s²</b>.<br>
+                        <i>Velocidade e aceleração têm mesmo sinal (+): Acelera para a direita!</i>
                     </div>
                 </div>
             </div>
 
             <div class="item-card">
-                <div class="item-badge">ITEM (a)</div>
+                <div class="item-badge">INTERVALO (b)</div>
                 <div>
-                    <div class="item-title">Posição Inicial t = 0 s</div>
-                    <div class="item-calc">x(0) = 1,0 + 0,80(0) - 0,040(0)² = <b>1,0 m</b>.</div>
-                </div>
-            </div>
-
-            <div class="item-card">
-                <div class="item-badge">ITEM (b)</div>
-                <div>
-                    <div class="item-title">Velocidade v(t) nos instantes t:</div>
+                    <div class="item-title">t₁ = 5,0s até t₂ = 7,0s</div>
                     <div class="item-calc">
-                        • t = 0 s: v(0) = <b>0,80 m/s</b>.<br>
-                        • t = 5,0 s: v(5,0) = <b>0,40 m/s</b>.<br>
-                        • t = 10,0 s: v(10,0) = <b>0,0 m/s</b> (inversão a x = 5,0m!).<br>
-                        • t = 15,0 s: v(15,0) = <b>-0,40 m/s</b> (retorno à nave).
+                        a_{mx} = (1,2 - 1,6) / (7,0 - 5,0) = -0,4 / 2,0 = <b>-0,2 m/s²</b>.<br>
+                        <i>Sinais opostos (v>0, a<0): Reduz a velocidade à direita!</i>
                     </div>
                 </div>
             </div>
 
             <div class="item-card">
-                <div class="item-badge">ITEM (c)</div>
+                <div class="item-badge">INTERVALO (c)</div>
                 <div>
-                    <div class="item-title">Aceleração Instantânea:</div>
-                    <div class="item-calc">a = dv/dt = <b>-0,080 m/s²</b> (constante negativa).</div>
+                    <div class="item-title">t₁ = 9,0s até t₂ = 11,0s</div>
+                    <div class="item-calc">
+                        a_{mx} = [-1,0 - (-0,4)] / (11,0 - 9,0) = -0,6 / 2,0 = <b>-0,3 m/s²</b>.<br>
+                        <i>Mesmo sinal negativo (v<0, a<0): Acelera para a esquerda!</i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-badge">INTERVALO (d)</div>
+                <div>
+                    <div class="item-title">t₁ = 13,0s até t₂ = 15,0s</div>
+                    <div class="item-calc">
+                        a_{mx} = [-0,8 - (-1,6)] / (15,0 - 13,0) = +0,8 / 2,0 = <b>+0,4 m/s²</b>.<br>
+                        <i>Sinais opostos (v<0, a>0): Reduz a velocidade à esquerda!</i>
+                    </div>
                 </div>
             </div>
 
             <!-- PUBLIC PHYSICS SIMULATIONS & REFERENCES BOX -->
-            <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 14px; margin-top: 14px;">
-                <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; margin-bottom:8px;">🌐 SIMULAÇÕES PÚBLICAS RECOMENDADAS:</div>
-                <ul style="font-size:0.85rem; color:#cbd5e1; padding-left:18px; line-height:1.6;">
-                    <li><a href="https://phet.colorado.edu/sims/html/moving-man/latest/moving-man_all.html" target="_blank" style="color:#fbbf24; font-weight:700; text-decoration:none;">🔗 PhET Colorado - The Moving Man (Posição, Velocidade e Aceleração)</a></li>
-                    <li><a href="https://www.geogebra.org/m/vcbqfzkf" target="_blank" style="color:#38bdf8; font-weight:700; text-decoration:none;">🔗 GeoGebra - Cinemática Vetorial 1D e 2D Interativa</a></li>
+            <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 12px; margin-top: 10px;">
+                <div style="font-size:0.82rem; font-weight:800; color:#38bdf8; margin-bottom:6px;">🌐 SIMULAÇÕES PÚBLICAS RECOMENDADAS:</div>
+                <ul style="font-size:0.82rem; color:#cbd5e1; padding-left:16px; line-height:1.5;">
+                    <li><a href="https://phet.colorado.edu/sims/html/moving-man/latest/moving-man_all.html" target="_blank" style="color:#fbbf24; font-weight:700; text-decoration:none;">🔗 PhET Colorado - Moving Man (Posição, Velocidade e Aceleração Média)</a></li>
+                    <li><a href="https://www.geogebra.org/m/vcbqfzkf" target="_blank" style="color:#38bdf8; font-weight:700; text-decoration:none;">🔗 GeoGebra - Inclinação de Tangentes v-t e Aceleração Média</a></li>
                 </ul>
             </div>
         </div>
 
-        <!-- Right Column: Interactive Stage & Kinematic Graphs -->
+        <!-- Right Column: 2D Scene & FIGURA 2.10 EXACT GRAPHS -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D e 3 Gráficos Cinemáticos Sincronizados (x-t, v-t, a-t)</span>
+                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Figura 2.10 do Livro: Gráfico v_x(t) (Superior) e a_{mx}(t) (Inferior)</span>
                 <div style="display:flex; gap:8px;">
                     <a href="exemplo-2-1.html" class="nav-step-btn">← Exemplo 2.1</a>
                     <a href="exemplo-2-3.html" class="nav-step-btn primary">Exemplo 2.3 →</a>
                 </div>
             </div>
 
-            <!-- Scene Canvas -->
+            <!-- 2D Motion Scene Canvas -->
             <div class="scene-card">
-                <div class="vector-legend">
-                    <span style="color:#fbbf24;">📍 Origem O</span>
-                    <span style="color:#38bdf8;">➔ Deslocamento Δx</span>
-                    <span style="color:#10b981;">➔ Velocidade v</span>
-                    <span style="color:#f43f5e;">➔ Aceleração a</span>
+                <div style="position:absolute; top:8px; right:12px; font-size:0.80rem; font-weight:700; background:rgba(0,0,0,0.85); padding:4px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.2);">
+                    <span style="color:#38bdf8;">📍 Origem O (Nave)</span>
+                    <span style="color:#10b981; margin-left:8px;">➔ Velocidade v_x</span>
+                    <span style="color:#f43f5e; margin-left:8px;">➔ Aceleração Média a_{mx}</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
             </div>
 
-            <!-- 3 KINEMATIC GRAPHS CONTAINER (x-t, v-t, a-t) -->
+            <!-- FIGURA 2.10 DUAL GRAPHS (v_x vs t & a_{mx} vs t) -->
             <div class="graphs-container">
                 <div class="graph-card">
-                    <div class="graph-title" style="background: rgba(251, 191, 36, 0.15); color: #fbbf24;">
-                        <span>📈 Gráfico x-t (Posição)</span>
-                        <span id="graph-x-val">x = 1.00m</span>
-                    </div>
-                    <canvas id="canvas-graph-x"></canvas>
-                </div>
-                <div class="graph-card">
                     <div class="graph-title" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
-                        <span>📊 Gráfico v-t (Velocidade)</span>
-                        <span id="graph-v-val">v = 0.80m/s</span>
+                        <span>📊 Fig 2.10 (Top): v_x(t) [Inclinação = a_{mx}]</span>
+                        <span id="graph-v-val">v_x = +0.8 m/s</span>
                     </div>
                     <canvas id="canvas-graph-v"></canvas>
                 </div>
                 <div class="graph-card">
                     <div class="graph-title" style="background: rgba(244, 63, 94, 0.15); color: #f43f5e;">
-                        <span>📉 Gráfico a-t (Aceleração)</span>
-                        <span id="graph-a-val">a = -0.08m/s²</span>
+                        <span>📉 Fig 2.10 (Bottom): a_{mx}(t) (Aceleração Média)</span>
+                        <span id="graph-a-val">a_{mx} = +0.2 m/s²</span>
                     </div>
                     <canvas id="canvas-graph-a"></canvas>
                 </div>
@@ -427,11 +431,11 @@
                 <div class="controls-row">
                     <div class="btn-group-inline">
                         <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
-                        <button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 0 s)</button>
+                        <button class="btn btn-secondary" onclick="resetDemo()">↺ Resetar (t = 1 s)</button>
                     </div>
                     <div class="control-group-inline">
-                        <label>Controle do Tempo t: <span id="ex-t-val">0.00 s</span></label>
-                        <input type="range" id="ex-t" min="0" max="15.0" step="0.1" value="0" oninput="updateDemo()">
+                        <label>Controle do Tempo t: <span id="ex-t-val">1.00 s</span></label>
+                        <input type="range" id="ex-t" min="1.0" max="15.0" step="0.1" value="1.0" oninput="updateDemo()">
                     </div>
                 </div>
             </div>
@@ -441,18 +445,65 @@
     <script>
         let timer = null, running = false;
 
+        // Sears & Zemansky Measured Points Table
+        const dataPoints = [
+            { t: 1.0, v: 0.8 },
+            { t: 3.0, v: 1.2 },
+            { t: 5.0, v: 1.6 },
+            { t: 7.0, v: 1.2 },
+            { t: 9.0, v: -0.4 },
+            { t: 11.0, v: -1.0 },
+            { t: 13.0, v: -1.6 },
+            { t: 15.0, v: -0.8 }
+        ];
+
+        // Piecewise Linear Interpolation for v_x(t)
+        function getVx(t) {
+            if (t <= 1.0) return 0.8;
+            if (t >= 15.0) return -0.8;
+            
+            // Piecewise segments matching Fig 2.10 intervals:
+            // [1,3]: 0.8 -> 1.2
+            // [3,5]: 1.2 -> 1.6
+            // [5,7]: 1.6 -> 1.2
+            // [7,9]: 1.2 -> -0.4
+            // [9,11]: -0.4 -> -1.0
+            // [11,13]: -1.0 -> -1.6
+            // [13,15]: -1.6 -> -0.8
+            for (let i = 0; i < dataPoints.length - 1; i++) {
+                const p1 = dataPoints[i], p2 = dataPoints[i+1];
+                if (t >= p1.t && t <= p2.t) {
+                    const frac = (t - p1.t) / (p2.t - p1.t);
+                    return p1.v + frac * (p2.v - p1.v);
+                }
+            }
+            return 0.8;
+        }
+
+        // Get Average Acceleration a_mx for current interval
+        function getAmx(t) {
+            if (t >= 1.0 && t <= 3.0) return 0.2;
+            if (t > 3.0 && t <= 5.0) return 0.2;
+            if (t > 5.0 && t <= 7.0) return -0.2;
+            if (t > 7.0 && t <= 9.0) return -0.8; // Transition
+            if (t > 9.0 && t <= 11.0) return -0.3;
+            if (t > 11.0 && t <= 13.0) return -0.3;
+            if (t > 13.0 && t <= 15.0) return 0.4;
+            return 0.2;
+        }
+
         function togglePlay() {
             const input = document.getElementById('ex-t');
             const maxVal = parseFloat(input.max || 15.0);
             if (parseFloat(input.value) >= maxVal) {
-                input.value = 0;
+                input.value = 1.0;
             }
 
             running = !running;
             document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Animação';
             
             if (running && !timer) {
-                timer = setInterval(loop, 30);
+                timer = setInterval(loop, 40);
             } else if (!running && timer) {
                 clearInterval(timer);
                 timer = null;
@@ -463,14 +514,14 @@
             running = false;
             if (timer) { clearInterval(timer); timer = null; }
             document.getElementById('btn-play').innerText = '▶ Simular Animação';
-            document.getElementById('ex-t').value = 0;
+            document.getElementById('ex-t').value = 1.0;
             updateDemo();
         }
 
         function loop() {
             if (!running) return;
             const input = document.getElementById('ex-t');
-            let t = parseFloat(input.value) + parseFloat(input.step || 0.1);
+            let t = parseFloat(input.value) + 0.1;
             const maxVal = parseFloat(input.max || 15.0);
             if (t >= maxVal) {
                 t = maxVal;
@@ -487,7 +538,7 @@
             if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
             const rect = canvas.getBoundingClientRect();
             const w = rect.width > 0 ? rect.width : (canvas.clientWidth || 300);
-            const h = rect.height > 0 ? rect.height : (canvas.clientHeight || 180);
+            const h = rect.height > 0 ? rect.height : (canvas.clientHeight || 200);
             const dpr = window.devicePixelRatio || 1;
             canvas.width = Math.floor(w * dpr);
             canvas.height = Math.floor(h * dpr);
@@ -526,52 +577,24 @@
             }
         }
 
+        // Draw 2D Motion Scene
         function drawScene(t) {
             const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
             ctx.clearRect(0,0,w,h);
             ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
 
-            const padL = 90, padB = 75, padR = 60, padT = 60;
+            const padL = 90, padB = 60, padR = 60, padT = 50;
             const gW = w - padL - padR;
-            const gH = h - padB - padT;
 
-            const maxX = 6.0;
-            const maxY = 2.0;
+            const originX = padL;
+            const originY = h - padB;
 
-            const toPxX = x => padL + (x / maxX) * gW;
-            const toPxY = y => (h - padB) - (y / maxY) * gH;
-
-            const originX = toPxX(0);
-            const originY = toPxY(0);
-
-            // GRID LINES
-            ctx.strokeStyle = 'rgba(51, 65, 85, 0.3)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
-            for (let x = 0; x <= maxX; x += 1) {
-                const px = toPxX(x);
-                ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, h - padB); ctx.stroke();
-            }
-            ctx.setLineDash([]);
-
-            // EIXOS CARTESIANOS X e Y
+            // Eixo X
             ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3;
             ctx.beginPath(); ctx.moveTo(padL - 10, originY); ctx.lineTo(w - padR + 15, originY); ctx.stroke();
             drawVectorArrow(ctx, w - padR + 5, originY, 15, 0, '#38bdf8', '');
             ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
             ctx.fillText('Eixo X (m)', w - padR + 24, originY + 4);
-
-            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 3;
-            ctx.beginPath(); ctx.moveTo(originX, h - padB + 10); ctx.lineTo(originX, padT - 15); ctx.stroke();
-            drawVectorArrow(ctx, originX, padT - 5, 0, -15, '#10b981', '');
-            ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
-            ctx.fillText('Eixo Y (m)', originX, padT - 25);
-
-            for (let x = 0; x <= maxX; x += 1) {
-                const px = toPxX(x);
-                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
-                ctx.beginPath(); ctx.moveTo(px, originY - 5); ctx.lineTo(px, originY + 5); ctx.stroke();
-                ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
-                ctx.fillText(`${x}m`, px, originY + 22);
-            }
 
             // NAVE ESPACIAL
             ctx.fillStyle = '#1e293b'; ctx.fillRect(originX - 35, originY - 25, 35, 50);
@@ -579,101 +602,55 @@
             ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'center';
             ctx.fillText('🚀 Nave (x=0)', originX - 17, originY + 4);
 
-            const x_t = 1.0 + 0.80 * t - 0.040 * t * t;
-            const v_t = 0.80 - 0.080 * t;
-            const a_t = -0.080;
+            const v_t = getVx(t);
+            const a_t = getAmx(t);
 
-            const astroX = toPxX(x_t);
+            // Integrate x position for visual display
+            let posX = 20.0;
+            for (let tau = 1.0; tau <= t; tau += 0.1) {
+                posX += getVx(tau) * 0.5;
+            }
+            const astroX = Math.min(w - padR - 20, originX + posX);
             const astroY = originY;
 
+            // Cabo de Segurança
             ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 2; ctx.setLineDash([2, 2]);
             ctx.beginPath(); ctx.moveTo(originX, originY); ctx.lineTo(astroX, astroY); ctx.stroke();
             ctx.setLineDash([]);
 
+            // Astronauta
             ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.arc(astroX, astroY, 15, 0, Math.PI*2); ctx.fill();
             ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#f8fafc'; ctx.textAlign = 'center';
-            ctx.fillText('👩‍🚀 Astronauta', astroX, astroY - 26);
+            ctx.fillText('👩‍🚀 Astronauta', astroX, astroY - 24);
 
-            // VETORES SEM COLISÃO
-            drawVectorArrow(ctx, originX, originY + 35, astroX - originX, 0, '#fbbf24', `r = ${x_t.toFixed(2)} m`, true);
+            // Vetores v_x e a_mx SEM EMPILHAMENTO
+            drawVectorArrow(ctx, astroX, astroY - 55, v_t * 35.0, 0, '#10b981', `v_x = ${v_t >= 0 ? '+' : ''}${v_t.toFixed(1)} m/s`);
+            drawVectorArrow(ctx, astroX, astroY + 45, a_t * 120.0, 0, '#f43f5e', `a_{mx} = ${a_t >= 0 ? '+' : ''}${a_t.toFixed(1)} m/s²`, true);
 
-            if (t > 0.1) {
-                const x0_px = toPxX(1.0);
-                drawVectorArrow(ctx, x0_px, originY - 30, astroX - x0_px, 0, '#38bdf8', `Δx = ${(x_t - 1.0).toFixed(2)} m`);
-            }
-
-            if (Math.abs(v_t) > 0.01) {
-                drawVectorArrow(ctx, astroX, astroY - 70, v_t * 120.0, 0, '#10b981', `v = ${v_t.toFixed(2)} m/s`);
-            }
-
-            drawVectorArrow(ctx, astroX, astroY + 65, a_t * 1500.0, 0, '#f43f5e', `a = ${a_t.toFixed(3)} m/s²`, true);
-
-            // HUD DASHBOARD
+            // TELEMETRY HUD
             ctx.fillStyle = 'rgba(15, 23, 42, 0.94)';
-            ctx.fillRect(18, 18, 270, 115);
+            ctx.fillRect(18, 14, 280, 95);
             ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)'; ctx.lineWidth = 1.5;
-            ctx.strokeRect(18, 18, 270, 115);
+            ctx.strokeRect(18, 14, 280, 95);
 
             ctx.font = 'bold 12px Inter'; ctx.textAlign = 'left';
-            ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(2)} s`, 28, 36);
-            ctx.fillStyle = '#fbbf24'; ctx.fillText(`🟡 Vetor Posição x: ${x_t.toFixed(2)} m`, 28, 54);
-            ctx.fillStyle = '#38bdf8'; ctx.fillText(`🔹 Vetor Deslocamento Δx: ${(x_t - 1.0).toFixed(2)} m`, 28, 72);
-            ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Vetor Velocidade v: ${v_t.toFixed(2)} m/s`, 28, 90);
-            ctx.fillStyle = '#f43f5e'; ctx.fillText(`🔴 Vetor Aceleração a: ${a_t.toFixed(3)} m/s²`, 28, 108);
+            ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(1)} s`, 28, 32);
+            ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Velocidade v_x: ${v_t >= 0 ? '+' : ''}${v_t.toFixed(1)} m/s`, 28, 54);
+            ctx.fillStyle = '#f43f5e'; ctx.fillText(`🔴 Aceleração Média a_{mx}: ${a_t >= 0 ? '+' : ''}${a_t.toFixed(1)} m/s²`, 28, 76);
+            ctx.fillStyle = '#fbbf24'; ctx.fillText(`📌 Status: ${v_t * a_t > 0 ? 'Acelerando (Ganho de V)' : 'Desacelerando (Redução de V)'}`, 28, 98);
         }
 
-        // ==========================================
-        // RENDER3D KINEMATIC GRAPHS (x-t, v-t, a-t)
-        // ==========================================
-        function drawGraphX(currentT) {
-            const { ctx, w, h } = getCanvasCtx('canvas-graph-x'); if (!ctx) return;
-            ctx.clearRect(0,0,w,h);
-            ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
-
-            const padL = 35, padB = 25, padR = 15, padT = 15;
-            const gW = w - padL - padR, gH = h - padB - padT;
-
-            const tMax = 15.0, xMin = 0.0, xMax = 6.0;
-
-            const toPx = (t, x) => ({
-                px: padL + (t / tMax) * gW,
-                py: (h - padB) - ((x - xMin) / (xMax - xMin)) * gH
-            });
-
-            // Axes
-            ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
-            ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-
-            // Parabola Curve x(t) = 1 + 0.8t - 0.04t^2
-            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2.5; ctx.beginPath();
-            for (let t = 0; t <= tMax; t += 0.2) {
-                const x = 1.0 + 0.80 * t - 0.040 * t * t;
-                const pt = toPx(t, x);
-                if (t === 0) ctx.moveTo(pt.px, pt.py); else ctx.lineTo(pt.px, pt.py);
-            }
-            ctx.stroke();
-
-            // Current Time Indicator Line
-            const currX = 1.0 + 0.80 * currentT - 0.040 * currentT * currentT;
-            const currPt = toPx(currentT, currX);
-
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
-            ctx.beginPath(); ctx.moveTo(currPt.px, padT); ctx.lineTo(currPt.px, h - padB); ctx.stroke();
-            ctx.setLineDash([]);
-
-            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(currPt.px, currPt.py, 5, 0, Math.PI*2); ctx.fill();
-            document.getElementById('graph-x-val').innerText = `x = ${currX.toFixed(2)}m`;
-        }
-
+        // DRAW EXACT FIGURA 2.10 TOP GRAPH: v_x vs t
         function drawGraphV(currentT) {
             const { ctx, w, h } = getCanvasCtx('canvas-graph-v'); if (!ctx) return;
             ctx.clearRect(0,0,w,h);
             ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
 
-            const padL = 35, padB = 25, padR = 15, padT = 15;
+            const padL = 40, padB = 30, padR = 20, padT = 20;
             const gW = w - padL - padR, gH = h - padB - padT;
 
-            const tMax = 15.0, vMin = -0.6, vMax = 1.0;
+            const tMax = 16.0;
+            const vMin = -1.8, vMax = 1.8;
             const zeroY = (h - padB) - ((0 - vMin) / (vMax - vMin)) * gH;
 
             const toPx = (t, v) => ({
@@ -681,39 +658,78 @@
                 py: (h - padB) - ((v - vMin) / (vMax - vMin)) * gH
             });
 
-            // Axes & Zero Line
+            // Axes
             ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
             ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'; ctx.setLineDash([2, 2]);
+            
+            // Zero Line (t axis)
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)'; ctx.setLineDash([2, 2]);
             ctx.beginPath(); ctx.moveTo(padL, zeroY); ctx.lineTo(w - padR, zeroY); ctx.stroke();
             ctx.setLineDash([]);
 
-            // Line v(t) = 0.8 - 0.08t
-            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath();
-            const p1 = toPx(0, 0.80); const p2 = toPx(15, -0.40);
-            ctx.moveTo(p1.px, p1.py); ctx.lineTo(p2.px, p2.py); ctx.stroke();
+            // Axis Ticks
+            ctx.font = '10px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
+            [5, 10, 15].forEach(tVal => {
+                const pt = toPx(tVal, 0);
+                ctx.fillText(`${tVal}`, pt.px, h - padB + 14);
+            });
+            ctx.textAlign = 'right';
+            [-1.5, -1.0, -0.5, 0.5, 1.0, 1.5].forEach(vVal => {
+                const pt = toPx(0, vVal);
+                ctx.fillText(`${vVal}`, padL - 5, pt.py + 3);
+            });
 
-            // Current Time Indicator Line
-            const currV = 0.80 - 0.080 * currentT;
+            // Draw Segments matching Fig 2.10
+            const segments = [
+                { t1: 1, v1: 0.8, t2: 3, v2: 1.2 },
+                { t1: 5, v1: 1.6, t2: 7, v2: 1.2 },
+                { t1: 9, v1: -0.4, t2: 11, v2: -1.0 },
+                { t1: 13, v1: -1.6, t2: 15, v2: -0.8 }
+            ];
+
+            segments.forEach(seg => {
+                const p1 = toPx(seg.t1, seg.v1);
+                const p2 = toPx(seg.t2, seg.v2);
+
+                // Dashed projection lines
+                ctx.strokeStyle = 'rgba(148, 163, 184, 0.3)'; ctx.lineWidth = 1; ctx.setLineDash([2, 2]);
+                ctx.beginPath(); ctx.moveTo(p1.px, zeroY); ctx.lineTo(p1.px, p1.py); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(p2.px, zeroY); ctx.lineTo(p2.px, p2.py); ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Segment line
+                ctx.strokeStyle = '#10b981'; ctx.lineWidth = 3;
+                ctx.beginPath(); ctx.moveTo(p1.px, p1.py); ctx.lineTo(p2.px, p2.py); ctx.stroke();
+
+                // End Dots
+                ctx.fillStyle = '#10b981';
+                ctx.beginPath(); ctx.arc(p1.px, p1.py, 4, 0, Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.arc(p2.px, p2.py, 4, 0, Math.PI*2); ctx.fill();
+            });
+
+            // Current Time Vertical Marker Line
+            const currV = getVx(currentT);
             const currPt = toPx(currentT, currV);
 
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2; ctx.setLineDash([3, 3]);
             ctx.beginPath(); ctx.moveTo(currPt.px, padT); ctx.lineTo(currPt.px, h - padB); ctx.stroke();
             ctx.setLineDash([]);
 
-            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(currPt.px, currPt.py, 5, 0, Math.PI*2); ctx.fill();
-            document.getElementById('graph-v-val').innerText = `v = ${currV.toFixed(2)}m/s`;
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(currPt.px, currPt.py, 6, 0, Math.PI*2); ctx.fill();
+            document.getElementById('graph-v-val').innerText = `v_x = ${currV >= 0 ? '+' : ''}${currV.toFixed(1)} m/s`;
         }
 
+        // DRAW EXACT FIGURA 2.10 BOTTOM GRAPH: a_{mx} vs t
         function drawGraphA(currentT) {
             const { ctx, w, h } = getCanvasCtx('canvas-graph-a'); if (!ctx) return;
             ctx.clearRect(0,0,w,h);
             ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
 
-            const padL = 35, padB = 25, padR = 15, padT = 15;
+            const padL = 40, padB = 30, padR = 20, padT = 20;
             const gW = w - padL - padR, gH = h - padB - padT;
 
-            const tMax = 15.0, aMin = -0.15, aMax = 0.05;
+            const tMax = 16.0;
+            const aMin = -0.6, aMax = 0.6;
             const zeroY = (h - padB) - ((0 - aMin) / (aMax - aMin)) * gH;
 
             const toPx = (t, a) => ({
@@ -721,34 +737,59 @@
                 py: (h - padB) - ((a - aMin) / (aMax - aMin)) * gH
             });
 
-            // Axes & Zero Line
+            // Axes
             ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
             ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'; ctx.setLineDash([2, 2]);
+            
+            // Zero Line
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)'; ctx.setLineDash([2, 2]);
             ctx.beginPath(); ctx.moveTo(padL, zeroY); ctx.lineTo(w - padR, zeroY); ctx.stroke();
             ctx.setLineDash([]);
 
-            // Constant Line a = -0.08
-            ctx.strokeStyle = '#f43f5e'; ctx.lineWidth = 2.5; ctx.beginPath();
-            const p1 = toPx(0, -0.080); const p2 = toPx(15, -0.080);
-            ctx.moveTo(p1.px, p1.py); ctx.lineTo(p2.px, p2.py); ctx.stroke();
+            // Axis Ticks
+            ctx.font = '10px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
+            [5, 10, 15].forEach(tVal => {
+                const pt = toPx(tVal, 0);
+                ctx.fillText(`${tVal}`, pt.px, h - padB + 14);
+            });
+            ctx.textAlign = 'right';
+            [-0.5, 0.5].forEach(aVal => {
+                const pt = toPx(0, aVal);
+                ctx.fillText(`${aVal}`, padL - 5, pt.py + 3);
+            });
 
-            // Current Time Indicator Line
-            const currPt = toPx(currentT, -0.080);
+            // Draw Constant Segments matching Fig 2.10
+            const aSegments = [
+                { t1: 1, t2: 3, a: 0.2 },
+                { t1: 5, t2: 7, a: -0.2 },
+                { t1: 9, t2: 11, a: -0.3 },
+                { t1: 13, t2: 15, a: 0.4 }
+            ];
 
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+            aSegments.forEach(seg => {
+                const p1 = toPx(seg.t1, seg.a);
+                const p2 = toPx(seg.t2, seg.a);
+
+                ctx.strokeStyle = '#f43f5e'; ctx.lineWidth = 3.5;
+                ctx.beginPath(); ctx.moveTo(p1.px, p1.py); ctx.lineTo(p2.px, p2.py); ctx.stroke();
+            });
+
+            // Current Time Marker Line
+            const currA = getAmx(currentT);
+            const currPt = toPx(currentT, currA);
+
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2; ctx.setLineDash([3, 3]);
             ctx.beginPath(); ctx.moveTo(currPt.px, padT); ctx.lineTo(currPt.px, h - padB); ctx.stroke();
             ctx.setLineDash([]);
 
-            ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.arc(currPt.px, currPt.py, 5, 0, Math.PI*2); ctx.fill();
-            document.getElementById('graph-a-val').innerText = `a = -0.08m/s²`;
+            ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.arc(currPt.px, currPt.py, 6, 0, Math.PI*2); ctx.fill();
+            document.getElementById('graph-a-val').innerText = `a_{mx} = ${currA >= 0 ? '+' : ''}${currA.toFixed(1)} m/s²`;
         }
 
         function updateDemo() {
             const t = parseFloat(document.getElementById('ex-t').value);
-            document.getElementById('ex-t-val').innerText = t.toFixed(2) + ' s';
+            document.getElementById('ex-t-val').innerText = t.toFixed(1) + ' s';
             drawScene(t);
-            drawGraphX(t);
             drawGraphV(t);
             drawGraphA(t);
         }
@@ -789,7 +830,7 @@
             window.speechSynthesis.cancel();
 
             const stmt = document.querySelector('.statement-title p')?.innerText || '';
-            const items = Array.from(document.querySelectorAll('.item-content'))
+            const items = Array.from(document.querySelectorAll('.item-content, .item-calc'))
                 .map(el => el.innerText.replace(/[\n\r]+/g, ' '))
                 .join('. ');
             const fullText = (stmt + '. Resolução Didática: ' + items).trim();
@@ -865,8 +906,8 @@
         }
 
         window.onload = function() {
-            document.getElementById('ex-t').value = 0;
-            updateDemo(); // Initial render at t = 0.00 s!
+            document.getElementById('ex-t').value = 1.0;
+            updateDemo();
         };
         window.onresize = function() { updateDemo(); };
     </script>
