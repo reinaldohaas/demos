@@ -1,0 +1,53 @@
+{
+  "project": "FSC5101 Física I & Demos Interativas",
+  "last_updated": "2026-09-02T00:04:30-03:00",
+  "paths": {
+    "git_root": "C:\\Users\\haas\\github\\demos",
+    "onedrive_mirror": "C:\\Users\\haas\\OneDrive\\Documentos\\disciplinas\\FSC5101_Fisica_I\\demos",
+    "canonical_physics": "fisica-1",
+    "canonical_meteorology": "mesoescala"
+  },
+  "navigation_hierarchy": {
+    "level_1_root": "index.html (Somente Disciplinas / Áreas)",
+    "level_2_discipline_hub": "fisica-1/index.html (Somente Capítulos do Livro)",
+    "level_3_chapter_hub": "fisica-1/capitulo-X/index.html (Lista dos Exercícios do Capítulo)",
+    "level_4_exercise_demo": "fisica-1/capitulo-X/exemplo-X-Y.html (Simulação Interativa)"
+  },
+  "typography_scale": {
+    "body_font": "Inter, sans-serif",
+    "title_font": "Outfit, sans-serif",
+    "body_size": "0.98rem",
+    "body_line_height": "1.6",
+    "statement_title_size": "1.4rem",
+    "card_title_size": "0.98rem"
+  },
+  "vector_color_standard": {
+    "origin_marker": "#fbbf24 (Amarelo / Circulo + Seta Indicadora 📍)",
+    "position_vector_r": "#fbbf24 (Amarelo / Dourado)",
+    "displacement_vector_dr": "#38bdf8 (Azul Ciano - Horizontal no Eixo X)",
+    "velocity_vector_v": "#10b981 (Verde Emerald - 55px acima do objeto)",
+    "acceleration_vector_a": "#f43f5e (Vermelho Rose - 65px abaixo do objeto)"
+  },
+  "canvas_layout": {
+    "height": "460px (Animação 2D/3D)",
+    "axes_system": "Cartesiano X-Y-Z com marcações graduadas e caixa 3D isométrica",
+    "graphs_panel": "3 Gráficos Cinemáticos Sincronizados (x-t, v-t, a-t) em tempo real"
+  },
+  "voice_panel_spec": {
+    "controls": [
+      "🔊 Play",
+      "⏸️ Pausar",
+      "⏹️ Parar",
+      "⏩ Velocidade (0.75x, 1.0x, 1.25x, 1.5x)"
+    ],
+    "lang": "pt-BR",
+    "engine": "Web Speech API (SpeechSynthesis) com binding assíncrono onvoiceschanged"
+  },
+  "public_libraries": {
+    "icons": "FontAwesome 6.5.1 CDN (fontawesome/6.5.1/css/all.min.css)",
+    "simulations": [
+      "PhET Colorado - Moving Man (phet.colorado.edu)",
+      "GeoGebra - Cinemática Vetorial (geogebra.org)"
+    ]
+  }
+}
