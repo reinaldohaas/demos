@@ -365,6 +365,118 @@
     </div>
 
     <script>
+
+        // Web Speech API - Complete Voice Controls Engine
+        let isSpeaking = false;
+        let isPaused = false;
+        let currentUtterance = null;
+        let voiceSpeedRate = 1.0;
+        let browserVoices = [];
+
+        function loadBrowserVoices() {
+            if ('speechSynthesis' in window) {
+                browserVoices = window.speechSynthesis.getVoices();
+            }
+        }
+        if ('speechSynthesis' in window) {
+            loadBrowserVoices();
+            window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
+        }
+
+        function playVoiceNarration() {
+            if (!('speechSynthesis' in window)) {
+                alert('Seu navegador não suporta a API de narração por voz.');
+                return;
+            }
+
+            const statusLabel = document.getElementById('voice-status-text');
+
+            if (isPaused) {
+                window.speechSynthesis.resume();
+                isPaused = false;
+                isSpeaking = true;
+                if (statusLabel) statusLabel.innerText = '🔊 Reproduzindo...';
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const stmt = document.querySelector('.statement-title p')?.innerText || '';
+            const items = Array.from(document.querySelectorAll('.item-content, .item-calc, .step-desc'))
+                .map(el => el.innerText.replace(/[\n\r]+/g, ' '))
+                .join('. ');
+            const fullText = (stmt + '. Resolução Didática: ' + items).trim();
+
+            currentUtterance = new SpeechSynthesisUtterance(fullText);
+            currentUtterance.lang = 'pt-BR';
+
+            const speedSelect = document.getElementById('voice-rate-select');
+            if (speedSelect) {
+                voiceSpeedRate = parseFloat(speedSelect.value) || 1.0;
+            }
+            currentUtterance.rate = voiceSpeedRate;
+            currentUtterance.pitch = 1.0;
+            currentUtterance.volume = 1.0;
+
+            const ptVoice = browserVoices.find(v => v.lang && (v.lang.includes('pt-BR') || v.lang.includes('pt')));
+            if (ptVoice) {
+                currentUtterance.voice = ptVoice;
+            }
+
+            currentUtterance.onstart = function() {
+                isSpeaking = true;
+                isPaused = false;
+                if (statusLabel) statusLabel.innerText = '🔊 Lendo...';
+            };
+
+            currentUtterance.onend = function() {
+                isSpeaking = false;
+                isPaused = false;
+                if (statusLabel) statusLabel.innerText = '✅ Concluído.';
+            };
+
+            currentUtterance.onerror = function() {
+                isSpeaking = false;
+                isPaused = false;
+                if (statusLabel) statusLabel.innerText = 'Status: Pronto';
+            };
+
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
+            window.speechSynthesis.speak(currentUtterance);
+        }
+
+        function pauseVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window && isSpeaking && !isPaused) {
+                window.speechSynthesis.pause();
+                isPaused = true;
+                if (statusLabel) statusLabel.innerText = '⏸️ Pausado.';
+            }
+        }
+
+        function stopVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+                isPaused = false;
+                if (statusLabel) statusLabel.innerText = '⏹️ Parado.';
+            }
+        }
+
+        function changeVoiceRate() {
+            const speedSelect = document.getElementById('voice-rate-select');
+            if (speedSelect) {
+                voiceSpeedRate = parseFloat(speedSelect.value) || 1.0;
+            }
+            if (isSpeaking && !isPaused) {
+                stopVoiceNarration();
+                playVoiceNarration();
+            }
+        }
+
         let timer = null, running = false; // Auto-play on load!
 
         function togglePlay() {
