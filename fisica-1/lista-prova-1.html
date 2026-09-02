@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Exercícios - Prova 1 (40 Questões) | FSC5101 Física I</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #070a12;
+            --bg-card: rgba(15, 23, 42, 0.90);
+            --bg-card-border: rgba(56, 189, 248, 0.25);
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
+            --accent-emerald: #10b981;
+            --accent-rose: #f43f5e;
+            --text-main: #f8fafc;
+            --text-sub: #cbd5e1;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-size: 0.98rem;
+            line-height: 1.65;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 45%);
+            background-attachment: fixed;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            background: rgba(10, 16, 30, 0.85);
+            border: 1px solid var(--bg-card-border);
+            padding: 16px 22px;
+            border-radius: 14px;
+        }
+        .back-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--bg-card-border);
+            color: var(--accent-cyan);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.88rem;
+            transition: all 0.2s;
+        }
+        .back-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); }
+
+        .search-filter-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            padding: 14px;
+            border-radius: 12px;
+            align-items: center;
+        }
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            background: #050811;
+            border: 1px solid #334155;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+        .search-input:focus { border-color: var(--accent-cyan); }
+
+        .filter-btn {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: var(--text-sub);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .question-card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: transform 0.2s;
+        }
+        .question-card:hover { border-color: var(--accent-cyan); }
+
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .q-badge {
+            background: rgba(99, 102, 241, 0.25);
+            color: #a855f7;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+        .q-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+        .q-text {
+            font-size: 1.0rem;
+            color: #e2e8f0;
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+
+        .btn-voice {
+            background: #a855f7;
+            color: white;
+            border: none;
+            font-weight: 700;
+            font-size: 0.82rem;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .btn-voice:hover { opacity: 0.9; }
+
+        @media print {
+            body { background: white; color: black; }
+            .top-header, .search-filter-bar, .btn-voice { display: none !important; }
+            .question-card { border: 1px solid #ccc; background: white; color: black; page-break-inside: avoid; }
+            .q-title { color: #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="top-header">
+            <div>
+                <a href="index.html" class="back-btn">← Voltar ao Hub do Curso</a>
+                <h1 style="font-family:'Outfit', sans-serif; font-size:1.6rem; color:var(--accent-cyan); margin-top:8px;">
+                    📚 Lista Oficial da Prova 1 (40 Questões Reorganizadas)
+                </h1>
+                <p style="font-size:0.92rem; color:var(--text-sub);">
+                    Livro Texto: Sears & Zemansky / Young & Freedman — 12ª Edição | FSC5101 Física I UFSC
+                </p>
+            </div>
+            <button onclick="window.print()" class="filter-btn" style="background:#10b981; color:white; border:none;">
+                🖨️ Imprimir / Salvar PDF Limpo
+            </button>
+        </div>
+
+        <!-- SEARCH AND FILTER BAR -->
+        <div class="search-filter-bar">
+            <input type="text" id="search-input" class="search-input" placeholder="🔍 Pesquisar por número da questão, enunciado ou tópico..." onkeyup="filterQuestions()">
+            <button class="filter-btn active" onclick="setFilter('all', this)">Todas (40)</button>
+            <button class="filter-btn" onclick="setFilter('cap1', this)">Capítulo 1 (01-08)</button>
+            <button class="filter-btn" onclick="setFilter('cap2', this)">Capítulo 2 (09-24)</button>
+            <button class="filter-btn" onclick="setFilter('cap3', this)">Capítulo 3 (25-40)</button>
+        </div>
+
+        <!-- QUESTIONS CONTAINER -->
+        <div id="questions-list">
+            <!-- Questions rendered via script -->
+        </div>
+    </div>
+
+    <script>
+        const questionsData = [
+            // CAP 1
+            { id: 1, cap: "cap1", ex: "Exercício 1.16", title: "Questão 01 — Deslocamentos da Esquiadora", text: "Uma esquiadora realiza três deslocamentos consecutivos a partir do ponto de partida. Descrevemos a direção do ponto de partida ao ponto de chegada pelo ângulo φ. Por meio de medidas cuidadosas, verificamos que a distância do ponto de partida ao ponto de chegada é de aproximadamente 2,2 km em um ângulo de φ = 63°. a) Determine as componentes x e y do vetor deslocamento resultante. b) Calcule com alta acurácia o módulo e a direção do deslocamento resultante somando as componentes dos vetores individuais." },
+            { id: 2, cap: "cap1", ex: "Exercício 1.24", title: "Questão 02 — Vetores Unitários e Escalares", text: "Dados os vetores A = 4,0i - 3,0j (m) e B = 6,0i + 8,0j (m): a) Encontre o módulo e a direção do vetor A. b) Encontre o módulo e a direção do vetor B. c) Determine o vetor resultante C = 2A - B usando vetores unitários. d) Calcule o módulo e a direção de C = 2A - B." },
+            { id: 3, cap: "cap1", ex: "Exercício 1.26", title: "Questão 03 — Produto Escalar de Vetores", text: "Para dois vetores arbitrários A e B, o produto escalar é definido como A · B = A B cos(φ). a) Mostre que para φ = 90°, A · B = 0. b) Mostre que para 0° ≤ φ < 90°, A · B > 0. c) Mostre que para 90° < φ ≤ 180°, A · B < 0. d) Verifique a lei comutativa: A · B = B · A." },
+            { id: 4, cap: "cap1", ex: "Exercício 1.29", title: "Questão 04 — Produto Vetorial e Regra da Mão Direita", text: "Para dois vetores A e B no plano xy: a) Calcule o módulo de C = A × B para A = 6,0, B = 4,0 e φ = 30°. b) Determine a direção e o sentido de C usando a regra da mão direita. c) Compare A × B com B × A." },
+            { id: 5, cap: "cap1", ex: "Exercício 1.33", title: "Questão 05 — Soma e Diferença Vetorial", text: "Para os vetores A e B indicados no plano cartesiano: a) Encontre as componentes da soma R = A + B. b) Determine o módulo e a direção de R. c) Encontre as componentes da diferença D = A - B. d) Determine o módulo e a direção de D." },
+            { id: 6, cap: "cap1", ex: "Exercício 1.45", title: "Questão 06 — Equilíbrio Vetorial de Forças", text: "Dois vetores atuam sobre uma partícula. Um vetor força de 625 N atua ao longo do eixo +Oy. Use componentes de vetores para determinar o módulo e a direção do vetor necessário para equilibrar a partícula." },
+            { id: 7, cap: "cap1", ex: "Exercício 1.49", title: "Questão 07 — Componentes em Vetores Unitários", text: "a) Escreva cada vetor do diagrama em termos dos vetores unitários i e j. b) Escreva a soma R = A + B + C. c) Encontre o módulo e a direção de R." },
+            { id: 8, cap: "cap1", ex: "Exercício 1.50", title: "Questão 08 — Diferença Vetorial e Diagramas", text: "Dados dois vetores A = 5,0i - 2,0j e B = -3,0i + 4,0j: a) Ache o módulo de cada vetor. b) Escreva a diferença D = A - B em vetores unitários. c) Ache o módulo e a direção de D. d) Verifique com um diagrama vetorial." },
+
+            // CAP 2
+            { id: 9, cap: "cap2", ex: "Exercício 2.5", title: "Questão 09 — Perseguição Policial na Zona Escolar", text: "Um motorista dirige a 15,0 m/s ao passar por uma escola (limite 10,0 m/s). Um policial de motocicleta parte do repouso com aceleração constante de 3,00 m/s². a) Qual o tempo até o policial alcançar o motorista? b) Qual a velocidade da motocicleta na ultrapassagem? c) Qual a distância percorrida?" },
+            { id: 10, cap: "cap2", ex: "Exercício 2.12", title: "Questão 10 — Dedução da Equação da Posição", text: "Partindo de v(t) = v0 + a t, deduza a equação x(t) = x0 + v0 t + 1/2 a t² para aceleração constante e interprete o significado de cada um dos três termos." },
+            { id: 11, cap: "cap2", ex: "Exercício 2.15", title: "Questão 11 — Análise de Gráficos do Movimento", text: "Analise os gráficos x(t), v(t) e a(t) para movimento com aceleração constante. Mostre como os gráficos se transformam quando a aceleração é zero (velocidade constante)." },
+            { id: 12, cap: "cap2", ex: "Exercício 2.25", title: "Questão 12 — Lançamento Vertical no Edifício", text: "Uma bola é lançada para cima a partir do parapeito de um edifício com v0 = 15,0 m/s. Calcule o instante t em que a bola está 5,0 m abaixo do parapeito (y = -5,0 m, g = 9,80 m/s²) e interprete as raízes." },
+            { id: 13, cap: "cap2", ex: "Exercício 2.29", title: "Questão 13 — Velocidade Máxima Instantânea", text: "Para uma partícula com posição x(t): a) Mostre que a velocidade máxima ocorre quando a aceleração é nula (a = dv/dt = 0). b) Calcule o valor da velocidade máxima." },
+            { id: 14, cap: "cap2", ex: "Exercício 2.31", title: "Questão 14 — Conceitos de Cinemática 1D", text: "a) Um objeto com aceleração constante pode reverter a direção do movimento? Duas vezes? Explique. b) Quando a velocidade média é igual à instantânea? c) É possível reduzir a velocidade com aceleração crescente em módulo?" },
+            { id: 15, cap: "cap2", ex: "Exercício 2.32", title: "Questão 15 — Movimento da Aranha no Eixo Ox", text: "Analisando o gráfico x(t) da aranha: identifique os pontos de velocidade nula, constante e positiva, constante e negativa, e pontos onde a velocidade cresce ou decresce em módulo." },
+            { id: 16, cap: "cap2", ex: "Exercício 2.35", title: "Questão 16 — Gráficos v(t) e a(t) da Aranha", text: "Construa os gráficos v(t) e a(t) para a aranha e faça um diagrama de movimento indicando posição, velocidade e aceleração nos instantes t = 2,5s, 10s, 20s, 30s e 37,5s." },
+            { id: 17, cap: "cap2", ex: "Exercício 2.38", title: "Questão 17 — Integração de Locomotiva com a(t) = A t", text: "A aceleração de um modelo de locomotiva no eixo Ox é a(t) = A t. Sabendo que x(0) = 0 e v(0) = 0, integre a(t) para obter a velocidade v(t) e a posição x(t)." },
+            { id: 18, cap: "cap2", ex: "Exercício 2.39", title: "Questão 18 — Encontro e Velocidade de Carros A e B", text: "Com base nos gráficos x(t) dos carros A e B: a) Faça um diagrama de movimento para t = 0, 1s e 3s. b) Determine quando ocupam a mesma posição. c) Faça gráficos v(t) e ache quando possuem a mesma velocidade." },
+            { id: 19, cap: "cap2", ex: "Exercício 2.40", title: "Questão 19 — Descida na Lua e Queda Livre", text: "A 5,0 m da superfície lunar, com velocidade descendente de 0,80 m/s, os motores do módulo desversam e ele entra em queda livre (g_lua = 1,62 m/s²). Qual a velocidade de impacto?" },
+            { id: 20, cap: "cap2", ex: "Exercício 2.41", title: "Questão 20 — Teste do Tempo de Reação", text: "Uma régua mantida verticalmente é solta sem aviso e segura após cair h. a) Deduza t = √(2h/g). b) Calcule t para h = 18,0 cm (g = 9,80 m/s²)." },
+            { id: 21, cap: "cap2", ex: "Exercício 2.42", title: "Questão 21 — Queda Livre de Tijolo", text: "Um tijolo é largado do alto de um edifício e atinge o solo em 2,50 s (g = 9,80 m/s²). a) Qual a altura do edifício? b) Qual a velocidade de impacto? c) Esboce os gráficos a(t), v(t) e y(t)." },
+            { id: 22, cap: "cap2", ex: "Exercício 2.43", title: "Questão 22 — Falha no Lançamento do Foguete", text: "Um foguete de 7500 kg sobe com a = 2,25 m/s² até 525 m, quando os motores falham. a) Qual a altura máxima atingida sobre o solo? b) Quanto tempo após a falha ele cai no solo?" },
+            { id: 23, cap: "cap2", ex: "Exercício 2.52", title: "Questão 23 — O Salto da Pulga", text: "Uma pulga de 2,0 mg salta quase verticalmente gravada a 3500 quadros/s. Use o gráfico a(t) para determinar quando a aceleração é nula e a velocidade máxima de decolagem." },
+            { id: 24, cap: "cap2", ex: "Exercício 2.53", title: "Questão 24 — Pedra Rolando Colina Abaixo", text: "Uma pedra rola colina abaixo com aceleração variável a(t). a) Determine a variação de velocidade Δv entre t = 2,5 s e 7,5 s. b) Faça o gráfico v(t)." },
+
+            // CAP 3
+            { id: 25, cap: "cap3", ex: "Exercício 3.12", title: "Questão 25 — Aceleração Centrípeta no MCU", text: "Para uma partícula em movimento circular uniforme com raio R e velocidade v: deduza a fórmula a_rad = v²/R dirigida ao centro da trajetória." },
+            { id: 26, cap: "cap3", ex: "Exercício 3.14", title: "Questão 26 — Avião Voando com Vento Ortogonal", text: "Um avião voa rumo Norte a 240 km/h no ar. Um vento sopra de Oeste para Leste a 100 km/h. a) Qual a velocidade do avião em relação à Terra? b) Qual o ângulo de desvio?" },
+            { id: 27, cap: "cap3", ex: "Exercício 3.21", title: "Questão 27 — Trajetória de Motocicleta 2D", text: "Uma motocicleta move-se com x(t) = 0,50 t² e y(t) = 0,10 t³. Em t = 0,50 s: a) Calcule a posição r. b) Encontre os componentes vx, vy e o módulo da velocidade." },
+            { id: 28, cap: "cap3", ex: "Exercício 3.36", title: "Questão 28 — Transformação de Galileu", text: "Para sistemas P, A e B: enuncie v_P/A = v_P/B + v_B/A e aplique para um passageiro caminhando em um trem em movimento." },
+            { id: 29, cap: "cap3", ex: "Exercício 3.38", title: "Questão 29 — Vetores Velocidade e Aceleração em Curvas", text: "Para uma trajetória curvilínea: desenhe os vetores velocidade e aceleração para velocidade constante, crescente e decrescente." },
+            { id: 30, cap: "cap3", ex: "Exercício 3.40", title: "Questão 30 — Bola de Gude no Planeta X", text: "Uma bola rola pela mesa e cai a uma distância D na Terra. No Planeta X, cai a Dx. Relacione as distâncias com a gravidade g_X do Planeta X." },
+            { id: 31, cap: "cap3", ex: "Exercício 3.41", title: "Questão 31 — Lançamento de Moeda na Prateleira", text: "Uma moeda é lançada a 6,4 m/s a 60° e pousa no prato na altura máxima. a) Qual a altura da prateleira? b) Qual a velocidade vertical ao pousar?" },
+            { id: 32, cap: "cap3", ex: "Exercício 3.42", title: "Questão 32 — Aceleração na Roda-Gigante", text: "Uma roda-gigante de raio R = 14,0 m gira a v = 7,0 m/s. Determine a aceleração no ponto mais baixo, no ponto mais alto e o período T." },
+            { id: 33, cap: "cap3", ex: "Exercício 3.44", title: "Questão 33 — Integração de Foguete com a(t) 2D", text: "Foguete com ax(t) = α t² e ay(t) = β - γ t. Determine v(t) e r(t) sabendo que r(0)=0 e v(0) = 1,0i + 7,0j (m/s)." },
+            { id: 34, cap: "cap3", ex: "Exercício 3.45", title: "Questão 34 — Foguete Lançado da Torre", text: "Foguete lançado de torre de 50,0 m com x(t) = A + B t² e y(t) = C + D t³. Em t = 1,0 s, a = 4,0i + 3,0j m/s². Ache A, B, C, D." },
+            { id: 35, cap: "cap3", ex: "Exercício 3.46", title: "Questão 35 — Voo do Pássaro no Plano XY", text: "Pássaro voa com v(t) = (α - β t²)i + γ t j. Ache r(t) e a(t), e a altura y quando cruza x = 0." },
+            { id: 36, cap: "cap3", ex: "Exercício 3.47", title: "Questão 36 — Foguete em Rampa Inclinada", text: "Foguete acelera a 125 m/s² por 200 m a 35° em rampa. Ao sair, entra em voo livre. Ache a altura máxima e o alcance horizontal total." },
+            { id: 37, cap: "cap3", ex: "Exercício 3.54", title: "Questão 37 — Equipamento para Navio em Movimento", text: "Navio se aproxima da doca a 0,45 m/s. Equipamento é lançado a 15,0 m/s a 60° de torre de 8,75 m. Qual a distância D para cair no convés?" },
+            { id: 38, cap: "cap3", ex: "Exercício 3.56", title: "Questão 38 — Jato de Água no Tanque Cilíndrico", text: "Mangueira a 45° a 6D da base de tanque de diâmetro D e altura 2D. Determine a faixa de velocidade v0 para a água entrar no tanque." },
+            { id: 39, cap: "cap3", ex: "Exercício 3.58", title: "Questão 39 — Chute de Ponto Extra no Futebol", text: "Bola chutada a 36 pés do gol a 40 pés/s a 45°. A barra está a 10 pés de altura. A bola passa acima da barra?" },
+            { id: 40, cap: "cap3", ex: "Exercício 3.60", title: "Questão 40 — Bola de Neve no Telhado Inclinado", text: "Bola de neve rola de telhado inclinado de 40° a 14,0 m do solo com v0 = 7,0 m/s. A que distância da parede ela atinge o solo?" }
+        ];
+
+        let currentFilter = 'all';
+
+        function renderQuestions() {
+            const listEl = document.getElementById('questions-list');
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+            listEl.innerHTML = '';
+
+            const filtered = questionsData.filter(q => {
+                const matchCap = (currentFilter === 'all' || q.cap === currentFilter);
+                const matchText = q.title.toLowerCase().includes(searchVal) || q.text.toLowerCase().includes(searchVal) || q.ex.toLowerCase().includes(searchVal);
+                return matchCap && matchText;
+            });
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = '<div style="text-align:center; padding:40px; color:#94a3b8; font-size:1.1rem;">Nenhuma questão encontrada para a pesquisa.</div>';
+                return;
+            }
+
+            filtered.forEach(q => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.innerHTML = `
+                    <div class="q-header">
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <span class="q-badge">${q.ex}</span>
+                            <span class="q-title">${q.title}</span>
+                        </div>
+                        <button class="btn-voice" onclick="readQuestion('${q.id}')">🔊 Ouvir Questão</button>
+                    </div>
+                    <div class="q-text" id="q-text-${q.id}">${q.text}</div>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+
+        function setFilter(cap, btn) {
+            currentFilter = cap;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderQuestions();
+        }
+
+        function filterQuestions() {
+            renderQuestions();
+        }
+
+        function readQuestion(id) {
+            const q = questionsData.find(item => item.id == id);
+            if (!q) return;
+
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const text = q.title + '. ' + q.text;
+                const ut = new SpeechSynthesisUtterance(text);
+                ut.lang = 'pt-BR';
+                ut.rate = 1.0;
+                window.speechSynthesis.speak(ut);
+            } else {
+                alert('Seu navegador não suporta narração por voz.');
+            }
+        }
+
+        window.onload = function() {
+            renderQuestions();
+        };
+    </script>
+</body>
+</html>
