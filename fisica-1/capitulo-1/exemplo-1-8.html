@@ -332,9 +332,22 @@
         let timer = null, running = false; // Auto-play on load!
 
         function togglePlay() {
+            const input = document.getElementById('ex-t');
+            if (input) {
+                const maxVal = parseFloat(input.max || 4.0);
+                if (parseFloat(input.value) >= maxVal) {
+                    input.value = 0;
+                }
+            }
             running = !running;
-            document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Animação';
-            if (running && !timer) timer = setInterval(loop, 30);
+            const btn = document.getElementById('btn-play');
+            if (btn) btn.innerText = running ? '⏸ Pausar' : '▶ Simular Animação';
+            if (running && !timer) {
+                timer = setInterval(loop, 30);
+            } else if (!running && timer) {
+                clearInterval(timer);
+                timer = null;
+            }
         }
 
         function resetDemo() {
