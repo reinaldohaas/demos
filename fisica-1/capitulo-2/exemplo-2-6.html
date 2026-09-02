@@ -641,8 +641,8 @@
             ctx.fillText(`🚘 Sueli (x = ${x_t.toFixed(1)}m)`, sueliX + 20, sueliY - 18);
 
             // SEPARATED VECTORS: Velocity ABOVE (sueliY - 22), Acceleration BELOW (sueliY + 22)
-            drawVectorArrow(ctx, sueliX, sueliY - 22, v_t * 6.0, 0, '#10b981', `v = ${v_t.toFixed(1)}m/s (acima)`);
-            drawVectorArrow(ctx, sueliX, sueliY + 22, a_t * 20.0, 0, '#f43f5e', `a = ${a_t.toFixed(2)}m/s² (abaixo)`);
+            drawVectorArrow(ctx, sueliX, sueliY - 22, v_t * 6.0, 0, '#10b981', `v = ${v_t.toFixed(1)}m/s`);
+            drawVectorArrow(ctx, sueliX, sueliY + 22, a_t * 20.0, 0, '#f43f5e', `a = ${a_t.toFixed(2)}m/s²`);
         }
         
 

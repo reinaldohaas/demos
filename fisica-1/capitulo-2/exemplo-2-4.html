@@ -626,8 +626,8 @@
             ctx.fillText(`🛑 Sedan (x = ${x_t.toFixed(1)}m)`, sedanX + 20, sedanY - 18);
 
             // SEPARATED VECTORS: Velocity ABOVE (sedanY - 22), Acceleration BELOW (sedanY + 22)
-            drawVectorArrow(ctx, sedanX, sedanY - 22, v_t * 10.0, 0, '#10b981', `v = ${v_t.toFixed(1)}m/s (acima)`);
-            drawVectorArrow(ctx, sedanX, sedanY + 22, a * 12.0, 0, '#f43f5e', `a = -2,0m/s² (abaixo)`);
+            drawVectorArrow(ctx, sedanX, sedanY - 22, v_t * 10.0, 0, '#10b981', `v = ${v_t.toFixed(1)}m/s`);
+            drawVectorArrow(ctx, sedanX, sedanY + 22, a * 12.0, 0, '#f43f5e', `a = -2,0m/s²`);
         }
         
 
