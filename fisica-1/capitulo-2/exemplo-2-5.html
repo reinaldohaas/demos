@@ -269,11 +269,34 @@
         <div class="statement-title">
             <h2>Exemplo 2.5: Queda Livre de um Corpo</h2>
             <p>Uma bola é lançada verticalmente para cima a partir do topo de um edifício de 50,0 m com velocidade inicial v₀ = 15,0 m/s. Determine o instante e a altura máxima atingida, o tempo total de queda e a velocidade ao atingir o solo.</p>
-            <div style="margin-top: 16px;">
-                <button id="btn-voice" class="voice-btn" onclick="toggleVoiceNarration()">
-                    🔊 Ouvir Explicação por Voz
-                </button>
+            
+            <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.4); border-radius: 12px; padding: 14px 18px; margin-top: 16px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 800; font-size: 1.0rem; padding: 10px 18px; border-radius: 8px; cursor: pointer;">
+                        🔊 Ouvir Voz
+                    </button>
+                    <button id="btn-voice-pause" onclick="pauseVoiceNarration()" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; font-weight: 700; font-size: 0.95rem; padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                        ⏸️ Pausar
+                    </button>
+                    <button id="btn-voice-stop" onclick="stopVoiceNarration()" style="background: #ef4444; color: white; border: none; font-weight: 700; font-size: 0.95rem; padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                        ⏹️ Parar
+                    </button>
+                </div>
+                
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <label style="font-size: 0.95rem; font-weight: 800; color: #d8b4fe;">⏩ Velocidade:</label>
+                    <select id="voice-rate-select" onchange="changeVoiceRate()" style="background: #0f172a; color: #38bdf8; border: 1px solid #38bdf8; padding: 8px 12px; border-radius: 6px; font-weight: 800; font-size: 0.95rem; cursor: pointer;">
+                        <option value="0.75">0.75x (Lento)</option>
+                        <option value="1.0" selected>1.0x (Normal)</option>
+                        <option value="1.25">1.25x (Rápido)</option>
+                        <option value="1.5">1.5x (Muito Rápido)</option>
+                        <option value="2.0">2.0x (Máximo)</option>
+                    </select>
+                </div>
+                
+                <span id="voice-status-text" style="font-size: 0.92rem; color: #94a3b8; font-weight: 700;">Status: Pronto para ler</span>
             </div>
+
         </div>
         <div class="formula-badge">y(t) = y₀ + v₀y t - ½ g t²</div>
     </div>
@@ -439,8 +462,11 @@
             drawScene(t);
         }
 
-        // Web Speech API - Voice Synthesis with Async Voice Loader
+        // Web Speech API - Complete Voice Controls (Play, Pause, Stop, Speed Rate)
         let isSpeaking = false;
+        let isPaused = false;
+        let currentUtterance = null;
+        let voiceSpeedRate = 1.0;
         let browserVoices = [];
 
         function loadBrowserVoices() {
@@ -453,53 +479,98 @@
             window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
         }
 
-        function toggleVoiceNarration() {
+        function playVoiceNarration() {
             if (!('speechSynthesis' in window)) {
-                alert('Seu navegador não suporta a API de voz.');
-                return;
-            }
-            const btn = document.getElementById('btn-voice');
-            if (isSpeaking) {
-                window.speechSynthesis.cancel();
-                isSpeaking = false;
-                if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
+                alert('Seu navegador não suporta a API de narração por voz.');
                 return;
             }
 
-            window.speechSynthesis.cancel(); // Clear any pending audio queue
+            const statusLabel = document.getElementById('voice-status-text');
+
+            if (isPaused) {
+                window.speechSynthesis.resume();
+                isPaused = false;
+                isSpeaking = true;
+                if (statusLabel) statusLabel.innerText = '🔊 Reproduzindo...';
+                return;
+            }
+
+            window.speechSynthesis.cancel(); // Reset previous audio
 
             const stmt = document.querySelector('.statement-title p')?.innerText || '';
-            const items = Array.from(document.querySelectorAll('.item-content')).map(el => el.innerText.replace(/[\n\r]+/g, ' ')).join('. ');
+            const items = Array.from(document.querySelectorAll('.item-content'))
+                .map(el => el.innerText.replace(/[\n\r]+/g, ' '))
+                .join('. ');
             const fullText = (stmt + '. Resolução Didática: ' + items).trim();
 
-            const msg = new SpeechSynthesisUtterance(fullText);
-            msg.lang = 'pt-BR';
-            msg.rate = 1.0;
-            msg.pitch = 1.0;
-            msg.volume = 1.0;
+            currentUtterance = new SpeechSynthesisUtterance(fullText);
+            currentUtterance.lang = 'pt-BR';
+
+            const speedSelect = document.getElementById('voice-rate-select');
+            if (speedSelect) {
+                voiceSpeedRate = parseFloat(speedSelect.value) || 1.0;
+            }
+            currentUtterance.rate = voiceSpeedRate;
+            currentUtterance.pitch = 1.0;
+            currentUtterance.volume = 1.0;
 
             const ptVoice = browserVoices.find(v => v.lang && (v.lang.includes('pt-BR') || v.lang.includes('pt')));
             if (ptVoice) {
-                msg.voice = ptVoice;
+                currentUtterance.voice = ptVoice;
             }
 
-            msg.onstart = function() {
+            currentUtterance.onstart = function() {
                 isSpeaking = true;
-                if (btn) btn.innerHTML = '⏹️ Parar Narração';
+                isPaused = false;
+                if (statusLabel) statusLabel.innerText = '🔊 Lendo enunciado e resolução...';
             };
-            msg.onend = function() {
+
+            currentUtterance.onend = function() {
                 isSpeaking = false;
-                if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
+                isPaused = false;
+                if (statusLabel) statusLabel.innerText = '✅ Leitura concluída.';
             };
-            msg.onerror = function() {
+
+            currentUtterance.onerror = function() {
                 isSpeaking = false;
-                if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
+                isPaused = false;
+                if (statusLabel) statusLabel.innerText = 'Status: Pronto para ler';
             };
 
             if (window.speechSynthesis.paused) {
                 window.speechSynthesis.resume();
             }
-            window.speechSynthesis.speak(msg);
+            window.speechSynthesis.speak(currentUtterance);
+        }
+
+        function pauseVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window && isSpeaking && !isPaused) {
+                window.speechSynthesis.pause();
+                isPaused = true;
+                if (statusLabel) statusLabel.innerText = '⏸️ Narração pausada.';
+            }
+        }
+
+        function stopVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+                isPaused = false;
+                if (statusLabel) statusLabel.innerText = '⏹️ Narração parada.';
+            }
+        }
+
+        function changeVoiceRate() {
+            const speedSelect = document.getElementById('voice-rate-select');
+            if (speedSelect) {
+                voiceSpeedRate = parseFloat(speedSelect.value) || 1.0;
+            }
+            if (isSpeaking && !isPaused) {
+                stopVoiceNarration();
+                playVoiceNarration();
+            }
         }
 
         window.onload = function() {
