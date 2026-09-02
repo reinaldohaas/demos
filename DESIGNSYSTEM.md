@@ -66,3 +66,13 @@ Cada exemplo de movimento inclui um painel de 3 gráficos abaixo ou ao lado do C
 Cada deck didático inclui links diretos para simulações públicas de referência:
 - 🔗 **PhET Interactive Simulations (University of Colorado Boulder)** — *The Moving Man*
 - 🔗 **GeoGebra** — *Cinemática Vetorial Interativa 1D/2D*
+
+---
+
+## 8. 📐 Regra de Separação de Painéis (Quadro Interativo vs. Quadro Estático)
+
+- 🎬 **PRIMEIRO QUADRO (Quadro 1 - Animação Interativa)**:  
+  Reservado **exclusivamente para a Simulação Interativa (2D/3D)**, com o Canvas de movimento, a barra de controle de tempo $t$, botões Play/Pause, telemetria em tempo real e gráficos cinemáticos dinâmicos.
+  
+- 📖 **SEGUNDO QUADRO (Quadro 2 - Conteúdo Estático)**:  
+  Reservado **exclusivamente para Conteúdo Estático de Apoio**, contendo o enunciado, a **Tabela de Identificação de Variáveis**, os passos da Resolução Didática com fórmulas e os diagramas/tabelas de referência estática do livro.

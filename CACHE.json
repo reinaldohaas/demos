@@ -1,6 +1,6 @@
 {
   "project": "FSC5101 Física I & Demos Interativas",
-  "last_updated": "2026-09-02T00:04:30-03:00",
+  "last_updated": "2026-09-02T00:44:00-03:00",
   "paths": {
     "git_root": "C:\\Users\\haas\\github\\demos",
     "onedrive_mirror": "C:\\Users\\haas\\OneDrive\\Documentos\\disciplinas\\FSC5101_Fisica_I\\demos",
@@ -49,5 +49,9 @@
       "PhET Colorado - Moving Man (phet.colorado.edu)",
       "GeoGebra - Cinemática Vetorial (geogebra.org)"
     ]
+  },
+  "panel_layout_rules": {
+    "first_panel_interactive": "Quadro 1 (Painel de Animação): Animação Interativa 2D/3D + Controles de Simulação + Telemetria em Tempo Real.",
+    "second_panel_static": "Quadro 2 (Painel Estático): Conteúdo Estático (Resolução Didática Passo a Passo, Tabela de Identificação de Variáveis, Fórmulas e Diagramas Estáticos de Referência)."
   }
 }
