@@ -477,11 +477,23 @@
             drawScene(t);
         }
 
-        // Web Speech API - Voice Synthesis
+        // Web Speech API - Voice Synthesis with Async Voice Loader
         let isSpeaking = false;
+        let browserVoices = [];
+
+        function loadBrowserVoices() {
+            if ('speechSynthesis' in window) {
+                browserVoices = window.speechSynthesis.getVoices();
+            }
+        }
+        if ('speechSynthesis' in window) {
+            loadBrowserVoices();
+            window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
+        }
+
         function toggleVoiceNarration() {
             if (!('speechSynthesis' in window)) {
-                alert('Seu navegador não suporta narração por voz.');
+                alert('Seu navegador não suporta a API de voz.');
                 return;
             }
             const btn = document.getElementById('btn-voice');
@@ -491,86 +503,42 @@
                 if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
                 return;
             }
-            
-            let voices = window.speechSynthesis.getVoices();
-            let ptVoice = voices.find(v => v.lang.includes('pt-BR') || v.lang.includes('pt')) || null;
-            
+
+            window.speechSynthesis.cancel(); // Clear any pending audio queue
+
             const stmt = document.querySelector('.statement-title p')?.innerText || '';
             const items = Array.from(document.querySelectorAll('.item-content')).map(el => el.innerText.replace(/[\n\r]+/g, ' ')).join('. ');
-            const fullText = stmt + '. Resolução Didática: ' + items;
-            
+            const fullText = (stmt + '. Resolução Didática: ' + items).trim();
+
             const msg = new SpeechSynthesisUtterance(fullText);
             msg.lang = 'pt-BR';
-            if (ptVoice) msg.voice = ptVoice;
             msg.rate = 1.0;
-            
-            msg.onstart = function() { isSpeaking = true; if (btn) btn.innerHTML = '⏹️ Parar Narração'; };
-            msg.onend = function() { isSpeaking = false; if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz'; };
-            msg.onerror = function() { isSpeaking = false; if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz'; };
-            
-            window.speechSynthesis.cancel();
+            msg.pitch = 1.0;
+            msg.volume = 1.0;
+
+            const ptVoice = browserVoices.find(v => v.lang && (v.lang.includes('pt-BR') || v.lang.includes('pt')));
+            if (ptVoice) {
+                msg.voice = ptVoice;
+            }
+
+            msg.onstart = function() {
+                isSpeaking = true;
+                if (btn) btn.innerHTML = '⏹️ Parar Narração';
+            };
+            msg.onend = function() {
+                isSpeaking = false;
+                if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
+            };
+            msg.onerror = function() {
+                isSpeaking = false;
+                if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
+            };
+
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
             window.speechSynthesis.speak(msg);
         }
-
-        
-        function drawScene(t) {
-            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
-            ctx.clearRect(0,0,w,h);
-            ctx.fillStyle = '#070a14'; ctx.fillRect(0,0,w,h);
-
-            const padL = 70, padB = 80, gW = w - padL - 50;
-            const toPxX = x => padL + (x / 60.0) * gW;
-            const trackY = h - padB;
-
-            // Track Line
-            ctx.strokeStyle = '#475569'; ctx.lineWidth = 3;
-            ctx.beginPath(); ctx.moveTo(padL, trackY); ctx.lineTo(w - 20, trackY); ctx.stroke();
-
-            // Track Ticks (0m, 10m, 20m, 30m, 40m, 50m)
-            for (let mark = 0; mark <= 50; mark += 10) {
-                const mx = toPxX(mark);
-                ctx.beginPath(); ctx.moveTo(mx, trackY); ctx.lineTo(mx, trackY + 10); ctx.stroke();
-                ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
-                ctx.fillText(`${mark}m`, mx, trackY + 28);
-            }
-
-            // Calculations for current time t
-            const x_t = 20.0 + 5.0 * t * t;
-            const v_t = 10.0 * t;
-            const a_t = 10.0;
-
-            const leoX = toPxX(x_t);
-            const antX = toPxX(50.0);
-
-            // Antelope (Stationary at 50m)
-            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(antX, trackY - 16, 14, 0, Math.PI*2); ctx.fill();
-            ctx.font = 'bold 14px Inter'; ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
-            ctx.fillText('🦌 Antílope (50m)', antX, trackY - 38);
-
-            // Leopard Icon (Moving)
-            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(leoX, trackY - 16, 15, 0, Math.PI*2); ctx.fill();
-            ctx.font = 'bold 14px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'center';
-            ctx.fillText('🐆 Leopardo', leoX, trackY - 38);
-
-            // SPACED VECTORS: Velocity 65px ABOVE track, Acceleration 50px BELOW track
-            if (v_t > 0.1) {
-                drawVectorArrow(ctx, leoX, trackY - 70, v_t * 4.5, 0, '#10b981', `v = ${v_t.toFixed(1)} m/s`);
-            }
-            drawVectorArrow(ctx, leoX, trackY + 45, a_t * 4.0, 0, '#f43f5e', `a = ${a_t.toFixed(1)} m/s²`, true);
-
-            // TOP-LEFT HUD TELEMETRY DASHBOARD
-            ctx.fillStyle = 'rgba(15, 23, 42, 0.94)';
-            ctx.fillRect(18, 18, 230, 95);
-            ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)'; ctx.lineWidth = 1.5;
-            ctx.strokeRect(18, 18, 230, 95);
-
-            ctx.font = 'bold 12px Inter'; ctx.textAlign = 'left';
-            ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(2)} s`, 30, 40);
-            ctx.fillStyle = '#fbbf24'; ctx.fillText(`📍 Posição x: ${x_t.toFixed(2)} m`, 30, 60);
-            ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Velocidade v: ${v_t.toFixed(1)} m/s`, 30, 80);
-            ctx.fillStyle = '#f43f5e'; ctx.fillText(`🔴 Aceleração a: ${a_t.toFixed(1)} m/s²`, 30, 100);
-        }
-
 
         window.onload = function() {
             document.getElementById('ex-t').value = 0;

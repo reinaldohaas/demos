@@ -437,11 +437,23 @@
             drawScene(t);
         }
 
-        // Web Speech API - Voice Synthesis
+        // Web Speech API - Voice Synthesis with Async Voice Loader
         let isSpeaking = false;
+        let browserVoices = [];
+
+        function loadBrowserVoices() {
+            if ('speechSynthesis' in window) {
+                browserVoices = window.speechSynthesis.getVoices();
+            }
+        }
+        if ('speechSynthesis' in window) {
+            loadBrowserVoices();
+            window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
+        }
+
         function toggleVoiceNarration() {
             if (!('speechSynthesis' in window)) {
-                alert('Seu navegador não suporta narração por voz.');
+                alert('Seu navegador não suporta a API de voz.');
                 return;
             }
             const btn = document.getElementById('btn-voice');
@@ -451,65 +463,42 @@
                 if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
                 return;
             }
-            
-            let voices = window.speechSynthesis.getVoices();
-            let ptVoice = voices.find(v => v.lang.includes('pt-BR') || v.lang.includes('pt')) || null;
-            
+
+            window.speechSynthesis.cancel(); // Clear any pending audio queue
+
             const stmt = document.querySelector('.statement-title p')?.innerText || '';
             const items = Array.from(document.querySelectorAll('.item-content')).map(el => el.innerText.replace(/[\n\r]+/g, ' ')).join('. ');
-            const fullText = stmt + '. Resolução Didática: ' + items;
-            
+            const fullText = (stmt + '. Resolução Didática: ' + items).trim();
+
             const msg = new SpeechSynthesisUtterance(fullText);
             msg.lang = 'pt-BR';
-            if (ptVoice) msg.voice = ptVoice;
             msg.rate = 1.0;
-            
-            msg.onstart = function() { isSpeaking = true; if (btn) btn.innerHTML = '⏹️ Parar Narração'; };
-            msg.onend = function() { isSpeaking = false; if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz'; };
-            msg.onerror = function() { isSpeaking = false; if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz'; };
-            
-            window.speechSynthesis.cancel();
+            msg.pitch = 1.0;
+            msg.volume = 1.0;
+
+            const ptVoice = browserVoices.find(v => v.lang && (v.lang.includes('pt-BR') || v.lang.includes('pt')));
+            if (ptVoice) {
+                msg.voice = ptVoice;
+            }
+
+            msg.onstart = function() {
+                isSpeaking = true;
+                if (btn) btn.innerHTML = '⏹️ Parar Narração';
+            };
+            msg.onend = function() {
+                isSpeaking = false;
+                if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
+            };
+            msg.onerror = function() {
+                isSpeaking = false;
+                if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
+            };
+
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
             window.speechSynthesis.speak(msg);
         }
-
-        
-        function drawScene(t) {
-            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
-            ctx.clearRect(0,0,w,h);
-            ctx.fillStyle = '#070a14'; ctx.fillRect(0,0,w,h);
-
-            const padL = 60, padB = 30, gW = w - padL - 30;
-            const toPxX = x => padL + (x / 200.0) * gW;
-
-            // Two Parallel Lanes
-            ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
-            ctx.beginPath(); ctx.moveTo(padL, h/2 - 35); ctx.lineTo(w - 20, h/2 - 35); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(padL, h/2 + 35); ctx.lineTo(w - 20, h/2 + 35); ctx.stroke();
-
-            const xA = 1.25 * t * t;
-            const xB = 15.0 * t;
-            const vA = 2.50 * t;
-            const vB = 15.0;
-
-            const pxA = toPxX(xA), pxB = toPxX(xB);
-            const pyA = h/2 - 50;
-            const pyB = h/2 + 20;
-
-            // Car A (Accelerated - Red)
-            ctx.fillStyle = '#f43f5e'; ctx.fillRect(pxA - 16, pyA - 10, 32, 16);
-            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#f43f5e'; ctx.textAlign = 'left';
-            ctx.fillText(`🏎️ Carro A (${xA.toFixed(1)}m)`, pxA + 20, pyA - 15);
-
-            // Car B (Constant speed - Cyan)
-            ctx.fillStyle = '#38bdf8'; ctx.fillRect(pxB - 16, pyB - 10, 32, 16);
-            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
-            ctx.fillText(`🚗 Carro B (${xB.toFixed(1)}m)`, pxB + 20, pyB + 28);
-
-            // SEPARATED VECTORS: Car A Velocity ABOVE (pyA - 20), Car B Velocity BELOW (pyB + 20)
-            drawVectorArrow(ctx, pxA, pyA - 20, vA * 3.0, 0, '#10b981', `vA = ${vA.toFixed(1)}m/s`);
-            drawVectorArrow(ctx, pxB, pyB + 20, vB * 3.0, 0, '#10b981', `vB = 15m/s`);
-        }
-        
 
         window.onload = function() {
             document.getElementById('ex-t').value = 0;

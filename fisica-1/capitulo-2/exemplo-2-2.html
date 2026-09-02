@@ -473,11 +473,23 @@
             drawScene(t);
         }
 
-        // Web Speech API - Voice Synthesis
+        // Web Speech API - Voice Synthesis with Async Voice Loader
         let isSpeaking = false;
+        let browserVoices = [];
+
+        function loadBrowserVoices() {
+            if ('speechSynthesis' in window) {
+                browserVoices = window.speechSynthesis.getVoices();
+            }
+        }
+        if ('speechSynthesis' in window) {
+            loadBrowserVoices();
+            window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
+        }
+
         function toggleVoiceNarration() {
             if (!('speechSynthesis' in window)) {
-                alert('Seu navegador não suporta narração por voz.');
+                alert('Seu navegador não suporta a API de voz.');
                 return;
             }
             const btn = document.getElementById('btn-voice');
@@ -487,67 +499,42 @@
                 if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
                 return;
             }
-            
-            let voices = window.speechSynthesis.getVoices();
-            let ptVoice = voices.find(v => v.lang.includes('pt-BR') || v.lang.includes('pt')) || null;
-            
+
+            window.speechSynthesis.cancel(); // Clear any pending audio queue
+
             const stmt = document.querySelector('.statement-title p')?.innerText || '';
             const items = Array.from(document.querySelectorAll('.item-content')).map(el => el.innerText.replace(/[\n\r]+/g, ' ')).join('. ');
-            const fullText = stmt + '. Resolução Didática: ' + items;
-            
+            const fullText = (stmt + '. Resolução Didática: ' + items).trim();
+
             const msg = new SpeechSynthesisUtterance(fullText);
             msg.lang = 'pt-BR';
-            if (ptVoice) msg.voice = ptVoice;
             msg.rate = 1.0;
-            
-            msg.onstart = function() { isSpeaking = true; if (btn) btn.innerHTML = '⏹️ Parar Narração'; };
-            msg.onend = function() { isSpeaking = false; if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz'; };
-            msg.onerror = function() { isSpeaking = false; if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz'; };
-            
-            window.speechSynthesis.cancel();
-            window.speechSynthesis.speak(msg);
-        }
+            msg.pitch = 1.0;
+            msg.volume = 1.0;
 
-        
-        function drawScene(t) {
-            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
-            ctx.clearRect(0,0,w,h);
-            ctx.fillStyle = '#070a14'; ctx.fillRect(0,0,w,h);
-
-            // Shaded Shuttle Body
-            ctx.fillStyle = '#1e293b'; ctx.fillRect(10, h/2 - 40, 70, 80);
-            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
-            ctx.fillText('🛸 Ônibus', 45, h/2);
-
-            const times = [1, 3, 5, 7, 9, 11, 13, 15];
-            const speeds = [0.8, 1.2, 1.6, 1.2, -0.4, -1.0, -1.6, -0.8];
-            
-            let vx = 0.8;
-            if (t <= 1) vx = 0.8;
-            else if (t >= 15) vx = -0.8;
-            else {
-                for (let i = 0; i < times.length - 1; i++) {
-                    if (t >= times[i] && t <= times[i+1]) {
-                        const ratio = (t - times[i]) / (times[i+1] - times[i]);
-                        vx = speeds[i] + ratio * (speeds[i+1] - speeds[i]);
-                        break;
-                    }
-                }
+            const ptVoice = browserVoices.find(v => v.lang && (v.lang.includes('pt-BR') || v.lang.includes('pt')));
+            if (ptVoice) {
+                msg.voice = ptVoice;
             }
 
-            const astroX = 130 + t * 22;
-            const astroY = h / 2;
+            msg.onstart = function() {
+                isSpeaking = true;
+                if (btn) btn.innerHTML = '⏹️ Parar Narração';
+            };
+            msg.onend = function() {
+                isSpeaking = false;
+                if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
+            };
+            msg.onerror = function() {
+                isSpeaking = false;
+                if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
+            };
 
-            ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.arc(astroX, astroY, 13, 0, Math.PI*2); ctx.fill();
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
-            ctx.fillText(`👩‍🚀 Astronauta (t = ${t.toFixed(1)}s)`, astroX + 18, astroY - 20);
-            ctx.fillText(`v_x = ${vx.toFixed(2)} m/s`, astroX + 18, astroY + 5);
-
-            // SEPARATED VECTORS: Velocity ABOVE (astroY - 25), Acceleration BELOW (astroY + 25)
-            drawVectorArrow(ctx, astroX, astroY - 25, vx * 45.0, 0, '#10b981', `v_x = ${vx.toFixed(2)}m/s (acima)`);
-            drawVectorArrow(ctx, astroX, astroY + 25, (vx >= 0 ? 10 : -10), 0, '#f43f5e', `sentido aceleração (abaixo)`);
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
+            window.speechSynthesis.speak(msg);
         }
-        
 
         window.onload = function() {
             document.getElementById('ex-t').value = 0;

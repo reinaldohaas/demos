@@ -439,11 +439,23 @@
             drawScene(t);
         }
 
-        // Web Speech API - Voice Synthesis
+        // Web Speech API - Voice Synthesis with Async Voice Loader
         let isSpeaking = false;
+        let browserVoices = [];
+
+        function loadBrowserVoices() {
+            if ('speechSynthesis' in window) {
+                browserVoices = window.speechSynthesis.getVoices();
+            }
+        }
+        if ('speechSynthesis' in window) {
+            loadBrowserVoices();
+            window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
+        }
+
         function toggleVoiceNarration() {
             if (!('speechSynthesis' in window)) {
-                alert('Seu navegador não suporta narração por voz.');
+                alert('Seu navegador não suporta a API de voz.');
                 return;
             }
             const btn = document.getElementById('btn-voice');
@@ -453,56 +465,42 @@
                 if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
                 return;
             }
-            
-            let voices = window.speechSynthesis.getVoices();
-            let ptVoice = voices.find(v => v.lang.includes('pt-BR') || v.lang.includes('pt')) || null;
-            
+
+            window.speechSynthesis.cancel(); // Clear any pending audio queue
+
             const stmt = document.querySelector('.statement-title p')?.innerText || '';
             const items = Array.from(document.querySelectorAll('.item-content')).map(el => el.innerText.replace(/[\n\r]+/g, ' ')).join('. ');
-            const fullText = stmt + '. Resolução Didática: ' + items;
-            
+            const fullText = (stmt + '. Resolução Didática: ' + items).trim();
+
             const msg = new SpeechSynthesisUtterance(fullText);
             msg.lang = 'pt-BR';
-            if (ptVoice) msg.voice = ptVoice;
             msg.rate = 1.0;
-            
-            msg.onstart = function() { isSpeaking = true; if (btn) btn.innerHTML = '⏹️ Parar Narração'; };
-            msg.onend = function() { isSpeaking = false; if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz'; };
-            msg.onerror = function() { isSpeaking = false; if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz'; };
-            
-            window.speechSynthesis.cancel();
+            msg.pitch = 1.0;
+            msg.volume = 1.0;
+
+            const ptVoice = browserVoices.find(v => v.lang && (v.lang.includes('pt-BR') || v.lang.includes('pt')));
+            if (ptVoice) {
+                msg.voice = ptVoice;
+            }
+
+            msg.onstart = function() {
+                isSpeaking = true;
+                if (btn) btn.innerHTML = '⏹️ Parar Narração';
+            };
+            msg.onend = function() {
+                isSpeaking = false;
+                if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
+            };
+            msg.onerror = function() {
+                isSpeaking = false;
+                if (btn) btn.innerHTML = '🔊 Ouvir Explicação por Voz';
+            };
+
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
             window.speechSynthesis.speak(msg);
         }
-
-        
-        function drawScene(t) {
-            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
-            ctx.clearRect(0,0,w,h);
-            ctx.fillStyle = '#070a14'; ctx.fillRect(0,0,w,h);
-
-            const padB = 40, padL = 80;
-            const toPxY = y => (h - padB) - (y / 70.0) * (h - padB - 30);
-
-            // Building Structure (50m)
-            const bY = toPxY(50.0);
-            ctx.fillStyle = '#1e293b'; ctx.fillRect(padL - 40, bY, 60, (h - padB) - bY);
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.strokeRect(padL - 40, bY, 60, (h - padB) - bY);
-
-            // Ball Position
-            const y_t = Math.max(0, 50.0 + 15.0 * t - 4.90 * t * t);
-            const vy_t = 15.0 - 9.80 * t;
-            const ballX = padL + 50;
-            const ballY = toPxY(y_t);
-
-            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(ballX, ballY, 9, 0, Math.PI*2); ctx.fill();
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'left';
-            ctx.fillText(`🏀 Bola (y = ${y_t.toFixed(1)}m)`, ballX + 20, ballY);
-
-            // SEPARATED VECTORS: Velocity LEFT (ballX - 25), Gravity RIGHT (ballX + 25)
-            drawVectorArrow(ctx, ballX - 25, ballY, 0, -vy_t * 4.0, '#10b981', `v = ${vy_t.toFixed(1)}m/s (esquerda)`);
-            drawVectorArrow(ctx, ballX + 25, ballY, 0, 9.80 * 2.5, '#f43f5e', `g = 9.8m/s² (direita)`);
-        }
-        
 
         window.onload = function() {
             document.getElementById('ex-t').value = 0;
