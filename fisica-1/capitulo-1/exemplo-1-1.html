@@ -6,7 +6,8 @@
     <title>Exemplo 1.1: Conversão de Unidades de Velocidade | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
             --bg-dark: #070a12;
@@ -18,28 +19,30 @@
             --accent-emerald: #10b981;
             --accent-rose: #f43f5e;
             --text-main: #f8fafc;
-            --text-sub: #94a3b8;
+            --text-sub: #cbd5e1;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
+            font-size: 0.98rem;
+            line-height: 1.6;
             min-height: 100vh;
             background-image: 
                 radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
                 radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 45%);
             background-attachment: fixed;
-            padding: 20px;
+            padding: 16px;
         }
         .top-nav {
-            max-width: 1300px;
-            margin: 0 auto 16px;
+            max-width: 1400px;
+            margin: 0 auto 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
         .back-btn {
             background: rgba(255, 255, 255, 0.08);
@@ -48,8 +51,8 @@
             padding: 8px 16px;
             border-radius: 8px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.85rem;
+            font-weight: 700;
+            font-size: 0.88rem;
             transition: all 0.2s;
         }
         .back-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); }
@@ -62,27 +65,25 @@
             border-radius: 8px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             transition: all 0.2s;
         }
         .nav-step-btn.primary { background: var(--primary-gradient); color: white; border-color: transparent; }
-        .nav-step-btn:hover { transform: translateY(-1px); opacity: 0.9; }
-        .nav-step-disabled { opacity: 0.4; font-size: 0.85rem; font-weight: 600; color: var(--text-sub); }
 
         .statement-box {
             background: rgba(10, 16, 30, 0.92);
             border-left: 5px solid var(--accent-cyan);
             border-radius: 12px;
-            padding: 20px 24px;
-            margin-bottom: 20px;
+            padding: 18px 22px;
+            margin-bottom: 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 14px;
         }
         .statement-title h2 { font-family: 'Outfit', sans-serif; font-size: 1.4rem; color: var(--accent-cyan); margin-bottom: 6px; }
-        .statement-title p { font-size: 0.92rem; color: #cbd5e1; line-height: 1.6; }
+        .statement-title p { font-size: 0.95rem; color: #e2e8f0; line-height: 1.6; max-width: 900px; }
 
         .formula-badge {
             background: rgba(56, 189, 248, 0.1);
@@ -90,134 +91,88 @@
             padding: 10px 18px;
             border-radius: 10px;
             font-family: 'Outfit', monospace;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--accent-gold);
             font-weight: 700;
         }
 
         .presentation-container {
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 460px 1fr;
-            gap: 20px;
+            grid-template-columns: 480px 1fr;
+            gap: 18px;
         }
-        @media (max-width: 960px) { .presentation-container { grid-template-columns: 1fr; } }
+        @media (max-width: 1024px) { .presentation-container { grid-template-columns: 1fr; } }
 
         .slide-deck {
             background: var(--bg-card);
             border: 1px solid var(--bg-card-border);
-            border-radius: 16px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            border-radius: 14px;
+            padding: 18px;
         }
 
         .item-card {
-            background: rgba(10, 16, 30, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(10, 16, 30, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            padding: 12px 14px;
-            margin-bottom: 10px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
             display: flex;
             gap: 12px;
         }
         .item-badge {
-            background: rgba(99, 102, 241, 0.2);
+            background: rgba(99, 102, 241, 0.25);
             color: #a855f7;
             font-weight: 800;
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             padding: 4px 8px;
             border-radius: 6px;
             height: fit-content;
+            white-space: nowrap;
         }
-        .item-title { font-weight: 700; font-size: 0.88rem; color: var(--text-main); margin-bottom: 4px; }
-        .item-formula code { font-family: monospace; font-size: 0.8rem; color: var(--accent-cyan); }
-        .item-calc { font-size: 0.82rem; color: var(--accent-emerald); margin-top: 4px; font-weight: 600; line-height: 1.5; }
-
-        .control-card {
-            background: rgba(10, 16, 30, 0.7);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 12px;
-            padding: 16px;
-            margin-top: 14px;
-        }
-        .control-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
-        .control-group label { font-size: 0.82rem; font-weight: 600; color: var(--text-sub); display: flex; justify-content: space-between; }
-        .control-group label span { color: var(--accent-cyan); font-family: monospace; font-weight: 700; }
-        input[type="range"] { width: 100%; height: 6px; border-radius: 3px; background: #1e293b; outline: none; accent-color: var(--accent-cyan); cursor: pointer; }
-
-        .btn-group { display: flex; gap: 8px; margin-top: 8px; }
-        .btn { flex: 1; padding: 9px 14px; border-radius: 8px; border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; }
-        .btn-primary { background: var(--primary-gradient); color: white; }
-        .btn-secondary { background: #1e293b; color: var(--text-main); }
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .item-title { font-weight: 700; font-size: 0.98rem; color: var(--text-main); margin-bottom: 6px; }
+        .item-formula code { font-family: monospace; font-size: 0.88rem; color: var(--accent-cyan); font-weight: 700; }
+        .item-calc { font-size: 0.90rem; color: #e2e8f0; margin-top: 6px; font-weight: 500; line-height: 1.65; }
 
         .interactive-stage {
             background: var(--bg-card);
             border: 1px solid var(--bg-card-border);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 14px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 14px;
         }
 
         .scene-card {
             background: #050811;
             border: 1px solid var(--bg-card-border);
-            border-radius: 12px;
-            padding: 10px;
-            height: 420px;
+            border-radius: 10px;
+            padding: 8px;
+            height: 440px;
             position: relative;
             overflow: hidden;
         }
-
-        .vector-legend {
-            position: absolute;
-            top: 8px;
-            right: 12px;
-            display: flex;
-            gap: 14px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 4px 10px;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .scene-nav-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(10, 16, 30, 0.8);
-            border: 1px solid var(--bg-card-border);
-            padding: 12px 18px;
-            border-radius: 12px;
-        }
-    
         .scene-card canvas {
             width: 100% !important;
             height: 100% !important;
             display: block;
         }
 
-    
         .controls-panel-inline {
             background: rgba(10, 16, 30, 0.85);
             border: 1px solid var(--bg-card-border);
-            border-radius: 12px;
-            padding: 16px 20px;
+            border-radius: 10px;
+            padding: 12px 16px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
         }
         .controls-row {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
             flex-wrap: wrap;
         }
         .control-group-inline {
@@ -225,10 +180,10 @@
             display: flex;
             flex-direction: column;
             gap: 4px;
-            min-width: 200px;
+            min-width: 180px;
         }
         .control-group-inline label {
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             font-weight: 700;
             color: var(--text-sub);
             display: flex;
@@ -238,47 +193,67 @@
             color: var(--accent-cyan);
             font-family: monospace;
             font-weight: 800;
-            font-size: 1.15rem;
-            line-height: 1.7;
+            font-size: 0.98rem;
         }
-        .btn-group-inline {
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #1e293b;
+            outline: none;
+            accent-color: var(--accent-cyan);
+            cursor: pointer;
+        }
+
+        .btn-group-inline { display: flex; gap: 8px; }
+        .btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .btn-primary { background: var(--primary-gradient); color: white; }
+        .btn-secondary { background: #1e293b; color: var(--text-main); }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .scene-nav-bar {
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 16, 30, 0.85);
+            border: 1px solid var(--bg-card-border);
+            padding: 10px 16px;
+            border-radius: 10px;
         }
-        
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
     <div class="top-nav">
         <a href="index.html" class="back-btn">← Voltar ao Hub do Capítulo 1</a>
-        <div style="display:flex; gap:10px; align-items:center;">
+        <div style="display:flex; gap:8px; align-items:center;">
             <span class="nav-step-disabled">← Primeiro Exemplo</span>
-            <a href="exemplo-1-2.html" class="nav-step-btn primary">Exemplo 1.2: Volume →</a>
+            <a href="exemplo-1-2.html" class="nav-step-btn primary">Exemplo 1.2 →</a>
         </div>
     </div>
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 1.1: Conversão de Unidades de Velocidade</h2>
-            <p>O recorde mundial de velocidade no solo é de 1228,0 km/h, estabelecido por Andy Green com o Thrust SSC (carro a jato). Expresse esta velocidade em metros por segundo (m/s).</p>
-        
-        <div style="margin-top: 14px; display: flex; gap: 10px; align-items: center;">
-            <button id="btn-voice" class="btn btn-secondary" onclick="toggleVoiceNarration()" style="background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.4); color: #d8b4fe; font-weight: 700; padding: 10px 18px; border-radius: 8px; cursor: pointer;">
-                🔊 Ouvir Explicação e Enunciado por Voz
-            </button>
-        </div>
-
+            <h2><i class="fa-solid fa-car" style="color:#38bdf8;"></i> Exemplo 1.1: Conversão de Unidades de Velocidade do Veículo</h2>
+            <p>Um automóvel se desloca a uma velocidade constante de v = 60,0 mi/h (milhas por hora). Converta essa velocidade para metros por segundo (m/s) e para quilômetros por hora (km/h) e observe o movimento em tempo real com escala ampliada.</p>
             <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
                 <div style="display: flex; gap: 6px; align-items: center;">
                     <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
-                        🔊 Ouvir Voz
+                        🔊 Ouvir Explicação por Voz
                     </button>
                     <button id="btn-voice-pause" onclick="pauseVoiceNarration()" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
                         ⏸️ Pausar
                     </button>
-                    <button id="btn-voice-stop" onclick="stopVoiceNarration()" style="background: #ef4444; color: white; border: none; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
+                    <button id="btn-voice-stop" onclick="stopVoiceNarration()" style="background: #ef4444; color: white; border: none; font-weight: 700; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
                         ⏹️ Parar
                     </button>
                 </div>
@@ -295,68 +270,83 @@
                 
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
-</div>
-        <div class="formula-badge">1228,0 km/h = 341,11 m/s</div>
+        </div>
+        <div class="formula-badge">v = 60,0	ext{ mi/h} = 26,8	ext{ m/s} = 96,6	ext{ km/h}</div>
     </div>
 
     <div class="presentation-container">
-        <!-- Didactic Resolution Deck -->
+        <!-- Left Column: Didactic Resolution Deck -->
         <div class="slide-deck">
-            <div>
-                <div style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); margin-bottom:12px; text-transform:uppercase;">
-                    📖 Resolução Didática Passo a Passo (Itens a, b, c...)
+            <div style="font-size:0.88rem; font-weight:800; color:var(--accent-cyan); margin-bottom:12px; text-transform:uppercase;">
+                📖 Resolução Didática Passo a Passo
+            </div>
+
+            <!-- SEPARAÇÃO DE VARIÁVEIS CARD -->
+            <div class="item-card">
+                <div class="item-badge">IDENTIFICAÇÃO DE VARIÁVEIS</div>
+                <div>
+                    <div class="item-title">Variáveis e Fatores de Conversão:</div>
+                    <div class="item-calc">
+                        • Velocidade Fornecida: <code>v = 60,0 mi/h</code><br>
+                        • Fator Milha → Metro: <code>1 mi = 1609 m</code><br>
+                        • Fator Hora → Segundo: <code>1 h = 3600 s</code><br>
+                        • Fator Metro → Quilômetro: <code>1 km = 1000 m</code>
+                    </div>
                 </div>
-                
-        <div class="item-card">
-            <div class="item-badge">Item (A)</div>
-            <div class="item-content">
-                <div class="item-title">Fator de Conversão de Comprimento</div>
-                <div class="item-formula"><code>1 km = 1000 m</code></div>
-                <div class="item-calc">1228,0 km/h × (1000 m / 1 km) = 1.228.000 m/h.</div>
             </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (B)</div>
-            <div class="item-content">
-                <div class="item-title">Fator de Conversão de Tempo</div>
-                <div class="item-formula"><code>1 h = 3600 s</code></div>
-                <div class="item-calc">1.228.000 m/h × (1 h / 3600 s) = 341,11 m/s.</div>
+
+            <div class="item-card">
+                <div class="item-badge">PASSO 1</div>
+                <div>
+                    <div class="item-title">Conversão para Metros por Segundo (m/s)</div>
+                    <div class="item-formula"><code>v = 60,0 \times \frac{1609\text{ m}}{1\text{ mi}} \times \frac{1\text{ h}}{3600\text{ s}}</code></div>
+                    <div class="item-calc">
+                        v = 60,0 × (1609 / 3600) = <b>26,8 m/s</b>.
+                    </div>
+                </div>
             </div>
-        </div>
-        
-        <div class="item-card">
-            <div class="item-badge">Item (C)</div>
-            <div class="item-content">
-                <div class="item-title">Avaliação e Precisão</div>
-                <div class="item-formula"><code>5 algarismos significativos</code></div>
-                <div class="item-calc">341,11 m/s corresponde a aproximadamente Mach 1,0 (superando a barreira do som no solo!).</div>
+
+            <div class="item-card">
+                <div class="item-badge">PASSO 2</div>
+                <div>
+                    <div class="item-title">Conversão para Quilômetros por Hora (km/h)</div>
+                    <div class="item-formula"><code>v = 26,8\text{ m/s} \times 3,6</code></div>
+                    <div class="item-calc">
+                        v = 26,8 × 3,6 = <b>96,6 km/h</b>.
+                    </div>
+                </div>
             </div>
-        </div>
-        
+
+            <!-- PUBLIC PHYSICS SIMULATIONS & REFERENCES BOX -->
+            <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 14px; margin-top: 14px;">
+                <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; margin-bottom:8px;">🌐 SIMULAÇÕES PÚBLICAS RECOMENDADAS:</div>
+                <ul style="font-size:0.85rem; color:#cbd5e1; padding-left:18px; line-height:1.6;">
+                    <li><a href="https://phet.colorado.edu/sims/html/moving-man/latest/moving-man_all.html" target="_blank" style="color:#fbbf24; font-weight:700; text-decoration:none;">🔗 PhET Colorado - Conversão de Unidades e Movimento Retilíneo</a></li>
+                    <li><a href="https://www.geogebra.org/m/vcbqfzkf" target="_blank" style="color:#38bdf8; font-weight:700; text-decoration:none;">🔗 GeoGebra - Vetor Velocidade e Escalas de Unidades</a></li>
+                </ul>
             </div>
         </div>
 
-        <!-- Interactive Visual Stage -->
+        <!-- Right Column: Interactive Stage with 2D Scene, Cartesian Grid, Origin O, and Vectors -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D/3D Silenciosa com Vetores e Grandezas Físicas</span>
+                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Ampliada do Automóvel | Eixos X-Y | Origem O(0,0)</span>
                 <div style="display:flex; gap:8px;">
                     <span class="nav-step-disabled">← Primeiro Exemplo</span>
-                    <a href="exemplo-1-2.html" class="nav-step-btn primary">Exemplo 1.2: Volume →</a>
+                    <a href="exemplo-1-2.html" class="nav-step-btn primary">Exemplo 1.2 →</a>
                 </div>
             </div>
 
             <!-- Scene Canvas -->
             <div class="scene-card">
-                <div class="vector-legend">
-                    <span style="color:#38bdf8;">➔ Vetor A / Grandeza A</span>
-                    <span style="color:#a855f7;">➔ Vetor B / Grandeza B</span>
-                    <span style="color:#fbbf24;">➔ Resultante R / C</span>
+                <div style="position:absolute; top:8px; right:12px; font-size:0.80rem; font-weight:700; background:rgba(0,0,0,0.85); padding:4px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.2);">
+                    <span style="color:#fbbf24;">📍 Origem O</span>
+                    <span style="color:#38bdf8; margin-left:8px;">➔ Posição r</span>
+                    <span style="color:#10b981; margin-left:8px;">➔ Velocidade v</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
             </div>
-        
+
             <!-- CONTROLS PANEL DIRECTLY ATTACHED TO ANIMATION STAGE -->
             <div class="controls-panel-inline">
                 <div class="controls-row">
@@ -370,32 +360,22 @@
                     </div>
                 </div>
             </div>
-        
-            <!-- SIMULAÇÕES PÚBLICAS RECOMENDADAS (PhET Colorado & GeoGebra) -->
-            <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 14px; margin-top: 14px;">
-                <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; margin-bottom:8px;">🌐 SIMULAÇÕES PÚBLICAS RECOMENDADAS:</div>
-                <ul style="font-size:0.85rem; color:#cbd5e1; padding-left:18px; line-height:1.6;">
-                    <li><a href="https://phet.colorado.edu/sims/html/moving-man/latest/moving-man_all.html" target="_blank" style="color:#fbbf24; font-weight:700; text-decoration:none;">🔗 PhET Colorado - Moving Man (Posição, Velocidade e Aceleração)</a></li>
-                    <li><a href="https://www.geogebra.org/m/vcbqfzkf" target="_blank" style="color:#38bdf8; font-weight:700; text-decoration:none;">🔗 GeoGebra - Cinemática Vetorial 1D e 2D Interativa</a></li>
-                </ul>
-            </div>
-</div>
+        </div>
     </div>
 
     <script>
-        let timer = null, running = false; // Auto-play on load!
+        let timer = null, running = false;
 
         function togglePlay() {
             const input = document.getElementById('ex-t');
-            if (input) {
-                const maxVal = parseFloat(input.max || 4.0);
-                if (parseFloat(input.value) >= maxVal) {
-                    input.value = 0;
-                }
+            const maxVal = parseFloat(input.max || 4.0);
+            if (parseFloat(input.value) >= maxVal) {
+                input.value = 0;
             }
+
             running = !running;
-            const btn = document.getElementById('btn-play');
-            if (btn) btn.innerText = running ? '⏸ Pausar' : '▶ Simular Animação';
+            document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Animação';
+            
             if (running && !timer) {
                 timer = setInterval(loop, 30);
             } else if (!running && timer) {
@@ -415,20 +395,19 @@
         function loop() {
             if (!running) return;
             const input = document.getElementById('ex-t');
-            let t = parseFloat(input.value) + parseFloat(input.step || 5.0);
-            const maxVal = parseFloat(input.max || 341.11);
-            if (t > maxVal) {
+            let t = parseFloat(input.value) + parseFloat(input.step || 0.05);
+            const maxVal = parseFloat(input.max || 4.0);
+            if (t >= maxVal) {
                 t = maxVal;
                 running = false;
-                clearInterval(timer);
-                timer = null;
+                if (timer) { clearInterval(timer); timer = null; }
                 document.getElementById('btn-play').innerText = '▶ Simular Animação';
             }
             input.value = t;
             updateDemo();
         }
 
-                function getCanvasCtx(id) {
+        function getCanvasCtx(id) {
             const canvas = document.getElementById(id);
             if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
             const rect = canvas.getBoundingClientRect();
@@ -442,59 +421,13 @@
             return { canvas, ctx, w, h };
         }
 
-                function draw3DCartesianBox(ctx, w, h, maxX = 60, maxY = 40, maxZ = 30) {
-            const padL = 70, padB = 70, padR = 40, padT = 60;
-            const gW = w - padL - padR - 60;
-            const gH = h - padB - padT - 40;
-
-            const angleZ = Math.PI / 6;
-            const originX = padL;
-            const originY = h - padB;
-
-            const project3D = (x, y, z) => {
-                const px = originX + (x / maxX) * gW + (z / maxZ) * 40 * Math.cos(angleZ);
-                const py = originY - (y / maxY) * gH - (z / maxZ) * 40 * Math.sin(angleZ);
-                return { x: px, y: py };
-            };
-
-            ctx.strokeStyle = 'rgba(51, 65, 85, 0.4)'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
-            for (let z = 0; z <= maxZ; z += maxZ / 3) {
-                const p1 = project3D(0, 0, z);
-                const p2 = project3D(maxX, 0, z);
-                ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-            }
-            ctx.setLineDash([]);
-
-            const pO = project3D(0, 0, 0);
-            const pX = project3D(maxX, 0, 0);
-            const pY = project3D(0, maxY, 0);
-            const pZ = project3D(0, 0, maxZ);
-
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5;
-            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pX.x, pX.y); ctx.stroke();
-            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
-            ctx.fillText('Eixo X (+m)', pX.x + 8, pX.y + 4);
-
-            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5;
-            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pY.x, pY.y); ctx.stroke();
-            ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
-            ctx.fillText('Eixo Y (+m)', pY.x, pY.y - 10);
-
-            ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2.5;
-            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pZ.x, pZ.y); ctx.stroke();
-            ctx.fillStyle = '#a855f7'; ctx.textAlign = 'right';
-            ctx.fillText('Eixo Z (profundidade)', pZ.x - 8, pZ.y - 4);
-
-            return { project3D, originX, originY };
-        }
-
-        function drawVectorArrow(ctx, x, y, dx, dy, color, label) {
+        function drawVectorArrow(ctx, x, y, dx, dy, color, label, labelBelow = false) {
             const len = Math.hypot(dx, dy);
             if (len < 2) return;
             const angle = Math.atan2(dy, dx);
             const headLen = Math.min(10, len * 0.35);
 
-            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2.5;
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2.8;
             ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); ctx.stroke();
 
             ctx.beginPath(); ctx.moveTo(x + dx, y + dy);
@@ -503,44 +436,235 @@
             ctx.closePath(); ctx.fill();
 
             if (label) {
-                ctx.font = 'bold 11px Inter'; ctx.textAlign = 'center';
-                ctx.fillText(label, x + dx * 0.5, y + dy - 6);
+                const labelX = x + dx * 0.5;
+                const labelY = labelBelow ? (y + dy + 18) : (y + dy - 10);
+                
+                ctx.font = 'bold 11px Inter';
+                const textWidth = ctx.measureText(label).width;
+                ctx.fillStyle = 'rgba(5, 8, 17, 0.92)';
+                ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
+                ctx.strokeStyle = color; ctx.lineWidth = 1;
+                ctx.strokeRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
+
+                ctx.fillStyle = color; ctx.textAlign = 'center';
+                ctx.fillText(label, labelX, labelY);
             }
+        }
+
+        // Draw 2D Scene with Smooth Car Scale, Cartesian Axes X-Y, and Vectors
+        function drawScene(t) {
+            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
+
+            const padL = 90, padB = 80, padR = 60, padT = 70;
+            const gW = w - padL - padR;
+            const gH = h - padB - padT;
+
+            const maxX = 110.0; // 110 meters scale
+            const maxY = 30.0;
+
+            const toPxX = x => padL + (x / maxX) * gW;
+            const toPxY = y => (h - padB) - (y / maxY) * gH;
+
+            const originX = toPxX(0);
+            const originY = toPxY(0);
+
+            // GRID LINES
+            ctx.strokeStyle = 'rgba(51, 65, 85, 0.3)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+            for (let x = 0; x <= maxX; x += 20) {
+                const px = toPxX(x);
+                ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, h - padB); ctx.stroke();
+            }
+            ctx.setLineDash([]);
+
+            // EIXOS CARTESIANOS X e Y
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(padL - 10, originY); ctx.lineTo(w - padR + 15, originY); ctx.stroke();
+            drawVectorArrow(ctx, w - padR + 5, originY, 15, 0, '#38bdf8', '');
+            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
+            ctx.fillText('Eixo X (m)', w - padR + 24, originY + 4);
+
+            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(originX, h - padB + 10); ctx.lineTo(originX, padT - 15); ctx.stroke();
+            drawVectorArrow(ctx, originX, padT - 5, 0, -15, '#10b981', '');
+            ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
+            ctx.fillText('Eixo Y (m)', originX, padT - 25);
+
+            // Ticks no Eixo X (0m, 20m, 40m, 60m, 80m, 100m)
+            for (let x = 0; x <= maxX; x += 20) {
+                const px = toPxX(x);
+                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(px, originY - 5); ctx.lineTo(px, originY + 5); ctx.stroke();
+                ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
+                ctx.fillText(`${x}m`, px, originY + 22);
+            }
+
+            // 3. SETA INDICADORA DA ORIGEM O (0,0)
+            ctx.strokeStyle = '#fbbf24'; ctx.fillStyle = '#fbbf24'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(originX, originY, 6, 0, Math.PI * 2); ctx.fill();
+            drawVectorArrow(ctx, originX - 35, originY + 35, 25, -25, '#fbbf24', '');
+            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'right';
+            ctx.fillText('📍 Origem O (x = 0)', originX - 40, originY + 42);
+
+            // Car Motion Physics: v = 26.8 m/s, x(t) = 26.8 * t
+            const v_ms = 26.8;
+            const x_t = v_ms * t;
+
+            const carX = toPxX(x_t);
+            const carY = originY;
+
+            // Draw Car Graphic
+            ctx.fillStyle = '#38bdf8'; ctx.fillRect(carX - 25, carY - 18, 50, 18);
+            ctx.fillStyle = '#fbbf24'; ctx.fillRect(carX - 15, carY - 28, 30, 10);
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath(); ctx.arc(carX - 14, carY, 6, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(carX + 14, carY, 6, 0, Math.PI*2); ctx.fill();
+
+            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#f8fafc'; ctx.textAlign = 'center';
+            ctx.fillText('🏎️ Veículo', carX, carY - 34);
+
+            // VETORES SEM EMPILHAMENTO
+            // 1. Vetor Posição r(t) (Dourado - Linha de base y + 35px)
+            drawVectorArrow(ctx, originX, originY + 35, carX - originX, 0, '#fbbf24', `r = ${x_t.toFixed(1)} m`, true);
+
+            // 2. Vetor Velocidade v(t) (Verde - Acima do carro em y - 60px)
+            drawVectorArrow(ctx, carX, carY - 60, 95, 0, '#10b981', `v = 26.8 m/s (96.6 km/h)`);
+
+            // TELEMETRY HUD
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.94)';
+            ctx.fillRect(18, 18, 290, 110);
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)'; ctx.lineWidth = 1.5;
+            ctx.strokeRect(18, 18, 290, 110);
+
+            ctx.font = 'bold 12px Inter'; ctx.textAlign = 'left';
+            ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(2)} s`, 28, 36);
+            ctx.fillStyle = '#fbbf24'; ctx.fillText(`🟡 Posição Percorrida x: ${x_t.toFixed(1)} m`, 28, 54);
+            ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Velocidade (SI): ${v_ms.toFixed(1)} m/s`, 28, 72);
+            ctx.fillStyle = '#a855f7'; ctx.fillText(`🏎️ Velocidade (km/h): 96,6 km/h`, 28, 90);
+            ctx.fillStyle = '#38bdf8'; ctx.fillText(`🇺🇸 Velocidade (mi/h): 60,0 mi/h`, 28, 108);
         }
 
         function updateDemo() {
             const t = parseFloat(document.getElementById('ex-t').value);
-            document.getElementById('ex-t-val').innerText = t.toFixed(2);
+            document.getElementById('ex-t-val').innerText = t.toFixed(2) + ' s';
             drawScene(t);
         }
 
-        
-        function drawScene(val) {
-            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,w,h);
+        // Web Speech API - Complete Voice Controls
+        let isSpeaking = false;
+        let isPaused = false;
+        let currentUtterance = null;
+        let voiceSpeedRate = 1.0;
+        let browserVoices = [];
 
-            const kmh = val * 3.6;
-            const progress = val / 341.11;
-            const carX = 40 + progress * (w - 120);
-
-            // Track Ground
-            ctx.strokeStyle = '#334155'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, h - 60); ctx.lineTo(w, h - 60); ctx.stroke();
-
-            // Thrust SSC Jet Car
-            ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.roundRect(carX, h - 85, 70, 20, 5); ctx.fill();
-            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(carX + 10, h - 60, 6, 0, Math.PI*2); ctx.arc(carX + 60, h - 60, 6, 0, Math.PI*2); ctx.fill();
-
-            // Flame exhaust
-            ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.moveTo(carX, h - 80); ctx.lineTo(carX - 25 * (val/341.11), h - 75); ctx.lineTo(carX, h - 70); ctx.fill();
-
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'center';
-            ctx.fillText(`🚀 Thrust SSC: ${val.toFixed(2)} m/s (${kmh.toFixed(1)} km/h)`, carX + 35, h - 100);
+        function loadBrowserVoices() {
+            if ('speechSynthesis' in window) {
+                browserVoices = window.speechSynthesis.getVoices();
+            }
         }
-        
+        if ('speechSynthesis' in window) {
+            loadBrowserVoices();
+            window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
+        }
+
+        function playVoiceNarration() {
+            if (!('speechSynthesis' in window)) {
+                alert('Seu navegador não suporta a API de narração por voz.');
+                return;
+            }
+
+            const statusLabel = document.getElementById('voice-status-text');
+
+            if (isPaused) {
+                window.speechSynthesis.resume();
+                isPaused = false;
+                isSpeaking = true;
+                if (statusLabel) statusLabel.innerText = '🔊 Reproduzindo...';
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            const stmt = document.querySelector('.statement-title p')?.innerText || '';
+            const items = Array.from(document.querySelectorAll('.item-content, .item-calc'))
+                .map(el => el.innerText.replace(/[\n\r]+/g, ' '))
+                .join('. ');
+            const fullText = (stmt + '. Resolução Didática: ' + items).trim();
+
+            currentUtterance = new SpeechSynthesisUtterance(fullText);
+            currentUtterance.lang = 'pt-BR';
+
+            const speedSelect = document.getElementById('voice-rate-select');
+            if (speedSelect) {
+                voiceSpeedRate = parseFloat(speedSelect.value) || 1.0;
+            }
+            currentUtterance.rate = voiceSpeedRate;
+            currentUtterance.pitch = 1.0;
+            currentUtterance.volume = 1.0;
+
+            const ptVoice = browserVoices.find(v => v.lang && (v.lang.includes('pt-BR') || v.lang.includes('pt')));
+            if (ptVoice) {
+                currentUtterance.voice = ptVoice;
+            }
+
+            currentUtterance.onstart = function() {
+                isSpeaking = true;
+                isPaused = false;
+                if (statusLabel) statusLabel.innerText = '🔊 Lendo...';
+            };
+
+            currentUtterance.onend = function() {
+                isSpeaking = false;
+                isPaused = false;
+                if (statusLabel) statusLabel.innerText = '✅ Concluído.';
+            };
+
+            currentUtterance.onerror = function() {
+                isSpeaking = false;
+                isPaused = false;
+                if (statusLabel) statusLabel.innerText = 'Status: Pronto';
+            };
+
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+            }
+            window.speechSynthesis.speak(currentUtterance);
+        }
+
+        function pauseVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window && isSpeaking && !isPaused) {
+                window.speechSynthesis.pause();
+                isPaused = true;
+                if (statusLabel) statusLabel.innerText = '⏸️ Pausado.';
+            }
+        }
+
+        function stopVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+                isPaused = false;
+                if (statusLabel) statusLabel.innerText = '⏹️ Parado.';
+            }
+        }
+
+        function changeVoiceRate() {
+            const speedSelect = document.getElementById('voice-rate-select');
+            if (speedSelect) {
+                voiceSpeedRate = parseFloat(speedSelect.value) || 1.0;
+            }
+            if (isSpeaking && !isPaused) {
+                stopVoiceNarration();
+                playVoiceNarration();
+            }
+        }
 
         window.onload = function() {
+            document.getElementById('ex-t').value = 0;
             updateDemo();
-            timer = setInterval(loop, 30); // Auto-play!
         };
         window.onresize = function() { updateDemo(); };
     </script>
