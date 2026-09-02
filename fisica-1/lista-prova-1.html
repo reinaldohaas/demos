@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Exercícios — Prova 1 (Texto do Livro Sears & Zemansky) | FSC5101 Física I</title>
+    <title>Exercícios da Prova 1 — Sears & Zemansky (12ª Ed.) | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
@@ -17,7 +17,6 @@
             --accent-cyan: #38bdf8;
             --accent-gold: #fbbf24;
             --accent-emerald: #10b981;
-            --accent-rose: #f43f5e;
             --text-main: #f8fafc;
             --text-sub: #cbd5e1;
         }
@@ -35,10 +34,7 @@
             background-attachment: fixed;
             padding: 20px;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
         .top-header {
             display: flex;
             justify-content: space-between;
@@ -127,9 +123,7 @@
             border-radius: 14px;
             padding: 20px;
             margin-bottom: 18px;
-            transition: transform 0.2s;
         }
-        .question-card:hover { border-color: var(--accent-cyan); }
 
         .q-header {
             display: flex;
@@ -180,12 +174,12 @@
     <div class="container">
         <div class="top-header">
             <div>
-                <a href="index.html" class="back-btn">← Voltar ao Hub do Curso</a>
+                <a href="index.html" class="back-btn">← Voltar ao Hub de Física I</a>
                 <h1 style="font-family:'Outfit', sans-serif; font-size:1.6rem; color:var(--accent-cyan); margin-top:8px;">
-                    📚 Lista Oficial da Prova 1 — Texto Integral Sears & Zemansky (12ª Ed.)
+                    📚 Exercícios de Revisão — Prova 1 (Sears & Zemansky 12ª Ed.)
                 </h1>
                 <p style="font-size:0.92rem; color:var(--text-sub);">
-                    Sem numeração de lista — Apenas a numeração oficial dos Exercícios do livro didático | FSC5101 Física I UFSC
+                    Sem numeração de lista arbitrária — Apenas a numeração canônica dos Exercícios do livro | FSC5101 UFSC
                 </p>
             </div>
             <div style="display:flex; gap:10px; align-items:center;">
@@ -200,17 +194,15 @@
 
         <!-- SEARCH AND FILTER BAR -->
         <div class="search-filter-bar">
-            <input type="text" id="search-input" class="search-input" placeholder="🔍 Pesquisar por número do exercício (ex: 1.16, 2.5, 3.12) ou enunciado..." onkeyup="filterQuestions()">
-            <button class="filter-btn active" onclick="setFilter('all', this)">Todas as Questões</button>
-            <button class="filter-btn" onclick="setFilter('cap1', this)">Capítulo 1 (Vetores)</button>
-            <button class="filter-btn" onclick="setFilter('cap2', this)">Capítulo 2 (Retilíneo)</button>
-            <button class="filter-btn" onclick="setFilter('cap3', this)">Capítulo 3 (2D / 3D)</button>
+            <input type="text" id="search-input" class="search-input" placeholder="🔍 Pesquisar por número do exercício (ex: 1.16, 2.5, 3.12)..." onkeyup="filterQuestions()">
+            <button class="filter-btn active" onclick="setFilter('all', this)">Todos os Exercícios</button>
+            <button class="filter-btn" onclick="setFilter('cap1', this)">Capítulo 1</button>
+            <button class="filter-btn" onclick="setFilter('cap2', this)">Capítulo 2</button>
+            <button class="filter-btn" onclick="setFilter('cap3', this)">Capítulo 3</button>
         </div>
 
         <!-- QUESTIONS CONTAINER -->
-        <div id="questions-list">
-            <!-- Questions rendered via script -->
-        </div>
+        <div id="questions-list"></div>
     </div>
 
     <script>
@@ -219,244 +211,243 @@
     "cap": "cap1",
     "cap_title": "Capítulo 1 — Unidades, Grandezas Físicas e Vetores",
     "ex": "Exercício 1.16",
-    "text": "1.16 mostramos um diagrama em escala dos deslocamentos da esquiadora. Descrevemos a direção do ponto de partida pelo ângulo \u0004 (a letra grega ﬁ). Por meio de medidas cuidadosas veriﬁcamos que a distância do ponto de par- tida ao ponto de chegada é aproximadamente igual a 2,2 km e o ângulo \u0004 é aproximadamente de 63°. Contudo, podemos calcu- lar com mais acurácia o resultado, somando os vetores de deslo- camento 1,0 km e 2,0 km. EXECUTAR: os vetores nesse diagrama formam um triângulo retângulo; a distância do ponto de partida ao ponto de chegada é igual ao comprimento da hipotenusa, que pode ser determinado usando-se o teorema de Pitágoras: O ân"
+    "text": "Uma placa retangular de alumínio possui comprimento de 5,60 \u0005 0,01 cm e largura de 1,90 \u0005 0,01 cm. a) Ache a área do retângulo e a incerteza na área. b) Veriﬁque se a incerteza fracio- nária na área é igual à soma das incertezas fracionárias do com- primento e da largura. (Este resultado é geral; ver o Problema Desaﬁador 1.98.)"
   },
   {
     "cap": "cap1",
     "cap_title": "Capítulo 1 — Unidades, Grandezas Físicas e Vetores",
     "ex": "Exercício 1.24",
-    "text": "1.24). Neste caso, a forma geral das equações (1.14) e (1.15) é (1.16) (1.17) Exemplo 1.9 USO DE VETORES UNITÁRIOS Dados os dois deslocamentos encontre o módulo de deslocamento SOLUÇÃO IDENTIFICAR: devemos multiplicar o vetor por 2 (uma gran- deza escalar) e subtrair o vetor do resultado. PREPARAR: segundo a Equação (1.9), para multiplicar por 2, devemos simplesmente multiplicar cada um dos seus componen- tes por 2. Por sua vez, a Equação (1.17) demonstra que, para sub- trair de 2 , simplesmente subtraímos os componentes de dos componentes de 2 . (Recapitulando a Seção 1.7, subtrair um vetor é o mesmo que somar o negativo desse vetor.)"
+    "text": "Os vetores unitários y x z O i^ j^ k^ 5 18d^ 1 11e^ 2 10k^ 2 m 5 3 112 2 42d^ 1 16 1 52e^ 1 122 2 82k^ 4 m F S 5 216d^ 1 3e^ 2 k^ 2 m 2 14d^ 2 5e^ 1 8k^ 2 m F S 5 2D S 2 E S, k^ e^, d^, D S E S D S E S D S E S D S 2D S 2 E S. D S 5 16d^ 1 3e^ 2 k^ 2 m e E S 5 14d^ 2 5e^ 1 8k^ 2 m 5 Rx d^ 1 Ry e^ 1 Rz k^ R S 5 1Ax 1 Bx2d^ 1 1Ay 1 By2e^ 1 1Az 1 Bz2k^ B S 5 Bx d^ 1 By e^ 1 Bz k^ A S 5 Ax d^ 1 Ay e^ 1 Az k^ k^ 5 Rx d^ 1 Ry e^ 5 1Ax 1 Bx2d^ 1 1Ay 1 By2e^ 5 1Ax d^ 1 Ay e^ 2 1 1Bx d^ 1 By e^ 2 R S 5 A S 1 B S B S 5 Bx d^ 1 By e^ A S 5 Ax d^ 1 Ay e^ R S B S A S Ax d^, 20 FÍSICA I e k^. e^, d^, ao longo de"
   },
   {
     "cap": "cap1",
     "cap_title": "Capítulo 1 — Unidades, Grandezas Físicas e Vetores",
     "ex": "Exercício 1.26",
-    "text": "1.26 O produto escalar S A \u0007 S B \u0002 AB cos \u0004 pode ser positivo, negativo ou zero, dependendo do ângulo entre S A e S B. Se f está compreendido entre 0° e 90°, A # B é positivo... ... porque B cos f . 0. S S (a) f B S A S Se f está compreendido entre 90º e 180º, A # B é negativo... ... porque B cos f , 0. S S (b) f B S A S Se f 5 90°, A # B 5 0 porque B possui zero componente paralelo a A. S S S S (c) f 5 90° B S A S B S A S B S A SB S A S A S B S B S A S B S A S B S B S A S A S # B S 5 AB cos f 5 0 A S 0 0 B S 0 cos f A S B S A S B S A S Figura 1.25 Cálculo do produto escalar de dois vetores S A \u0007 S B \u0002 AB cos \u0004. Desenhe o início dos vetore"
+    "text": "O produto escalar S A \u0007 S B \u0002 AB cos \u0004 pode ser positivo, negativo ou zero, dependendo do ângulo entre S A e S B. Se f está compreendido entre 0° e 90°, A # B é positivo... ... porque B cos f . 0. S S (a) f B S A S Se f está compreendido entre 90º e 180º, A # B é negativo... ... porque B cos f , 0. S S (b) f B S A S Se f 5 90°, A # B 5 0 porque B possui zero componente paralelo a A. S S S S (c) f 5 90° B S A S B S A S B S A SB S A S A S B S B S A S B S A S B S B S A S A S # B S 5 AB cos f 5 0 A S 0 0 B S 0 cos f A S B S A S B S A S Figura 1.25 Cálculo do produto escalar de dois vetores S A \u0007 S B \u0002 AB cos \u0004. Desenhe o início dos vetore"
   },
   {
     "cap": "cap1",
     "cap_title": "Capítulo 1 — Unidades, Grandezas Físicas e Vetores",
     "ex": "Exercício 1.29",
-    "text": "Exercício 1.29, são propostas várias estimativas de ‘ordem de grandeza’. Algumas são muito simples, outras exigem a elaboração de hipóteses para os dados necessá- rios. Não tente procurar muitos dados; elabore as melho- res hipóteses possíveis. Mesmo que elas estejam fora da realidade de um fator de dez, os resultados podem ser úteis e interessantes. Exemplo 1.4 UMA ESTIMATIVA DE ORDEM DE GRANDEZA Você está escrevendo um conto de aventuras no qual o herói foge pela fronteira transportando em sua mala barras de ouro estima- das em um bilhão de dólares. Seria isto possível? Poderia esta quantidade de ouro caber na mala? Esta quantidade seria pe"
+    "text": "a) O produto vetorial S A \u0005 S B determinado pela regra da mão direita. b) S B \u0005 S A \u0002 \u0004 S A \u0005 S B; o produto vetorial de dois vetores é anticomutativo. A \u0005 B é ortogonal ao plano que contém os vetores A e B. Sua direção é determinada pela regra da mão direita. Desenhe os vetores iniciando do mesmo ponto. Eles definem um plano. (a) A \u0005 B S S S S S S A S B S f B \u0005 A S S A S B S f (b) B \u0005 A 5 2A \u0005 B (mesmo módulo, mas direção oposta). S S S S C S 5 A S 3 B S, B S A S B S A S A S 3 B S A S 3 B S. B S, A S A S # B S f 5 100° cos f 5 Ax Bx 1 Ay By 1 Az Bz AB 5 23 \"14 \"21 5 20,175 B 5 \"Bx 2 1 By 2 1 Bz 2 5 \"12422 1 22 1 1212 2 5 \"21 A"
   },
   {
     "cap": "cap1",
     "cap_title": "Capítulo 1 — Unidades, Grandezas Físicas e Vetores",
     "ex": "Exercício 1.33",
-    "text": "1.33. Determine o módulo, a direção e o sentido do deslocamento resultante usando diagramas em escala. (Veja o Exercício 1.38 para usar um método alternati- vo na solução deste problema.)"
+    "text": "Uma espeleóloga está pesquisando (sugestão: talvez seja mais interessante dizer ‘pesquisadora estudando uma caverna’) uma caverna. Ela percorre 180 m em linha reta de leste para oeste, depois caminha 210 m em uma dire- ção formando 45° com a dire- ção anterior e em sentido do sul para o leste; a seguir, per- corre 280 m a 30° no sentido do norte para o oeste. Depois de um quarto deslocamento não medido, ela retorna ao B S 2 A S. 2A S 2 B S A S 2 B S. A S 1 B S B S A S Figura 1.33 Exercícios 1.31 e 1.38. N L O S 45° 4,0 km 2,6 km 3,1 km INÍCIO FIM Capítulo 1 Unidades, grandezas físicas e vetores 29 y 30,0° 53,0 O 25,0° x B (15,0 m) r D ("
   },
   {
     "cap": "cap1",
     "cap_title": "Capítulo 1 — Unidades, Grandezas Físicas e Vetores",
     "ex": "Exercício 1.45",
-    "text": "1.45 Use componentes de vetores para determinar o módulo e a direção do vetor necessários para equilibrar os dois vetores demonstrados na Figura 1.36. Considere o vetor 625-N ao longo do eixo –Oy e considere o eixo \u0006Ox ortogo nal a ele, no sentido da direita."
+    "text": "Use componentes de vetores para determinar o módulo e a direção do vetor necessários para equilibrar os dois vetores demonstrados na Figura 1.36. Considere o vetor 625-N ao longo do eixo –Oy e considere o eixo \u0006Ox ortogo nal a ele, no sentido da direita."
   },
   {
     "cap": "cap1",
     "cap_title": "Capítulo 1 — Unidades, Grandezas Físicas e Vetores",
     "ex": "Exercício 1.49",
-    "text": "1.49 a) Escreva cada vetor indicado na Figura 1.37 em termos dos vetores unitários e b) Use vetores unitários para escrever o vetor onde c) Encontre o módulo e a dire- ção de"
+    "text": "a) Escreva cada vetor indicado na Figura 1.37 em termos dos vetores unitários e b) Use vetores unitários para escrever o vetor onde c) Encontre o módulo e a dire- ção de"
   },
   {
     "cap": "cap1",
     "cap_title": "Capítulo 1 — Unidades, Grandezas Físicas e Vetores",
     "ex": "Exercício 1.50",
-    "text": "1.50 Dados dois vetores e a) ache o módulo de cada vetor; b) escreva uma expressão para a diferença vetorial usando vetores unitários; c) ache o módulo e a direção diferença vetorial ; d) faça um diagra- ma vetorial para e e mostre que os resultados con- cordam aproximadamente com a resposta do item c)."
+    "text": "Dados dois vetores e a) ache o módulo de cada vetor; b) escreva uma expressão para a diferença vetorial usando vetores unitários; c) ache o módulo e a direção diferença vetorial ; d) faça um diagra- ma vetorial para e e mostre que os resultados con- cordam aproximadamente com a resposta do item c)."
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.5",
-    "text": "2.5). A velocidade instantânea, assim como a velocidade média, é uma grandeza vetorial. A Equação (2.3) deﬁne seu componente x. No movimento retilíneo, todos os demais com- ponentes da velocidade instantânea são nulos e, neste caso, costumamos dizer que v é simplesmente a velocidade instan- tânea. (No Capítulo 3, abordaremos o caso geral em que a velocidade instantânea pode ter componentes x, y e z não nulos.) Quando empregamos a palavra ‘velocidade’, normal- mente queremos dizer velocidade instantânea, e não velocida- de média, a menos que haja alguma especiﬁcação diferente. vx 5 lim DtS0 Dx Dt 5 dx dt Figura 2.4 O vencedor de uma competiç"
+    "text": "Se você arremes- sa uma bola de baixo para cima com certa velocidade inicial, ela cai livremente e atinge uma altura máxima h em um instante t, após deixar sua mão. a) Se você jogar a bola para cima com o dobro da velocidade inicial, que nova altura máxima e bola atin- girá? i) ii) 2h; iii) 4h; iv) 8h; v) 16h. b) Se você jogar a bola para cima com o dobro da velocidade inicial, quanto tempo levará para ela atingir a sua nova altura máxima? i) t/2; ii) iii) t; iv) v) 2t. ❚"
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.12",
-    "text": "2.12 Gráﬁco vxt do movimento indicado na Figura 2.11. Inclinação zero: ax 5 0 Inclinação positiva: ax . 0 Inclinação negativa: ax , 0 (b) Posição, velocidade e aceleração do objeto no eixo x 0 A B C D E t vx tE tA 5 0 tB tC tD 0 x 0 x 0 x 0 x a a v a 5 0 v v 5 0 0 x a v 5 0 v a Objeto está a x . 0, movendo-se no sentido –x (vx , 0), e acelerando (vx e ax possuem o mesmo sinal). (a) Gráfico vxt para o deslocamento de um objeto pelo eixo Ox Quanto maior a inclinação (positiva ou negativa) do gráfico vxt de um objeto, maior a aceleração do objeto no sentido positivo ou negativo de x. Objeto está a x , 0, movendo-se no sentido –x (vx , 0), e"
+    "text": "Em um teste de um novo modelo de automóvel da empresa Motores Incríveis, o velocímetro é calibrado para ler m/s em vez de km/h. A série de medidas a seguir foi registrada durante o teste ao longo de uma estrada retilínea muito longa: Tempo (s) 0 2 4 6 8 10 12 14 16 Velocidade (m/s) 0 0 2 6 10 16 19 22 22 a) Calcule a aceleração média durante cada intervalo de 2,0 s. A aceleração é constante? Ela é constante em algum trecho do teste? b) Faça um gráﬁco vxt dos dados tabelados usando escalas de 1 cm = 1 s no eixo horizontal e de 1 cm = 2 m/s no eixo ver- tical. Desenhe uma curva entre os pontos plotados. Medindo a inclinação dessa curva,"
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.15",
-    "text": "2.15 é um diagrama do movimento que mostra a posição, a velocidade e a aceleração para uma partícula que se move com aceleração constante. Nas ﬁguras 2.16 e 2.17 mostramos esse mesmo diagrama por meio de gráﬁcos. Como a aceleração a é constante, o grá- ﬁco at (gráﬁco da aceleração versus o tempo) indicado na Figura 2.16 é uma linha horizontal. O gráﬁco da velocida- de versus o tempo possui uma inclinação constante, e, portanto, o gráﬁco vt é uma linha reta (Figura 2.16). O gráﬁco da velocidade versus tempo, ou vxt, tem inclina- ção constante porque a aceleração é constante, então seu gráﬁco é uma linha reta (Figura 2.17). ax 5 dvx dt 5 d dt"
+    "text": "Uma tartaruga se arrasta em linha reta, à qual chamaremos de eixo Ox com a direção positiva para a direita. A equação para a posição da tartaruga em função do tempo é x(t) = 50,0 cm + (2,0 cm/s)t \u0002 (0,0625 cm/s2)t2. a) Determine a velocidade inicial, a posição inicial e a aceleração inicial da tartaruga. b) Em qual ins- tante t a velocidade da tartaruga é zero? c) Quanto tempo do ponto inicial a tartaruga leva para retornar ao ponto de partida? d) Em qual instante t a tartaruga está a uma distância de 10,0 cm do ponto inicial? Qual é a velocidade (módulo e direção) da tartaruga em cada um desses instantes? e) Desenhe um gráﬁco de x versu"
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.25",
-    "text": "2.25. Como a aceleração é constante e negativa, o gráﬁco yt é uma parábola com curvatu- ra orientada para baixo e o gráﬁco vyt é uma linha reta com incli- nação negativa. Exemplo 2.8 DUAS SOLUÇÕES OU UMA? Calcule o instante para o qual a bola do Exemplo 2.7 está a 5,0 m abaixo do parapeito do edifício. SOLUÇÃO IDENTIFICAR: novamente este é um problema de aceleração constante. A incógnita é o instante em que a bola está em uma determinada posição. PREPARAR: escolhemos novamente o eixo Oy como na Figura"
+    "text": "Air bag de automóvel. O corpo humano pode sobreviver a um trauma por acidente com aceleração negativa (parada súbita) quando o módulo de aceleração é menor do que 250 m/s2 (cerca de 25 g). Suponha que você sofra um acidente de automóvel com velocidade inicial de 105 km/h e seja amortecido por um air bag que inﬂa automaticamente. Qual deve ser a distância que o air bag se deforma para que você consiga sobreviver?"
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.29",
-    "text": "2.29 mostra gráﬁcos de ax, vx e x em função do tempo. Note que para qualquer tempo t a inclinação do gráﬁco vxt forne- ce o valor de ax e a inclinação do gráﬁco xt fornece o valor de vx. b) O valor máximo de vx ocorre quando v pára de crescer e começa a decrescer. Para esse instante, dvx/dt \u0003 ax \u0003 0. Igualando a zero a expressão de ax, obtemos c) Para achar a velocidade máxima, substituímos t \u0003 20 s (quando a velocidade é máxima) na equação para vx da parte a): d) O valor máximo de vx ocorre para t \u0003 20 s. Obtemos a posi- ção do carro (isto é, o valor de x) nesse instante substituindo t \u0003 20 s na equação geral de x da parte a): AVALIAR: a Fig"
+    "text": "mostra gráﬁcos de ax, vx e x em função do tempo. Note que para qualquer tempo t a inclinação do gráﬁco vxt forne- ce o valor de ax e a inclinação do gráﬁco xt fornece o valor de vx. b) O valor máximo de vx ocorre quando v pára de crescer e começa a decrescer. Para esse instante, dvx/dt \u0003 ax \u0003 0. Igualando a zero a expressão de ax, obtemos c) Para achar a velocidade máxima, substituímos t \u0003 20 s (quando a velocidade é máxima) na equação para vx da parte a): d) O valor máximo de vx ocorre para t \u0003 20 s. Obtemos a posi- ção do carro (isto é, o valor de x) nesse instante substituindo t \u0003 20 s na equação geral de x da parte a): AVALIAR: a Fig"
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.31",
-    "text": "2.31 descreve de forma mais plausível o movimento desse inseto? Q2.3 Um objeto com aceleração constante pode reverter a dire- ção do seu percurso? Duas vezes? Em cada caso, explique seu raciocínio. Q2.4 Em que condições uma velocidade média pode ser igual a uma velocidade instantânea? Q2.5 É possível um objeto a) reduzir a velocidade enquanto o módulo da sua aceleração cresce? b) aumentar a velocidade enquanto sua aceleração é reduzida? Em cada caso, explique seu raciocínio. Q2.6 Sob quais condições o módulo do vetor velocidade média é igual ao módulo da velocidade escalar? Figura 2.31 Questão Q2.2. (a) vx t O (b) ax t O (c) x t O (d) vx t"
+    "text": "descreve de forma mais plausível o movimento desse inseto? Q2.3 Um objeto com aceleração constante pode reverter a dire- ção do seu percurso? Duas vezes? Em cada caso, explique seu raciocínio. Q2.4 Em que condições uma velocidade média pode ser igual a uma velocidade instantânea? Q2.5 É possível um objeto a) reduzir a velocidade enquanto o módulo da sua aceleração cresce? b) aumentar a velocidade enquanto sua aceleração é reduzida? Em cada caso, explique seu raciocínio. Q2.6 Sob quais condições o módulo do vetor velocidade média é igual ao módulo da velocidade escalar? Figura 2.31 Questão Q2.2. (a) vx t O (b) ax t O (c) x t O (d) vx t"
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.32",
-    "text": "2.32. Em qual dos pontos indicados sua veloci- dade é: a) zero? b) constante e positiva? c) constante e negativa? d) crescente em módulo? e) decrescente em módulo?"
+    "text": "Exercício 2.10. 1 2 3 4 5 6 7 8 t (min) O 400 300 200 100 x (m) I II III IV V 60 FÍSICA I"
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.35",
-    "text": "2.35 mostra a coordenada de uma aranha que se desloca lentamente ao longo do eixo Ox. a) Faça um gráfico de sua velocidade e aceleração em função do tempo. b) Faça um diagrama do movimento (como o da Figura 2.13b ou o da Figura 2.14b) mostrando a posição, a velocidade e a aceleração da aranha para cinco tempos: t = 2,5 s, t = 10 s, t = 20 s, t = 30 s e t = 37,5 s."
+    "text": "mostra a coordenada de uma aranha que se desloca lentamente ao longo do eixo Ox. a) Faça um gráfico de sua velocidade e aceleração em função do tempo. b) Faça um diagrama do movimento (como o da Figura 2.13b ou o da Figura 2.14b) mostrando a posição, a velocidade e a aceleração da aranha para cinco tempos: t = 2,5 s, t = 10 s, t = 20 s, t = 30 s e t = 37,5 s."
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.38",
-    "text": "2.38 mostra a aceleração de um modelo de locomotiva que se move no eixo Ox. Faça um gráﬁco da velo- cidade e da posição sabendo que x = 0 e vx = 0 para t = 0."
+    "text": "mostra a aceleração de um modelo de locomotiva que se move no eixo Ox. Faça um gráﬁco da velo- cidade e da posição sabendo que x = 0 e vx = 0 para t = 0."
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.39",
-    "text": "2.39 mostra as posições de A e B em função do tempo. a) Faça um diagrama do movimento (como o da Figura 2.13b ou o da Figura 2.14b) mostrando a posição, a velocidade e a acelera- ção do carro para t \u0003 0, t \u0003 1 s e t \u0003 3 s. b) Para que tempo(s), caso exista algum, A e B possuem a mesma posição? c) Faça um gráﬁco da velocidade versus tempo para A e B. d) Para que tempo(s), caso exista algum, A e B possuem a mesma velocida- de? e) Para que tempo(s), caso exista algum, o carro B ultrapas- sa o carro A?"
+    "text": "mostra as posições de A e B em função do tempo. a) Faça um diagrama do movimento (como o da Figura 2.13b ou o da Figura 2.14b) mostrando a posição, a velocidade e a acelera- ção do carro para t \u0003 0, t \u0003 1 s e t \u0003 3 s. b) Para que tempo(s), caso exista algum, A e B possuem a mesma posição? c) Faça um gráﬁco da velocidade versus tempo para A e B. d) Para que tempo(s), caso exista algum, A e B possuem a mesma velocida- de? e) Para que tempo(s), caso exista algum, o carro B ultrapas- sa o carro A?"
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.40",
-    "text": "2.40 Descida na Lua. Um módulo explorador da Lua está pou- sando na Base Lunar I (Figura 2.40). Ele desce lentamente sob a ação dos retropropulsores do motor de descida. O motor se sepa- ra do módulo quando ele se encontra a 5,0 m da superfície lunar e possui uma velocidade para baixo igual a 0,8 m/s. Ao se sepa- rar do motor, o módulo inicia uma queda livre. Qual é a veloci- dade do módulo no instante em que ele toca a superfície? A ace- leração da gravidade na Lua é igual a 1,6 m/s2."
+    "text": "Descida na Lua. Um módulo explorador da Lua está pou- sando na Base Lunar I (Figura 2.40). Ele desce lentamente sob a ação dos retropropulsores do motor de descida. O motor se sepa- ra do módulo quando ele se encontra a 5,0 m da superfície lunar e possui uma velocidade para baixo igual a 0,8 m/s. Ao se sepa- rar do motor, o módulo inicia uma queda livre. Qual é a veloci- dade do módulo no instante em que ele toca a superfície? A ace- leração da gravidade na Lua é igual a 1,6 m/s2."
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.41",
-    "text": "2.41 Um teste simples para o tempo de reação. Uma régua de medição é mantida verticalmente acima de sua mão com a extre- midade inferior entre o polegar e o indicador. Ao ver a régua sendo largada, você a segura com esses dois dedos. Seu tempo de reação pode ser calculado pela distância percorrida pela régua, medida diretamente pela posição dos seus dedos na escala da régua. a) Deduza uma relação para seu tempo de reação em fun- ção da distância d. b) Calcule o tempo de reação supondo uma distância medida igual a 17,6 cm."
+    "text": "Um teste simples para o tempo de reação. Uma régua de medição é mantida verticalmente acima de sua mão com a extre- midade inferior entre o polegar e o indicador. Ao ver a régua sendo largada, você a segura com esses dois dedos. Seu tempo de reação pode ser calculado pela distância percorrida pela régua, medida diretamente pela posição dos seus dedos na escala da régua. a) Deduza uma relação para seu tempo de reação em fun- ção da distância d. b) Calcule o tempo de reação supondo uma distância medida igual a 17,6 cm."
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.42",
-    "text": "2.42 Um tijolo é largado (velocidade inicial nula) do alto de um edifício. Ele atinge o solo em 2,50 s. A resistência do ar pode ser desprezada, de modo que o tijolo está em queda livre. a) Qual é a altura do edifício? b) Qual é o módulo da velocidade quando ele atinge o solo? c) Faça gráﬁcos ayt, vyt e yt para o movimento do tijolo."
+    "text": "Um tijolo é largado (velocidade inicial nula) do alto de um edifício. Ele atinge o solo em 2,50 s. A resistência do ar pode ser desprezada, de modo que o tijolo está em queda livre. a) Qual é a altura do edifício? b) Qual é o módulo da velocidade quando ele atinge o solo? c) Faça gráﬁcos ayt, vyt e yt para o movimento do tijolo."
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.43",
-    "text": "2.43 Falha no lançamento. Um foguete de 7.500 kg é lançado verticalmente da plataforma com uma aceleração constante no sentido de baixo para cima de 2,25 m/s2 e não sente nenhuma resistência signiﬁcativa do ar. Ao atingir uma altura de 525 m, seus motores falham repentinamente, de modo que a única força atuando sobre ele nesse momento é a gravidade. a) Qual é a altu- ra máxima que esse foguete atingirá a partir da plataforma de lançamento? b) A partir da falha no motor, quanto tempo decor- rerá antes que o foguete caia sobre a plataforma de lançamento e qual será sua velocidade instantes antes da queda? c) Faça gráﬁ- cos ayt, vyt e yt do movi"
+    "text": "Falha no lançamento. Um foguete de 7.500 kg é lançado verticalmente da plataforma com uma aceleração constante no sentido de baixo para cima de 2,25 m/s2 e não sente nenhuma resistência signiﬁcativa do ar. Ao atingir uma altura de 525 m, seus motores falham repentinamente, de modo que a única força atuando sobre ele nesse momento é a gravidade. a) Qual é a altu- ra máxima que esse foguete atingirá a partir da plataforma de lançamento? b) A partir da falha no motor, quanto tempo decor- rerá antes que o foguete caia sobre a plataforma de lançamento e qual será sua velocidade instantes antes da queda? c) Faça gráﬁ- cos ayt, vyt e yt do movi"
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.52",
-    "text": "2.52 O salto voador de uma pulga. A Figura 2.42 mostra o grá- ﬁco de dados coletados de uma pulga saltitante de 210-\u0004g em um ﬁlme de alta velocidade (3500 quadros/segundo). Essa pulga tinha aproximadamente 2 mm de comprimento e saltou a um ângulo de decolagem quase vertical. Use o gráﬁco para respon- der a estas perguntas. a) A aceleração da pulga pode chegar a zero? Se sim, quando? Justiﬁque sua resposta. b) Determine a altura máxima que a pulga atingiu nos primeiros 2,5 ms. c) Determine a aceleração da pulga a 0,5 ms, 1,0 ms e 1,5 ms. d) Determine a altura da pulga a 0,5 ms, 1,0 ms e 1,5 ms. *2.53 O gráﬁco na Figura 2.43 descreve a aceler"
+    "text": "O salto voador de uma pulga. A Figura 2.42 mostra o grá- ﬁco de dados coletados de uma pulga saltitante de 210-\u0004g em um ﬁlme de alta velocidade (3500 quadros/segundo). Essa pulga tinha aproximadamente 2 mm de comprimento e saltou a um ângulo de decolagem quase vertical. Use o gráﬁco para respon- der a estas perguntas. a) A aceleração da pulga pode chegar a zero? Se sim, quando? Justiﬁque sua resposta. b) Determine a altura máxima que a pulga atingiu nos primeiros 2,5 ms. c) Determine a aceleração da pulga a 0,5 ms, 1,0 ms e 1,5 ms. d) Determine a altura da pulga a 0,5 ms, 1,0 ms e 1,5 ms."
   },
   {
     "cap": "cap2",
     "cap_title": "Capítulo 2 — Movimento Retilíneo",
     "ex": "Exercício 2.53",
-    "text": "2.53 O gráﬁco na Figura 2.43 descreve a aceleração em função do tempo para uma pedra que rola colina abaixo, a partir de uma posição de repouso. a) Determine a variação na velocidade da pedra, entre t \u0003 2,5 s e t \u0003 7,5 s. b) Faça um gráﬁco da veloci- dade da pedra em função do tempo. Problemas"
+    "text": "O gráﬁco na Figura 2.43 descreve a aceleração em função do tempo para uma pedra que rola colina abaixo, a partir de uma posição de repouso. a) Determine a variação na velocidade da pedra, entre t \u0003 2,5 s e t \u0003 7,5 s. b) Faça um gráﬁco da veloci- dade da pedra em função do tempo. Problemas"
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.12",
-    "text": "3.12) e o vetor aceleração do seguinte modo (3.13) Exemplo 3.2 CÁLCULO DA ACELERAÇÃO INSTANTÂNEA E DA ACELE- RAÇÃO MÉDIA Vamos analisar novamente os movimentos do veículo robótico mencionado no Exemplo 3.1. Os componentes da velocidade instantânea em função do tempo t são: e o vetor velocidade é a) Calcule os componentes do vetor aceleração média no intervalo de tempo entre t \u0003 0,0 s e t \u0003 2,0 s. b) Ache a acelera- ção instantânea para t \u0003 2,0 s. SOLUÇÃO IDENTIFICAR: este exemplo usa as relações vetoriais entre velocidade, aceleração média e aceleração instantânea. PREPARAR: na parte a) Usamos a Equação (3.8); para calcular- mos os componen"
+    "text": "Uma ousada nadadora salta correndo 510 N e horizontal- mente de um rochedo para um mergulho, conforme a Figura 3.39. Qual deve ser sua veloci- dade mínima quando salta do topo do rochedo, de modo que ela consiga ultrapassar uma saliência no pé do rochedo, com largura de 1,75 m e 9,0 m abai- xo do topo?"
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.14",
-    "text": "3.14 (a) A trajetória da esquiadora. (b) Nossa solução. A Direção do movimento B C C D D E E F F B Normal em D Normal em E Normal em F (a) a a a a (b) a S Capítulo 3 Movimento em duas ou três dimensões 77 um corresponde ao movimento de uma bola largada sem velocidade inicial e o outro foi lançado horizontalmente do mesmo ponto, porém ambos caem verticalmente à mesma distância em intervalos de tempo iguais. Assim podemos expressar todas as relações vetoriais para a posição, velocidade e aceleração usando equações separadas para os componentes horizontais e perpendicu- lares. O movimento efetivo do projétil é a superposição desses movimentos s"
+    "text": "VOANDO COM VENTO ORTOGONAL A bússola de um avião mostra que ele se desloca do sul para o norte, e seu indicador de velocidade do ar mostra que ele está se movendo no ar com velo- cidade igual a 240 km/h. Se existe um vento de 100 km/h de oeste para leste, qual é a velocidade do avião em relação à Terra? SOLUÇÃO IDENTIFICAR: este problema envolve as velocidades em duas dimensões (sentido Norte e sentido Leste), de modo que se trata de um problema sobre velocidade relativa usando vetores. PREPARAR: encontraremos o módulo e a direção da velocidade do avião (P) em relação ao ar (A). Encontaremos também o módulo e a direção da velocidade do"
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.21",
-    "text": "3.21) (movimento de um projétil) (3.22) (movimento de um projétil) (3.23) (movimento de um projétil) Essas equações descrevem a posição e a velocidade de um projétil na Figura 3.17 em qualquer instante t. Dessas equações podemos extrair muitas informações. Por exemplo, em qualquer instante, a distância r entre o pro- jétil e a origem (o módulo do vetor posição ) é dada por (3.24) A velocidade escalar do projétil (o módulo de sua velocidade) em qualquer instante é dada por (3.25) A direção e o sentido da velocidade em termos do ângulo \u0002 que ela faz com o sentido positivo do eixo Ox (Figura 3.17) são dados por (3.26) O vetor velocidade em cada"
+    "text": "Ganhe o prêmio. Em um parque de diversões você pode ganhar uma girafa inﬂável, se conseguir encaixar uma moeda de 25 centavos em um prato pequeno. O prato está sobre uma pra- teleira acima do ponto em que a moeda deixa sua mão, a uma dis- tância horizontal de 2,1 m deste ponto (Figura 3.41). Se você lança a moeda com velocidade de 6,4 m/s formando um ângulo de 60º acima da horizontal, a moeda se encaixa no prato. Despreze a resistência do ar. a) Qual a altura da prateleira em relação ao nível da sua mão? b) Qual é o componente vertical da velocidade da moeda imediatamente antes de a moeda pousar no prato?"
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.36",
-    "text": "3.36) (velocidade relativa no espaço) A Equação (3.36) é conhecida como a transforma- ção de velocidade de Galileu, que relaciona a velocidade de um corpo P em relação ao sistema de referência A e sua velocidade em relação ao sistema de referência B e respectivamente) com a velocidade do siste- ma de referência B em relação ao sistema de referência A Quando todas as três velocidades relativas são paralelas à mesma linha reta, então a Equação (3.36) se reduz à Equação (3.33) para os componentes da velocida- de ao longo dessa linha. Se a velocidade relativa do trem em relação ao solo possui módulo vB/A = 3,0 m/s e a velocidade relativa da mulh"
+    "text": "ilustra a situação. Os vetores são dis- postos de acordo com a equação de velocidade relativa do vetor, na Equação (3.36): Conforme a Figura 3.36, o piloto aponta o bico do avião de modo a formar um ângulo \u0004 em relação ao vento e assim compensar o vento ortogonal. Esse ângulo, que informa a direção do vetor (a velocidade do avião em relação ao ar), é uma das nossas incógni- tas. A outra incógnita é a velocidade escalar do avião sobre o solo, que é o módulo do vetor (a velocidade do avião em rela- ção à Terra). As grandezas conhecidas e desconhecidas são: Figura 3.36 O piloto deve inclinar o avião na direção do vetor →vP/A para que ele"
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.38",
-    "text": "3.38. Entre os pontos B e D, a trajetória é uma linha reta. Desenhe o vetor aceleração em A, C e E para os casos em que a) a partícu- la se move com velocidade escalar constante; b) a partícula se move com velocidade escalar que cresce uniformemente; c) a partícula se move com velocidade escalar que decresce unifor- memente. Seção 3.3 Movimento de um projétil"
+    "text": "Exercício 3.8. (a) (b) (c) E D C B A v S v S v S E D C B A v S v S v S E D C B A v S v S v S r S 5 bt 2d^ 1 ct 3e^, 12,5 cm/s22t24d^ 1 15,0 cm/s2te^. 34,0 cm 1 r S 5 96 FÍSICA I v0 Saliência 1,75 m 9,0 m Figura 3.39 Exercício 3.12."
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.40",
-    "text": "3.40). Para qual alcance da velocida- de v0 a bola de gude aterrissará no buraco?"
+    "text": "Exercício 3.14."
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.41",
-    "text": "3.41). Se você lança a moeda com velocidade de 6,4 m/s formando um ângulo de 60º acima da horizontal, a moeda se encaixa no prato. Despreze a resistência do ar. a) Qual a altura da prateleira em relação ao nível da sua mão? b) Qual é o componente vertical da velocidade da moeda imediatamente antes de a moeda pousar no prato?"
+    "text": "Exercício 3.21. v 5 6,4 m/s 60° 2,1 m ? Capítulo 3 Movimento em duas ou três dimensões 97 2,75 m v0 5 ? 1,50 m 2,0 m Figura 3.40 Exercício 3.14."
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.42",
-    "text": "3.42). A velocidade linear de uma passageira em sua periferia é igual a 7,0 m/s. Determine o módulo, a direção e o sentido da aceleração da passageira a) no ponto mais baixo do movimen- to circular, b) no ponto mais alto do movimento circular. c) Quanto tempo leva a roda- gigante para completar uma revolução?"
+    "text": "Exercícios 3.33 e 3.34. plataforma móvel, quanto tempo ela necessita para chegar à extremidade oposta, se andar a) na mesma direção que a platafor- ma se move? b) na direção oposta?"
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.44",
-    "text": "3.44 Um modelo de foguete se move no plano xy (o sentido posi- tivo do eixo vertical Oy é de baixo para cima). A aceleração do foguete possui os componentes ax (t) \u0003 \u0002t2 e ay (t) \u0003 \u0004 – \u0007t, onde \u0002 \u0003 2,50 m/s4, \u0004 \u0003 9,0 m/s2 e \u0007 \u0003 1,40 m/s3. Para t \u0003 0, o foguete está na origem e possui velocidade , sendo v0x \u0003 1,0 m/s e v0y \u0003 7,0 m/s. a) Determine o vetor velo- cidade e o vetor posição em função do tempo. b) Qual a altura máxima atingida pelo foguete? c) Faça um desenho da trajetória do foguete. d) Qual o deslocamento horizontal do foguete quan- do ele retorna para o ponto y \u0003 0?"
+    "text": "Um modelo de foguete se move no plano xy (o sentido posi- tivo do eixo vertical Oy é de baixo para cima). A aceleração do foguete possui os componentes ax (t) \u0003 \u0002t2 e ay (t) \u0003 \u0004 – \u0007t, onde \u0002 \u0003 2,50 m/s4, \u0004 \u0003 9,0 m/s2 e \u0007 \u0003 1,40 m/s3. Para t \u0003 0, o foguete está na origem e possui velocidade , sendo v0x \u0003 1,0 m/s e v0y \u0003 7,0 m/s. a) Determine o vetor velo- cidade e o vetor posição em função do tempo. b) Qual a altura máxima atingida pelo foguete? c) Faça um desenho da trajetória do foguete. d) Qual o deslocamento horizontal do foguete quan- do ele retorna para o ponto y \u0003 0?"
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.45",
-    "text": "3.45 Um foguete é lançado a um ângulo do topo de uma torre com altura h0 \u0003 50,0 m. Devido ao projeto dos motores, suas coordenadas de posição estão na forma x(t) \u0003 A + Bt2 e y(t) \u0003 C \u0003 Dt3, sendo que A, B, C e D são constantes. Além disso, a aceleração do foguete 1,0 s após o lançamento é \u0003 (4,0î + 3,0 ) m/s2. Suponha que a origem das coordendas esteja na base da torre. a) Ache as constantes A, B, C e D, incluindo suas unidades SI. b) No instante imediatamente após o lançamento do foguete, quais são seu vetor de aceleração e sua velocidade? c) Quais são os componentes x e y da velocidade do foguete 10,0 s após seu lançamento e com que velo"
+    "text": "Um foguete é lançado a um ângulo do topo de uma torre com altura h0 \u0003 50,0 m. Devido ao projeto dos motores, suas coordenadas de posição estão na forma x(t) \u0003 A + Bt2 e y(t) \u0003 C \u0003 Dt3, sendo que A, B, C e D são constantes. Além disso, a aceleração do foguete 1,0 s após o lançamento é \u0003 (4,0î + 3,0 ) m/s2. Suponha que a origem das coordendas esteja na base da torre. a) Ache as constantes A, B, C e D, incluindo suas unidades SI. b) No instante imediatamente após o lançamento do foguete, quais são seu vetor de aceleração e sua velocidade? c) Quais são os componentes x e y da velocidade do foguete 10,0 s após seu lançamento e com que velo"
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.46",
-    "text": "3.46 Um pássaro voa em um plano xy com um vetor velocidade dado por sendo \u0002 \u0003 2,4 m/s, \u0004 \u0003 1,6 m/s3 e \u0007 \u0003 4,0 m/s2. O sentido positivo do eixo vertical Oy é de baixo para cima. Em t \u0003 0, o pássaro está na origem. a) Determine o vetor posição e o vetor aceleração do pássaro em função do tempo. b) Qual é a altura do pássaro (coordenada y) quando ele voa sobre x \u0003 0 pela primeira vez depois de t \u0003 0?"
+    "text": "Um pássaro voa em um plano xy com um vetor velocidade dado por sendo \u0002 \u0003 2,4 m/s, \u0004 \u0003 1,6 m/s3 e \u0007 \u0003 4,0 m/s2. O sentido positivo do eixo vertical Oy é de baixo para cima. Em t \u0003 0, o pássaro está na origem. a) Determine o vetor posição e o vetor aceleração do pássaro em função do tempo. b) Qual é a altura do pássaro (coordenada y) quando ele voa sobre x \u0003 0 pela primeira vez depois de t \u0003 0?"
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.47",
-    "text": "3.47 Um foguete de teste é lançado por aceleração ao longo de uma inclinação de 200,0 m, a 125 m/s2, partindo do repouso no ponto A (Figura 3.45). A inclinação se ergue a 35,0o sobre a horizontal e, no ins- tante em que o foguete parte dela, os motores se apagam e ele ﬁca sujeito somente à gravidade (a resistência ao ar pode ser desprezada). Determine a) a altura máxima sobre o solo atingida pelo fogue- te e b) o maior alcance horizontal do foguete passando-se o ponto A."
+    "text": "Um foguete de teste é lançado por aceleração ao longo de uma inclinação de 200,0 m, a 125 m/s2, partindo do repouso no ponto A (Figura 3.45). A inclinação se ergue a 35,0o sobre a horizontal e, no ins- tante em que o foguete parte dela, os motores se apagam e ele ﬁca sujeito somente à gravidade (a resistência ao ar pode ser desprezada). Determine a) a altura máxima sobre o solo atingida pelo fogue- te e b) o maior alcance horizontal do foguete passando-se o ponto A."
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.54",
-    "text": "3.54 Um navio se aproxima do porto a 45,0 cm/s e uma importan- te peça do equipamento de ancoragem precisa ser lançada, para que ele possa aportar. Esse equipamento é lançado a 15,0 m/s e 60,0º acima da horizontal, do topo de uma torre, à beira da água, 8,75 m acima do convés do navio (Figura 3.46). Para esse equipa- mento cair na frente do navio, a que distância D da doca deve estar o navio quando o equipamento for lançado? Despreze a resistência do ar."
+    "text": "Um navio se aproxima do porto a 45,0 cm/s e uma importan- te peça do equipamento de ancoragem precisa ser lançada, para que ele possa aportar. Esse equipamento é lançado a 15,0 m/s e 60,0º acima da horizontal, do topo de uma torre, à beira da água, 8,75 m acima do convés do navio (Figura 3.46). Para esse equipa- mento cair na frente do navio, a que distância D da doca deve estar o navio quando o equipamento for lançado? Despreze a resistência do ar."
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.56",
-    "text": "3.56 Uma mangueira de água é usada para encher um grande tan- que cilíndrico com diâmetro D e altura 2D. O jato de água sai da mangueira a 45º acima da horizontal, a partir do mesmo nível da base do tanque, e está a uma distância 6D (Figura 3.47). Para qual alcance de velocidade de lançamento (v0) a água entrará no tanque? Despreze a resistência do ar e expresse sua resposta em termos de D e g."
+    "text": "Uma mangueira de água é usada para encher um grande tan- que cilíndrico com diâmetro D e altura 2D. O jato de água sai da mangueira a 45º acima da horizontal, a partir do mesmo nível da base do tanque, e está a uma distância 6D (Figura 3.47). Para qual alcance de velocidade de lançamento (v0) a água entrará no tanque? Despreze a resistência do ar e expresse sua resposta em termos de D e g."
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.58",
-    "text": "3.58 Chutando a gol. No futebol americano, após um touchdown (aterrissagem, nome de uma jogada vencedora), o time tem a oportunidade de conquistar mais um ponto chutando a bola sobre a barra entre as traves do gol. A barra ﬁca a 10,0 pés acima do solo, e a bola é chutada do nível do solo, na direção horizontal a 36,0 pés da barra (Figura 3.48). As regras do futebol americano são enunciadas em unidades inglesas, mas devem ser convertidas para SI neste caso. a) Há um ângulo mínimo acima do solo que garante que a bola passará sobre a barra, seja qual for a velocida- de do chute. Qual é esse ângulo? b) Se a bola for chutada Figura 3.48 Problema"
+    "text": "Chutando a gol. No futebol americano, após um touchdown (aterrissagem, nome de uma jogada vencedora), o time tem a oportunidade de conquistar mais um ponto chutando a bola sobre a barra entre as traves do gol. A barra ﬁca a 10,0 pés acima do solo, e a bola é chutada do nível do solo, na direção horizontal a 36,0 pés da barra (Figura 3.48). As regras do futebol americano são enunciadas em unidades inglesas, mas devem ser convertidas para SI neste caso. a) Há um ângulo mínimo acima do solo que garante que a bola passará sobre a barra, seja qual for a velocida- de do chute. Qual é esse ângulo? b) Se a bola for chutada Figura 3.48 Problema"
   },
   {
     "cap": "cap3",
     "cap_title": "Capítulo 3 — Movimento em Duas ou Três Dimensões",
     "ex": "Exercício 3.60",
-    "text": "3.60 Cuidado! Uma bola de neve rola do telhado de um celeiro que possui uma inclina- ção para baixo igual a 40º (Figura 3.49). A extremidade do telhado está situada a 14,0 m acima do solo e a bola de neve possui velocidade de 7,0 m/s quando ela abandona o telhado. Despreze a resistência do ar. a) A que distância do celeiro a bola de neve atingirá o solo caso não colida com nada durante sua queda? b) Faça dia- gramas xt, yt, vxt e vyt para o movimento da parte (a). c) Um homem de 1,9 m de altura está parado a uma distância de 4,0 m da extremidade do celeiro. Ele será atingido pela bola de neve?"
+    "text": "Cuidado! Uma bola de neve rola do telhado de um celeiro que possui uma inclina- ção para baixo igual a 40º (Figura 3.49). A extremidade do telhado está situada a 14,0 m acima do solo e a bola de neve possui velocidade de 7,0 m/s quando ela abandona o telhado. Despreze a resistência do ar. a) A que distância do celeiro a bola de neve atingirá o solo caso não colida com nada durante sua queda? b) Faça dia- gramas xt, yt, vxt e vyt para o movimento da parte (a). c) Um homem de 1,9 m de altura está parado a uma distância de 4,0 m da extremidade do celeiro. Ele será atingido pela bola de neve?"
   }
 ];
-
         let currentFilter = 'all';
 
         function renderQuestions() {
@@ -471,7 +462,7 @@
             });
 
             if (filtered.length === 0) {
-                listEl.innerHTML = '<div style="text-align:center; padding:40px; color:#94a3b8; font-size:1.1rem;">Nenhum exercício encontrado para a pesquisa.</div>';
+                listEl.innerHTML = '<div style="text-align:center; padding:40px; color:#94a3b8; font-size:1.1rem;">Nenhum exercício encontrado.</div>';
                 return;
             }
 
@@ -506,9 +497,7 @@
             renderQuestions();
         }
 
-        function filterQuestions() {
-            renderQuestions();
-        }
+        function filterQuestions() { renderQuestions(); }
 
         function readQuestion(exId) {
             const q = questionsData.find(item => item.ex === exId);
@@ -526,9 +515,7 @@
             }
         }
 
-        window.onload = function() {
-            renderQuestions();
-        };
+        window.onload = function() { renderQuestions(); };
     </script>
 </body>
 </html>
