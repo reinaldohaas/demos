@@ -383,6 +383,32 @@
                 <canvas id="canvas-scene"></canvas>
             </div>
 
+            
+            <!-- 3 KINEMATIC GRAPHS CONTAINER (x-t, v-t, a-t) -->
+            <div class="graphs-container" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-top:10px;">
+                <div class="graph-card" style="background:#050811; border:1px solid rgba(56,189,248,0.3); border-radius:10px; padding:8px; height:200px; display:flex; flex-direction:column;">
+                    <div class="graph-title" style="background:rgba(251,191,36,0.15); color:#fbbf24; font-size:0.82rem; font-weight:800; padding:4px 8px; border-radius:6px; margin-bottom:4px; display:flex; justify-content:space-between;">
+                        <span>📈 Gráfico x-t (Posição)</span>
+                        <span id="graph-x-val">x = 20.0m</span>
+                    </div>
+                    <canvas id="canvas-graph-x"></canvas>
+                </div>
+                <div class="graph-card" style="background:#050811; border:1px solid rgba(56,189,248,0.3); border-radius:10px; padding:8px; height:200px; display:flex; flex-direction:column;">
+                    <div class="graph-title" style="background:rgba(16,185,129,0.15); color:#10b981; font-size:0.82rem; font-weight:800; padding:4px 8px; border-radius:6px; margin-bottom:4px; display:flex; justify-content:space-between;">
+                        <span>📊 Gráfico v-t (Velocidade)</span>
+                        <span id="graph-v-val">v = 0.0m/s</span>
+                    </div>
+                    <canvas id="canvas-graph-v"></canvas>
+                </div>
+                <div class="graph-card" style="background:#050811; border:1px solid rgba(56,189,248,0.3); border-radius:10px; padding:8px; height:200px; display:flex; flex-direction:column;">
+                    <div class="graph-title" style="background:rgba(244,63,94,0.15); color:#f43f5e; font-size:0.82rem; font-weight:800; padding:4px 8px; border-radius:6px; margin-bottom:4px; display:flex; justify-content:space-between;">
+                        <span>📉 Gráfico a-t (Aceleração)</span>
+                        <span id="graph-a-val">a = 10.0m/s²</span>
+                    </div>
+                    <canvas id="canvas-graph-a"></canvas>
+                </div>
+            </div>
+    
             <!-- CONTROLS PANEL DIRECTLY ATTACHED TO ANIMATION STAGE -->
             <div class="controls-panel-inline">
                 <div class="controls-row">
@@ -491,6 +517,9 @@
             const t = parseFloat(document.getElementById('ex-t').value);
             document.getElementById('ex-t-val').innerText = t.toFixed(2) + ' s';
             drawScene(t);
+            drawGraphX(t);
+            drawGraphV(t);
+            drawGraphA(t);
         }
 
         // Web Speech API - Complete Voice Controls
@@ -709,6 +738,115 @@
             ctx.fillStyle = '#f43f5e'; ctx.fillText(`🔴 Vetor Aceleração a: ${a_t.toFixed(1)} m/s²`, 28, 108);
         }
 
+
+        
+        // ==========================================
+        // RENDER KINEMATIC GRAPHS FOR EXEMPLO 2.1
+        // ==========================================
+        function drawGraphX(currentT) {
+            const { ctx, w, h } = getCanvasCtx('canvas-graph-x'); if (!ctx) return;
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
+
+            const padL = 35, padB = 25, padR = 15, padT = 15;
+            const gW = w - padL - padR, gH = h - padB - padT;
+            const tMax = 3.0, xMin = 0.0, xMax = 65.0;
+
+            const toPx = (t, x) => ({
+                px: padL + (t / tMax) * gW,
+                py: (h - padB) - ((x - xMin) / (xMax - xMin)) * gH
+            });
+
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+
+            // x(t) = 20 + 5 t^2
+            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2.5; ctx.beginPath();
+            for (let t = 0; t <= tMax; t += 0.05) {
+                const x = 20.0 + 5.0 * t * t;
+                const pt = toPx(t, x);
+                if (t === 0) ctx.moveTo(pt.px, pt.py); else ctx.lineTo(pt.px, pt.py);
+            }
+            ctx.stroke();
+
+            const currX = 20.0 + 5.0 * currentT * currentT;
+            const currPt = toPx(currentT, currX);
+
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+            ctx.beginPath(); ctx.moveTo(currPt.px, padT); ctx.lineTo(currPt.px, h - padB); ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(currPt.px, currPt.py, 5, 0, Math.PI*2); ctx.fill();
+            const labelEl = document.getElementById('graph-x-val');
+            if (labelEl) labelEl.innerText = `x = ${currX.toFixed(1)}m`;
+        }
+
+        function drawGraphV(currentT) {
+            const { ctx, w, h } = getCanvasCtx('canvas-graph-v'); if (!ctx) return;
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
+
+            const padL = 35, padB = 25, padR = 15, padT = 15;
+            const gW = w - padL - padR, gH = h - padB - padT;
+            const tMax = 3.0, vMin = 0.0, vMax = 32.0;
+
+            const toPx = (t, v) => ({
+                px: padL + (t / tMax) * gW,
+                py: (h - padB) - ((v - vMin) / (vMax - vMin)) * gH
+            });
+
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+
+            // v(t) = 10 t
+            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath();
+            const p1 = toPx(0, 0); const p2 = toPx(3.0, 30.0);
+            ctx.moveTo(p1.px, p1.py); ctx.lineTo(p2.px, p2.py); ctx.stroke();
+
+            const currV = 10.0 * currentT;
+            const currPt = toPx(currentT, currV);
+
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+            ctx.beginPath(); ctx.moveTo(currPt.px, padT); ctx.lineTo(currPt.px, h - padB); ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(currPt.px, currPt.py, 5, 0, Math.PI*2); ctx.fill();
+            const labelEl = document.getElementById('graph-v-val');
+            if (labelEl) labelEl.innerText = `v = ${currV.toFixed(1)}m/s`;
+        }
+
+        function drawGraphA(currentT) {
+            const { ctx, w, h } = getCanvasCtx('canvas-graph-a'); if (!ctx) return;
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
+
+            const padL = 35, padB = 25, padR = 15, padT = 15;
+            const gW = w - padL - padR, gH = h - padB - padT;
+            const tMax = 3.0, aMin = 0.0, aMax = 15.0;
+
+            const toPx = (t, a) => ({
+                px: padL + (t / tMax) * gW,
+                py: (h - padB) - ((a - aMin) / (aMax - aMin)) * gH
+            });
+
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+
+            // a(t) = 10 m/s^2
+            ctx.strokeStyle = '#f43f5e'; ctx.lineWidth = 2.5; ctx.beginPath();
+            const p1 = toPx(0, 10.0); const p2 = toPx(3.0, 10.0);
+            ctx.moveTo(p1.px, p1.py); ctx.lineTo(p2.px, p2.py); ctx.stroke();
+
+            const currPt = toPx(currentT, 10.0);
+
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+            ctx.beginPath(); ctx.moveTo(currPt.px, padT); ctx.lineTo(currPt.px, h - padB); ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.arc(currPt.px, currPt.py, 5, 0, Math.PI*2); ctx.fill();
+            const labelEl = document.getElementById('graph-a-val');
+            if (labelEl) labelEl.innerText = `a = 10.0m/s²`;
+        }
 
         window.onload = function() {
             document.getElementById('ex-t').value = 0;

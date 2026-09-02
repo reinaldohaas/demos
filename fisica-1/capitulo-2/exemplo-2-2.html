@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 2.2 | FSC5101 Física I</title>
+    <title>Exemplo 2.2: A Astronauta com Gráficos x-t, v-t, a-t | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
@@ -69,7 +69,6 @@
             transition: all 0.2s;
         }
         .nav-step-btn.primary { background: var(--primary-gradient); color: white; border-color: transparent; }
-        .nav-step-btn:hover { transform: translateY(-1px); opacity: 0.9; }
 
         .statement-box {
             background: rgba(10, 16, 30, 0.92);
@@ -101,7 +100,7 @@
             max-width: 1400px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 480px 1fr;
+            grid-template-columns: 460px 1fr;
             gap: 18px;
         }
         @media (max-width: 1024px) { .presentation-container { grid-template-columns: 1fr; } }
@@ -151,7 +150,7 @@
             border: 1px solid var(--bg-card-border);
             border-radius: 10px;
             padding: 8px;
-            height: 460px;
+            height: 380px;
             position: relative;
             overflow: hidden;
         }
@@ -159,6 +158,33 @@
             width: 100% !important;
             height: 100% !important;
             display: block;
+        }
+
+        /* GRAPHS PANEL STYLING */
+        .graphs-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        @media (max-width: 900px) { .graphs-container { grid-template-columns: 1fr; } }
+
+        .graph-card {
+            background: #050811;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 10px;
+            padding: 8px;
+            height: 220px;
+            display: flex;
+            flex-direction: column;
+        }
+        .graph-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
         }
 
         .vector-legend {
@@ -261,8 +287,8 @@
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2><i class="fa-solid fa-user-astronaut" style="color:#a855f7;"></i> Exemplo 2.2: A Astronauta em Movimento Retilíneo</h2>
-            <p>Uma astronauta executa uma caminhada no espaço conectada por um cabo à nave espacial (origem x = 0). Sua posição é dada por x(t) = 1,0 + 0,80 t - 0,040 t². Calcule sua posição inicial, velocidade em t = 0s, 5s, 10s e 15s, e sua aceleração.</p>
+            <h2><i class="fa-solid fa-user-astronaut" style="color:#a855f7;"></i> Exemplo 2.2: A Astronauta com Gráficos Cinemáticos x-t, v-t, a-t</h2>
+            <p>Uma astronauta realiza uma caminhada espacial conectada a um cabo à nave (origem x = 0). Sua posição é x(t) = 1,0 + 0,80 t - 0,040 t². Acompanhe a animação 2D e os 3 gráficos cinemáticos sincronizados em tempo real.</p>
             <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
                 <div style="display: flex; gap: 6px; align-items: center;">
                     <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
@@ -300,13 +326,13 @@
             </div>
             
             <div class="item-card">
-                <div class="item-badge">IDENTIFICAÇÃO DE VARIÁVEIS</div>
+                <div class="item-badge">VARIÁVEIS</div>
                 <div>
-                    <div class="item-title">Variáveis e Equação do Movimento da Astronauta:</div>
+                    <div class="item-title">Equação do Movimento:</div>
                     <div class="item-calc">
-                        • Equação da Posição: <code>x(t) = 1,0 + 0,80 t - 0,040 t²</code> (m)<br>
-                        • Posição da Nave Espacial (Origem O): <code>x = 0,0 m</code><br>
-                        • Cabo de Segurança Ligando a Astronauta à Nave.
+                        • Posição: <code>x(t) = 1,0 + 0,80 t - 0,040 t²</code> (m)<br>
+                        • Velocidade: <code>v(t) = 0,80 - 0,080 t</code> (m/s)<br>
+                        • Aceleração: <code>a = -0,080 m/s²</code> (constante)
                     </div>
                 </div>
             </div>
@@ -314,24 +340,20 @@
             <div class="item-card">
                 <div class="item-badge">ITEM (a)</div>
                 <div>
-                    <div class="item-title">Posição Inicial da Astronauta em t = 0 s</div>
-                    <div class="item-formula"><code>x(0) = 1,0 + 0,80(0) - 0,040(0)²</code></div>
-                    <div class="item-calc">
-                        x(0) = <b>1,0 m</b> (A astronauta começa a 1,0 m da nave).
-                    </div>
+                    <div class="item-title">Posição Inicial t = 0 s</div>
+                    <div class="item-calc">x(0) = 1,0 + 0,80(0) - 0,040(0)² = <b>1,0 m</b>.</div>
                 </div>
             </div>
 
             <div class="item-card">
                 <div class="item-badge">ITEM (b)</div>
                 <div>
-                    <div class="item-title">Velocidade Instantânea v(t) em t = 0s, 5s, 10s e 15s</div>
-                    <div class="item-formula"><code>v(t) = dx/dt = 0,80 - 0,080 t</code></div>
+                    <div class="item-title">Velocidade v(t) nos instantes t:</div>
                     <div class="item-calc">
-                        1) Para t = 0 s: v(0) = <b>0,80 m/s</b> (afastando-se da nave).<br>
-                        2) Para t = 5,0 s: v(5,0) = 0,80 - 0,080(5,0) = <b>0,40 m/s</b>.<br>
-                        3) Para t = 10,0 s: v(10,0) = 0,80 - 0,080(10,0) = <b>0,0 m/s</b> (parada momentânea a x = 5,0 m!).<br>
-                        4) Para t = 15,0 s: v(15,0) = 0,80 - 0,080(15,0) = <b>-0,40 m/s</b> (retornando à nave!).
+                        • t = 0 s: v(0) = <b>0,80 m/s</b>.<br>
+                        • t = 5,0 s: v(5,0) = <b>0,40 m/s</b>.<br>
+                        • t = 10,0 s: v(10,0) = <b>0,0 m/s</b> (inversão a x = 5,0m!).<br>
+                        • t = 15,0 s: v(15,0) = <b>-0,40 m/s</b> (retorno à nave).
                     </div>
                 </div>
             </div>
@@ -339,11 +361,8 @@
             <div class="item-card">
                 <div class="item-badge">ITEM (c)</div>
                 <div>
-                    <div class="item-title">Aceleração Instantânea a(t)</div>
-                    <div class="item-formula"><code>a(t) = dv/dt = -0,080 m/s²</code></div>
-                    <div class="item-calc">
-                        a = <b>-0,080 m/s²</b> (Aceleração constante negativa, puxando a astronauta de volta para a nave!).
-                    </div>
+                    <div class="item-title">Aceleração Instantânea:</div>
+                    <div class="item-calc">a = dv/dt = <b>-0,080 m/s²</b> (constante negativa).</div>
                 </div>
             </div>
 
@@ -355,13 +374,12 @@
                     <li><a href="https://www.geogebra.org/m/vcbqfzkf" target="_blank" style="color:#38bdf8; font-weight:700; text-decoration:none;">🔗 GeoGebra - Cinemática Vetorial 1D e 2D Interativa</a></li>
                 </ul>
             </div>
-
         </div>
 
-        <!-- Right Column: Interactive Stage STARTS AT t = 0.00 s -->
+        <!-- Right Column: Interactive Stage & Kinematic Graphs -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D com Zero Empilhamento de Vetores e Eixos X-Y</span>
+                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D e 3 Gráficos Cinemáticos Sincronizados (x-t, v-t, a-t)</span>
                 <div style="display:flex; gap:8px;">
                     <a href="exemplo-2-1.html" class="nav-step-btn">← Exemplo 2.1</a>
                     <a href="exemplo-2-3.html" class="nav-step-btn primary">Exemplo 2.3 →</a>
@@ -371,12 +389,37 @@
             <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
-                    <span style="color:#fbbf24;">📍 Origem O (Nave)</span>
+                    <span style="color:#fbbf24;">📍 Origem O</span>
                     <span style="color:#38bdf8;">➔ Deslocamento Δx</span>
                     <span style="color:#10b981;">➔ Velocidade v</span>
                     <span style="color:#f43f5e;">➔ Aceleração a</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
+            </div>
+
+            <!-- 3 KINEMATIC GRAPHS CONTAINER (x-t, v-t, a-t) -->
+            <div class="graphs-container">
+                <div class="graph-card">
+                    <div class="graph-title" style="background: rgba(251, 191, 36, 0.15); color: #fbbf24;">
+                        <span>📈 Gráfico x-t (Posição)</span>
+                        <span id="graph-x-val">x = 1.00m</span>
+                    </div>
+                    <canvas id="canvas-graph-x"></canvas>
+                </div>
+                <div class="graph-card">
+                    <div class="graph-title" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                        <span>📊 Gráfico v-t (Velocidade)</span>
+                        <span id="graph-v-val">v = 0.80m/s</span>
+                    </div>
+                    <canvas id="canvas-graph-v"></canvas>
+                </div>
+                <div class="graph-card">
+                    <div class="graph-title" style="background: rgba(244, 63, 94, 0.15); color: #f43f5e;">
+                        <span>📉 Gráfico a-t (Aceleração)</span>
+                        <span id="graph-a-val">a = -0.08m/s²</span>
+                    </div>
+                    <canvas id="canvas-graph-a"></canvas>
+                </div>
             </div>
 
             <!-- CONTROLS PANEL DIRECTLY ATTACHED TO ANIMATION STAGE -->
@@ -443,8 +486,8 @@
             const canvas = document.getElementById(id);
             if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
             const rect = canvas.getBoundingClientRect();
-            const w = rect.width > 0 ? rect.width : (canvas.clientWidth || 600);
-            const h = rect.height > 0 ? rect.height : (canvas.clientHeight || 400);
+            const w = rect.width > 0 ? rect.width : (canvas.clientWidth || 300);
+            const h = rect.height > 0 ? rect.height : (canvas.clientHeight || 180);
             const dpr = window.devicePixelRatio || 1;
             canvas.width = Math.floor(w * dpr);
             canvas.height = Math.floor(h * dpr);
@@ -483,10 +526,231 @@
             }
         }
 
+        function drawScene(t) {
+            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
+
+            const padL = 90, padB = 75, padR = 60, padT = 60;
+            const gW = w - padL - padR;
+            const gH = h - padB - padT;
+
+            const maxX = 6.0;
+            const maxY = 2.0;
+
+            const toPxX = x => padL + (x / maxX) * gW;
+            const toPxY = y => (h - padB) - (y / maxY) * gH;
+
+            const originX = toPxX(0);
+            const originY = toPxY(0);
+
+            // GRID LINES
+            ctx.strokeStyle = 'rgba(51, 65, 85, 0.3)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+            for (let x = 0; x <= maxX; x += 1) {
+                const px = toPxX(x);
+                ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, h - padB); ctx.stroke();
+            }
+            ctx.setLineDash([]);
+
+            // EIXOS CARTESIANOS X e Y
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(padL - 10, originY); ctx.lineTo(w - padR + 15, originY); ctx.stroke();
+            drawVectorArrow(ctx, w - padR + 5, originY, 15, 0, '#38bdf8', '');
+            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
+            ctx.fillText('Eixo X (m)', w - padR + 24, originY + 4);
+
+            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(originX, h - padB + 10); ctx.lineTo(originX, padT - 15); ctx.stroke();
+            drawVectorArrow(ctx, originX, padT - 5, 0, -15, '#10b981', '');
+            ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
+            ctx.fillText('Eixo Y (m)', originX, padT - 25);
+
+            for (let x = 0; x <= maxX; x += 1) {
+                const px = toPxX(x);
+                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(px, originY - 5); ctx.lineTo(px, originY + 5); ctx.stroke();
+                ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
+                ctx.fillText(`${x}m`, px, originY + 22);
+            }
+
+            // NAVE ESPACIAL
+            ctx.fillStyle = '#1e293b'; ctx.fillRect(originX - 35, originY - 25, 35, 50);
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.strokeRect(originX - 35, originY - 25, 35, 50);
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'center';
+            ctx.fillText('🚀 Nave (x=0)', originX - 17, originY + 4);
+
+            const x_t = 1.0 + 0.80 * t - 0.040 * t * t;
+            const v_t = 0.80 - 0.080 * t;
+            const a_t = -0.080;
+
+            const astroX = toPxX(x_t);
+            const astroY = originY;
+
+            ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 2; ctx.setLineDash([2, 2]);
+            ctx.beginPath(); ctx.moveTo(originX, originY); ctx.lineTo(astroX, astroY); ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.arc(astroX, astroY, 15, 0, Math.PI*2); ctx.fill();
+            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#f8fafc'; ctx.textAlign = 'center';
+            ctx.fillText('👩‍🚀 Astronauta', astroX, astroY - 26);
+
+            // VETORES SEM COLISÃO
+            drawVectorArrow(ctx, originX, originY + 35, astroX - originX, 0, '#fbbf24', `r = ${x_t.toFixed(2)} m`, true);
+
+            if (t > 0.1) {
+                const x0_px = toPxX(1.0);
+                drawVectorArrow(ctx, x0_px, originY - 30, astroX - x0_px, 0, '#38bdf8', `Δx = ${(x_t - 1.0).toFixed(2)} m`);
+            }
+
+            if (Math.abs(v_t) > 0.01) {
+                drawVectorArrow(ctx, astroX, astroY - 70, v_t * 120.0, 0, '#10b981', `v = ${v_t.toFixed(2)} m/s`);
+            }
+
+            drawVectorArrow(ctx, astroX, astroY + 65, a_t * 1500.0, 0, '#f43f5e', `a = ${a_t.toFixed(3)} m/s²`, true);
+
+            // HUD DASHBOARD
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.94)';
+            ctx.fillRect(18, 18, 270, 115);
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)'; ctx.lineWidth = 1.5;
+            ctx.strokeRect(18, 18, 270, 115);
+
+            ctx.font = 'bold 12px Inter'; ctx.textAlign = 'left';
+            ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(2)} s`, 28, 36);
+            ctx.fillStyle = '#fbbf24'; ctx.fillText(`🟡 Vetor Posição x: ${x_t.toFixed(2)} m`, 28, 54);
+            ctx.fillStyle = '#38bdf8'; ctx.fillText(`🔹 Vetor Deslocamento Δx: ${(x_t - 1.0).toFixed(2)} m`, 28, 72);
+            ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Vetor Velocidade v: ${v_t.toFixed(2)} m/s`, 28, 90);
+            ctx.fillStyle = '#f43f5e'; ctx.fillText(`🔴 Vetor Aceleração a: ${a_t.toFixed(3)} m/s²`, 28, 108);
+        }
+
+        // ==========================================
+        // RENDER3D KINEMATIC GRAPHS (x-t, v-t, a-t)
+        // ==========================================
+        function drawGraphX(currentT) {
+            const { ctx, w, h } = getCanvasCtx('canvas-graph-x'); if (!ctx) return;
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
+
+            const padL = 35, padB = 25, padR = 15, padT = 15;
+            const gW = w - padL - padR, gH = h - padB - padT;
+
+            const tMax = 15.0, xMin = 0.0, xMax = 6.0;
+
+            const toPx = (t, x) => ({
+                px: padL + (t / tMax) * gW,
+                py: (h - padB) - ((x - xMin) / (xMax - xMin)) * gH
+            });
+
+            // Axes
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+
+            // Parabola Curve x(t) = 1 + 0.8t - 0.04t^2
+            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2.5; ctx.beginPath();
+            for (let t = 0; t <= tMax; t += 0.2) {
+                const x = 1.0 + 0.80 * t - 0.040 * t * t;
+                const pt = toPx(t, x);
+                if (t === 0) ctx.moveTo(pt.px, pt.py); else ctx.lineTo(pt.px, pt.py);
+            }
+            ctx.stroke();
+
+            // Current Time Indicator Line
+            const currX = 1.0 + 0.80 * currentT - 0.040 * currentT * currentT;
+            const currPt = toPx(currentT, currX);
+
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+            ctx.beginPath(); ctx.moveTo(currPt.px, padT); ctx.lineTo(currPt.px, h - padB); ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(currPt.px, currPt.py, 5, 0, Math.PI*2); ctx.fill();
+            document.getElementById('graph-x-val').innerText = `x = ${currX.toFixed(2)}m`;
+        }
+
+        function drawGraphV(currentT) {
+            const { ctx, w, h } = getCanvasCtx('canvas-graph-v'); if (!ctx) return;
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
+
+            const padL = 35, padB = 25, padR = 15, padT = 15;
+            const gW = w - padL - padR, gH = h - padB - padT;
+
+            const tMax = 15.0, vMin = -0.6, vMax = 1.0;
+            const zeroY = (h - padB) - ((0 - vMin) / (vMax - vMin)) * gH;
+
+            const toPx = (t, v) => ({
+                px: padL + (t / tMax) * gW,
+                py: (h - padB) - ((v - vMin) / (vMax - vMin)) * gH
+            });
+
+            // Axes & Zero Line
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'; ctx.setLineDash([2, 2]);
+            ctx.beginPath(); ctx.moveTo(padL, zeroY); ctx.lineTo(w - padR, zeroY); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Line v(t) = 0.8 - 0.08t
+            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5; ctx.beginPath();
+            const p1 = toPx(0, 0.80); const p2 = toPx(15, -0.40);
+            ctx.moveTo(p1.px, p1.py); ctx.lineTo(p2.px, p2.py); ctx.stroke();
+
+            // Current Time Indicator Line
+            const currV = 0.80 - 0.080 * currentT;
+            const currPt = toPx(currentT, currV);
+
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+            ctx.beginPath(); ctx.moveTo(currPt.px, padT); ctx.lineTo(currPt.px, h - padB); ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(currPt.px, currPt.py, 5, 0, Math.PI*2); ctx.fill();
+            document.getElementById('graph-v-val').innerText = `v = ${currV.toFixed(2)}m/s`;
+        }
+
+        function drawGraphA(currentT) {
+            const { ctx, w, h } = getCanvasCtx('canvas-graph-a'); if (!ctx) return;
+            ctx.clearRect(0,0,w,h);
+            ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
+
+            const padL = 35, padB = 25, padR = 15, padT = 15;
+            const gW = w - padL - padR, gH = h - padB - padT;
+
+            const tMax = 15.0, aMin = -0.15, aMax = 0.05;
+            const zeroY = (h - padB) - ((0 - aMin) / (aMax - aMin)) * gH;
+
+            const toPx = (t, a) => ({
+                px: padL + (t / tMax) * gW,
+                py: (h - padB) - ((a - aMin) / (aMax - aMin)) * gH
+            });
+
+            // Axes & Zero Line
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.lineTo(w - padR, h - padB); ctx.stroke();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'; ctx.setLineDash([2, 2]);
+            ctx.beginPath(); ctx.moveTo(padL, zeroY); ctx.lineTo(w - padR, zeroY); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Constant Line a = -0.08
+            ctx.strokeStyle = '#f43f5e'; ctx.lineWidth = 2.5; ctx.beginPath();
+            const p1 = toPx(0, -0.080); const p2 = toPx(15, -0.080);
+            ctx.moveTo(p1.px, p1.py); ctx.lineTo(p2.px, p2.py); ctx.stroke();
+
+            // Current Time Indicator Line
+            const currPt = toPx(currentT, -0.080);
+
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]);
+            ctx.beginPath(); ctx.moveTo(currPt.px, padT); ctx.lineTo(currPt.px, h - padB); ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.arc(currPt.px, currPt.py, 5, 0, Math.PI*2); ctx.fill();
+            document.getElementById('graph-a-val').innerText = `a = -0.08m/s²`;
+        }
+
         function updateDemo() {
             const t = parseFloat(document.getElementById('ex-t').value);
             document.getElementById('ex-t-val').innerText = t.toFixed(2) + ' s';
             drawScene(t);
+            drawGraphX(t);
+            drawGraphV(t);
+            drawGraphA(t);
         }
 
         // Web Speech API - Complete Voice Controls
@@ -599,116 +863,6 @@
                 playVoiceNarration();
             }
         }
-
-        
-        function drawScene(t) {
-            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
-            ctx.clearRect(0,0,w,h);
-            ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
-
-            // Canvas Layout Dimensions
-            const padL = 90, padB = 90, padR = 60, padT = 70;
-            const gW = w - padL - padR;
-            const gH = h - padB - padT;
-
-            const maxX = 6.0; // max distance 6.0 meters
-            const maxY = 2.0;
-
-            const toPxX = x => padL + (x / maxX) * gW;
-            const toPxY = y => (h - padB) - (y / maxY) * gH;
-
-            const originX = toPxX(0);
-            const originY = toPxY(0);
-
-            // 1. GRID LINES
-            ctx.strokeStyle = 'rgba(51, 65, 85, 0.3)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
-            for (let x = 0; x <= maxX; x += 1) {
-                const px = toPxX(x);
-                ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, h - padB); ctx.stroke();
-            }
-            ctx.setLineDash([]);
-
-            // 2. EIXOS CARTESIANOS X e Y
-            // Eixo X (Horizontal - Azul)
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3;
-            ctx.beginPath(); ctx.moveTo(padL - 10, originY); ctx.lineTo(w - padR + 15, originY); ctx.stroke();
-            drawVectorArrow(ctx, w - padR + 5, originY, 15, 0, '#38bdf8', '');
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
-            ctx.fillText('Eixo X (m)', w - padR + 24, originY + 4);
-
-            // Eixo Y (Vertical - Verde)
-            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 3;
-            ctx.beginPath(); ctx.moveTo(originX, h - padB + 10); ctx.lineTo(originX, padT - 15); ctx.stroke();
-            drawVectorArrow(ctx, originX, padT - 5, 0, -15, '#10b981', '');
-            ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
-            ctx.fillText('Eixo Y (m)', originX, padT - 25);
-
-            // Ticks no Eixo X (0m, 1m, 2m, 3m, 4m, 5m, 6m)
-            for (let x = 0; x <= maxX; x += 1) {
-                const px = toPxX(x);
-                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
-                ctx.beginPath(); ctx.moveTo(px, originY - 5); ctx.lineTo(px, originY + 5); ctx.stroke();
-                ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
-                ctx.fillText(`${x}m`, px, originY + 22);
-            }
-
-            // 3. SETA INDICADORA DA ORIGEM O (0,0 - NAVE ESPACIAL)
-            // Desenhar caixa da Nave Espacial na Origem
-            ctx.fillStyle = '#1e293b'; ctx.fillRect(originX - 35, originY - 25, 35, 50);
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 1.5; ctx.strokeRect(originX - 35, originY - 25, 35, 50);
-            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'center';
-            ctx.fillText('🚀 Nave (x=0)', originX - 17, originY + 4);
-
-            // Calculations for current time t
-            const x_t = 1.0 + 0.80 * t - 0.040 * t * t;
-            const v_t = 0.80 - 0.080 * t;
-            const a_t = -0.080;
-
-            const astroX = toPxX(x_t);
-            const astroY = originY;
-
-            // Cabo de segurança entre Nave e Astronauta
-            ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 2; ctx.setLineDash([2, 2]);
-            ctx.beginPath(); ctx.moveTo(originX, originY); ctx.lineTo(astroX, astroY); ctx.stroke();
-            ctx.setLineDash([]);
-
-            // Astronaut Icon Position
-            ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.arc(astroX, astroY, 15, 0, Math.PI*2); ctx.fill();
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#f8fafc'; ctx.textAlign = 'center';
-            ctx.fillText('👩‍🚀 Astronauta', astroX, astroY - 26);
-
-            // === ZERO OVERLAP VECTORS WITH EXPLICIT Y OFFSETS ===
-            // 1. VETOR POSIÇÃO r(t) (Dourado - Na linha de base y + 35px)
-            drawVectorArrow(ctx, originX, originY + 35, astroX - originX, 0, '#fbbf24', `r = ${x_t.toFixed(2)} m`, true);
-
-            // 2. VETOR DESLOCAMENTO Δx (Azul Ciano - Em y - 30px se t > 0)
-            if (t > 0.1) {
-                const x0_px = toPxX(1.0);
-                drawVectorArrow(ctx, x0_px, originY - 30, astroX - x0_px, 0, '#38bdf8', `Δx = ${(x_t - 1.0).toFixed(2)} m`);
-            }
-
-            // 3. VETOR VELOCIDADE v(t) (Verde - Bem acima em y - 70px)
-            if (Math.abs(v_t) > 0.01) {
-                drawVectorArrow(ctx, astroX, astroY - 70, v_t * 120.0, 0, '#10b981', `v = ${v_t.toFixed(2)} m/s`);
-            }
-
-            // 4. VETOR ACELERAÇÃO a(t) (Vermelho - Bem abaixo em y + 65px)
-            drawVectorArrow(ctx, astroX, astroY + 65, a_t * 1500.0, 0, '#f43f5e', `a = ${a_t.toFixed(3)} m/s²`, true);
-
-            // TOP-LEFT HUD TELEMETRY DASHBOARD
-            ctx.fillStyle = 'rgba(15, 23, 42, 0.94)';
-            ctx.fillRect(18, 18, 270, 115);
-            ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)'; ctx.lineWidth = 1.5;
-            ctx.strokeRect(18, 18, 270, 115);
-
-            ctx.font = 'bold 12px Inter'; ctx.textAlign = 'left';
-            ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(2)} s`, 28, 36);
-            ctx.fillStyle = '#fbbf24'; ctx.fillText(`🟡 Vetor Posição x: ${x_t.toFixed(2)} m`, 28, 54);
-            ctx.fillStyle = '#38bdf8'; ctx.fillText(`🔹 Vetor Deslocamento Δx: ${(x_t - 1.0).toFixed(2)} m`, 28, 72);
-            ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Vetor Velocidade v: ${v_t.toFixed(2)} m/s`, 28, 90);
-            ctx.fillStyle = '#f43f5e'; ctx.fillText(`🔴 Vetor Aceleração a: ${a_t.toFixed(3)} m/s²`, 28, 108);
-        }
-
 
         window.onload = function() {
             document.getElementById('ex-t').value = 0;
