@@ -166,8 +166,8 @@
             top: 10px;
             right: 14px;
             display: flex;
-            gap: 16px;
-            font-size: 0.82rem;
+            gap: 14px;
+            font-size: 0.80rem;
             font-weight: 700;
             background: rgba(0, 0, 0, 0.85);
             padding: 6px 14px;
@@ -340,7 +340,7 @@
         <!-- Right Column: Interactive Stage STARTS AT t = 0.00 s -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 3D HTML5 com Vetores r (Posição), v (Velocidade) e a (Aceleração)</span>
+                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 3D HTML5 com Vetores r (Posição), Δr (Deslocamento), v (Velocidade) e a (Aceleração)</span>
                 <div style="display:flex; gap:8px;">
                     <a href="exemplo-2-6.html" class="nav-step-btn">← Anterior</a>
                     <a href="index.html" class="nav-step-btn primary">🎉 Finalizar Capítulo 2 →</a>
@@ -350,9 +350,10 @@
             <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
-                    <span style="color:#fbbf24;">➔ Posição r (Amarelo)</span>
-                    <span style="color:#10b981;">➔ Velocidade v (Verde)</span>
-                    <span style="color:#f43f5e;">➔ Aceleração a (Vermelho)</span>
+                    <span style="color:#fbbf24;">➔ Posição r</span>
+                    <span style="color:#38bdf8;">➔ Deslocamento Δr</span>
+                    <span style="color:#10b981;">➔ Velocidade v</span>
+                    <span style="color:#f43f5e;">➔ Aceleração a</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
             </div>
