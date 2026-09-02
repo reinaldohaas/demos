@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Geral de Demonstrativos e Simulações Físicas</title>
+    <title>Portal Geral de Demonstrativos e Simulações</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -16,7 +16,6 @@
             --accent-purple: #a855f7;
             --accent-gold: #fbbf24;
             --accent-emerald: #10b981;
-            --accent-rose: #f43f5e;
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
         }
@@ -106,8 +105,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🌐 PORTAL DE DEMONSTRAÇÕES E SIMULAÇÕES FÍSICAS</h1>
-            <p>Catálogo Geral Organizado por Assuntos e Áreas da Física e Matemática</p>
+            <h1>🌐 PORTAL DE DEMONSTRAÇÕES E SIMULAÇÕES</h1>
+            <p>Catálogo Geral de Demonstrações Organizado por Áreas (Física I, Mesoescala, Geofísica, Oscilações)</p>
         </div>
 
         <!-- FÍSICA I - MECÂNICA -->
@@ -120,13 +119,13 @@
                         <div class="card-title">Catálogo Completo de Física I</div>
                         <div class="card-desc">Hub geral com todos os exemplos interativos dos Capítulos 1, 2, 3, 4 e 5.</div>
                     </div>
-                    <div class="card-btn">Abrir Índice Geral de Física I →</div>
+                    <div class="card-btn">Abrir Hub de Física I →</div>
                 </a>
                 <a href="fisica-1/capitulo-1/index.html" class="card">
                     <div>
                         <div class="card-icon">📐</div>
                         <div class="card-title">Capítulo 1: Unidades, Grandezas e Vetores</div>
-                        <div class="card-desc">Exemplos 1.1 ao 1.12 com conversão de unidades, produto escalar e vetorial.</div>
+                        <div class="card-desc">Exemplos 1.1 ao 1.12 com conversão de unidades e produto vetorial.</div>
                     </div>
                     <div class="card-btn">Abrir Capítulo 1 →</div>
                 </a>
@@ -142,26 +141,26 @@
                     <div>
                         <div class="card-icon">🚀</div>
                         <div class="card-title">Capítulo 3: Movimento em 2D e 3D</div>
-                        <div class="card-desc">Exemplos 3.1 ao 3.8 (Projéteis, MCU, Movimento Não-Uniforme e Velocidade Relativa).</div>
+                        <div class="card-desc">Exemplos 3.1 ao 3.8 (Projéteis, MCU, Veículo em Marte e Velocidade Relativa).</div>
                     </div>
                     <div class="card-btn">Abrir Capítulo 3 →</div>
                 </a>
             </div>
         </div>
 
-        <!-- MECÂNICA AVANÇADA & GEOFÍSICA -->
+        <!-- METEOROLOGIA & MESOESCALA -->
         <div class="subject-section">
-            <div class="subject-title">🌐 2. Mecânica Avançada & Geofísica</div>
+            <div class="subject-title">🌪️ 2. Meteorologia & Mesoescala</div>
             <div class="grid">
-                <a href="foucault-pendulum/index.html" class="card">
+                <a href="mesoescala/supercell-splat-spin/index.html" class="card">
                     <div>
-                        <div class="card-icon">🕰️</div>
-                        <div class="card-title">Pêndulo de Foucault</div>
-                        <div class="card-desc">Simulação 3D/2D da rotação da Terra e precessão do plano de oscilação do pêndulo em função da latitude.</div>
+                        <div class="card-icon">🌀</div>
+                        <div class="card-title">Supercélulas & Vorticidade (Mesoescala)</div>
+                        <div class="card-desc">Dinâmica de tempestades severas em mesoescala, correntes ascendentes e cisalhamento.</div>
                     </div>
-                    <div class="card-btn">Abrir Pêndulo de Foucault →</div>
+                    <div class="card-btn">Abrir Supercélulas (Mesoescala) →</div>
                 </a>
-                <a href="rossby-radius/index.html" class="card">
+                <a href="mesoescala/rossby-radius/index.html" class="card">
                     <div>
                         <div class="card-icon">🌊</div>
                         <div class="card-title">Raio de Deformação de Rossby</div>
@@ -172,55 +171,33 @@
             </div>
         </div>
 
-        <!-- OSCILAÇÕES & ONDAS -->
+        <!-- MECÂNICA AVANÇADA, OSCILAÇÕES & GEOMETRIA -->
         <div class="subject-section">
-            <div class="subject-title">🌊 3. Oscilações, Ondas e Sistemas Dinâmicos</div>
+            <div class="subject-title">🌐 3. Mecânica Avançada, Oscilações & Geometria</div>
             <div class="grid">
+                <a href="foucault-pendulum/index.html" class="card">
+                    <div>
+                        <div class="card-icon">🕰️</div>
+                        <div class="card-title">Pêndulo de Foucault</div>
+                        <div class="card-desc">Simulação 3D/2D da rotação da Terra e precessão do plano de oscilação do pêndulo.</div>
+                    </div>
+                    <div class="card-btn">Abrir Pêndulo de Foucault →</div>
+                </a>
                 <a href="harmonic-oscillator/index.html" class="card">
                     <div>
                         <div class="card-icon">〰️</div>
                         <div class="card-title">Oscilador Harmônico Simples e Amortecido</div>
-                        <div class="card-desc">Massa-mola, amortecimento subcrítico, crítico e supercrítico com gráficos de fase e energia.</div>
+                        <div class="card-desc">Massa-mola, amortecimento subcrítico, crítico e supercrítico.</div>
                     </div>
                     <div class="card-btn">Abrir Oscilador Harmônico →</div>
                 </a>
-            </div>
-        </div>
-
-        <!-- METEOROLOGIA & TEMPESTADES -->
-        <div class="subject-section">
-            <div class="subject-title">🌪️ 4. Meteorologia & Tempestades Severas</div>
-            <div class="grid">
-                <a href="supercell-splat-spin/index.html" class="card">
-                    <div>
-                        <div class="card-icon">🌀</div>
-                        <div class="card-title">Supercélulas & Vorticidade</div>
-                        <div class="card-desc">Dinâmica de correntes ascendentes, inclinação de vorticidade horizontal e cisalhamento do vento.</div>
-                    </div>
-                    <div class="card-btn">Abrir Supercélula & Spin →</div>
-                </a>
-            </div>
-        </div>
-
-        <!-- GEOMETRIA & ÁLGEBRA -->
-        <div class="subject-section">
-            <div class="subject-title">📐 5. Geometria Computacional & Matemática</div>
-            <div class="grid">
                 <a href="geometric-quadratic/index.html" class="card">
                     <div>
                         <div class="card-icon">📊</div>
                         <div class="card-title">Geometria Quadrática Interativa</div>
-                        <div class="card-desc">Formas quadráticas, parábolas, superfícies 2D/3D e interpretação geométrica.</div>
+                        <div class="card-desc">Formas quadráticas, parábolas e superfícies 2D/3D.</div>
                     </div>
                     <div class="card-btn">Abrir Geometria Quadrática →</div>
-                </a>
-                <a href="exercicios/index.html" class="card">
-                    <div>
-                        <div class="card-icon">📝</div>
-                        <div class="card-title">Banco de Exercícios Interativos</div>
-                        <div class="card-desc">Conjuntos de problemas práticos com verificação de respostas em tempo real.</div>
-                    </div>
-                    <div class="card-btn">Abrir Exercícios →</div>
                 </a>
             </div>
         </div>
