@@ -2,7 +2,7 @@
   "demos": [
     {
       "id": "fisica1-hub",
-      "title": "Física I • Hub Principal de Demonstrações por Capítulo",
+      "title": "Física I • Hub Principal por Capítulos",
       "category": "Física I • Geral",
       "llm": "Gemini 3.7 Flash",
       "icon": "📚",
@@ -13,23 +13,22 @@
       ],
       "description": "Catálogo completo de demonstrações interativas de Física I divididas por capítulos.",
       "path": "fisica-1/index.html",
-      "date": "2026-08-31"
+      "date": "2026-09-01"
     },
     {
       "id": "exemplo-1-1",
-      "title": "Exemplo 1.1: Vetores e Soma 2D",
-      "category": "Capítulo 1 • Vetores",
+      "title": "Exemplo 1.1: Conversão de Unidades de Velocidade",
+      "category": "Capítulo 1 • Unidades e Vetores",
       "llm": "Gemini 3.7 Flash",
       "icon": "📐",
       "tags": [
-        "Vetores",
-        "Soma Vetorial",
-        "Produto Escalar",
-        "Produto Vetorial"
+        "Conversão",
+        "Velocidade",
+        "Vetores"
       ],
-      "description": "Demonstração de vetores R = A + B, produto escalar e produto vetorial.",
+      "description": "Conversão do recorde mundial de velocidade em terra de 1228,0 km/h para m/s.",
       "path": "fisica-1/capitulo-1/exemplo-1-1.html",
-      "date": "2026-08-31"
+      "date": "2026-09-01"
     },
     {
       "id": "exemplo-2-1",
@@ -43,99 +42,25 @@
         "Reta Secante",
         "Reta Tangente"
       ],
-      "description": "Animação e simulação didática da perseguição do leopardo x(t) = 20 + 5,0 t².",
+      "description": "Animação e simulação didática da perseguição do leopardo x(t) = 20 + 5,0 t² com narração por voz.",
       "path": "fisica-1/capitulo-2/exemplo-2-1.html",
-      "date": "2026-08-31"
+      "date": "2026-09-01"
     },
     {
-      "id": "exemplo-2-2",
-      "title": "Exemplo 2.2: Velocidade Instantânea e Inversão de Sentido",
-      "category": "Capítulo 2 • Movimento Retilíneo",
+      "id": "exemplo-3-1",
+      "title": "Exemplo 3.1: Posição e Velocidade 2D (Veículo em Marte)",
+      "category": "Capítulo 3 • Movimento 2D e 3D",
       "llm": "Gemini 3.7 Flash",
-      "icon": "🏎️",
+      "icon": "🚀",
       "tags": [
-        "Velocidade Instantânea",
-        "Derivada",
-        "Inversão de Sentido"
+        "Marte",
+        "Vetor Posição",
+        "Velocidade 2D",
+        "Aceleração 2D"
       ],
-      "description": "Animação do carro de testes com derivada v(t) = 3,0 - 0,30 t².",
-      "path": "fisica-1/capitulo-2/exemplo-2-2.html",
-      "date": "2026-08-31"
-    },
-    {
-      "id": "exemplo-2-3",
-      "title": "Exemplo 2.3: Aceleração Média e Instantânea",
-      "category": "Capítulo 2 • Movimento Retilíneo",
-      "llm": "Gemini 3.7 Flash",
-      "icon": "📈",
-      "tags": [
-        "Aceleração Média",
-        "Aceleração Instantânea"
-      ],
-      "description": "Simulação gráfica da aceleração instantânea a(t) = 1,0 t m/s².",
-      "path": "fisica-1/capitulo-2/exemplo-2-3.html",
-      "date": "2026-08-31"
-    },
-    {
-      "id": "exemplo-2-4",
-      "title": "Exemplo 2.4: MRUV - Frenagem e Distância de Parada",
-      "category": "Capítulo 2 • Movimento Retilíneo",
-      "llm": "Gemini 3.7 Flash",
-      "icon": "🛑",
-      "tags": [
-        "MRUV",
-        "Frenagem",
-        "Desaceleração Constante",
-        "Equação de Torricelli"
-      ],
-      "description": "Animação da frenagem de um veículo viajando a 54 km/h.",
-      "path": "fisica-1/capitulo-2/exemplo-2-4.html",
-      "date": "2026-08-31"
-    },
-    {
-      "id": "exemplo-2-5",
-      "title": "Exemplo 2.5: Queda Livre do Topo de Edifício de 50 m",
-      "category": "Capítulo 2 • Movimento Retilíneo",
-      "llm": "Gemini 3.7 Flash",
-      "icon": "🏀",
-      "tags": [
-        "Queda Livre",
-        "Lançamento Vertical",
-        "Altura Máxima"
-      ],
-      "description": "Simulação 2D do lançamento vertical do topo de um edifício de 50 m.",
-      "path": "fisica-1/capitulo-2/exemplo-2-5.html",
-      "date": "2026-08-31"
-    },
-    {
-      "id": "exemplo-2-6",
-      "title": "Exemplo 2.6: Integração da Aceleração Variável a(t)",
-      "category": "Capítulo 2 • Movimento Retilíneo",
-      "llm": "Gemini 3.7 Flash",
-      "icon": "∫",
-      "tags": [
-        "Integração",
-        "Aceleração Variável",
-        "Cálculo"
-      ],
-      "description": "Simulação gráfica tripla das equações integradas a(t), v(t) e x(t).",
-      "path": "fisica-1/capitulo-2/exemplo-2-6.html",
-      "date": "2026-08-31"
-    },
-    {
-      "id": "exemplo-2-7",
-      "title": "Exemplo 2.7: Ultrapassagem e Movimento Relativo",
-      "category": "Capítulo 2 • Movimento Retilíneo",
-      "llm": "Gemini 3.7 Flash",
-      "icon": "🚗",
-      "tags": [
-        "Ultrapassagem",
-        "Movimento Relativo",
-        "Cruzamento de Curvas"
-      ],
-      "description": "Animação em duas pistas paralelas mostrando o Carro A ultrapassando o Carro B.",
-      "path": "fisica-1/capitulo-2/exemplo-2-7.html",
-      "date": "2026-08-31"
+      "description": "Robô de exploração em Marte com trajetórias r(t), v(t) e a(t) desempacotados.",
+      "path": "fisica-1/capitulo-3/exemplo-3-1.html",
+      "date": "2026-09-01"
     }
   ]
 }

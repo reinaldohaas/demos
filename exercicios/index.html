@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo Didático dos 7 Exemplos | FSC5101 Física I</title>
+    <title>Banco de Exercícios e Demonstrações | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -44,6 +44,21 @@
             margin-bottom: 8px;
         }
         .header p { color: var(--text-sub); font-size: 1.05rem; }
+
+        .back-nav {
+            max-width: 1200px;
+            margin: 0 auto 20px;
+        }
+        .back-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--bg-card-border);
+            color: var(--accent-cyan);
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
 
         .grid {
             max-width: 1200px;
@@ -86,76 +101,78 @@
     </style>
 </head>
 <body>
+    <div class="back-nav">
+        <a href="../index.html" class="back-btn">← Voltar ao Portal Principal</a>
+    </div>
+
     <div class="header">
         <h1>FSC5101 — Física I (MECÂNICA)</h1>
-        <p>Catálogo Didático dos 7 Exemplos com Apresentação Passo a Passo (Itens a, b, c, d)</p>
+        <p>Catálogo Didático dos Exercícios de Física I (Unificados e sem Duplicatas)</p>
     </div>
 
     <div class="grid">
-
-        <a href="exemplo-1-1.html" class="card">
+        <a href="../fisica-1/capitulo-1/exemplo-1-1.html" class="card">
             <div>
-                <div class="card-tag">Capítulo 1 • Unidades, Grandezas Físicas e Vetores</div>
-                <div class="card-title">Exemplo 1.1: Vetores e Soma Vetorial no Plano 2D</div>
-                <div class="card-desc">Um marinheiro realiza dois deslocamentos sucessivos no plano xy: o vetor A = (3,0i + 4,0j) m e o vetor B = (4,0i - 2,0j) m. Determine a soma vetorial R = A + B, o produto escalar A · B e o produto vetorial A × B.</div>
+                <div class="card-tag">Capítulo 1 • Unidades, Grandezas e Vetores</div>
+                <div class="card-title">Exemplo 1.1: Conversão de Unidades de Velocidade</div>
+                <div class="card-desc">Conversão do recorde mundial de velocidade em terra de 1228,0 km/h para m/s.</div>
             </div>
-            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+            <div class="card-btn">Abrir Demonstração Didática →</div>
         </a>
     
-        <a href="exemplo-2-1.html" class="card">
+        <a href="../fisica-1/capitulo-2/exemplo-2-1.html" class="card">
             <div>
                 <div class="card-tag">Capítulo 2 • Movimento Retilíneo</div>
                 <div class="card-title">Exemplo 2.1: Velocidade Média e Instantânea (O Leopardo)</div>
-                <div class="card-desc">Um leopardo está espreitando a 20 m a leste de um jipe. No instante t = 0, o leopardo começa a perseguir um antílope a 50 m do jipe. O movimento do leopardo é dado por x(t) = 20 + 5,0 t² (m).</div>
+                <div class="card-desc">Um leopardo perseguindo um antílope com x(t) = 20 + 5,0 t² (m) e cálculo de limites Δt → 0.</div>
             </div>
-            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+            <div class="card-btn">Abrir Demonstração Didática →</div>
         </a>
-    
-        <a href="exemplo-2-2.html" class="card">
+
+        <a href="../fisica-1/capitulo-2/exemplo-2-5.html" class="card">
             <div>
                 <div class="card-tag">Capítulo 2 • Movimento Retilíneo</div>
-                <div class="card-title">Exemplo 2.2: Queda Livre e Lançamento Vertical</div>
-                <div class="card-desc">Uma bola é lançada verticalmente para cima a partir do solo (y₀ = 0) com velocidade inicial v₀ = 20,0 m/s sob gravidade g = 9,80 m/s².</div>
+                <div class="card-title">Exemplo 2.5: Queda Livre do Topo de Edifício de 50 m</div>
+                <div class="card-desc">Lançamento vertical de bola do topo de edifício com v₀ = 15,0 m/s sob gravidade g = 9,80 m/s².</div>
             </div>
-            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+            <div class="card-btn">Abrir Demonstração Didática →</div>
         </a>
     
-        <a href="exemplo-3-1.html" class="card">
+        <a href="../fisica-1/capitulo-3/exemplo-3-1.html" class="card">
             <div>
                 <div class="card-tag">Capítulo 3 • Movimento em 2D e 3D</div>
-                <div class="card-title">Exemplo 3.1: Movimento de Projéteis (Lançamento Oblíquo 2D)</div>
-                <div class="card-desc">Um projétil é disparado do solo com velocidade v₀ = 25,0 m/s a um ângulo θ = 45,0° acima da horizontal sob g = 9,80 m/s².</div>
+                <div class="card-title">Exemplo 3.1: Posição e Velocidade 2D (Veículo em Marte)</div>
+                <div class="card-desc">Movimento planetário de robô no plano xy com posições e vetores r(t), v(t) e a(t).</div>
             </div>
-            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+            <div class="card-btn">Abrir Demonstração Didática →</div>
         </a>
     
-        <a href="exemplo-3-2.html" class="card">
+        <a href="../fisica-1/capitulo-3/exemplo-3-3.html" class="card">
             <div>
                 <div class="card-tag">Capítulo 3 • Movimento em 2D e 3D</div>
-                <div class="card-title">Exemplo 3.2: Movimento Circular Uniforme (MCU)</div>
-                <div class="card-desc">Uma partícula descreve uma órbita circular de raio R = 5,0 m com velocidade escalar constante v = 10,0 m/s.</div>
+                <div class="card-title">Exemplo 3.3: Movimento de Projéteis (Chute de Bola)</div>
+                <div class="card-desc">Lançamento de projétil com v₀ = 12,0 m/s a 53,1° acima da horizontal.</div>
             </div>
-            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+            <div class="card-btn">Abrir Demonstração Didática →</div>
         </a>
     
-        <a href="exemplo-4-1.html" class="card">
+        <a href="../fisica-1/capitulo-4/exemplo-4-1.html" class="card">
             <div>
                 <div class="card-tag">Capítulo 4 • Leis de Newton do Movimento</div>
-                <div class="card-title">Exemplo 4.1: Leis de Newton em Plano Inclinado com Atrito</div>
-                <div class="card-desc">Um bloco de massa m = 2,0 kg desliza sobre um plano inclinado de θ = 30,0° com coeficiente de atrito cinético μ_k = 0,20 (g = 9,80 m/s²).</div>
+                <div class="card-title">Exemplo 4.1: Leis de Newton e Força Resultante</div>
+                <div class="card-desc">Análise de forças em superfícies inclinadas e aceleração resultante.</div>
             </div>
-            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+            <div class="card-btn">Abrir Demonstração Didática →</div>
         </a>
     
-        <a href="exemplo-5-1.html" class="card">
+        <a href="../fisica-1/capitulo-5/exemplo-5-1.html" class="card">
             <div>
                 <div class="card-tag">Capítulo 5 • Aplicações e Conservação de Energia</div>
                 <div class="card-title">Exemplo 5.1: Trabalho e Conservação da Energia Mecânica</div>
-                <div class="card-desc">Um bloco de massa m = 3,0 kg é solto do repouso do topo de uma pista sem atrito de altura h = 10,0 m (g = 9,80 m/s²).</div>
+                <div class="card-desc">Conservação da energia mecânica e transformações entre energia potencial e cinética.</div>
             </div>
-            <div class="card-btn">Abrir Apresentação Didática (Itens a, b, c, d) →</div>
+            <div class="card-btn">Abrir Demonstração Didática →</div>
         </a>
-    
     </div>
 </body>
 </html>
