@@ -299,88 +299,72 @@
                 📖 Resolução Didática Passo a Passo
             </div>
             
-        <div class="item-card">
-            <div class="item-badge">Item (A)</div>
-            <div class="item-content">
-                <div class="item-title">Deslocamento no Intervalo entre t₁ = 1,0 s e t₂ = 2,0 s</div>
-                <div class="item-formula"><code>x(t) = 20 m + (5,0 m/s²) t²</code></div>
-                <div class="item-calc">
-                    📌 <b>Passo 1: Identificação das Variáveis Disponíveis:</b><br>
-                    • Posição inicial da tocaia: x₀ = 20 m<br>
-                    • Coeficiente de aceleração: c = 5,0 m/s²<br>
-                    • Instante inicial: t₁ = 1,0 s<br>
-                    • Instante final: t₂ = 2,0 s<br><br>
-                    🔹 <b>Passo 2: Cálculo da Posição Inicial x₁:</b><br>
-                    x₁ = 20 + 5,0(1,0)² = 20 + 5,0 = <b>25,0 m</b>.<br><br>
-                    🔹 <b>Passo 3: Cálculo da Posição Final x₂:</b><br>
-                    x₂ = 20 + 5,0(2,0)² = 20 + 20,0 = <b>40,0 m</b>.<br><br>
-                    🔹 <b>Passo 4: Cálculo do Deslocamento Δx:</b><br>
-                    Δx = x₂ - x₁ = 40,0 m - 25,0 m = <b>15,0 m</b>.
+            <div class="item-card">
+                <div class="item-badge">IDENTIFICAÇÃO DE VARIÁVEIS</div>
+                <div>
+                    <div class="item-title">Variáveis Fornecidas no Enunciado:</div>
+                    <div class="item-calc">
+                        • Posição Inicial: <code>x_0 = 20,0 m</code> (em t = 0 s)<br>
+                        • Coeficiente da Aceleração: <code>C = 5,0 m/s²</code><br>
+                        • Equação da Posição: <code>x(t) = 20,0 + 5,0 t²</code><br>
+                        • Posição do Antílope: <code>x_{\text{antílope}} = 50,0 m</code>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="item-card">
-            <div class="item-badge">Item (B)</div>
-            <div class="item-content">
-                <div class="item-title">Velocidade Média no Intervalo Δt = 1,0 s</div>
-                <div class="item-formula"><code>v_méd-x = Δx / Δt = (x₂ - x₁) / (t₂ - t₁)</code></div>
-                <div class="item-calc">
-                    📌 <b>Passo 1: Identificação das Variáveis Disponíveis:</b><br>
-                    • Deslocamento calculado no Item A: Δx = 15,0 m<br>
-                    • Intervalo de tempo: Δt = t₂ - t₁ = 2,0 s - 1,0 s = 1,0 s<br><br>
-                    🔹 <b>Passo 2: Aplicação da Fórmula da Velocidade Média:</b><br>
-                    v_méd-x = 15,0 m / 1,0 s = <b>15,0 m/s</b>.<br>
-                    <i>(Nota didática: representa a inclinação da reta secante ao gráfico x-t ligando t = 1,0 s a t = 2,0 s).</i>
+            <div class="item-card">
+                <div class="item-badge">ITEM (a)</div>
+                <div>
+                    <div class="item-title">Deslocamento no Intervalo t₁ = 1,0 s até t₂ = 2,0 s</div>
+                    <div class="item-formula"><code>Δx = x(2,0) - x(1,0)</code></div>
+                    <div class="item-calc">
+                        1) Para t₁ = 1,0 s: x₁ = 20,0 + 5,0(1,0)² = 25,0 m.<br>
+                        2) Para t₂ = 2,0 s: x₂ = 20,0 + 5,0(2,0)² = 40,0 m.<br>
+                        3) Deslocamento: Δx = 40,0 - 25,0 = <b>15,0 m</b>.
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="item-card">
-            <div class="item-badge">Item (C)</div>
-            <div class="item-content">
-                <div class="item-title">Velocidade Instantânea em t₁ = 1,0 s via Limites Δt → 0</div>
-                <div class="item-formula"><code>v_x = lim_{Δt → 0} (Δx / Δt)</code></div>
-                <div class="item-calc">
-                    📌 <b>Passo 1: Identificação das Variáveis Disponíveis:</b><br>
-                    • Ponto de avaliação fixo: t₁ = 1,0 s (x₁ = 25,0 m)<br>
-                    • Intervalos de tempo decrescentes: Δt = 0,1 s, Δt = 0,01 s, Δt = 0,001 s<br><br>
-                    🔹 <b>Passo 2: Avaliação para Δt = 0,1 s (t₂ = 1,1 s):</b><br>
-                    x₂ = 20 + 5,0(1,1)² = 26,05 m ⟹ Δx = 1,05 m ⟹ v_méd = 1,05 / 0,1 = <b>10,5 m/s</b>.<br><br>
-                    🔹 <b>Passo 3: Avaliação para Δt = 0,01 s (t₂ = 1,01 s):</b><br>
-                    x₂ = 20 + 5,0(1,01)² = 25,1005 m ⟹ Δx = 0,1005 m ⟹ v_méd = <b>10,05 m/s</b>.<br><br>
-                    🔹 <b>Passo 4: Avaliação para Δt = 0,001 s (t₂ = 1,001 s):</b><br>
-                    x₂ = 25,010005 m ⟹ Δx = 0,010005 m ⟹ v_méd = <b>10,005 m/s</b>.<br><br>
-                    🔹 <b>Conclusão:</b> Conforme Δt tende a zero, a velocidade média se aproxima exatamente de <b>10,0 m/s</b>.
+            <div class="item-card">
+                <div class="item-badge">ITEM (b)</div>
+                <div>
+                    <div class="item-title">Velocidade Média no Intervalo t₁ = 1,0 s até t₂ = 2,0 s</div>
+                    <div class="item-formula"><code>v_méd = Δx / Δt</code></div>
+                    <div class="item-calc">
+                        v_méd = (40,0 - 25,0) / (2,0 - 1,0) = 15,0 / 1,0 = <b>15,0 m/s</b>.
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="item-card">
-            <div class="item-badge">Item (D)</div>
-            <div class="item-content">
-                <div class="item-title">Expressão Geral para a Velocidade Instantânea v_x(t)</div>
-                <div class="item-formula"><code>v_x(t) = dx/dt = d/dt [20 + 5,0 t²] = (10,0 m/s²) t</code></div>
-                <div class="item-calc">
-                    📌 <b>Passo 1: Identificação das Variáveis Disponíveis:</b><br>
-                    • Função posição: x(t) = 20 + 5,0 t²<br>
-                    • Instantes de avaliação solicitados: t = 1,0 s e t = 2,0 s<br><br>
-                    🔹 <b>Passo 2: Derivação da Função Posição:</b><br>
-                    v_x(t) = dx/dt = 2 × (5,0) t¹ = <b>(10,0 m/s²) t</b>.<br><br>
-                    🔹 <b>Passo 3: Cálculo da Velocidade em t = 1,0 s:</b><br>
-                    v_x(1,0) = 10,0 × 1,0 = <b>10,0 m/s</b>.<br><br>
-                    🔹 <b>Passo 4: Cálculo da Velocidade em t = 2,0 s:</b><br>
-                    v_x(2,0) = 10,0 × 2,0 = <b>20,0 m/s</b>.
+            <div class="item-card">
+                <div class="item-badge">ITEM (c)</div>
+                <div>
+                    <div class="item-title">Tempo para o Leopardo Alcançar o Antílope (x = 50,0 m)</div>
+                    <div class="item-formula"><code>x(t) = 50,0 ⟹ 20,0 + 5,0 t² = 50,0</code></div>
+                    <div class="item-calc">
+                        5,0 t² = 30,0 ⟹ t² = 6,0 ⟹ t = √6,0 ≈ <b>2,45 s</b>.<br>
+                        <i>O leopardo alcança o antílope exatamente em t = 2,45 s!</i>
+                    </div>
                 </div>
             </div>
-        </div>
-        
+
+            <div class="item-card">
+                <div class="item-badge">ITEM (d)</div>
+                <div>
+                    <div class="item-title">Velocidade Instantânea ao Alcançar (t = 2,45 s)</div>
+                    <div class="item-formula"><code>v(t) = dx/dt = 10,0 t</code></div>
+                    <div class="item-calc">
+                        v(2,45) = 10,0 × 2,45 = <b>24,5 m/s</b>.
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- Right Column: Interactive Stage STARTS AT t = 0.00 s -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Sistema Cartesiano X-Y com Indicador de Origem O (0,0) e Vetor Deslocamento Horizontal Δx</span>
+                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Alcance em t ≈ 2.45 s (x = 50.0m) | Sistema Cartesiano X-Y</span>
                 <div style="display:flex; gap:8px;">
                     <span class="nav-step-disabled">← Primeiro Exemplo</span>
                     <a href="exemplo-2-2.html" class="nav-step-btn primary">Exemplo 2.2: Aceleração Média →</a>
@@ -391,7 +375,7 @@
             <div class="scene-card">
                 <div class="vector-legend">
                     <span style="color:#fbbf24;">📍 Origem O</span>
-                    <span style="color:#38bdf8;">➔ Deslocamento Horizontal Δx</span>
+                    <span style="color:#38bdf8;">➔ Deslocamento Δx</span>
                     <span style="color:#10b981;">➔ Velocidade v</span>
                     <span style="color:#f43f5e;">➔ Aceleração a</span>
                 </div>
@@ -407,7 +391,7 @@
                     </div>
                     <div class="control-group-inline">
                         <label>Controle do Tempo t: <span id="ex-t-val">0.00 s</span></label>
-                        <input type="range" id="ex-t" min="0" max="2.0" step="0.05" value="0" oninput="updateDemo()">
+                        <input type="range" id="ex-t" min="0" max="3.0" step="0.05" value="0" oninput="updateDemo()">
                     </div>
                 </div>
             </div>
@@ -419,7 +403,7 @@
 
         function togglePlay() {
             const input = document.getElementById('ex-t');
-            const maxVal = parseFloat(input.max || 2.0);
+            const maxVal = parseFloat(input.max || 3.0);
             if (parseFloat(input.value) >= maxVal) {
                 input.value = 0;
             }
@@ -447,7 +431,7 @@
             if (!running) return;
             const input = document.getElementById('ex-t');
             let t = parseFloat(input.value) + parseFloat(input.step || 0.05);
-            const maxVal = parseFloat(input.max || 2.0);
+            const maxVal = parseFloat(input.max || 3.0);
             if (t >= maxVal) {
                 t = maxVal;
                 running = false;
@@ -639,27 +623,21 @@
             const originX = toPxX(0);
             const originY = toPxY(0);
 
-            // 1. GRID LINES (Plane XY)
+            // 1. GRID LINES
             ctx.strokeStyle = 'rgba(51, 65, 85, 0.3)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
             for (let x = 0; x <= maxX; x += 10) {
                 const px = toPxX(x);
                 ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, h - padB); ctx.stroke();
             }
-            for (let y = 0; y <= maxY; y += 10) {
-                const py = toPxY(y);
-                ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(w - padR, py); ctx.stroke();
-            }
             ctx.setLineDash([]);
 
-            // 2. EIXOS CARTESIANOS X e Y (Com Setas e Marcações)
-            // Eixo X (Horizontal - Azul)
+            // 2. EIXOS CARTESIANOS X e Y
             ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3;
             ctx.beginPath(); ctx.moveTo(padL - 10, originY); ctx.lineTo(w - padR + 15, originY); ctx.stroke();
             drawVectorArrow(ctx, w - padR + 5, originY, 15, 0, '#38bdf8', '');
             ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
             ctx.fillText('Eixo X (m)', w - padR + 24, originY + 4);
 
-            // Eixo Y (Vertical - Verde)
             ctx.strokeStyle = '#10b981'; ctx.lineWidth = 3;
             ctx.beginPath(); ctx.moveTo(originX, h - padB + 10); ctx.lineTo(originX, padT - 15); ctx.stroke();
             drawVectorArrow(ctx, originX, padT - 5, 0, -15, '#10b981', '');
@@ -678,13 +656,12 @@
             // 3. SETA INDICADORA DA ORIGEM O (0,0)
             ctx.strokeStyle = '#fbbf24'; ctx.fillStyle = '#fbbf24'; ctx.lineWidth = 2;
             ctx.beginPath(); ctx.arc(originX, originY, 6, 0, Math.PI * 2); ctx.fill();
-            // Seta Apontando para a Origem
             drawVectorArrow(ctx, originX - 35, originY + 35, 25, -25, '#fbbf24', '');
             ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'right';
             ctx.fillText('📍 Origem O (x = 0)', originX - 40, originY + 42);
 
             // Calculations for current time t
-            const x_t = 20.0 + 5.0 * t * t;
+            const x_t = Math.min(60.0, 20.0 + 5.0 * t * t);
             const v_t = 10.0 * t;
             const a_t = 10.0;
 
@@ -693,40 +670,38 @@
             const antX = toPxX(50.0);
             const antY = originY;
 
+            const caught = (x_t >= 50.0);
+
             // Antelope Position at 50m
-            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(antX, antY, 14, 0, Math.PI*2); ctx.fill();
-            ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
-            ctx.fillText('🦌 Antílope (50m)', antX, antY - 26);
+            ctx.fillStyle = caught ? '#ef4444' : '#10b981';
+            ctx.beginPath(); ctx.arc(antX, antY, 14, 0, Math.PI*2); ctx.fill();
+            ctx.font = 'bold 13px Inter'; ctx.fillStyle = caught ? '#ef4444' : '#10b981'; ctx.textAlign = 'center';
+            ctx.fillText(caught ? '💥 Alcance! (50m)' : '🦌 Antílope (50m)', antX, antY - 26);
 
             // Leopard Position at x(t)
             ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(leoX, leoY, 15, 0, Math.PI*2); ctx.fill();
             ctx.font = 'bold 13px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'center';
             ctx.fillText('🐆 Leopardo', leoX, leoY - 26);
 
-            // === VETORES CINEMÁTICOS DE EXERCÍCIO 2.1 ===
-            // 1. VETOR POSIÇÃO r(t) (Horizontal no Eixo X a partir de x=0)
+            // VETORES CINEMÁTICOS
             drawVectorArrow(ctx, originX, originY + 35, leoX - originX, 0, '#fbbf24', `r = ${x_t.toFixed(1)} m`, true);
 
-            // 2. VETOR DESLOCAMENTO HORIZONTAL Δx (Azul Ciano - Entre x(t=1s)=25m e x(t=2s)=40m)
             if (t >= 1.0) {
                 const x1_px = toPxX(25.0);
                 drawVectorArrow(ctx, x1_px, originY - 30, leoX - x1_px, 0, '#38bdf8', `Δx = ${(x_t - 25.0).toFixed(1)} m`);
             }
 
-            // 3. VETOR VELOCIDADE HORIZONTAL v(t) (Verde - Acima do objeto)
             drawVectorArrow(ctx, leoX, leoY - 55, v_t * 4.2, 0, '#10b981', `v = ${v_t.toFixed(1)} m/s`);
-
-            // 4. VETOR ACELERAÇÃO HORIZONTAL a(t) (Vermelho - Abaixo do eixo X)
             drawVectorArrow(ctx, leoX, leoY + 65, a_t * 3.8, 0, '#f43f5e', `a = ${a_t.toFixed(1)} m/s²`, true);
 
             // TOP-LEFT HUD TELEMETRY DASHBOARD
             ctx.fillStyle = 'rgba(15, 23, 42, 0.94)';
-            ctx.fillRect(18, 18, 260, 110);
-            ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)'; ctx.lineWidth = 1.5;
-            ctx.strokeRect(18, 18, 260, 110);
+            ctx.fillRect(18, 18, 270, 115);
+            ctx.strokeStyle = caught ? '#ef4444' : 'rgba(56, 189, 248, 0.5)'; ctx.lineWidth = 1.5;
+            ctx.strokeRect(18, 18, 270, 115);
 
             ctx.font = 'bold 12px Inter'; ctx.textAlign = 'left';
-            ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(2)} s`, 28, 36);
+            ctx.fillStyle = '#38bdf8'; ctx.fillText(`⏱️ Tempo t: ${t.toFixed(2)} s ${caught ? '(ALCANÇOU em t ≈ 2,45s!)' : ''}`, 28, 36);
             ctx.fillStyle = '#fbbf24'; ctx.fillText(`🟡 Vetor Posição x: ${x_t.toFixed(2)} m`, 28, 54);
             ctx.fillStyle = '#38bdf8'; ctx.fillText(`🔹 Vetor Deslocamento Δx: ${(x_t - 20.0).toFixed(2)} m`, 28, 72);
             ctx.fillStyle = '#10b981'; ctx.fillText(`🟢 Vetor Velocidade v: ${v_t.toFixed(1)} m/s`, 28, 90);
