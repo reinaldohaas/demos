@@ -166,10 +166,10 @@
             top: 10px;
             right: 14px;
             display: flex;
-            gap: 14px;
+            gap: 12px;
             font-size: 0.80rem;
             font-weight: 700;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.88);
             padding: 6px 14px;
             border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -342,7 +342,7 @@
         <!-- Right Column: Interactive Stage STARTS AT t = 0.00 s -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 3D HTML5 com Vetores r (Posição), Δr (Deslocamento), v (Velocidade) e a (Aceleração)</span>
+                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Sistema Cartesiano X-Y com Indicador de Origem O (0,0) e Vetor Deslocamento Horizontal Δx</span>
                 <div style="display:flex; gap:8px;">
                     <a href="exemplo-2-4.html" class="nav-step-btn">← Anterior</a>
                     <a href="exemplo-2-6.html" class="nav-step-btn primary">Exemplo 2.6: Integração →</a>
@@ -352,8 +352,8 @@
             <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
-                    <span style="color:#fbbf24;">➔ Posição r</span>
-                    <span style="color:#38bdf8;">➔ Deslocamento Δr</span>
+                    <span style="color:#fbbf24;">📍 Origem O</span>
+                    <span style="color:#38bdf8;">➔ Deslocamento Horizontal Δx</span>
                     <span style="color:#10b981;">➔ Velocidade v</span>
                     <span style="color:#f43f5e;">➔ Aceleração a</span>
                 </div>
@@ -432,52 +432,6 @@
             const ctx = canvas.getContext('2d');
             ctx.scale(dpr, dpr);
             return { canvas, ctx, w, h };
-        }
-
-        function draw3DCartesianBox(ctx, w, h, maxX = 60, maxY = 40, maxZ = 30) {
-            const padL = 70, padB = 70, padR = 40, padT = 60;
-            const gW = w - padL - padR - 60;
-            const gH = h - padB - padT - 40;
-
-            const angleZ = Math.PI / 6;
-            const originX = padL;
-            const originY = h - padB;
-
-            const project3D = (x, y, z) => {
-                const px = originX + (x / maxX) * gW + (z / maxZ) * 40 * Math.cos(angleZ);
-                const py = originY - (y / maxY) * gH - (z / maxZ) * 40 * Math.sin(angleZ);
-                return { x: px, y: py };
-            };
-
-            ctx.strokeStyle = 'rgba(51, 65, 85, 0.4)'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
-            for (let z = 0; z <= maxZ; z += maxZ / 3) {
-                const p1 = project3D(0, 0, z);
-                const p2 = project3D(maxX, 0, z);
-                ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-            }
-            ctx.setLineDash([]);
-
-            const pO = project3D(0, 0, 0);
-            const pX = project3D(maxX, 0, 0);
-            const pY = project3D(0, maxY, 0);
-            const pZ = project3D(0, 0, maxZ);
-
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5;
-            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pX.x, pX.y); ctx.stroke();
-            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
-            ctx.fillText('Eixo X (+m)', pX.x + 8, pX.y + 4);
-
-            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5;
-            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pY.x, pY.y); ctx.stroke();
-            ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
-            ctx.fillText('Eixo Y (+m)', pY.x, pY.y - 10);
-
-            ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2.5;
-            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pZ.x, pZ.y); ctx.stroke();
-            ctx.fillStyle = '#a855f7'; ctx.textAlign = 'right';
-            ctx.fillText('Eixo Z (profundidade)', pZ.x - 8, pZ.y - 4);
-
-            return { project3D, originX, originY };
         }
 
         function drawVectorArrow(ctx, x, y, dx, dy, color, label, labelBelow = false) {
