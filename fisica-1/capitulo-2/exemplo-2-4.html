@@ -35,7 +35,7 @@
             padding: 16px;
         }
         .top-nav {
-            max-width: 1350px;
+            max-width: 1400px;
             margin: 0 auto 14px;
             display: flex;
             justify-content: space-between;
@@ -98,7 +98,7 @@
         }
 
         .presentation-container {
-            max-width: 1350px;
+            max-width: 1400px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: 480px 1fr;
@@ -151,7 +151,7 @@
             border: 1px solid var(--bg-card-border);
             border-radius: 10px;
             padding: 8px;
-            height: 420px;
+            height: 460px;
             position: relative;
             overflow: hidden;
         }
@@ -249,7 +249,6 @@
         <div class="statement-title">
             <h2>Exemplo 2.4: Movimento com Aceleração Constante</h2>
             <p>Um motorista trafega em um sedan a 54 km/h (15,0 m/s). Ao avistar um obstáculo, ele aciona os freios produzindo uma desaceleração constante de -2,0 m/s². Determine o tempo de parada t e a distância de parada Δx.</p>
-            
             <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
                 <div style="display: flex; gap: 6px; align-items: center;">
                     <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
@@ -275,7 +274,6 @@
                 
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
-
         </div>
         <div class="formula-badge">v² = v₀² + 2 a Δx</div>
     </div>
@@ -328,7 +326,7 @@
         <!-- Right Column: Interactive Stage STARTS AT t = 0.00 s -->
         <div class="interactive-stage">
             <div class="scene-nav-bar">
-                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 2D Silenciosa com Telemetria HUD</span>
+                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-cyan);">📺 Animação 3D HTML5 com Caixa Isométrica e Eixos Cartesianos X, Y, Z</span>
                 <div style="display:flex; gap:8px;">
                     <a href="exemplo-2-3.html" class="nav-step-btn">← Anterior</a>
                     <a href="exemplo-2-5.html" class="nav-step-btn primary">Exemplo 2.5: Queda Livre →</a>
@@ -361,15 +359,14 @@
 
         function togglePlay() {
             const input = document.getElementById('ex-t');
-            if (input) {
-                const maxVal = parseFloat(input.max || 4.0);
-                if (parseFloat(input.value) >= maxVal) {
-                    input.value = 0;
-                }
+            const maxVal = parseFloat(input.max || 7.5);
+            if (parseFloat(input.value) >= maxVal) {
+                input.value = 0;
             }
+
             running = !running;
-            const btn = document.getElementById('btn-play');
-            if (btn) btn.innerText = running ? '⏸ Pausar' : '▶ Simular Animação';
+            document.getElementById('btn-play').innerText = running ? '⏸ Pausar' : '▶ Simular Animação';
+            
             if (running && !timer) {
                 timer = setInterval(loop, 30);
             } else if (!running && timer) {
@@ -414,6 +411,69 @@
             ctx.scale(dpr, dpr);
             return { canvas, ctx, w, h };
         }
+
+        
+        function draw3DCartesianBox(ctx, w, h, maxX = 60, maxY = 40, maxZ = 30) {
+            const padL = 70, padB = 70, padR = 40, padT = 60;
+            const gW = w - padL - padR - 60;
+            const gH = h - padB - padT - 40;
+
+            // Perspective projection constants
+            const angleZ = Math.PI / 6; // 30 degrees
+            const scaleZ = 1.2;
+
+            const originX = padL;
+            const originY = h - padB;
+
+            const project3D = (x, y, z) => {
+                const px = originX + (x / maxX) * gW + (z / maxZ) * 40 * Math.cos(angleZ);
+                const py = originY - (y / maxY) * gH - (z / maxZ) * 40 * Math.sin(angleZ);
+                return { x: px, y: py };
+            };
+
+            // 1. Draw Back Wireframe Faces of 3D Box
+            ctx.strokeStyle = 'rgba(51, 65, 85, 0.4)'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+            
+            // Floor Grid (XZ plane)
+            for (let z = 0; z <= maxZ; z += maxZ / 3) {
+                const p1 = project3D(0, 0, z);
+                const p2 = project3D(maxX, 0, z);
+                ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+            }
+            for (let x = 0; x <= maxX; x += maxX / 4) {
+                const p1 = project3D(x, 0, 0);
+                const p2 = project3D(x, 0, maxZ);
+                ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+            }
+            ctx.setLineDash([]);
+
+            // 2. Draw Main Axis Lines (X in Blue, Y in Green, Z in Purple)
+            const pO = project3D(0, 0, 0);
+            const pX = project3D(maxX, 0, 0);
+            const pY = project3D(0, maxY, 0);
+            const pZ = project3D(0, 0, maxZ);
+
+            // Eixo X (Blue)
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pX.x, pX.y); ctx.stroke();
+            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
+            ctx.fillText('Eixo X (+m)', pX.x + 8, pX.y + 4);
+
+            // Eixo Y (Green)
+            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pY.x, pY.y); ctx.stroke();
+            ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
+            ctx.fillText('Eixo Y (+m)', pY.x, pY.y - 10);
+
+            // Eixo Z (Purple / Depth)
+            ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pZ.x, pZ.y); ctx.stroke();
+            ctx.fillStyle = '#a855f7'; ctx.textAlign = 'right';
+            ctx.fillText('Eixo Z (profundidade)', pZ.x - 8, pZ.y - 4);
+
+            return { project3D, originX, originY };
+        }
+
 
         function drawVectorArrow(ctx, x, y, dx, dy, color, label, labelBelow = false) {
             const len = Math.hypot(dx, dy);
