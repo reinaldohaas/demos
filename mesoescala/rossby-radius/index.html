@@ -727,7 +727,7 @@
             latDeg: -45,         // Latitude
             pertAmpM: 100,       // Perturbação de elevação fixa em +100 m
             pertShape: 'dome',
-            solverMode: 'standard', // 'standard' ou 'waterwave' (MATLAB Cleve Moler)
+            solverMode: 'waterwave', // 'waterwave' (Lax-Wendroff 2-Step em JS puro) ou 'standard'
             kFriction: 2.0e-5,   // Coeficiente k de atrito linear Rayleigh (1/s)
             simTimeSeconds: 0,   // Tempo físico acumulado (s)
             maxTimeHours: 48,    // Tempo limite finito de integração (horas)
@@ -1060,10 +1060,40 @@
             }
         }
 
-        // INJETAR PERTURBAÇÃO GAUSSIANA DE 100M
+        // INJETAR PERTURBAÇÃO GAUSSIANA DE 100M (COMPATÍVEL COM JS LAX-WENDROFF)
         function injectPerturbation(cx = NX / 2, cy = NY / 2) {
             const rCells = (state.pertRadiusKm * 1000) / dx;
             const amp = state.pertAmpM;
+
+            if (state.solverMode === 'waterwave') {
+                const wwCx = Math.floor((cx / NX) * N_WW) + 1;
+                const wwCy = Math.floor((cy / NY) * N_WW) + 1;
+                const rCellsWW = Math.max(2, Math.floor((state.pertRadiusKm / domainKm) * N_WW));
+                const hAmp = (amp / 100.0) * 0.9;
+
+                for (let j = 1; j <= N_WW; j++) {
+                    for (let i = 1; i <= N_WW; i++) {
+                        const idx = j * G_WW + i;
+                        const di = i - wwCx;
+                        const dj = j - wwCy;
+                        const distSq = di * di + dj * dj;
+
+                        if (state.pertShape === 'dome') {
+                            H_ww[idx] += hAmp * Math.exp(-distSq / (2 * (rCellsWW * 0.45) ** 2));
+                        } else if (state.pertShape === 'depression') {
+                            H_ww[idx] -= Math.abs(hAmp) * Math.exp(-distSq / (2 * (rCellsWW * 0.45) ** 2));
+                        } else if (state.pertShape === 'front') {
+                            const frontProfile = Math.tanh((i - wwCx) / (rCellsWW * 0.4));
+                            H_ww[idx] += hAmp * 0.8 * frontProfile;
+                        } else if (state.pertShape === 'dipole') {
+                            const dPlus = (i - (wwCx - rCellsWW * 0.4)) ** 2 + (j - wwCy) ** 2;
+                            const dMinus = (i - (wwCx + rCellsWW * 0.4)) ** 2 + (j - wwCy) ** 2;
+                            H_ww[idx] += hAmp * (Math.exp(-dPlus / (2 * (rCellsWW * 0.35) ** 2)) - Math.exp(-dMinus / (2 * (rCellsWW * 0.35) ** 2)));
+                        }
+                    }
+                }
+                return;
+            }
 
             for (let j = 0; j < NY; j++) {
                 for (let i = 0; i < NX; i++) {
@@ -1749,8 +1779,12 @@
         window.onload = function() {
             init3D();
             setCameraView('3d');
+            if (state.solverMode === 'waterwave') {
+                initWaterWave();
+            } else {
+                injectPerturbation();
+            }
             updateMetricsUI();
-            injectPerturbation();
             initMathRendering();
             requestAnimationFrame(animate);
             if (window.renderMathInElement) {
