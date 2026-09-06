@@ -16,67 +16,66 @@
       "date": "2026-09-01"
     },
     {
-      "id": "exemplo-1-1",
-      "title": "Exemplo 1.1: Conversão de Unidades de Velocidade",
-      "category": "Capítulo 1 • Unidades e Vetores",
-      "llm": "Gemini 3.7 Flash",
-      "icon": "📐",
-      "tags": [
-        "Conversão",
-        "Velocidade",
-        "Vetores"
-      ],
-      "description": "Conversão do recorde mundial de velocidade em terra de 1228,0 km/h para m/s.",
-      "path": "fisica-1/capitulo-1/exemplo-1-1.html",
-      "date": "2026-09-01"
-    },
-    {
-      "id": "exemplo-2-1",
-      "title": "Exemplo 2.1: O Leopardo (Velocidade Média e Instantânea)",
-      "category": "Capítulo 2 • Movimento Retilíneo",
-      "llm": "Gemini 3.7 Flash",
-      "icon": "🐆",
-      "tags": [
-        "O Leopardo",
-        "Velocidade Média",
-        "Reta Secante",
-        "Reta Tangente"
-      ],
-      "description": "Animação e simulação didática da perseguição do leopardo x(t) = 20 + 5,0 t² com narração por voz.",
-      "path": "fisica-1/capitulo-2/exemplo-2-1.html",
-      "date": "2026-09-01"
-    },
-    {
-      "id": "exemplo-3-1",
-      "title": "Exemplo 3.1: Posição e Velocidade 2D (Veículo em Marte)",
-      "category": "Capítulo 3 • Movimento 2D e 3D",
-      "llm": "Gemini 3.7 Flash",
-      "icon": "🚀",
-      "tags": [
-        "Marte",
-        "Vetor Posição",
-        "Velocidade 2D",
-        "Aceleração 2D"
-      ],
-      "description": "Robô de exploração em Marte com trajetórias r(t), v(t) e a(t) desempacotados.",
-      "path": "fisica-1/capitulo-3/exemplo-3-1.html",
-      "date": "2026-09-01"
-    },
-    {
       "id": "rossby-radius-3d",
       "title": "Ajuste Geostrófico de Rossby 3D & Ondas de Gravidade",
-      "category": "Geofísica & Fluidos em Rotação",
+      "category": "Meteorologia & Mesoescala",
       "llm": "Gemini 3.7 Flash",
       "icon": "🌊",
       "tags": [
         "Ajuste Geostrófico",
         "Raio de Rossby",
         "Ondas de Gravidade",
-        "COMET Program 3D"
+        "Superfície 3D"
       ],
-      "description": "Simulação 3D WebGL do ajuste geostrófico de Rossby, radiação de ondas de Poincaré e comparação COMET (L >> 2πLR vs L << 2πLR).",
+      "description": "Simulação 3D WebGL das equações de águas rasas, perturbação Gaussiana de 100m, camada de esponja e comparativo COMET.",
       "path": "mesoescala/rossby-radius/index.html",
       "date": "2026-09-06"
+    },
+    {
+      "id": "foucault-pendulum",
+      "title": "Pêndulo de Foucault 3D & Efeito de Coriolis",
+      "category": "Meteorologia & Mesoescala",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "🌍",
+      "tags": [
+        "Foucault",
+        "Coriolis",
+        "Rotação da Terra",
+        "3D"
+      ],
+      "description": "Demonstração 3D da precessão do plano do pêndulo de Foucault e período inercial em função da latitude.",
+      "path": "mesoescala/foucault-pendulum/index.html",
+      "date": "2026-09-01"
+    },
+    {
+      "id": "ohs-waves",
+      "title": "Oscilador Harmônico Simples (OHS) & Ondas de Superfície",
+      "category": "Meteorologia & Mesoescala",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "〰️",
+      "tags": [
+        "OHS",
+        "Oscilações",
+        "Ondas de Superfície"
+      ],
+      "description": "Simulação do oscilador harmônico simples e propagação de ondas em fluidos.",
+      "path": "mesoescala/ohs/index.html",
+      "date": "2026-09-01"
+    },
+    {
+      "id": "supercell-splat-spin",
+      "title": "Supercélula, Vorticitate & Splat Spin",
+      "category": "Meteorologia & Mesoescala",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "🌪️",
+      "tags": [
+        "Supercélulas",
+        "Tempestades",
+        "Vorticidade"
+      ],
+      "description": "Dinâmica em mesoescala de tempestades severas, correntes ascendentes e vorticidade.",
+      "path": "mesoescala/supercell-splat-spin/index.html",
+      "date": "2026-09-01"
     }
   ]
 }
