@@ -1237,10 +1237,13 @@
                     const H1 = H_ww[idx1], U1 = U_ww[idx1], V1 = V_ww[idx1];
                     const H0 = H_ww[idx0], U0 = U_ww[idx0], V0 = V_ww[idx0];
 
-                    const fluxU1 = (U1 * U1) / H1 + 0.5 * g_ww * H1 * H1;
-                    const fluxU0 = (U0 * U0) / H0 + 0.5 * g_ww * H0 * H0;
-                    const fluxV1 = (U1 * V1) / H1;
-                    const fluxV0 = (U0 * V0) / H0;
+                    const H1_s = Math.max(0.01, H1);
+                    const H0_s = Math.max(0.01, H0);
+
+                    const fluxU1 = (U1 * U1) / H1_s + 0.5 * g_ww * H1 * H1;
+                    const fluxU0 = (U0 * U0) / H0_s + 0.5 * g_ww * H0 * H0;
+                    const fluxV1 = (U1 * V1) / H1_s;
+                    const fluxV0 = (U0 * V0) / H0_s;
 
                     const hx_idx = i * (N_WW + 1) + j;
                     Hx_ww[hx_idx] = 0.5 * (H1 + H0) - (dt / (2 * dx)) * (U1 - U0);
@@ -1261,10 +1264,13 @@
                     const H1 = H_ww[idx1], U1 = U_ww[idx1], V1 = V_ww[idx1];
                     const H0 = H_ww[idx0], U0 = U_ww[idx0], V0 = V_ww[idx0];
 
-                    const fluxU1 = (V1 * U1) / H1;
-                    const fluxU0 = (V0 * U0) / H0;
-                    const fluxV1 = (V1 * V1) / H1 + 0.5 * g_ww * H1 * H1;
-                    const fluxV0 = (V0 * V0) / H0 + 0.5 * g_ww * H0 * H0;
+                    const H1_s = Math.max(0.01, H1);
+                    const H0_s = Math.max(0.01, H0);
+
+                    const fluxU1 = (V1 * U1) / H1_s;
+                    const fluxU0 = (V0 * U0) / H0_s;
+                    const fluxV1 = (V1 * V1) / H1_s + 0.5 * g_ww * H1 * H1;
+                    const fluxV0 = (V0 * V0) / H0_s + 0.5 * g_ww * H0 * H0;
 
                     const hy_idx = i * (N_WW + 1) + j;
                     Hy_ww[hy_idx] = 0.5 * (H1 + H0) - (dt / (2 * dy)) * (V1 - V0);
@@ -1292,15 +1298,20 @@
                     const Vy1 = Vy_ww[hy_1], Hy1 = Hy_ww[hy_1], Uy1 = Uy_ww[hy_1];
                     const Vy0 = Vy_ww[hy_0], Hy0 = Hy_ww[hy_0], Uy0 = Uy_ww[hy_0];
 
-                    const fluxUx1 = (Ux1 * Ux1) / Hx1 + 0.5 * g_ww * Hx1 * Hx1;
-                    const fluxUx0 = (Ux0 * Ux0) / Hx0 + 0.5 * g_ww * Hx0 * Hx0;
-                    const fluxUy1 = (Vy1 * Uy1) / Hy1;
-                    const fluxUy0 = (Vy0 * Uy0) / Hy0;
+                    const Hx1_s = Math.max(0.01, Hx1);
+                    const Hx0_s = Math.max(0.01, Hx0);
+                    const Hy1_s = Math.max(0.01, Hy1);
+                    const Hy0_s = Math.max(0.01, Hy0);
 
-                    const fluxVx1 = (Ux1 * Vx1) / Hx1;
-                    const fluxVx0 = (Ux0 * Vx0) / Hx0;
-                    const fluxVy1 = (Vy1 * Vy1) / Hy1 + 0.5 * g_ww * Hy1 * Hy1;
-                    const fluxVy0 = (Vy0 * Vy0) / Hy0 + 0.5 * g_ww * Hy0 * Hy0;
+                    const fluxUx1 = (Ux1 * Ux1) / Hx1_s + 0.5 * g_ww * Hx1 * Hx1;
+                    const fluxUx0 = (Ux0 * Ux0) / Hx0_s + 0.5 * g_ww * Hx0 * Hx0;
+                    const fluxUy1 = (Vy1 * Uy1) / Hy1_s;
+                    const fluxUy0 = (Vy0 * Uy0) / Hy0_s;
+
+                    const fluxVx1 = (Ux1 * Vx1) / Hx1_s;
+                    const fluxVx0 = (Ux0 * Vx0) / Hx0_s;
+                    const fluxVy1 = (Vy1 * Vy1) / Hy1_s + 0.5 * g_ww * Hy1 * Hy1;
+                    const fluxVy0 = (Vy0 * Vy0) / Hy0_s + 0.5 * g_ww * Hy0 * Hy0;
 
                     H_ww[idx] -= (dt / dx) * (Ux1 - Ux0) + (dt / dy) * (Vy1 - Vy0);
                     U_ww[idx] -= (dt / dx) * (fluxUx1 - fluxUx0) + (dt / dy) * (fluxUy1 - fluxUy0);
@@ -1340,7 +1351,7 @@
             }
 
             state.tvNorm = Math.sqrt(sumCsq);
-            state.simTimeSeconds += dt * 3600;
+            state.simTimeSeconds += 1.0;
 
             if (hasNaN) {
                 initWaterWave();
