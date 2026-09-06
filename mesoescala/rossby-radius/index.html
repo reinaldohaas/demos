@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajuste Geostrófico de Rossby 3D — Altura Equivalente (1–4 km) & Perturbação de 100 m</title>
+    <title>Ajuste Geostrófico 3D — Domínio Expandido (10.000 km) & Camada de Esponja Absorvente</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -427,8 +427,8 @@
 <body>
     <header>
         <div class="title-group">
-            <h1>Ajuste Geostrófico de Rossby 3D — Altura Equivalente (1–4 km)</h1>
-            <p>Perturbação Fixa de +100 m & Controle do Raio de Decaimento (L vs R_d) em Equações de Águas Rasas</p>
+            <h1>Ajuste Geostrófico 3D — Domínio Expandido (10.000 km) & Esponja Absorvente</h1>
+            <p>Perturbação Fixa de +100 m, Camada Absorvente sem Reflexão de Borda & Raio de Rossby ($R_d$)</p>
         </div>
 
         <div class="nav-links">
@@ -460,7 +460,7 @@
                     <span>Raio de Decaimento (L)</span>
                     <span class="control-val" id="val-radius">500 km (L &lt; Rd)</span>
                 </div>
-                <input type="range" id="slider-radius" min="100" max="2500" step="50" value="500">
+                <input type="range" id="slider-radius" min="100" max="3000" step="50" value="500">
             </div>
 
             <!-- Latitude (-90 a +90) -->
@@ -509,12 +509,13 @@
             </div>
 
             <div class="formula-box">
-                <strong>Equações de Águas Rasas & Raio de Rossby:</strong>
+                <strong>Domínio Expandido & Camada de Esponja:</strong>
                 <span style="font-family:monospace; color:var(--accent-gold); display:block; margin-top:2px;">
-                    R_d = \sqrt{g H_{eq}} / |f| = c / (2\Omega |\sin\phi|)
+                    D = 10.000 	ext{ km} \quad | \quad 	ext{Esponja: } \sigma(r) = \sigma_{max} (d_{border} - d)^2
                 </span>
                 <span style="display:block; margin-top:4px; color:var(--text-muted); font-size:0.75rem;">
-                    • <b>Demonstração de Escala:</b> Para a <b>mesma perturbação de +100m</b>, ao reduzir a largura $L < R_d$, quase toda a energia escapa como <b>ondas de gravidade</b>. Se $L > R_d$, a massa de +100m é mantida!
+                    • <b>Domínio Amplo:</b> Permite a propagação livre das ondas de gravidade por milhares de km.<br>
+                    • <b>Sem Reflexão:</b> A camada de esponja nas 20 células externas absorve as ondas sem refletir!
                 </span>
             </div>
         </div>
@@ -523,13 +524,12 @@
         <div class="viewport-container">
             <div class="viewport-header-overlay">
                 <div class="overlay-badge">
-                    <span id="badge-regime">⚡ H_eq = 2.5 km | R_d = 1515 km (Pequena Escala L &lt; Rd)</span>
+                    <span id="badge-regime">⚡ Domínio: 10.000 km | H_eq = 2.5 km | R_d = 1515 km (L &lt; Rd)</span>
                 </div>
                 <div class="view-options">
                     <button class="view-toggle-btn active" id="btn-mode-3d" onclick="setCameraView('3d')">🌐 3D Perspectiva</button>
                     <button class="view-toggle-btn" id="btn-mode-top" onclick="setCameraView('top')">📐 Visão de Topo</button>
-                    <button class="view-toggle-btn active" id="btn-view-vectors">Vetores Vento</button>
-                    <button class="view-toggle-btn active" id="btn-view-particles">Partículas</button>
+                    <button class="view-toggle-btn active" id="btn-view-sponge">🧽 Esponja Damping</button>
                     <button class="view-toggle-btn active" id="btn-view-circles">Escalas L vs Rd</button>
                 </div>
             </div>
@@ -549,7 +549,8 @@
                     <span style="color:#38bdf8;">Decaimento Gaussiano (L)</span>
                 </div>
                 <div class="legend-item">
-                    <span style="color:#34d399;" id="legend-hemisphere">⟲ Rotação Anti-Horária no Sul</span>
+                    <span class="legend-dot" style="background:rgba(239,68,68,0.5); border:1px solid #ef4444;"></span>
+                    <span style="color:#ef4444;">Camada de Esponja Absorvente</span>
                 </div>
             </div>
 
@@ -566,7 +567,7 @@
         <!-- PAINEL DIREITO: DIAGNÓSTICO DA PERTURBAÇÃO DE 100M, CORTE 1D E COMET -->
         <div class="panel sidebar-right">
             <div class="panel-header">
-                <h2>📊 Diagnóstico da Perturbação de +100 m</h2>
+                <h2>📊 Diagnóstico da Perturbação (+100 m)</h2>
             </div>
 
             <div class="metrics-grid">
@@ -584,13 +585,13 @@
                 </div>
                 <div class="metric-card">
                     <div class="metric-title">Ondas de Gravidade</div>
-                    <div class="metric-val" id="metric-waves" style="color:var(--accent-red);">Intensas (L &lt; Rd)</div>
+                    <div class="metric-val" id="metric-waves" style="color:var(--accent-red);">Radiação Livre</div>
                 </div>
             </div>
 
             <!-- CORTE TRANSVERSAL 1D DA ELEVAÇÃO E VENTO PERPENDICULAR (FIGURAS 1-3) -->
             <div class="panel-header">
-                <h2>📈 Corte Transversal 1D (Perfil de +100 m & Ventos)</h2>
+                <h2>📈 Corte Transversal 1D (Perfil de 10.000 km)</h2>
             </div>
             <div class="graph-box" style="height: 160px;">
                 <canvas id="graph-cs-canvas"></canvas>
@@ -603,15 +604,15 @@
             <div class="comet-box">
                 <div class="comet-card">
                     <h4>Large Scale ($L \gg 2\pi L_R$)</h4>
-                    <div class="comet-item">• Perturbação de +100m mantida</div>
+                    <div class="comet-item">• Domo de +100m mantido</div>
                     <div class="comet-item">• Vento ajusta ao gradiente</div>
                     <div class="comet-item">• Poucas ondas de gravidade</div>
                 </div>
                 <div class="comet-card">
                     <h4>Small Scale ($L \ll 2\pi L_R$)</h4>
-                    <div class="comet-item">• Domo de 100m achata</div>
+                    <div class="comet-item">• Domo de +100m achata</div>
                     <div class="comet-item">• Massa ajusta ao vento</div>
-                    <div class="comet-item">• **Radiação massiva de ondas**</div>
+                    <div class="comet-item">• **Radiação livre sem reflexão**</div>
                 </div>
             </div>
 
@@ -641,14 +642,14 @@
         </div>
     </div>
 
-    <!-- SOLVER NUMÉRICO DAS EQUAÇÕES DE ÁGUAS RASAS EM GRADE Arakawa C-grid / FORWARD-BACKWARD -->
+    <!-- SOLVER NUMÉRICO DE ÁGUAS RASAS EM DOMÍNIO DE 10.000 KM COM CAMADA DE ESPONJA RAYLEIGH -->
     <script>
         const g = 9.81;
         const Omega = 7.2921e-5;
 
-        const NX = 100;
-        const NY = 100;
-        const domainKm = 4000; // Domínio amplo de 4000 km x 4000 km
+        const NX = 120;
+        const NY = 120;
+        const domainKm = 10000; // Domínio expandido compatível de 10.000 km x 10.000 km
         const dx = (domainKm * 1000) / NX;
         const dy = (domainKm * 1000) / NY;
 
@@ -656,16 +657,19 @@
         let u = new Float32Array(NX * NY);
         let v = new Float32Array(NX * NY);
 
-        // Partículas traçadoras
-        const NUM_PARTICLES = 400;
-        const particles = [];
-        for (let i = 0; i < NUM_PARTICLES; i++) {
-            particles.push({
-                x: Math.random() * NX,
-                y: Math.random() * NY,
-                age: Math.random() * 100,
-                maxAge: 80 + Math.random() * 60
-            });
+        // Pre-calcular máscara da Camada de Esponja Absorvente (outer 22 cells)
+        const spongeWidth = 22;
+        const spongeMask = new Float32Array(NX * NY);
+        for (let j = 0; j < NY; j++) {
+            for (let i = 0; i < NX; i++) {
+                const distI = Math.min(i, NX - 1 - i);
+                const distJ = Math.min(j, NY - 1 - j);
+                const minDist = Math.min(distI, distJ);
+                if (minDist < spongeWidth) {
+                    const frac = (spongeWidth - minDist) / spongeWidth;
+                    spongeMask[j * NX + i] = 0.09 * (frac * frac); // Amortecimento quadrático sem reflexão
+                }
+            }
         }
 
         const state = {
@@ -674,8 +678,7 @@
             latDeg: -45,       // Latitude
             pertAmpM: 100,     // Perturbação de elevação fixa em +100 m
             pertShape: 'dome',
-            viewVectors: true,
-            viewParticles: true,
+            viewSponge: true,
             viewCircles: true,
             stepsPerFrame: 4
         };
@@ -703,8 +706,7 @@
         const btnPresetSouth = document.getElementById('btn-preset-south');
         const btnPresetMid = document.getElementById('btn-preset-mid');
 
-        const btnViewVectors = document.getElementById('btn-view-vectors');
-        const btnViewParticles = document.getElementById('btn-view-particles');
+        const btnViewSponge = document.getElementById('btn-view-sponge');
         const btnViewCircles = document.getElementById('btn-view-circles');
 
         const metricRd = document.getElementById('metric-rd');
@@ -721,8 +723,8 @@
         const latCanvas = document.getElementById('graph-lat-canvas');
         const latCtx = latCanvas.getContext('2d');
 
-        // --- ENGINE PERSPECTIVA 3D WEBGL (THREE.JS) ---
-        let scene, camera, renderer, controls, surfaceMesh;
+        // --- THREE.JS 3D PERSPECTIVE ENGINE ---
+        let scene, camera, renderer, controls, surfaceMesh, spongeBorderMesh;
         const webglWrap = document.getElementById('webgl-canvas-wrap');
 
         function init3D() {
@@ -730,7 +732,7 @@
             scene.background = new THREE.Color(0x020612);
 
             camera = new THREE.PerspectiveCamera(45, webglWrap.clientWidth / webglWrap.clientHeight, 0.1, 1000);
-            camera.position.set(0, 52, 68);
+            camera.position.set(0, 55, 75);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(webglWrap.clientWidth, webglWrap.clientHeight);
@@ -749,8 +751,8 @@
             dirLight.position.set(30, 60, 30);
             scene.add(dirLight);
 
-            // Criar Malha 3D da Superfície Dinâmica (100x100)
-            const geom = new THREE.PlaneGeometry(60, 60, NX - 1, NY - 1);
+            // Criar Malha 3D da Superfície Dinâmica (120x120)
+            const geom = new THREE.PlaneGeometry(65, 65, NX - 1, NY - 1);
             geom.rotateX(-Math.PI / 2);
 
             const mat = new THREE.MeshPhongMaterial({
@@ -764,7 +766,20 @@
             surfaceMesh = new THREE.Mesh(geom, mat);
             scene.add(surfaceMesh);
 
-            const gridHelper = new THREE.GridHelper(60, 12, 0x38bdf8, 0x1e293b);
+            // Moldura da Camada de Esponja Absorvente 3D
+            const spongeGeom = new THREE.RingGeometry(24, 32.5, 4);
+            spongeGeom.rotateX(-Math.PI / 2);
+            const spongeMat = new THREE.MeshBasicMaterial({
+                color: 0xef4444,
+                transparent: true,
+                opacity: 0.15,
+                side: THREE.DoubleSide
+            });
+            spongeBorderMesh = new THREE.Mesh(spongeGeom, spongeMat);
+            spongeBorderMesh.position.y = -0.05;
+            scene.add(spongeBorderMesh);
+
+            const gridHelper = new THREE.GridHelper(65, 12, 0x38bdf8, 0x1e293b);
             gridHelper.position.y = -0.1;
             scene.add(gridHelper);
 
@@ -811,6 +826,10 @@
             surfaceMesh.geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
             surfaceMesh.geometry.attributes.position.needsUpdate = true;
             surfaceMesh.geometry.computeVertexNormals();
+
+            if (spongeBorderMesh) {
+                spongeBorderMesh.visible = state.viewSponge;
+            }
         }
 
         function setCameraView(viewMode) {
@@ -818,9 +837,9 @@
             document.getElementById('btn-mode-top').classList.toggle('active', viewMode === 'top');
 
             if (viewMode === 'top') {
-                camera.position.set(0, 85, 0.01);
+                camera.position.set(0, 90, 0.01);
             } else {
-                camera.position.set(0, 52, 68);
+                camera.position.set(0, 55, 75);
             }
             controls.target.set(0, 0, 0);
             controls.update();
@@ -830,8 +849,8 @@
         function getPhysics() {
             const phiRad = (state.latDeg * Math.PI) / 180;
             const f = 2 * Omega * Math.sin(phiRad);
-            const H_m = state.heqKm * 1000.0; // Altura equivalente em metros (1000m a 4000m)
-            const c = Math.sqrt(g * H_m);     // Velocidade da onda de gravidade
+            const H_m = state.heqKm * 1000.0;
+            const c = Math.sqrt(g * H_m);
             let Rd_km = Infinity;
             if (Math.abs(f) > 1e-7) {
                 Rd_km = (c / Math.abs(f)) / 1000;
@@ -851,7 +870,6 @@
 
             metricL.textContent = `${state.pertRadiusKm} km`;
 
-            // Pico de massa retido na origem (0,0)
             const cy = Math.floor(NY / 2); const cx = Math.floor(NX / 2);
             const peakRetained = eta[cy * NX + cx];
             metricRetained.textContent = `${peakRetained > 0 ? '+' : ''}${peakRetained.toFixed(1)} m`;
@@ -875,22 +893,22 @@
                 metricRd.textContent = `${Rd_km.toFixed(0)} km`;
 
                 if (state.pertRadiusKm > Rd_km * 1.15) {
-                    badgeRegime.textContent = `🌀 H_eq = ${state.heqKm}km | R_d = ${Rd_km.toFixed(0)}km: Grande Escala (L > Rd - Massa Retida)`;
-                    metricWaves.textContent = 'Fracas (Massa Retida)';
+                    badgeRegime.textContent = `🌀 10.000 km | H_eq = ${state.heqKm}km | R_d = ${Rd_km.toFixed(0)}km: Grande Escala (L > Rd - Massa Retida)`;
+                    metricWaves.textContent = 'Absorção Livre';
                     metricWaves.style.color = '#34d399';
                 } else if (state.pertRadiusKm < Rd_km * 0.85) {
-                    badgeRegime.textContent = `⚡ H_eq = ${state.heqKm}km | R_d = ${Rd_km.toFixed(0)}km: Pequena Escala (L < Rd - Ondas Intensas)`;
-                    metricWaves.textContent = 'Intensas (L < Rd)';
+                    badgeRegime.textContent = `⚡ 10.000 km | H_eq = ${state.heqKm}km | R_d = ${Rd_km.toFixed(0)}km: Pequena Escala (L < Rd - Ondas Intensas)`;
+                    metricWaves.textContent = 'Radiação sem Reflexão';
                     metricWaves.style.color = '#f43f5e';
                 } else {
-                    badgeRegime.textContent = `⚖️ H_eq = ${state.heqKm}km | R_d = ${Rd_km.toFixed(0)}km: Regime de Transição (L ≈ Rd)`;
-                    metricWaves.textContent = 'Moderadas (L ≈ Rd)';
+                    badgeRegime.textContent = `⚖️ 10.000 km | H_eq = ${state.heqKm}km | R_d = ${Rd_km.toFixed(0)}km: Regime de Transição (L ≈ Rd)`;
+                    metricWaves.textContent = 'Moderadas';
                     metricWaves.style.color = '#c084fc';
                 }
             }
         }
 
-        // INJETAR PERTURBAÇÃO DE 100M
+        // INJETAR PERTURBAÇÃO GAUSSIANA DE 100M
         function injectPerturbation(cx = NX / 2, cy = NY / 2) {
             const rCells = (state.pertRadiusKm * 1000) / dx;
             const amp = state.pertAmpM; // +100 m
@@ -903,10 +921,8 @@
                     const distSq = di * di + dj * dj;
 
                     if (state.pertShape === 'dome') {
-                        // Domo Gaussiano de +100m
                         eta[idx] += amp * Math.exp(-distSq / (2 * (rCells * 0.45) ** 2));
                     } else if (state.pertShape === 'depression') {
-                        // Depressão de -100m
                         eta[idx] -= Math.abs(amp) * Math.exp(-distSq / (2 * (rCells * 0.45) ** 2));
                     } else if (state.pertShape === 'front') {
                         const frontProfile = Math.tanh((i - cx) / (rCells * 0.4));
@@ -926,7 +942,7 @@
             v.fill(0);
         }
 
-        // INTEGRAÇÃO NUMÉRICA DAS EQUAÇÕES DE ÁGUAS RASAS (SEM DIFUSÃO INTERIOR)
+        // INTEGRAÇÃO NUMÉRICA DAS EQUAÇÕES DE ÁGUAS RASAS + CAMADA DE ESPONJA RAYLEIGH
         function stepPhysics() {
             const { f, c, H_m } = getPhysics();
             const dt = Math.min(25, 0.35 * dx / (c * 1.414));
@@ -957,15 +973,12 @@
                 }
             }
 
-            // Absorção suave apenas nas bordas externas do domínio
-            const margin = 5;
-            for (let j = 0; j < NY; j++) {
-                for (let i = 0; i < NX; i++) {
-                    if (i < margin || i >= NX - margin || j < margin || j >= NY - margin) {
-                        const idx = j * NX + i;
-                        eta[idx] *= 0.96; u[idx] *= 0.96; v[idx] *= 0.96;
-                    }
-                }
+            // 3. Aplicação da Camada de Esponja Absorvente nas bordas (sem reflexão)
+            for (let idx = 0; idx < NX * NY; idx++) {
+                const sFactor = 1.0 - spongeMask[idx];
+                eta[idx] *= sFactor;
+                u[idx] *= sFactor;
+                v[idx] *= sFactor;
             }
         }
 
@@ -981,26 +994,7 @@
             }
         }
 
-        function getColorForEta(val) {
-            const norm = Math.max(0, Math.min(1, (val + 100.0) / 200.0));
-            let r, g_c, b;
-            if (norm < 0.25) {
-                const t = norm / 0.25;
-                r = Math.floor(15 + 20 * t); g_c = Math.floor(45 + 95 * t); b = Math.floor(190 + 65 * t);
-            } else if (norm < 0.5) {
-                const t = (norm - 0.25) / 0.25;
-                r = Math.floor(35 + 10 * t); g_c = Math.floor(140 + 70 * t); b = Math.floor(255 - 100 * t);
-            } else if (norm < 0.75) {
-                const t = (norm - 0.5) / 0.25;
-                r = Math.floor(45 + 210 * t); g_c = Math.floor(210 + 20 * t); b = Math.floor(155 - 120 * t);
-            } else {
-                const t = (norm - 0.75) / 0.25;
-                r = Math.floor(255); g_c = Math.floor(230 - 170 * t); b = Math.floor(35 - 15 * t);
-            }
-            return `rgb(${r},${g_c},${b})`;
-        }
-
-        // DESENHO DO OVERLAY 2D (ESCALAS E VETORES)
+        // DESENHO DO OVERLAY 2D (ESPECIALIZADO EM ESCALAS E ESPONJA)
         function drawSimulation() {
             ensureCanvasSize(simCanvas);
             const ctx = simCtx;
@@ -1013,6 +1007,18 @@
 
             const cx = w / 2; const cy = h / 2;
             const { Rd_km } = getPhysics();
+
+            // Desenhar moldura da Esponja Damping no overlay 2D
+            if (state.viewSponge) {
+                const sPx = (spongeWidth / NX) * w;
+                ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)';
+                ctx.lineWidth = 1.5 * dpr;
+                ctx.strokeRect(sPx, sPx, w - 2 * sPx, h - 2 * sPx);
+
+                ctx.fillStyle = 'rgba(239, 68, 68, 0.7)';
+                ctx.font = `${9 * dpr}px sans-serif`;
+                ctx.fillText('Camada de Esponja Absorvente (Sem Reflexão)', sPx + 6 * dpr, sPx + 14 * dpr);
+            }
 
             if (state.viewCircles) {
                 if (Rd_km !== Infinity && !isNaN(Rd_km)) {
@@ -1041,7 +1047,7 @@
             }
         }
 
-        // DESENHO DO CORTE TRANSVERSAL 1D (+100M & VENTOS)
+        // DESENHO DO CORTE TRANSVERSAL 1D (10.000 KM)
         function drawCrossSectionGraph() {
             ensureCanvasSize(csCanvas);
             const ctx = csCtx;
@@ -1137,7 +1143,6 @@
                 ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + gh); ctx.stroke();
             });
 
-            // Curva Teórica para a Altura Equivalente Atual Heq
             const H_m = state.heqKm * 1000.0;
             const c = Math.sqrt(g * H_m);
             ctx.beginPath(); ctx.strokeStyle = '#c084fc'; ctx.lineWidth = 2 * dpr;
@@ -1160,7 +1165,6 @@
             }
             ctx.stroke();
 
-            // Ponto Atual
             const { Rd_km } = getPhysics();
             const curX = mapX(state.latDeg);
             const curY = mapY(Rd_km);
@@ -1198,9 +1202,9 @@
         });
 
         btnPresetLarge.addEventListener('click', () => {
-            state.pertRadiusKm = 2000;
+            state.pertRadiusKm = 2200;
             state.heqKm = 1.5;
-            sliderRadius.value = 2000;
+            sliderRadius.value = 2200;
             sliderHeq.value = 1.5;
             clearFlow(); injectPerturbation(); updateMetricsUI();
         });
@@ -1215,12 +1219,22 @@
             clearFlow(); injectPerturbation(); updateMetricsUI();
         });
 
+        btnViewSponge.addEventListener('click', () => {
+            state.viewSponge = !state.viewSponge;
+            btnViewSponge.classList.toggle('active', state.viewSponge);
+        });
+
+        btnViewCircles.addEventListener('click', () => {
+            state.viewCircles = !state.viewCircles;
+            btnViewCircles.classList.toggle('active', state.viewCircles);
+        });
+
         // VOICE NARRATION
         function playVoice() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const rate = parseFloat(document.getElementById('voice-rate').value);
-                const text = `Com altura equivalente ajustada entre 1 e 4 quilômetros, a perturbação de massa fixa em 100 metros permite comparar diretamente o efeito de escala no ajuste geostrófico de Rossby. Quando o raio de decaimento Gaussiano L é menor que o raio de deformação de Rossby R_d, a maior parte da elevação de 100 metros se espalha gerando ondas de gravidade intensas. Quando L é maior que R_d, o domo de 100 metros é retido e gera ventos geostróficos fortes.`;
+                const text = `Nesta simulação em domínio expandido de 10 mil quilômetros, a camada de esponja absorvente nas bordas elimina completamente as reflexões de ondas de gravidade. A perturbação de 100 metros irradia ondas de Poincaré livremente, permitindo visualizar o ajuste geostrófico perfeito.`;
                 const u = new SpeechSynthesisUtterance(text);
                 u.lang = 'pt-BR'; u.rate = rate;
                 window.speechSynthesis.speak(u);
