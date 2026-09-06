@@ -503,8 +503,10 @@
             <div class="btn-grid">
                 <button class="preset-btn active" id="btn-preset-small">⚡ Pequena Escala (L &lt;&lt; Rd)</button>
                 <button class="preset-btn" id="btn-preset-large">🌀 Grande Escala (L &gt;&gt; Rd)</button>
-                <button class="preset-btn" id="btn-preset-south">❄️ Polo Sul (-90°)</button>
-                <button class="preset-btn" id="btn-preset-mid">📐 45° Sul (Hemisfério S)</button>
+                <button class="preset-btn" id="btn-preset-eq">🌴 Equador (0° - Nulo)</button>
+                <button class="preset-btn" id="btn-preset-hn">🌀 45° Norte (Direita)</button>
+                <button class="preset-btn" id="btn-preset-mid">🌀 45° Sul (Esquerda)</button>
+                <button class="preset-btn" id="btn-preset-south">❄️ Polos (±90° - Máximo)</button>
             </div>
 
             <div class="btn-grid" style="margin-top: 4px;">
@@ -513,13 +515,15 @@
             </div>
 
             <div class="formula-box">
-                <strong>Domínio Expandido & Camada de Esponja:</strong>
+                <strong>Equações de Águas Rasas & Força de Coriolis:</strong>
                 <span style="font-family:monospace; color:var(--accent-gold); display:block; margin-top:2px;">
-                    D = 10.000 	ext{ km} \quad | \quad 	ext{Esponja: } \sigma(r) = \sigma_{max} (d_{border} - d)^2
+                    f = 2\Omega \sin(\phi) \quad | \quad R_d = \frac{\sqrt{g H_{eq}}}{|f|}
                 </span>
                 <span style="display:block; margin-top:4px; color:var(--text-muted); font-size:0.75rem;">
-                    • <b>Domínio Amplo:</b> Permite a propagação livre das ondas de gravidade por milhares de km.<br>
-                    • <b>Sem Reflexão:</b> A camada de esponja nas 20 células externas absorve as ondas sem refletir!
+                    • <b>Equador ($\phi = 0^\circ$):</b> $f = 0 \implies R_d \to \infty$. Ajuste Geostrófico <b>NULO</b> e giro do vento <b>NULO</b>.<br>
+                    • <b>Polos ($\phi = \pm 90^\circ$):</b> $|f|$ é <b>MÁXIMO</b> $\implies R_d$ mínimo e Ajuste Geostrófico <b>MÁXIMO</b>.<br>
+                    • <b>Giro no HN ($\phi > 0$):</b> Deflexão à <b>DIREITA</b>.<br>
+                    • <b>Giro no HS ($\phi < 0$):</b> Deflexão à <b>ESQUERDA</b>.
                 </span>
             </div>
         </div>
@@ -585,12 +589,12 @@
                     <div class="metric-val" id="metric-l" style="color:var(--accent-cyan);">500 km</div>
                 </div>
                 <div class="metric-card">
-                    <div class="metric-title">Massa Retida (Pico)</div>
-                    <div class="metric-val" id="metric-retained" style="color:var(--accent-green);">+28.4 m</div>
+                    <div class="metric-title">Giro do Vento (Coriolis)</div>
+                    <div class="metric-val" id="metric-spin" style="color:var(--accent-purple);">À Esquerda (HS)</div>
                 </div>
                 <div class="metric-card">
-                    <div class="metric-title">Ondas de Gravidade</div>
-                    <div class="metric-val" id="metric-waves" style="color:var(--accent-red);">Radiação Livre</div>
+                    <div class="metric-title">Massa Retida (Pico)</div>
+                    <div class="metric-val" id="metric-retained" style="color:var(--accent-green);">+28.4 m</div>
                 </div>
             </div>
 
@@ -708,16 +712,18 @@
 
         const btnPresetSmall = document.getElementById('btn-preset-small');
         const btnPresetLarge = document.getElementById('btn-preset-large');
-        const btnPresetSouth = document.getElementById('btn-preset-south');
+        const btnPresetEq = document.getElementById('btn-preset-eq');
+        const btnPresetHn = document.getElementById('btn-preset-hn');
         const btnPresetMid = document.getElementById('btn-preset-mid');
+        const btnPresetSouth = document.getElementById('btn-preset-south');
 
         const btnViewSponge = document.getElementById('btn-view-sponge');
         const btnViewCircles = document.getElementById('btn-view-circles');
 
         const metricRd = document.getElementById('metric-rd');
         const metricL = document.getElementById('metric-l');
+        const metricSpin = document.getElementById('metric-spin');
         const metricRetained = document.getElementById('metric-retained');
-        const metricWaves = document.getElementById('metric-waves');
         const badgeRegime = document.getElementById('badge-regime');
 
         const simCanvas = document.getElementById('sim-canvas');
@@ -947,25 +953,37 @@
             const peakRetained = eta[cy * NX + cx];
             metricRetained.textContent = `${peakRetained > 0 ? '+' : ''}${peakRetained.toFixed(1)} m`;
 
-            if (Rd_km === Infinity || isNaN(Rd_km)) {
+            if (metricSpin) {
+                if (state.latDeg === 0) {
+                    metricSpin.textContent = 'Nulo (Equador)';
+                    metricSpin.style.color = '#94a3b8';
+                } else if (state.latDeg > 0) {
+                    metricSpin.textContent = 'À Direita (HN)';
+                    metricSpin.style.color = '#38bdf8';
+                } else {
+                    metricSpin.textContent = 'À Esquerda (HS)';
+                    metricSpin.style.color = '#c084fc';
+                }
+            }
+
+            if (Rd_km === Infinity || isNaN(Rd_km) || state.latDeg === 0) {
                 metricRd.textContent = '∞ (Infinito)';
-                badgeRegime.textContent = '🌴 Equador: Dispersão Gravitacional Pura (Sem Coriolis)';
-                metricWaves.textContent = 'Totais (Equador)';
+                badgeRegime.textContent = '🌴 Equador (0°): Ajuste Geostrófico NULO (f = 0, Giro Nulo, Radiação de Ondas de Gravidade Pura)';
             } else {
                 metricRd.textContent = `${Rd_km.toFixed(0)} km`;
 
-                if (state.pertRadiusKm > Rd_km * 1.15) {
-                    badgeRegime.textContent = `🌀 10.000 km | H_eq = ${state.heqKm}km | R_d = ${Rd_km.toFixed(0)}km: Grande Escala (L > Rd - Massa Retida)`;
-                    metricWaves.textContent = 'Absorção Livre';
-                    metricWaves.style.color = '#34d399';
+                const latAbs = Math.abs(state.latDeg);
+                const isPole = latAbs >= 80;
+                const giroDirection = state.latDeg > 0 ? 'Giro à DIREITA (HN)' : 'Giro à ESQUERDA (HS)';
+
+                if (isPole) {
+                    badgeRegime.textContent = `❄️ Pólos (±90°): Ajuste Geostrófico MÁXIMO (f_max = 1.45×10⁻⁴s⁻¹, R_d = ${Rd_km.toFixed(0)}km | ${giroDirection})`;
+                } else if (state.pertRadiusKm > Rd_km * 1.15) {
+                    badgeRegime.textContent = `🌀 L > Rd (${state.pertRadiusKm}km vs ${Rd_km.toFixed(0)}km): Grande Escala — Domo Retido | ${giroDirection}`;
                 } else if (state.pertRadiusKm < Rd_km * 0.85) {
-                    badgeRegime.textContent = `⚡ 10.000 km | H_eq = ${state.heqKm}km | R_d = ${Rd_km.toFixed(0)}km: Pequena Escala (L < Rd - Ondas Intensas)`;
-                    metricWaves.textContent = 'Radiação sem Reflexão';
-                    metricWaves.style.color = '#f43f5e';
+                    badgeRegime.textContent = `⚡ L < Rd (${state.pertRadiusKm}km vs ${Rd_km.toFixed(0)}km): Pequena Escala — Domo Achata & Radiação Libre | ${giroDirection}`;
                 } else {
-                    badgeRegime.textContent = `⚖️ 10.000 km | H_eq = ${state.heqKm}km | R_d = ${Rd_km.toFixed(0)}km: Regime de Transição (L ≈ Rd)`;
-                    metricWaves.textContent = 'Moderadas';
-                    metricWaves.style.color = '#c084fc';
+                    badgeRegime.textContent = `⚖️ L ≈ Rd (${state.pertRadiusKm}km vs ${Rd_km.toFixed(0)}km): Transição Geostrófica | ${giroDirection}`;
                 }
             }
         }
@@ -1259,15 +1277,33 @@
             clearFlow(); injectPerturbation(); updateMetricsUI();
         });
 
-        btnPresetSouth.addEventListener('click', () => {
-            state.latDeg = -90; sliderLat.value = -90;
-            clearFlow(); injectPerturbation(); updateMetricsUI();
-        });
+        if (btnPresetEq) {
+            btnPresetEq.addEventListener('click', () => {
+                state.latDeg = 0; sliderLat.value = 0;
+                clearFlow(); injectPerturbation(); updateMetricsUI();
+            });
+        }
 
-        btnPresetMid.addEventListener('click', () => {
-            state.latDeg = -45; sliderLat.value = -45;
-            clearFlow(); injectPerturbation(); updateMetricsUI();
-        });
+        if (btnPresetHn) {
+            btnPresetHn.addEventListener('click', () => {
+                state.latDeg = 45; sliderLat.value = 45;
+                clearFlow(); injectPerturbation(); updateMetricsUI();
+            });
+        }
+
+        if (btnPresetMid) {
+            btnPresetMid.addEventListener('click', () => {
+                state.latDeg = -45; sliderLat.value = -45;
+                clearFlow(); injectPerturbation(); updateMetricsUI();
+            });
+        }
+
+        if (btnPresetSouth) {
+            btnPresetSouth.addEventListener('click', () => {
+                state.latDeg = -90; sliderLat.value = -90;
+                clearFlow(); injectPerturbation(); updateMetricsUI();
+            });
+        }
 
         btnViewSponge.addEventListener('click', () => {
             state.viewSponge = !state.viewSponge;
@@ -1284,7 +1320,15 @@
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const rate = parseFloat(document.getElementById('voice-rate').value);
-                const text = `Nesta simulação em domínio expandido de 10 mil quilômetros, a camada de esponja absorvente nas bordas elimina completamente as reflexões de ondas de gravidade. A perturbação de 100 metros irradia ondas de Poincaré livremente, permitindo visualizar o ajuste geostrófico perfeito.`;
+                let hemText = '';
+                if (state.latDeg === 0) {
+                    hemText = 'No Equador, a latitude é zero e o parâmetro de Coriolis f é nulo. Portanto, o ajuste geostrófico é nulo e não há giro do vento. Toda a perturbação de 100 metros se dissipa como ondas de gravidade livres.';
+                } else if (state.latDeg > 0) {
+                    hemText = `No Hemisfério Norte a latitude é de ${state.latDeg} graus. A força de Coriolis desvia o vento para a direita. O ajuste geostrófico retém massa com raio de Rossby de ${metricRd.textContent}.`;
+                } else {
+                    hemText = `No Hemisfério Sul a latitude é de ${Math.abs(state.latDeg)} graus Sul. A força de Coriolis desvia o vento para a esquerda. O ajuste geostrófico retém massa com raio de Rossby de ${metricRd.textContent}.`;
+                }
+                const text = `Simulação das equações de águas rasas em domínio amplo de 10 mil quilômetros. ${hemText}`;
                 const u = new SpeechSynthesisUtterance(text);
                 u.lang = 'pt-BR'; u.rate = rate;
                 window.speechSynthesis.speak(u);
