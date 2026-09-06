@@ -727,7 +727,7 @@
             latDeg: -45,         // Latitude
             pertAmpM: 100,       // Perturbação de elevação fixa em +100 m
             pertShape: 'dome',
-            solverMode: 'waterwave', // 'waterwave' (Lax-Wendroff 2-Step em JS puro) ou 'standard'
+            solverMode: 'standard', // 'standard' (Equações 2D SWE de Rossby) ou 'waterwave'
             kFriction: 2.0e-5,   // Coeficiente k de atrito linear Rayleigh (1/s)
             simTimeSeconds: 0,   // Tempo físico acumulado (s)
             maxTimeHours: 48,    // Tempo limite finito de integração (horas)
@@ -737,7 +737,7 @@
             stepsPerFrame: 4
         };
 
-        // Elementos DOM
+        // Elementos DOM (com checagem segura contra nulos)
         const sliderHeq = document.getElementById('slider-heq');
         const valHeq = document.getElementById('val-heq');
         const sliderRadius = document.getElementById('slider-radius');
@@ -998,15 +998,15 @@
             const { f, c, Rd_km, ratio } = getPhysics();
 
             const hem = state.latDeg < 0 ? 'S (Hemisfério Sul)' : (state.latDeg > 0 ? 'N (Hemisfério Norte)' : '(Equador)');
-            valLat.textContent = `${Math.abs(state.latDeg).toFixed(1)}° ${hem}`;
-            valHeq.textContent = `${state.heqKm.toFixed(1)} km (c = ${c.toFixed(1)} m/s)`;
-            valRadius.textContent = `${state.pertRadiusKm} km (${state.pertRadiusKm > Rd_km ? 'L > Rd' : 'L < Rd'})`;
-            valAmp.textContent = `${state.pertAmpM > 0 ? '+' : ''}${state.pertAmpM.toFixed(0)} m (Fixa)`;
+            if (valLat) valLat.textContent = `${Math.abs(state.latDeg).toFixed(1)}° ${hem}`;
+            if (valHeq) valHeq.textContent = `${state.heqKm.toFixed(1)} km (c = ${c.toFixed(1)} m/s)`;
+            if (valRadius) valRadius.textContent = `${state.pertRadiusKm} km (${state.pertRadiusKm > Rd_km ? 'L > Rd' : 'L < Rd'})`;
+            if (valAmp) valAmp.textContent = `${state.pertAmpM > 0 ? '+' : ''}${state.pertAmpM.toFixed(0)} m (Fixa)`;
 
-            valTmax.textContent = `${state.maxTimeHours.toFixed(1)} horas`;
-            valFriction.textContent = `${(state.kFriction * 1e5).toFixed(1)} × 10⁻⁵ s⁻¹`;
+            if (valTmax) valTmax.textContent = `${state.maxTimeHours.toFixed(1)} horas`;
+            if (valFriction) valFriction.textContent = `${(state.kFriction * 1e5).toFixed(1)} × 10⁻⁵ s⁻¹`;
 
-            metricL.textContent = `${state.pertRadiusKm} km`;
+            if (metricL) metricL.textContent = `${state.pertRadiusKm} km`;
 
             const currentHours = state.simTimeSeconds / 3600;
             if (metricTime) {
@@ -1018,7 +1018,7 @@
 
             const cy = Math.floor(NY / 2); const cx = Math.floor(NX / 2);
             const peakRetained = eta[cy * NX + cx];
-            metricRetained.textContent = `${peakRetained > 0 ? '+' : ''}${peakRetained.toFixed(1)} m`;
+            if (metricRetained) metricRetained.textContent = `${peakRetained > 0 ? '+' : ''}${peakRetained.toFixed(1)} m`;
 
             if (metricSpin) {
                 if (state.latDeg === 0) {
@@ -1033,29 +1033,31 @@
                 }
             }
 
-            if (state.solverMode === 'waterwave') {
-                const tvStr = state.tvNorm !== undefined ? state.tvNorm.toFixed(2) : '0.00';
-                badgeRegime.textContent = `🌊 Modelo MATLAB WaterWave (Cleve Moler — Lax-Wendroff 2-Step | tv = ${tvStr})`;
-            } else if (!state.isRunning && currentHours >= state.maxTimeHours) {
-                badgeRegime.textContent = `⏱️ Tempo Finito Alcançado (t = ${currentHours.toFixed(1)}h) — Ajuste Geostrófico Estabilizado (Simulação Pausada)`;
-            } else if (Rd_km === Infinity || isNaN(Rd_km) || state.latDeg === 0) {
-                metricRd.textContent = '∞ (Infinito)';
-                badgeRegime.textContent = '🌴 Equador (0°): Ajuste Geostrófico NULO (f = 0, Giro Nulo, Radiação de Ondas de Gravidade Pura)';
-            } else {
-                metricRd.textContent = `${Rd_km.toFixed(0)} km`;
-
-                const latAbs = Math.abs(state.latDeg);
-                const isPole = latAbs >= 80;
-                const giroDirection = state.latDeg > 0 ? 'Giro à DIREITA (HN)' : 'Giro à ESQUERDA (HS)';
-
-                if (isPole) {
-                    badgeRegime.textContent = `❄️ Pólos (±90°): Ajuste Geostrófico MÁXIMO (f_max = 1.45×10⁻⁴s⁻¹, R_d = ${Rd_km.toFixed(0)}km | ${giroDirection})`;
-                } else if (state.pertRadiusKm > Rd_km * 1.15) {
-                    badgeRegime.textContent = `🌀 L > Rd (${state.pertRadiusKm}km vs ${Rd_km.toFixed(0)}km): Grande Escala — Domo Retido | ${giroDirection}`;
-                } else if (state.pertRadiusKm < Rd_km * 0.85) {
-                    badgeRegime.textContent = `⚡ L < Rd (${state.pertRadiusKm}km vs ${Rd_km.toFixed(0)}km): Pequena Escala — Domo Achata & Radiação Libre | ${giroDirection}`;
+            if (badgeRegime) {
+                if (state.solverMode === 'waterwave') {
+                    const tvStr = state.tvNorm !== undefined ? state.tvNorm.toFixed(2) : '0.00';
+                    badgeRegime.textContent = `🌊 Modelo MATLAB WaterWave (Cleve Moler — Lax-Wendroff 2-Step | tv = ${tvStr})`;
+                } else if (!state.isRunning && currentHours >= state.maxTimeHours) {
+                    badgeRegime.textContent = `⏱️ Tempo Finito Alcançado (t = ${currentHours.toFixed(1)}h) — Ajuste Geostrófico Estabilizado (Simulação Pausada)`;
+                } else if (Rd_km === Infinity || isNaN(Rd_km) || state.latDeg === 0) {
+                    if (metricRd) metricRd.textContent = '∞ (Infinito)';
+                    badgeRegime.textContent = '🌴 Equador (0°): Ajuste Geostrófico NULO (f = 0, Giro Nulo, Radiação de Ondas de Gravidade Pura)';
                 } else {
-                    badgeRegime.textContent = `⚖️ L ≈ Rd (${state.pertRadiusKm}km vs ${Rd_km.toFixed(0)}km): Transição Geostrófica | ${giroDirection}`;
+                    if (metricRd) metricRd.textContent = `${Rd_km.toFixed(0)} km`;
+
+                    const latAbs = Math.abs(state.latDeg);
+                    const isPole = latAbs >= 80;
+                    const giroDirection = state.latDeg > 0 ? 'Giro à DIREITA (HN)' : 'Giro à ESQUERDA (HS)';
+
+                    if (isPole) {
+                        badgeRegime.textContent = `❄️ Pólos (±90°): Ajuste Geostrófico MÁXIMO (f_max = 1.45×10⁻⁴s⁻¹, R_d = ${Rd_km.toFixed(0)}km | ${giroDirection})`;
+                    } else if (state.pertRadiusKm > Rd_km * 1.15) {
+                        badgeRegime.textContent = `🌀 L > Rd (${state.pertRadiusKm}km vs ${Rd_km.toFixed(0)}km): Grande Escala — Domo Retido | ${giroDirection}`;
+                    } else if (state.pertRadiusKm < Rd_km * 0.85) {
+                        badgeRegime.textContent = `⚡ L < Rd (${state.pertRadiusKm}km vs ${Rd_km.toFixed(0)}km): Pequena Escala — Domo Achata & Radiação Libre | ${giroDirection}`;
+                    } else {
+                        badgeRegime.textContent = `⚖️ L ≈ Rd (${state.pertRadiusKm}km vs ${Rd_km.toFixed(0)}km): Transição Geostrófica | ${giroDirection}`;
+                    }
                 }
             }
         }
