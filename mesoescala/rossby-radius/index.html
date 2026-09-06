@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demonstração do Raio de Deformação de Rossby - Ajuste Geostrófico 3D & Ondas de Gravidade</title>
+    <title>Ajuste Geostrófico de Rossby — Equações de Águas Rasas 2D & Perturbação Gaussiana</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,7 +60,7 @@
 
         .title-group h1 {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             font-weight: 800;
             background: linear-gradient(90deg, #38bdf8, #818cf8, #fbbf24);
             -webkit-background-clip: text;
@@ -141,7 +141,6 @@
             gap: 8px;
         }
 
-        /* Controls */
         .control-group {
             display: flex;
             flex-direction: column;
@@ -323,7 +322,6 @@
             pointer-events: auto;
         }
 
-        /* Colorbar legend */
         .colorbar-container {
             position: absolute;
             bottom: 12px;
@@ -372,7 +370,6 @@
         .legend-item { display: flex; align-items: center; gap: 6px; }
         .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
 
-        /* Metrics grid */
         .metrics-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -409,7 +406,6 @@
             overflow: hidden;
         }
 
-        /* COMET Program Cards */
         .comet-box {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -420,14 +416,10 @@
             padding: 10px;
         }
 
-        .comet-card {
-            font-size: 0.75rem;
-            line-height: 1.4;
-        }
+        .comet-card { font-size: 0.75rem; line-height: 1.4; }
         .comet-card h4 { color: var(--accent-gold); font-size: 0.8rem; margin-bottom: 4px; }
         .comet-item { color: var(--text-muted); margin-left: 10px; }
 
-        /* Voice Box */
         .voice-card {
             background: rgba(168, 85, 247, 0.1);
             border: 1px solid rgba(168, 85, 247, 0.3);
@@ -442,8 +434,8 @@
 <body>
     <header>
         <div class="title-group">
-            <h1>Demonstração do Raio de Deformação de Rossby</h1>
-            <p>Polo Sul (-90°), Ajuste Geostrófico 3D & Saída de Ondas de Gravidade em Tempo Real</p>
+            <h1>Ajuste Geostrófico de Rossby — Equações de Águas Rasas 2D</h1>
+            <p>Solver Numérico de Águas Rasas (Sem Difusão), Perturbação Gaussiana Inicial & Superfície 3D</p>
         </div>
 
         <div class="nav-links">
@@ -457,7 +449,7 @@
         <!-- PAINEL ESQUERDO: CONTROLES FÍSICOS DA SIMULAÇÃO NUMÉRICA -->
         <div class="panel">
             <div class="panel-header">
-                <h2>⚙️ Parâmetros Dinâmicos</h2>
+                <h2>⚙️ Parâmetros das Águas Rasas</h2>
             </div>
 
             <!-- Latitude (-90 a +90) -->
@@ -472,10 +464,10 @@
             <!-- Tamanho Perturbação L -->
             <div class="control-group">
                 <div class="control-label">
-                    <span>Tamanho da Perturbação (L)</span>
+                    <span>Largura Gaussiana (L)</span>
                     <span class="control-val" id="val-radius">250 km (L &gt; Rd)</span>
                 </div>
-                <input type="range" id="slider-radius" min="20" max="500" step="10" value="250">
+                <input type="range" id="slider-radius" min="30" max="500" step="10" value="250">
             </div>
 
             <!-- Profundidade H -->
@@ -487,24 +479,24 @@
                 <input type="range" id="slider-depth" min="10" max="400" step="5" value="80">
             </div>
 
-            <!-- Amplitude -->
+            <!-- Amplitude Gaussiana -->
             <div class="control-group">
                 <div class="control-label">
-                    <span>Amplitude (&eta; max)</span>
+                    <span>Amplitude Gaussiana (&eta;₀)</span>
                     <span class="control-val" id="val-amp">+1.2 m (Domo)</span>
                 </div>
                 <input type="range" id="slider-amp" min="-2.5" max="2.5" step="0.1" value="1.2">
             </div>
 
             <div class="panel-header" style="margin-top: 4px;">
-                <h2>🎯 Forma da Perturbação</h2>
+                <h2>🎯 Perturbações Iniciais</h2>
             </div>
 
             <div class="btn-grid">
-                <button class="preset-btn active" id="btn-shape-dome">💧 Domo Circular</button>
-                <button class="preset-btn" id="btn-shape-depression">🌀 Depressão</button>
+                <button class="preset-btn active" id="btn-shape-dome">💧 Domo Gaussiano</button>
+                <button class="preset-btn" id="btn-shape-depression">🌀 Depressão Gaussiana</button>
                 <button class="preset-btn" id="btn-shape-front">〰️ Frente Linear</button>
-                <button class="preset-btn" id="btn-shape-dipole">⚡ Dipolo (+ e -)</button>
+                <button class="preset-btn" id="btn-shape-dipole">⚡ Dipolo Gaussiano</button>
             </div>
 
             <div class="panel-header" style="margin-top: 4px;">
@@ -519,18 +511,20 @@
             </div>
 
             <div class="btn-grid" style="margin-top: 4px;">
-                <button class="action-btn" id="btn-trigger-bump">💧 Injetar Perturbação</button>
-                <button class="preset-btn" id="btn-clear-flow">🔄 Limpar Fluxo</button>
+                <button class="action-btn" id="btn-trigger-bump">💧 Injetar Gaussiana</button>
+                <button class="preset-btn" id="btn-clear-flow">🔄 Zerar Campo</button>
             </div>
 
             <div class="formula-box">
-                <strong>Equação do Raio de Rossby:</strong>
+                <strong>Equações Resolver de Águas Rasas:</strong>
                 <span style="font-family:monospace; color:var(--accent-gold); display:block; margin-top:2px;">
-                    R_d = \sqrt{g H} / |f| = c / (2\Omega |\sin\phi|)
+                    \partial u/\partial t = +f v - g \, \partial \eta/\partial x<br>
+                    \partial v/\partial t = -f u - g \, \partial \eta/\partial y<br>
+                    \partial \eta/\partial t = -H (\partial u/\partial x + \partial v/\partial y)
                 </span>
                 <span style="display:block; margin-top:4px; color:var(--text-muted); font-size:0.75rem;">
-                    • <b>No Polo Sul (&phi; = -90°):</b> Coriolis f é negativo &rarr; A deflexão é para a <b>esquerda</b>!<br>
-                    • <b>Saída de Ondas:</b> Ao clicar, veja as ondas de gravidade (Poincaré) irradiarem para fora do domínio!
+                    • <b>Sem Difusão Interior:</b> O sistema resolve as equações puras de ondas e Coriolis!<br>
+                    • <b>Perturbação Gaussiana:</b> $\eta(r, 0) = \eta_0 \exp(-r^2 / 2L^2)$.
                 </span>
             </div>
         </div>
@@ -542,9 +536,9 @@
                     <span id="badge-regime">🌀 Polo Sul (-90°): Ajuste Geostrófico (L &gt; Rd)</span>
                 </div>
                 <div class="view-options">
-                    <button class="view-toggle-btn active" id="btn-mode-3d" onclick="setRenderMode('3d')">🌐 Modo 3D WebGL</button>
-                    <button class="view-toggle-btn" id="btn-mode-2d" onclick="setRenderMode('2d')">🗺️ Modo 2D Plano</button>
-                    <button class="view-toggle-btn active" id="btn-view-vectors">Vetores (u, v)</button>
+                    <button class="view-toggle-btn active" id="btn-mode-3d" onclick="setRenderMode('3d')">🌐 Superfície 3D WebGL</button>
+                    <button class="view-toggle-btn" id="btn-mode-2d" onclick="setRenderMode('2d')">🗺️ Plano 2D Heatmap</button>
+                    <button class="view-toggle-btn active" id="btn-view-vectors">Vetores Vento (u, v)</button>
                     <button class="view-toggle-btn active" id="btn-view-particles">Partículas</button>
                     <button class="view-toggle-btn active" id="btn-view-circles">Escalas L vs Rd</button>
                 </div>
@@ -562,7 +556,7 @@
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot" style="background:#38bdf8; border:1px solid #fff;"></span>
-                    <span style="color:#38bdf8;">Tamanho da Perturbação (L)</span>
+                    <span style="color:#38bdf8;">Largura Gaussiana (L)</span>
                 </div>
                 <div class="legend-item">
                     <span style="color:#34d399;" id="legend-hemisphere">⟲ Rotação Anti-Horária no Sul</span>
@@ -591,7 +585,7 @@
                     <div class="metric-val" id="metric-rd" style="color:var(--accent-gold);">192 km</div>
                 </div>
                 <div class="metric-card">
-                    <div class="metric-title">Tamanho Perturbação (L)</div>
+                    <div class="metric-title">Largura Gaussiana (L)</div>
                     <div class="metric-val" id="metric-l" style="color:var(--accent-cyan);">250 km</div>
                 </div>
                 <div class="metric-card">
@@ -657,7 +651,7 @@
         </div>
     </div>
 
-    <!-- SIMULADOR NUMÉRICO INTEGRAÇÃO SHALLOW WATER 2D + ENGINE 3D WEBGL -->
+    <!-- SOLVER NUMÉRICO DAS EQUAÇÕES DE ÁGUAS RASAS EM GRADE Arakawa C-grid / FORWARD-BACKWARD -->
     <script>
         const g = 9.81;
         const Omega = 7.2921e-5;
@@ -669,11 +663,8 @@
         const dy = (domainKm * 1000) / NY;
 
         let eta = new Float32Array(NX * NY);
-        let eta_next = new Float32Array(NX * NY);
         let u = new Float32Array(NX * NY);
-        let u_next = new Float32Array(NX * NY);
         let v = new Float32Array(NX * NY);
-        let v_next = new Float32Array(NX * NY);
 
         // Partículas traçadoras
         const NUM_PARTICLES = 400;
@@ -693,12 +684,10 @@
             pertRadiusKm: 250,
             pertAmpM: 1.2,
             pertShape: 'dome',
-            renderMode: '3d', // '3d' ou '2d'
-            viewHeight: true,
+            renderMode: '3d',
             viewVectors: true,
             viewParticles: true,
             viewCircles: true,
-            dt: 25,
             stepsPerFrame: 4
         };
 
@@ -743,7 +732,7 @@
         const latCanvas = document.getElementById('graph-lat-canvas');
         const latCtx = latCanvas.getContext('2d');
 
-        // --- INICIALIZAÇÃO DO ENGINE 3D WEBGL (THREE.JS) ---
+        // --- THREE.JS 3D WEBGL ENGINE ---
         let scene, camera, renderer, controls, surfaceMesh;
         const webglWrap = document.getElementById('webgl-canvas-wrap');
 
@@ -752,7 +741,7 @@
             scene.background = new THREE.Color(0x020612);
 
             camera = new THREE.PerspectiveCamera(45, webglWrap.clientWidth / webglWrap.clientHeight, 0.1, 1000);
-            camera.position.set(0, 50, 70);
+            camera.position.set(0, 52, 68);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(webglWrap.clientWidth, webglWrap.clientHeight);
@@ -764,14 +753,14 @@
             controls.dampingFactor = 0.05;
 
             // Luzes
-            const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+            const ambient = new THREE.AmbientLight(0xffffff, 0.65);
             scene.add(ambient);
 
             const dirLight = new THREE.DirectionalLight(0x38bdf8, 0.9);
             dirLight.position.set(30, 60, 30);
             scene.add(dirLight);
 
-            // Criar Malha 3D da Superfície Dinâmica
+            // Criar Malha 3D da Superfície Dinâmica (100x100)
             const geom = new THREE.PlaneGeometry(60, 60, NX - 1, NY - 1);
             geom.rotateX(-Math.PI / 2);
 
@@ -786,10 +775,20 @@
             surfaceMesh = new THREE.Mesh(geom, mat);
             scene.add(surfaceMesh);
 
-            // Grade de referência 3D
             const gridHelper = new THREE.GridHelper(60, 12, 0x38bdf8, 0x1e293b);
             gridHelper.position.y = -0.1;
             scene.add(gridHelper);
+
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function onWindowResize() {
+            if (!renderer || !camera) return;
+            const w = webglWrap.clientWidth;
+            const h = webglWrap.clientHeight;
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
         }
 
         function update3DMesh() {
@@ -800,13 +799,10 @@
             for (let j = 0; j < NY; j++) {
                 for (let i = 0; i < NX; i++) {
                     const idx = j * NX + i;
-                    const vertIndex = j * NX + i;
                     const etaVal = eta[idx];
 
-                    // Atualizar Y da malha 3D
-                    pos.setY(vertIndex, etaVal * 3.5);
+                    pos.setY(idx, etaVal * 3.5);
 
-                    // Colorizar por elevação (Vermelho High, Azul Low)
                     const norm = Math.max(-1, Math.min(1, etaVal / 1.5));
                     let r = 0.1, g_c = 0.5, b = 0.9;
                     if (norm > 0) {
@@ -834,7 +830,7 @@
 
             if (mode === '3d') {
                 webglWrap.style.display = 'block';
-                simCanvas.style.opacity = '0.35'; // overlay suave de interações
+                simCanvas.style.opacity = '0.35';
             } else {
                 webglWrap.style.display = 'none';
                 simCanvas.style.opacity = '1.0';
@@ -897,7 +893,7 @@
             }
         }
 
-        // INJETAR PERTURBAÇÃO (DOMO, DEPRESSÃO, FRENTE, DIPOLO)
+        // INJETAR PERTURBAÇÃO GAUSSIANA PURA
         function injectPerturbation(cx = NX / 2, cy = NY / 2) {
             const rCells = (state.pertRadiusKm * 1000) / dx;
             const amp = state.pertAmpM;
@@ -910,9 +906,11 @@
                     const distSq = di * di + dj * dj;
 
                     if (state.pertShape === 'dome') {
-                        eta[idx] += amp * Math.exp(-distSq / (2 * (rCells * 0.5) ** 2));
+                        // Domo Gaussiano puro
+                        eta[idx] += amp * Math.exp(-distSq / (2 * (rCells * 0.45) ** 2));
                     } else if (state.pertShape === 'depression') {
-                        eta[idx] -= Math.abs(amp) * Math.exp(-distSq / (2 * (rCells * 0.5) ** 2));
+                        // Depressão Gaussiana pura
+                        eta[idx] -= Math.abs(amp) * Math.exp(-distSq / (2 * (rCells * 0.45) ** 2));
                     } else if (state.pertShape === 'front') {
                         const frontProfile = Math.tanh((i - cx) / (rCells * 0.4));
                         eta[idx] += amp * 0.8 * frontProfile;
@@ -926,65 +924,58 @@
         }
 
         function clearFlow() {
-            eta.fill(0); eta_next.fill(0);
-            u.fill(0); u_next.fill(0);
-            v.fill(0); v_next.fill(0);
+            eta.fill(0);
+            u.fill(0);
+            v.fill(0);
         }
 
-        // INTEGRAÇÃO NUMÉRICA DAS EQUAÇÕES DE ÁGUAS RASAS
+        // INTEGRAÇÃO NUMÉRICA PURA DAS EQUAÇÕES DE ÁGUAS RASAS (SEM DIFUSÃO INTERIOR)
         function stepPhysics() {
-            const { f } = getPhysics();
+            const { f, c } = getPhysics();
             const H = state.depthH;
-            const dt = state.dt;
-            const damping = 0.9995;
+            
+            // Passo de tempo CFL estável
+            const dt = Math.min(25, 0.4 * dx / (c * 1.414));
 
+            // 1. Atualizar Velocidades (u, v) via Gradientes da Altura
             for (let j = 1; j < NY - 1; j++) {
                 for (let i = 1; i < NX - 1; i++) {
                     const idx = j * NX + i;
-                    const deta_dx = (eta[idx + 1] - eta[idx - 1]) / (2 * dx);
-                    const deta_dy = (eta[idx + NX] - eta[idx - NX]) / (2 * dy);
+                    const deta_dx = (eta[idx + 1] - eta[idx]) / dx;
+                    const deta_dy = (eta[idx + NX] - eta[idx]) / dy;
 
-                    u_next[idx] = (u[idx] + dt * (f * v[idx] - g * deta_dx)) * damping;
-                    v_next[idx] = (v[idx] + dt * (-f * u[idx] - g * deta_dy)) * damping;
+                    // Média centrada de Coriolis
+                    const v_avg = 0.25 * (v[idx] + v[idx + 1] + v[idx + NX] + v[idx + NX + 1]);
+                    const u_avg = 0.25 * (u[idx] + u[idx + 1] + u[idx + NX] + u[idx + NX + 1]);
+
+                    u[idx] += dt * (f * v_avg - g * deta_dx);
+                    v[idx] += dt * (-f * u_avg - g * deta_dy);
                 }
             }
 
-            for (let i = 0; i < NX; i++) {
-                u_next[i] = u_next[i + NX] * 0.9;
-                u_next[(NY - 1) * NX + i] = u_next[(NY - 2) * NX + i] * 0.9;
-                v_next[i] = v_next[i + NX] * 0.9;
-                v_next[(NY - 1) * NX + i] = v_next[(NY - 2) * NX + i] * 0.9;
-            }
-            for (let j = 0; j < NY; j++) {
-                u_next[j * NX] = u_next[j * NX + 1] * 0.9;
-                u_next[j * NX + (NX - 1)] = u_next[j * NX + (NX - 2)] * 0.9;
-                v_next[j * NX] = v_next[j * NX + 1] * 0.9;
-                v_next[j * NX + (NX - 1)] = v_next[j * NX + (NX - 2)] * 0.9;
-            }
-
-            u.set(u_next);
-            v.set(v_next);
-
+            // 2. Atualizar Elevação (eta) via Divergência do Vento
             for (let j = 1; j < NY - 1; j++) {
                 for (let i = 1; i < NX - 1; i++) {
                     const idx = j * NX + i;
-                    const du_dx = (u[idx + 1] - u[idx - 1]) / (2 * dx);
-                    const dv_dy = (v[idx + NX] - v[idx - NX]) / (2 * dy);
+                    const du_dx = (u[idx] - u[idx - 1]) / dx;
+                    const dv_dy = (v[idx] - v[idx - NX]) / dy;
 
-                    eta_next[idx] = (eta[idx] - dt * H * (du_dx + dv_dy)) * damping;
+                    eta[idx] -= dt * H * (du_dx + dv_dy);
                 }
             }
 
-            for (let i = 0; i < NX; i++) {
-                eta_next[i] = eta_next[i + NX] * 0.92;
-                eta_next[(NY - 1) * NX + i] = eta_next[(NY - 2) * NX + i] * 0.92;
-            }
+            // Absorção suave apenas nas bordas externas do domínio (Radiating Boundaries)
+            const margin = 5;
             for (let j = 0; j < NY; j++) {
-                eta_next[j * NX] = eta_next[j * NX + 1] * 0.92;
-                eta_next[j * NX + (NX - 1)] = eta_next[j * NX + (NX - 2)] * 0.92;
+                for (let i = 0; i < NX; i++) {
+                    if (i < margin || i >= NX - margin || j < margin || j >= NY - margin) {
+                        const idx = j * NX + i;
+                        eta[idx] *= 0.96;
+                        u[idx] *= 0.96;
+                        v[idx] *= 0.96;
+                    }
+                }
             }
-
-            eta.set(eta_next);
         }
 
         function ensureCanvasSize(cvs) {
@@ -1136,7 +1127,6 @@
             const midY_h = h * 0.35;
             const midY_v = h * 0.80;
 
-            // Eixo
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
             ctx.lineWidth = 1 * dpr;
             ctx.beginPath();
@@ -1300,7 +1290,7 @@
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const rate = parseFloat(document.getElementById('voice-rate').value);
-                const u = new SpeechSynthesisUtterance("O Ajuste Geostrófico de Rossby demonstra a adaptação entre o campo de pressão e o campo de vento em um fluido em rotação. Ao injetar uma perturbação no Polo Sul a 90 graus sul, a deflexão de Coriolis atua para a esquerda, gerando rotação anti-horária ao redor de um domo de alta pressão. Ondas de gravidade propagam-se para fora irradiando a energia transitória.");
+                const u = new SpeechSynthesisUtterance("As equações puras de águas rasas governam a propagação de ondas de gravidade e a conservação da vorticidade potencial. A perturbação inicial em formato de domo gaussiano induz uma resposta gravitacional irradiante. No Polo Sul, a Força de Coriolis cria um vórtice geostrófico anti-horário em torno do domo gaussiano sem qualquer difusão artificial.");
                 u.lang = 'pt-BR'; u.rate = rate;
                 window.speechSynthesis.speak(u);
             }
