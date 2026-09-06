@@ -3,982 +3,1338 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajuste Geostrófico de Rossby 3D & Raio de Deformação | FSC5101</title>
+    <title>Demonstração do Raio de Deformação de Rossby - Ajuste Geostrófico 3D & Ondas de Gravidade</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Three.js e OrbitControls para Visualização 3D Interativa -->
+    <!-- Three.js e OrbitControls para Visualização 3D da Superfície -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    
-    <!-- KaTeX para Renderização de Fórmulas Matemáticas -->
+
+    <!-- KaTeX para Fórmulas Matemáticas -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
 
     <style>
         :root {
-            --bg-dark: #070a12;
-            --bg-card: rgba(15, 23, 42, 0.92);
-            --bg-card-border: rgba(56, 189, 248, 0.25);
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --bg-dark: #050812;
+            --card-bg: rgba(13, 20, 36, 0.95);
+            --card-border: rgba(56, 189, 248, 0.35);
             --accent-cyan: #38bdf8;
             --accent-gold: #fbbf24;
-            --accent-emerald: #10b981;
-            --accent-rose: #f43f5e;
+            --accent-red: #f43f5e;
+            --accent-green: #34d399;
+            --accent-purple: #c084fc;
             --text-main: #f8fafc;
-            --text-sub: #cbd5e1;
+            --text-muted: #94a3b8;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
+            background: radial-gradient(circle at 50% 10%, #0c1527 0%, var(--bg-dark) 100%);
             color: var(--text-main);
-            font-size: 0.95rem;
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.12) 0%, transparent 45%),
-                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
-            background-attachment: fixed;
-            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
         }
 
-        .header-nav {
+        header {
+            padding: 12px 24px;
+            background: rgba(10, 16, 30, 0.95);
+            border-bottom: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 16px;
-            background: rgba(10, 16, 30, 0.9);
-            border: 1px solid var(--bg-card-border);
-            padding: 14px 20px;
-            border-radius: 14px;
+            z-index: 20;
         }
 
-        .back-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--bg-card-border);
-            color: var(--accent-cyan);
-            padding: 6px 14px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
-        .back-btn:hover { background: rgba(56, 189, 248, 0.2); }
-
-        .header-title h1 {
+        .title-group h1 {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 800;
             background: linear-gradient(90deg, #38bdf8, #818cf8, #fbbf24);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* LAYOUT PRINCIPAL EM 2 QUADROS */
-        .two-panel-grid {
+        .title-group p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .nav-links { display: flex; gap: 8px; }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: rgba(56, 189, 248, 0.25);
+            border-color: var(--accent-cyan);
+            color: #fff;
+        }
+
+        .main-container {
             display: grid;
-            grid-template-columns: 1.35fr 1fr;
-            gap: 16px;
-            align-items: start;
+            grid-template-columns: 360px 1fr 390px;
+            gap: 14px;
+            padding: 14px;
+            flex: 1;
+            max-width: 1920px;
+            margin: 0 auto;
+            width: 100%;
         }
 
-        @media (max-width: 1100px) {
-            .two-panel-grid { grid-template-columns: 1fr; }
+        @media (max-width: 1400px) {
+            .main-container { grid-template-columns: 340px 1fr; }
+            .sidebar-right { grid-column: span 2; }
         }
 
-        .panel-card {
-            background: var(--bg-card);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 16px;
-            padding: 18px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        @media (max-width: 950px) {
+            .main-container { grid-template-columns: 1fr; }
+            .sidebar-right { grid-column: span 1; }
+        }
+
+        .panel {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
         }
 
-        .panel-header-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--accent-cyan);
+        .panel-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 8px;
+            padding-bottom: 6px;
         }
 
-        /* QUADRO 1: INTERATIVO (3D & 2D STAGE) */
-        .viewport-3d-wrap {
-            position: relative;
-            width: 100%;
-            height: 380px;
-            background: #02040a;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        #webgl-canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-
-        .overlay-hud-top {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            pointer-events: none;
-        }
-
-        .hud-badge {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(56, 189, 248, 0.4);
+        .panel-header h2 {
+            font-size: 0.95rem;
+            font-weight: 700;
             color: var(--accent-cyan);
-            font-weight: 700;
-            font-size: 0.78rem;
-            padding: 4px 10px;
-            border-radius: 6px;
-            pointer-events: auto;
-            backdrop-filter: blur(8px);
-        }
-
-        .btn-group-sm {
             display: flex;
-            gap: 6px;
-            pointer-events: auto;
-        }
-
-        .btn-toggle-sm {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--text-sub);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        .btn-toggle-sm.active {
-            background: var(--accent-cyan);
-            color: #020617;
-            border-color: var(--accent-cyan);
-        }
-
-        /* CANVASES DAS 3 ETAPAS DE CORTE 1D (Time = Initial, Later, Final) */
-        .cross-sections-container {
-            display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 8px;
-            background: rgba(3, 7, 18, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 10px;
         }
 
-        .cs-graph-title {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--accent-gold);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .cs-canvas-box {
-            position: relative;
-            width: 100%;
-            height: 120px;
-            background: #020612;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-        }
-
-        /* CONTROLES DE SIMULAÇÃO */
-        .control-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 12px;
-            border-radius: 12px;
-        }
-
-        .control-item {
+        /* Controls */
+        .control-group {
             display: flex;
             flex-direction: column;
             gap: 4px;
         }
 
-        .control-label-row {
+        .control-label {
             display: flex;
             justify-content: space-between;
             font-size: 0.8rem;
-            color: var(--text-sub);
+            color: var(--text-muted);
         }
 
-        .control-val { font-weight: 700; color: var(--accent-gold); }
+        .control-val {
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
 
         input[type="range"] {
+            -webkit-appearance: none;
             width: 100%;
-            height: 5px;
+            height: 6px;
             background: rgba(255, 255, 255, 0.15);
             border-radius: 3px;
             outline: none;
             accent-color: var(--accent-cyan);
         }
 
-        .action-bar {
-            display: flex;
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
         }
 
-        .btn-act {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--bg-card-border);
-            color: white;
-            padding: 8px 14px;
+        .preset-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-main);
+            padding: 8px 10px;
             border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             cursor: pointer;
             transition: all 0.2s;
-            display: inline-flex;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .preset-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: var(--accent-cyan);
+        }
+
+        .preset-btn.active {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.35), rgba(129, 140, 248, 0.35));
+            border-color: var(--accent-cyan);
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #38bdf8, #2563eb);
+            color: #020617;
+            border: none;
+            padding: 9px 16px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
         }
-        .btn-act:hover { background: rgba(56, 189, 248, 0.25); border-color: var(--accent-cyan); }
-        .btn-act.primary { background: var(--primary-gradient); border-color: transparent; }
 
-        /* QUADRO 2: CONTEÚDO ESTÁTICO & COMET REFERENCE */
-        .var-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.82rem;
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.5);
         }
 
-        .var-table th, .var-table td {
-            padding: 7px 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            text-align: left;
-        }
-
-        .var-table th {
-            color: var(--accent-cyan);
-            font-weight: 700;
+        .formula-box {
             background: rgba(56, 189, 248, 0.08);
+            border-left: 3px solid var(--accent-cyan);
+            padding: 10px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            line-height: 1.45;
         }
 
-        .comet-comparison-grid {
+        /* Viewport Stage */
+        .viewport-container {
+            position: relative;
+            flex: 1;
+            min-height: 540px;
+            background: #020612;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .viewport-header-overlay {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: none;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .overlay-badge {
+            background: rgba(15, 23, 42, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            backdrop-filter: blur(8px);
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .view-options {
+            display: flex;
+            gap: 6px;
+            pointer-events: auto;
+        }
+
+        .view-toggle-btn {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-muted);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .view-toggle-btn.active {
+            background: rgba(56, 189, 248, 0.25);
+            border-color: var(--accent-cyan);
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .canvas-wrap {
+            flex: 1;
+            position: relative;
+            cursor: crosshair;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #webgl-canvas-wrap {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            display: block;
+        }
+
+        #2d-canvas-wrap {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2;
+            pointer-events: auto;
+        }
+
+        /* Colorbar legend */
+        .colorbar-container {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            padding: 6px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            backdrop-filter: blur(8px);
+            z-index: 10;
+        }
+
+        .colorbar-gradient {
+            width: 130px;
+            height: 10px;
+            border-radius: 2px;
+            background: linear-gradient(to right, #1d4ed8, #06b6d4, #10b981, #fbbf24, #ef4444);
+        }
+
+        .colorbar-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+        }
+
+        .legend-overlay {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            background: rgba(15, 23, 42, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.72rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            backdrop-filter: blur(8px);
+            z-index: 10;
+        }
+
+        .legend-item { display: flex; align-items: center; gap: 6px; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+        /* Metrics grid */
+        .metrics-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 6px;
+            gap: 8px;
+        }
+
+        .metric-card {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .metric-title {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .metric-val {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+            margin-top: 3px;
+        }
+
+        .graph-box {
+            position: relative;
+            height: 145px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* COMET Program Cards */
+        .comet-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: rgba(2, 6, 23, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 10px;
         }
 
         .comet-card {
-            background: rgba(2, 6, 23, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 10px;
-            font-size: 0.78rem;
-        }
-
-        .comet-card h4 {
-            color: var(--accent-gold);
-            font-size: 0.85rem;
-            margin-bottom: 6px;
-        }
-
-        .comet-bullet {
-            margin-left: 12px;
-            color: var(--text-sub);
+            font-size: 0.75rem;
             line-height: 1.4;
         }
+        .comet-card h4 { color: var(--accent-gold); font-size: 0.8rem; margin-bottom: 4px; }
+        .comet-item { color: var(--text-muted); margin-left: 10px; }
 
-        /* PAINEL DE VOZ */
-        .voice-box {
+        /* Voice Box */
+        .voice-card {
             background: rgba(168, 85, 247, 0.1);
             border: 1px solid rgba(168, 85, 247, 0.3);
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 8px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-        }
-
-        .voice-controls {
-            display: flex;
             gap: 6px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-voice {
-            background: #a855f7;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        .btn-voice:hover { opacity: 0.9; }
-
-        select.voice-select {
-            background: #0f172a;
-            border: 1px solid #334155;
-            color: white;
-            padding: 5px 8px;
-            border-radius: 6px;
-            font-size: 0.78rem;
         }
     </style>
 </head>
 <body>
-
-    <div class="header-nav">
-        <div>
-            <a href="../../index.html" class="back-btn">← Voltar às Disciplinas</a>
-        </div>
-        <div class="header-title">
-            <h1>🌊 Ajuste Geostrófico de Rossby 3D & Ondas de Gravidade</h1>
-        </div>
-        <div>
-            <span style="font-size:0.82rem; color:var(--text-sub); font-weight:600;">FSC5101 • Geofísica & Fluidos em Rotação</span>
-        </div>
-    </div>
-
-    <div class="two-panel-grid">
-        <!-- ==========================================
-             QUADRO 1 (PRIMEIRO QUADRO): ANIMAÇÃO 3D & CORTE 1D
-             ========================================== -->
-        <div class="panel-card">
-            <div class="panel-header-title">
-                <span>🎬 QUADRO 1 — Simulação Interativa 3D & Saída de Ondas de Gravidade</span>
-                <span style="font-size:0.75rem; color:var(--accent-gold);" id="status-time-stage">Tempo = Inicial (t = 0 s)</span>
-            </div>
-
-            <!-- VIEWPORT 3D WEBGL -->
-            <div class="viewport-3d-wrap">
-                <div class="overlay-hud-top">
-                    <div class="hud-badge" id="hud-regime">Regime: Grande Escala ($L > 2\pi L_R$)</div>
-                    <div class="btn-group-sm">
-                        <button class="btn-toggle-sm active" id="btn-wireframe" onclick="toggleWireframe()">Grade 3D</button>
-                        <button class="btn-toggle-sm active" id="btn-arrows" onclick="toggleArrows()">Vetores Vento</button>
-                        <button class="btn-toggle-sm active" id="btn-waves" onclick="toggleWaves()">Ondas de Gravidade</button>
-                    </div>
-                </div>
-                <div id="webgl-container" style="width:100%; height:100%;"></div>
-            </div>
-
-            <!-- CORTE TRANSVERSAL 1D DA SUPERFÍCIE E VENTO PERPENDICULAR (Fiel às Figuras 1, 2, 3) -->
-            <div class="cross-sections-container">
-                <div class="cs-graph-title">
-                    <span>📈 Corte Transversal ($X - Z$) — Perfil de Elevação $h(x)$ & Vento Perpendicular $v(x)$</span>
-                    <span style="color:var(--accent-cyan);" id="cs-time-label">Time = initial</span>
-                </div>
-                <div class="cs-canvas-box">
-                    <canvas id="cs-canvas"></canvas>
-                </div>
-            </div>
-
-            <!-- CONTROLES PARÂMETRICOS -->
-            <div class="control-grid">
-                <div class="control-item">
-                    <div class="control-label-row">
-                        <span>Latitude ($\phi$) [Coriolis $f$]</span>
-                        <span class="control-val" id="val-lat">45.0° N</span>
-                    </div>
-                    <input type="range" id="range-lat" min="-90" max="90" step="1" value="45" oninput="updateParams()">
-                </div>
-
-                <div class="control-item">
-                    <div class="control-label-row">
-                        <span>Escala Perturbação ($L$)</span>
-                        <span class="control-val" id="val-l">2500 km</span>
-                    </div>
-                    <input type="range" id="range-l" min="200" max="5000" step="100" value="2500" oninput="updateParams()">
-                </div>
-
-                <div class="control-item">
-                    <div class="control-label-row">
-                        <span>Profundidade Fluido ($H$)</span>
-                        <span class="control-val" id="val-h">400 m</span>
-                    </div>
-                    <input type="range" id="range-h" min="50" max="2000" step="50" value="400" oninput="updateParams()">
-                </div>
-
-                <div class="control-item">
-                    <div class="control-label-row">
-                        <span>Amplitude Perturbação ($\eta_0$)</span>
-                        <span class="control-val" id="val-eta">+100 m</span>
-                    </div>
-                    <input type="range" id="range-eta" min="-200" max="200" step="10" value="100" oninput="updateParams()">
-                </div>
-            </div>
-
-            <!-- BARRA DE AÇÕES E CONTROLE DE TEMPO -->
-            <div class="action-bar">
-                <button class="btn-act primary" onclick="togglePlay()" id="btn-play">▶️ Iniciar Ajuste</button>
-                <button class="btn-act" onclick="resetSim()">🔄 Reiniciar ($t=0$)</button>
-                <button class="btn-act" onclick="setPresetMode('large')">🔍 Grande Escala ($L \gg 2\pi L_R$)</button>
-                <button class="btn-act" onclick="setPresetMode('small')">⚡ Pequena Escala ($L \ll 2\pi L_R$)</button>
-            </div>
+    <header>
+        <div class="title-group">
+            <h1>Demonstração do Raio de Deformação de Rossby</h1>
+            <p>Polo Sul (-90°), Ajuste Geostrófico 3D & Saída de Ondas de Gravidade em Tempo Real</p>
         </div>
 
-        <!-- ==========================================
-             QUADRO 2 (SEGUNDO QUADRO): CONTEÚDO ESTÁTICO & COMET
-             ========================================== -->
-        <div class="panel-card">
-            <div class="panel-header-title">
-                <span>📖 QUADRO 2 — Identificação de Variáveis & Fundamentação Teórica</span>
+        <div class="nav-links">
+            <a href="../../index.html" class="nav-btn">🏠 Início</a>
+            <a href="../foucault-pendulum/index.html" class="nav-btn">🌍 Pêndulo 3D</a>
+            <a href="../rossby-radius/index.html" class="nav-btn active">🌊 Raio de Rossby 3D</a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- PAINEL ESQUERDO: CONTROLES FÍSICOS DA SIMULAÇÃO NUMÉRICA -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>⚙️ Parâmetros Dinâmicos</h2>
             </div>
 
-            <!-- TABELA DE IDENTIFICAÇÃO DE VARIÁVEIS -->
-            <table class="var-table">
-                <thead>
-                    <tr>
-                        <th>Variável</th>
-                        <th>Descrição Física</th>
-                        <th>Fórmula / Valor Atual</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><b>$L_R$</b></td>
-                        <td>Raio de Deformação de Rossby</td>
-                        <td><span id="var-lr-val" style="color:var(--accent-gold); font-weight:700;">612 km</span></td>
-                    </tr>
-                    <tr>
-                        <td><b>$L$</b></td>
-                        <td>Escala da Perturbação Inicial</td>
-                        <td><span id="var-l-val" style="color:var(--accent-cyan); font-weight:700;">2500 km</span></td>
-                    </tr>
-                    <tr>
-                        <td><b>$f$</b></td>
-                        <td>Parâmetro de Coriolis ($2\Omega\sin\phi$)</td>
-                        <td><span id="var-f-val" style="color:var(--accent-rose); font-weight:700;">1.03 × 10⁻⁴ s⁻¹</span></td>
-                    </tr>
-                    <tr>
-                        <td><b>$c_g$</b></td>
-                        <td>Vel. Ondas de Gravidade ($\sqrt{gH}$)</td>
-                        <td><span id="var-cg-val" style="color:var(--accent-emerald); font-weight:700;">62.6 m/s</span></td>
-                    </tr>
-                    <tr>
-                        <td><b>$v_g$</b></td>
-                        <td>Vento Geostrófico Resultante</td>
-                        <td>$rac{g}{f} rac{\partial \eta}{\partial x}$</td>
-                    </tr>
-                    <tr>
-                        <td><b>$q$</b></td>
-                        <td>Vorticidade Potencial Conservada</td>
-                        <td>$rac{\zeta + f}{H + \eta} = 	ext{const}$</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- PAINEL COMPARATIVO PROGRAMA COMET (FIGURA 4) -->
-            <div class="panel-header-title" style="margin-top:4px;">
-                <span>🎯 Comparativo COMET: Grande vs Pequena Escala</span>
+            <!-- Latitude (-90 a +90) -->
+            <div class="control-group">
+                <div class="control-label">
+                    <span>Latitude (&phi;) &rarr; Coriolis f</span>
+                    <span class="control-val" id="val-lat">-90.0° S (Polo Sul)</span>
+                </div>
+                <input type="range" id="slider-lat" min="-90" max="90" step="1" value="-90">
             </div>
 
-            <div class="comet-comparison-grid">
+            <!-- Tamanho Perturbação L -->
+            <div class="control-group">
+                <div class="control-label">
+                    <span>Tamanho da Perturbação (L)</span>
+                    <span class="control-val" id="val-radius">250 km (L &gt; Rd)</span>
+                </div>
+                <input type="range" id="slider-radius" min="20" max="500" step="10" value="250">
+            </div>
+
+            <!-- Profundidade H -->
+            <div class="control-group">
+                <div class="control-label">
+                    <span>Profundidade (H) &rarr; Onda c</span>
+                    <span class="control-val" id="val-depth">80 m (c = 28.0 m/s)</span>
+                </div>
+                <input type="range" id="slider-depth" min="10" max="400" step="5" value="80">
+            </div>
+
+            <!-- Amplitude -->
+            <div class="control-group">
+                <div class="control-label">
+                    <span>Amplitude (&eta; max)</span>
+                    <span class="control-val" id="val-amp">+1.2 m (Domo)</span>
+                </div>
+                <input type="range" id="slider-amp" min="-2.5" max="2.5" step="0.1" value="1.2">
+            </div>
+
+            <div class="panel-header" style="margin-top: 4px;">
+                <h2>🎯 Forma da Perturbação</h2>
+            </div>
+
+            <div class="btn-grid">
+                <button class="preset-btn active" id="btn-shape-dome">💧 Domo Circular</button>
+                <button class="preset-btn" id="btn-shape-depression">🌀 Depressão</button>
+                <button class="preset-btn" id="btn-shape-front">〰️ Frente Linear</button>
+                <button class="preset-btn" id="btn-shape-dipole">⚡ Dipolo (+ e -)</button>
+            </div>
+
+            <div class="panel-header" style="margin-top: 4px;">
+                <h2>❄️ Presets de Latitude</h2>
+            </div>
+
+            <div class="btn-grid">
+                <button class="preset-btn active" id="btn-preset-south-pole">❄️ Polo Sul (-90°)</button>
+                <button class="preset-btn" id="btn-preset-south-mid">📐 45° Sul (Hemisfério S)</button>
+                <button class="preset-btn" id="btn-preset-equator">🌴 Equador (0°)</button>
+                <button class="preset-btn" id="btn-preset-north-pole">❄️ Polo Norte (+90°)</button>
+            </div>
+
+            <div class="btn-grid" style="margin-top: 4px;">
+                <button class="action-btn" id="btn-trigger-bump">💧 Injetar Perturbação</button>
+                <button class="preset-btn" id="btn-clear-flow">🔄 Limpar Fluxo</button>
+            </div>
+
+            <div class="formula-box">
+                <strong>Equação do Raio de Rossby:</strong>
+                <span style="font-family:monospace; color:var(--accent-gold); display:block; margin-top:2px;">
+                    R_d = \sqrt{g H} / |f| = c / (2\Omega |\sin\phi|)
+                </span>
+                <span style="display:block; margin-top:4px; color:var(--text-muted); font-size:0.75rem;">
+                    • <b>No Polo Sul (&phi; = -90°):</b> Coriolis f é negativo &rarr; A deflexão é para a <b>esquerda</b>!<br>
+                    • <b>Saída de Ondas:</b> Ao clicar, veja as ondas de gravidade (Poincaré) irradiarem para fora do domínio!
+                </span>
+            </div>
+        </div>
+
+        <!-- PAINEL CENTRAL: VIEWPORT 3D WEBGL & 2D COM INTERAÇÃO DIRETA POR CLIQUE -->
+        <div class="viewport-container">
+            <div class="viewport-header-overlay">
+                <div class="overlay-badge">
+                    <span id="badge-regime">🌀 Polo Sul (-90°): Ajuste Geostrófico (L &gt; Rd)</span>
+                </div>
+                <div class="view-options">
+                    <button class="view-toggle-btn active" id="btn-mode-3d" onclick="setRenderMode('3d')">🌐 Modo 3D WebGL</button>
+                    <button class="view-toggle-btn" id="btn-mode-2d" onclick="setRenderMode('2d')">🗺️ Modo 2D Plano</button>
+                    <button class="view-toggle-btn active" id="btn-view-vectors">Vetores (u, v)</button>
+                    <button class="view-toggle-btn active" id="btn-view-particles">Partículas</button>
+                    <button class="view-toggle-btn active" id="btn-view-circles">Escalas L vs Rd</button>
+                </div>
+            </div>
+
+            <div class="canvas-wrap" id="canvas-stage">
+                <div id="webgl-canvas-wrap"></div>
+                <canvas id="sim-canvas"></canvas>
+            </div>
+
+            <div class="legend-overlay">
+                <div class="legend-item">
+                    <span class="legend-dot" style="background:#fbbf24; border:1px dashed #fff;"></span>
+                    <span style="color:#fbbf24;">Raio de Rossby (Rd)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background:#38bdf8; border:1px solid #fff;"></span>
+                    <span style="color:#38bdf8;">Tamanho da Perturbação (L)</span>
+                </div>
+                <div class="legend-item">
+                    <span style="color:#34d399;" id="legend-hemisphere">⟲ Rotação Anti-Horária no Sul</span>
+                </div>
+            </div>
+
+            <div class="colorbar-container">
+                <div class="colorbar-labels">
+                    <span>-1.5m</span>
+                    <span>0m</span>
+                    <span>+1.5m</span>
+                </div>
+                <div class="colorbar-gradient"></div>
+            </div>
+        </div>
+
+        <!-- PAINEL DIREITO: CORTE 1D (FIGURAS 1-3), COMET DECK (FIGURA 4) E DIAGNÓSTICO -->
+        <div class="panel sidebar-right">
+            <div class="panel-header">
+                <h2>📊 Diagnóstico do Escoamento</h2>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-title">Raio de Rossby (R_d)</div>
+                    <div class="metric-val" id="metric-rd" style="color:var(--accent-gold);">192 km</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Tamanho Perturbação (L)</div>
+                    <div class="metric-val" id="metric-l" style="color:var(--accent-cyan);">250 km</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Coriolis (f)</div>
+                    <div class="metric-val" id="metric-f" style="color:var(--accent-red);">-1.46e-4 s⁻¹</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Razão L / Rd</div>
+                    <div class="metric-val" id="metric-ratio" style="color:var(--accent-green);">1.30 (L &gt; Rd)</div>
+                </div>
+            </div>
+
+            <!-- CORTE TRANSVERSAL 1D (FIGURAS 1, 2, 3) -->
+            <div class="panel-header">
+                <h2>📈 Corte Transversal 1D (Alturas & Ventos)</h2>
+            </div>
+            <div class="graph-box" style="height: 155px;">
+                <canvas id="graph-cs-canvas"></canvas>
+            </div>
+
+            <!-- COMPARAÇÃO COMET (FIGURA 4) -->
+            <div class="panel-header">
+                <h2>🎯 Comparativo Programa COMET</h2>
+            </div>
+            <div class="comet-box">
                 <div class="comet-card">
-                    <h4>Large-scale ($L \gg 2\pi L_R$)</h4>
-                    <div class="comet-bullet">• A perturbação de massa é **mantida**.</div>
-                    <div class="comet-bullet">• Os ventos se ajustam ao campo de massa.</div>
-                    <div class="comet-bullet">• Tamanho da elevação muda muito pouco.</div>
-                    <div class="comet-bullet">• Radia poucas ondas de gravidade.</div>
+                    <h4>Large Scale ($L \gg 2\pi L_R$)</h4>
+                    <div class="comet-item">• Perturbação mantida</div>
+                    <div class="comet-item">• Vento ajusta à massa</div>
+                    <div class="comet-item">• Tamanho muda pouco</div>
                 </div>
                 <div class="comet-card">
-                    <h4>Small-scale ($L \ll 2\pi L_R$)</h4>
-                    <div class="comet-bullet">• A perturbação de massa **se espalha/achata**.</div>
-                    <div class="comet-bullet">• Campo de massa se ajusta aos ventos.</div>
-                    <div class="comet-bullet">• **Saída massiva de ondas de gravidade**.</div>
-                    <div class="comet-bullet">• A perturbação inicial enfraquece.</div>
+                    <h4>Small Scale ($L \ll 2\pi L_R$)</h4>
+                    <div class="comet-item">• Perturbação achata</div>
+                    <div class="comet-item">• Massa ajusta ao vento</div>
+                    <div class="comet-item">• Ondas de gravidade</div>
                 </div>
             </div>
 
-            <!-- DERIVAÇÃO MATEMÁTICA E EQUAÇÕES -->
-            <div style="background:rgba(2,6,23,0.7); border:1px solid rgba(255,255,255,0.08); padding:10px; border-radius:10px; font-size:0.8rem; line-height:1.5;">
-                <strong style="color:var(--accent-gold);">📐 Conservação da Vorticidade Potencial:</strong><br>
-                Partindo das equações de águas rasas linearizadas no plano-$f$:
-                $$rac{\partial u}{\partial t} - f v = -g rac{\partial \eta}{\partial x}, \quad rac{\partial v}{\partial t} + f u = -g rac{\partial \eta}{\partial y}$$
-                Obtém-se a equação de Helmholtz para a superfície ajustada no estado final ($\eta_\infty$):
-                $$
-abla^2 \eta_\infty - rac{1}{L_R^2} \eta_\infty = -rac{1}{L_R^2} \eta_0(x,y)$$
-                As ondas de gravidade transitórias (Poincaré) obedecem à relação de dispersão $\omega^2 = f^2 + g H k^2$, propagando-se para fora do domínio e deixando o vento geostrófico equilibrado: $v_g = rac{g}{f} rac{\partial \eta_\infty}{\partial x}$.
+            <!-- CURVA Rd vs LATITUDE -->
+            <div class="panel-header">
+                <h2>🌐 R_d vs Latitude (&phi;)</h2>
+            </div>
+            <div class="graph-box">
+                <canvas id="graph-lat-canvas"></canvas>
             </div>
 
-            <!-- PAINEL DE VOZ -->
-            <div class="voice-box">
-                <div style="display:flex; justify-size:space-between; align-items:center;">
-                    <span style="font-weight:700; color:#c084fc; font-size:0.85rem;">🔊 Explicação Narrada por Voz</span>
-                    <select id="voice-rate" class="voice-select" onchange="updateVoiceRate()">
+            <!-- NARRAÇÃO POR VOZ -->
+            <div class="voice-card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:700; color:#c084fc; font-size:0.8rem;">🔊 Narração Didática</span>
+                    <select id="voice-rate" style="background:#0f172a; color:#fff; border:1px solid #334155; padding:2px 6px; border-radius:4px; font-size:0.75rem;">
                         <option value="0.75">0.75x</option>
-                        <option value="1.0" selected>1.0x (Normal)</option>
+                        <option value="1.0" selected>1.0x</option>
                         <option value="1.25">1.25x</option>
-                        <option value="1.5">1.5x</option>
                     </select>
                 </div>
-                <div class="voice-controls">
-                    <button class="btn-voice" onclick="playVoiceNarration()">🔊 Ouvir Explicação</button>
-                    <button class="btn-voice" style="background:#64748b;" onclick="pauseVoiceNarration()">⏸️ Pausar</button>
-                    <button class="btn-voice" style="background:#ef4444;" onclick="stopVoiceNarration()">⏹️ Parar</button>
+                <div style="display:flex; gap:6px;">
+                    <button class="preset-btn" style="background:#a855f7; color:#fff;" onclick="playVoice()">🔊 Ouvir Explicação</button>
+                    <button class="preset-btn" onclick="stopVoice()">⏹️ Parar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT DE SIMULAÇÃO 3D WEBGL, CORTE TRANSVERSAL 1D E FÍSICA SHALLOW WATER -->
+    <!-- SIMULADOR NUMÉRICO INTEGRAÇÃO SHALLOW WATER 2D + ENGINE 3D WEBGL -->
     <script>
-        // --- CONSTANTES E PARÂMETROS FÍSICOS ---
-        const g = 9.81; // m/s²
-        const Omega = 7.2921e-5; // rad/s (rotação da Terra)
+        const g = 9.81;
+        const Omega = 7.2921e-5;
 
-        let lat = 45; // graus
-        let L_scale = 2500; // km
-        let H_depth = 400; // m
-        let eta_max = 100; // m
+        const NX = 100;
+        const NY = 100;
+        const domainKm = 1200;
+        const dx = (domainKm * 1000) / NX;
+        const dy = (domainKm * 1000) / NY;
 
-        let f_coriolis = 2 * Omega * Math.sin(lat * Math.PI / 180);
-        let L_R = Math.sqrt(g * H_depth) / Math.abs(f_coriolis) / 1000; // km
+        let eta = new Float32Array(NX * NY);
+        let eta_next = new Float32Array(NX * NY);
+        let u = new Float32Array(NX * NY);
+        let u_next = new Float32Array(NX * NY);
+        let v = new Float32Array(NX * NY);
+        let v_next = new Float32Array(NX * NY);
 
-        let isPlaying = false;
-        let simTime = 0; // segundos de simulação
-        let showWireframe = true;
-        let showArrows = true;
-        let showWaves = true;
+        // Partículas traçadoras
+        const NUM_PARTICLES = 400;
+        const particles = [];
+        for (let i = 0; i < NUM_PARTICLES; i++) {
+            particles.push({
+                x: Math.random() * NX,
+                y: Math.random() * NY,
+                age: Math.random() * 100,
+                maxAge: 80 + Math.random() * 60
+            });
+        }
 
-        // --- CONFIGURAÇÃO THREE.JS 3D ---
-        let scene, camera, renderer, surfaceMesh, gridMesh, arrowsGroup, wavesGroup;
-        const GRID_SIZE = 80;
-        const DOMAIN_KM = 5000;
+        const state = {
+            latDeg: -90,
+            depthH: 80,
+            pertRadiusKm: 250,
+            pertAmpM: 1.2,
+            pertShape: 'dome',
+            renderMode: '3d', // '3d' ou '2d'
+            viewHeight: true,
+            viewVectors: true,
+            viewParticles: true,
+            viewCircles: true,
+            dt: 25,
+            stepsPerFrame: 4
+        };
+
+        // Elementos DOM
+        const sliderLat = document.getElementById('slider-lat');
+        const valLat = document.getElementById('val-lat');
+        const sliderRadius = document.getElementById('slider-radius');
+        const valRadius = document.getElementById('val-radius');
+        const sliderDepth = document.getElementById('slider-depth');
+        const valDepth = document.getElementById('val-depth');
+        const sliderAmp = document.getElementById('slider-amp');
+        const valAmp = document.getElementById('val-amp');
+
+        const btnTriggerBump = document.getElementById('btn-trigger-bump');
+        const btnClearFlow = document.getElementById('btn-clear-flow');
+
+        const btnShapeDome = document.getElementById('btn-shape-dome');
+        const btnShapeDepression = document.getElementById('btn-shape-depression');
+        const btnShapeFront = document.getElementById('btn-shape-front');
+        const btnShapeDipole = document.getElementById('btn-shape-dipole');
+
+        const btnPresetSouthPole = document.getElementById('btn-preset-south-pole');
+        const btnPresetSouthMid = document.getElementById('btn-preset-south-mid');
+        const btnPresetEquator = document.getElementById('btn-preset-equator');
+        const btnPresetNorthPole = document.getElementById('btn-preset-north-pole');
+
+        const btnViewVectors = document.getElementById('btn-view-vectors');
+        const btnViewParticles = document.getElementById('btn-view-particles');
+        const btnViewCircles = document.getElementById('btn-view-circles');
+
+        const metricRd = document.getElementById('metric-rd');
+        const metricL = document.getElementById('metric-l');
+        const metricF = document.getElementById('metric-f');
+        const metricRatio = document.getElementById('metric-ratio');
+        const badgeRegime = document.getElementById('badge-regime');
+        const legendHemisphere = document.getElementById('legend-hemisphere');
+
+        const simCanvas = document.getElementById('sim-canvas');
+        const simCtx = simCanvas.getContext('2d');
+        const csCanvas = document.getElementById('graph-cs-canvas');
+        const csCtx = csCanvas.getContext('2d');
+        const latCanvas = document.getElementById('graph-lat-canvas');
+        const latCtx = latCanvas.getContext('2d');
+
+        // --- INICIALIZAÇÃO DO ENGINE 3D WEBGL (THREE.JS) ---
+        let scene, camera, renderer, controls, surfaceMesh;
+        const webglWrap = document.getElementById('webgl-canvas-wrap');
 
         function init3D() {
-            const container = document.getElementById('webgl-container');
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x02040a);
+            scene.background = new THREE.Color(0x020612);
 
-            camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-            camera.position.set(0, 55, 75);
+            camera = new THREE.PerspectiveCamera(45, webglWrap.clientWidth / webglWrap.clientHeight, 0.1, 1000);
+            camera.position.set(0, 50, 70);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(width, height);
+            renderer.setSize(webglWrap.clientWidth, webglWrap.clientHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
-            container.appendChild(renderer.domElement);
+            webglWrap.appendChild(renderer.domElement);
 
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
 
             // Luzes
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-            scene.add(ambientLight);
+            const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambient);
 
-            const dirLight = new THREE.DirectionalLight(0x38bdf8, 0.8);
-            dirLight.position.set(20, 50, 20);
+            const dirLight = new THREE.DirectionalLight(0x38bdf8, 0.9);
+            dirLight.position.set(30, 60, 30);
             scene.add(dirLight);
 
-            const pointLight = new THREE.PointLight(0xfbbf24, 0.5);
-            pointLight.position.set(-20, 30, -20);
-            scene.add(pointLight);
+            // Criar Malha 3D da Superfície Dinâmica
+            const geom = new THREE.PlaneGeometry(60, 60, NX - 1, NY - 1);
+            geom.rotateX(-Math.PI / 2);
 
-            // Criar Malha 3D da Superfície Isobarica
-            const geometry = new THREE.PlaneGeometry(60, 60, GRID_SIZE - 1, GRID_SIZE - 1);
-            geometry.rotateX(-Math.PI / 2);
-
-            const material = new THREE.MeshPhongMaterial({
+            const mat = new THREE.MeshPhongMaterial({
                 color: 0x38bdf8,
-                wireframe: showWireframe,
+                wireframe: false,
                 side: THREE.DoubleSide,
-                shininess: 80,
-                transparent: true,
-                opacity: 0.85
+                shininess: 90,
+                vertexColors: true
             });
 
-            surfaceMesh = new THREE.Mesh(geometry, material);
+            surfaceMesh = new THREE.Mesh(geom, mat);
             scene.add(surfaceMesh);
 
-            // Grupo de Vetores Vento e Grupo de Ondas de Gravidade
-            arrowsGroup = new THREE.Group();
-            scene.add(arrowsGroup);
-
-            wavesGroup = new THREE.Group();
-            scene.add(wavesGroup);
-
-            window.addEventListener('resize', onWindowResize);
-            updateSurfaceGeometry();
+            // Grade de referência 3D
+            const gridHelper = new THREE.GridHelper(60, 12, 0x38bdf8, 0x1e293b);
+            gridHelper.position.y = -0.1;
+            scene.add(gridHelper);
         }
 
-        function onWindowResize() {
-            const container = document.getElementById('webgl-container');
-            if (!container) return;
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-            renderer.setSize(width, height);
-        }
-
-        // --- CÁLCULO FÍSICO DO ESTADO 3D E CORTE TRANSVERSAL 1D ---
-        function getSurfaceHeight(x_km, y_km, t) {
-            // Distância radial
-            const r_km = Math.sqrt(x_km * x_km + y_km * y_km);
-            const L_m = L_scale * 1000;
-            const L_R_m = L_R * 1000;
-
-            // Perturbação inicial (Gaussiana)
-            const eta0 = eta_max * Math.exp(-(x_km * x_km + y_km * y_km) / (L_scale * L_scale));
-
-            // Estado Final Ajustado (Helmholtz / Green function convolution)
-            const alpha = 1.0 / (1.0 + (L_R / L_scale) * (L_R / L_scale));
-            const eta_inf = eta0 * (1.0 - (1.0 - alpha) * Math.exp(-r_km / L_R));
-
-            // Ondas de Gravidade Radiantes (Poincaré transient waves propagating outward)
-            const c_g = Math.sqrt(g * H_depth); // m/s
-            const c_km_s = c_g / 1000.0;
-            const wave_front = c_km_s * t;
-
-            let eta_wave = 0;
-            if (t > 0 && showWaves) {
-                const dist_from_front = Math.abs(r_km - wave_front);
-                if (dist_from_front < L_scale) {
-                    const wave_amp = (1.0 - alpha) * eta_max * Math.exp(-dist_from_front * dist_from_front / (0.25 * L_scale * L_scale));
-                    eta_wave = wave_amp * Math.cos(0.02 * (r_km - wave_front * 0.5));
-                }
-            }
-
-            // Transição temporal t do estado inicial -> final
-            const tau = 150.0; // tempo característico de ajuste
-            const factor = 1.0 - Math.exp(-t / tau);
-
-            const eta_current = eta0 * (1.0 - factor) + eta_inf * factor + eta_wave * (1.0 - factor);
-            return { eta: eta_current, eta_inf: eta_inf, eta0: eta0 };
-        }
-
-        function updateSurfaceGeometry() {
+        function update3DMesh() {
             if (!surfaceMesh) return;
-            const positions = surfaceMesh.geometry.attributes.position;
-            const colorsAttr = [];
+            const pos = surfaceMesh.geometry.attributes.position;
+            const colors = [];
 
-            for (let i = 0; i < GRID_SIZE; i++) {
-                for (let j = 0; j < GRID_SIZE; j++) {
-                    const index = i * GRID_SIZE + j;
+            for (let j = 0; j < NY; j++) {
+                for (let i = 0; i < NX; i++) {
+                    const idx = j * NX + i;
+                    const vertIndex = j * NX + i;
+                    const etaVal = eta[idx];
 
-                    // Converter coordenadas 3D para km (-2500 km a +2500 km)
-                    const x_km = ((j / (GRID_SIZE - 1)) - 0.5) * DOMAIN_KM;
-                    const z_km = ((i / (GRID_SIZE - 1)) - 0.5) * DOMAIN_KM;
+                    // Atualizar Y da malha 3D
+                    pos.setY(vertIndex, etaVal * 3.5);
 
-                    const res = getSurfaceHeight(x_km, z_km, simTime);
-                    const y_val = res.eta * 0.08; // escala visual de altura
-
-                    positions.setY(index, y_val);
-
-                    // Colorização por altura perturbation (Vermelho High, Azul Low)
-                    const normEta = Math.max(-1, Math.min(1, res.eta / (Math.abs(eta_max) + 1)));
-                    let r = 0.2, g_c = 0.6, b = 0.9;
-
-                    if (normEta > 0) {
-                        r = 0.2 + 0.8 * normEta;
-                        g_c = 0.6 * (1 - normEta);
-                        b = 0.9 * (1 - normEta);
+                    // Colorizar por elevação (Vermelho High, Azul Low)
+                    const norm = Math.max(-1, Math.min(1, etaVal / 1.5));
+                    let r = 0.1, g_c = 0.5, b = 0.9;
+                    if (norm > 0) {
+                        r = 0.1 + 0.85 * norm;
+                        g_c = 0.5 * (1 - norm);
+                        b = 0.9 * (1 - norm);
                     } else {
-                        r = 0.2 * (1 + normEta);
-                        g_c = 0.6 * (1 + normEta);
-                        b = 0.9 - 0.7 * normEta;
+                        r = 0.1 * (1 + norm);
+                        g_c = 0.5 * (1 + norm);
+                        b = 0.9 - 0.7 * norm;
                     }
-
-                    colorsAttr.push(r, g_c, b);
+                    colors.push(r, g_c, b);
                 }
             }
 
-            surfaceMesh.geometry.setAttribute('color', new THREE.Float32BufferAttribute(colorsAttr, 3));
+            surfaceMesh.geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
             surfaceMesh.geometry.attributes.position.needsUpdate = true;
             surfaceMesh.geometry.computeVertexNormals();
-
-            // Atualizar Vetores Vento
-            updateWindArrows();
-
-            // Atualizar Corte Transversal 1D
-            draw1DCrossSection();
         }
 
-        function updateWindArrows() {
-            if (!arrowsGroup) return;
-            while (arrowsGroup.children.length > 0) {
-                arrowsGroup.remove(arrowsGroup.children[0]);
+        function setRenderMode(mode) {
+            state.renderMode = mode;
+            document.getElementById('btn-mode-3d').classList.toggle('active', mode === '3d');
+            document.getElementById('btn-mode-2d').classList.toggle('active', mode === '2d');
+
+            if (mode === '3d') {
+                webglWrap.style.display = 'block';
+                simCanvas.style.opacity = '0.35'; // overlay suave de interações
+            } else {
+                webglWrap.style.display = 'none';
+                simCanvas.style.opacity = '1.0';
+            }
+        }
+
+        // CÁLCULOS FÍSICOS
+        function getPhysics() {
+            const phiRad = (state.latDeg * Math.PI) / 180;
+            const f = 2 * Omega * Math.sin(phiRad);
+            const c = Math.sqrt(g * state.depthH);
+            let Rd_km = Infinity;
+            if (Math.abs(f) > 1e-7) {
+                Rd_km = (c / Math.abs(f)) / 1000;
+            }
+            const ratio = Rd_km !== Infinity ? state.pertRadiusKm / Rd_km : 0;
+            return { f, c, Rd_km, ratio };
+        }
+
+        function updateMetricsUI() {
+            const { f, c, Rd_km, ratio } = getPhysics();
+
+            const hem = state.latDeg < 0 ? 'S (Hemisfério Sul)' : (state.latDeg > 0 ? 'N (Hemisfério Norte)' : '(Equador)');
+            valLat.textContent = `${Math.abs(state.latDeg).toFixed(1)}° ${hem}`;
+            valDepth.textContent = `${state.depthH} m (c = ${c.toFixed(1)} m/s)`;
+            valRadius.textContent = `${state.pertRadiusKm} km (${state.pertRadiusKm > Rd_km ? 'L > Rd' : 'L < Rd'})`;
+            valAmp.textContent = `${state.pertAmpM > 0 ? '+' : ''}${state.pertAmpM.toFixed(1)} m`;
+
+            metricF.textContent = `${f.toExponential(2)} s⁻¹`;
+            metricL.textContent = `${state.pertRadiusKm} km`;
+
+            if (state.latDeg < 0) {
+                legendHemisphere.textContent = '⟲ Rotação Anti-Horária no Sul (f < 0)';
+                legendHemisphere.style.color = '#34d399';
+            } else if (state.latDeg > 0) {
+                legendHemisphere.textContent = '⟳ Rotação Horária no Norte (f > 0)';
+                legendHemisphere.style.color = '#38bdf8';
+            } else {
+                legendHemisphere.textContent = '↔️ Sem Rotação (f = 0)';
+                legendHemisphere.style.color = '#fbbf24';
             }
 
-            if (!showArrows) return;
+            if (Rd_km === Infinity || isNaN(Rd_km)) {
+                metricRd.textContent = '∞ (Infinito)';
+                metricRatio.textContent = '0.0 (L << Rd)';
+                badgeRegime.textContent = '🌴 Equador: Dispersão Gravitacional Pura (Sem Coriolis)';
+            } else {
+                metricRd.textContent = `${Rd_km.toFixed(0)} km`;
+                metricRatio.textContent = `${ratio.toFixed(2)} (${state.pertRadiusKm > Rd_km ? 'L > Rd' : 'L < Rd'})`;
 
-            const step = 8;
-            for (let i = step; i < GRID_SIZE - step; i += step) {
-                for (let j = step; j < GRID_SIZE - step; j += step) {
-                    const x_km = ((j / (GRID_SIZE - 1)) - 0.5) * DOMAIN_KM;
-                    const z_km = ((i / (GRID_SIZE - 1)) - 0.5) * DOMAIN_KM;
+                const latLabel = state.latDeg < 0 ? `Polo Sul (${state.latDeg}°)` : `Latitude ${state.latDeg}°`;
 
-                    const delta = 50; // km
-                    const h_center = getSurfaceHeight(x_km, z_km, simTime).eta;
-                    const h_px = getSurfaceHeight(x_km + delta, z_km, simTime).eta;
-                    const h_pz = getSurfaceHeight(x_km, z_km + delta, simTime).eta;
+                if (state.pertRadiusKm > Rd_km * 1.15) {
+                    badgeRegime.textContent = `🌀 ${latLabel}: Ajuste Geostrófico (L > Rd)`;
+                } else if (state.pertRadiusKm < Rd_km * 0.85) {
+                    badgeRegime.textContent = `⚡ ${latLabel}: Ondas de Gravidade / Poincaré (L < Rd)`;
+                } else {
+                    badgeRegime.textContent = `⚖️ ${latLabel}: Regime de Transição (L ≈ Rd)`;
+                }
+            }
+        }
 
-                    const dh_dx = (h_px - h_center) / (delta * 1000);
-                    const dh_dz = (h_pz - h_center) / (delta * 1000);
+        // INJETAR PERTURBAÇÃO (DOMO, DEPRESSÃO, FRENTE, DIPOLO)
+        function injectPerturbation(cx = NX / 2, cy = NY / 2) {
+            const rCells = (state.pertRadiusKm * 1000) / dx;
+            const amp = state.pertAmpM;
 
-                    // Vento geostrófico
-                    let u_g = -(g / f_coriolis) * dh_dz;
-                    let v_g = (g / f_coriolis) * dh_dx;
+            for (let j = 0; j < NY; j++) {
+                for (let i = 0; i < NX; i++) {
+                    const idx = j * NX + i;
+                    const di = i - cx;
+                    const dj = j - cy;
+                    const distSq = di * di + dj * dj;
 
-                    const speed = Math.sqrt(u_g * u_g + v_g * v_g);
-                    if (speed > 0.01) {
-                        const dir = new THREE.Vector3(u_g, 0, v_g).normalize();
-                        const origin = new THREE.Vector3((j / (GRID_SIZE - 1) - 0.5) * 60, h_center * 0.08 + 0.5, (i / (GRID_SIZE - 1) - 0.5) * 60);
-                        const length = Math.min(6, Math.max(1, speed * 0.15));
-                        const arrowHelper = new THREE.ArrowHelper(dir, origin, length, 0xfbbf24, 0.4 * length, 0.3 * length);
-                        arrowsGroup.add(arrowHelper);
+                    if (state.pertShape === 'dome') {
+                        eta[idx] += amp * Math.exp(-distSq / (2 * (rCells * 0.5) ** 2));
+                    } else if (state.pertShape === 'depression') {
+                        eta[idx] -= Math.abs(amp) * Math.exp(-distSq / (2 * (rCells * 0.5) ** 2));
+                    } else if (state.pertShape === 'front') {
+                        const frontProfile = Math.tanh((i - cx) / (rCells * 0.4));
+                        eta[idx] += amp * 0.8 * frontProfile;
+                    } else if (state.pertShape === 'dipole') {
+                        const dPlus = (i - (cx - rCells * 0.4)) ** 2 + (j - cy) ** 2;
+                        const dMinus = (i - (cx + rCells * 0.4)) ** 2 + (j - cy) ** 2;
+                        eta[idx] += amp * (Math.exp(-dPlus / (2 * (rCells * 0.35) ** 2)) - Math.exp(-dMinus / (2 * (rCells * 0.35) ** 2)));
                     }
                 }
             }
         }
 
-        // --- RENDERIZAÇÃO DO CORTE TRANSVERSAL 1D (Fiel às Figuras 1, 2, 3 do Usuário) ---
-        function draw1DCrossSection() {
-            const canvas = document.getElementById('cs-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const w = canvas.width = canvas.clientWidth;
-            const h = canvas.height = canvas.clientHeight;
+        function clearFlow() {
+            eta.fill(0); eta_next.fill(0);
+            u.fill(0); u_next.fill(0);
+            v.fill(0); v_next.fill(0);
+        }
 
+        // INTEGRAÇÃO NUMÉRICA DAS EQUAÇÕES DE ÁGUAS RASAS
+        function stepPhysics() {
+            const { f } = getPhysics();
+            const H = state.depthH;
+            const dt = state.dt;
+            const damping = 0.9995;
+
+            for (let j = 1; j < NY - 1; j++) {
+                for (let i = 1; i < NX - 1; i++) {
+                    const idx = j * NX + i;
+                    const deta_dx = (eta[idx + 1] - eta[idx - 1]) / (2 * dx);
+                    const deta_dy = (eta[idx + NX] - eta[idx - NX]) / (2 * dy);
+
+                    u_next[idx] = (u[idx] + dt * (f * v[idx] - g * deta_dx)) * damping;
+                    v_next[idx] = (v[idx] + dt * (-f * u[idx] - g * deta_dy)) * damping;
+                }
+            }
+
+            for (let i = 0; i < NX; i++) {
+                u_next[i] = u_next[i + NX] * 0.9;
+                u_next[(NY - 1) * NX + i] = u_next[(NY - 2) * NX + i] * 0.9;
+                v_next[i] = v_next[i + NX] * 0.9;
+                v_next[(NY - 1) * NX + i] = v_next[(NY - 2) * NX + i] * 0.9;
+            }
+            for (let j = 0; j < NY; j++) {
+                u_next[j * NX] = u_next[j * NX + 1] * 0.9;
+                u_next[j * NX + (NX - 1)] = u_next[j * NX + (NX - 2)] * 0.9;
+                v_next[j * NX] = v_next[j * NX + 1] * 0.9;
+                v_next[j * NX + (NX - 1)] = v_next[j * NX + (NX - 2)] * 0.9;
+            }
+
+            u.set(u_next);
+            v.set(v_next);
+
+            for (let j = 1; j < NY - 1; j++) {
+                for (let i = 1; i < NX - 1; i++) {
+                    const idx = j * NX + i;
+                    const du_dx = (u[idx + 1] - u[idx - 1]) / (2 * dx);
+                    const dv_dy = (v[idx + NX] - v[idx - NX]) / (2 * dy);
+
+                    eta_next[idx] = (eta[idx] - dt * H * (du_dx + dv_dy)) * damping;
+                }
+            }
+
+            for (let i = 0; i < NX; i++) {
+                eta_next[i] = eta_next[i + NX] * 0.92;
+                eta_next[(NY - 1) * NX + i] = eta_next[(NY - 2) * NX + i] * 0.92;
+            }
+            for (let j = 0; j < NY; j++) {
+                eta_next[j * NX] = eta_next[j * NX + 1] * 0.92;
+                eta_next[j * NX + (NX - 1)] = eta_next[j * NX + (NX - 2)] * 0.92;
+            }
+
+            eta.set(eta_next);
+        }
+
+        function ensureCanvasSize(cvs) {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = cvs.getBoundingClientRect();
+            const targetW = Math.floor(rect.width * dpr);
+            const targetH = Math.floor(rect.height * dpr);
+            if (cvs.width !== targetW || cvs.height !== targetH) {
+                if (targetW > 0 && targetH > 0) {
+                    cvs.width = targetW;
+                    cvs.height = targetH;
+                }
+            }
+        }
+
+        function getColorForEta(val) {
+            const norm = Math.max(0, Math.min(1, (val + 1.5) / 3.0));
+            let r, g, b;
+            if (norm < 0.25) {
+                const t = norm / 0.25;
+                r = Math.floor(15 + 20 * t); g = Math.floor(45 + 95 * t); b = Math.floor(190 + 65 * t);
+            } else if (norm < 0.5) {
+                const t = (norm - 0.25) / 0.25;
+                r = Math.floor(35 + 10 * t); g = Math.floor(140 + 70 * t); b = Math.floor(255 - 100 * t);
+            } else if (norm < 0.75) {
+                const t = (norm - 0.5) / 0.25;
+                r = Math.floor(45 + 210 * t); g = Math.floor(210 + 20 * t); b = Math.floor(155 - 120 * t);
+            } else {
+                const t = (norm - 0.75) / 0.25;
+                r = Math.floor(255); g = Math.floor(230 - 170 * t); b = Math.floor(35 - 15 * t);
+            }
+            return `rgb(${r},${g},${b})`;
+        }
+
+        // DESENHO DO SIMULADOR 2D
+        function drawSimulation() {
+            ensureCanvasSize(simCanvas);
+            const ctx = simCtx;
+            const w = simCanvas.width;
+            const h = simCanvas.height;
+            if (!w || !h) return;
+
+            const dpr = window.devicePixelRatio || 1;
             ctx.clearRect(0, 0, w, h);
 
-            // Desenhar Eixo
+            const cellW = w / NX;
+            const cellH = h / NY;
+
+            // Modo 2D Heatmap
+            if (state.renderMode === '2d') {
+                for (let j = 0; j < NY; j++) {
+                    for (let i = 0; i < NX; i++) {
+                        const val = eta[j * NX + i];
+                        ctx.fillStyle = getColorForEta(val);
+                        ctx.fillRect(i * cellW, j * cellH, cellW + 0.5, cellH + 0.5);
+                    }
+                }
+            }
+
+            const cx = w / 2;
+            const cy = h / 2;
+            const { Rd_km } = getPhysics();
+
+            // Escalas Circulares (L vs Rd)
+            if (state.viewCircles) {
+                if (Rd_km !== Infinity && !isNaN(Rd_km)) {
+                    const rdPixels = ((Rd_km * 1000) / (domainKm * 1000)) * w;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, rdPixels, 0, Math.PI * 2);
+                    ctx.strokeStyle = '#fbbf24';
+                    ctx.lineWidth = 2.2 * dpr;
+                    ctx.setLineDash([6 * dpr, 4 * dpr]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                    ctx.fillStyle = '#fbbf24';
+                    ctx.font = `bold ${10.5 * dpr}px sans-serif`;
+                    ctx.fillText(`Rd = ${Rd_km.toFixed(0)} km`, cx - 35 * dpr, cy - rdPixels - 6 * dpr);
+                }
+
+                const lPixels = ((state.pertRadiusKm * 1000) / (domainKm * 1000)) * w * 0.5;
+                ctx.beginPath();
+                ctx.arc(cx, cy, lPixels, 0, Math.PI * 2);
+                ctx.strokeStyle = '#38bdf8';
+                ctx.lineWidth = 2 * dpr;
+                ctx.stroke();
+                ctx.fillStyle = '#38bdf8';
+                ctx.font = `bold ${10.5 * dpr}px sans-serif`;
+                ctx.fillText(`L = ${state.pertRadiusKm} km`, cx - 30 * dpr, cy + lPixels + 14 * dpr);
+            }
+
+            // Vetores
+            if (state.viewVectors && state.renderMode === '2d') {
+                const step = 5;
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+                ctx.lineWidth = 1.2 * dpr;
+
+                for (let j = 3; j < NY; j += step) {
+                    for (let i = 3; i < NX; i += step) {
+                        const idx = j * NX + i;
+                        const vx = u[idx]; const vy = v[idx];
+                        const speed = Math.sqrt(vx * vx + vy * vy);
+
+                        if (speed > 0.005) {
+                            const px = (i + 0.5) * cellW;
+                            const py = (j + 0.5) * cellH;
+                            const len = Math.min(speed * 25 * dpr, cellW * 3.5);
+                            const angle = Math.atan2(vy, vx);
+                            const endX = px + Math.cos(angle) * len;
+                            const endY = py + Math.sin(angle) * len;
+
+                            ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(endX, endY); ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            // Partículas
+            if (state.viewParticles && state.renderMode === '2d') {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                particles.forEach(p => {
+                    const gi = Math.floor(p.x); const gj = Math.floor(p.y);
+                    if (gi >= 0 && gi < NX && gj >= 0 && gj < NY) {
+                        const idx = gj * NX + gi;
+                        p.x += u[idx] * 0.12; p.y += v[idx] * 0.12;
+                    }
+                    p.age++;
+                    if (p.age > p.maxAge || p.x < 0 || p.x >= NX || p.y < 0 || p.y >= NY) {
+                        p.x = Math.random() * NX; p.y = Math.random() * NY; p.age = 0;
+                    }
+                    ctx.beginPath();
+                    ctx.arc(p.x * cellW, p.y * cellH, 1.8 * dpr, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            }
+        }
+
+        // DESENHO DO CORTE TRANSVERSAL 1D (FIGURAS 1, 2, 3)
+        function drawCrossSectionGraph() {
+            ensureCanvasSize(csCanvas);
+            const ctx = csCtx;
+            const w = csCanvas.width;
+            const h = csCanvas.height;
+            if (!w || !h) return;
+
+            const dpr = window.devicePixelRatio || 1;
+            ctx.clearRect(0, 0, w, h);
+
             const midY_h = h * 0.35;
             const midY_v = h * 0.80;
 
+            // Eixo
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 1 * dpr;
             ctx.beginPath();
-            ctx.moveTo(40, midY_h); ctx.lineTo(w - 20, midY_h);
-            ctx.moveTo(40, midY_v); ctx.lineTo(w - 20, midY_v);
+            ctx.moveTo(35 * dpr, midY_h); ctx.lineTo(w - 15 * dpr, midY_h);
+            ctx.moveTo(35 * dpr, midY_v); ctx.lineTo(w - 15 * dpr, midY_v);
             ctx.stroke();
 
-            // Rótulos
             ctx.fillStyle = '#94a3b8';
-            ctx.font = '10px Inter, sans-serif';
-            ctx.fillText('Geopotential height η', 10, midY_h - 15);
-            ctx.fillText('Speed perpendicular v_g', 10, midY_v - 15);
-            ctx.fillText('2500 km', w / 2 - 20, h - 4);
+            ctx.font = `${8.5 * dpr}px sans-serif`;
+            ctx.fillText('Heights (η)', 5 * dpr, midY_h - 10 * dpr);
+            ctx.fillText('Winds (v_g)', 5 * dpr, midY_v - 10 * dpr);
 
-            const numPoints = 120;
-            const dx_pixel = (w - 60) / numPoints;
+            const numP = NX;
+            const dxP = (w - 50 * dpr) / numP;
+            const cy = Math.floor(NY / 2);
 
-            // 1. Desenhar Área Perturbada de Altura η(x) (Vermelho)
+            // Altura eta (Vermelho)
             ctx.beginPath();
             ctx.fillStyle = 'rgba(239, 68, 68, 0.35)';
             ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1.8 * dpr;
 
-            for (let k = 0; k <= numPoints; k++) {
-                const x_km = ((k / numPoints) - 0.5) * DOMAIN_KM;
-                const res = getSurfaceHeight(x_km, 0, simTime);
-                const px = 40 + k * dx_pixel;
-                const py = midY_h - res.eta * 0.25;
-
-                if (k === 0) ctx.moveTo(px, midY_h);
+            for (let i = 0; i < NX; i++) {
+                const val = eta[cy * NX + i];
+                const px = 35 * dpr + i * dxP;
+                const py = midY_h - (val / 1.5) * (h * 0.22);
+                if (i === 0) ctx.moveTo(px, midY_h);
                 ctx.lineTo(px, py);
             }
-            ctx.lineTo(40 + numPoints * dx_pixel, midY_h);
+            ctx.lineTo(35 * dpr + (NX - 1) * dxP, midY_h);
             ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
+            ctx.fill(); ctx.stroke();
 
-            // 2. Desenhar Área Perturbada de Vento Perpendicular v(x) (Azul)
+            // Vento v (Azul)
             ctx.beginPath();
             ctx.fillStyle = 'rgba(56, 189, 248, 0.4)';
             ctx.strokeStyle = '#38bdf8';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1.8 * dpr;
 
-            for (let k = 0; k <= numPoints; k++) {
-                const x_km = ((k / numPoints) - 0.5) * DOMAIN_KM;
-                const delta = 20;
-                const h1 = getSurfaceHeight(x_km - delta, 0, simTime).eta;
-                const h2 = getSurfaceHeight(x_km + delta, 0, simTime).eta;
-                const dh_dx = (h2 - h1) / (2 * delta * 1000);
-                const v_g = (g / f_coriolis) * dh_dx;
-
-                const px = 40 + k * dx_pixel;
-                const py = midY_v - v_g * 1.2;
-
-                if (k === 0) ctx.moveTo(px, midY_v);
+            for (let i = 0; i < NX; i++) {
+                const valV = v[cy * NX + i];
+                const px = 35 * dpr + i * dxP;
+                const py = midY_v - valV * 25 * dpr;
+                if (i === 0) ctx.moveTo(px, midY_v);
                 ctx.lineTo(px, py);
             }
-            ctx.lineTo(40 + numPoints * dx_pixel, midY_v);
+            ctx.lineTo(35 * dpr + (NX - 1) * dxP, midY_v);
             ctx.closePath();
-            ctx.fill();
+            ctx.fill(); ctx.stroke();
+        }
+
+        // GRÁFICO R_d vs LATITUDE
+        function drawLatGraph() {
+            ensureCanvasSize(latCanvas);
+            const ctx = latCtx;
+            const w = latCanvas.width;
+            const h = latCanvas.height;
+            if (!w || !h) return;
+
+            const dpr = window.devicePixelRatio || 1;
+            ctx.clearRect(0, 0, w, h);
+
+            const padL = 35 * dpr; const padR = 15 * dpr;
+            const padT = 20 * dpr; const padB = 22 * dpr;
+            const gw = w - padL - padR; const gh = h - padT - padB;
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = `bold ${9.5 * dpr}px sans-serif`;
+            ctx.fillText('Raio de Rossby Rd vs Latitude (-90° a +90°)', padL, 13 * dpr);
+
+            const maxRdY = 1200;
+            function mapX(lat) { return padL + ((lat + 90) / 180) * gw; }
+            function mapY(rd) { return padT + gh - (Math.min(rd, maxRdY) / maxRdY) * gh; }
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+            ctx.lineWidth = 1 * dpr;
+
+            [-90, -45, 0, 45, 90].forEach(lat => {
+                const x = mapX(lat);
+                ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + gh); ctx.stroke();
+            });
+
+            // Curva Teórica
+            const c = Math.sqrt(g * state.depthH);
+            ctx.beginPath(); ctx.strokeStyle = '#c084fc'; ctx.lineWidth = 2 * dpr;
+
+            let first = true;
+            for (let lat = -90; lat <= -1; lat += 1) {
+                const f = 2 * Omega * Math.sin((lat * Math.PI) / 180);
+                const rd = (c / Math.abs(f)) / 1000;
+                const x = mapX(lat); const y = mapY(rd);
+                if (first) { ctx.moveTo(x, y); first = false; } else { ctx.lineTo(x, y); }
+            }
             ctx.stroke();
-        }
 
-        // --- ATUALIZAÇÃO DOS PARÂMETROS E HUD ---
-        function updateParams() {
-            lat = parseFloat(document.getElementById('range-lat').value);
-            L_scale = parseFloat(document.getElementById('range-l').value);
-            H_depth = parseFloat(document.getElementById('range-h').value);
-            eta_max = parseFloat(document.getElementById('range-eta').value);
-
-            f_coriolis = 2 * Omega * Math.sin(lat * Math.PI / 180);
-            if (Math.abs(f_coriolis) < 1e-6) f_coriolis = 1e-6; // evitar divisão por zero no equador
-
-            const c_g = Math.sqrt(g * H_depth);
-            L_R = c_g / Math.abs(f_coriolis) / 1000; // km
-
-            // Atualizar Rótulos UI
-            document.getElementById('val-lat').innerText = lat.toFixed(1) + '° ' + (lat >= 0 ? 'N' : 'S');
-            document.getElementById('val-l').innerText = L_scale + ' km';
-            document.getElementById('val-h').innerText = H_depth + ' m';
-            document.getElementById('val-eta').innerText = (eta_max > 0 ? '+' : '') + eta_max + ' m';
-
-            document.getElementById('var-lr-val').innerText = L_R.toFixed(0) + ' km';
-            document.getElementById('var-l-val').innerText = L_scale + ' km';
-            document.getElementById('var-f-val').innerText = f_coriolis.toExponential(2) + ' s⁻¹';
-            document.getElementById('var-cg-val').innerText = c_g.toFixed(1) + ' m/s';
-
-            const ratio = L_scale / (2 * Math.PI * L_R);
-            const isLarge = ratio > 0.5;
-
-            document.getElementById('hud-regime').innerText = isLarge ? 
-                `Regime: Grande Escala (L >> 2π L_R)` : 
-                `Regime: Pequena Escala (L << 2π L_R)`;
-
-            updateSurfaceGeometry();
-        }
-
-        // --- CONTROLE DE ANIMAÇÃO ---
-        function animate() {
-            requestAnimationFrame(animate);
-            if (isPlaying) {
-                simTime += 2.5;
-                const stageLabel = simTime === 0 ? 'Time = initial (t = 0 s)' :
-                    (simTime < 250 ? `Time = later (t = ${simTime.toFixed(0)} s)` : `Time = final (Ajustado)`);
-                document.getElementById('status-time-stage').innerText = stageLabel;
-                document.getElementById('cs-time-label').innerText = stageLabel;
-                updateSurfaceGeometry();
+            ctx.beginPath(); first = true;
+            for (let lat = 1; lat <= 90; lat += 1) {
+                const f = 2 * Omega * Math.sin((lat * Math.PI) / 180);
+                const rd = (c / Math.abs(f)) / 1000;
+                const x = mapX(lat); const y = mapY(rd);
+                if (first) { ctx.moveTo(x, y); first = false; } else { ctx.lineTo(x, y); }
             }
-            if (renderer && scene && camera) {
-                renderer.render(scene, camera);
-            }
+            ctx.stroke();
+
+            // Ponto Atual
+            const { Rd_km } = getPhysics();
+            const curX = mapX(state.latDeg);
+            const curY = mapY(Rd_km);
+            ctx.beginPath(); ctx.arc(curX, curY, 4.5 * dpr, 0, Math.PI * 2);
+            ctx.fillStyle = '#fbbf24'; ctx.fill(); ctx.stroke();
         }
 
-        function togglePlay() {
-            isPlaying = !isPlaying;
-            document.getElementById('btn-play').innerText = isPlaying ? '⏸️ Pausar Simulação' : '▶️ Iniciar Ajuste';
+        // LISTENERS E CONTROLES
+        sliderLat.addEventListener('input', (e) => { state.latDeg = parseFloat(e.target.value); updateMetricsUI(); });
+        sliderRadius.addEventListener('input', (e) => { state.pertRadiusKm = parseFloat(e.target.value); updateMetricsUI(); });
+        sliderDepth.addEventListener('input', (e) => { state.depthH = parseFloat(e.target.value); updateMetricsUI(); });
+        sliderAmp.addEventListener('input', (e) => { state.pertAmpM = parseFloat(e.target.value); updateMetricsUI(); });
+
+        btnTriggerBump.addEventListener('click', () => { injectPerturbation(); });
+        btnClearFlow.addEventListener('click', () => { clearFlow(); });
+
+        const shapeButtons = [btnShapeDome, btnShapeDepression, btnShapeFront, btnShapeDipole];
+        function setShape(activeBtn, shapeName) {
+            shapeButtons.forEach(b => b.classList.remove('active'));
+            activeBtn.classList.add('active');
+            state.pertShape = shapeName;
+            clearFlow(); injectPerturbation();
+        }
+        btnShapeDome.addEventListener('click', () => setShape(btnShapeDome, 'dome'));
+        btnShapeDepression.addEventListener('click', () => setShape(btnShapeDepression, 'depression'));
+        btnShapeFront.addEventListener('click', () => setShape(btnShapeFront, 'front'));
+        btnShapeDipole.addEventListener('click', () => setShape(btnShapeDipole, 'dipole'));
+
+        const latPresets = [btnPresetSouthPole, btnPresetSouthMid, btnPresetEquator, btnPresetNorthPole];
+        function setLatPreset(activeBtn, latVal) {
+            latPresets.forEach(b => b.classList.remove('active'));
+            activeBtn.classList.add('active');
+            state.latDeg = latVal; sliderLat.value = latVal;
+            clearFlow(); injectPerturbation(); updateMetricsUI();
+        }
+        btnPresetSouthPole.addEventListener('click', () => setLatPreset(btnPresetSouthPole, -90));
+        btnPresetSouthMid.addEventListener('click', () => setLatPreset(btnPresetSouthMid, -45));
+        btnPresetEquator.addEventListener('click', () => setLatPreset(btnPresetEquator, 0));
+        btnPresetNorthPole.addEventListener('click', () => setLatPreset(btnPresetNorthPole, 90));
+
+        // Interação por mouse no Canvas
+        let isMouseDown = false;
+        simCanvas.addEventListener('mousedown', (e) => { isMouseDown = true; triggerAtMouse(e); });
+        window.addEventListener('mouseup', () => { isMouseDown = false; });
+        simCanvas.addEventListener('mousemove', (e) => { if (isMouseDown) triggerAtMouse(e); });
+
+        function triggerAtMouse(e) {
+            const rect = simCanvas.getBoundingClientRect();
+            const mx = (e.clientX - rect.left) / rect.width;
+            const my = (e.clientY - rect.top) / rect.height;
+            injectPerturbation(mx * NX, my * NY);
         }
 
-        function resetSim() {
-            simTime = 0;
-            isPlaying = false;
-            document.getElementById('btn-play').innerText = '▶️ Iniciar Ajuste';
-            document.getElementById('status-time-stage').innerText = 'Time = initial (t = 0 s)';
-            document.getElementById('cs-time-label').innerText = 'Time = initial';
-            updateSurfaceGeometry();
-        }
-
-        function setPresetMode(mode) {
-            if (mode === 'large') {
-                document.getElementById('range-l').value = 4000;
-                document.getElementById('range-h').value = 500;
-                document.getElementById('range-lat').value = 45;
-            } else {
-                document.getElementById('range-l').value = 400;
-                document.getElementById('range-h').value = 100;
-                document.getElementById('range-lat').value = 30;
-            }
-            resetSim();
-            updateParams();
-        }
-
-        function toggleWireframe() {
-            showWireframe = !showWireframe;
-            if (surfaceMesh) surfaceMesh.material.wireframe = showWireframe;
-            document.getElementById('btn-wireframe').classList.toggle('active', showWireframe);
-        }
-
-        function toggleArrows() {
-            showArrows = !showArrows;
-            document.getElementById('btn-arrows').classList.toggle('active', showArrows);
-            updateWindArrows();
-        }
-
-        function toggleWaves() {
-            showWaves = !showWaves;
-            document.getElementById('btn-waves').classList.toggle('active', showWaves);
-            updateSurfaceGeometry();
-        }
-
-        // --- RECURSOS DE NARRAÇÃO POR VOZ ---
-        let currentUtterance = null;
-
-        function playVoiceNarration() {
-            stopVoiceNarration();
-            const rate = parseFloat(document.getElementById('voice-rate').value);
-            const text = `O Ajuste Geostrófico de Rossby é o processo fundamental pelo qual um fluido em rotação restabelece o equilíbrio entre o campo de pressão e o campo de vento. Quando uma perturbação inicial de altura surge no oceano ou na atmosfera, a força de gradiente de pressão acelera o fluido. Com a rotação da Terra, a Força de Coriolis deflete o escoamento gerando vento geostrófico. O excesso de energia é irradiado para fora do domínio sob a forma de ondas de gravidade transitórias conhecidas como ondas de Poincaré. O raio de deformação de Rossby, dado por raiz de g H sobre f, determina a escala espacial que separa o regime de grande escala, onde o campo de massa domina, do regime de pequena escala, onde o vento domina e a perturbação se dissipa.`;
-
+        // VOICE NARRATION
+        function playVoice() {
             if ('speechSynthesis' in window) {
-                currentUtterance = new SpeechSynthesisUtterance(text);
-                currentUtterance.lang = 'pt-BR';
-                currentUtterance.rate = rate;
-                window.speechSynthesis.speak(currentUtterance);
-            } else {
-                alert('Seu navegador não suporta a narração por voz.');
+                window.speechSynthesis.cancel();
+                const rate = parseFloat(document.getElementById('voice-rate').value);
+                const u = new SpeechSynthesisUtterance("O Ajuste Geostrófico de Rossby demonstra a adaptação entre o campo de pressão e o campo de vento em um fluido em rotação. Ao injetar uma perturbação no Polo Sul a 90 graus sul, a deflexão de Coriolis atua para a esquerda, gerando rotação anti-horária ao redor de um domo de alta pressão. Ondas de gravidade propagam-se para fora irradiando a energia transitória.");
+                u.lang = 'pt-BR'; u.rate = rate;
+                window.speechSynthesis.speak(u);
             }
         }
+        function stopVoice() { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }
 
-        function pauseVoiceNarration() {
-            if ('speechSynthesis' in window) window.speechSynthesis.pause();
-        }
-
-        function stopVoiceNarration() {
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-        }
-
-        function updateVoiceRate() {
-            if (currentUtterance && window.speechSynthesis.speaking) {
-                playVoiceNarration();
+        // LOOP PRINCIPAL DE SIMULAÇÃO
+        function animate() {
+            for (let s = 0; s < state.stepsPerFrame; s++) {
+                stepPhysics();
             }
+
+            if (state.renderMode === '3d') {
+                update3DMesh();
+                if (controls) controls.update();
+                if (renderer && scene && camera) renderer.render(scene, camera);
+            }
+
+            drawSimulation();
+            drawCrossSectionGraph();
+            drawLatGraph();
+
+            requestAnimationFrame(animate);
         }
 
         window.onload = function() {
             init3D();
-            updateParams();
-            animate();
+            setRenderMode('3d');
+            updateMetricsUI();
+            injectPerturbation();
+            requestAnimationFrame(animate);
             if (window.renderMathInElement) {
                 renderMathInElement(document.body, {
-                    delimiters: [
-                        {left: '$$', right: '$$', display: true},
-                        {left: '$', right: '$', display: false}
-                    ]
+                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
                 });
             }
         };
