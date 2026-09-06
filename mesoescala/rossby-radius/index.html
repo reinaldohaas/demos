@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajuste Geostrófico de Rossby — Equações de Águas Rasas 2D & Perturbação Gaussiana</title>
+    <title>Ajuste Geostrófico de Rossby 3D — Altura Equivalente (1–4 km) & Perturbação de 100 m</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -234,7 +234,7 @@
         .viewport-container {
             position: relative;
             flex: 1;
-            min-height: 540px;
+            min-height: 550px;
             background: #020612;
             border-radius: 12px;
             border: 1px solid var(--card-border);
@@ -315,13 +315,6 @@
             display: block;
         }
 
-        #2d-canvas-wrap {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 2;
-            pointer-events: auto;
-        }
-
         .colorbar-container {
             position: absolute;
             bottom: 12px;
@@ -399,7 +392,7 @@
 
         .graph-box {
             position: relative;
-            height: 145px;
+            height: 150px;
             background: rgba(0, 0, 0, 0.35);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 8px;
@@ -434,8 +427,8 @@
 <body>
     <header>
         <div class="title-group">
-            <h1>Ajuste Geostrófico de Rossby — Equações de Águas Rasas 2D</h1>
-            <p>Solver Numérico de Águas Rasas (Sem Difusão), Perturbação Gaussiana Inicial & Superfície 3D</p>
+            <h1>Ajuste Geostrófico de Rossby 3D — Altura Equivalente (1–4 km)</h1>
+            <p>Perturbação Fixa de +100 m & Controle do Raio de Decaimento (L vs R_d) em Equações de Águas Rasas</p>
         </div>
 
         <div class="nav-links">
@@ -446,46 +439,46 @@
     </header>
 
     <div class="main-container">
-        <!-- PAINEL ESQUERDO: CONTROLES FÍSICOS DA SIMULAÇÃO NUMÉRICA -->
+        <!-- PAINEL ESQUERDO: CONTROLES FÍSICOS DAS ÁGUAS RASAS -->
         <div class="panel">
             <div class="panel-header">
                 <h2>⚙️ Parâmetros das Águas Rasas</h2>
+            </div>
+
+            <!-- Altura Equivalente Heq (1 km a 4 km) -->
+            <div class="control-group">
+                <div class="control-label">
+                    <span>Altura Equivalente (H_eq)</span>
+                    <span class="control-val" id="val-heq">2.5 km (c = 156.6 m/s)</span>
+                </div>
+                <input type="range" id="slider-heq" min="1.0" max="4.0" step="0.1" value="2.5">
+            </div>
+
+            <!-- Largura / Raio de Decaimento Gaussiano L -->
+            <div class="control-group">
+                <div class="control-label">
+                    <span>Raio de Decaimento (L)</span>
+                    <span class="control-val" id="val-radius">500 km (L &lt; Rd)</span>
+                </div>
+                <input type="range" id="slider-radius" min="100" max="2500" step="50" value="500">
             </div>
 
             <!-- Latitude (-90 a +90) -->
             <div class="control-group">
                 <div class="control-label">
                     <span>Latitude (&phi;) &rarr; Coriolis f</span>
-                    <span class="control-val" id="val-lat">-90.0° S (Polo Sul)</span>
+                    <span class="control-val" id="val-lat">-45.0° S (Hemisfério Sul)</span>
                 </div>
-                <input type="range" id="slider-lat" min="-90" max="90" step="1" value="-90">
+                <input type="range" id="slider-lat" min="-90" max="90" step="1" value="-45">
             </div>
 
-            <!-- Tamanho Perturbação L -->
+            <!-- Amplitude Gaussiana FIXA em 100 m -->
             <div class="control-group">
                 <div class="control-label">
-                    <span>Largura Gaussiana (L)</span>
-                    <span class="control-val" id="val-radius">250 km (L &gt; Rd)</span>
+                    <span>Amplitude da Perturbação (&eta;₀)</span>
+                    <span class="control-val" id="val-amp" style="color:var(--accent-green);">+100 m (Fixa)</span>
                 </div>
-                <input type="range" id="slider-radius" min="30" max="500" step="10" value="250">
-            </div>
-
-            <!-- Profundidade H -->
-            <div class="control-group">
-                <div class="control-label">
-                    <span>Profundidade (H) &rarr; Onda c</span>
-                    <span class="control-val" id="val-depth">80 m (c = 28.0 m/s)</span>
-                </div>
-                <input type="range" id="slider-depth" min="10" max="400" step="5" value="80">
-            </div>
-
-            <!-- Amplitude Gaussiana -->
-            <div class="control-group">
-                <div class="control-label">
-                    <span>Amplitude Gaussiana (&eta;₀)</span>
-                    <span class="control-val" id="val-amp">+1.2 m (Domo)</span>
-                </div>
-                <input type="range" id="slider-amp" min="-2.5" max="2.5" step="0.1" value="1.2">
+                <input type="range" id="slider-amp" min="20" max="200" step="10" value="100">
             </div>
 
             <div class="panel-header" style="margin-top: 4px;">
@@ -493,52 +486,49 @@
             </div>
 
             <div class="btn-grid">
-                <button class="preset-btn active" id="btn-shape-dome">💧 Domo Gaussiano</button>
-                <button class="preset-btn" id="btn-shape-depression">🌀 Depressão Gaussiana</button>
-                <button class="preset-btn" id="btn-shape-front">〰️ Frente Linear</button>
-                <button class="preset-btn" id="btn-shape-dipole">⚡ Dipolo Gaussiano</button>
+                <button class="preset-btn active" id="btn-shape-dome">💧 Domo Gaussiano (+100m)</button>
+                <button class="preset-btn" id="btn-shape-depression">🌀 Depressão (-100m)</button>
+                <button class="preset-btn" id="btn-shape-front">〰️ Degrau Linear (+100m)</button>
+                <button class="preset-btn" id="btn-shape-dipole">⚡ Dipolo (+100m / -100m)</button>
             </div>
 
             <div class="panel-header" style="margin-top: 4px;">
-                <h2>❄️ Presets de Latitude</h2>
+                <h2>❄️ Presets de Escala & Latitude</h2>
             </div>
 
             <div class="btn-grid">
-                <button class="preset-btn active" id="btn-preset-south-pole">❄️ Polo Sul (-90°)</button>
-                <button class="preset-btn" id="btn-preset-south-mid">📐 45° Sul (Hemisfério S)</button>
-                <button class="preset-btn" id="btn-preset-equator">🌴 Equador (0°)</button>
-                <button class="preset-btn" id="btn-preset-north-pole">❄️ Polo Norte (+90°)</button>
+                <button class="preset-btn active" id="btn-preset-small">⚡ Pequena Escala (L &lt;&lt; Rd)</button>
+                <button class="preset-btn" id="btn-preset-large">🌀 Grande Escala (L &gt;&gt; Rd)</button>
+                <button class="preset-btn" id="btn-preset-south">❄️ Polo Sul (-90°)</button>
+                <button class="preset-btn" id="btn-preset-mid">📐 45° Sul (Hemisfério S)</button>
             </div>
 
             <div class="btn-grid" style="margin-top: 4px;">
-                <button class="action-btn" id="btn-trigger-bump">💧 Injetar Gaussiana</button>
+                <button class="action-btn" id="btn-trigger-bump">💧 Re-injetar Perturbação</button>
                 <button class="preset-btn" id="btn-clear-flow">🔄 Zerar Campo</button>
             </div>
 
             <div class="formula-box">
-                <strong>Equações Resolver de Águas Rasas:</strong>
+                <strong>Equações de Águas Rasas & Raio de Rossby:</strong>
                 <span style="font-family:monospace; color:var(--accent-gold); display:block; margin-top:2px;">
-                    \partial u/\partial t = +f v - g \, \partial \eta/\partial x<br>
-                    \partial v/\partial t = -f u - g \, \partial \eta/\partial y<br>
-                    \partial \eta/\partial t = -H (\partial u/\partial x + \partial v/\partial y)
+                    R_d = \sqrt{g H_{eq}} / |f| = c / (2\Omega |\sin\phi|)
                 </span>
                 <span style="display:block; margin-top:4px; color:var(--text-muted); font-size:0.75rem;">
-                    • <b>Sem Difusão Interior:</b> O sistema resolve as equações puras de ondas e Coriolis!<br>
-                    • <b>Perturbação Gaussiana:</b> $\eta(r, 0) = \eta_0 \exp(-r^2 / 2L^2)$.
+                    • <b>Demonstração de Escala:</b> Para a <b>mesma perturbação de +100m</b>, ao reduzir a largura $L < R_d$, quase toda a energia escapa como <b>ondas de gravidade</b>. Se $L > R_d$, a massa de +100m é mantida!
                 </span>
             </div>
         </div>
 
-        <!-- PAINEL CENTRAL: VIEWPORT 3D WEBGL & 2D COM INTERAÇÃO DIRETA POR CLIQUE -->
+        <!-- PAINEL CENTRAL: VIEWPORT PERSPECTIVA 3D WEBGL COM ARRASTO E CLIQUE -->
         <div class="viewport-container">
             <div class="viewport-header-overlay">
                 <div class="overlay-badge">
-                    <span id="badge-regime">🌀 Polo Sul (-90°): Ajuste Geostrófico (L &gt; Rd)</span>
+                    <span id="badge-regime">⚡ H_eq = 2.5 km | R_d = 1515 km (Pequena Escala L &lt; Rd)</span>
                 </div>
                 <div class="view-options">
-                    <button class="view-toggle-btn active" id="btn-mode-3d" onclick="setRenderMode('3d')">🌐 Superfície 3D WebGL</button>
-                    <button class="view-toggle-btn" id="btn-mode-2d" onclick="setRenderMode('2d')">🗺️ Plano 2D Heatmap</button>
-                    <button class="view-toggle-btn active" id="btn-view-vectors">Vetores Vento (u, v)</button>
+                    <button class="view-toggle-btn active" id="btn-mode-3d" onclick="setCameraView('3d')">🌐 3D Perspectiva</button>
+                    <button class="view-toggle-btn" id="btn-mode-top" onclick="setCameraView('top')">📐 Visão de Topo</button>
+                    <button class="view-toggle-btn active" id="btn-view-vectors">Vetores Vento</button>
                     <button class="view-toggle-btn active" id="btn-view-particles">Partículas</button>
                     <button class="view-toggle-btn active" id="btn-view-circles">Escalas L vs Rd</button>
                 </div>
@@ -556,7 +546,7 @@
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot" style="background:#38bdf8; border:1px solid #fff;"></span>
-                    <span style="color:#38bdf8;">Largura Gaussiana (L)</span>
+                    <span style="color:#38bdf8;">Decaimento Gaussiano (L)</span>
                 </div>
                 <div class="legend-item">
                     <span style="color:#34d399;" id="legend-hemisphere">⟲ Rotação Anti-Horária no Sul</span>
@@ -565,75 +555,75 @@
 
             <div class="colorbar-container">
                 <div class="colorbar-labels">
-                    <span>-1.5m</span>
+                    <span>-100m</span>
                     <span>0m</span>
-                    <span>+1.5m</span>
+                    <span>+100m</span>
                 </div>
                 <div class="colorbar-gradient"></div>
             </div>
         </div>
 
-        <!-- PAINEL DIREITO: CORTE 1D (FIGURAS 1-3), COMET DECK (FIGURA 4) E DIAGNÓSTICO -->
+        <!-- PAINEL DIREITO: DIAGNÓSTICO DA PERTURBAÇÃO DE 100M, CORTE 1D E COMET -->
         <div class="panel sidebar-right">
             <div class="panel-header">
-                <h2>📊 Diagnóstico do Escoamento</h2>
+                <h2>📊 Diagnóstico da Perturbação de +100 m</h2>
             </div>
 
             <div class="metrics-grid">
                 <div class="metric-card">
                     <div class="metric-title">Raio de Rossby (R_d)</div>
-                    <div class="metric-val" id="metric-rd" style="color:var(--accent-gold);">192 km</div>
+                    <div class="metric-val" id="metric-rd" style="color:var(--accent-gold);">1515 km</div>
                 </div>
                 <div class="metric-card">
-                    <div class="metric-title">Largura Gaussiana (L)</div>
-                    <div class="metric-val" id="metric-l" style="color:var(--accent-cyan);">250 km</div>
+                    <div class="metric-title">Decaimento Gauss. (L)</div>
+                    <div class="metric-val" id="metric-l" style="color:var(--accent-cyan);">500 km</div>
                 </div>
                 <div class="metric-card">
-                    <div class="metric-title">Coriolis (f)</div>
-                    <div class="metric-val" id="metric-f" style="color:var(--accent-red);">-1.46e-4 s⁻¹</div>
+                    <div class="metric-title">Massa Retida (Pico)</div>
+                    <div class="metric-val" id="metric-retained" style="color:var(--accent-green);">+28.4 m</div>
                 </div>
                 <div class="metric-card">
-                    <div class="metric-title">Razão L / Rd</div>
-                    <div class="metric-val" id="metric-ratio" style="color:var(--accent-green);">1.30 (L &gt; Rd)</div>
+                    <div class="metric-title">Ondas de Gravidade</div>
+                    <div class="metric-val" id="metric-waves" style="color:var(--accent-red);">Intensas (L &lt; Rd)</div>
                 </div>
             </div>
 
-            <!-- CORTE TRANSVERSAL 1D (FIGURAS 1, 2, 3) -->
+            <!-- CORTE TRANSVERSAL 1D DA ELEVAÇÃO E VENTO PERPENDICULAR (FIGURAS 1-3) -->
             <div class="panel-header">
-                <h2>📈 Corte Transversal 1D (Alturas & Ventos)</h2>
+                <h2>📈 Corte Transversal 1D (Perfil de +100 m & Ventos)</h2>
             </div>
-            <div class="graph-box" style="height: 155px;">
+            <div class="graph-box" style="height: 160px;">
                 <canvas id="graph-cs-canvas"></canvas>
             </div>
 
-            <!-- COMPARAÇÃO COMET (FIGURA 4) -->
+            <!-- COMPARAÇÃO COMET PROGRAM (FIGURA 4) -->
             <div class="panel-header">
                 <h2>🎯 Comparativo Programa COMET</h2>
             </div>
             <div class="comet-box">
                 <div class="comet-card">
                     <h4>Large Scale ($L \gg 2\pi L_R$)</h4>
-                    <div class="comet-item">• Perturbação mantida</div>
-                    <div class="comet-item">• Vento ajusta à massa</div>
-                    <div class="comet-item">• Tamanho muda pouco</div>
+                    <div class="comet-item">• Perturbação de +100m mantida</div>
+                    <div class="comet-item">• Vento ajusta ao gradiente</div>
+                    <div class="comet-item">• Poucas ondas de gravidade</div>
                 </div>
                 <div class="comet-card">
                     <h4>Small Scale ($L \ll 2\pi L_R$)</h4>
-                    <div class="comet-item">• Perturbação achata</div>
+                    <div class="comet-item">• Domo de 100m achata</div>
                     <div class="comet-item">• Massa ajusta ao vento</div>
-                    <div class="comet-item">• Ondas de gravidade</div>
+                    <div class="comet-item">• **Radiação massiva de ondas**</div>
                 </div>
             </div>
 
-            <!-- CURVA Rd vs LATITUDE -->
+            <!-- CURVA R_d vs LATITUDE -->
             <div class="panel-header">
-                <h2>🌐 R_d vs Latitude (&phi;)</h2>
+                <h2>🌐 R_d em Função da Latitude (&phi;)</h2>
             </div>
             <div class="graph-box">
                 <canvas id="graph-lat-canvas"></canvas>
             </div>
 
-            <!-- NARRAÇÃO POR VOZ -->
+            <!-- NARRAÇÃO DIDÁTICA POR VOZ -->
             <div class="voice-card">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <span style="font-weight:700; color:#c084fc; font-size:0.8rem;">🔊 Narração Didática</span>
@@ -658,7 +648,7 @@
 
         const NX = 100;
         const NY = 100;
-        const domainKm = 1200;
+        const domainKm = 4000; // Domínio amplo de 4000 km x 4000 km
         const dx = (domainKm * 1000) / NX;
         const dy = (domainKm * 1000) / NY;
 
@@ -679,12 +669,11 @@
         }
 
         const state = {
-            latDeg: -90,
-            depthH: 80,
-            pertRadiusKm: 250,
-            pertAmpM: 1.2,
+            heqKm: 2.5,        // Altura equivalente de 1.0 a 4.0 km
+            pertRadiusKm: 500, // Raio de decaimento Gaussiano L (km)
+            latDeg: -45,       // Latitude
+            pertAmpM: 100,     // Perturbação de elevação fixa em +100 m
             pertShape: 'dome',
-            renderMode: '3d',
             viewVectors: true,
             viewParticles: true,
             viewCircles: true,
@@ -692,12 +681,12 @@
         };
 
         // Elementos DOM
-        const sliderLat = document.getElementById('slider-lat');
-        const valLat = document.getElementById('val-lat');
+        const sliderHeq = document.getElementById('slider-heq');
+        const valHeq = document.getElementById('val-heq');
         const sliderRadius = document.getElementById('slider-radius');
         const valRadius = document.getElementById('val-radius');
-        const sliderDepth = document.getElementById('slider-depth');
-        const valDepth = document.getElementById('val-depth');
+        const sliderLat = document.getElementById('slider-lat');
+        const valLat = document.getElementById('val-lat');
         const sliderAmp = document.getElementById('slider-amp');
         const valAmp = document.getElementById('val-amp');
 
@@ -709,10 +698,10 @@
         const btnShapeFront = document.getElementById('btn-shape-front');
         const btnShapeDipole = document.getElementById('btn-shape-dipole');
 
-        const btnPresetSouthPole = document.getElementById('btn-preset-south-pole');
-        const btnPresetSouthMid = document.getElementById('btn-preset-south-mid');
-        const btnPresetEquator = document.getElementById('btn-preset-equator');
-        const btnPresetNorthPole = document.getElementById('btn-preset-north-pole');
+        const btnPresetSmall = document.getElementById('btn-preset-small');
+        const btnPresetLarge = document.getElementById('btn-preset-large');
+        const btnPresetSouth = document.getElementById('btn-preset-south');
+        const btnPresetMid = document.getElementById('btn-preset-mid');
 
         const btnViewVectors = document.getElementById('btn-view-vectors');
         const btnViewParticles = document.getElementById('btn-view-particles');
@@ -720,8 +709,8 @@
 
         const metricRd = document.getElementById('metric-rd');
         const metricL = document.getElementById('metric-l');
-        const metricF = document.getElementById('metric-f');
-        const metricRatio = document.getElementById('metric-ratio');
+        const metricRetained = document.getElementById('metric-retained');
+        const metricWaves = document.getElementById('metric-waves');
         const badgeRegime = document.getElementById('badge-regime');
         const legendHemisphere = document.getElementById('legend-hemisphere');
 
@@ -732,7 +721,7 @@
         const latCanvas = document.getElementById('graph-lat-canvas');
         const latCtx = latCanvas.getContext('2d');
 
-        // --- THREE.JS 3D WEBGL ENGINE ---
+        // --- ENGINE PERSPECTIVA 3D WEBGL (THREE.JS) ---
         let scene, camera, renderer, controls, surfaceMesh;
         const webglWrap = document.getElementById('webgl-canvas-wrap');
 
@@ -756,7 +745,7 @@
             const ambient = new THREE.AmbientLight(0xffffff, 0.65);
             scene.add(ambient);
 
-            const dirLight = new THREE.DirectionalLight(0x38bdf8, 0.9);
+            const dirLight = new THREE.DirectionalLight(0x38bdf8, 0.95);
             dirLight.position.set(30, 60, 30);
             scene.add(dirLight);
 
@@ -801,9 +790,10 @@
                     const idx = j * NX + i;
                     const etaVal = eta[idx];
 
-                    pos.setY(idx, etaVal * 3.5);
+                    // Elevação 3D proporcional à perturbação de +100 m
+                    pos.setY(idx, (etaVal / 100.0) * 12.0);
 
-                    const norm = Math.max(-1, Math.min(1, etaVal / 1.5));
+                    const norm = Math.max(-1, Math.min(1, etaVal / 100.0));
                     let r = 0.1, g_c = 0.5, b = 0.9;
                     if (norm > 0) {
                         r = 0.1 + 0.85 * norm;
@@ -823,31 +813,31 @@
             surfaceMesh.geometry.computeVertexNormals();
         }
 
-        function setRenderMode(mode) {
-            state.renderMode = mode;
-            document.getElementById('btn-mode-3d').classList.toggle('active', mode === '3d');
-            document.getElementById('btn-mode-2d').classList.toggle('active', mode === '2d');
+        function setCameraView(viewMode) {
+            document.getElementById('btn-mode-3d').classList.toggle('active', viewMode === '3d');
+            document.getElementById('btn-mode-top').classList.toggle('active', viewMode === 'top');
 
-            if (mode === '3d') {
-                webglWrap.style.display = 'block';
-                simCanvas.style.opacity = '0.35';
+            if (viewMode === 'top') {
+                camera.position.set(0, 85, 0.01);
             } else {
-                webglWrap.style.display = 'none';
-                simCanvas.style.opacity = '1.0';
+                camera.position.set(0, 52, 68);
             }
+            controls.target.set(0, 0, 0);
+            controls.update();
         }
 
-        // CÁLCULOS FÍSICOS
+        // CÁLCULOS FÍSICOS (ALTURA EQUIVALENTE & RAIO DE ROSSBY)
         function getPhysics() {
             const phiRad = (state.latDeg * Math.PI) / 180;
             const f = 2 * Omega * Math.sin(phiRad);
-            const c = Math.sqrt(g * state.depthH);
+            const H_m = state.heqKm * 1000.0; // Altura equivalente em metros (1000m a 4000m)
+            const c = Math.sqrt(g * H_m);     // Velocidade da onda de gravidade
             let Rd_km = Infinity;
             if (Math.abs(f) > 1e-7) {
                 Rd_km = (c / Math.abs(f)) / 1000;
             }
             const ratio = Rd_km !== Infinity ? state.pertRadiusKm / Rd_km : 0;
-            return { f, c, Rd_km, ratio };
+            return { f, c, Rd_km, ratio, H_m };
         }
 
         function updateMetricsUI() {
@@ -855,12 +845,16 @@
 
             const hem = state.latDeg < 0 ? 'S (Hemisfério Sul)' : (state.latDeg > 0 ? 'N (Hemisfério Norte)' : '(Equador)');
             valLat.textContent = `${Math.abs(state.latDeg).toFixed(1)}° ${hem}`;
-            valDepth.textContent = `${state.depthH} m (c = ${c.toFixed(1)} m/s)`;
+            valHeq.textContent = `${state.heqKm.toFixed(1)} km (c = ${c.toFixed(1)} m/s)`;
             valRadius.textContent = `${state.pertRadiusKm} km (${state.pertRadiusKm > Rd_km ? 'L > Rd' : 'L < Rd'})`;
-            valAmp.textContent = `${state.pertAmpM > 0 ? '+' : ''}${state.pertAmpM.toFixed(1)} m`;
+            valAmp.textContent = `${state.pertAmpM > 0 ? '+' : ''}${state.pertAmpM.toFixed(0)} m (Fixa)`;
 
-            metricF.textContent = `${f.toExponential(2)} s⁻¹`;
             metricL.textContent = `${state.pertRadiusKm} km`;
+
+            // Pico de massa retido na origem (0,0)
+            const cy = Math.floor(NY / 2); const cx = Math.floor(NX / 2);
+            const peakRetained = eta[cy * NX + cx];
+            metricRetained.textContent = `${peakRetained > 0 ? '+' : ''}${peakRetained.toFixed(1)} m`;
 
             if (state.latDeg < 0) {
                 legendHemisphere.textContent = '⟲ Rotação Anti-Horária no Sul (f < 0)';
@@ -875,28 +869,31 @@
 
             if (Rd_km === Infinity || isNaN(Rd_km)) {
                 metricRd.textContent = '∞ (Infinito)';
-                metricRatio.textContent = '0.0 (L << Rd)';
                 badgeRegime.textContent = '🌴 Equador: Dispersão Gravitacional Pura (Sem Coriolis)';
+                metricWaves.textContent = 'Totais (Equador)';
             } else {
                 metricRd.textContent = `${Rd_km.toFixed(0)} km`;
-                metricRatio.textContent = `${ratio.toFixed(2)} (${state.pertRadiusKm > Rd_km ? 'L > Rd' : 'L < Rd'})`;
-
-                const latLabel = state.latDeg < 0 ? `Polo Sul (${state.latDeg}°)` : `Latitude ${state.latDeg}°`;
 
                 if (state.pertRadiusKm > Rd_km * 1.15) {
-                    badgeRegime.textContent = `🌀 ${latLabel}: Ajuste Geostrófico (L > Rd)`;
+                    badgeRegime.textContent = `🌀 H_eq = ${state.heqKm}km | R_d = ${Rd_km.toFixed(0)}km: Grande Escala (L > Rd - Massa Retida)`;
+                    metricWaves.textContent = 'Fracas (Massa Retida)';
+                    metricWaves.style.color = '#34d399';
                 } else if (state.pertRadiusKm < Rd_km * 0.85) {
-                    badgeRegime.textContent = `⚡ ${latLabel}: Ondas de Gravidade / Poincaré (L < Rd)`;
+                    badgeRegime.textContent = `⚡ H_eq = ${state.heqKm}km | R_d = ${Rd_km.toFixed(0)}km: Pequena Escala (L < Rd - Ondas Intensas)`;
+                    metricWaves.textContent = 'Intensas (L < Rd)';
+                    metricWaves.style.color = '#f43f5e';
                 } else {
-                    badgeRegime.textContent = `⚖️ ${latLabel}: Regime de Transição (L ≈ Rd)`;
+                    badgeRegime.textContent = `⚖️ H_eq = ${state.heqKm}km | R_d = ${Rd_km.toFixed(0)}km: Regime de Transição (L ≈ Rd)`;
+                    metricWaves.textContent = 'Moderadas (L ≈ Rd)';
+                    metricWaves.style.color = '#c084fc';
                 }
             }
         }
 
-        // INJETAR PERTURBAÇÃO GAUSSIANA PURA
+        // INJETAR PERTURBAÇÃO DE 100M
         function injectPerturbation(cx = NX / 2, cy = NY / 2) {
             const rCells = (state.pertRadiusKm * 1000) / dx;
-            const amp = state.pertAmpM;
+            const amp = state.pertAmpM; // +100 m
 
             for (let j = 0; j < NY; j++) {
                 for (let i = 0; i < NX; i++) {
@@ -906,10 +903,10 @@
                     const distSq = di * di + dj * dj;
 
                     if (state.pertShape === 'dome') {
-                        // Domo Gaussiano puro
+                        // Domo Gaussiano de +100m
                         eta[idx] += amp * Math.exp(-distSq / (2 * (rCells * 0.45) ** 2));
                     } else if (state.pertShape === 'depression') {
-                        // Depressão Gaussiana pura
+                        // Depressão de -100m
                         eta[idx] -= Math.abs(amp) * Math.exp(-distSq / (2 * (rCells * 0.45) ** 2));
                     } else if (state.pertShape === 'front') {
                         const frontProfile = Math.tanh((i - cx) / (rCells * 0.4));
@@ -929,22 +926,18 @@
             v.fill(0);
         }
 
-        // INTEGRAÇÃO NUMÉRICA PURA DAS EQUAÇÕES DE ÁGUAS RASAS (SEM DIFUSÃO INTERIOR)
+        // INTEGRAÇÃO NUMÉRICA DAS EQUAÇÕES DE ÁGUAS RASAS (SEM DIFUSÃO INTERIOR)
         function stepPhysics() {
-            const { f, c } = getPhysics();
-            const H = state.depthH;
-            
-            // Passo de tempo CFL estável
-            const dt = Math.min(25, 0.4 * dx / (c * 1.414));
+            const { f, c, H_m } = getPhysics();
+            const dt = Math.min(25, 0.35 * dx / (c * 1.414));
 
-            // 1. Atualizar Velocidades (u, v) via Gradientes da Altura
+            // 1. Atualizar Velocidades (u, v)
             for (let j = 1; j < NY - 1; j++) {
                 for (let i = 1; i < NX - 1; i++) {
                     const idx = j * NX + i;
                     const deta_dx = (eta[idx + 1] - eta[idx]) / dx;
                     const deta_dy = (eta[idx + NX] - eta[idx]) / dy;
 
-                    // Média centrada de Coriolis
                     const v_avg = 0.25 * (v[idx] + v[idx + 1] + v[idx + NX] + v[idx + NX + 1]);
                     const u_avg = 0.25 * (u[idx] + u[idx + 1] + u[idx + NX] + u[idx + NX + 1]);
 
@@ -953,26 +946,24 @@
                 }
             }
 
-            // 2. Atualizar Elevação (eta) via Divergência do Vento
+            // 2. Atualizar Elevação (eta)
             for (let j = 1; j < NY - 1; j++) {
                 for (let i = 1; i < NX - 1; i++) {
                     const idx = j * NX + i;
                     const du_dx = (u[idx] - u[idx - 1]) / dx;
                     const dv_dy = (v[idx] - v[idx - NX]) / dy;
 
-                    eta[idx] -= dt * H * (du_dx + dv_dy);
+                    eta[idx] -= dt * H_m * (du_dx + dv_dy);
                 }
             }
 
-            // Absorção suave apenas nas bordas externas do domínio (Radiating Boundaries)
+            // Absorção suave apenas nas bordas externas do domínio
             const margin = 5;
             for (let j = 0; j < NY; j++) {
                 for (let i = 0; i < NX; i++) {
                     if (i < margin || i >= NX - margin || j < margin || j >= NY - margin) {
                         const idx = j * NX + i;
-                        eta[idx] *= 0.96;
-                        u[idx] *= 0.96;
-                        v[idx] *= 0.96;
+                        eta[idx] *= 0.96; u[idx] *= 0.96; v[idx] *= 0.96;
                     }
                 }
             }
@@ -985,32 +976,31 @@
             const targetH = Math.floor(rect.height * dpr);
             if (cvs.width !== targetW || cvs.height !== targetH) {
                 if (targetW > 0 && targetH > 0) {
-                    cvs.width = targetW;
-                    cvs.height = targetH;
+                    cvs.width = targetW; cvs.height = targetH;
                 }
             }
         }
 
         function getColorForEta(val) {
-            const norm = Math.max(0, Math.min(1, (val + 1.5) / 3.0));
-            let r, g, b;
+            const norm = Math.max(0, Math.min(1, (val + 100.0) / 200.0));
+            let r, g_c, b;
             if (norm < 0.25) {
                 const t = norm / 0.25;
-                r = Math.floor(15 + 20 * t); g = Math.floor(45 + 95 * t); b = Math.floor(190 + 65 * t);
+                r = Math.floor(15 + 20 * t); g_c = Math.floor(45 + 95 * t); b = Math.floor(190 + 65 * t);
             } else if (norm < 0.5) {
                 const t = (norm - 0.25) / 0.25;
-                r = Math.floor(35 + 10 * t); g = Math.floor(140 + 70 * t); b = Math.floor(255 - 100 * t);
+                r = Math.floor(35 + 10 * t); g_c = Math.floor(140 + 70 * t); b = Math.floor(255 - 100 * t);
             } else if (norm < 0.75) {
                 const t = (norm - 0.5) / 0.25;
-                r = Math.floor(45 + 210 * t); g = Math.floor(210 + 20 * t); b = Math.floor(155 - 120 * t);
+                r = Math.floor(45 + 210 * t); g_c = Math.floor(210 + 20 * t); b = Math.floor(155 - 120 * t);
             } else {
                 const t = (norm - 0.75) / 0.25;
-                r = Math.floor(255); g = Math.floor(230 - 170 * t); b = Math.floor(35 - 15 * t);
+                r = Math.floor(255); g_c = Math.floor(230 - 170 * t); b = Math.floor(35 - 15 * t);
             }
-            return `rgb(${r},${g},${b})`;
+            return `rgb(${r},${g_c},${b})`;
         }
 
-        // DESENHO DO SIMULADOR 2D
+        // DESENHO DO OVERLAY 2D (ESCALAS E VETORES)
         function drawSimulation() {
             ensureCanvasSize(simCanvas);
             const ctx = simCtx;
@@ -1021,25 +1011,9 @@
             const dpr = window.devicePixelRatio || 1;
             ctx.clearRect(0, 0, w, h);
 
-            const cellW = w / NX;
-            const cellH = h / NY;
-
-            // Modo 2D Heatmap
-            if (state.renderMode === '2d') {
-                for (let j = 0; j < NY; j++) {
-                    for (let i = 0; i < NX; i++) {
-                        const val = eta[j * NX + i];
-                        ctx.fillStyle = getColorForEta(val);
-                        ctx.fillRect(i * cellW, j * cellH, cellW + 0.5, cellH + 0.5);
-                    }
-                }
-            }
-
-            const cx = w / 2;
-            const cy = h / 2;
+            const cx = w / 2; const cy = h / 2;
             const { Rd_km } = getPhysics();
 
-            // Escalas Circulares (L vs Rd)
             if (state.viewCircles) {
                 if (Rd_km !== Infinity && !isNaN(Rd_km)) {
                     const rdPixels = ((Rd_km * 1000) / (domainKm * 1000)) * w;
@@ -1065,55 +1039,9 @@
                 ctx.font = `bold ${10.5 * dpr}px sans-serif`;
                 ctx.fillText(`L = ${state.pertRadiusKm} km`, cx - 30 * dpr, cy + lPixels + 14 * dpr);
             }
-
-            // Vetores
-            if (state.viewVectors && state.renderMode === '2d') {
-                const step = 5;
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-                ctx.lineWidth = 1.2 * dpr;
-
-                for (let j = 3; j < NY; j += step) {
-                    for (let i = 3; i < NX; i += step) {
-                        const idx = j * NX + i;
-                        const vx = u[idx]; const vy = v[idx];
-                        const speed = Math.sqrt(vx * vx + vy * vy);
-
-                        if (speed > 0.005) {
-                            const px = (i + 0.5) * cellW;
-                            const py = (j + 0.5) * cellH;
-                            const len = Math.min(speed * 25 * dpr, cellW * 3.5);
-                            const angle = Math.atan2(vy, vx);
-                            const endX = px + Math.cos(angle) * len;
-                            const endY = py + Math.sin(angle) * len;
-
-                            ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(endX, endY); ctx.stroke();
-                        }
-                    }
-                }
-            }
-
-            // Partículas
-            if (state.viewParticles && state.renderMode === '2d') {
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-                particles.forEach(p => {
-                    const gi = Math.floor(p.x); const gj = Math.floor(p.y);
-                    if (gi >= 0 && gi < NX && gj >= 0 && gj < NY) {
-                        const idx = gj * NX + gi;
-                        p.x += u[idx] * 0.12; p.y += v[idx] * 0.12;
-                    }
-                    p.age++;
-                    if (p.age > p.maxAge || p.x < 0 || p.x >= NX || p.y < 0 || p.y >= NY) {
-                        p.x = Math.random() * NX; p.y = Math.random() * NY; p.age = 0;
-                    }
-                    ctx.beginPath();
-                    ctx.arc(p.x * cellW, p.y * cellH, 1.8 * dpr, 0, Math.PI * 2);
-                    ctx.fill();
-                });
-            }
         }
 
-        // DESENHO DO CORTE TRANSVERSAL 1D (FIGURAS 1, 2, 3)
+        // DESENHO DO CORTE TRANSVERSAL 1D (+100M & VENTOS)
         function drawCrossSectionGraph() {
             ensureCanvasSize(csCanvas);
             const ctx = csCtx;
@@ -1136,12 +1064,12 @@
 
             ctx.fillStyle = '#94a3b8';
             ctx.font = `${8.5 * dpr}px sans-serif`;
-            ctx.fillText('Heights (η)', 5 * dpr, midY_h - 10 * dpr);
-            ctx.fillText('Winds (v_g)', 5 * dpr, midY_v - 10 * dpr);
+            ctx.fillText('Heights η (+100m)', 5 * dpr, midY_h - 10 * dpr);
+            ctx.fillText('Winds v_g', 5 * dpr, midY_v - 10 * dpr);
 
             const numP = NX;
             const dxP = (w - 50 * dpr) / numP;
-            const cy = Math.floor(NY / 2);
+            const cy_idx = Math.floor(NY / 2);
 
             // Altura eta (Vermelho)
             ctx.beginPath();
@@ -1150,9 +1078,9 @@
             ctx.lineWidth = 1.8 * dpr;
 
             for (let i = 0; i < NX; i++) {
-                const val = eta[cy * NX + i];
+                const val = eta[cy_idx * NX + i];
                 const px = 35 * dpr + i * dxP;
-                const py = midY_h - (val / 1.5) * (h * 0.22);
+                const py = midY_h - (val / 100.0) * (h * 0.25);
                 if (i === 0) ctx.moveTo(px, midY_h);
                 ctx.lineTo(px, py);
             }
@@ -1167,9 +1095,9 @@
             ctx.lineWidth = 1.8 * dpr;
 
             for (let i = 0; i < NX; i++) {
-                const valV = v[cy * NX + i];
+                const valV = v[cy_idx * NX + i];
                 const px = 35 * dpr + i * dxP;
-                const py = midY_v - valV * 25 * dpr;
+                const py = midY_v - valV * 2.5 * dpr;
                 if (i === 0) ctx.moveTo(px, midY_v);
                 ctx.lineTo(px, py);
             }
@@ -1195,9 +1123,9 @@
 
             ctx.fillStyle = '#94a3b8';
             ctx.font = `bold ${9.5 * dpr}px sans-serif`;
-            ctx.fillText('Raio de Rossby Rd vs Latitude (-90° a +90°)', padL, 13 * dpr);
+            ctx.fillText(`R_d vs Latitude (H_eq = ${state.heqKm} km)`, padL, 13 * dpr);
 
-            const maxRdY = 1200;
+            const maxRdY = 3000;
             function mapX(lat) { return padL + ((lat + 90) / 180) * gw; }
             function mapY(rd) { return padT + gh - (Math.min(rd, maxRdY) / maxRdY) * gh; }
 
@@ -1209,8 +1137,9 @@
                 ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + gh); ctx.stroke();
             });
 
-            // Curva Teórica
-            const c = Math.sqrt(g * state.depthH);
+            // Curva Teórica para a Altura Equivalente Atual Heq
+            const H_m = state.heqKm * 1000.0;
+            const c = Math.sqrt(g * H_m);
             ctx.beginPath(); ctx.strokeStyle = '#c084fc'; ctx.lineWidth = 2 * dpr;
 
             let first = true;
@@ -1240,9 +1169,9 @@
         }
 
         // LISTENERS E CONTROLES
-        sliderLat.addEventListener('input', (e) => { state.latDeg = parseFloat(e.target.value); updateMetricsUI(); });
+        sliderHeq.addEventListener('input', (e) => { state.heqKm = parseFloat(e.target.value); updateMetricsUI(); });
         sliderRadius.addEventListener('input', (e) => { state.pertRadiusKm = parseFloat(e.target.value); updateMetricsUI(); });
-        sliderDepth.addEventListener('input', (e) => { state.depthH = parseFloat(e.target.value); updateMetricsUI(); });
+        sliderLat.addEventListener('input', (e) => { state.latDeg = parseFloat(e.target.value); updateMetricsUI(); });
         sliderAmp.addEventListener('input', (e) => { state.pertAmpM = parseFloat(e.target.value); updateMetricsUI(); });
 
         btnTriggerBump.addEventListener('click', () => { injectPerturbation(); });
@@ -1260,37 +1189,39 @@
         btnShapeFront.addEventListener('click', () => setShape(btnShapeFront, 'front'));
         btnShapeDipole.addEventListener('click', () => setShape(btnShapeDipole, 'dipole'));
 
-        const latPresets = [btnPresetSouthPole, btnPresetSouthMid, btnPresetEquator, btnPresetNorthPole];
-        function setLatPreset(activeBtn, latVal) {
-            latPresets.forEach(b => b.classList.remove('active'));
-            activeBtn.classList.add('active');
-            state.latDeg = latVal; sliderLat.value = latVal;
+        btnPresetSmall.addEventListener('click', () => {
+            state.pertRadiusKm = 300;
+            state.heqKm = 3.0;
+            sliderRadius.value = 300;
+            sliderHeq.value = 3.0;
             clearFlow(); injectPerturbation(); updateMetricsUI();
-        }
-        btnPresetSouthPole.addEventListener('click', () => setLatPreset(btnPresetSouthPole, -90));
-        btnPresetSouthMid.addEventListener('click', () => setLatPreset(btnPresetSouthMid, -45));
-        btnPresetEquator.addEventListener('click', () => setLatPreset(btnPresetEquator, 0));
-        btnPresetNorthPole.addEventListener('click', () => setLatPreset(btnPresetNorthPole, 90));
+        });
 
-        // Interação por mouse no Canvas
-        let isMouseDown = false;
-        simCanvas.addEventListener('mousedown', (e) => { isMouseDown = true; triggerAtMouse(e); });
-        window.addEventListener('mouseup', () => { isMouseDown = false; });
-        simCanvas.addEventListener('mousemove', (e) => { if (isMouseDown) triggerAtMouse(e); });
+        btnPresetLarge.addEventListener('click', () => {
+            state.pertRadiusKm = 2000;
+            state.heqKm = 1.5;
+            sliderRadius.value = 2000;
+            sliderHeq.value = 1.5;
+            clearFlow(); injectPerturbation(); updateMetricsUI();
+        });
 
-        function triggerAtMouse(e) {
-            const rect = simCanvas.getBoundingClientRect();
-            const mx = (e.clientX - rect.left) / rect.width;
-            const my = (e.clientY - rect.top) / rect.height;
-            injectPerturbation(mx * NX, my * NY);
-        }
+        btnPresetSouth.addEventListener('click', () => {
+            state.latDeg = -90; sliderLat.value = -90;
+            clearFlow(); injectPerturbation(); updateMetricsUI();
+        });
+
+        btnPresetMid.addEventListener('click', () => {
+            state.latDeg = -45; sliderLat.value = -45;
+            clearFlow(); injectPerturbation(); updateMetricsUI();
+        });
 
         // VOICE NARRATION
         function playVoice() {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const rate = parseFloat(document.getElementById('voice-rate').value);
-                const u = new SpeechSynthesisUtterance("As equações puras de águas rasas governam a propagação de ondas de gravidade e a conservação da vorticidade potencial. A perturbação inicial em formato de domo gaussiano induz uma resposta gravitacional irradiante. No Polo Sul, a Força de Coriolis cria um vórtice geostrófico anti-horário em torno do domo gaussiano sem qualquer difusão artificial.");
+                const text = `Com altura equivalente ajustada entre 1 e 4 quilômetros, a perturbação de massa fixa em 100 metros permite comparar diretamente o efeito de escala no ajuste geostrófico de Rossby. Quando o raio de decaimento Gaussiano L é menor que o raio de deformação de Rossby R_d, a maior parte da elevação de 100 metros se espalha gerando ondas de gravidade intensas. Quando L é maior que R_d, o domo de 100 metros é retido e gera ventos geostróficos fortes.`;
+                const u = new SpeechSynthesisUtterance(text);
                 u.lang = 'pt-BR'; u.rate = rate;
                 window.speechSynthesis.speak(u);
             }
@@ -1303,22 +1234,21 @@
                 stepPhysics();
             }
 
-            if (state.renderMode === '3d') {
-                update3DMesh();
-                if (controls) controls.update();
-                if (renderer && scene && camera) renderer.render(scene, camera);
-            }
+            update3DMesh();
+            if (controls) controls.update();
+            if (renderer && scene && camera) renderer.render(scene, camera);
 
             drawSimulation();
             drawCrossSectionGraph();
             drawLatGraph();
+            updateMetricsUI();
 
             requestAnimationFrame(animate);
         }
 
         window.onload = function() {
             init3D();
-            setRenderMode('3d');
+            setCameraView('3d');
             updateMetricsUI();
             injectPerturbation();
             requestAnimationFrame(animate);
