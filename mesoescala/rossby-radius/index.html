@@ -230,6 +230,17 @@
             line-height: 1.45;
         }
 
+        .math-eq-container {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-radius: 6px;
+            padding: 6px 10px;
+            text-align: center;
+            color: var(--accent-gold);
+            font-size: 0.92rem;
+            overflow-x: auto;
+        }
+
         /* Viewport Stage */
         .viewport-container {
             position: relative;
@@ -528,16 +539,22 @@
                 <button class="preset-btn" id="btn-clear-flow">🔄 Zerar Campo</button>
             </div>
 
-            <div class="formula-box">
-                <strong>Equações de Águas Rasas com Atrito Rayleigh ($k$):</strong>
-                <div style="font-size:0.82rem; color:var(--accent-gold); margin:6px 0; line-height:1.5;">
-                    $$\frac{\partial h}{\partial t} + H \left( \frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} \right) = 0$$
-                    $$\frac{\partial u}{\partial t} - fv = -g \frac{\partial h}{\partial x} - ku$$
-                    $$\frac{\partial v}{\partial t} + fu = -g \frac{\partial h}{\partial y} - kv$$
+            <div class="formula-box" id="eq-formula-box">
+                <strong style="color:var(--accent-cyan);">📐 Equações de Águas Rasas com Atrito Rayleigh (<span style="font-family:serif; font-style:italic; color:var(--accent-gold);">k</span>):</strong>
+                <div style="margin: 8px 0; display: flex; flex-direction: column; gap: 6px;">
+                    <div id="katex-eq1" class="math-eq-container">
+                        <span class="html-math-fallback">&part;h/&part;t + H (&part;u/&part;x + &part;v/&part;y) = 0</span>
+                    </div>
+                    <div id="katex-eq2" class="math-eq-container">
+                        <span class="html-math-fallback">&part;u/&part;t &minus; f v = &minus;g &part;h/&part;x &minus; k u</span>
+                    </div>
+                    <div id="katex-eq3" class="math-eq-container">
+                        <span class="html-math-fallback">&part;v/&part;t + f u = &minus;g &part;h/&part;y &minus; k v</span>
+                    </div>
                 </div>
-                <span style="display:block; margin-top:4px; color:var(--text-muted); font-size:0.74rem;">
-                    • <b>Tempo Finito Integrado:</b> Interrompe automaticamente em $t = T_{max}$ para garantir a estabilidade matemática.<br>
-                    • <b>Atrito Linear ($-ku, -kv$):</b> Amortece oscilações espúrias de alta frequência mantendo o ajuste geostrófico equilibrado.
+                <span style="display:block; margin-top:6px; color:var(--text-muted); font-size:0.74rem;">
+                    • <b>Tempo Finito Integrado:</b> Interrompe automaticamente em <i>t = T<sub>max</sub></i> para garantir a estabilidade matemática.<br>
+                    • <b>Atrito Linear (&minus;ku, &minus;kv):</b> Amortece oscilações espúrias de alta frequência mantendo o ajuste geostrófico equilibrado.
                 </span>
             </div>
         </div>
@@ -1451,16 +1468,39 @@
             requestAnimationFrame(animate);
         }
 
+        function initMathRendering() {
+            const latex1 = "\\frac{\\partial h}{\\partial t} + H \\left( \\frac{\\partial u}{\\partial x} + \\frac{\\partial v}{\\partial y} \\right) = 0";
+            const latex2 = "\\frac{\\partial u}{\\partial t} - f v = -g \\frac{\\partial h}{\\partial x} - k u";
+            const latex3 = "\\frac{\\partial v}{\\partial t} + f u = -g \\frac{\\partial h}{\\partial y} - k v";
+
+            const eq1 = document.getElementById('katex-eq1');
+            const eq2 = document.getElementById('katex-eq2');
+            const eq3 = document.getElementById('katex-eq3');
+
+            if (window.katex) {
+                try {
+                    if (eq1) katex.render(latex1, eq1, { displayMode: true, throwOnError: false });
+                    if (eq2) katex.render(latex2, eq2, { displayMode: true, throwOnError: false });
+                    if (eq3) katex.render(latex3, eq3, { displayMode: true, throwOnError: false });
+                } catch (e) {
+                    console.warn("KaTeX rendering error:", e);
+                }
+            }
+        }
+
         window.onload = function() {
             init3D();
             setCameraView('3d');
             updateMetricsUI();
             injectPerturbation();
+            initMathRendering();
             requestAnimationFrame(animate);
             if (window.renderMathInElement) {
-                renderMathInElement(document.body, {
-                    delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
-                });
+                try {
+                    renderMathInElement(document.body, {
+                        delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+                    });
+                } catch (e) {}
             }
         };
     </script>
