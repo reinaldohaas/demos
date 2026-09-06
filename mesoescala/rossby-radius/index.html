@@ -476,13 +476,27 @@
                 <input type="range" id="slider-lat" min="-90" max="90" step="1" value="-45">
             </div>
 
-            <!-- Amplitude Gaussiana FIXA em 100 m -->
+            <!-- Tempo Limite T_max (6h a 120h) para evitar instabilidade numânica de integração infinita -->
             <div class="control-group">
                 <div class="control-label">
-                    <span>Amplitude da Perturbação (&eta;₀)</span>
-                    <span class="control-val" id="val-amp" style="color:var(--accent-green);">+100 m (Fixa)</span>
+                    <span>Tempo Limite Finito (T_max)</span>
+                    <span class="control-val" id="val-tmax" style="color:var(--accent-gold);">48.0 horas</span>
                 </div>
-                <input type="range" id="slider-amp" min="20" max="200" step="10" value="100">
+                <input type="range" id="slider-tmax" min="6" max="120" step="6" value="48">
+            </div>
+
+            <!-- Atrito Linear Rayleigh k (0 a 10.0 e-5 s^-1) conforme equações fornecidas -->
+            <div class="control-group">
+                <div class="control-label">
+                    <span>Atrito Rayleigh (k)</span>
+                    <span class="control-val" id="val-friction" style="color:var(--accent-cyan);">2.0 &times; 10⁻⁵ s⁻¹</span>
+                </div>
+                <input type="range" id="slider-friction" min="0" max="10" step="0.5" value="2">
+            </div>
+
+            <div class="btn-grid" style="margin-top: 4px;">
+                <button class="action-btn" id="btn-toggle-play">⏸️ Pausar Simulação</button>
+                <button class="preset-btn" id="btn-reset-time">⏱️ Resetar Tempo (t=0)</button>
             </div>
 
             <div class="panel-header" style="margin-top: 4px;">
@@ -515,15 +529,15 @@
             </div>
 
             <div class="formula-box">
-                <strong>Equações de Águas Rasas & Força de Coriolis:</strong>
-                <span style="font-family:monospace; color:var(--accent-gold); display:block; margin-top:2px;">
-                    f = 2\Omega \sin(\phi) \quad | \quad R_d = \frac{\sqrt{g H_{eq}}}{|f|}
-                </span>
-                <span style="display:block; margin-top:4px; color:var(--text-muted); font-size:0.75rem;">
-                    • <b>Equador ($\phi = 0^\circ$):</b> $f = 0 \implies R_d \to \infty$. Ajuste Geostrófico <b>NULO</b> e giro do vento <b>NULO</b>.<br>
-                    • <b>Polos ($\phi = \pm 90^\circ$):</b> $|f|$ é <b>MÁXIMO</b> $\implies R_d$ mínimo e Ajuste Geostrófico <b>MÁXIMO</b>.<br>
-                    • <b>Giro no HN ($\phi > 0$):</b> Deflexão à <b>DIREITA</b>.<br>
-                    • <b>Giro no HS ($\phi < 0$):</b> Deflexão à <b>ESQUERDA</b>.
+                <strong>Equações de Águas Rasas com Atrito Rayleigh ($k$):</strong>
+                <div style="font-size:0.82rem; color:var(--accent-gold); margin:6px 0; line-height:1.5;">
+                    $$\frac{\partial h}{\partial t} + H \left( \frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} \right) = 0$$
+                    $$\frac{\partial u}{\partial t} - fv = -g \frac{\partial h}{\partial x} - ku$$
+                    $$\frac{\partial v}{\partial t} + fu = -g \frac{\partial h}{\partial y} - kv$$
+                </div>
+                <span style="display:block; margin-top:4px; color:var(--text-muted); font-size:0.74rem;">
+                    • <b>Tempo Finito Integrado:</b> Interrompe automaticamente em $t = T_{max}$ para garantir a estabilidade matemática.<br>
+                    • <b>Atrito Linear ($-ku, -kv$):</b> Amortece oscilações espúrias de alta frequência mantendo o ajuste geostrófico equilibrado.
                 </span>
             </div>
         </div>
@@ -589,12 +603,20 @@
                     <div class="metric-val" id="metric-l" style="color:var(--accent-cyan);">500 km</div>
                 </div>
                 <div class="metric-card">
+                    <div class="metric-title">Tempo Integrado (t)</div>
+                    <div class="metric-val" id="metric-time" style="color:var(--accent-gold);">0.0 / 48.0 h</div>
+                </div>
+                <div class="metric-card">
                     <div class="metric-title">Giro do Vento (Coriolis)</div>
                     <div class="metric-val" id="metric-spin" style="color:var(--accent-purple);">À Esquerda (HS)</div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-title">Massa Retida (Pico)</div>
                     <div class="metric-val" id="metric-retained" style="color:var(--accent-green);">+28.4 m</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Atrito Rayleigh (k)</div>
+                    <div class="metric-val" id="metric-k" style="color:var(--accent-red);">2.0&times;10⁻⁵ s⁻¹</div>
                 </div>
             </div>
 
@@ -682,11 +704,15 @@
         }
 
         const state = {
-            heqKm: 2.5,        // Altura equivalente de 1.0 a 4.0 km
-            pertRadiusKm: 500, // Raio de decaimento Gaussiano L (km)
-            latDeg: -45,       // Latitude
-            pertAmpM: 100,     // Perturbação de elevação fixa em +100 m
+            heqKm: 2.5,          // Altura equivalente de 1.0 a 4.0 km
+            pertRadiusKm: 500,   // Raio de decaimento Gaussiano L (km)
+            latDeg: -45,         // Latitude
+            pertAmpM: 100,       // Perturbação de elevação fixa em +100 m
             pertShape: 'dome',
+            kFriction: 2.0e-5,   // Coeficiente k de atrito linear Rayleigh (1/s)
+            simTimeSeconds: 0,   // Tempo físico acumulado (s)
+            maxTimeHours: 48,    // Tempo limite finito de integração (horas)
+            isRunning: true,     // Estado de execução (play/pause)
             viewSponge: true,
             viewCircles: true,
             stepsPerFrame: 4
@@ -701,6 +727,14 @@
         const valLat = document.getElementById('val-lat');
         const sliderAmp = document.getElementById('slider-amp');
         const valAmp = document.getElementById('val-amp');
+
+        const sliderTmax = document.getElementById('slider-tmax');
+        const valTmax = document.getElementById('val-tmax');
+        const sliderFriction = document.getElementById('slider-friction');
+        const valFriction = document.getElementById('val-friction');
+
+        const btnTogglePlay = document.getElementById('btn-toggle-play');
+        const btnResetTime = document.getElementById('btn-reset-time');
 
         const btnTriggerBump = document.getElementById('btn-trigger-bump');
         const btnClearFlow = document.getElementById('btn-clear-flow');
@@ -722,8 +756,10 @@
 
         const metricRd = document.getElementById('metric-rd');
         const metricL = document.getElementById('metric-l');
+        const metricTime = document.getElementById('metric-time');
         const metricSpin = document.getElementById('metric-spin');
         const metricRetained = document.getElementById('metric-retained');
+        const metricK = document.getElementById('metric-k');
         const badgeRegime = document.getElementById('badge-regime');
 
         const simCanvas = document.getElementById('sim-canvas');
@@ -947,7 +983,18 @@
             valRadius.textContent = `${state.pertRadiusKm} km (${state.pertRadiusKm > Rd_km ? 'L > Rd' : 'L < Rd'})`;
             valAmp.textContent = `${state.pertAmpM > 0 ? '+' : ''}${state.pertAmpM.toFixed(0)} m (Fixa)`;
 
+            valTmax.textContent = `${state.maxTimeHours.toFixed(1)} horas`;
+            valFriction.textContent = `${(state.kFriction * 1e5).toFixed(1)} × 10⁻⁵ s⁻¹`;
+
             metricL.textContent = `${state.pertRadiusKm} km`;
+
+            const currentHours = state.simTimeSeconds / 3600;
+            if (metricTime) {
+                metricTime.textContent = `${currentHours.toFixed(1)} / ${state.maxTimeHours.toFixed(1)} h`;
+            }
+            if (metricK) {
+                metricK.textContent = `${(state.kFriction * 1e5).toFixed(1)}×10⁻⁵ s⁻¹`;
+            }
 
             const cy = Math.floor(NY / 2); const cx = Math.floor(NX / 2);
             const peakRetained = eta[cy * NX + cx];
@@ -966,7 +1013,9 @@
                 }
             }
 
-            if (Rd_km === Infinity || isNaN(Rd_km) || state.latDeg === 0) {
+            if (!state.isRunning && currentHours >= state.maxTimeHours) {
+                badgeRegime.textContent = `⏱️ Tempo Finito Alcançado (t = ${currentHours.toFixed(1)}h) — Ajuste Geostrófico Estabilizado (Simulação Pausada)`;
+            } else if (Rd_km === Infinity || isNaN(Rd_km) || state.latDeg === 0) {
                 metricRd.textContent = '∞ (Infinito)';
                 badgeRegime.textContent = '🌴 Equador (0°): Ajuste Geostrófico NULO (f = 0, Giro Nulo, Radiação de Ondas de Gravidade Pura)';
             } else {
@@ -1018,12 +1067,24 @@
 
         function clearFlow() {
             eta.fill(0); u.fill(0); v.fill(0);
+            state.simTimeSeconds = 0;
+            state.isRunning = true;
+            if (btnTogglePlay) btnTogglePlay.textContent = '⏸️ Pausar Simulação';
         }
 
-        // INTEGRAÇÃO NUMÉRICA DAS EQUAÇÕES DE ÁGUAS RASAS + CAMADA DE ESPONJA RAYLEIGH
+        // INTEGRAÇÃO NUMÉRICA DAS EQUAÇÕES DE ÁGUAS RASAS + ATRITO RAYLEIGH (-ku, -kv) + PARADA EM TEMPO FINITO
         function stepPhysics() {
+            if (!state.isRunning) return;
+
             const { f, c, H_m } = getPhysics();
             const dt = Math.min(25, 0.35 * dx / (c * 1.414));
+
+            if (state.simTimeSeconds / 3600 >= state.maxTimeHours) {
+                state.isRunning = false;
+                if (btnTogglePlay) btnTogglePlay.textContent = '▶️ Retomar Simulação';
+                updateMetricsUI();
+                return;
+            }
 
             for (let j = 1; j < NY - 1; j++) {
                 for (let i = 1; i < NX - 1; i++) {
@@ -1034,8 +1095,11 @@
                     const v_avg = 0.25 * (v[idx] + v[idx + 1] + v[idx + NX] + v[idx + NX + 1]);
                     const u_avg = 0.25 * (u[idx] + u[idx + 1] + u[idx + NX] + u[idx + NX + 1]);
 
-                    u[idx] += dt * (f * v_avg - g * deta_dx);
-                    v[idx] += dt * (-f * u_avg - g * deta_dy);
+                    // Equações de momento com Coriolis e Atrito Rayleigh (-ku, -kv) conforme imagem do usuário:
+                    // du/dt - f*v = -g dh/dx - k*u => du/dt = f*v - g dh/dx - k*u
+                    // dv/dt + f*u = -g dh/dy - k*v => dv/dt = -f*u - g dh/dy - k*v
+                    u[idx] += dt * (f * v_avg - g * deta_dx - state.kFriction * u[idx]);
+                    v[idx] += dt * (-f * u_avg - g * deta_dy - state.kFriction * v[idx]);
                 }
             }
 
@@ -1045,6 +1109,7 @@
                     const du_dx = (u[idx] - u[idx - 1]) / dx;
                     const dv_dy = (v[idx] - v[idx - NX]) / dy;
 
+                    // dh/dt + H*(du/dx + dv/dy) = 0 => dh/dt = -H*(du/dx + dv/dy)
                     eta[idx] -= dt * H_m * (du_dx + dv_dy);
                 }
             }
@@ -1053,6 +1118,8 @@
                 const sFactor = 1.0 - spongeMask[idx];
                 eta[idx] *= sFactor; u[idx] *= sFactor; v[idx] *= sFactor;
             }
+
+            state.simTimeSeconds += dt;
         }
 
         function ensureCanvasSize(cvs) {
@@ -1244,7 +1311,37 @@
         sliderHeq.addEventListener('input', (e) => { state.heqKm = parseFloat(e.target.value); updateMetricsUI(); });
         sliderRadius.addEventListener('input', (e) => { state.pertRadiusKm = parseFloat(e.target.value); updateMetricsUI(); });
         sliderLat.addEventListener('input', (e) => { state.latDeg = parseFloat(e.target.value); updateMetricsUI(); });
-        sliderAmp.addEventListener('input', (e) => { state.pertAmpM = parseFloat(e.target.value); updateMetricsUI(); });
+
+        if (sliderTmax) {
+            sliderTmax.addEventListener('input', (e) => {
+                state.maxTimeHours = parseFloat(e.target.value);
+                updateMetricsUI();
+            });
+        }
+
+        if (sliderFriction) {
+            sliderFriction.addEventListener('input', (e) => {
+                state.kFriction = parseFloat(e.target.value) * 1.0e-5;
+                updateMetricsUI();
+            });
+        }
+
+        if (btnTogglePlay) {
+            btnTogglePlay.addEventListener('click', () => {
+                state.isRunning = !state.isRunning;
+                btnTogglePlay.textContent = state.isRunning ? '⏸️ Pausar Simulação' : '▶️ Retomar Simulação';
+                updateMetricsUI();
+            });
+        }
+
+        if (btnResetTime) {
+            btnResetTime.addEventListener('click', () => {
+                state.simTimeSeconds = 0;
+                state.isRunning = true;
+                btnTogglePlay.textContent = '⏸️ Pausar Simulação';
+                updateMetricsUI();
+            });
+        }
 
         btnTriggerBump.addEventListener('click', () => { injectPerturbation(); });
         btnClearFlow.addEventListener('click', () => { clearFlow(); });
