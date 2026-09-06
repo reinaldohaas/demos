@@ -61,6 +61,22 @@
       "description": "Robô de exploração em Marte com trajetórias r(t), v(t) e a(t) desempacotados.",
       "path": "fisica-1/capitulo-3/exemplo-3-1.html",
       "date": "2026-09-01"
+    },
+    {
+      "id": "rossby-radius-3d",
+      "title": "Ajuste Geostrófico de Rossby 3D & Ondas de Gravidade",
+      "category": "Geofísica & Fluidos em Rotação",
+      "llm": "Gemini 3.7 Flash",
+      "icon": "🌊",
+      "tags": [
+        "Ajuste Geostrófico",
+        "Raio de Rossby",
+        "Ondas de Gravidade",
+        "COMET Program 3D"
+      ],
+      "description": "Simulação 3D WebGL do ajuste geostrófico de Rossby, radiação de ondas de Poincaré e comparação COMET (L >> 2πLR vs L << 2πLR).",
+      "path": "mesoescala/rossby-radius/index.html",
+      "date": "2026-09-06"
     }
   ]
 }
