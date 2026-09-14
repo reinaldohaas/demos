@@ -1,0 +1,316 @@
+\documentclass[9pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage[margin=0.9cm,top=0.9cm,bottom=0.9cm]{geometry}
+\usepackage{multicol}
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+% Configurações de Cores
+\definecolor{primaryblue}{HTML}{0f172a}
+\definecolor{accentcyan}{HTML}{0284c7}
+\definecolor{accentpurple}{HTML}{7e22ce}
+\definecolor{accentgold}{HTML}{d97706}
+\definecolor{accentemerald}{HTML}{059669}
+\definecolor{accentrose}{HTML}{e11d48}
+\definecolor{boxbg}{HTML}{f8fafc}
+\definecolor{amberbg}{HTML}{fffbeb}
+\definecolor{rosebg}{HTML}{fff1f2}
+
+% Estilo tcolorbox
+\tcbuselibrary{skins}
+\tcbset{
+    enhanced,
+    fonttitle=\bfseries\sffamily\small,
+    boxrule=0.6pt,
+    arc=3pt,
+    top=3pt,bottom=3pt,left=5pt,right=5pt,
+    boxsep=1pt
+}
+
+\newtcolorbox{topicbox}[1]{
+    colback=boxbg,
+    colframe=accentcyan,
+    coltitle=white,
+    title={#1},
+    colbacktitle=accentcyan
+}
+
+\newtcolorbox{tipbox}[1]{
+    colback=amberbg,
+    colframe=accentgold,
+    coltitle=white,
+    title={#1},
+    colbacktitle=accentgold
+}
+
+\newtcolorbox{alertbox}[1]{
+    colback=rosebg,
+    colframe=accentrose,
+    coltitle=white,
+    title={#1},
+    colbacktitle=accentrose
+}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+
+\begin{document}
+
+% CABEÇALHO COMPACTO
+\begin{center}
+    \tcbset{colback=primaryblue,colframe=accentcyan,arc=4pt,top=4pt,bottom=4pt}
+    \begin{tcolorbox}[coltext=white,halign=center]
+        {\Large \bfseries FSC5101 FÍSICA I --- MANUAL COMPACTO DE FÓRMULAS}\\[2pt]
+        {\small \textbf{Capítulo 1:} Medição e Vetores \quad$\vert$\quad \textbf{Capítulo 2:} Cinemática 1D \quad$\vert$\quad \textbf{Capítulo 3:} Cinemática 2D/3D, Projéteis e MCU}
+    \end{tcolorbox}
+\end{center}
+
+\vspace{-6pt}
+
+\begin{multicols*}{2}
+
+% =================================================================
+% CAPÍTULO 1: MEDIÇÃO, UNIDADES E ÁLGEBRA VETORIAL
+% =================================================================
+\begin{topicbox}{Capítulo 1: Medição, Unidades e Vetores}
+
+\textbf{1. Unidades SI e Prefixos}
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+    \item \textbf{Base SI}: Comprimento $[L]$ (m), Massa $[M]$ (kg), Tempo $[T]$ (s).
+    \item \textbf{Prefixos}: $k=10^3$, $M=10^6$, $G=10^9$, $c=10^{-2}$, $m=10^{-3}$, $\mu=10^{-6}$, $n=10^{-9}$.
+    \item \textbf{Análise Dimensional}: $[v] = LT^{-1}, \; [a] = LT^{-2}, \; [F] = MLT^{-2}$.
+\end{itemize}
+
+\textbf{2. Vetores em 2D e 3D}
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+    \item \textbf{Forma Componente}: $\vec{A} = A_x \hat{i} + A_y \hat{j} + A_z \hat{k}$
+    \item \textbf{Módulo}: $A = |\vec{A}| = \sqrt{A_x^2 + A_y^2 + A_z^2}$
+    \item \textbf{Decomposição 2D}: $A_x = A \cos\theta, \quad A_y = A \sin\theta, \quad \theta = \arctan\left(\frac{A_y}{A_x}\right)$
+    \item \textbf{Soma Vetorial}: $\vec{R} = \vec{A} + \vec{B} \implies R_x = A_x + B_x, \; R_y = A_y + B_y$
+\end{itemize}
+
+\textbf{3. Produtos Vetoriais}
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+    \item \textbf{Produto Escalar (Escalar)}:
+    \begin{equation*}
+        \vec{A} \cdot \vec{B} = A B \cos\phi = A_x B_x + A_y B_y + A_z B_z
+    \end{equation*}
+    \begin{itemize}[leftmargin=*]
+        \item Se $\vec{A} \perp \vec{B} \implies \vec{A} \cdot \vec{B} = 0$. Ângulo: $\cos\phi = \frac{\vec{A} \cdot \vec{B}}{A B}$.
+    \end{itemize}
+    \item \textbf{Produto Vetorial (Vetor)}: $\vec{C} = \vec{A} \times \vec{B}$
+    \begin{equation*}
+        |\vec{A} \times \vec{B}| = A B \sin\phi \quad (\text{Regra da Mão Direita})
+    \end{equation*}
+    \begin{equation*}
+        \vec{A} \times \vec{B} = \begin{vmatrix} \hat{i} & \hat{j} & \hat{k} \\ A_x & A_y & A_z \\ B_x & B_y & B_z \end{vmatrix} = (A_y B_z - A_z B_y)\hat{i} - \dots
+    \end{equation*}
+    \item \textbf{Anticomutativo}: $\vec{B} \times \vec{A} = -(\vec{A} \times \vec{B})$.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.75, >=Stealth]
+    \draw[->, thick, gray] (0,0) -- (3.0,0) node[right] {\footnotesize $x$};
+    \draw[->, thick, gray] (0,0) -- (0,2.2) node[above] {\footnotesize $y$};
+    \draw[->, ultra thick, accentcyan] (0,0) -- (2.2,1.2) node[above right] {\footnotesize $\vec{A}$};
+    \draw[dashed, accentcyan!70] (2.2,0) -- (2.2,1.2) -- (0,1.2);
+    \draw[->, ultra thick, accentpurple] (2.2,1.2) -- (2.8, 1.9) node[right] {\footnotesize $\vec{B}$};
+    \draw[->, ultra thick, accentemerald] (0,0) -- (2.8, 1.9) node[above left] {\footnotesize $\vec{R} = \vec{A}+\vec{B}$};
+    \draw[->, thick, accentgold] (0.5,0) arc (0:28:0.5);
+    \node[accentgold] at (0.75,0.2) {\tiny $\theta$};
+\end{tikzpicture}
+\end{center}
+\end{topicbox}
+
+% =================================================================
+% CAPÍTULO 2: CINEMÁTICA RETILÍNEA EM 1D
+% =================================================================
+\begin{topicbox}{Capítulo 2: Cinemática Retilínea (1D)}
+
+\textbf{1. Posicao, Deslocamento e Velocidade}
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+    \item \textbf{Deslocamento}: $\Delta x = x_2 - x_1$ (depende apenas dos pontos extremos).
+    \item \textbf{Velocidade Média}: $v_{\text{méd}} = \frac{\Delta x}{\Delta t} = \frac{x_2 - x_1}{t_2 - t_1}$.
+    \item \textbf{Velocidade Instantânea}: $v(t) = \frac{dx}{dt}$.
+    \item \textbf{Rapidez Média}: $s_{\text{méd}} = \frac{\text{Distância Total Percorrida}}{\Delta t} \ge 0$.
+\end{itemize}
+
+\textbf{2. Aceleração}
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+    \item \textbf{Aceleração Média}: $a_{\text{méd}} = \frac{\Delta v}{\Delta t}$. \quad \textbf{Instantânea}: $a(t) = \frac{dv}{dt} = \frac{d^2 x}{dt^2}$.
+\end{itemize}
+
+\textbf{3. Movimento Uniforme (MRU: $a = 0$)}
+\begin{equation*}
+    x(t) = x_0 + v t
+\end{equation*}
+
+\textbf{4. Movimento Uniformemente Variado (MRUV: $a = \text{const}$)}
+\begin{align*}
+    v(t) &= v_0 + a t \\
+    x(t) &= x_0 + v_0 t + \frac{1}{2} a t^2 \\
+    v^2 &= v_0^2 + 2 a \Delta x \quad \text{(\textbf{Equação de Torricelli})} \\
+    \Delta x &= \left(\frac{v_0 + v}{2}\right) t
+\end{align*}
+
+\textbf{5. Queda Livre sob Gravidade ($a = -g$, $g \approx 9,80\text{ m/s}^2$)}
+\begin{align*}
+    v(t) = v_0 - g t, \quad y(t) = y_0 + v_0 t - \frac{1}{2} g t^2, \quad v^2 = v_0^2 - 2 g \Delta y
+\end{align*}
+
+\textbf{6. Integração Gráfica}
+\begin{equation*}
+    v(t) - v_0 = \int_{t_0}^t a(t') \, dt', \quad x(t) - x_0 = \int_{t_0}^t v(t') \, dt'
+\end{equation*}
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+    \item \textbf{Gráfico $v \times t$}: Área sob a curva = Deslocamento $\Delta x$.
+    \item \textbf{Gráfico $a \times t$}: Área sob a curva = Variação de velocidade $\Delta v$.
+\end{itemize}
+
+\end{topicbox}
+
+\begin{tipbox}{DICAS DE OURO: CAPÍTULOS 1 E 2}
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+    \item \textbf{Frenagem vs Sinal de $a$}: Acelerado $\implies |v|$ aumenta ($v$ e $a$ com mesmo sinal). Retardado $\implies |v|$ diminui ($v$ e $a$ com sinais opostos).
+    \item \textbf{Deslocamento vs Distância}: Ir de $x=0$ a $x=10$m e voltar a $x=0$ dá $\Delta x = 0$, porém distância = $20$m!
+    \item \textbf{Quadrante no ArcTan}: Se $A_x < 0$, adicione $+180^\circ$ ao valor do $\arctan(A_y/A_x)$ para obter o ângulo correto em relação ao eixo $+x$.
+\end{itemize}
+\end{tipbox}
+
+\end{multicols*}
+
+\newpage % PÁGINA 2 (VERSO DA FOLHA)
+
+\begin{multicols*}{2}
+
+% =================================================================
+% CAPÍTULO 3: CINEMÁTICA EM 2D E 3D
+% =================================================================
+\begin{topicbox}{Capítulo 3: Cinemática 2D/3D, Projéteis e MCU}
+
+\textbf{1. Vetores Posição, Velocidade e Aceleração}
+\begin{align*}
+    \vec{r}(t) &= x(t)\hat{i} + y(t)\hat{j} + z(t)\hat{k} \\
+    \vec{v}(t) &= \frac{d\vec{r}}{dt} = v_x \hat{i} + v_y \hat{j} + v_z \hat{k} \\
+    \vec{a}(t) &= \frac{d\vec{v}}{dt} = a_x \hat{i} + a_y \hat{j} + a_z \hat{k}
+\end{align*}
+
+\textbf{2. Movimento de Projéteis (Lançamento Oblíquo)}
+\textit{Sem resistência do ar: $a_x = 0$ (MRU) e $a_y = -g$ (MRUV).}
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+    \item \textbf{Velocidades Iniciais}: $v_{0x} = v_0 \cos\theta_0, \quad v_{0y} = v_0 \sin\theta_0$.
+    \item \textbf{Eixo Horizontal (x)}:
+    \begin{equation*}
+        x(t) = x_0 + (v_0 \cos\theta_0) t, \quad v_x = v_0 \cos\theta_0 \text{ (constante)}
+    \end{equation*}
+    \item \textbf{Eixo Vertical (y)}:
+    \begin{equation*}
+        y(t) = y_0 + (v_0 \sin\theta_0) t - \frac{1}{2} g t^2, \quad v_y(t) = v_0 \sin\theta_0 - g t
+    \end{equation*}
+    \item \textbf{Equação da Trajetória Parabólica $y(x)$}:
+    \begin{equation*}
+        y(x) = (\tan\theta_0) x - \frac{g x^2}{2(v_0 \cos\theta_0)^2}
+    \end{equation*}
+    \item \textbf{Tempo de Voo e Altura Máxima} (para $y_0 = 0$):
+    \begin{equation*}
+        t_{\text{sub}} = \frac{v_0 \sin\theta_0}{g}, \quad h_{\text{máx}} = \frac{(v_0 \sin\theta_0)^2}{2g}
+    \end{equation*}
+    \item \textbf{Alcance Horizontal Máximo $R$} (para $y_{\text{final}} = y_0 = 0$):
+    \begin{equation*}
+        R = \frac{v_0^2 \sin(2\theta_0)}{g} \quad \text{(Alcance máximo para } \theta_0 = 45^\circ\text{)}
+    \end{equation*}
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.70, >=Stealth]
+    \draw[->, thick, gray] (0,0) -- (4.0,0) node[right] {\footnotesize $x$};
+    \draw[->, thick, gray] (0,0) -- (0,2.3) node[above] {\footnotesize $y$};
+    \draw[ultra thick, accentcyan, domain=0:3.6, samples=50] plot (\x, {1.7*\x - 0.47*\x*\x});
+    \draw[->, ultra thick, accentrose] (0,0) -- (1.0,1.7) node[above] {\footnotesize $\vec{v}_0$};
+    \draw[->, thick, accentgold] (0,0) -- (1.0,0) node[below] {\tiny $v_{0x}$};
+    \draw[->, thick, accentgold] (0,0) -- (0,1.7) node[left] {\tiny $v_{0y}$};
+    \draw[thick, accentgold] (0.4,0) arc (0:58:0.4);
+    \node[accentgold] at (0.65,0.25) {\tiny $\theta_0$};
+    \draw[dashed, gray] (1.8, 1.53) -- (1.8, 0);
+    \draw[dashed, gray] (1.8, 1.53) -- (0, 1.53) node[left] {\tiny $h_{\text{máx}}$};
+    \node[draw, circle, fill=accentemerald, inner sep=1.0pt] at (1.8, 1.53) {};
+    \node[below, accentemerald] at (3.6,0) {\tiny $R$};
+\end{tikzpicture}
+\end{center}
+
+\end{topicbox}
+
+\begin{topicbox}{Movimento Circular e Velocidade Relativa}
+
+\textbf{3. Movimento Circular Uniforme (MCU)}
+\textit{Módulo de $v$ constante, direção em rotação contínua.}
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+    \item \textbf{Período $T$ e Frequência $f$}: $f = \frac{1}{T} \text{ (Hz)}, \quad T = \frac{1}{f} \text{ (s)}$.
+    \item \textbf{Velocidade Angular $\omega$} e \textbf{Velocidade Linear $v$}:
+    \begin{equation*}
+        \omega = \frac{2\pi}{T} = 2\pi f \quad (\text{rad/s}), \quad v = \frac{2\pi R}{T} = \omega R
+    \end{equation*}
+    \item \textbf{Aceleração Centrípeta $\vec{a}_c$} (aponta para o centro):
+    \begin{equation*}
+        a_c = \frac{v^2}{R} = \omega^2 R = \frac{4\pi^2 R}{T^2}
+    \end{equation*}
+\end{itemize}
+
+\textbf{4. Movimento Circular Não-Uniforme}
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+    \item Possui aceleração centrípeta $a_c = \frac{v^2}{R}$ (muda direção) e aceleração tangencial $a_t = \frac{dv}{dt} = \alpha R$ (muda módulo).
+    \item \textbf{Aceleração Total}: $\vec{a} = \vec{a}_c + \vec{a}_t \implies a = \sqrt{a_c^2 + a_t^2}$.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.70, >=Stealth]
+    \draw[thick, gray!60] (0,0) circle (1.2cm);
+    \draw[fill=gray] (0,0) circle (1.5pt) node[below left] {\tiny Centro};
+    \path (45:1.2cm) coordinate (P);
+    \draw[fill=accentpurple] (P) circle (2.5pt) node[above right] {\tiny Objeto};
+    \draw[dashed, gray] (0,0) -- (P) node[midway, above left] {\tiny $R$};
+    \draw[->, ultra thick, accentemerald] (P) -- ($(P) + (-0.9, 0.9)$) node[above] {\tiny $\vec{v}$};
+    \draw[->, ultra thick, accentrose] (P) -- ($(P)!0.65!(0,0)$) node[midway, right] {\tiny $\vec{a}_c$};
+\end{tikzpicture}
+\end{center}
+
+\textbf{5. Velocidade Relativa em 2D (Galileu)}
+\textit{Referenciais $A$ (Terra), $B$ (Ar/Água) e Partícula $P$ (Avião/Barco):}
+\begin{equation*}
+    \vec{r}_{P/A} = \vec{r}_{P/B} + \vec{r}_{B/A} \implies \vec{v}_{P/A} = \vec{v}_{P/B} + \vec{v}_{B/A}
+\end{equation*}
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+    \item $\vec{v}_{P/A}$: Velocidade em relação à Terra.
+    \item $\vec{v}_{P/B}$: Velocidade em relação ao meio (Ar/Água).
+    \item $\vec{v}_{B/A}$: Velocidade do meio em relação à Terra (Vento/Correnteza).
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.70, >=Stealth]
+    \draw[->, ultra thick, accentpurple] (0,0) -- (-1.1, 1.6) node[midway, left] {\tiny $\vec{v}_{P/B}$};
+    \draw[->, ultra thick, accentcyan] (-1.1, 1.6) -- (0, 1.6) node[midway, above] {\tiny $\vec{v}_{B/A}$};
+    \draw[->, ultra thick, accentemerald] (0,0) -- (0, 1.6) node[right] {\tiny $\vec{v}_{P/A}$};
+\end{tikzpicture}
+\end{center}
+\end{topicbox}
+
+\begin{alertbox}{PEGADINHAS E ALERTAS DE PROVA (CAP. 3)}
+\begin{enumerate}[leftmargin=*,itemsep=1pt]
+    \item \textbf{Ponto Mais Alto do Projétil}: No ápice, $v_y = 0$, mas a velocidade total \textbf{NÃO} é nula! $v_{\text{topo}} = v_x = v_0 \cos\theta_0$. A aceleração continua sendo $\vec{a} = -g\hat{j}$.
+    \item \textbf{MCU tem Aceleração!}: Mesmo no MCU com $v = \text{constante}$, a aceleração \textbf{NÃO} é zero! Existe aceleração centrípeta $a_c = v^2/R \neq 0$ apontando para o centro.
+    \item \textbf{Vento Cruzado / Avião}: Para voar reto para o Norte com vento para o Leste, o bico deve apontar para Noroeste com $\sin\theta = v_{\text{vento}} / v_{\text{ar}}$, resultando em $v_{\text{terra}} = \sqrt{v_{\text{ar}}^2 - v_{\text{vento}}^2}$.
+\end{enumerate}
+\end{alertbox}
+
+\end{multicols*}
+
+\end{document}
