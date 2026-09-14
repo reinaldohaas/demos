@@ -341,14 +341,23 @@
             <!-- Scene Canvas -->
             <div class="scene-card">
                 <div class="vector-legend">
-                    <span style="color:#10b981;">➔ Vetor Velocidade v</span>
-                    <span style="color:#f43f5e;">➔ Vetor Aceleração a</span>
+                    <span style="color:#a855f7;">➔ v_{A/AR} (Ar: 240 km/h)</span>
+                    <span style="color:#38bdf8;">➔ v_{AR/T} (Vento: 100 km/h Leste)</span>
+                    <span style="color:#10b981;">➔ v_{A/T} (Resultante Terra)</span>
                 </div>
                 <canvas id="canvas-scene"></canvas>
             </div>
         
             <!-- CONTROLS PANEL DIRECTLY ATTACHED TO ANIMATION STAGE -->
             <div class="controls-panel-inline">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                    <button id="btn-mode-corr" class="btn btn-primary" onclick="setDemoMode('corrected')" style="flex:1; min-width:200px; padding:8px 12px; font-size:0.82rem;">
+                        ✈️ Com Correção (θ = 24,6° O → Rota Norte)
+                    </button>
+                    <button id="btn-mode-uncorr" class="btn btn-secondary" onclick="setDemoMode('uncorrected')" style="flex:1; min-width:200px; padding:8px 12px; font-size:0.82rem;">
+                        💨 Sem Correção (Bico p/ Norte → Deriva p/ Leste)
+                    </button>
+                </div>
                 <div class="controls-row">
                     <div class="btn-group-inline">
                         <button class="btn btn-primary" id="btn-play" onclick="togglePlay()">▶ Simular Animação</button>
@@ -610,32 +619,225 @@
             }
         }
 
+        let demoMode = 'corrected'; // 'corrected' ou 'uncorrected'
+
+        function setDemoMode(mode) {
+            demoMode = mode;
+            document.getElementById('btn-mode-corr').className = mode === 'corrected' ? 'btn btn-primary' : 'btn btn-secondary';
+            document.getElementById('btn-mode-uncorr').className = mode === 'uncorrected' ? 'btn btn-primary' : 'btn btn-secondary';
+            updateDemo();
+        }
+
+        function drawVectorArrow(ctx, x, y, dx, dy, color, label) {
+            const len = Math.hypot(dx, dy);
+            if (len < 2) return;
+            const angle = Math.atan2(dy, dx);
+            const headLen = Math.min(10, len * 0.35);
+
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); ctx.stroke();
+
+            ctx.beginPath(); ctx.moveTo(x + dx, y + dy);
+            ctx.lineTo(x + dx - headLen * Math.cos(angle - Math.PI / 6), y + dy - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(x + dx - headLen * Math.cos(angle + Math.PI / 6), y + dy - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath(); ctx.fill();
+
+            if (label) {
+                ctx.font = 'bold 11px Inter'; ctx.fillStyle = color; ctx.textAlign = 'center';
+                const midX = x + dx * 0.5;
+                const midY = y + dy * 0.5 - 6;
+                ctx.fillText(label, midX, midY);
+            }
+        }
+
         function updateDemo() {
             const t = parseFloat(document.getElementById('ex-t').value);
             document.getElementById('ex-t-val').innerText = t.toFixed(2) + ' s';
             drawScene(t);
         }
 
-        
+        function drawAirplane(ctx, x, y, angleRad, scale = 1.0) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angleRad);
+
+            // Wings
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath();
+            ctx.moveTo(0, -18 * scale);
+            ctx.lineTo(14 * scale, 8 * scale);
+            ctx.lineTo(3 * scale, 5 * scale);
+            ctx.lineTo(3 * scale, 14 * scale);
+            ctx.lineTo(8 * scale, 18 * scale);
+            ctx.lineTo(-8 * scale, 18 * scale);
+            ctx.lineTo(-3 * scale, 14 * scale);
+            ctx.lineTo(-3 * scale, 5 * scale);
+            ctx.lineTo(-14 * scale, 8 * scale);
+            ctx.closePath();
+            ctx.fill();
+
+            // Fuselage highlight
+            ctx.fillStyle = '#f8fafc';
+            ctx.beginPath();
+            ctx.arc(0, -12 * scale, 3 * scale, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
         function drawScene(t) {
             const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return; ctx.clearRect(0,0,w,h);
             ctx.fillStyle = '#050811'; ctx.fillRect(0,0,w,h);
 
-            const px = w / 2;
-            const py = (h - 40) - t * 25;
+            // 1. Wind Flow Lines (Background)
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.12)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([8, 8]);
+            const windOffset = (t * 60) % 24;
+            for (let y = 30; y < h; y += 35) {
+                ctx.beginPath();
+                ctx.moveTo(-24 + windOffset, y);
+                ctx.lineTo(w + 24, y);
+                ctx.stroke();
+            }
+            ctx.setLineDash([]);
 
-            // Airplane
-            ctx.fillStyle = '#38bdf8'; ctx.fillRect(px - 10, py - 10, 20, 20);
-            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'center';
-            ctx.fillText('✈️ Avião (218 km/h Norte)', px, py - 18);
+            // 2. Target Runway / North Axis (Dashed Gold Line)
+            const targetX = w / 2;
+            ctx.strokeStyle = 'rgba(251, 191, 36, 0.35)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([6, 6]);
+            ctx.beginPath(); ctx.moveTo(targetX, 20); ctx.lineTo(targetX, h - 20); ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'center';
+            ctx.fillText('Norte (Trajeto Desejado)', targetX, 32);
 
-            // Wind Vector (Cyan East)
-            drawVectorArrow(ctx, 40, h / 2, 45, 0, '#38bdf8', `Vento = 100 km/h`);
+            // Compass Rose (Top Left)
+            ctx.font = 'bold 10px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
+            ctx.fillText('N (0°)', 35, 25);
+            ctx.fillText('S', 35, 65);
+            ctx.fillText('O', 15, 45);
+            ctx.fillText('L', 55, 45);
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(35, 28); ctx.lineTo(35, 55); ctx.moveTo(18, 42); ctx.lineTo(52, 42); ctx.stroke();
 
-            // Resultant Velocity Vector (Green North)
-            drawVectorArrow(ctx, px, py, 0, -45, '#10b981', `v_terra = 218 km/h`);
+            // Physical Parameters
+            const v_air = 240;   // km/h (Airspeed)
+            const v_wind = 100;  // km/h (Wind East)
+            const thetaRad = Math.asin(v_wind / v_air); // 24.62°
+            const thetaDeg = (thetaRad * 180 / Math.PI).toFixed(1);
+            const v_ground_corr = Math.sqrt(v_air * v_air - v_wind * v_wind); // 218.17 km/h
+
+            const scaleVec = 0.38; // scale vector length in pixels per km/h
+
+            let px, py, noseAngleRad, v_ar_x, v_ar_y, v_wind_x, v_wind_y, v_terra_x, v_terra_y, v_terra_mag, trajectoryLabel;
+
+            const startX = targetX;
+            const startY = h - 60;
+
+            if (demoMode === 'corrected') {
+                // Airplane points nose at angle theta to the WEST (-x)
+                // v_{A/AR} = (-100, 218.17)
+                // v_{AR/T} = (+100, 0)
+                // v_{A/T} = (0, 218.17) -> Straight North!
+                noseAngleRad = -thetaRad; // Rotate nose to West (left)
+                v_ar_x = -v_wind;
+                v_ar_y = v_ground_corr;
+                v_wind_x = v_wind;
+                v_wind_y = 0;
+                v_terra_x = 0;
+                v_terra_y = v_ground_corr;
+                v_terra_mag = v_ground_corr;
+
+                px = startX;
+                py = startY - t * (v_terra_mag * 0.3);
+                trajectoryLabel = `Com Correção: Avance para o Norte a 218 km/h (θ = ${thetaDeg}° O)`;
+            } else {
+                // Airplane points nose straight NORTH (0°)
+                // v_{A/AR} = (0, 240)
+                // v_{AR/T} = (+100, 0)
+                // v_{A/T} = (+100, 240) -> Drifts East!
+                noseAngleRad = 0; // Pointing North
+                v_ar_x = 0;
+                v_ar_y = v_air;
+                v_wind_x = v_wind;
+                v_wind_y = 0;
+                v_terra_x = v_wind;
+                v_terra_y = v_air;
+                v_terra_mag = Math.hypot(v_terra_x, v_terra_y); // 260 km/h
+
+                px = startX + t * (v_terra_x * 0.3);
+                py = startY - t * (v_terra_y * 0.3);
+                trajectoryLabel = `Sem Correção: Deriva para Nordeste a 260 km/h (Bico para Norte)`;
+            }
+
+            // Draw Trajectory Trail
+            ctx.strokeStyle = demoMode === 'corrected' ? '#10b981' : '#f43f5e';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(px, py);
+            ctx.stroke();
+
+            // 3. DRAW VECTOR ADDITION TRIANGLE (Tip-to-Tail) AT PLANE POSITION
+            // Canvas coordinate mapping: +x is Right (East), +y is Down (South), -y is Up (North).
+            // Vector 1: Airspeed v_{A/AR}
+            const vec1_dx = v_ar_x * scaleVec;
+            const vec1_dy = -v_ar_y * scaleVec; // minus sign for canvas Y
+            const tip1_x = px + vec1_dx;
+            const tip1_y = py + vec1_dy;
+
+            // Vector 2: Wind v_{AR/T} (added to tip of Vector 1)
+            const vec2_dx = v_wind_x * scaleVec;
+            const vec2_dy = -v_wind_y * scaleVec;
+            const tip2_x = tip1_x + vec2_dx;
+            const tip2_y = tip1_y + vec2_dy;
+
+            // Vector 3: Resultant Ground Speed v_{A/T} (from plane to tip of Vector 2)
+            const vec3_dx = v_terra_x * scaleVec;
+            const vec3_dy = -v_terra_y * scaleVec;
+
+            // Render Vector 1 (Airspeed, Purple)
+            drawVectorArrow(ctx, px, py, vec1_dx, vec1_dy, '#a855f7', `v_{A/AR} = ${v_air} km/h`);
+
+            // Render Vector 2 (Wind, Cyan) Tip-to-Tail
+            drawVectorArrow(ctx, tip1_x, tip1_y, vec2_dx, vec2_dy, '#38bdf8', `Vento = ${v_wind} km/h`);
+
+            // Render Vector 3 (Resultant Ground Speed, Green/Emerald)
+            drawVectorArrow(ctx, px, py, vec3_dx, vec3_dy, '#10b981', `v_{A/T} = ${v_terra_mag.toFixed(0)} km/h`);
+
+            // Render Airplane Icon
+            drawAirplane(ctx, px, py, noseAngleRad, 1.0);
+
+            // 4. INFOGRAPHIC HUD CARD ON CANVAS
+            ctx.fillStyle = 'rgba(10, 16, 30, 0.88)';
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+            ctx.lineWidth = 1;
+            ctx.fillRect(w - 290, h - 90, 280, 80);
+            ctx.strokeRect(w - 290, h - 90, 280, 80);
+
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
+            ctx.fillText('📐 SOMA VETORIAL EM 2D:', w - 280, h - 72);
+
+            ctx.font = '10px monospace'; ctx.fillStyle = '#f8fafc';
+            ctx.fillText(`v_{A/T} = v_{A/AR} + v_{AR/T}`, w - 280, h - 54);
+
+            if (demoMode === 'corrected') {
+                ctx.fillStyle = '#a855f7';
+                ctx.fillText(`v_{A/AR} = (-100, 218) km/h (θ = 24.6° O)`, w - 280, h - 38);
+                ctx.fillStyle = '#38bdf8';
+                ctx.fillText(`+ v_{AR/T} = (+100,   0) km/h (Vento Leste)`, w - 280, h - 24);
+                ctx.fillStyle = '#10b981';
+                ctx.fillText(`= v_{A/T}  = (   0, 218) km/h [NORTE PURA]`, w - 280, h - 10);
+            } else {
+                ctx.fillStyle = '#a855f7';
+                ctx.fillText(`v_{A/AR} = (   0, 240) km/h (Norte)`, w - 280, h - 38);
+                ctx.fillStyle = '#38bdf8';
+                ctx.fillText(`+ v_{AR/T} = (+100,   0) km/h (Vento Leste)`, w - 280, h - 24);
+                ctx.fillStyle = '#f43f5e';
+                ctx.fillText(`= v_{A/T}  = (+100, 240) = 260 km/h [DERIVA]`, w - 280, h - 10);
+            }
         }
-        
 
         window.onload = function() {
             updateDemo();
