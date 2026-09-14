@@ -619,33 +619,43 @@
         
         function drawScene(t) {
             const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-            const cx = w / 2, cy = h / 2, R = 55;
+            const cx = w / 2, cy = h / 2, R = 110; // Raio 2x maior (110 px em vez de 55 px)
             ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,w,h);
 
-            // Circular Path
-            ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+            // Circular Path (Track)
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)'; ctx.lineWidth = 2.5;
+            ctx.setLineDash([6, 6]);
+            ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+            ctx.setLineDash([]);
 
+            // Center Point (Eixo da Centrífuga)
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(cx, cy, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.font = 'bold 10px Inter'; ctx.fillStyle = '#fbbf24'; ctx.textAlign = 'center';
+            ctx.fillText('Centro (Eixo)', cx, cy + 16);
+
+            // Radius Line (Raio R = 5,0 m)
             const angle = (2 * Math.PI / 4.0) * t;
             const px = cx + R * Math.cos(angle);
             const py = cy - R * Math.sin(angle);
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(px, py); ctx.stroke();
 
             // Tangential velocity vector direction
             const vx = -7.85 * Math.sin(angle);
             const vy = 7.85 * Math.cos(angle);
 
-            // Centripetal acceleration vector (towards center)
-            const ax = -cx + px; const ay = -cy + py;
-
-            // Object
-            ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.arc(px, py, 8, 0, Math.PI * 2); ctx.fill();
-            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#a855f7'; ctx.textAlign = 'center';
-            ctx.fillText(`🛸 Centrífuga (v = 7.85 m/s)`, px, py - 18);
+            // Object (Centrífuga / Veículo Espacial)
+            ctx.fillStyle = '#a855f7'; ctx.beginPath(); ctx.arc(px, py, 9, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.stroke();
+            ctx.font = 'bold 11px Inter'; ctx.fillStyle = '#f8fafc'; ctx.textAlign = 'center';
+            ctx.fillText(`🛸 Centrífuga (v = 7,85 m/s)`, px, py - 18);
 
             // Velocity Vector (Green Tangent)
-            drawVectorArrow(ctx, px, py, vx * 3.5, -vy * 3.5, '#10b981', `v`);
+            drawVectorArrow(ctx, px, py, vx * 4.5, -vy * 4.5, '#10b981', `v = 7,85 m/s`);
 
             // Centripetal Acceleration Vector (Red Center)
-            drawVectorArrow(ctx, px, py, (cx - px) * 0.5, (cy - py) * 0.5, '#f43f5e', `a_c = 12.3m/s²`);
+            drawVectorArrow(ctx, px, py, (cx - px) * 0.45, (cy - py) * 0.45, '#f43f5e', `a_c = 12,34 m/s²`);
         }
         
 
