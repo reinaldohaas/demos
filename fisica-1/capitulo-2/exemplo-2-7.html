@@ -605,9 +605,7 @@
         
         
         // --- HELPER FUNCTIONS FOR BACKGROUND GRID AND GRADUATED AXES WITH NUMBERS ---
-        function drawCartesianGrid2D(ctx, w, h, options = {}) {
-            const minX = options.minX !== undefined ? options.minX : -10;
-            const maxX = options.maxX !== undefined ? options.maxX : 10;
+        function            const maxX = options.maxX !== undefined ? options.maxX : 10;
             const minY = options.minY !== undefined ? options.minY : -10;
             const maxY = options.maxY !== undefined ? options.maxY : 10;
             const stepX = options.stepX || 2;
@@ -677,9 +675,7 @@
             return { toPxX, toPxY, originX, originY };
         }
 
-        function drawCartesianGrid3D(ctx, w, h, options = {}) {
-            const maxX = options.maxX || 10;
-            const maxY = options.maxY || 10;
+        function            const maxY = options.maxY || 10;
             const maxZ = options.maxZ || 10;
             const stepX = options.stepX || 2;
             const stepY = options.stepY || 2;
@@ -762,9 +758,9 @@
         }
 
         function drawScene(t) {
-            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;
-            ctx.clearRect(0,0,w,h);
+            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return;            ctx.clearRect(0,0,w,h);
             ctx.fillStyle = '#070a14'; ctx.fillRect(0,0,w,h);
+            drawCartesianGrid2D(ctx, w, h, { minX: 0, maxX: 120, minY: -10, maxY: 10, labelX: 'Eixo X', labelY: 'Eixo Y', unitX: 'm', unitY: 'm', stepX: 20, stepY: 5, padL: 60, padB: 50, padT: 40, padR: 40 });
 
             const padL = 60, padB = 30, gW = w - padL - 30;
             const toPxX = x => padL + (x / 200.0) * gW;

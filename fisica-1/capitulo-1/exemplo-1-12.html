@@ -620,9 +620,7 @@
         
         
         // --- HELPER FUNCTIONS FOR BACKGROUND GRID AND GRADUATED AXES WITH NUMBERS ---
-        function drawCartesianGrid2D(ctx, w, h, options = {}) {
-            const minX = options.minX !== undefined ? options.minX : -10;
-            const maxX = options.maxX !== undefined ? options.maxX : 10;
+        function            const maxX = options.maxX !== undefined ? options.maxX : 10;
             const minY = options.minY !== undefined ? options.minY : -10;
             const maxY = options.maxY !== undefined ? options.maxY : 10;
             const stepX = options.stepX || 2;
@@ -692,9 +690,7 @@
             return { toPxX, toPxY, originX, originY };
         }
 
-        function drawCartesianGrid3D(ctx, w, h, options = {}) {
-            const maxX = options.maxX || 10;
-            const maxY = options.maxY || 10;
+        function            const maxY = options.maxY || 10;
             const maxZ = options.maxZ || 10;
             const stepX = options.stepX || 2;
             const stepY = options.stepY || 2;
@@ -777,8 +773,8 @@
         }
 
         function drawScene(ang) {
-            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return; ctx.clearRect(0,0,w,h);
-            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,w,h);
+            const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return; ctx.clearRect(0,0,w,h);            ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,w,h);
+            drawCartesianGrid3D(ctx, w, h, { maxX: 8, maxY: 6, maxZ: 12, stepX: 2, stepY: 2, stepZ: 3 });
             const ox = w / 2 - 40, oy = h / 2 + 40;
 
             drawVectorArrow(ctx, ox, oy, 6 * 20, 0, '#38bdf8', 'A = 6 (+x)');
