@@ -1,0 +1,138 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage[margin=1.0cm,top=1.0cm,bottom=1.0cm]{geometry}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+% Cores elegantes
+\definecolor{primaryblue}{HTML}{0f172a}
+\definecolor{accentcyan}{HTML}{0284c7}
+\definecolor{accentpurple}{HTML}{7e22ce}
+\definecolor{accentgold}{HTML}{d97706}
+\definecolor{accentemerald}{HTML}{059669}
+\definecolor{boxbg}{HTML}{f8fafc}
+
+\tcbuselibrary{skins}
+\tcbset{
+    enhanced,
+    fonttitle=\bfseries\sffamily\small,
+    boxrule=0.6pt,
+    arc=4pt,
+    top=3pt,bottom=3pt,left=6pt,right=6pt,
+    boxsep=1pt
+}
+
+\newtcolorbox{problembox}[1]{
+    colback=boxbg,
+    colframe=accentcyan,
+    coltitle=white,
+    title={#1},
+    colbacktitle=accentcyan
+}
+
+\newtcolorbox{solutionarea}[1]{
+    colback=white,
+    colframe=gray!40,
+    coltitle=black!80,
+    fonttitle=\bfseries\sffamily\footnotesize,
+    title={#1},
+    colbacktitle=gray!15,
+    arc=2pt,
+    boxrule=0.4pt
+}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+
+\begin{document}
+
+% CABEÇALHO DO ALUNO
+\begin{tcolorbox}[colback=primaryblue,colframe=accentcyan,coltext=white,arc=4pt,top=5pt,bottom=5pt]
+    \begin{center}
+        {\Large \bfseries FSC5101 FÍSICA I --- EXERCÍCIOS DE SALA DE AULA}\\[2pt]
+        {\small \textbf{Capítulo 1:} Vetores 3D \quad$\vert$\quad \textbf{Capítulo 2:} Cinemática 1D \& Cálculo \quad$\vert$\quad \textbf{Capítulo 3:} Projétis \& Vento Cruzado}
+    \end{center}
+\end{tcolorbox}
+
+\vspace{2pt}
+
+\begin{tcolorbox}[colback=boxbg,colframe=gray!40,boxrule=0.5pt,top=4pt,bottom=4pt]
+    \small
+    \textbf{Nome do Aluno(a):} \underline{\hspace{8.5cm}} \quad \textbf{Data:} \underline{\hspace{2.2cm}} \quad \textbf{Turma:} \underline{\hspace{1.5cm}}
+\end{tcolorbox}
+
+\vspace{4pt}
+
+% =================================================================
+% EXERCÍCIO 1: CAPÍTULO 1 (VETORES 3D E PRODUTOS)
+% =================================================================
+\begin{problembox}{Exercício 1 (Capítulo 1): Vetores no Espaço 3D e Produtos Vetoriais}
+Um drone de monitoramento ambiental decola da origem $O(0, 0, 0)$ e registra a posição no espaço de duas estações de amostragem $A$ e $B$:
+$$\vec{r}_A = (4\hat{i} + 3\hat{j} + 12\hat{k})\text{ m} \qquad \text{e} \qquad \vec{r}_B = (2\hat{i} - 6\hat{j} + 3\hat{k})\text{ m}$$
+
+\textbf{a)} Calcule os módulos $r_A$ e $r_B$ dos vetores posição de cada estação.\\
+\textbf{b)} Determine o produto escalar $\vec{r}_A \cdot \vec{r}_B$ e o ângulo $\phi$ formado entre os dois vetores.\\
+\textbf{c)} Calcule o produto vetorial $\vec{C} = \vec{r}_A \times \vec{r}_B$ e determine a área do paralelogramo formado por esses dois vetores.
+\end{problembox}
+
+\begin{solutionarea}{Espaço para Resolução do Exercício 1 (Itens a, b e c):}
+    \vspace{6.8cm}
+\end{solutionarea}
+
+\vspace{4pt}
+
+% =================================================================
+% EXERCÍCIO 2: CAPÍTULO 2 (CINEMÁTICA 1D E REGRA DO MONÔMIO)
+% =================================================================
+\begin{problembox}{Exercício 2 (Capítulo 2): Cinemática 1D com Aceleração Variável \& Regra do Monômio}
+Um protótipo elétrico de testes move-se ao longo do eixo $x$. No instante $t = 0$, ele parte da posição inicial $x_0 = 10\text{ m}$ com velocidade inicial $v_0 = 0$. Sua aceleração varia com o tempo conforme a função polinomial:
+$$a(t) = 6.0 \, t - 12.0 \quad (\text{em m/s}^2 \text{ com } t \text{ em segundos})$$
+
+\textbf{a)} Utilizando a Regra do Monômio da Integral, determine as expressões analíticas da velocidade $v(t)$ e da posição $x(t)$.\\
+\textbf{b)} Determine o instante $t > 0$ em que o veículo para momentaneamente ($v = 0$).\\
+\textbf{c)} Qual é a posição $x$ e a aceleração $a$ do veículo no instante em que ele atinge a sua \textbf{velocidade mínima}?
+\end{problembox}
+
+\begin{solutionarea}{Espaço para Resolução do Exercício 2 (Itens a e b):}
+    \vspace{6.0cm}
+\end{solutionarea}
+
+\newpage % PÁGINA 2 (VERSO DA FOLHA)
+
+\begin{solutionarea}{Espaço para Resolução do Exercício 2 (Continuação - Item c):}
+    \vspace{4.8cm}
+\end{solutionarea}
+
+\vspace{4pt}
+
+% =================================================================
+% EXERCÍCIO 3: CAPÍTULO 3 (PROJÉTEIS 2D E VENTO CRUZADO SOH CAH TOA)
+% =================================================================
+\begin{problembox}{Exercício 3 (Capítulo 3): Projétis 2D + Vento Cruzado}
+Em uma atividade integrada de cinemática 2D e vetores:
+
+\textbf{Parte A (Lançamento de Projétil):} Um projétil é lançado do solo ($y_0 = 0$) com velocidade $v_0 = 50.0\text{ m/s}$ sob um ângulo de $\theta_0 = 37.0^\circ$ acima da horizontal (considere $g = 9.8\text{ m/s}^2$).\\
+1. Calcule as componentes iniciais $v_{0x}$ e $v_{0y}$.\\
+2. Determine a altura máxima $h_{\text{máx}}$ e o alcance horizontal total $R$.
+
+\textbf{Parte B (Vento Cruzado / Velocidade Relativa):} Para resgatar o projétil, um drone voa com velocidade em relação ao ar de $v_{\text{drone/ar}} = 130.0\text{ km/h}$. Um vento lateral sopra do \textbf{Oeste para o Leste} a $v_{\text{vento}} = 50.0\text{ km/h}$. O piloto precisa que o drone avance direto rumo ao \textbf{Norte}.\\
+1. Determine o ângulo $\theta$ de compensação do bico do drone a \textbf{Oeste do Norte}.\\
+2. Calcule a velocidade resultante do drone em relação à Terra ($v_{\text{drone/terra}}$).
+\end{problembox}
+
+\begin{solutionarea}{Espaço para Resolução do Exercício 3 (Parte A: Projétil 2D com $g = 9.8\text{ m/s}^2$):}
+    \vspace{7.2cm}
+\end{solutionarea}
+
+\vspace{4pt}
+
+\begin{solutionarea}{Espaço para Resolução do Exercício 3 (Parte B: Vento Cruzado \& Velocidade Relativa):}
+    \vspace{7.2cm}
+\end{solutionarea}
+
+\end{document}
