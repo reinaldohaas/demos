@@ -618,6 +618,164 @@
         }
 
         
+        
+        // --- HELPER FUNCTIONS FOR BACKGROUND GRID AND GRADUATED AXES WITH NUMBERS ---
+        function drawCartesianGrid2D(ctx, w, h, options = {}) {
+            const minX = options.minX !== undefined ? options.minX : -10;
+            const maxX = options.maxX !== undefined ? options.maxX : 10;
+            const minY = options.minY !== undefined ? options.minY : -10;
+            const maxY = options.maxY !== undefined ? options.maxY : 10;
+            const stepX = options.stepX || 2;
+            const stepY = options.stepY || 2;
+            const padL = options.padL || 60;
+            const padR = options.padR || 40;
+            const padT = options.padT || 40;
+            const padB = options.padB || 50;
+            const labelX = options.labelX || 'Eixo X';
+            const labelY = options.labelY || 'Eixo Y';
+            const unitX = options.unitX || 'm';
+            const unitY = options.unitY || 'm';
+
+            const gW = w - padL - padR;
+            const gH = h - padT - padB;
+
+            const toPxX = x => padL + ((x - minX) / (maxX - minX)) * gW;
+            const toPxY = y => (h - padB) - ((y - minY) / (maxY - minY)) * gH;
+
+            const originX = toPxX(0);
+            const originY = toPxY(0);
+
+            // 1. Grid Lines (Horizontal & Vertical)
+            ctx.strokeStyle = 'rgba(51, 65, 85, 0.35)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+            for (let x = minX; x <= maxX + 1e-5; x += stepX) {
+                const px = toPxX(x);
+                ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, h - padB); ctx.stroke();
+            }
+            for (let y = minY; y <= maxY + 1e-5; y += stepY) {
+                const py = toPxY(y);
+                ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(w - padR, py); ctx.stroke();
+            }
+            ctx.setLineDash([]);
+
+            // 2. Axes Lines
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(padL - 10, originY); ctx.lineTo(w - padR + 10, originY); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(originX, h - padB + 10); ctx.lineTo(originX, padT - 10); ctx.stroke();
+
+            // 3. Axis Titles
+            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
+            ctx.fillText(`${labelX} (${unitX})`, w - padR + 14, originY + 4);
+            ctx.textAlign = 'center'; ctx.fillStyle = '#10b981';
+            ctx.fillText(`${labelY} (${unitY})`, originX, padT - 16);
+
+            // 4. Numbered Ticks on X Axis
+            for (let x = minX; x <= maxX + 1e-5; x += stepX) {
+                const px = toPxX(x);
+                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(px, originY - 4); ctx.lineTo(px, originY + 4); ctx.stroke();
+                ctx.font = '11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
+                let txt = Number.isInteger(x) ? `${x}` : `${x.toFixed(1)}`;
+                ctx.fillText(txt, px, originY + 18);
+            }
+
+            // 5. Numbered Ticks on Y Axis
+            for (let y = minY; y <= maxY + 1e-5; y += stepY) {
+                if (Math.abs(y) < 1e-5 && minX <= 0 && maxX >= 0) continue; // avoid overlapping origin
+                const py = toPxY(y);
+                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(originX - 4, py); ctx.lineTo(originX + 4, py); ctx.stroke();
+                ctx.font = '11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'right';
+                let txt = Number.isInteger(y) ? `${y}` : `${y.toFixed(1)}`;
+                ctx.fillText(txt, originX - 8, py + 4);
+            }
+
+            return { toPxX, toPxY, originX, originY };
+        }
+
+        function drawCartesianGrid3D(ctx, w, h, options = {}) {
+            const maxX = options.maxX || 10;
+            const maxY = options.maxY || 10;
+            const maxZ = options.maxZ || 10;
+            const stepX = options.stepX || 2;
+            const stepY = options.stepY || 2;
+            const stepZ = options.stepZ || 2;
+            const ox = options.ox || (w / 2 - 40);
+            const oy = options.oy || (h / 2 + 50);
+
+            const angleZ = Math.PI / 6;
+            const scaleX = options.scaleX || 20;
+            const scaleY = options.scaleY || 20;
+            const scaleZ = options.scaleZ || 15;
+
+            const project3D = (x, y, z) => {
+                const px = ox + x * scaleX + z * scaleZ * Math.cos(angleZ);
+                const py = oy - y * scaleY - z * scaleZ * Math.sin(angleZ);
+                return { x: px, y: py };
+            };
+
+            // Grid floor (XZ plane)
+            ctx.strokeStyle = 'rgba(51, 65, 85, 0.35)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+            for (let x = 0; x <= maxX + 1e-5; x += stepX) {
+                const p1 = project3D(x, 0, 0);
+                const p2 = project3D(x, 0, maxZ);
+                ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+            }
+            for (let z = 0; z <= maxZ + 1e-5; z += stepZ) {
+                const p1 = project3D(0, 0, z);
+                const p2 = project3D(maxX, 0, z);
+                ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+            }
+            ctx.setLineDash([]);
+
+            // Axes lines
+            const pO = project3D(0,0,0);
+            const pX = project3D(maxX, 0, 0);
+            const pY = project3D(0, maxY, 0);
+            const pZ = project3D(0, 0, maxZ);
+
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pX.x, pX.y); ctx.stroke();
+            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
+            ctx.fillText('Eixo X (+m)', pX.x + 8, pX.y + 4);
+
+            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pY.x, pY.y); ctx.stroke();
+            ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
+            ctx.fillText('Eixo Y (+m)', pY.x, pY.y - 10);
+
+            ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pZ.x, pZ.y); ctx.stroke();
+            ctx.fillStyle = '#a855f7'; ctx.textAlign = 'right';
+            ctx.fillText('Eixo Z (profundidade)', pZ.x - 8, pZ.y - 4);
+
+            // Numbered ticks X
+            for (let x = 0; x <= maxX + 1e-5; x += stepX) {
+                const p = project3D(x, 0, 0);
+                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(p.x, p.y - 4); ctx.lineTo(p.x, p.y + 4); ctx.stroke();
+                ctx.font = '11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
+                ctx.fillText(`${x}`, p.x, p.y + 16);
+            }
+            // Numbered ticks Y
+            for (let y = stepY; y <= maxY + 1e-5; y += stepY) {
+                const p = project3D(0, y, 0);
+                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(p.x - 4, p.y); ctx.lineTo(p.x + 4, p.y); ctx.stroke();
+                ctx.font = '11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'right';
+                ctx.fillText(`${y}`, p.x - 8, p.y + 4);
+            }
+            // Numbered ticks Z
+            for (let z = stepZ; z <= maxZ + 1e-5; z += stepZ) {
+                const p = project3D(0, 0, z);
+                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(p.x - 4, p.y - 2); ctx.lineTo(p.x + 4, p.y + 2); ctx.stroke();
+                ctx.font = '11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'left';
+                ctx.fillText(`${z}`, p.x + 8, p.y + 4);
+            }
+
+            return { project3D, pO, pX, pY, pZ };
+        }
+
         function drawScene(m) {
             const { ctx, w, h } = getCanvasCtx('canvas-scene'); if (!ctx) return; ctx.clearRect(0,0,w,h);
             ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,w,h);
