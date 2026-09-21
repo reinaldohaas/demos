@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+import os
+
+target_path = r"C:\Users\haas\github\demos\fisica-1\capitulo-4\apresentacao.html"
+
+# Master Python script that builds the complete 50-slide presentation deck (Theory + PDF Exercises 4.1 to 4.57)
+script_content = r'''<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -869,3 +874,10 @@
     </script>
 </body>
 </html>
+'''
+
+os.makedirs(os.path.dirname(target_path), exist_ok=True)
+with open(target_path, "w", encoding="utf-8") as f:
+    f.write(script_content)
+
+print(f"Successfully generated master presentation deck with exercises at {target_path}!")
