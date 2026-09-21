@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+import os
+
+target_path = r"C:\Users\haas\github\demos\fisica-1\capitulo-4\apresentacao.html"
+
+html_content = '''<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -282,13 +286,13 @@
                 <div class="slide-content">
                     <p>A <b>força</b> é a medida da interação entre dois corpos. É uma grandeza vetorial. Quando diversas forças atuam sobre um corpo, o efeito sobre seu movimento é o mesmo que o produzido pela ação de uma única força agindo sobre o corpo, dada pela soma vetorial (resultante) dessas forças:</p>
                     <div class="highlight-box">
-                        \[ ec{R} = ec{F}_1 + ec{F}_2 + ec{F}_3 + \dots = \sum ec{F} 	ag{4.1} \]
+                        \[ \vec{R} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3 + \dots = \sum \vec{F} \tag{4.1} \]
                     </div>
                 </div>
             </div>
             <div class="canvas-container">
                 <canvas id="cvSlide2" width="360" height="240"></canvas>
-                <div class="figure-caption">Decomposição e soma de vetores força resultando em \(ec{R}\).</div>
+                <div class="figure-caption">Decomposição e soma de vetores força resultando em \(\vec{R}\).</div>
             </div>
         </div>
 
@@ -300,8 +304,8 @@
                 <div class="slide-content">
                     <p>Uma força pode ser exercida por contato direto (como um empurrão ou puxão) ou à distância (como a gravidade).</p>
                     <div class="highlight-box">
-                        <b>Empurrar:</b> A força \(ec{F}\) é direcionada para o corpo.<br>
-                        <b>Puxar:</b> A força \(ec{F}\) é direcionada para fora do corpo na direção do barbante/mão.
+                        <b>Empurrar:</b> A força \(\vec{F}\) é direcionada para o corpo.<br>
+                        <b>Puxar:</b> A força \(\vec{F}\) é direcionada para fora do corpo na direção do barbante/mão.
                     </div>
                     <p>A força é caracterizada por seu módulo, direção e sentido.</p>
                 </div>
@@ -319,10 +323,10 @@
                 <h3 class="slide-title">Figura 4.2: Quatro Tipos de Força em Mecânica</h3>
                 <div class="slide-content">
                     <ul>
-                        <li><b>(a) Força Normal (\(ec{n}\)):</b> Quando um objeto repousa ou empurra uma superfície, a superfície exerce força perpendicular à superfície.</li>
-                        <li><b>(b) Força de Atrito (\(ec{f}\)):</b> Além da normal, a superfície exerce atrito paralelo à superfície.</li>
-                        <li><b>(c) Força de Tensão (\(ec{T}\)):</b> Força de puxar exercida por corda ou cabo.</li>
-                        <li><b>(d) Peso (\(ec{p}\)):</b> Força de atração da gravidade exercida a distância.</li>
+                        <li><b>(a) Força Normal (\(\vec{n}\)):</b> Quando um objeto repousa ou empurra uma superfície, a superfície exerce força perpendicular à superfície.</li>
+                        <li><b>(b) Força de Atrito (\(\vec{f}\)):</b> Além da normal, a superfície exerce atrito paralelo à superfície.</li>
+                        <li><b>(c) Força de Tensão (\(\vec{T}\)):</b> Força de puxar exercida por corda ou cabo.</li>
+                        <li><b>(d) Peso (\(\vec{p}\)):</b> Força de atração da gravidade exercida a distância.</li>
                     </ul>
                 </div>
             </div>
@@ -357,9 +361,9 @@
                 <span class="slide-num-badge">Slide 6 de 35</span>
                 <h3 class="slide-title">Figura 4.4: Princípio da Superposição de Forças</h3>
                 <div class="slide-content">
-                    <p>Duas forças \(ec{F}_1\) e \(ec{F}_2\) atuando simultaneamente sobre um ponto A de um corpo equivalem a uma única força resultante \(ec{R}\):</p>
+                    <p>Duas forças \(\vec{F}_1\) e \(\vec{F}_2\) atuando simultaneamente sobre um ponto A de um corpo equivalem a uma única força resultante \(\vec{R}\):</p>
                     <div class="highlight-box">
-                        \[ ec{R} = ec{F}_1 + ec{F}_2 \]
+                        \[ \vec{R} = \vec{F}_1 + \vec{F}_2 \]
                     </div>
                     <p>A adição de forças segue a <b>regra do paralelogramo</b> da álgebra vetorial.</p>
                 </div>
@@ -376,16 +380,16 @@
                 <span class="slide-num-badge">Slide 7 de 35</span>
                 <h3 class="slide-title">Figura 4.5: Vetores Componentes Retangulares</h3>
                 <div class="slide-content">
-                    <p>Uma força \(ec{F}\) atuando em um ângulo \(	heta\) com o eixo Ox pode ser substituída por suas componentes retangulares \(ec{F}_x\) e \(ec{F}_y\):</p>
+                    <p>Uma força \(\vec{F}\) atuando em um ângulo \(\theta\) com o eixo Ox pode ser substituída por suas componentes retangulares \(\vec{F}_x\) e \(\vec{F}_y\):</p>
                     <div class="highlight-box">
-                        \[ F_x = F \cos	heta \quad 	ext{e} \quad F_y = F \sin	heta \]
+                        \[ F_x = F \cos\theta \quad \text{e} \quad F_y = F \sin\theta \]
                     </div>
-                    <p>Os vetores componentes juntos exercem exatamente o mesmo efeito que a força original \(ec{F}\).</p>
+                    <p>Os vetores componentes juntos exercem exatamente o mesmo efeito que a força original \(\vec{F}\).</p>
                 </div>
             </div>
             <div class="canvas-container">
                 <canvas id="cvSlide7" width="360" height="240"></canvas>
-                <div class="figure-caption">Figura 4.5: Substituição da força \(ec{F}\) por suas componentes.</div>
+                <div class="figure-caption">Figura 4.5: Substituição da força \(\vec{F}\) por suas componentes.</div>
             </div>
         </div>
 
@@ -405,7 +409,7 @@
             </div>
             <div class="canvas-container">
                 <canvas id="cvSlide8" width="360" height="240"></canvas>
-                <div class="figure-caption">Figura 4.6: Componentes de \(ec{F}\) no plano inclinado.</div>
+                <div class="figure-caption">Figura 4.6: Componentes de \(\vec{F}\) no plano inclinado.</div>
             </div>
         </div>
 
@@ -415,12 +419,12 @@
                 <span class="slide-num-badge">Slide 9 de 35</span>
                 <h3 class="slide-title">Figura 4.7: Componentes do Vetor Soma (Resultante)</h3>
                 <div class="slide-content">
-                    <p>Para obter a resultante \(ec{R} = \sum ec{F}\) de várias forças:</p>
+                    <p>Para obter a resultante \(\vec{R} = \sum \vec{F}\) de várias forças:</p>
                     <div class="highlight-box">
                         \[ R_x = F_{1x} + F_{2x} + \dots = \sum F_x \]
                         \[ R_y = F_{1y} + F_{2y} + \dots = \sum F_y \]
                     </div>
-                    <p>O componente y de \(ec{R}\) é a soma dos componentes y, e o mesmo aplica-se para os componentes x.</p>
+                    <p>O componente y de \(\vec{R}\) é a soma dos componentes y, e o mesmo aplica-se para os componentes x.</p>
                 </div>
             </div>
             <div class="canvas-container">
@@ -435,12 +439,12 @@
                 <span class="slide-num-badge">Slide 10 de 35</span>
                 <h3 class="slide-title">Figura 4.8: Cálculo da Resultante de Três Forças</h3>
                 <div class="slide-content">
-                    <p><b>(a) Três forças atuando em um ponto:</b> \(ec{F}_1\) a \(53^\circ\), \(ec{F}_2\) horizontal e \(ec{F}_3\) vertical para baixo.</p>
+                    <p><b>(a) Três forças atuando em um ponto:</b> \(\vec{F}_1\) a \(53^\circ\), \(\vec{F}_2\) horizontal e \(\vec{F}_3\) vertical para baixo.</p>
                     <div class="highlight-box">
-                        <b>(b) Força resultante \(ec{R} = \sum ec{F}\):</b><br>
+                        <b>(b) Força resultante \(\vec{R} = \sum \vec{F}\):</b><br>
                         \(R_x = F_{1x} + F_{2x} + F_{3x}\)<br>
                         \(R_y = F_{1y} + F_{2y} + F_{3y}\)<br>
-                        Ângulo resultante: \(	heta = 141^\circ\).
+                        Ângulo resultante: \(\theta = 141^\circ\).
                     </div>
                 </div>
             </div>
@@ -458,14 +462,14 @@
                 <div class="slide-content">
                     <p>A primeira lei de Newton afirma que, quando a soma vetorial das forças que atuam sobre o corpo (a <i>força resultante</i>) é igual a zero, o corpo está em equilíbrio e possui aceleração nula:</p>
                     <div class="highlight-box">
-                        \[ \sum ec{F} = 0 \quad \implies \quad ec{v} = 	ext{constante} 	ag{4.3} \]
+                        \[ \sum \vec{F} = 0 \quad \implies \quad \vec{v} = \text{constante} \tag{4.3} \]
                     </div>
                     <p>Quando o corpo está em repouso, ele permanece em repouso; quando está em movimento, continua em MRU. Vale em <b>referenciais inerciais</b>.</p>
                 </div>
             </div>
             <div class="canvas-container">
                 <canvas id="cvSlide11" width="360" height="240"></canvas>
-                <div class="figure-caption">Corpo em equilíbrio estático/dinâmico com \(\sum ec{F} = 0\).</div>
+                <div class="figure-caption">Corpo em equilíbrio estático/dinâmico com \(\sum \vec{F} = 0\).</div>
             </div>
         </div>
 
@@ -496,8 +500,8 @@
                 <h3 class="slide-title">Figura 4.10: Força Unica vs Força Resultante Nula</h3>
                 <div class="slide-content">
                     <div class="highlight-box">
-                        <b>(a) Ação de uma única força:</b> Um disco sobre superfície sem atrito acelera no sentido da força \(ec{F}_1\).<br><br>
-                        <b>(b) Soma de forças igual a zero:</b> Quando \(ec{F}_2 = -ec{F}_1\), a força resultante é nula (\(\sum ec{F} = 0 \implies ec{a} = 0\)).
+                        <b>(a) Ação de uma única força:</b> Um disco sobre superfície sem atrito acelera no sentido da força \(\vec{F}_1\).<br><br>
+                        <b>(b) Soma de forças igual a zero:</b> Quando \(\vec{F}_2 = -\vec{F}_1\), a força resultante é nula (\(\sum \vec{F} = 0 \implies \vec{a} = 0\)).
                     </div>
                 </div>
             </div>
@@ -552,9 +556,9 @@
                 <div class="slide-content">
                     <p>A aceleração de um corpo é diretamente proporcional à soma vetorial das forças e inversamente proporcional à sua massa:</p>
                     <div class="highlight-box">
-                        \[ \sum ec{F} = m ec{a} \implies egin{cases} \sum F_x = m a_x \ \sum F_y = m a_y \ \sum F_z = m a_z \end{cases} \]
+                        \[ \sum \vec{F} = m \vec{a} \implies \begin{cases} \sum F_x = m a_x \\ \sum F_y = m a_y \\ \sum F_z = m a_z \end{cases} \]
                     </div>
-                    <p>Unidade no SI: <b>Newton (N)</b> \(1	ext{ N} = 1	ext{ kg} \cdot 	ext{m/s}^2\).</p>
+                    <p>Unidade no SI: <b>Newton (N)</b> \(1\text{ N} = 1\text{ kg} \cdot \text{m/s}^2\).</p>
                 </div>
             </div>
             <div class="canvas-container">
@@ -570,9 +574,9 @@
                 <h3 class="slide-title">Figura 4.13: Efeito da Força Resultante na Aceleração</h3>
                 <div class="slide-content">
                     <ul>
-                        <li><b>(a) \(\sum ec{F} = 0 \implies ec{a} = 0\):</b> Disco com velocidade constante em equilíbrio.</li>
-                        <li><b>(b) Força no sentido do movimento:</b> Provoca aceleração constante no mesmo sentido de \(ec{v}\).</li>
-                        <li><b>(c) Força em sentido oposto:</b> Provoca desaceleração no sentido oposto a \(ec{v}\).</li>
+                        <li><b>(a) \(\sum \vec{F} = 0 \implies \vec{a} = 0\):</b> Disco com velocidade constante em equilíbrio.</li>
+                        <li><b>(b) Força no sentido do movimento:</b> Provoca aceleração constante no mesmo sentido de \(\vec{v}\).</li>
+                        <li><b>(c) Força em sentido oposto:</b> Provoca desaceleração no sentido oposto a \(\vec{v}\).</li>
                     </ul>
                 </div>
             </div>
@@ -590,7 +594,7 @@
                 <div class="slide-content">
                     <p>Um disco preso a uma corda gira em movimento circular uniforme sobre mesa sem atrito:</p>
                     <div class="highlight-box">
-                        Em todos os pontos, a aceleração \(ec{a}\) e a força resultante \(\sum ec{F}\) apontam no <b>mesmo sentido</b> — sempre orientadas para o centro do círculo (centrípeta).
+                        Em todos os pontos, a aceleração \(\vec{a}\) e a força resultante \(\sum \vec{F}\) apontam no <b>mesmo sentido</b> — sempre orientadas para o centro do círculo (centrípeta).
                     </div>
                 </div>
             </div>
@@ -608,9 +612,9 @@
                 <div class="slide-content">
                     <p>Para um corpo de massa constante \(m\):</p>
                     <div class="highlight-box">
-                        (a) Força \(ec{F}_1 \implies\) aceleração \(ec{a}\)<br>
-                        (b) Dobrando a força (\(2ec{F}_1\)) \(\implies\) dobra a aceleração (\(2ec{a}\))<br>
-                        (c) Metade da força (\(rac{1}{2}ec{F}_1\)) \(\implies\) metade da aceleração (\(rac{ec{a}}{2}\))
+                        (a) Força \(\vec{F}_1 \implies\) aceleração \(\vec{a}\)<br>
+                        (b) Dobrando a força (\(2\vec{F}_1\)) \(\implies\) dobra a aceleração (\(2\vec{a}\))<br>
+                        (c) Metade da força (\(\frac{1}{2}\vec{F}_1\)) \(\implies\) metade da aceleração (\(\frac{\vec{a}}{2}\))
                     </div>
                 </div>
             </div>
@@ -626,11 +630,11 @@
                 <span class="slide-num-badge">Slide 20 de 35</span>
                 <h3 class="slide-title">Figura 4.16: Aceleração Inversamente Proporcional à Massa</h3>
                 <div class="slide-content">
-                    <p>Aplicando uma mesma força resultante \(\sum ec{F}\):</p>
+                    <p>Aplicando uma mesma força resultante \(\sum \vec{F}\):</p>
                     <div class="highlight-box">
-                        (a) Massa \(m_1 \implies\) aceleração \(ec{a}_1\)<br>
-                        (b) Massa maior \(m_2 \implies\) aceleração menor \(ec{a}_2\)<br>
-                        (c) Massa composta \(m_1 + m_2 \implies\) aceleração ainda menor \(ec{a}_3\)
+                        (a) Massa \(m_1 \implies\) aceleração \(\vec{a}_1\)<br>
+                        (b) Massa maior \(m_2 \implies\) aceleração menor \(\vec{a}_2\)<br>
+                        (c) Massa composta \(m_1 + m_2 \implies\) aceleração ainda menor \(\vec{a}_3\)
                     </div>
                 </div>
             </div>
@@ -666,10 +670,10 @@
                 <span class="slide-num-badge">Slide 22 de 35</span>
                 <h3 class="slide-title">Figura 4.18: Exemplo de Caixa Empurrada</h3>
                 <div class="slide-content">
-                    <p>Caixa de \(m = 40	ext{ kg}\) empurrada com força \(F = 20	ext{ N}\) sobre piso sem atrito:</p>
+                    <p>Caixa de \(m = 40\text{ kg}\) empurrada com força \(F = 20\text{ N}\) sobre piso sem atrito:</p>
                     <div class="highlight-box">
                         <b>Vertical:</b> \(a_y = 0 \implies n - p = 0 \implies n = p = m g\)<br>
-                        <b>Horizontal:</b> \(\sum F_x = F = m a_x \implies a_x = rac{20	ext{ N}}{40	ext{ kg}} = 0,5	ext{ m/s}^2\)
+                        <b>Horizontal:</b> \(\sum F_x = F = m a_x \implies a_x = \frac{20\text{ N}}{40\text{ kg}} = 0,5\text{ m/s}^2\)
                     </div>
                 </div>
             </div>
@@ -685,10 +689,10 @@
                 <span class="slide-num-badge">Slide 23 de 35</span>
                 <h3 class="slide-title">Figura 4.19: Pote de Vidro Deslizando com Atrito</h3>
                 <div class="slide-content">
-                    <p>Pote de \(m = 0,45	ext{ kg}\) lançado com \(v_{0x} = 2,8	ext{ m/s}\) percorre \(1,0	ext{ m}\) até parar:</p>
+                    <p>Pote de \(m = 0,45\text{ kg}\) lançado com \(v_{0x} = 2,8\text{ m/s}\) percorre \(1,0\text{ m}\) até parar:</p>
                     <div class="highlight-box">
-                        \[ v_x^2 = v_{0x}^2 + 2 a_x x \implies 0 = (2,8)^2 + 2 a_x (1,0) \implies a_x = -3,92	ext{ m/s}^2 \]
-                        \[ f = m |a_x| = (0,45	ext{ kg})(3,92	ext{ m/s}^2) = 1,76	ext{ N} \]
+                        \[ v_x^2 = v_{0x}^2 + 2 a_x x \implies 0 = (2,8)^2 + 2 a_x (1,0) \implies a_x = -3,92\text{ m/s}^2 \]
+                        \[ f = m |a_x| = (0,45\text{ kg})(3,92\text{ m/s}^2) = 1,76\text{ N} \]
                     </div>
                 </div>
             </div>
@@ -706,7 +710,7 @@
                 <div class="slide-content">
                     <p>Comparação de ordens de grandeza de massa em diferentes sistemas de unidades:</p>
                     <div class="highlight-box">
-                        Uma lesma típica de jardim possui massa de aproximadamente \(10^{-3}	ext{ slug}\), o que equivale a cerca de \(15	ext{ gramas}\) (ou \(0,015	ext{ kg}\)).
+                        Uma lesma típica de jardim possui massa de aproximadamente \(10^{-3}\text{ slug}\), o que equivale a cerca de \(15\text{ gramas}\) (ou \(0,015\text{ kg}\)).
                     </div>
                 </div>
             </div>
@@ -722,16 +726,16 @@
                 <span class="slide-num-badge">Slide 25 de 35</span>
                 <h3 class="slide-title">Definição Rigorosa de Peso</h3>
                 <div class="slide-content">
-                    <p>O <b>peso \(ec{p}\)</b> de um corpo é a força de atração gravitacional exercida pela Terra sobre o corpo:</p>
+                    <p>O <b>peso \(\vec{p}\)</b> de um corpo é a força de atração gravitacional exercida pela Terra sobre o corpo:</p>
                     <div class="highlight-box">
-                        \[ ec{p} = m ec{g} 	ag{4.9} \]
+                        \[ \vec{p} = m \vec{g} \tag{4.9} \]
                     </div>
                     <p>O peso depende do local (varia com \(g\)), porém a massa \(m\) é constante em qualquer ponto do universo.</p>
                 </div>
             </div>
             <div class="canvas-container">
                 <canvas id="cvSlide25" width="360" height="240"></canvas>
-                <div class="figure-caption">Relação entre vetor peso \(ec{p}\) e aceleração da gravidade \(ec{g}\).</div>
+                <div class="figure-caption">Relação entre vetor peso \(\vec{p}\) e aceleração da gravidade \(\vec{g}\).</div>
             </div>
         </div>
 
@@ -742,8 +746,8 @@
                 <h3 class="slide-title">Figura 4.21: Corpo em Queda Livre vs Suspenso</h3>
                 <div class="slide-content">
                     <div class="highlight-box">
-                        <b>Corpo em Queda Livre:</b> \(ec{a} = ec{g}\), a única força atuante é o peso \(\sum ec{F} = ec{p} = mec{g}\).<br><br>
-                        <b>Corpo Suspenso por Fio:</b> \(ec{a} = 0\), a tensão cancela o peso \(\sum ec{F} = ec{T} - ec{p} = 0 \implies T = p = m g\).
+                        <b>Corpo em Queda Livre:</b> \(\vec{a} = \vec{g}\), a única força atuante é o peso \(\sum \vec{F} = \vec{p} = m\vec{g}\).<br><br>
+                        <b>Corpo Suspenso por Fio:</b> \(\vec{a} = 0\), a tensão cancela o peso \(\sum \vec{F} = \vec{T} - \vec{p} = 0 \implies T = p = m g\).
                     </div>
                     <p>A relação \(p = mg\) é a mesma esteja o corpo caindo ou parado!</p>
                 </div>
@@ -762,7 +766,7 @@
                 <div class="slide-content">
                     <p>A aceleração de um objeto em queda livre (desprezando a resistência do ar) é constante:</p>
                     <div class="highlight-box">
-                        \[ ec{a} = ec{g} \implies \sum ec{F} = ec{p} \]
+                        \[ \vec{a} = \vec{g} \implies \sum \vec{F} = \vec{p} \]
                     </div>
                     <p>Tanto a força resultante quanto a aceleração permanecem invariáveis durante toda a descida.</p>
                 </div>
@@ -779,12 +783,12 @@
                 <span class="slide-num-badge">Slide 28 de 35</span>
                 <h3 class="slide-title">Figura 4.23: Medição de Peso na Terra vs Lua</h3>
                 <div class="slide-content">
-                    <p>Para um mesmo corpo de massa constante \(m = 1,0	ext{ kg}\):</p>
+                    <p>Para um mesmo corpo de massa constante \(m = 1,0\text{ kg}\):</p>
                     <div class="highlight-box">
-                        <b>(a) Na Terra (\(g = 9,80	ext{ m/s}^2\)):</b><br>
-                        \(p = m g = 1,0 	imes 9,80 = 9,80	ext{ N}\)<br><br>
-                        <b>(b) Na Lua (\(g = 1,62	ext{ m/s}^2\)):</b><br>
-                        \(p = m g = 1,0 	imes 1,62 = 1,62	ext{ N}\)
+                        <b>(a) Na Terra (\(g = 9,80\text{ m/s}^2\)):</b><br>
+                        \(p = m g = 1,0 \times 9,80 = 9,80\text{ N}\)<br><br>
+                        <b>(b) Na Lua (\(g = 1,62\text{ m/s}^2\)):</b><br>
+                        \(p = m g = 1,0 \times 1,62 = 1,62\text{ N}\)
                     </div>
                 </div>
             </div>
@@ -820,7 +824,7 @@
                 <div class="slide-content">
                     <p>Quando dois corpos interagem, a força que o primeiro exerce sobre o segundo é exatamente igual em módulo e oposta em sentido à força que o segundo exerce sobre o primeiro:</p>
                     <div class="highlight-box">
-                        \[ ec{F}_{A 	ext{ em } B} = - ec{F}_{B 	ext{ em } A} 	ag{4.11} \]
+                        \[ \vec{F}_{A \text{ em } B} = - \vec{F}_{B \text{ em } A} \tag{4.11} \]
                     </div>
                     <p><b>Regra de Ouro:</b> Cada força de um par de ação e reação atua separadamente em corpos DIFERENTES!</p>
                 </div>
@@ -837,9 +841,9 @@
                 <span class="slide-num-badge">Slide 31 de 35</span>
                 <h3 class="slide-title">Figura 4.25: Interação Pé e Bola</h3>
                 <div class="slide-content">
-                    <p>Quando o pé (corpo A) exerce uma força \(ec{F}_{A 	ext{ em } B}\) na bola (corpo B):</p>
+                    <p>Quando o pé (corpo A) exerce uma força \(\vec{F}_{A \text{ em } B}\) na bola (corpo B):</p>
                     <div class="highlight-box">
-                        A bola responde exercendo a força \(ec{F}_{B 	ext{ em } A}\) de mesmo módulo, mesma direção e sentido oposto no pé do jogador.
+                        A bola responde exercendo a força \(\vec{F}_{B \text{ em } A}\) de mesmo módulo, mesma direção e sentido oposto no pé do jogador.
                     </div>
                 </div>
             </div>
@@ -876,7 +880,7 @@
                 <div class="slide-content">
                     <p>Análise de forças no sistema pedreiro-corda-bloco:</p>
                     <ul>
-                        <li><b>(b) Pares reais:</b> Pedreiro puxa corda (\(ec{F}_{P 	ext{ em } C}\)) \(\leftrightarrow\) Corda puxa pedreiro.</li>
+                        <li><b>(b) Pares reais:</b> Pedreiro puxa corda (\(\vec{F}_{P \text{ em } C}\)) \(\leftrightarrow\) Corda puxa pedreiro.</li>
                         <li><b>(c) NÃO são pares:</b> Força do bloco na corda e do pedreiro na corda (atuam no mesmo objeto: a corda).</li>
                         <li><b>(d) Corda sem massa:</b> As trações nas extremidades são iguais em módulo.</li>
                     </ul>
@@ -896,8 +900,8 @@
                 <div class="slide-content">
                     <p>Como o bloco consegue se mover?</p>
                     <div class="highlight-box">
-                        <b>Bloco + Corda:</b> Desliza porque a força de puxar \(ec{F}_{P 	ext{ em } C}\) supera o atrito do piso no bloco.<br><br>
-                        <b>Pedreiro:</b> Permanece firme em repouso porque a reação \(ec{F}_{C 	ext{ em } P}\) é contrabalançada pela força de atrito dos sapatos com o piso.
+                        <b>Bloco + Corda:</b> Desliza porque a força de puxar \(\vec{F}_{P \text{ em } C}\) supera o atrito do piso no bloco.<br><br>
+                        <b>Pedreiro:</b> Permanece firme em repouso porque a reação \(\vec{F}_{C \text{ em } P}\) é contrabalançada pela força de atrito dos sapatos com o piso.
                     </div>
                 </div>
             </div>
@@ -1175,3 +1179,9 @@
     </script>
 </body>
 </html>
+'''
+
+with open(target_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print(f"Successfully generated 35-slide presentation deck at {target_path}!")
