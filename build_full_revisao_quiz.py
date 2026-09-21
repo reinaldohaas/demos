@@ -7,7 +7,7 @@ html_content = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz de Revisão Geral - Física 1, 2 e 3</title>
+    <title>Quiz de Revisão - Capítulos 1, 2 e 3 (Física I)</title>
     <!-- MathJax for rendering LaTeX math formulas -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -179,13 +179,9 @@ html_content = """<!DOCTYPE html>
             text-transform: uppercase;
         }
 
-        .badge-f1 { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
-        .badge-f2 { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
-        .badge-f3 { background: rgba(234, 179, 8, 0.2); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
-
-        .badge-facil { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
-        .badge-moderada { background: rgba(234, 179, 8, 0.2); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
-        .badge-dificil { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+        .badge-cap1 { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
+        .badge-cap2 { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
+        .badge-cap3 { background: rgba(234, 179, 8, 0.2); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
 
         .progress-bar-container {
             width: 100%;
@@ -454,17 +450,17 @@ html_content = """<!DOCTYPE html>
 <body>
 
     <header>
-        <h1><i class="fa-solid fa-atom"></i> Quiz de Revisão: Física 1, 2 e 3</h1>
-        <p>30 Questões Completas com Diagramas Gráficos, Voz e Resoluções Detalhadas</p>
+        <h1><i class="fa-solid fa-atom"></i> Quiz de Revisão: Capítulos 1, 2 e 3</h1>
+        <p>30 Questões de Física I (Vetores, Cinemática 1D e Cinemática 2D/3D) com Diagramas e Voz</p>
     </header>
 
     <div class="controls-bar">
         <div class="filter-group">
-            <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: bold;">Disciplina:</span>
-            <button class="filter-btn active" onclick="setDiscipline('todas')">Todas</button>
-            <button class="filter-btn" onclick="setDiscipline('Física 1')">Física 1</button>
-            <button class="filter-btn" onclick="setDiscipline('Física 2')">Física 2</button>
-            <button class="filter-btn" onclick="setDiscipline('Física 3')">Física 3</button>
+            <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: bold;">Capítulo:</span>
+            <button class="filter-btn active" onclick="setChapter('todos')">Todos</button>
+            <button class="filter-btn" onclick="setChapter('Capítulo 1')">Capítulo 1</button>
+            <button class="filter-btn" onclick="setChapter('Capítulo 2')">Capítulo 2</button>
+            <button class="filter-btn" onclick="setChapter('Capítulo 3')">Capítulo 3</button>
         </div>
 
         <div class="audio-controls">
@@ -485,7 +481,7 @@ html_content = """<!DOCTYPE html>
         <div id="quizScreen">
             <div class="progress-header">
                 <div class="badge-info">
-                    <span id="discBadge" class="badge badge-f1">Física 1</span>
+                    <span id="chapBadge" class="badge badge-cap1">Capítulo 1</span>
                 </div>
                 <div class="score-telemetry">
                     <div class="score-item"><i class="fa-solid fa-fire" style="color: #f97316;"></i> <span id="streakCount">0</span></div>
@@ -520,7 +516,7 @@ html_content = """<!DOCTYPE html>
 
             <div class="action-bar">
                 <span id="questionCounter" style="color: var(--text-muted); font-size: 0.9rem;">Questão 1 de 30</span>
-                <button id="nextBtn" class="btn-primary" onclick="handleNextAction()" disabled>
+                <button id="nextBtn" class="btn-primary" disabled>
                     <span>Confirmar Resposta</span> <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
@@ -529,7 +525,7 @@ html_content = """<!DOCTYPE html>
         <!-- Tela Final (Scorecard) -->
         <div id="scorecardScreen" class="scorecard">
             <h2><i class="fa-solid fa-trophy"></i> Quiz Concluído!</h2>
-            <p style="color: var(--text-muted);">Confira seu desempenho geral na revisão de Física 1, 2 e 3:</p>
+            <p style="color: var(--text-muted);">Confira seu desempenho geral na revisão dos Capítulos 1, 2 e 3 de Física I:</p>
             
             <div id="medalContainer" class="medal-icon">
                 <i class="fa-solid fa-award"></i>
@@ -557,497 +553,437 @@ html_content = """<!DOCTYPE html>
     </div>
 
     <script>
-        // Banco com 30 Questões
+        // Banco com 30 Questões estritamente dos Capítulos 1, 2 e 3 de Física I
         const questionsBank = [
-            // --- FÍSICA 1 ---
+            // --- CAPÍTULO 1: VETORES, UNIDADES E COORDENADAS (10 QUESTÕES) ---
             {
-                id: 1, discipline: "Física 1", difficulty: "Fácil",
-                question: "Um automóvel viaja com velocidade constante de 72 km/h (20 m/s) ao longo de uma pista retilínea. Qual é a distância percorrida pelo veículo após 15 segundos?",
-                options: ["200 m", "300 m", "400 m", "1080 m"],
-                correct: 1,
-                hint: "Converta a velocidade para m/s (72 / 3,6 = 20 m/s) e use a fórmula do MRU: \\\\(\\Delta s = v \\\\cdot t\\\\).",
-                explanation: "Para calcular o deslocamento em Movimento Retilíneo Uniforme (MRU):<br>1) Velocidade: \\\\(v = 72 \\\\text{ km/h} = 20 \\\\text{ m/s}\\\\).<br>2) Tempo: \\\\(t = 15 \\\\text{ s}\\\\).<br>3) Deslocamento: \\\\(\\Delta s = v \\\\cdot t = 20 \\\\times 15 = 300 \\\\text{ m}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    // Pista
-                    ctx.strokeStyle = "#475569"; ctx.lineWidth = 4;
-                    ctx.beginPath(); ctx.moveTo(40, 180); ctx.lineTo(440, 180); ctx.stroke();
-                    // Carro
-                    ctx.fillStyle = "#38bdf8"; ctx.fillRect(80, 140, 70, 35);
-                    ctx.fillStyle = "#0f172a"; ctx.beginPath(); ctx.arc(100, 175, 10, 0, Math.PI*2); ctx.arc(130, 175, 10, 0, Math.PI*2); ctx.fill();
-                    // Vetor velocidade
-                    drawArrow(ctx, 150, 155, 230, 155, "#22c55e", "v = 20 m/s");
-                }
-            },
-            {
-                id: 2, discipline: "Física 1", difficulty: "Fácil",
-                question: "Um bloco de massa m = 5 kg é puxado por uma força resultante horizontal constante de 25 N sobre uma superfície horizontal sem atrito. Qual é a aceleração do bloco?",
-                options: ["2 m/s²", "5 m/s²", "10 m/s²", "125 m/s²"],
-                correct: 1,
-                hint: "Aplique a Segunda Lei de Newton: \\\\(F_{res} = m \\\\cdot a\\\\).",
-                explanation: "Pela Segunda Lei de Newton:<br>\\\\(F = m \\\\cdot a \\\\implies a = \\\\frac{F}{m} = \\\\frac{25 \\\\text{ N}}{5 \\\\text{ kg}} = 5 \\\\text{ m/s}^2\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    // Solo
-                    ctx.strokeStyle = "#475569"; ctx.lineWidth = 3;
-                    ctx.beginPath(); ctx.moveTo(40, 180); ctx.lineTo(440, 180); ctx.stroke();
-                    // Bloco
-                    ctx.fillStyle = "#a855f7"; ctx.fillRect(180, 110, 80, 70);
-                    ctx.fillStyle = "#ffffff"; ctx.font = "bold 16px sans-serif"; ctx.fillText("m = 5 kg", 190, 150);
-                    // Força
-                    drawArrow(ctx, 260, 145, 360, 145, "#eab308", "F = 25 N");
-                }
-            },
-            {
-                id: 3, discipline: "Física 1", difficulty: "Fácil",
-                question: "Uma força constante de 40 N atua sobre um caixote paralelamente ao seu deslocamento de 6 metros. Qual é o trabalho realizado por essa força?",
-                options: ["120 J", "240 J", "160 J", "400 J"],
-                correct: 1,
-                hint: "O trabalho de uma força constante paralela ao movimento é \\\\(W = F \\\\cdot d \\\\cdot \\\\cos(\\\\theta)\\\\), onde \\\\(\\cos(0^\\\\circ) = 1\\\\).",
-                explanation: "O trabalho é dado por:<br>\\\\(W = F \\\\cdot d = 40 \\\\text{ N} \\\\times 6 \\\\text{ m} = 240 \\\\text{ Joules}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    ctx.strokeStyle = "#475569"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(40, 180); ctx.lineTo(440, 180); ctx.stroke();
-                    // Caixa inicio e fim
-                    ctx.fillStyle = "#334155"; ctx.fillRect(80, 120, 60, 60);
-                    ctx.fillStyle = "#38bdf8"; ctx.fillRect(320, 120, 60, 60);
-                    // Seta deslocamento
-                    drawArrow(ctx, 140, 200, 320, 200, "#38bdf8", "d = 6 m");
-                    drawArrow(ctx, 80, 90, 160, 90, "#22c55e", "F = 40 N");
-                }
-            },
-            {
-                id: 4, discipline: "Física 1", difficulty: "Moderada",
-                question: "Um projétil é lançado com velocidade de 50 m/s sob um ângulo onde sen(θ) = 0,6 e cos(θ) = 0,8. Adotando g = 9,8 m/s², qual é a altura máxima atingida pelo projétil?",
-                options: ["30,0 m", "45,9 m", "60,0 m", "91,8 m"],
-                correct: 1,
-                hint: "A componente vertical da velocidade é \\\\(v_{0y} = v_0 \\\\cdot \\\\sen(\\\\theta)\\\\). A altura máxima é \\\\(H_{máx} = \\\\frac{v_{0y}^2}{2g}\\\\).",
-                explanation: "1) Componente vertical: \\\\(v_{0y} = 50 \\\\times 0,6 = 30 \\\\text{ m/s}\\\\).<br>2) Altura máxima: \\\\(H_{máx} = \\\\frac{v_{0y}^2}{2g} = \\\\frac{30^2}{2 \\\\times 9,8} = \\\\frac{900}{19,6} \\\\approx 45,92 \\\\text{ m}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    // Solo
-                    ctx.strokeStyle = "#475569"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(40, 200); ctx.lineTo(440, 200); ctx.stroke();
-                    // Trajetoria parabolica
-                    ctx.strokeStyle = "#eab308"; ctx.setLineDash([5, 5]); ctx.lineWidth = 2;
-                    ctx.beginPath(); ctx.moveTo(60, 200); ctx.quadraticCurveTo(240, 40, 420, 200); ctx.stroke(); ctx.setLineDash([]);
-                    // Altura Hmax
-                    ctx.strokeStyle = "#ef4444"; ctx.beginPath(); ctx.moveTo(240, 200); ctx.lineTo(240, 120); ctx.stroke();
-                    ctx.fillStyle = "#ef4444"; ctx.font = "14px sans-serif"; ctx.fillText("H_máx = 45,9 m", 250, 160);
-                }
-            },
-            {
-                id: 5, discipline: "Física 1", difficulty: "Moderada",
-                question: "Um carrinho de montanha-russa de 200 kg parte do repouso do topo de uma colina a 20 m de altura. Desprezando o atrito e adotando g = 9,8 m/s², qual é a sua velocidade na base da colina?",
-                options: ["14,0 m/s", "19,8 m/s", "25,0 m/s", "392 m/s"],
-                correct: 1,
-                hint: "Utilize a Conservação da Energia Mecânica: \\\\(m \\\\cdot g \\\\cdot h = \\\\frac{1}{2} m \\\\cdot v^2 \\\\implies v = \\\\sqrt{2gh}\\\\).",
-                explanation: "Pela conservação da energia mecânica:<br>\\\\(E_{p} = E_{c} \\\\implies mgh = \\\\frac{1}{2}mv^2 \\\\implies v = \\\\sqrt{2gh}\\\\)<br>\\\\(v = \\\\sqrt{2 \\\\times 9,8 \\\\times 20} = \\\\sqrt{392} \\\\approx 19,8 \\\\text{ m/s}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    // Pista de montanha russa
-                    ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 4;
-                    ctx.beginPath(); ctx.moveTo(40, 60); ctx.bezierCurveTo(150, 60, 200, 200, 440, 200); ctx.stroke();
-                    // Carrinho no topo
-                    ctx.fillStyle = "#ef4444"; ctx.fillRect(60, 35, 30, 20); ctx.fillText("Topo (h=20m)", 40, 25);
-                }
-            },
-            {
-                id: 6, discipline: "Física 1", difficulty: "Moderada",
-                question: "Dois blocos se chocam de forma perfeitamente inelástica (ficando grudados). Bloco A (mA = 2 kg) move-se a 6 m/s para a direita, e Bloco B (mB = 4 kg) está inicialmente em repouso. Qual a velocidade final do conjunto?",
-                options: ["1,0 m/s", "2,0 m/s", "3,0 m/s", "4,0 m/s"],
-                correct: 1,
-                hint: "Aplique a Conservação do Momento Linear: \\\\(m_A v_A + m_B v_B = (m_A + m_B) V_f\\\\).",
-                explanation: "Pela conservação da quantidade de movimento:<br>\\\\(Q_{antes} = Q_{depois}\\\\)<br>\\\\(2 \\\\times 6 + 4 \\\\times 0 = (2 + 4) \\\\cdot V_f \\\\implies 12 = 6 V_f \\\\implies V_f = 2,0 \\\\text{ m/s}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    ctx.strokeStyle = "#475569"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(40, 180); ctx.lineTo(440, 180); ctx.stroke();
-                    // Antes
-                    ctx.fillStyle = "#38bdf8"; ctx.fillRect(80, 120, 50, 60); ctx.fillText("A (2kg)", 85, 155);
-                    ctx.fillStyle = "#a855f7"; ctx.fillRect(200, 110, 70, 70); ctx.fillText("B (4kg)", 210, 150);
-                    drawArrow(ctx, 130, 130, 180, 130, "#22c55e", "6 m/s");
-                }
-            },
-            {
-                id: 7, discipline: "Física 1", difficulty: "Moderada",
-                question: "Um disco de momento de inércia I = 0,5 kg·m² gira em torno de seu eixo central. Se um torque resultante constante de 4 N·m é aplicado, qual é a aceleração angular α do disco?",
-                options: ["2 rad/s²", "4 rad/s²", "8 rad/s²", "16 rad/s²"],
+                id: 1, chapter: "Capítulo 1",
+                question: "A velocidade máxima em uma rodovia é de 108 km/h. Qual é o valor dessa velocidade expresso em metros por segundo (m/s)?",
+                options: ["20,0 m/s", "25,0 m/s", "30,0 m/s", "36,0 m/s"],
                 correct: 2,
-                hint: "Use a Segunda Lei de Newton para rotações: \\\\(\\tau = I \\\\cdot \\\\alpha\\\\).",
-                explanation: "A analogia rotacional da Segunda Lei de Newton é:<br>\\\\(\\tau = I \\\\cdot \\\\alpha \\\\implies \\\\alpha = \\\\frac{\\\\tau}{I} = \\\\frac{4 \\\\text{ N}\\\\cdot\\\\text{m}}{0,5 \\\\text{ kg}\\\\cdot\\\\text{m}^2} = 8,0 \\\\text{ rad/s}^2\\\\).",
+                hint: "Para converter a velocidade de km/h para m/s, divida o valor por 3,6.",
+                explanation: "Para converter de km/h para m/s:<br>\\\\(v = \\\\frac{108 \\\\text{ km/h}}{3,6} = 30,0 \\\\text{ m/s}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
-                    // Disco
-                    ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(240, 120, 70, 0, Math.PI*2); ctx.stroke();
-                    ctx.fillStyle = "#0f172a"; ctx.fill();
-                    // Eixo central
-                    ctx.fillStyle = "#eab308"; ctx.beginPath(); ctx.arc(240, 120, 6, 0, Math.PI*2); ctx.fill();
-                    // Torque seta curva
-                    ctx.strokeStyle = "#22c55e"; ctx.beginPath(); ctx.arc(240, 120, 90, -Math.PI*0.3, Math.PI*0.5); ctx.stroke();
-                    ctx.fillStyle = "#22c55e"; ctx.font = "14px sans-serif"; ctx.fillText("Torque τ = 4 N·m", 280, 60);
+                    ctx.fillStyle = "#1e293b"; ctx.fillRect(160, 40, 160, 160);
+                    ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 4; ctx.strokeRect(160, 40, 160, 160);
+                    ctx.fillStyle = "#eab308"; ctx.font = "bold 24px sans-serif"; ctx.fillText("108 km/h", 185, 110);
+                    ctx.fillStyle = "#22c55e"; ctx.font = "bold 20px sans-serif"; ctx.fillText("= 30 m/s", 195, 150);
                 }
             },
             {
-                id: 8, discipline: "Física 1", difficulty: "Difícil",
-                question: "Um bloco de 10 kg repousa sobre um plano inclinado de 30°. O coeficiente de atrito estático é μe = 0,6. Com g = 9,8 m/s², o bloco permanece em repouso ou desliza? Qual é o valor da força de atrito?",
-                options: ["Desliza, fat = 51,0 N", "Permanece em repouso, fat = 49,0 N", "Desliza, fat = 24,5 N", "Permanece em repouso, fat = 98,0 N"],
+                id: 2, chapter: "Capítulo 1",
+                question: "Um vetor de módulo |A| = 10 u faz um ângulo de 30° com o eixo x positivo. Quais são as suas componentes retangulares Ax e Ay? (cos(30°) ≈ 0,866, sen(30°) = 0,5)",
+                options: ["Ax = 5,0 u; Ay = 8,66 u", "Ax = 8,66 u; Ay = 5,0 u", "Ax = 10,0 u; Ay = 5,0 u", "Ax = 6,0 u; Ay = 8,0 u"],
                 correct: 1,
-                hint: "Calcule a componente do peso paralela ao plano \\\\(P_x = m g \\\\sen(30^\\\\circ)\\\\), e o atrito estático máximo \\\\(f_{e,máx} = \\\\mu_e m g \\\\cos(30^\\\\circ)\\\\).",
-                explanation: "1) Componente tangencial do peso: \\\\(P_x = 10 \\\\times 9,8 \\\\times \\\\sen(30^\\\\circ) = 49,0 \\\\text{ N}\\\\).<br>2) Atrito estático máximo: \\\\(f_{e,máx} = 0,6 \\\\times 10 \\\\times 9,8 \\\\times \\\\cos(30^\\\\circ) = 0,6 \\\\times 98 \\\\times 0,866 \\\\approx 50,92 \\\\text{ N}\\\\).<br>Como \\\\(P_x (49,0 \\\\text{ N}) < f_{e,máx} (50,92 \\\\text{ N})\\\\), o bloco **não desliza** e a força de atrito equilibra exatamente a força peso paralela: \\\\(f_{at} = 49,0 \\\\text{ N}\\\\).",
+                hint: "Use as definições de trigonometria no triângulo retângulo: \\\\(A_x = |A| \\\\cos(\\\\theta)\\\\), \\\\(A_y = |A| \\\\sen(\\\\theta)\\\\).",
+                explanation: "1) Componente horizontal: \\\\(A_x = 10 \\\\times \\\\cos(30^\\\\circ) = 10 \\\\times 0,866 = 8,66 \\\\text{ u}\\\\).<br>2) Componente vertical: \\\\(A_y = 10 \\\\times \\\\sen(30^\\\\circ) = 10 \\\\times 0,5 = 5,0 \\\\text{ u}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
-                    // Rampa
-                    ctx.strokeStyle = "#475569"; ctx.lineWidth = 3;
-                    ctx.beginPath(); ctx.moveTo(60, 200); ctx.lineTo(380, 200); ctx.lineTo(380, 60); ctx.closePath(); ctx.stroke();
-                    // Bloco
-                    ctx.save(); ctx.translate(220, 140); ctx.rotate(-Math.PI/6);
-                    ctx.fillStyle = "#38bdf8"; ctx.fillRect(-30, -30, 60, 30);
-                    drawArrow(ctx, 0, -15, -60, -15, "#ef4444", "fat");
-                    drawArrow(ctx, 0, -15, 60, -15, "#22c55e", "Px");
-                    ctx.restore();
+                    // Eixos
+                    ctx.strokeStyle = "#475569"; ctx.lineWidth = 2;
+                    ctx.beginPath(); ctx.moveTo(60, 200); ctx.lineTo(420, 200); ctx.moveTo(60, 200); ctx.lineTo(60, 40); ctx.stroke();
+                    drawArrow(ctx, 60, 200, 320, 70, "#38bdf8", "A = 10 u");
+                    ctx.strokeStyle = "#eab308"; ctx.setLineDash([4, 4]);
+                    ctx.beginPath(); ctx.moveTo(320, 70); ctx.lineTo(320, 200); ctx.lineTo(60, 70); ctx.stroke(); ctx.setLineDash([]);
+                    ctx.fillStyle = "#eab308"; ctx.font = "14px sans-serif"; ctx.fillText("Ax = 8,66", 180, 215); ctx.fillText("Ay = 5,0", 15, 130);
                 }
             },
             {
-                id: 9, discipline: "Física 1", difficulty: "Difícil",
-                question: "Um satélite de massa m é movido de uma órbita circular de raio r1 = R_E para r2 = 2 R_E em torno da Terra. Sabendo que U(r) = -G M m / r, qual o trabalho realizado pela força gravitacional?",
-                options: ["-G M m / (2 R_E)", "+G M m / (2 R_E)", "-3 G M m / (2 R_E)", "Zero"],
+                id: 3, chapter: "Capítulo 1",
+                question: "Um vetor deslocamento é dado por d = 6 i + 8 j (em metros). Qual é o módulo desse vetor deslocamento?",
+                options: ["10,0 m", "14,0 m", "48,0 m", "2,0 m"],
                 correct: 0,
-                hint: "O trabalho da força gravitacional (força conservativa) é \\\\(W_g = -\\\\Delta U = -(U_f - U_i)\\\\).",
-                explanation: "1) Energia potencial inicial: \\\\(U_i = -\\\\frac{GMm}{R_E}\\\\).<br>2) Energia potencial final: \\\\(U_f = -\\\\frac{GMm}{2R_E}\\\\).<br>3) Trabalho da força conservativa: \\\\(W_g = - (U_f - U_i) = -\\\\left(-\\\\frac{GMm}{2R_E} + \\\\frac{GMm}{R_E}\\\\right) = -\\\\frac{GMm}{2R_E}\\\\).",
+                hint: "O módulo de um vetor de componentes (dx, dy) é dado pelo Teorema de Pitágoras: \\\\(|d| = \\\\sqrt{d_x^2 + d_y^2}\\\\).",
+                explanation: "Calculando o módulo:<br>\\\\(|d| = \\\\sqrt{6^2 + 8^2} = \\\\sqrt{36 + 64} = \\\\sqrt{100} = 10,0 \\\\text{ m}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
-                    // Terra
-                    ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(240, 120, 35, 0, Math.PI*2); ctx.fill();
-                    // Orbitas
-                    ctx.strokeStyle = "#94a3b8"; ctx.setLineDash([4, 4]);
-                    ctx.beginPath(); ctx.arc(240, 120, 65, 0, Math.PI*2); ctx.stroke();
-                    ctx.beginPath(); ctx.arc(240, 120, 100, 0, Math.PI*2); ctx.stroke();
-                    ctx.setLineDash([]);
-                    ctx.fillStyle = "#eab308"; ctx.beginPath(); ctx.arc(240, 20, 6, 0, Math.PI*2); ctx.fill();
-                    ctx.fillText("2 R_E", 250, 25);
+                    ctx.strokeStyle = "#475569"; ctx.lineWidth = 2;
+                    ctx.beginPath(); ctx.moveTo(60, 200); ctx.lineTo(420, 200); ctx.moveTo(60, 200); ctx.lineTo(60, 40); ctx.stroke();
+                    drawArrow(ctx, 60, 200, 300, 60, "#22c55e", "|d| = 10 m");
+                    ctx.fillStyle = "#cbd5e1"; ctx.fillText("dx = 6", 170, 215); ctx.fillText("dy = 8", 20, 130);
                 }
             },
             {
-                id: 10, discipline: "Física 1", difficulty: "Difícil",
-                question: "Uma haste fina homogênea de comprimento L = 1,2 m oscila como pêndulo físico em torno de uma extremidade. Com I = 1/3 M L² e d = L/2, qual é o período T de pequenas oscilações? (g = 9,8 m/s²)",
-                options: ["1,20 s", "1,80 s", "2,20 s", "3,14 s"],
-                correct: 1,
-                hint: "A fórmula do período do pêndulo físico é \\\\(T = 2\\\\pi \\\\sqrt{\\\\frac{I}{M g d}}\\\\). Simplifique para \\\\(T = 2\\\\pi \\\\sqrt{\\\\frac{2L}{3g}}\\\\).",
-                explanation: "Substituindo os valores na expressão simplificada do período:<br>\\\\(T = 2\\\\pi \\\\sqrt{\\\\frac{2L}{3g}} = 2\\\\pi \\\\sqrt{\\\\frac{2 \\\\times 1,2}{3 \\\\times 9,8}} = 2\\\\pi \\\\sqrt{\\\\frac{2,4}{29,4}} = 2\\\\pi \\\\times 0,2857 \\\\approx 1,795 \\\\approx 1,80 \\\\text{ s}\\\\).",
+                id: 4, chapter: "Capítulo 1",
+                question: "Dados os vetores A = 3 i - 2 j e B = 1 i + 5 j, qual é o vetor resultante R = A + B?",
+                options: ["4 i + 3 j", "2 i + 7 j", "4 i - 7 j", "3 i + 3 j"],
+                correct: 0,
+                hint: "Soma vetorial por componentes cartesianas: some as componentes i com i, e j com j.",
+                explanation: "1) Componente x: \\\\(R_x = A_x + B_x = 3 + 1 = 4\\\\).<br>2) Componente y: \\\\(R_y = A_y + B_y = -2 + 5 = 3\\\\).<br>Portanto, \\\\(R = 4 \\\\hat{i} + 3 \\\\hat{j}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
-                    // Pivô
-                    ctx.fillStyle = "#eab308"; ctx.beginPath(); ctx.arc(240, 40, 8, 0, Math.PI*2); ctx.fill();
-                    // Haste inclinada
-                    ctx.save(); ctx.translate(240, 40); ctx.rotate(Math.PI/8);
-                    ctx.fillStyle = "#a855f7"; ctx.fillRect(-6, 0, 12, 140);
-                    ctx.fillStyle = "#ef4444"; ctx.beginPath(); ctx.arc(0, 70, 6, 0, Math.PI*2); ctx.fill();
-                    ctx.restore();
+                    drawArrow(ctx, 60, 140, 200, 180, "#38bdf8", "A");
+                    drawArrow(ctx, 200, 180, 260, 60, "#a855f7", "B");
+                    drawArrow(ctx, 60, 140, 260, 60, "#22c55e", "R = A + B");
+                }
+            },
+            {
+                id: 5, chapter: "Capítulo 1",
+                question: "Se A = 5 i + 4 j e B = 2 i + 1 j, qual é o módulo do vetor diferença C = A - B?",
+                options: ["3,00 m", "4,24 m", "5,00 m", "7,00 m"],
+                correct: 1,
+                hint: "Determine primeiro \\\\(C = (A_x - B_x)\\\\hat{i} + (A_y - B_y)\\\\hat{j}\\\\), depois calcule o módulo \\\\(\\\\sqrt{C_x^2 + C_y^2}\\\\).",
+                explanation: "1) Vetor diferença: \\\\(C = (5-2)\\\\hat{i} + (4-1)\\\\hat{j} = 3\\\\hat{i} + 3\\\\hat{j}\\\\).<br>2) Módulo: \\\\(|C| = \\\\sqrt{3^2 + 3^2} = \\\\sqrt{18} = 3\\\\sqrt{2} \\\\approx 4,24 \\\\text{ m}\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    drawArrow(ctx, 80, 180, 330, 60, "#38bdf8", "A");
+                    drawArrow(ctx, 80, 180, 180, 135, "#ef4444", "B");
+                    drawArrow(ctx, 180, 135, 330, 60, "#eab308", "C = A - B");
+                }
+            },
+            {
+                id: 6, chapter: "Capítulo 1",
+                question: "Os vetores A = 2 i + 3 j e B = 4 i - 1 j têm produto escalar A · B igual a:",
+                options: ["5", "8", "11", "-5"],
+                correct: 0,
+                hint: "O produto escalar de dois vetores em componentes cartesianas é \\\\(A \\\\cdot B = A_x B_x + A_y B_y\\\\).",
+                explanation: "Calculando o produto escalar:<br>\\\\(A \\\\cdot B = (2)(4) + (3)(-1) = 8 - 3 = 5\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    drawArrow(ctx, 100, 160, 220, 70, "#38bdf8", "A");
+                    drawArrow(ctx, 100, 160, 340, 190, "#eab308", "B");
+                }
+            },
+            {
+                id: 7, chapter: "Capítulo 1",
+                question: "Sabendo que o produto escalar entre dois vetores é A · B = 15, e que seus módulos são |A| = 5 e |B| = 6, qual é o ângulo θ entre eles?",
+                options: ["30°", "45°", "60°", "90°"],
+                correct: 2,
+                hint: "Utilize a relação geométrica do produto escalar: \\\\(A \\\\cdot B = |A| |B| \\\\cos(\\\\theta)\\\\).",
+                explanation: "1) \\\\(15 = 5 \\\\times 6 \\\\times \\\\cos(\\\\theta) \\\\implies 15 = 30 \\\\cos(\\\\theta)\\\\).<br>2) \\\\(\\cos(\\\\theta) = \\\\frac{15}{30} = 0,5 \\\\implies \\\\theta = 60^\\\\circ\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    drawArrow(ctx, 120, 180, 320, 180, "#38bdf8", "B (|B|=6)");
+                    drawArrow(ctx, 120, 180, 220, 60, "#22c55e", "A (|A|=5)");
+                    ctx.strokeStyle = "#eab308"; ctx.beginPath(); ctx.arc(120, 180, 40, 0, -Math.PI/3, true); ctx.stroke();
+                    ctx.fillStyle = "#eab308"; ctx.font = "bold 16px sans-serif"; ctx.fillText("θ = 60°", 170, 160);
+                }
+            },
+            {
+                id: 8, chapter: "Capítulo 1",
+                question: "Os vetores A = 3 i e B = 4 j estão no plano xy. Qual é o vetor resultante do produto vetorial C = A x B?",
+                options: ["12 k", "-12 k", "12 i", "0"],
+                correct: 0,
+                hint: "O produto vetorial \\\\(\\hat{i} \\\\times \\\\hat{j} = \\\\hat{k}\\\\). O módulo é \\\\(|A||B|\\\\sen(90^\\\\circ)\\\\).",
+                explanation: "Calculando o produto vetorial:<br>\\\\(C = A \\\\times B = (3\\\\hat{i}) \\\\times (4\\\\hat{j}) = (3 \\\\times 4) (\\\\hat{i} \\\\times \\\\hat{j}) = 12 \\\\hat{k}\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    drawArrow(ctx, 140, 160, 320, 160, "#38bdf8", "A = 3i");
+                    drawArrow(ctx, 140, 160, 140, 40, "#a855f7", "B = 4j");
+                    ctx.fillStyle = "#22c55e"; ctx.font = "bold 16px sans-serif"; ctx.fillText("C = A x B = 12 k (aponta para fora)", 170, 90);
+                }
+            },
+            {
+                id: 9, chapter: "Capítulo 1",
+                question: "Um vetor é dado por v = 3 i + 4 j. Qual é o vetor unitário u na mesma direção e sentido de v?",
+                options: ["0,6 i + 0,8 j", "0,5 i + 0,5 j", "3,0 i + 4,0 j", "0,8 i + 0,6 j"],
+                correct: 0,
+                hint: "O vetor unitário é obtido dividindo o vetor pelo seu módulo: \\\\(\\u = \\\\frac{v}{|v|}\\\\).",
+                explanation: "1) Módulo: \\\\(|v| = \\\\sqrt{3^2 + 4^2} = 5\\\\).<br>2) Vetor unitário: \\\\(\\u = \\\\frac{3}{5}\\\\hat{i} + \\\\frac{4}{5}\\\\hat{j} = 0,6 \\\\hat{i} + 0,8 \\\\hat{j}\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    drawArrow(ctx, 80, 180, 320, 60, "#38bdf8", "v = 3i + 4j (|v|=5)");
+                    drawArrow(ctx, 80, 180, 128, 156, "#ef4444", "u");
+                }
+            },
+            {
+                id: 10, chapter: "Capítulo 1",
+                question: "Para qual valor da constante k os vetores A = 4 i - 2 j e B = 3 i + k j são ortogonais (perpendiculares)?",
+                options: ["k = 2", "k = 6", "k = -6", "k = 12"],
+                correct: 1,
+                hint: "Dois vetores são ortogonais se e somente se o produto escalar entre eles for igual a zero: \\\\(A \\\\cdot B = 0\\\\).",
+                explanation: "1) \\\\(A \\\\cdot B = 4(3) + (-2)(k) = 0\\\\).<br>2) \\\\(12 - 2k = 0 \\\\implies 2k = 12 \\\\implies k = 6\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    drawArrow(ctx, 160, 120, 320, 180, "#38bdf8", "A = 4i - 2j");
+                    drawArrow(ctx, 160, 120, 280, 20, "#22c55e", "B = 3i + 6j");
                 }
             },
 
-            // --- FÍSICA 2 ---
+            // --- CAPÍTULO 2: MOVIMENTO EM UMA DIMENSÃO (10 QUESTÕES) ---
             {
-                id: 11, discipline: "Física 2", difficulty: "Fácil",
-                question: "Qual é a pressão manométrica exercida por uma coluna de água (ρ = 1000 kg/m³) a uma profundidade h = 5 metros? Adote g = 9,8 m/s².",
-                options: ["49 kPa", "98 kPa", "100 kPa", "149 kPa"],
-                correct: 0,
-                hint: "Utilize o Teorema de Stevin para pressão manométrica: \\\\(P = \\\\rho \\\\cdot g \\\\cdot h\\\\).",
-                explanation: "A pressão manométrica hidrostática é dada por:<br>\\\\(P = \\\\rho \\\\cdot g \\\\cdot h = 1000 \\\\text{ kg/m}^3 \\\\times 9,8 \\\\text{ m/s}^2 \\\\times 5 \\\\text{ m} = 49.000 \\\\text{ Pa} = 49 \\\\text{ kPa}\\\\).",
+                id: 11, chapter: "Capítulo 2",
+                question: "Um móvel percorre 120 km em 1,5 hora. Qual é a sua velocidade média em m/s?",
+                options: ["20,0 m/s", "22,2 m/s", "80,0 m/s", "30,0 m/s"],
+                correct: 1,
+                hint: "Calcule a velocidade média em km/h (vm = Δs/Δt) e converta para m/s dividindo por 3,6.",
+                explanation: "1) Velocidade em km/h: \\\\(v_{méd} = \\\\frac{120 \\\\text{ km}}{1,5 \\\\text{ h}} = 80 \\\\text{ km/h}\\\\).<br>2) Em m/s: \\\\(v_{méd} = \\\\frac{80}{3,6} \\\\approx 22,22 \\\\text{ m/s}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
-                    // Tanque de agua
-                    ctx.fillStyle = "rgba(56, 189, 248, 0.3)"; ctx.fillRect(140, 50, 200, 150);
-                    ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 3; ctx.strokeRect(140, 50, 200, 150);
-                    drawArrow(ctx, 360, 50, 360, 200, "#eab308", "h = 5m");
+                    ctx.strokeStyle = "#475569"; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(40, 160); ctx.lineTo(440, 160); ctx.stroke();
+                    ctx.fillStyle = "#38bdf8"; ctx.fillRect(60, 120, 60, 35);
+                    drawArrow(ctx, 120, 137, 380, 137, "#22c55e", "Δs = 120 km (1,5 h)");
                 }
             },
             {
-                id: 12, discipline: "Física 2", difficulty: "Fácil",
-                question: "Uma onda sonora senoidal propaga-se no ar com frequência de 440 Hz e comprimento de onda λ = 0,78 m. Qual é a velocidade de propagação dessa onda?",
-                options: ["300,0 m/s", "343,2 m/s", "564,0 m/s", "1500,0 m/s"],
+                id: 12, chapter: "Capítulo 2",
+                question: "Um objeto move-se segundo a equação horária da posição x(t) = 15 + 4t (com x em m e t em s). Em que instante t ele atinge a posição x = 35 m?",
+                options: ["4,0 s", "5,0 s", "8,75 s", "10,0 s"],
                 correct: 1,
-                hint: "Use a Equação Fundamental da Ondulatória: \\\\(v = \\\\lambda \\\\cdot f\\\\).",
-                explanation: "A velocidade da onda é o produto da frequência pelo comprimento de onda:<br>\\\\(v = \\\\lambda \\\\cdot f = 0,78 \\\\text{ m} \\\\times 440 \\\\text{ Hz} = 343,2 \\\\text{ m/s}\\\\).",
+                hint: "Substitua a posição x = 35 m na equação horária e isole a variável tempo t.",
+                explanation: "Substituindo x = 35:<br>\\\\(35 = 15 + 4t \\\\implies 4t = 20 \\\\implies t = 5,0 \\\\text{ s}\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(60, 200); ctx.lineTo(420, 200); ctx.moveTo(60, 200); ctx.lineTo(60, 40); ctx.stroke();
+                    ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(60, 140); ctx.lineTo(360, 40); ctx.stroke();
+                    ctx.fillStyle = "#eab308"; ctx.fillText("t = 5s", 270, 215); ctx.fillText("x = 35m", 15, 70);
+                }
+            },
+            {
+                id: 13, chapter: "Capítulo 2",
+                question: "Um automóvel trafegando a 20 m/s é freado uniformemente até parar em 4 segundos. Qual é o módulo de sua aceleração média?",
+                options: ["4,0 m/s²", "5,0 m/s²", "10,0 m/s²", "20,0 m/s²"],
+                correct: 1,
+                hint: "A aceleração média é dada pela taxa de variação da velocidade: \\\\(a_{méd} = \\\\frac{v_f - v_i}{\\\\Delta t}\\\\).",
+                explanation: "Calculando a aceleração:<br>\\\\(a = \\\\frac{0 - 20}{4} = -5,0 \\\\text{ m/s}^2\\\\). O módulo é 5,0 m/s².",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    ctx.fillStyle = "#38bdf8"; ctx.fillRect(100, 130, 70, 35);
+                    drawArrow(ctx, 170, 140, 250, 140, "#22c55e", "v = 20m/s");
+                    drawArrow(ctx, 170, 160, 110, 160, "#ef4444", "a = -5m/s²");
+                }
+            },
+            {
+                id: 14, chapter: "Capítulo 2",
+                question: "Um carro acelera uniformemente a partir do repouso com aceleração de 3 m/s² ao longo de uma distância de 24 metros. Qual é a sua velocidade final?",
+                options: ["6,0 m/s", "12,0 m/s", "18,0 m/s", "72,0 m/s"],
+                correct: 1,
+                hint: "Utilize a Equação de Torricelli para o movimento com aceleração constante: \\\\(v^2 = v_0^2 + 2 a \\\\Delta x\\\\).",
+                explanation: "Como parte do repouso (v0 = 0):<br>\\\\(v^2 = 0^2 + 2(3)(24) = 144 \\\\implies v = \\\\sqrt{144} = 12,0 \\\\text{ m/s}\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    ctx.strokeStyle = "#475569"; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(40, 180); ctx.lineTo(440, 180); ctx.stroke();
+                    drawArrow(ctx, 60, 195, 380, 195, "#38bdf8", "Δx = 24 m");
+                }
+            },
+            {
+                id: 15, chapter: "Capítulo 2",
+                question: "Um objeto é abandonado do repouso do topo de um edifício de 19,6 metros de altura. Adotando g = 9,8 m/s², quanto tempo ele leva para atingir o solo?",
+                options: ["1,0 s", "2,0 s", "3,0 s", "4,0 s"],
+                correct: 1,
+                hint: "Em queda livre a partir do repouso: \\\\(h = \\\\frac{1}{2} g t^2 \\\\implies t = \\\\sqrt{\\\\frac{2h}{g}}\\\\).",
+                explanation: "Calculando o tempo de queda:<br>\\\\(t = \\\\sqrt{\\\\frac{2 \\\\times 19,6}{9,8}} = \\\\sqrt{4} = 2,0 \\\\text{ s}\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    ctx.fillStyle = "#334155"; ctx.fillRect(60, 40, 80, 160);
+                    ctx.fillStyle = "#eab308"; ctx.beginPath(); ctx.arc(170, 50, 12, 0, Math.PI*2); ctx.fill();
+                    drawArrow(ctx, 170, 50, 170, 180, "#ef4444", "h = 19,6 m");
+                }
+            },
+            {
+                id: 16, chapter: "Capítulo 2",
+                question: "Com que velocidade o mesmo objeto da questão anterior (abandonado do repouso a 19,6 m com g = 9,8 m/s²) atinge o solo?",
+                options: ["9,8 m/s", "19,6 m/s", "39,2 m/s", "4,9 m/s"],
+                correct: 1,
+                hint: "Use \\\\(v = g \\\\cdot t\\\\) ou a Equação de Torricelli em queda livre: \\\\(v = \\\\sqrt{2gh}\\\\).",
+                explanation: "Pela velocidade em queda livre:<br>\\\\(v = g \\\\cdot t = 9,8 \\\\times 2,0 = 19,6 \\\\text{ m/s}\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    ctx.fillStyle = "#eab308"; ctx.beginPath(); ctx.arc(240, 160, 12, 0, Math.PI*2); ctx.fill();
+                    drawArrow(ctx, 240, 160, 240, 220, "#22c55e", "v = 19,6 m/s");
+                }
+            },
+            {
+                id: 17, chapter: "Capítulo 2",
+                question: "Uma pedra é lançada verticalmente para cima com velocidade inicial v0 = 29,4 m/s. Adotando g = 9,8 m/s², qual a altura máxima atingida?",
+                options: ["14,7 m", "29,4 m", "44,1 m", "88,2 m"],
+                correct: 2,
+                hint: "No ponto mais alto a velocidade é nula (v = 0). Use \\\\(0 = v_0^2 - 2g H_{máx}\\\\).",
+                explanation: "1) \\\\(H_{máx} = \\\\frac{v_0^2}{2g}\\\\).<br>2) \\\\(H_{máx} = \\\\frac{29,4^2}{2 \\\\times 9,8} = \\\\frac{864,36}{19,6} = 44,1 \\\\text{ m}\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    drawArrow(ctx, 240, 200, 240, 40, "#38bdf8", "v0 = 29,4 m/s");
+                    ctx.fillStyle = "#ef4444"; ctx.fillText("H_máx = 44,1 m (v = 0)", 255, 45);
+                }
+            },
+            {
+                id: 18, chapter: "Capítulo 2",
+                question: "O gráfico da velocidade de um móvel em função do tempo é um triângulo de base t = 6 s e altura v = 20 m/s. Qual foi o deslocamento total percorrido?",
+                options: ["30,0 m", "60,0 m", "120,0 m", "10,0 m"],
+                correct: 1,
+                hint: "No gráfico velocidade vs tempo, a área sob a curva representa o deslocamento numericamente.",
+                explanation: "Área do triângulo:<br>\\\\(\\Delta x = \\\\frac{\\\\text{base} \\\\times \\\\text{altura}}{2} = \\\\frac{6 \\\\times 20}{2} = 60,0 \\\\text{ m}\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(60, 200); ctx.lineTo(420, 200); ctx.moveTo(60, 200); ctx.lineTo(60, 40); ctx.stroke();
+                    ctx.fillStyle = "rgba(56, 189, 248, 0.3)"; ctx.beginPath(); ctx.moveTo(60, 200); ctx.lineTo(360, 60); ctx.lineTo(360, 200); ctx.closePath(); ctx.fill();
+                    ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 3; ctx.stroke();
+                }
+            },
+            {
+                id: 19, chapter: "Capítulo 2",
+                question: "A posição de uma partícula ao longo do eixo x é x(t) = 2t³ - 5t + 3 (m). Qual é a velocidade instantânea v(t) no instante t = 2 s?",
+                options: ["7,0 m/s", "19,0 m/s", "24,0 m/s", "11,0 m/s"],
+                correct: 1,
+                hint: "A velocidade instantânea é a derivada temporal da posição: \\\\(v(t) = \\\\frac{dx}{dt}\\\\).",
+                explanation: "1) \\\\(v(t) = \\\\frac{d}{dt}(2t^3 - 5t + 3) = 6t^2 - 5\\\\).<br>2) Em \\\\(t = 2\\\\): \\\\(v(2) = 6(2)^2 - 5 = 24 - 5 = 19,0 \\\\text{ m/s}\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    ctx.strokeStyle = "#a855f7"; ctx.lineWidth = 3; ctx.beginPath();
+                    for(let t=0; t<=300; t+=5) {
+                        let x = 180 - (0.0001*t*t*t - 0.2*t);
+                        if(t===0) ctx.moveTo(80+t, x); else ctx.lineTo(80+t, x);
+                    }
+                    ctx.stroke();
+                }
+            },
+            {
+                id: 20, chapter: "Capítulo 2",
+                question: "A aceleração de uma partícula varia com o tempo conforme a(t) = 3t (m/s²). Se ela parte do repouso em t = 0, qual é sua velocidade em t = 4 s?",
+                options: ["12,0 m/s", "24,0 m/s", "36,0 m/s", "48,0 m/s"],
+                correct: 1,
+                hint: "A velocidade é a integral da aceleração no tempo: \\\\(v(t) = \\\\int_0^t a(t') dt'\\\\).",
+                explanation: "1) \\\\(v(t) = \\\\int_0^4 3t \\\\, dt = \\\\left[ \\\\frac{3t^2}{2} \\\\right]_0^4\\\\).<br>2) \\\\(v(4) = \\\\frac{3 \\\\times 16}{2} = 24,0 \\\\text{ m/s}\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    ctx.strokeStyle = "#eab308"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(60, 200); ctx.lineTo(360, 60); ctx.stroke();
+                }
+            },
+
+            // --- CAPÍTULO 3: MOVIMENTO EM DUAS E TRÊS DIMENSÕES (10 QUESTÕES) ---
+            {
+                id: 21, chapter: "Capítulo 3",
+                question: "A posição de um objeto em função do tempo é r(t) = (4t²) i + (3t) j (m). Qual é o vetor velocidade v(t) no instante t = 2 s?",
+                options: ["8 i + 3 j", "16 i + 3 j", "16 i + 6 j", "4 i + 3 j"],
+                correct: 1,
+                hint: "Derive cada componente do vetor posição em relação ao tempo: \\\\(v(t) = \\\\frac{dx}{dt}\\\\hat{i} + \\\\frac{dy}{dt}\\\\hat{j}\\\\).",
+                explanation: "1) \\\\(v_x = \\\\frac{d}{dt}(4t^2) = 8t\\\\) e \\\\(v_y = \\\\frac{d}{dt}(3t) = 3\\\\).<br>2) Para \\\\(t = 2\\\\text{ s}\\\\): \\\\(v(2) = 16\\\\hat{i} + 3\\\\hat{j} \\\\text{ m/s}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 3; ctx.beginPath();
-                    for(let x=40; x<=440; x+=5) {
-                        let y = 120 + 40*Math.sin((x-40)*0.03);
-                        if(x===40) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-                    }
-                    ctx.stroke();
-                    drawArrow(ctx, 145, 60, 355, 60, "#eab308", "λ = 0,78 m");
+                    ctx.moveTo(60, 200); ctx.quadraticCurveTo(200, 180, 380, 60); ctx.stroke();
+                    drawArrow(ctx, 220, 150, 340, 110, "#22c55e", "v = 16i + 3j");
                 }
             },
             {
-                id: 13, discipline: "Física 2", difficulty: "Fácil",
-                question: "Um gás ideal recebe 500 J de calor de uma fonte térmica e realiza 300 J de trabalho sobre o meio externo. Qual foi a variação da energia interna (ΔU) do gás?",
-                options: ["-200 J", "+200 J", "+800 J", "+1500 J"],
+                id: 22, chapter: "Capítulo 3",
+                question: "Um projétil é lançado com v0 = 50 m/s em um ângulo onde cos(37°) = 0,8 e sen(37°) = 0,6. Quais são as componentes v0x e v0y?",
+                options: ["v0x = 30 m/s; v0y = 40 m/s", "v0x = 40 m/s; v0y = 30 m/s", "v0x = 50 m/s; v0y = 30 m/s", "v0x = 40 m/s; v0y = 50 m/s"],
                 correct: 1,
-                hint: "Primeira Lei da Termodinâmica: \\\\(\\Delta U = Q - W\\\\).",
-                explanation: "Pela Primeira Lei da Termodinâmica:<br>\\\\(\\Delta U = Q - W = 500 \\\\text{ J} - 300 \\\\text{ J} = +200 \\\\text{ Joules}\\\\).",
+                hint: "Use \\\\(v_{0x} = v_0 \\\\cos(\\\\theta)\\\\), \\\\(v_{0y} = v_0 \\\\sen(\\\\theta)\\\\).",
+                explanation: "1) \\\\(v_{0x} = 50 \\\\times 0,8 = 40 \\\\text{ m/s}\\\\).<br>2) \\\\(v_{0y} = 50 \\\\times 0,6 = 30 \\\\text{ m/s}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
-                    ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 3; ctx.strokeRect(160, 60, 160, 120);
-                    ctx.fillStyle = "#ef4444"; ctx.fillRect(165, 80, 150, 20);
-                    drawArrow(ctx, 240, 210, 240, 170, "#ef4444", "Q = +500 J");
-                    drawArrow(ctx, 240, 70, 240, 30, "#22c55e", "W = 300 J");
+                    drawArrow(ctx, 60, 180, 300, 60, "#38bdf8", "v0 = 50 m/s");
+                    drawArrow(ctx, 60, 180, 252, 180, "#22c55e", "v0x = 40 m/s");
+                    drawArrow(ctx, 60, 180, 60, 84, "#eab308", "v0y = 30 m/s");
                 }
             },
             {
-                id: 14, discipline: "Física 2", difficulty: "Moderada",
-                question: "Um bloco de madeira de volume V = 0,02 m³ flutua na água (ρ = 1000 kg/m³) com 60% de seu volume submerso. Adotando g = 9,8 m/s², qual é a força de empuxo que a água exerce no bloco?",
-                options: ["58,8 N", "117,6 N", "196,0 N", "200,0 N"],
+                id: 23, chapter: "Capítulo 3",
+                question: "Para o projétil da questão anterior (v0y = 30 m/s com g = 9,8 m/s²), qual o tempo total de voo até retornar à mesma altura de lançamento?",
+                options: ["3,06 s", "6,12 s", "9,80 s", "12,24 s"],
                 correct: 1,
-                hint: "O empuxo é igual ao peso do fluido deslocado: \\\\(E = \\\\rho_{água} \\\\cdot V_{sub} \\\\cdot g\\\\), com \\\\(V_{sub} = 0,60 \\\\cdot V\\\\).",
-                explanation: "1) Volume submerso: \\\\(V_{sub} = 0,60 \\\\times 0,02 = 0,012 \\\\text{ m}^3\\\\).<br>2) Empuxo: \\\\(E = 1000 \\\\times 0,012 \\\\times 9,8 = 117,6 \\\\text{ N}\\\\).",
+                hint: "O tempo de voo é o dobro do tempo de subida: \\\\(t_{voo} = \\\\frac{2 v_{0y}}{g}\\\\).",
+                explanation: "Calculando o tempo total de voo:<br>\\\\(t_{voo} = \\\\frac{2 \\\\times 30}{9,8} = \\\\frac{60}{9,8} \\\\approx 6,12 \\\\text{ s}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
-                    ctx.fillStyle = "rgba(56, 189, 248, 0.4)"; ctx.fillRect(40, 120, 400, 90);
-                    ctx.fillStyle = "#eab308"; ctx.fillRect(190, 80, 100, 80);
-                    drawArrow(ctx, 240, 170, 240, 210, "#ef4444", "Peso");
-                    drawArrow(ctx, 240, 110, 240, 50, "#22c55e", "Empuxo E");
+                    ctx.strokeStyle = "#eab308"; ctx.setLineDash([5, 5]); ctx.lineWidth = 3;
+                    ctx.beginPath(); ctx.moveTo(60, 200); ctx.quadraticCurveTo(240, 40, 420, 200); ctx.stroke(); ctx.setLineDash([]);
+                    ctx.fillStyle = "#eab308"; ctx.fillText("t_voo = 6,12 s", 200, 215);
                 }
             },
             {
-                id: 15, discipline: "Física 2", difficulty: "Moderada",
-                question: "Água escoa por um tubo horizontal. Na seção 1, o raio é R1 = 4 cm e a velocidade é v1 = 2 m/s. Na seção 2, o raio reduz para R2 = 2 cm. Qual é a velocidade v2 do escoamento na seção 2?",
-                options: ["4,0 m/s", "8,0 m/s", "16,0 m/s", "32,0 m/s"],
+                id: 24, chapter: "Capítulo 3",
+                question: "Qual é o alcance horizontal máximo R percorrido pelo projétil das questões anteriores (v0x = 40 m/s e t_voo = 6,12 s)?",
+                options: ["122,4 m", "244,9 m", "300,0 m", "400,0 m"],
                 correct: 1,
-                hint: "Equação da Continuidade para fluido incompressível: \\\\(A_1 v_1 = A_2 v_2 \\\\implies R_1^2 v_1 = R_2^2 v_2\\\\).",
-                explanation: "Pela Equação da Continuidade:<br>\\\\(\\pi R_1^2 v_1 = \\\\pi R_2^2 v_2 \\\\implies (4)^2 \\\\times 2 = (2)^2 \\\\times v_2 \\\\implies 16 \\\\times 2 = 4 v_2 \\\\implies v_2 = 8,0 \\\\text{ m/s}\\\\).",
+                hint: "No eixo horizontal o movimento é uniforme: \\\\(R = v_{0x} \\\\cdot t_{voo}\\\\).",
+                explanation: "Calculando o alcance horizontal:<br>\\\\(R = 40 \\\\text{ m/s} \\\\times 6,122 \\\\text{ s} \\\\approx 244,9 \\\\text{ m}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
-                    ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 4; ctx.beginPath();
-                    ctx.moveTo(40, 60); ctx.lineTo(240, 60); ctx.lineTo(440, 90);
-                    ctx.moveTo(40, 180); ctx.lineTo(240, 180); ctx.lineTo(440, 150); ctx.stroke();
-                    drawArrow(ctx, 80, 120, 150, 120, "#38bdf8", "v1 = 2 m/s");
-                    drawArrow(ctx, 320, 120, 410, 120, "#22c55e", "v2 = 8 m/s");
-                }
-            },
-            {
-                id: 16, discipline: "Física 2", difficulty: "Moderada",
-                question: "Uma ambulância com sirene de 800 Hz aproxima-se de um observador parado com velocidade de 34 m/s. Considerando a velocidade do som no ar igual a 340 m/s, qual a frequência percebida pelo observador?",
-                options: ["720,0 Hz", "800,0 Hz", "888,9 Hz", "900,0 Hz"],
-                correct: 2,
-                hint: "Fórmula do Efeito Doppler para fonte se aproximando: \\\\(f_{obs} = f_{fonte} \\\\cdot \\\\frac{v_{som}}{v_{som} - v_{fonte}}\\\\).",
-                explanation: "Aplicação direta da fórmula do Efeito Doppler com fonte em aproximação:<br>\\\\(f_{obs} = 800 \\\\times \\\\frac{340}{340 - 34} = 800 \\\\times \\\\frac{340}{306} = 800 \\\\times 1,1111 \\\\approx 888,9 \\\\text{ Hz}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    ctx.fillStyle = "#ef4444"; ctx.fillRect(80, 130, 80, 40);
                     ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2;
-                    for(let r=30; r<=120; r+=20) { ctx.beginPath(); ctx.arc(160, 150, r, -Math.PI*0.4, Math.PI*0.4); ctx.stroke(); }
-                    ctx.fillStyle = "#22c55e"; ctx.beginPath(); ctx.arc(380, 150, 12, 0, Math.PI*2); ctx.fill();
+                    ctx.beginPath(); ctx.moveTo(60, 180); ctx.quadraticCurveTo(240, 40, 420, 180); ctx.stroke();
+                    drawArrow(ctx, 60, 200, 420, 200, "#22c55e", "Alcance R = 244,9 m");
                 }
             },
             {
-                id: 17, discipline: "Física 2", difficulty: "Moderada",
-                question: "Uma máquina térmica de Carnot opera entre uma fonte quente a 500 K e uma fonte fria a 300 K. Se em cada ciclo ela absorve 1000 J da fonte quente, qual é o trabalho útil realizado por ciclo?",
-                options: ["300 J", "400 J", "500 J", "600 J"],
+                id: 25, chapter: "Capítulo 3",
+                question: "Uma esfera abandona uma mesa horizontal a 5 m/s. Sabendo que a altura da mesa é h = 1,96 m e g = 9,8 m/s², a que distância horizontal do pé da mesa ela atinge o chão?",
+                options: ["2,20 m", "3,16 m", "5,00 m", "9,80 m"],
                 correct: 1,
-                hint: "O rendimento de Carnot é \\\\(\\eta = 1 - \\\\frac{T_F}{T_Q}\\\\). O trabalho é \\\\(W = \\\\eta \\\\cdot Q_Q\\\\).",
-                explanation: "1) Rendimento máximo de Carnot: \\\\(\\eta = 1 - \\\\frac{300}{500} = 0,40\\\\) (40%).<br>2) Trabalho útil: \\\\(W = \\\\eta \\\\cdot Q_Q = 0,40 \\\\times 1000 \\\\text{ J} = 400 \\\\text{ Joules}\\\\).",
+                hint: "1) Tempo de queda vertical: \\\\(t = \\\\sqrt{2h/g}\\\\). 2) Distância horizontal: \\\\(x = v_x \\\\cdot t\\\\).",
+                explanation: "1) \\\\(t = \\\\sqrt{\\\\frac{2 \\\\times 1,96}{9,8}} = \\\\sqrt{0,4} \\\\approx 0,6325 \\\\text{ s}\\\\).<br>2) \\\\(x = 5 \\\\times 0,6325 \\\\approx 3,16 \\\\text{ m}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
-                    ctx.fillStyle = "#ef4444"; ctx.fillRect(180, 30, 120, 40); ctx.fillStyle="#fff"; ctx.fillText("Fonte Quente 500K", 185, 55);
-                    ctx.strokeStyle = "#eab308"; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(240, 120, 30, 0, Math.PI*2); ctx.stroke();
-                    ctx.fillStyle = "#38bdf8"; ctx.fillRect(180, 170, 120, 40); ctx.fillStyle="#fff"; ctx.fillText("Fonte Fria 300K", 195, 195);
-                    drawArrow(ctx, 240, 70, 240, 90, "#ef4444", "Q_Q = 1000J");
-                    drawArrow(ctx, 270, 120, 340, 120, "#22c55e", "W = 400J");
+                    ctx.fillStyle = "#334155"; ctx.fillRect(40, 100, 120, 100);
+                    ctx.strokeStyle = "#eab308"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(160, 100); ctx.quadraticCurveTo(260, 100, 360, 200); ctx.stroke();
                 }
             },
             {
-                id: 18, discipline: "Física 2", difficulty: "Difícil",
-                question: "Um gás ideal diatômico (γ = 1,4) expande-se de forma adiabática e reversível de V1 = 1 L e T1 = 400 K até V2 = 32 L. Qual é a temperatura final T2 do gás?",
-                options: ["100 K", "200 K", "250 K", "300 K"],
-                correct: 0,
-                hint: "Em uma expansão adiabática reversível: \\\\(T_1 V_1^{\\\\gamma - 1} = T_2 V_2^{\\\\gamma - 1}\\\\). Note que \\\\(\\gamma - 1 = 0,4 = 2/5\\\\).",
-                explanation: "Isolando \\\\(T_2\\\\):<br>\\\\(T_2 = T_1 \\\\left(\\\\frac{V_1}{V_2}\\\\right)^{\\\\gamma - 1} = 400 \\\\times \\\\left(\\\\frac{1}{32}\\\\right)^{0,4}\\\\)<br>Como \\\\(32 = 2^5\\\\), temos \\\\((32)^{-0,4} = (2^5)^{-0,4} = 2^{-2} = \\\\frac{1}{4}\\\\).<br>Logo, \\\\(T_2 = 400 \\\\times \\\\frac{1}{4} = 100 \\\\text{ K}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 2;
-                    ctx.beginPath(); ctx.moveTo(60, 20); ctx.lineTo(60, 200); ctx.lineTo(440, 200); ctx.stroke();
-                    ctx.strokeStyle = "#a855f7"; ctx.lineWidth = 3; ctx.beginPath();
-                    ctx.moveTo(90, 40); ctx.quadraticCurveTo(150, 160, 380, 180); ctx.stroke();
-                }
-            },
-            {
-                id: 19, discipline: "Física 2", difficulty: "Difícil",
-                question: "Um tubo sonoro de comprimento L = 0,85 m é fechado em uma extremidade e aberto na outra. Considerando a velocidade do som no ar v = 340 m/s, qual a frequência do terceiro harmônico (n = 3)?",
-                options: ["100 Hz", "200 Hz", "300 Hz", "400 Hz"],
+                id: 26, chapter: "Capítulo 3",
+                question: "Uma partícula realiza movimento circular uniforme (MCU) em raio R = 2 m com velocidade constante v = 6 m/s. Qual a intensidade da aceleração centrípeta ac?",
+                options: ["3,0 m/s²", "12,0 m/s²", "18,0 m/s²", "36,0 m/s²"],
                 correct: 2,
-                hint: "Para tubos fechados em uma extremidade, os harmônicos permitidos são ímpares com frequência \\\\(f_n = \\\\frac{n \\\\cdot v}{4L}\\\\).",
-                explanation: "Para o terceiro harmônico (n = 3):<br>\\\\(f_3 = \\\\frac{3 \\\\cdot v}{4L} = \\\\frac{3 \\\\times 340}{4 \\\\times 0,85} = \\\\frac{1020}{3,4} = 300 \\\\text{ Hz}\\\\).",
+                hint: "A aceleração centrípeta aponta para o centro e possui módulo \\\\(a_c = \\\\frac{v^2}{R}\\\\).",
+                explanation: "Calculando a aceleração centrípeta:<br>\\\\(a_c = \\\\frac{6^2}{2} = \\\\frac{36}{2} = 18,0 \\\\text{ m/s}^2\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
-                    ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 3;
-                    ctx.beginPath(); ctx.moveTo(60, 80); ctx.lineTo(380, 80); ctx.lineTo(380, 160); ctx.lineTo(60, 160); ctx.stroke();
-                    ctx.strokeStyle = "#eab308"; ctx.lineWidth = 2; ctx.beginPath();
-                    ctx.moveTo(380, 120); ctx.quadraticCurveTo(280, 70, 220, 120); ctx.quadraticCurveTo(160, 170, 60, 80); ctx.stroke();
+                    ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(240, 120, 70, 0, Math.PI*2); ctx.stroke();
+                    drawArrow(ctx, 240, 50, 310, 50, "#22c55e", "v = 6m/s");
+                    drawArrow(ctx, 240, 50, 240, 105, "#ef4444", "ac = 18m/s²");
                 }
             },
             {
-                id: 20, discipline: "Física 2", difficulty: "Difícil",
-                question: "Um bloco de gelo de 0,5 kg a 0°C (273 K) funde-se completamente transformando-se em água a 0°C. Com Lf = 3,34 x 10⁵ J/kg, qual a variação de entropia ΔS do gelo durante a fusão?",
-                options: ["0 J/K", "611,7 J/K", "1223,4 J/K", "167.000 J/K"],
-                correct: 1,
-                hint: "Para uma transição de fase isotérmica, a variação de entropia é \\\\(\\Delta S = \\\\frac{Q}{T} = \\\\frac{m \\\\cdot L_f}{T}\\\\).",
-                explanation: "1) Calor absorvido: \\\\(Q = m \\\\cdot L_f = 0,5 \\\\text{ kg} \\\\times 3,34 \\\\times 10^5 \\\\text{ J/kg} = 1,67 \\\\times 10^5 \\\\text{ J}\\\\).<br>2) Variação de Entropia: \\\\(\\Delta S = \\\\frac{Q}{T} = \\\\frac{1,67 \\\\times 10^5 \\\\text{ J}}{273 \\\\text{ K}} \\\\approx 611,72 \\\\text{ J/K}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    ctx.fillStyle = "rgba(56, 189, 248, 0.6)"; ctx.fillRect(180, 90, 80, 80);
-                    ctx.fillStyle = "#22c55e"; ctx.font = "16px sans-serif"; ctx.fillText("T = 273 K (constante)", 150, 60);
-                }
-            },
-
-            // --- FÍSICA 3 ---
-            {
-                id: 21, discipline: "Física 3", difficulty: "Fácil",
-                question: "Duas cargas puntiformes q1 = +2 μC e q2 = +3 μC estão separadas no vácuo por uma distância de 0,3 metros. Qual é a força elétrica repulsiva entre elas? (k0 = 9 x 10⁹ N·m²/C²)",
-                options: ["0,3 N", "0,6 N", "1,8 N", "6,0 N"],
-                correct: 1,
-                hint: "Lei de Coulomb: \\\\(F = k_0 \\\\frac{|q_1 q_2|}{r^2}\\\\). Lembre-se de converter \\\\(\\mu C\\\\) para \\\\(10^{-6} C\\\\).",
-                explanation: "Pela Lei de Coulomb:<br>\\\\(F = 9 \\\\times 10^9 \\\\times \\\\frac{(2 \\\\times 10^{-6}) \\\\times (3 \\\\times 10^{-6})}{(0,3)^2} = 9 \\\\times 10^9 \\\\times \\\\frac{6 \\\\times 10^{-12}}{0,09} = 0,6 \\\\text{ N}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    ctx.fillStyle = "#ef4444"; ctx.beginPath(); ctx.arc(140, 120, 20, 0, Math.PI*2); ctx.fill(); ctx.fillStyle="#fff"; ctx.fillText("+q1", 130, 125);
-                    ctx.fillStyle = "#ef4444"; ctx.beginPath(); ctx.arc(340, 120, 20, 0, Math.PI*2); ctx.fill(); ctx.fillStyle="#fff"; ctx.fillText("+q2", 330, 125);
-                    drawArrow(ctx, 120, 120, 60, 120, "#22c55e", "F");
-                    drawArrow(ctx, 360, 120, 420, 120, "#22c55e", "F");
-                }
-            },
-            {
-                id: 22, discipline: "Física 3", difficulty: "Fácil",
-                question: "Um resistor de resistência R = 12 Ω é submetido a uma diferença de potencial de 36 V. Qual é a corrente elétrica que atravessa o resistor?",
-                options: ["0,33 A", "3,0 A", "24,0 A", "432,0 A"],
-                correct: 1,
-                hint: "Primeira Lei de Ohm: \\\\(U = R \\\\cdot I \\\\implies I = \\\\frac{U}{R}\\\\).",
-                explanation: "Pela Lei de Ohm:<br>\\\\(I = \\\\frac{U}{R} = \\\\frac{36 \\\\text{ V}}{12 \\\\text{ }\\\\Omega} = 3,0 \\\\text{ A}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 3; ctx.strokeRect(100, 50, 280, 140);
-                    ctx.fillStyle = "#0f172a"; ctx.fillRect(200, 40, 80, 20);
-                    ctx.strokeStyle = "#eab308"; ctx.lineWidth = 4; ctx.strokeRect(200, 40, 80, 20);
-                    ctx.fillStyle = "#eab308"; ctx.fillText("R = 12 Ω", 210, 30);
-                }
-            },
-            {
-                id: 23, discipline: "Física 3", difficulty: "Fácil",
-                question: "Um feixe de luz viaja no vácuo (c = 3 x 10⁸ m/s) e incide em um meio transparente com índice de refração n = 1,5. Qual é a velocidade da luz nesse meio?",
-                options: ["1,5 x 10⁸ m/s", "2,0 x 10⁸ m/s", "3,0 x 10⁸ m/s", "4,5 x 10⁸ m/s"],
-                correct: 1,
-                hint: "Definição do índice de refração: \\\\(n = \\\\frac{c}{v} \\\\implies v = \\\\frac{c}{n}\\\\).",
-                explanation: "Calculando a velocidade no meio:<br>\\\\(v = \\\\frac{c}{n} = \\\\frac{3 \\\\times 10^8 \\\\text{ m/s}}{1,5} = 2,0 \\\\times 10^8 \\\\text{ m/s}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    ctx.fillStyle = "rgba(56, 189, 248, 0.2)"; ctx.fillRect(40, 120, 400, 100);
-                    ctx.strokeStyle = "#475569"; ctx.beginPath(); ctx.moveTo(40, 120); ctx.lineTo(440, 120); ctx.stroke();
-                    ctx.strokeStyle = "#eab308"; ctx.lineWidth = 3;
-                    ctx.beginPath(); ctx.moveTo(140, 40); ctx.lineTo(240, 120); ctx.lineTo(300, 210); ctx.stroke();
-                }
-            },
-            {
-                id: 24, discipline: "Física 3", difficulty: "Moderada",
-                question: "Qual é a intensidade do campo elétrico gerado por uma carga puntual Q = 4 μC a uma distância de r = 2 metros no vácuo? (k0 = 9 x 10⁹ N·m²/C²)",
-                options: ["4.500 N/C", "9.000 N/C", "18.000 N/C", "36.000 N/C"],
-                correct: 1,
-                hint: "Fórmula do campo elétrico de carga puntiforme: \\\\(E = k_0 \\\\frac{|Q|}{r^2}\\\\).",
-                explanation: "Substituindo os valores:<br>\\\\(E = 9 \\\\times 10^9 \\\\times \\\\frac{4 \\\\times 10^{-6}}{2^2} = 9 \\\\times 10^9 \\\\times \\\\frac{4 \\\\times 10^{-6}}{4} = 9.000 \\\\text{ N/C}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    ctx.fillStyle = "#ef4444"; ctx.beginPath(); ctx.arc(180, 120, 18, 0, Math.PI*2); ctx.fill();
-                    drawArrow(ctx, 180, 120, 340, 120, "#38bdf8", "E = 9000 N/C");
-                }
-            },
-            {
-                id: 25, discipline: "Física 3", difficulty: "Moderada",
-                question: "Dois resistores de R1 = 6 Ω e R2 = 12 Ω estão associados em paralelo sob uma tensão constante de 24 V. Qual é a corrente total fornecida pela fonte?",
-                options: ["2,0 A", "4,0 A", "6,0 A", "18,0 A"],
-                correct: 2,
-                hint: "Calcule a resistência equivalente em paralelo: \\\\(R_{eq} = \\\\frac{R_1 \\\\cdot R_2}{R_1 + R_2}\\\\), e depois use \\\\(I_{tot} = \\\\frac{U}{R_{eq}}\\\\).",
-                explanation: "1) Resistência equivalente: \\\\(R_{eq} = \\\\frac{6 \\\\times 12}{6 + 12} = \\\\frac{72}{18} = 4 \\\\text{ }\\\\Omega\\\\).<br>2) Corrente total: \\\\(I_{tot} = \\\\frac{U}{R_{eq}} = \\\\frac{24 \\\\text{ V}}{4 \\\\text{ }\\\\Omega} = 6,0 \\\\text{ A}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 3;
-                    ctx.strokeRect(80, 50, 320, 140);
-                    ctx.beginPath(); ctx.moveTo(240, 50); ctx.lineTo(240, 190); ctx.stroke();
-                }
-            },
-            {
-                id: 26, discipline: "Física 3", difficulty: "Moderada",
-                question: "Uma partícula com carga q = +5 μC penetra perpendicularmente (θ = 90°) em um campo magnético B = 0,4 T com velocidade v = 2 x 10⁵ m/s. Qual o módulo da força magnética sobre ela?",
-                options: ["0,1 N", "0,4 N", "2,0 N", "4,0 N"],
-                correct: 1,
-                hint: "Força magnética de Lorentz: \\\\(F_m = |q| \\\\cdot v \\\\cdot B \\\\cdot \\\\sen(\\\\theta)\\\\).",
-                explanation: "Como \\\\(\\sen(90^\\\\circ) = 1\\\\):<br>\\\\(F_m = (5 \\\\times 10^{-6}) \\\\times (2 \\\\times 10^5) \\\\times 0,4 \\\\times 1 = 1,0 \\\\times 0,4 = 0,4 \\\\text{ N}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    ctx.fillStyle = "#475569"; ctx.font = "20px sans-serif";
-                    for(let x=200; x<=400; x+=50) for(let y=50; y<=190; y+=50) ctx.fillText("✕", x, y);
-                    ctx.fillStyle = "#ef4444"; ctx.beginPath(); ctx.arc(100, 120, 15, 0, Math.PI*2); ctx.fill();
-                    drawArrow(ctx, 100, 120, 220, 120, "#22c55e", "v");
-                }
-            },
-            {
-                id: 27, discipline: "Física 3", difficulty: "Moderada",
-                question: "Uma carga pontual de Q = 8,85 x 10⁻⁹ C está no centro de uma superfície esférica. Com ε0 = 8,85 x 10⁻¹² C²/(N·m²), qual é o fluxo elétrico total ΦE através da esfera?",
-                options: ["100 N·m²/C", "1.000 N·m²/C", "8.850 N·m²/C", "Zero"],
-                correct: 1,
-                hint: "Lei de Gauss: O fluxo elétrico total através de qualquer superfície fechada é \\\\(\\Phi_E = \\\\frac{Q_{enc}}{\\\\varepsilon_0}\\\\).",
-                explanation: "Pela Lei de Gauss:<br>\\\\(\\Phi_E = \\\\frac{Q}{\\\\varepsilon_0} = \\\\frac{8,85 \\\\times 10^{-9}}{8,85 \\\\times 10^{-12}} = 10^3 = 1.000 \\\\text{ N}\\\\cdot\\\\text{m}^2/\\\\text{C}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    ctx.strokeStyle = "#38bdf8"; ctx.setLineDash([5, 5]); ctx.lineWidth = 3;
-                    ctx.beginPath(); ctx.arc(240, 120, 80, 0, Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
-                    ctx.fillStyle = "#ef4444"; ctx.beginPath(); ctx.arc(240, 120, 12, 0, Math.PI*2); ctx.fill();
-                }
-            },
-            {
-                id: 28, discipline: "Física 3", difficulty: "Difícil",
-                question: "Uma espira circular de raio r = 0,1 m (Área A ≈ 0,0314 m²) está perpendicular a um campo magnético que varia de 0,2 T para 1,0 T em Δt = 0,05 s. Qual a fem inducida ε na espira?",
-                options: ["0,10 V", "0,50 V", "1,00 V", "2,00 V"],
-                correct: 1,
-                hint: "Lei de Faraday-Lenz: \\\\(\\varepsilon = \\\\left| \\\\frac{\\\\Delta \\\\Phi_B}{\\\\Delta t} \\\\right| = A \\\\cdot \\\\frac{\\\\Delta B}{\\\\Delta t}\\\\).",
-                explanation: "1) Variação do campo magnético: \\\\(\\Delta B = 1,0 - 0,2 = 0,8 \\\\text{ T}\\\\).<br>2) Variação de fluxo: \\\\(\\Delta \\\\Phi_B = A \\\\cdot \\\\Delta B = 0,0314 \\\\times 0,8 = 0,02512 \\\\text{ Wb}\\\\).<br>3) Força eletromotriz: \\\\(\\varepsilon = \\\\frac{0,02512}{0,05} \\\\approx 0,5024 \\\\text{ V} \\\\approx 0,50 \\\\text{ V}\\\\).",
-                drawCanvas: (ctx) => {
-                    ctx.clearRect(0, 0, 480, 240);
-                    ctx.strokeStyle = "#eab308"; ctx.lineWidth = 4;
-                    ctx.beginPath(); ctx.arc(240, 120, 60, 0, Math.PI*2); ctx.stroke();
-                }
-            },
-            {
-                id: 29, discipline: "Física 3", difficulty: "Difícil",
-                question: "Um capacitor C = 50 μF é ligado em série com um resistor R = 20 kΩ (20.000 Ω) e uma bateria ideal de 12 V. Qual é a constante de tempo τ do circuito e a carga máxima final no capacitor?",
-                options: ["τ = 1,0 s; Q = 600 μC", "τ = 0,5 s; Q = 300 μC", "τ = 2,0 s; Q = 1200 μC", "τ = 10,0 s; Q = 60 μC"],
+                id: 27, chapter: "Capítulo 3",
+                question: "Um disco gira em movimento circular uniforme efetuando 120 rotações por minuto (120 rpm). Qual é o período T de uma rotação em segundos?",
+                options: ["0,5 s", "1,0 s", "2,0 s", "60,0 s"],
                 correct: 0,
-                hint: "Constante de tempo \\\\(\\tau = R \\\\cdot C\\\\) e carga máxima \\\\(Q = C \\\\cdot U\\\\).",
-                explanation: "1) Constante de tempo: \\\\(\\tau = (20.000 \\\\text{ }\\\\Omega) \\\\times (50 \\\\times 10^{-6} \\\\text{ F}) = 1,0 \\\\text{ s}\\\\).<br>2) Carga máxima: \\\\(Q_{máx} = (50 \\\\times 10^{-6} \\\\text{ F}) \\\\times 12 \\\\text{ V} = 600 \\\\times 10^{-6} \\\\text{ C} = 600 \\\\mu \\\\text{C}\\\\).",
+                hint: "Converta a frequência para Hz dividindo rpm por 60. O período é o inverso da frequência: \\\\(T = 1/f\\\\).",
+                explanation: "1) \\\\(f = \\\\frac{120}{60} = 2 \\\\text{ Hz}\\\\).<br>2) \\\\(T = \\\\frac{1}{f} = \\\\frac{1}{2} = 0,5 \\\\text{ s}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
-                    ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 3; ctx.strokeRect(100, 50, 280, 140);
-                    ctx.fillStyle = "#0f172a"; ctx.fillRect(370, 100, 20, 40);
-                    ctx.strokeStyle = "#38bdf8"; ctx.beginPath(); ctx.moveTo(375, 100); ctx.lineTo(375, 140); ctx.moveTo(385, 100); ctx.lineTo(385, 140); ctx.stroke();
+                    ctx.strokeStyle = "#eab308"; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(240, 120, 60, 0, Math.PI*2); ctx.stroke();
+                    ctx.fillStyle = "#eab308"; ctx.fillText("120 rpm -> T = 0,5 s", 175, 125);
                 }
             },
             {
-                id: 30, discipline: "Física 3", difficulty: "Difícil",
-                question: "Um objeto de 4 cm de altura é colocado a 30 cm de uma lente convergente de distância focal f = 20 cm. Onde se forma a imagem e qual é a sua altura?",
-                options: ["p' = 60 cm, imagem invertida de 8 cm", "p' = 30 cm, imagem direita de 4 cm", "p' = 12 cm, imagem invertida de 2 cm", "p' = -60 cm, imagem virtual de 12 cm"],
-                correct: 0,
-                hint: "Equação de Gauss: \\\\(\\frac{1}{f} = \\\\frac{1}{p} + \\\\frac{1}{p'}\\\\). Ampliação lateral: \\\\(m = -\\\\frac{p'}{p} = \\\\frac{i}{o}\\\\).",
-                explanation: "1) Posição da imagem (Gauss):<br>\\\\(\\frac{1}{20} = \\\\frac{1}{30} + \\\\frac{1}{p'} \\\\implies \\\\frac{1}{p'} = \\\\frac{1}{20} - \\\\frac{1}{30} = \\\\frac{1}{60} \\\\implies p' = 60 \\\\text{ cm}\\\\).<br>2) Altura da imagem:<br>\\\\(m = -\\\\frac{60}{30} = -2 \\\\implies i = m \\\\cdot o = -2 \\\\times 4 = -8 \\\\text{ cm}\\\\).<br>Imagem real, invertida e com 8 cm de altura.",
+                id: 28, chapter: "Capítulo 3",
+                question: "Um carro em pista circular (R = 50 m) aumenta sua velocidade com taxa tangencial at = 3 m/s². Quando sua velocidade é v = 10 m/s, qual o módulo de sua aceleração resultante?",
+                options: ["2,00 m/s²", "3,61 m/s²", "5,00 m/s²", "6,00 m/s²"],
+                correct: 1,
+                hint: "1) \\\\(a_c = v^2/R\\\\). 2) Como \\\\(a_t\\\\) e \\\\(a_c\\\\) são perpendiculares: \\\\(a = \\\\sqrt{a_t^2 + a_c^2}\\\\).",
+                explanation: "1) \\\\(a_c = \\\\frac{10^2}{50} = 2,0 \\\\text{ m/s}^2\\\\).<br>2) \\\\(a = \\\\sqrt{3^2 + 2^2} = \\\\sqrt{13} \\\\approx 3,61 \\\\text{ m/s}^2\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
-                    ctx.strokeStyle = "#475569"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(20, 120); ctx.lineTo(460, 120); ctx.stroke();
-                    ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(240, 40); ctx.lineTo(240, 200); ctx.stroke();
-                    drawArrow(ctx, 120, 120, 120, 60, "#22c55e", "Objeto");
-                    drawArrow(ctx, 380, 120, 380, 210, "#ef4444", "Imagem");
+                    drawArrow(ctx, 200, 160, 320, 160, "#22c55e", "at = 3");
+                    drawArrow(ctx, 200, 160, 200, 80, "#ef4444", "ac = 2");
+                    drawArrow(ctx, 200, 160, 320, 80, "#38bdf8", "a = 3,61");
+                }
+            },
+            {
+                id: 29, chapter: "Capítulo 3",
+                question: "O barco A navega a 15 km/h para o Leste em relação à margem, e o barco B a 20 km/h para o Oeste. Qual é a velocidade do barco B em relação ao barco A?",
+                options: ["5 km/h para o Oeste", "35 km/h para o Oeste", "35 km/h para o Leste", "5 km/h para o Leste"],
+                correct: 1,
+                hint: "Defina um sentido positivo (ex: Leste = +). A velocidade relativa é \\\\(v_{B/A} = v_B - v_A\\\\).",
+                explanation: "1) \\\\(v_A = +15 \\\\text{ km/h}\\\\), \\\\(v_B = -20 \\\\text{ km/h}\\\\).<br>2) \\\\(v_{B/A} = -20 - 15 = -35 \\\\text{ km/h}\\\\), ou seja, 35 km/h para o Oeste.",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    drawArrow(ctx, 160, 100, 300, 100, "#38bdf8", "Barco A (15 km/h Leste)");
+                    drawArrow(ctx, 320, 160, 140, 160, "#ef4444", "Barco B (20 km/h Oeste)");
+                }
+            },
+            {
+                id: 30, chapter: "Capítulo 3",
+                question: "Um barco navega perpendicularmente à correnteza a 4 m/s em relação à água. A correnteza do rio corre a 3 m/s em relação às margens. Qual a velocidade do barco em relação à margem?",
+                options: ["1,0 m/s", "5,0 m/s", "7,0 m/s", "12,0 m/s"],
+                correct: 1,
+                hint: "Os vetores velocidade são perpendiculares. Use o Teorema de Pitágoras: \\\\(v = \\\\sqrt{v_{barco}^2 + v_{rio}^2}\\\\).",
+                explanation: "Calculando a velocidade resultante:<br>\\\\(v_{margem} = \\\\sqrt{4^2 + 3^2} = \\\\sqrt{16 + 9} = \\\\sqrt{25} = 5,0 \\\\text{ m/s}\\\\).",
+                drawCanvas: (ctx) => {
+                    ctx.clearRect(0, 0, 480, 240);
+                    ctx.fillStyle = "rgba(56, 189, 248, 0.2)"; ctx.fillRect(40, 40, 400, 160);
+                    drawArrow(ctx, 100, 180, 100, 60, "#38bdf8", "v_barco = 4");
+                    drawArrow(ctx, 100, 180, 220, 180, "#eab308", "v_rio = 3");
+                    drawArrow(ctx, 100, 180, 220, 60, "#22c55e", "v_resultante = 5 m/s");
                 }
             }
         ];
 
         // Estado da Aplicação
-        let activeDiscipline = "todas";
+        let activeChapter = "todos";
         let filteredQuestions = [...questionsBank];
         let currentIndex = 0;
         let score = 0;
@@ -1082,7 +1018,7 @@ html_content = """<!DOCTYPE html>
 
         function filterQuestions() {
             filteredQuestions = questionsBank.filter(q => {
-                return (activeDiscipline === "todas" || q.discipline === activeDiscipline);
+                return (activeChapter === "todos" || q.chapter === activeChapter);
             });
             currentIndex = 0;
             score = 0;
@@ -1098,10 +1034,10 @@ html_content = """<!DOCTYPE html>
             renderQuestion();
         }
 
-        function setDiscipline(disc) {
-            activeDiscipline = disc;
+        function setChapter(chap) {
+            activeChapter = chap;
             document.querySelectorAll('.filter-group')[0].querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.innerText.includes(disc) || (disc==='todas' && btn.innerText==='Todas'));
+                btn.classList.toggle('active', btn.innerText.includes(chap) || (chap==='todos' && btn.innerText==='Todos'));
             });
             filterQuestions();
         }
@@ -1126,9 +1062,9 @@ html_content = """<!DOCTYPE html>
             document.getElementById("progressBar").style.width = `${progressPercent}%`;
 
             // Badges
-            const discBadge = document.getElementById("discBadge");
-            discBadge.innerText = q.discipline;
-            discBadge.className = `badge badge-${q.discipline.toLowerCase().replace(' ', '')}`;
+            const chapBadge = document.getElementById("chapBadge");
+            chapBadge.innerText = q.chapter;
+            chapBadge.className = `badge badge-${q.chapter.toLowerCase().replace(' ', '')}`;
 
             // Canvas
             const canvas = document.getElementById("physicsCanvas");
