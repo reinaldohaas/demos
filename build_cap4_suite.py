@@ -1,0 +1,515 @@
+import os
+
+cap4_dir = r"C:\Users\haas\github\demos\fisica-1\capitulo-4"
+os.makedirs(cap4_dir, exist_ok=True)
+
+# -------------------------------------------------------------
+# 1. APRESENTAÇÃO DO CAPÍTULO 4 (apresentacao.html)
+# -------------------------------------------------------------
+apresentacao_html = """<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apresentação Capítulo 4: Leis de Newton | FSC5101</title>
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070a12;
+            --bg-card: rgba(15, 23, 42, 0.92);
+            --bg-card-border: rgba(56, 189, 248, 0.25);
+            --accent-cyan: #38bdf8;
+            --accent-purple: #a855f7;
+            --accent-gold: #fbbf24;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-sub: #cbd5e1;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            padding: 15px 30px;
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid var(--bg-card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 6px 14px;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 8px;
+        }
+
+        .slide-stage {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            max-width: 1100px;
+            height: 100%;
+            max-height: 650px;
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .slide.full-width {
+            display: none;
+        }
+        .slide.full-width.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .slide-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent-cyan);
+            margin-bottom: 15px;
+            grid-column: 1 / -1;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .slide-content {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-sub);
+        }
+
+        .slide-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .slide-content li {
+            margin-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--accent-cyan);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: #ffffff;
+        }
+
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #0f172a;
+            border: 1px solid var(--bg-card-border);
+            border-radius: 14px;
+            padding: 15px;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        footer {
+            padding: 15px 30px;
+            background: rgba(15, 23, 42, 0.95);
+            border-top: 1px solid var(--bg-card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slide-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .ctrl-btn {
+            background: var(--accent-cyan);
+            color: #070a12;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .ctrl-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
+        }
+
+        .ctrl-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .progress-indicator {
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        @media (max-width: 900px) {
+            .slide.active { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fa-solid fa-scale-balanced"></i> Capítulo 4: Leis de Newton do Movimento</h1>
+        <div class="nav-links">
+            <a href="index.html"><i class="fa-solid fa-list"></i> Ver Exercícios do Cap 4</a>
+        </div>
+    </header>
+
+    <div class="slide-stage">
+
+        <!-- SLIDE 1: Capa -->
+        <div class="slide full-width active">
+            <h2 style="font-family:'Outfit', sans-serif; font-size: 3rem; color: var(--accent-cyan); margin-bottom: 20px;">
+                <i class="fa-solid fa-atom"></i> Leis de Newton do Movimento
+            </h2>
+            <p style="font-size: 1.4rem; color: var(--text-sub); max-width: 800px; margin: 0 auto 30px;">
+                Apresentação Didática e Resoluções dos Exemplos e Figuras do Capítulo 4 (Sears & Zemansky / Young & Freedman)
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center;">
+                <span style="background: rgba(56,189,248,0.15); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 10px 20px; border-radius: 30px; font-weight: 700;">
+                    <i class="fa-solid fa-check"></i> Força e Resultante
+                </span>
+                <span style="background: rgba(168,85,247,0.15); border: 1px solid var(--accent-purple); color: var(--accent-purple); padding: 10px 20px; border-radius: 30px; font-weight: 700;">
+                    <i class="fa-solid fa-check"></i> As 3 Leis de Newton
+                </span>
+                <span style="background: rgba(234,179,8,0.15); border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 10px 20px; border-radius: 30px; font-weight: 700;">
+                    <i class="fa-solid fa-check"></i> Diagramas de Corpo Livre (DCL)
+                </span>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: Conceito de Força e Superposição -->
+        <div class="slide">
+            <h3 class="slide-title">1. Conceito de Força e Superposição Vetorial</h3>
+            <div class="slide-content">
+                <p>Uma <b>força</b> é uma interação vetorial entre dois corpos (empurrão ou puxão). A força resultante \\(\\vec{R}\\) é a soma vetorial de todas as forças atuantes:</p>
+                <div class="highlight-box">
+                    \\[ \\vec{R} = \\sum \\vec{F} = \\vec{F}_1 + \\vec{F}_2 + \\vec{F}_3 + \\dots \\]
+                </div>
+                <ul>
+                    <li><b>Forças Paralelas (\\(\\theta = 0^\\circ\\)):</b> \\(R = F_1 + F_2\\)</li>
+                    <li><b>Forças Perpendiculares (\\(\\theta = 90^\\circ\\)):</b> \\(R = \\sqrt{F_1^2 + F_2^2}\\)</li>
+                    <li><b>Forças Antiparalelas (\\(\\theta = 180^\\circ\\)):</b> \\(R = |F_1 - F_2|\\)</li>
+                </ul>
+            </div>
+            <div class="canvas-container">
+                <canvas id="canvasSlide2" width="400" height="280"></canvas>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: Componentes e Rotação de Eixos -->
+        <div class="slide">
+            <h3 class="slide-title">2. Decomposição de Forças e Rotação de Coordenadas</h3>
+            <div class="slide-content">
+                <p>Ao analisar sistemas complexos, decompomos as forças em componentes cartesianas \\(R_x\\) e \\(R_y\\):</p>
+                <div class="highlight-box">
+                    \\[ R_x = \\sum F_x = F_1 \\cos\\theta_1 + F_2 \\cos\\theta_2 \\]
+                    \\[ R_y = \\sum F_y = F_1 \\sin\\theta_1 + F_2 \\sin\\theta_2 \\]
+                    \\[ R = \\sqrt{R_x^2 + R_y^2}, \\quad \\theta = \\arctan\\left(\\frac{R_y}{R_x}\\right) \\]
+                </div>
+                <p><b>Nota Exemplo 4.2:</b> Ao rotacionar os eixos coordenados em um ângulo (ex: \\(37^\\circ\\)), o módulo da resultante \\(R = 128\\text{ N}\\) permanece inalterado!</p>
+            </div>
+            <div class="canvas-container">
+                <canvas id="canvasSlide3" width="400" height="280"></canvas>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Segunda Lei de Newton -->
+        <div class="slide">
+            <h3 class="slide-title">3. A Segunda Lei de Newton e Relação Peso vs Massa</h3>
+            <div class="slide-content">
+                <p>A aceleração de um corpo é diretamente proporcional à força resultante e inversamente proporcional à sua massa:</p>
+                <div class="highlight-box">
+                    \\[ \\vec{F}_{res} = m \\vec{a} \\implies a = \\frac{F}{m} \\]
+                </div>
+                <p><b>Diferença Fundamental:</b></p>
+                <ul>
+                    <li><b>Massa (\\(m\\)):</b> Propriedade intrínseca (inércia do corpo), medida em kg. NUNCA muda com o local!</li>
+                    <li><b>Peso (\\(w\\)):</b> Força de atração gravitacional exercida pela Terra ou planeta: \\(w = m g\\).</li>
+                </ul>
+            </div>
+            <div class="canvas-container">
+                <canvas id="canvasSlide4" width="400" height="280"></canvas>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Terceira Lei de Newton e DCL -->
+        <div class="slide">
+            <h3 class="slide-title">4. Terceira Lei de Newton e Diagrama de Corpo Livre (DCL)</h3>
+            <div class="slide-content">
+                <p><b>Princípio da Ação e Reação:</b> Se o corpo A exerce uma força \\(\\vec{F}_{A/B}\\) sobre o corpo B, o corpo B exerce uma força igual e oposta \\(\\vec{F}_{B/A}\\) sobre A:</p>
+                <div class="highlight-box">
+                    \\[ \\vec{F}_{A/B} = - \\vec{F}_{B/A} \\]
+                </div>
+                <p><b>Regra de Ouro do DCL:</b> Um Diagrama de Corpo Livre mostra <i>apenas</i> as forças externas aplicadas a <b>um único corpo isolado</b>. O par ação-reação NUNCA atua no mesmo corpo!</p>
+            </div>
+            <div class="canvas-container">
+                <canvas id="canvasSlide5" width="400" height="280"></canvas>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: Aplicações em Planos Inclinados e Rampas -->
+        <div class="slide">
+            <h3 class="slide-title">5. Aplicações: Plano Inclinado e Tração</h3>
+            <div class="slide-content">
+                <p>Em um plano inclinado de ângulo \\(\\theta\\), decomponha o peso nas direções paralela e perpendicular à superfície:</p>
+                <div class="highlight-box">
+                    \\[ P_x = m g \\sin\\theta \\quad (\\text{paralela ao plano}) \\]
+                    \\[ P_y = m g \\cos\\theta \\quad (\\text{perpendicular ao plano}) \\]
+                    \\[ n = m g \\cos\\theta \\quad (\\text{força normal}) \\]
+                </div>
+                <p>Para manter o bloco em equilíbrio estático, a tração ou força de retenção deve satisfazer \\(T = m g \\sin\\theta\\).</p>
+            </div>
+            <div class="canvas-container">
+                <canvas id="canvasSlide6" width="400" height="280"></canvas>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Sistemas Conectados e Elevadores -->
+        <div class="slide">
+            <h3 class="slide-title">6. Sistemas Conectados, Elevadores e Halteres</h3>
+            <div class="slide-content">
+                <p>Para resolver sistemas de múltiplos corpos conectados (ex: blocos empurrados, elevadores, cabos e halterofilistas):</p>
+                <ol>
+                    <li>Desenhe o DCL para cada corpo individualmente.</li>
+                    <li>Aplique \\(\\sum F = m a\\) para cada corpo.</li>
+                    <li>Resolva o sistema linear de equações acopladas.</li>
+                </ol>
+                <div class="highlight-box">
+                    \\[ T - m g = m a \\implies T = m(g + a) \\quad (\\text{aceleração para cima}) \\]
+                </div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="canvasSlide7" width="400" height="280"></canvas>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Forças Variáveis e Equações Diferenciais -->
+        <div class="slide">
+            <h3 class="slide-title">7. Forças Variáveis com o Tempo e Cálculo Integral</h3>
+            <div class="slide-content">
+                <p>Quando a força depende do tempo \\(F(t)\\) ou da velocidade \\(F(v)\\), a aceleração não é constante:</p>
+                <div class="highlight-box">
+                    \\[ a(t) = \\frac{F(t)}{m} \\implies v(t) = v_0 + \\int_0^t a(t') dt' \\]
+                    \\[ -C v^2 = m \\frac{dv}{dt} \\implies x - x_0 = \\frac{m}{C} \\ln\\left(\\frac{v_0}{v}\\right) \\]
+                </div>
+                <p>Exemplo 4.56: Atrito do ar proporcional ao quadrado da velocidade exige separação de variáveis antes da integração!</p>
+            </div>
+            <div class="canvas-container">
+                <canvas id="canvasSlide8" width="400" height="280"></canvas>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: Resumo Final -->
+        <div class="slide full-width">
+            <h3 style="font-family:'Outfit', sans-serif; font-size: 2.2rem; color: var(--accent-cyan); margin-bottom: 20px;">
+                <i class="fa-solid fa-flag-checkered"></i> Resumo do Capítulo 4
+            </h3>
+            <div style="max-width: 900px; margin: 0 auto; text-align: left; background: rgba(10,16,30,0.8); padding: 30px; border-radius: 16px; border: 1px solid var(--bg-card-border);">
+                <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-sub);">
+                    <b>1. Força é um Vetor:</b> Respeita todas as regras da álgebra vetorial e decomposição trigonométrica.<br>
+                    <b>2. Segunda Lei de Newton:</b> \\(\\vec{F}_{net} = m \\vec{a}\\). Conecta a causa (forças) ao efeito cinemático (aceleração).<br>
+                    <b>3. Massa vs Peso:</b> A massa é inércia (kg); o peso é força gravitacional (N).<br>
+                    <b>4. Terceira Lei:</b> Pares de Ação e Reação atuam SEMPRE em corpos diferentes.<br>
+                    <b>5. DCL é Essencial:</b> Isolar o corpo e desenhar todas as forças externas garante 100% de precisão nos cálculos!
+                </p>
+            </div>
+            <div style="margin-top: 30px;">
+                <a href="index.html" class="ctrl-btn" style="text-decoration: none; display: inline-block;">
+                    <i class="fa-solid fa-play"></i> Explorar os Exercícios Resolvidos (4.1 a 4.57)
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="progress-indicator">Slide <span id="currentSlideNum">1</span> de <span id="totalSlidesNum">9</span></div>
+        <div class="slide-controls">
+            <button id="prevBtn" class="ctrl-btn" onclick="prevSlide()"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button id="nextBtn" class="ctrl-btn" onclick="nextSlide()">Próximo <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('totalSlidesNum').innerText = totalSlides;
+
+        function updateSlide() {
+            slides.forEach((s, idx) => {
+                s.classList.remove('active');
+                if (idx === currentSlide) s.classList.add('active');
+            });
+            document.getElementById('currentSlideNum').innerText = currentSlide + 1;
+            document.getElementById('prevBtn').disabled = (currentSlide === 0);
+            document.getElementById('nextBtn').disabled = (currentSlide === totalSlides - 1);
+
+            if (window.MathJax) MathJax.typesetPromise();
+            drawCanvasForSlide(currentSlide);
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Desenhar figuras interativas nos canvases dos slides
+        function drawArrow(ctx, fromx, fromy, tox, toy, color, label="") {
+            const headlen = 10;
+            const dx = tox - fromx;
+            const dy = toy - fromy;
+            const angle = Math.atan2(dy, dx);
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(fromx, fromy); ctx.lineTo(tox, toy); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath(); ctx.fill();
+            if(label) {
+                ctx.font = "bold 13px sans-serif";
+                ctx.fillText(label, (fromx + tox)/2 + 5, (fromy + toy)/2 - 5);
+            }
+        }
+
+        function drawCanvasForSlide(slideIdx) {
+            if (slideIdx === 1) {
+                const c = document.getElementById('canvasSlide2'); if(!c) return;
+                const ctx = c.getContext('2d'); ctx.clearRect(0,0,400,280);
+                drawArrow(ctx, 200, 140, 340, 140, "#38bdf8", "F1 = 270 N");
+                drawArrow(ctx, 200, 140, 270, 40, "#a855f7", "F2 = 300 N");
+                drawArrow(ctx, 200, 140, 380, 50, "#22c55e", "R = 494 N");
+            } else if (slideIdx === 2) {
+                const c = document.getElementById('canvasSlide3'); if(!c) return;
+                const ctx = c.getContext('2d'); ctx.clearRect(0,0,400,280);
+                ctx.strokeStyle="#475569"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(40,140); ctx.lineTo(360,140); ctx.moveTo(200,40); ctx.lineTo(200,240); ctx.stroke();
+                drawArrow(ctx, 200, 140, 115, 200, "#ef4444", "F120 N");
+                drawArrow(ctx, 200, 140, 290, 210, "#eab308", "F50 N");
+            } else if (slideIdx === 3) {
+                const c = document.getElementById('canvasSlide4'); if(!c) return;
+                const ctx = c.getContext('2d'); ctx.clearRect(0,0,400,280);
+                ctx.fillStyle="#38bdf8"; ctx.fillRect(150,100,100,80);
+                drawArrow(ctx, 250, 140, 350, 140, "#22c55e", "F_res");
+                drawArrow(ctx, 250, 110, 320, 110, "#eab308", "a = F/m");
+            } else if (slideIdx === 4) {
+                const c = document.getElementById('canvasSlide5'); if(!c) return;
+                const ctx = c.getContext('2d'); ctx.clearRect(0,0,400,280);
+                ctx.fillStyle="#38bdf8"; ctx.fillRect(80,100,70,70); ctx.fillStyle="#fff"; ctx.fillText("Corpo A", 90, 140);
+                ctx.fillStyle="#a855f7"; ctx.fillRect(230,100,70,70); ctx.fillStyle="#fff"; ctx.fillText("Corpo B", 240, 140);
+                drawArrow(ctx, 150, 135, 210, 135, "#22c55e", "F_A/B");
+                drawArrow(ctx, 230, 135, 170, 135, "#ef4444", "F_B/A");
+            } else if (slideIdx === 5) {
+                const c = document.getElementById('canvasSlide6'); if(!c) return;
+                const ctx = c.getContext('2d'); ctx.clearRect(0,0,400,280);
+                ctx.strokeStyle="#475569"; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(40,220); ctx.lineTo(360,220); ctx.lineTo(360,70); ctx.closePath(); ctx.stroke();
+                ctx.save(); ctx.translate(200,145); ctx.rotate(-Math.PI/6);
+                ctx.fillStyle="#38bdf8"; ctx.fillRect(-30,-30,60,30);
+                drawArrow(ctx, 0, -15, -70, -15, "#22c55e", "T");
+                drawArrow(ctx, 0, -15, 0, -70, "#eab308", "n");
+                ctx.restore();
+                drawArrow(ctx, 200, 145, 200, 230, "#ef4444", "Peso w");
+            } else if (slideIdx === 6) {
+                const c = document.getElementById('canvasSlide7'); if(!c) return;
+                const ctx = c.getContext('2d'); ctx.clearRect(0,0,400,280);
+                ctx.fillStyle="#38bdf8"; ctx.fillRect(160,80,80,60); ctx.fillStyle="#fff"; ctx.fillText("m1 = 6kg", 170, 115);
+                ctx.fillStyle="#a855f7"; ctx.fillRect(160,170,80,60); ctx.fillStyle="#fff"; ctx.fillText("m2 = 5kg", 170, 205);
+                drawArrow(ctx, 200, 80, 200, 20, "#22c55e", "F = 200 N");
+                drawArrow(ctx, 200, 170, 200, 140, "#eab308", "T");
+            } else if (slideIdx === 7) {
+                const c = document.getElementById('canvasSlide8'); if(!c) return;
+                const ctx = c.getContext('2d'); ctx.clearRect(0,0,400,280);
+                ctx.strokeStyle="#cbd5e1"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(40,220); ctx.lineTo(360,220); ctx.moveTo(40,220); ctx.lineTo(40,40); ctx.stroke();
+                ctx.strokeStyle="#a855f7"; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(40,50); ctx.quadraticCurveTo(150,200,340,215); ctx.stroke();
+            }
+        }
+
+        window.onload = () => {
+            updateSlide();
+        };
+    </script>
+</body>
+</html>
+"""
+
+with open(os.path.join(cap4_dir, "apresentacao.html"), "w", encoding="utf-8") as f:
+    f.write(apresentacao_html)
+
+print("Created apresentacao.html!")

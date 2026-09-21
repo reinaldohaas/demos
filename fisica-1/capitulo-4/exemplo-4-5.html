@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo 4.5: Aplicações Práticas de DCL (Rampas e Cadeiras) | FSC5101 Física I</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #070a12;
+            --bg-card: rgba(15, 23, 42, 0.88);
+            --bg-card-border: rgba(56, 189, 248, 0.25);
+            --accent-cyan: #38bdf8;
+            --accent-purple: #a855f7;
+            --accent-gold: #fbbf24;
+            --accent-emerald: #10b981;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-sub: #cbd5e1;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
+            background-attachment: fixed;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--bg-card-border);
+            color: var(--accent-cyan);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover { background: rgba(56, 189, 248, 0.2); }
+
+        .statement-box {
+            background: rgba(10, 16, 30, 0.92);
+            border-left: 5px solid var(--accent-cyan);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .statement-box h2 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--accent-cyan);
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .statement-box p {
+            line-height: 1.6;
+            color: var(--text-sub);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .card h3 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--accent-cyan);
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .controls-group {
+            margin-bottom: 15px;
+        }
+
+        .controls-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-bottom: 5px;
+        }
+
+        .controls-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-cyan);
+        }
+
+        .value-disp {
+            font-weight: bold;
+            color: var(--accent-gold);
+            float: right;
+        }
+
+        canvas {
+            width: 100%;
+            background: #0f172a;
+            border-radius: 10px;
+            border: 1px solid var(--bg-card-border);
+        }
+
+        .solution-step {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .solution-step h4 {
+            color: var(--accent-gold);
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 900px) {
+            .content-grid { grid-template-columns: 1fr; }
+        }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-nav">
+            <a href="index.html" class="back-btn">← Voltar aos Exercícios do Cap 4</a>
+            <a href="apresentacao.html" class="back-btn" style="color:var(--accent-gold);">🖥️ Ver Apresentação</a>
+        </div>
+
+        <div class="statement-box">
+            <h2><i class="fa-solid fa-atom"></i> Exemplo 4.5: Aplicações Práticas de DCL (Rampas e Cadeiras)</h2>
+            <p>Análise de forças normais, peso e tração em cadeiras inclinadas e martelos (Exercícios 4.27 a 4.36 do PDF).</p>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h3><i class="fa-solid fa-sliders"></i> Parâmetros Interativos</h3>
+                
+    <div class="controls-group">
+        <label>Massa do Homem/Cadeira (kg): <span id="mCadDisp" class="value-disp">65</span></label>
+        <input type="range" id="mCadVal" min="20" max="120" value="65" oninput="updateSimulation()">
+    </div>
+    <div class="controls-group">
+        <label>Ângulo do Plano Inclinado (°): <span id="angPlanoDisp" class="value-disp">26</span></label>
+        <input type="range" id="angPlanoVal" min="5" max="60" value="26" oninput="updateSimulation()">
+    </div>
+
+                <div style="margin-top:15px;">
+                    <canvas id="simCanvas" width="380" height="260"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="fa-solid fa-book-open"></i> Resolução Didática Passo a Passo</h3>
+                
+    <div class="solution-step">
+        <h4>1. Cadeira Puxada sob Ângulo (Exercício 4.27)</h4>
+        <p>Para a cadeira em equilíbrio vertical (\(a_y = 0\)):</p>
+        \[ n - m g - F \sin(37^\circ) = 0 \implies n = m g + F \sin(37^\circ) \]
+    </div>
+    <div class="solution-step">
+        <h4>2. Tração na Corda em Rampa (Exercício 4.28)</h4>
+        <p>Para segurar um homem de 65 kg em uma rampa sem atrito a \(26^\circ\):</p>
+        \[ T = m g \sin\theta = (65\text{ kg})(9,80\text{ m/s}^2)\sin(26,0^\circ) = 279\text{ N} \]
+    </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function drawArrow(ctx, fromx, fromy, tox, toy, color, label="") {
+            const headlen = 10;
+            const dx = tox - fromx;
+            const dy = toy - fromy;
+            const angle = Math.atan2(dy, dx);
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(fromx, fromy); ctx.lineTo(tox, toy); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath(); ctx.fill();
+            if(label) {
+                ctx.font = "bold 13px sans-serif";
+                ctx.fillText(label, (fromx + tox)/2 + 5, (fromy + toy)/2 - 5);
+            }
+        }
+
+        
+    function updateSimulation() {
+        const m = parseFloat(document.getElementById('mCadVal').value);
+        const angDeg = parseFloat(document.getElementById('angPlanoVal').value);
+        const angRad = angDeg * Math.PI / 180;
+
+        document.getElementById('mCadDisp').innerText = m;
+        document.getElementById('angPlanoDisp').innerText = angDeg;
+
+        const T = (m * 9.80 * Math.sin(angRad)).toFixed(1);
+
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,380,260);
+
+        ctx.strokeStyle = '#475569'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(40,220); ctx.lineTo(340,220); ctx.lineTo(340,220 - 300*Math.tan(angRad)); ctx.closePath(); ctx.stroke();
+
+        ctx.save(); ctx.translate(180, 220 - 140*Math.tan(angRad)); ctx.rotate(-angRad);
+        ctx.fillStyle = '#38bdf8'; ctx.fillRect(-25,-25,50,25);
+        drawArrow(ctx, 0, -12, -70, -12, '#22c55e', `T = ${T} N`);
+        ctx.restore();
+
+        if (window.MathJax) MathJax.typesetPromise();
+    }
+
+
+        window.onload = () => {
+            updateSimulation();
+        };
+    </script>
+</body>
+</html>

@@ -7,12 +7,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #070a12;
             --bg-card: rgba(15, 23, 42, 0.9);
             --bg-card-border: rgba(56, 189, 248, 0.25);
             --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
             --text-main: #f8fafc;
             --text-sub: #cbd5e1;
         }
@@ -23,22 +25,95 @@
         .back-btn { background: rgba(255,255,255,0.08); border: 1px solid var(--bg-card-border); color: var(--accent-cyan); padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 700; }
         .header { text-align: center; margin-bottom: 35px; }
         .header h1 { font-family: 'Outfit', sans-serif; font-size: 2.4rem; color: var(--accent-cyan); margin-bottom: 8px; }
-        .card { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 14px; padding: 22px; margin-bottom: 16px; text-decoration: none; color: inherit; display: flex; justify-content: space-between; align-items: center; }
-        .card:hover { border-color: var(--accent-cyan); }
-        .card-btn { background: var(--accent-cyan); color: #020617; padding: 8px 16px; border-radius: 8px; font-weight: 700; }
+        
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .hero-banner h2 { font-family: 'Outfit', sans-serif; color: var(--accent-gold); font-size: 1.6rem; margin-bottom: 10px; }
+        .hero-btn { background: var(--accent-cyan); color: #020617; padding: 12px 24px; border-radius: 10px; font-weight: 800; text-decoration: none; display: inline-block; margin-top: 10px; }
+
+        .card { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 14px; padding: 22px; margin-bottom: 16px; text-decoration: none; color: inherit; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
+        .card:hover { border-color: var(--accent-cyan); transform: translateY(-2px); }
+        .card-btn { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 8px 16px; border-radius: 8px; font-weight: 700; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="back-nav"><a href="../index.html" class="back-btn">← Voltar aos Capítulos</a></div>
-        <div class="header"><h1>⚖️ Capítulo 4: Leis de Newton do Movimento</h1><p>Exercícios e demonstrações interativas de forças e aceleração</p></div>
+        <div class="back-nav"><a href="../index.html" class="back-btn">← Voltar ao Índice Geral</a></div>
+        <div class="header">
+            <h1>⚖️ Capítulo 4: Leis de Newton do Movimento</h1>
+            <p>Exercícios, Demonstrações Interativas e Apresentação de Slidedeck Completa</p>
+        </div>
+
+        <div class="hero-banner">
+            <h2><i class="fa-solid fa-desktop"></i> Apresentação do Capítulo 4</h2>
+            <p style="color:var(--text-sub); font-size:1.05rem;">Acesse os slides didáticos com diagramas vetoriais e visualizações interativas das 3 Leis de Newton.</p>
+            <a href="apresentacao.html" class="hero-btn"><i class="fa-solid fa-play"></i> Abrir Apresentação de Slides →</a>
+        </div>
+
+        <h3 style="color:var(--accent-cyan); margin-bottom:16px; font-family:'Outfit', sans-serif; font-size:1.4rem;">Exemplos e Exercícios Resolvidos (PDF 4.1 a 4.57)</h3>
+
         <a href="exemplo-4-1.html" class="card">
             <div>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.1: Leis de Newton e Força Resultante</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Análise de forças no plano inclinado com atrito e cálculo da força resultante.</div>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.1: Leis de Newton em Plano Inclinado com Atrito</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Superposição de forças, plano inclinado com atrito e força resultante.</div>
             </div>
-            <div class="card-btn">Abrir Exercício →</div>
+            <div class="card-btn">Abrir →</div>
         </a>
+
+        <a href="exemplo-4-2.html" class="card">
+            <div>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.2: Superposição de Forças e Rotação de Eixos (4.1 a 4.6)</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Forças perpendiculares, decomposição cartesiana e invariância por rotação de eixos.</div>
+            </div>
+            <div class="card-btn">Abrir →</div>
+        </a>
+
+        <a href="exemplo-4-3.html" class="card">
+            <div>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.3: Segunda Lei de Newton (F = ma) e Movimento (4.7 a 4.14)</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Aceleração de blocos, desaceleração com atrito e campo elétrico em elétrons.</div>
+            </div>
+            <div class="card-btn">Abrir →</div>
+        </a>
+
+        <a href="exemplo-4-4.html" class="card">
+            <div>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.4: Terceira Lei de Newton e DCL (4.15 a 4.26)</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Ação e reação, blocos encostados e forças de atrito na carroceria de caminhões.</div>
+            </div>
+            <div class="card-btn">Abrir →</div>
+        </a>
+
+        <a href="exemplo-4-5.html" class="card">
+            <div>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.5: Aplicações Práticas de DCL (4.27 a 4.36)</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Rampas, cadeiras puxadas sob ângulo, martelo com prego e salto de atletas.</div>
+            </div>
+            <div class="card-btn">Abrir →</div>
+        </a>
+
+        <a href="exemplo-4-6.html" class="card">
+            <div>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.6: Sistemas Conectados e Elevadores (4.37 a 4.52)</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Tração em cabos, elevação de halterofilistas e correntes com múltiplos elos.</div>
+            </div>
+            <div class="card-btn">Abrir →</div>
+        </a>
+
+        <a href="exemplo-4-7.html" class="card">
+            <div>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.7: Forças Variáveis e Equações Diferenciais (4.53 a 4.57)</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Forças dependentes do tempo F(t), resistência quadrática do ar e cálculo integral.</div>
+            </div>
+            <div class="card-btn">Abrir →</div>
+        </a>
+
     </div>
 </body>
 </html>
