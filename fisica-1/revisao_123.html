@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz de Revisão - Capítulos 1, 2 e 3 (Física I)</title>
     <!-- MathJax for rendering LaTeX math formulas -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -675,8 +674,8 @@
                 question: "Um vetor é dado por v = 3 i + 4 j. Qual é o vetor unitário u na mesma direção e sentido de v?",
                 options: ["0,6 i + 0,8 j", "0,5 i + 0,5 j", "3,0 i + 4,0 j", "0,8 i + 0,6 j"],
                 correct: 0,
-                hint: "O vetor unitário é obtido dividindo o vetor pelo seu módulo: \\(\u = \\frac{v}{|v|}\\).",
-                explanation: "1) Módulo: \\(|v| = \\sqrt{3^2 + 4^2} = 5\\).<br>2) Vetor unitário: \\(\u = \\frac{3}{5}\\hat{i} + \\frac{4}{5}\\hat{j} = 0,6 \\hat{i} + 0,8 \\hat{j}\\).",
+                hint: "O vetor unitário é obtido dividindo o vetor pelo seu módulo: \\(\\hat{u} = \\frac{v}{|v|}\\).",
+                explanation: "1) Módulo: \\(|v| = \\sqrt{3^2 + 4^2} = 5\\).<br>2) Vetor unitário: \\(\\hat{u} = \\frac{3}{5}\\hat{i} + \\frac{4}{5}\\hat{j} = 0,6 \\hat{i} + 0,8 \\hat{j}\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     drawArrow(ctx, 80, 180, 320, 60, "#38bdf8", "v = 3i + 4j (|v|=5)");
@@ -1007,10 +1006,12 @@
             }
         }
 
-        // Inicialização
-        window.onload = () => {
+        // Inicialização rápida ao carregar o DOM
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", filterQuestions);
+        } else {
             filterQuestions();
-        };
+        }
 
         function filterQuestions() {
             filteredQuestions = questionsBank.filter(q => {
