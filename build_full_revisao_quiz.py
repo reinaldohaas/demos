@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+import os
+
+target_path = r"C:\Users\haas\github\demos\fisica-1\revisao_123.html"
+
+html_content = """<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -561,8 +565,8 @@
                 question: "Um automóvel viaja com velocidade constante de 72 km/h (20 m/s) ao longo de uma pista retilínea. Qual é a distância percorrida pelo veículo após 15 segundos?",
                 options: ["200 m", "300 m", "400 m", "1080 m"],
                 correct: 1,
-                hint: "Converta a velocidade para m/s (72 / 3,6 = 20 m/s) e use a fórmula do MRU: \\(\Delta s = v \\cdot t\\).",
-                explanation: "Para calcular o deslocamento em Movimento Retilíneo Uniforme (MRU):<br>1) Velocidade: \\(v = 72 \\text{ km/h} = 20 \\text{ m/s}\\).<br>2) Tempo: \\(t = 15 \\text{ s}\\).<br>3) Deslocamento: \\(\Delta s = v \\cdot t = 20 \\times 15 = 300 \\text{ m}\\).",
+                hint: "Converta a velocidade para m/s (72 / 3,6 = 20 m/s) e use a fórmula do MRU: \\\\(\\Delta s = v \\\\cdot t\\\\).",
+                explanation: "Para calcular o deslocamento em Movimento Retilíneo Uniforme (MRU):<br>1) Velocidade: \\\\(v = 72 \\\\text{ km/h} = 20 \\\\text{ m/s}\\\\).<br>2) Tempo: \\\\(t = 15 \\\\text{ s}\\\\).<br>3) Deslocamento: \\\\(\\Delta s = v \\\\cdot t = 20 \\\\times 15 = 300 \\\\text{ m}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     // Pista
@@ -580,8 +584,8 @@
                 question: "Um bloco de massa m = 5 kg é puxado por uma força resultante horizontal constante de 25 N sobre uma superfície horizontal sem atrito. Qual é a aceleração do bloco?",
                 options: ["2 m/s²", "5 m/s²", "10 m/s²", "125 m/s²"],
                 correct: 1,
-                hint: "Aplique a Segunda Lei de Newton: \\(F_{res} = m \\cdot a\\).",
-                explanation: "Pela Segunda Lei de Newton:<br>\\(F = m \\cdot a \\implies a = \\frac{F}{m} = \\frac{25 \\text{ N}}{5 \\text{ kg}} = 5 \\text{ m/s}^2\\).",
+                hint: "Aplique a Segunda Lei de Newton: \\\\(F_{res} = m \\\\cdot a\\\\).",
+                explanation: "Pela Segunda Lei de Newton:<br>\\\\(F = m \\\\cdot a \\\\implies a = \\\\frac{F}{m} = \\\\frac{25 \\\\text{ N}}{5 \\\\text{ kg}} = 5 \\\\text{ m/s}^2\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     // Solo
@@ -599,8 +603,8 @@
                 question: "Uma força constante de 40 N atua sobre um caixote paralelamente ao seu deslocamento de 6 metros. Qual é o trabalho realizado por essa força?",
                 options: ["120 J", "240 J", "160 J", "400 J"],
                 correct: 1,
-                hint: "O trabalho de uma força constante paralela ao movimento é \\(W = F \\cdot d \\cdot \\cos(\\theta)\\), onde \\(\cos(0^\\circ) = 1\\).",
-                explanation: "O trabalho é dado por:<br>\\(W = F \\cdot d = 40 \\text{ N} \\times 6 \\text{ m} = 240 \\text{ Joules}\\).",
+                hint: "O trabalho de uma força constante paralela ao movimento é \\\\(W = F \\\\cdot d \\\\cdot \\\\cos(\\\\theta)\\\\), onde \\\\(\\cos(0^\\\\circ) = 1\\\\).",
+                explanation: "O trabalho é dado por:<br>\\\\(W = F \\\\cdot d = 40 \\\\text{ N} \\\\times 6 \\\\text{ m} = 240 \\\\text{ Joules}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#475569"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(40, 180); ctx.lineTo(440, 180); ctx.stroke();
@@ -617,8 +621,8 @@
                 question: "Um projétil é lançado com velocidade de 50 m/s sob um ângulo onde sen(θ) = 0,6 e cos(θ) = 0,8. Adotando g = 9,8 m/s², qual é a altura máxima atingida pelo projétil?",
                 options: ["30,0 m", "45,9 m", "60,0 m", "91,8 m"],
                 correct: 1,
-                hint: "A componente vertical da velocidade é \\(v_{0y} = v_0 \\cdot \\sen(\\theta)\\). A altura máxima é \\(H_{máx} = \\frac{v_{0y}^2}{2g}\\).",
-                explanation: "1) Componente vertical: \\(v_{0y} = 50 \\times 0,6 = 30 \\text{ m/s}\\).<br>2) Altura máxima: \\(H_{máx} = \\frac{v_{0y}^2}{2g} = \\frac{30^2}{2 \\times 9,8} = \\frac{900}{19,6} \\approx 45,92 \\text{ m}\\).",
+                hint: "A componente vertical da velocidade é \\\\(v_{0y} = v_0 \\\\cdot \\\\sen(\\\\theta)\\\\). A altura máxima é \\\\(H_{máx} = \\\\frac{v_{0y}^2}{2g}\\\\).",
+                explanation: "1) Componente vertical: \\\\(v_{0y} = 50 \\\\times 0,6 = 30 \\\\text{ m/s}\\\\).<br>2) Altura máxima: \\\\(H_{máx} = \\\\frac{v_{0y}^2}{2g} = \\\\frac{30^2}{2 \\\\times 9,8} = \\\\frac{900}{19,6} \\\\approx 45,92 \\\\text{ m}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     // Solo
@@ -636,8 +640,8 @@
                 question: "Um carrinho de montanha-russa de 200 kg parte do repouso do topo de uma colina a 20 m de altura. Desprezando o atrito e adotando g = 9,8 m/s², qual é a sua velocidade na base da colina?",
                 options: ["14,0 m/s", "19,8 m/s", "25,0 m/s", "392 m/s"],
                 correct: 1,
-                hint: "Utilize a Conservação da Energia Mecânica: \\(m \\cdot g \\cdot h = \\frac{1}{2} m \\cdot v^2 \\implies v = \\sqrt{2gh}\\).",
-                explanation: "Pela conservação da energia mecânica:<br>\\(E_{p} = E_{c} \\implies mgh = \\frac{1}{2}mv^2 \\implies v = \\sqrt{2gh}\\)<br>\\(v = \\sqrt{2 \\times 9,8 \\times 20} = \\sqrt{392} \\approx 19,8 \\text{ m/s}\\).",
+                hint: "Utilize a Conservação da Energia Mecânica: \\\\(m \\\\cdot g \\\\cdot h = \\\\frac{1}{2} m \\\\cdot v^2 \\\\implies v = \\\\sqrt{2gh}\\\\).",
+                explanation: "Pela conservação da energia mecânica:<br>\\\\(E_{p} = E_{c} \\\\implies mgh = \\\\frac{1}{2}mv^2 \\\\implies v = \\\\sqrt{2gh}\\\\)<br>\\\\(v = \\\\sqrt{2 \\\\times 9,8 \\\\times 20} = \\\\sqrt{392} \\\\approx 19,8 \\\\text{ m/s}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     // Pista de montanha russa
@@ -652,8 +656,8 @@
                 question: "Dois blocos se chocam de forma perfeitamente inelástica (ficando grudados). Bloco A (mA = 2 kg) move-se a 6 m/s para a direita, e Bloco B (mB = 4 kg) está inicialmente em repouso. Qual a velocidade final do conjunto?",
                 options: ["1,0 m/s", "2,0 m/s", "3,0 m/s", "4,0 m/s"],
                 correct: 1,
-                hint: "Aplique a Conservação do Momento Linear: \\(m_A v_A + m_B v_B = (m_A + m_B) V_f\\).",
-                explanation: "Pela conservação da quantidade de movimento:<br>\\(Q_{antes} = Q_{depois}\\)<br>\\(2 \\times 6 + 4 \\times 0 = (2 + 4) \\cdot V_f \\implies 12 = 6 V_f \\implies V_f = 2,0 \\text{ m/s}\\).",
+                hint: "Aplique a Conservação do Momento Linear: \\\\(m_A v_A + m_B v_B = (m_A + m_B) V_f\\\\).",
+                explanation: "Pela conservação da quantidade de movimento:<br>\\\\(Q_{antes} = Q_{depois}\\\\)<br>\\\\(2 \\\\times 6 + 4 \\\\times 0 = (2 + 4) \\\\cdot V_f \\\\implies 12 = 6 V_f \\\\implies V_f = 2,0 \\\\text{ m/s}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#475569"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(40, 180); ctx.lineTo(440, 180); ctx.stroke();
@@ -668,8 +672,8 @@
                 question: "Um disco de momento de inércia I = 0,5 kg·m² gira em torno de seu eixo central. Se um torque resultante constante de 4 N·m é aplicado, qual é a aceleração angular α do disco?",
                 options: ["2 rad/s²", "4 rad/s²", "8 rad/s²", "16 rad/s²"],
                 correct: 2,
-                hint: "Use a Segunda Lei de Newton para rotações: \\(\tau = I \\cdot \\alpha\\).",
-                explanation: "A analogia rotacional da Segunda Lei de Newton é:<br>\\(\tau = I \\cdot \\alpha \\implies \\alpha = \\frac{\\tau}{I} = \\frac{4 \\text{ N}\\cdot\\text{m}}{0,5 \\text{ kg}\\cdot\\text{m}^2} = 8,0 \\text{ rad/s}^2\\).",
+                hint: "Use a Segunda Lei de Newton para rotações: \\\\(\\tau = I \\\\cdot \\\\alpha\\\\).",
+                explanation: "A analogia rotacional da Segunda Lei de Newton é:<br>\\\\(\\tau = I \\\\cdot \\\\alpha \\\\implies \\\\alpha = \\\\frac{\\\\tau}{I} = \\\\frac{4 \\\\text{ N}\\\\cdot\\\\text{m}}{0,5 \\\\text{ kg}\\\\cdot\\\\text{m}^2} = 8,0 \\\\text{ rad/s}^2\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     // Disco
@@ -687,8 +691,8 @@
                 question: "Um bloco de 10 kg repousa sobre um plano inclinado de 30°. O coeficiente de atrito estático é μe = 0,6. Com g = 9,8 m/s², o bloco permanece em repouso ou desliza? Qual é o valor da força de atrito?",
                 options: ["Desliza, fat = 51,0 N", "Permanece em repouso, fat = 49,0 N", "Desliza, fat = 24,5 N", "Permanece em repouso, fat = 98,0 N"],
                 correct: 1,
-                hint: "Calcule a componente do peso paralela ao plano \\(P_x = m g \\sen(30^\\circ)\\), e o atrito estático máximo \\(f_{e,máx} = \\mu_e m g \\cos(30^\\circ)\\).",
-                explanation: "1) Componente tangencial do peso: \\(P_x = 10 \\times 9,8 \\times \\sen(30^\\circ) = 49,0 \\text{ N}\\).<br>2) Atrito estático máximo: \\(f_{e,máx} = 0,6 \\times 10 \\times 9,8 \\times \\cos(30^\\circ) = 0,6 \\times 98 \\times 0,866 \\approx 50,92 \\text{ N}\\).<br>Como \\(P_x (49,0 \\text{ N}) < f_{e,máx} (50,92 \\text{ N})\\), o bloco **não desliza** e a força de atrito equilibra exatamente a força peso paralela: \\(f_{at} = 49,0 \\text{ N}\\).",
+                hint: "Calcule a componente do peso paralela ao plano \\\\(P_x = m g \\\\sen(30^\\\\circ)\\\\), e o atrito estático máximo \\\\(f_{e,máx} = \\\\mu_e m g \\\\cos(30^\\\\circ)\\\\).",
+                explanation: "1) Componente tangencial do peso: \\\\(P_x = 10 \\\\times 9,8 \\\\times \\\\sen(30^\\\\circ) = 49,0 \\\\text{ N}\\\\).<br>2) Atrito estático máximo: \\\\(f_{e,máx} = 0,6 \\\\times 10 \\\\times 9,8 \\\\times \\\\cos(30^\\\\circ) = 0,6 \\\\times 98 \\\\times 0,866 \\\\approx 50,92 \\\\text{ N}\\\\).<br>Como \\\\(P_x (49,0 \\\\text{ N}) < f_{e,máx} (50,92 \\\\text{ N})\\\\), o bloco **não desliza** e a força de atrito equilibra exatamente a força peso paralela: \\\\(f_{at} = 49,0 \\\\text{ N}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     // Rampa
@@ -707,8 +711,8 @@
                 question: "Um satélite de massa m é movido de uma órbita circular de raio r1 = R_E para r2 = 2 R_E em torno da Terra. Sabendo que U(r) = -G M m / r, qual o trabalho realizado pela força gravitacional?",
                 options: ["-G M m / (2 R_E)", "+G M m / (2 R_E)", "-3 G M m / (2 R_E)", "Zero"],
                 correct: 0,
-                hint: "O trabalho da força gravitacional (força conservativa) é \\(W_g = -\\Delta U = -(U_f - U_i)\\).",
-                explanation: "1) Energia potencial inicial: \\(U_i = -\\frac{GMm}{R_E}\\).<br>2) Energia potencial final: \\(U_f = -\\frac{GMm}{2R_E}\\).<br>3) Trabalho da força conservativa: \\(W_g = - (U_f - U_i) = -\\left(-\\frac{GMm}{2R_E} + \\frac{GMm}{R_E}\\right) = -\\frac{GMm}{2R_E}\\).",
+                hint: "O trabalho da força gravitacional (força conservativa) é \\\\(W_g = -\\\\Delta U = -(U_f - U_i)\\\\).",
+                explanation: "1) Energia potencial inicial: \\\\(U_i = -\\\\frac{GMm}{R_E}\\\\).<br>2) Energia potencial final: \\\\(U_f = -\\\\frac{GMm}{2R_E}\\\\).<br>3) Trabalho da força conservativa: \\\\(W_g = - (U_f - U_i) = -\\\\left(-\\\\frac{GMm}{2R_E} + \\\\frac{GMm}{R_E}\\\\right) = -\\\\frac{GMm}{2R_E}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     // Terra
@@ -727,8 +731,8 @@
                 question: "Uma haste fina homogênea de comprimento L = 1,2 m oscila como pêndulo físico em torno de uma extremidade. Com I = 1/3 M L² e d = L/2, qual é o período T de pequenas oscilações? (g = 9,8 m/s²)",
                 options: ["1,20 s", "1,80 s", "2,20 s", "3,14 s"],
                 correct: 1,
-                hint: "A fórmula do período do pêndulo físico é \\(T = 2\\pi \\sqrt{\\frac{I}{M g d}}\\). Simplifique para \\(T = 2\\pi \\sqrt{\\frac{2L}{3g}}\\).",
-                explanation: "Substituindo os valores na expressão simplificada do período:<br>\\(T = 2\\pi \\sqrt{\\frac{2L}{3g}} = 2\\pi \\sqrt{\\frac{2 \\times 1,2}{3 \\times 9,8}} = 2\\pi \\sqrt{\\frac{2,4}{29,4}} = 2\\pi \\times 0,2857 \\approx 1,795 \\approx 1,80 \\text{ s}\\).",
+                hint: "A fórmula do período do pêndulo físico é \\\\(T = 2\\\\pi \\\\sqrt{\\\\frac{I}{M g d}}\\\\). Simplifique para \\\\(T = 2\\\\pi \\\\sqrt{\\\\frac{2L}{3g}}\\\\).",
+                explanation: "Substituindo os valores na expressão simplificada do período:<br>\\\\(T = 2\\\\pi \\\\sqrt{\\\\frac{2L}{3g}} = 2\\\\pi \\\\sqrt{\\\\frac{2 \\\\times 1,2}{3 \\\\times 9,8}} = 2\\\\pi \\\\sqrt{\\\\frac{2,4}{29,4}} = 2\\\\pi \\\\times 0,2857 \\\\approx 1,795 \\\\approx 1,80 \\\\text{ s}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     // Pivô
@@ -747,8 +751,8 @@
                 question: "Qual é a pressão manométrica exercida por uma coluna de água (ρ = 1000 kg/m³) a uma profundidade h = 5 metros? Adote g = 9,8 m/s².",
                 options: ["49 kPa", "98 kPa", "100 kPa", "149 kPa"],
                 correct: 0,
-                hint: "Utilize o Teorema de Stevin para pressão manométrica: \\(P = \\rho \\cdot g \\cdot h\\).",
-                explanation: "A pressão manométrica hidrostática é dada por:<br>\\(P = \\rho \\cdot g \\cdot h = 1000 \\text{ kg/m}^3 \\times 9,8 \\text{ m/s}^2 \\times 5 \\text{ m} = 49.000 \\text{ Pa} = 49 \\text{ kPa}\\).",
+                hint: "Utilize o Teorema de Stevin para pressão manométrica: \\\\(P = \\\\rho \\\\cdot g \\\\cdot h\\\\).",
+                explanation: "A pressão manométrica hidrostática é dada por:<br>\\\\(P = \\\\rho \\\\cdot g \\\\cdot h = 1000 \\\\text{ kg/m}^3 \\\\times 9,8 \\\\text{ m/s}^2 \\\\times 5 \\\\text{ m} = 49.000 \\\\text{ Pa} = 49 \\\\text{ kPa}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     // Tanque de agua
@@ -762,8 +766,8 @@
                 question: "Uma onda sonora senoidal propaga-se no ar com frequência de 440 Hz e comprimento de onda λ = 0,78 m. Qual é a velocidade de propagação dessa onda?",
                 options: ["300,0 m/s", "343,2 m/s", "564,0 m/s", "1500,0 m/s"],
                 correct: 1,
-                hint: "Use a Equação Fundamental da Ondulatória: \\(v = \\lambda \\cdot f\\).",
-                explanation: "A velocidade da onda é o produto da frequência pelo comprimento de onda:<br>\\(v = \\lambda \\cdot f = 0,78 \\text{ m} \\times 440 \\text{ Hz} = 343,2 \\text{ m/s}\\).",
+                hint: "Use a Equação Fundamental da Ondulatória: \\\\(v = \\\\lambda \\\\cdot f\\\\).",
+                explanation: "A velocidade da onda é o produto da frequência pelo comprimento de onda:<br>\\\\(v = \\\\lambda \\\\cdot f = 0,78 \\\\text{ m} \\\\times 440 \\\\text{ Hz} = 343,2 \\\\text{ m/s}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 3; ctx.beginPath();
@@ -780,8 +784,8 @@
                 question: "Um gás ideal recebe 500 J de calor de uma fonte térmica e realiza 300 J de trabalho sobre o meio externo. Qual foi a variação da energia interna (ΔU) do gás?",
                 options: ["-200 J", "+200 J", "+800 J", "+1500 J"],
                 correct: 1,
-                hint: "Primeira Lei da Termodinâmica: \\(\Delta U = Q - W\\).",
-                explanation: "Pela Primeira Lei da Termodinâmica:<br>\\(\Delta U = Q - W = 500 \\text{ J} - 300 \\text{ J} = +200 \\text{ Joules}\\).",
+                hint: "Primeira Lei da Termodinâmica: \\\\(\\Delta U = Q - W\\\\).",
+                explanation: "Pela Primeira Lei da Termodinâmica:<br>\\\\(\\Delta U = Q - W = 500 \\\\text{ J} - 300 \\\\text{ J} = +200 \\\\text{ Joules}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 3; ctx.strokeRect(160, 60, 160, 120);
@@ -795,8 +799,8 @@
                 question: "Um bloco de madeira de volume V = 0,02 m³ flutua na água (ρ = 1000 kg/m³) com 60% de seu volume submerso. Adotando g = 9,8 m/s², qual é a força de empuxo que a água exerce no bloco?",
                 options: ["58,8 N", "117,6 N", "196,0 N", "200,0 N"],
                 correct: 1,
-                hint: "O empuxo é igual ao peso do fluido deslocado: \\(E = \\rho_{água} \\cdot V_{sub} \\cdot g\\), com \\(V_{sub} = 0,60 \\cdot V\\).",
-                explanation: "1) Volume submerso: \\(V_{sub} = 0,60 \\times 0,02 = 0,012 \\text{ m}^3\\).<br>2) Empuxo: \\(E = 1000 \\times 0,012 \\times 9,8 = 117,6 \\text{ N}\\).",
+                hint: "O empuxo é igual ao peso do fluido deslocado: \\\\(E = \\\\rho_{água} \\\\cdot V_{sub} \\\\cdot g\\\\), com \\\\(V_{sub} = 0,60 \\\\cdot V\\\\).",
+                explanation: "1) Volume submerso: \\\\(V_{sub} = 0,60 \\\\times 0,02 = 0,012 \\\\text{ m}^3\\\\).<br>2) Empuxo: \\\\(E = 1000 \\\\times 0,012 \\\\times 9,8 = 117,6 \\\\text{ N}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.fillStyle = "rgba(56, 189, 248, 0.4)"; ctx.fillRect(40, 120, 400, 90);
@@ -810,8 +814,8 @@
                 question: "Água escoa por um tubo horizontal. Na seção 1, o raio é R1 = 4 cm e a velocidade é v1 = 2 m/s. Na seção 2, o raio reduz para R2 = 2 cm. Qual é a velocidade v2 do escoamento na seção 2?",
                 options: ["4,0 m/s", "8,0 m/s", "16,0 m/s", "32,0 m/s"],
                 correct: 1,
-                hint: "Equação da Continuidade para fluido incompressível: \\(A_1 v_1 = A_2 v_2 \\implies R_1^2 v_1 = R_2^2 v_2\\).",
-                explanation: "Pela Equação da Continuidade:<br>\\(\pi R_1^2 v_1 = \\pi R_2^2 v_2 \\implies (4)^2 \\times 2 = (2)^2 \\times v_2 \\implies 16 \\times 2 = 4 v_2 \\implies v_2 = 8,0 \\text{ m/s}\\).",
+                hint: "Equação da Continuidade para fluido incompressível: \\\\(A_1 v_1 = A_2 v_2 \\\\implies R_1^2 v_1 = R_2^2 v_2\\\\).",
+                explanation: "Pela Equação da Continuidade:<br>\\\\(\\pi R_1^2 v_1 = \\\\pi R_2^2 v_2 \\\\implies (4)^2 \\\\times 2 = (2)^2 \\\\times v_2 \\\\implies 16 \\\\times 2 = 4 v_2 \\\\implies v_2 = 8,0 \\\\text{ m/s}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 4; ctx.beginPath();
@@ -826,8 +830,8 @@
                 question: "Uma ambulância com sirene de 800 Hz aproxima-se de um observador parado com velocidade de 34 m/s. Considerando a velocidade do som no ar igual a 340 m/s, qual a frequência percebida pelo observador?",
                 options: ["720,0 Hz", "800,0 Hz", "888,9 Hz", "900,0 Hz"],
                 correct: 2,
-                hint: "Fórmula do Efeito Doppler para fonte se aproximando: \\(f_{obs} = f_{fonte} \\cdot \\frac{v_{som}}{v_{som} - v_{fonte}}\\).",
-                explanation: "Aplicação direta da fórmula do Efeito Doppler com fonte em aproximação:<br>\\(f_{obs} = 800 \\times \\frac{340}{340 - 34} = 800 \\times \\frac{340}{306} = 800 \\times 1,1111 \\approx 888,9 \\text{ Hz}\\).",
+                hint: "Fórmula do Efeito Doppler para fonte se aproximando: \\\\(f_{obs} = f_{fonte} \\\\cdot \\\\frac{v_{som}}{v_{som} - v_{fonte}}\\\\).",
+                explanation: "Aplicação direta da fórmula do Efeito Doppler com fonte em aproximação:<br>\\\\(f_{obs} = 800 \\\\times \\\\frac{340}{340 - 34} = 800 \\\\times \\\\frac{340}{306} = 800 \\\\times 1,1111 \\\\approx 888,9 \\\\text{ Hz}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.fillStyle = "#ef4444"; ctx.fillRect(80, 130, 80, 40);
@@ -841,8 +845,8 @@
                 question: "Uma máquina térmica de Carnot opera entre uma fonte quente a 500 K e uma fonte fria a 300 K. Se em cada ciclo ela absorve 1000 J da fonte quente, qual é o trabalho útil realizado por ciclo?",
                 options: ["300 J", "400 J", "500 J", "600 J"],
                 correct: 1,
-                hint: "O rendimento de Carnot é \\(\eta = 1 - \\frac{T_F}{T_Q}\\). O trabalho é \\(W = \\eta \\cdot Q_Q\\).",
-                explanation: "1) Rendimento máximo de Carnot: \\(\eta = 1 - \\frac{300}{500} = 0,40\\) (40%).<br>2) Trabalho útil: \\(W = \\eta \\cdot Q_Q = 0,40 \\times 1000 \\text{ J} = 400 \\text{ Joules}\\).",
+                hint: "O rendimento de Carnot é \\\\(\\eta = 1 - \\\\frac{T_F}{T_Q}\\\\). O trabalho é \\\\(W = \\\\eta \\\\cdot Q_Q\\\\).",
+                explanation: "1) Rendimento máximo de Carnot: \\\\(\\eta = 1 - \\\\frac{300}{500} = 0,40\\\\) (40%).<br>2) Trabalho útil: \\\\(W = \\\\eta \\\\cdot Q_Q = 0,40 \\\\times 1000 \\\\text{ J} = 400 \\\\text{ Joules}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.fillStyle = "#ef4444"; ctx.fillRect(180, 30, 120, 40); ctx.fillStyle="#fff"; ctx.fillText("Fonte Quente 500K", 185, 55);
@@ -857,8 +861,8 @@
                 question: "Um gás ideal diatômico (γ = 1,4) expande-se de forma adiabática e reversível de V1 = 1 L e T1 = 400 K até V2 = 32 L. Qual é a temperatura final T2 do gás?",
                 options: ["100 K", "200 K", "250 K", "300 K"],
                 correct: 0,
-                hint: "Em uma expansão adiabática reversível: \\(T_1 V_1^{\\gamma - 1} = T_2 V_2^{\\gamma - 1}\\). Note que \\(\gamma - 1 = 0,4 = 2/5\\).",
-                explanation: "Isolando \\(T_2\\):<br>\\(T_2 = T_1 \\left(\\frac{V_1}{V_2}\\right)^{\\gamma - 1} = 400 \\times \\left(\\frac{1}{32}\\right)^{0,4}\\)<br>Como \\(32 = 2^5\\), temos \\((32)^{-0,4} = (2^5)^{-0,4} = 2^{-2} = \\frac{1}{4}\\).<br>Logo, \\(T_2 = 400 \\times \\frac{1}{4} = 100 \\text{ K}\\).",
+                hint: "Em uma expansão adiabática reversível: \\\\(T_1 V_1^{\\\\gamma - 1} = T_2 V_2^{\\\\gamma - 1}\\\\). Note que \\\\(\\gamma - 1 = 0,4 = 2/5\\\\).",
+                explanation: "Isolando \\\\(T_2\\\\):<br>\\\\(T_2 = T_1 \\\\left(\\\\frac{V_1}{V_2}\\\\right)^{\\\\gamma - 1} = 400 \\\\times \\\\left(\\\\frac{1}{32}\\\\right)^{0,4}\\\\)<br>Como \\\\(32 = 2^5\\\\), temos \\\\((32)^{-0,4} = (2^5)^{-0,4} = 2^{-2} = \\\\frac{1}{4}\\\\).<br>Logo, \\\\(T_2 = 400 \\\\times \\\\frac{1}{4} = 100 \\\\text{ K}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 2;
@@ -872,8 +876,8 @@
                 question: "Um tubo sonoro de comprimento L = 0,85 m é fechado em uma extremidade e aberto na outra. Considerando a velocidade do som no ar v = 340 m/s, qual a frequência do terceiro harmônico (n = 3)?",
                 options: ["100 Hz", "200 Hz", "300 Hz", "400 Hz"],
                 correct: 2,
-                hint: "Para tubos fechados em uma extremidade, os harmônicos permitidos são ímpares com frequência \\(f_n = \\frac{n \\cdot v}{4L}\\).",
-                explanation: "Para o terceiro harmônico (n = 3):<br>\\(f_3 = \\frac{3 \\cdot v}{4L} = \\frac{3 \\times 340}{4 \\times 0,85} = \\frac{1020}{3,4} = 300 \\text{ Hz}\\).",
+                hint: "Para tubos fechados em uma extremidade, os harmônicos permitidos são ímpares com frequência \\\\(f_n = \\\\frac{n \\\\cdot v}{4L}\\\\).",
+                explanation: "Para o terceiro harmônico (n = 3):<br>\\\\(f_3 = \\\\frac{3 \\\\cdot v}{4L} = \\\\frac{3 \\\\times 340}{4 \\\\times 0,85} = \\\\frac{1020}{3,4} = 300 \\\\text{ Hz}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 3;
@@ -887,8 +891,8 @@
                 question: "Um bloco de gelo de 0,5 kg a 0°C (273 K) funde-se completamente transformando-se em água a 0°C. Com Lf = 3,34 x 10⁵ J/kg, qual a variação de entropia ΔS do gelo durante a fusão?",
                 options: ["0 J/K", "611,7 J/K", "1223,4 J/K", "167.000 J/K"],
                 correct: 1,
-                hint: "Para uma transição de fase isotérmica, a variação de entropia é \\(\Delta S = \\frac{Q}{T} = \\frac{m \\cdot L_f}{T}\\).",
-                explanation: "1) Calor absorvido: \\(Q = m \\cdot L_f = 0,5 \\text{ kg} \\times 3,34 \\times 10^5 \\text{ J/kg} = 1,67 \\times 10^5 \\text{ J}\\).<br>2) Variação de Entropia: \\(\Delta S = \\frac{Q}{T} = \\frac{1,67 \\times 10^5 \\text{ J}}{273 \\text{ K}} \\approx 611,72 \\text{ J/K}\\).",
+                hint: "Para uma transição de fase isotérmica, a variação de entropia é \\\\(\\Delta S = \\\\frac{Q}{T} = \\\\frac{m \\\\cdot L_f}{T}\\\\).",
+                explanation: "1) Calor absorvido: \\\\(Q = m \\\\cdot L_f = 0,5 \\\\text{ kg} \\\\times 3,34 \\\\times 10^5 \\\\text{ J/kg} = 1,67 \\\\times 10^5 \\\\text{ J}\\\\).<br>2) Variação de Entropia: \\\\(\\Delta S = \\\\frac{Q}{T} = \\\\frac{1,67 \\\\times 10^5 \\\\text{ J}}{273 \\\\text{ K}} \\\\approx 611,72 \\\\text{ J/K}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.fillStyle = "rgba(56, 189, 248, 0.6)"; ctx.fillRect(180, 90, 80, 80);
@@ -902,8 +906,8 @@
                 question: "Duas cargas puntiformes q1 = +2 μC e q2 = +3 μC estão separadas no vácuo por uma distância de 0,3 metros. Qual é a força elétrica repulsiva entre elas? (k0 = 9 x 10⁹ N·m²/C²)",
                 options: ["0,3 N", "0,6 N", "1,8 N", "6,0 N"],
                 correct: 1,
-                hint: "Lei de Coulomb: \\(F = k_0 \\frac{|q_1 q_2|}{r^2}\\). Lembre-se de converter \\(\mu C\\) para \\(10^{-6} C\\).",
-                explanation: "Pela Lei de Coulomb:<br>\\(F = 9 \\times 10^9 \\times \\frac{(2 \\times 10^{-6}) \\times (3 \\times 10^{-6})}{(0,3)^2} = 9 \\times 10^9 \\times \\frac{6 \\times 10^{-12}}{0,09} = 0,6 \\text{ N}\\).",
+                hint: "Lei de Coulomb: \\\\(F = k_0 \\\\frac{|q_1 q_2|}{r^2}\\\\). Lembre-se de converter \\\\(\\mu C\\\\) para \\\\(10^{-6} C\\\\).",
+                explanation: "Pela Lei de Coulomb:<br>\\\\(F = 9 \\\\times 10^9 \\\\times \\\\frac{(2 \\\\times 10^{-6}) \\\\times (3 \\\\times 10^{-6})}{(0,3)^2} = 9 \\\\times 10^9 \\\\times \\\\frac{6 \\\\times 10^{-12}}{0,09} = 0,6 \\\\text{ N}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.fillStyle = "#ef4444"; ctx.beginPath(); ctx.arc(140, 120, 20, 0, Math.PI*2); ctx.fill(); ctx.fillStyle="#fff"; ctx.fillText("+q1", 130, 125);
@@ -917,8 +921,8 @@
                 question: "Um resistor de resistência R = 12 Ω é submetido a uma diferença de potencial de 36 V. Qual é a corrente elétrica que atravessa o resistor?",
                 options: ["0,33 A", "3,0 A", "24,0 A", "432,0 A"],
                 correct: 1,
-                hint: "Primeira Lei de Ohm: \\(U = R \\cdot I \\implies I = \\frac{U}{R}\\).",
-                explanation: "Pela Lei de Ohm:<br>\\(I = \\frac{U}{R} = \\frac{36 \\text{ V}}{12 \\text{ }\\Omega} = 3,0 \\text{ A}\\).",
+                hint: "Primeira Lei de Ohm: \\\\(U = R \\\\cdot I \\\\implies I = \\\\frac{U}{R}\\\\).",
+                explanation: "Pela Lei de Ohm:<br>\\\\(I = \\\\frac{U}{R} = \\\\frac{36 \\\\text{ V}}{12 \\\\text{ }\\\\Omega} = 3,0 \\\\text{ A}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 3; ctx.strokeRect(100, 50, 280, 140);
@@ -932,8 +936,8 @@
                 question: "Um feixe de luz viaja no vácuo (c = 3 x 10⁸ m/s) e incide em um meio transparente com índice de refração n = 1,5. Qual é a velocidade da luz nesse meio?",
                 options: ["1,5 x 10⁸ m/s", "2,0 x 10⁸ m/s", "3,0 x 10⁸ m/s", "4,5 x 10⁸ m/s"],
                 correct: 1,
-                hint: "Definição do índice de refração: \\(n = \\frac{c}{v} \\implies v = \\frac{c}{n}\\).",
-                explanation: "Calculando a velocidade no meio:<br>\\(v = \\frac{c}{n} = \\frac{3 \\times 10^8 \\text{ m/s}}{1,5} = 2,0 \\times 10^8 \\text{ m/s}\\).",
+                hint: "Definição do índice de refração: \\\\(n = \\\\frac{c}{v} \\\\implies v = \\\\frac{c}{n}\\\\).",
+                explanation: "Calculando a velocidade no meio:<br>\\\\(v = \\\\frac{c}{n} = \\\\frac{3 \\\\times 10^8 \\\\text{ m/s}}{1,5} = 2,0 \\\\times 10^8 \\\\text{ m/s}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.fillStyle = "rgba(56, 189, 248, 0.2)"; ctx.fillRect(40, 120, 400, 100);
@@ -947,8 +951,8 @@
                 question: "Qual é a intensidade do campo elétrico gerado por uma carga puntual Q = 4 μC a uma distância de r = 2 metros no vácuo? (k0 = 9 x 10⁹ N·m²/C²)",
                 options: ["4.500 N/C", "9.000 N/C", "18.000 N/C", "36.000 N/C"],
                 correct: 1,
-                hint: "Fórmula do campo elétrico de carga puntiforme: \\(E = k_0 \\frac{|Q|}{r^2}\\).",
-                explanation: "Substituindo os valores:<br>\\(E = 9 \\times 10^9 \\times \\frac{4 \\times 10^{-6}}{2^2} = 9 \\times 10^9 \\times \\frac{4 \\times 10^{-6}}{4} = 9.000 \\text{ N/C}\\).",
+                hint: "Fórmula do campo elétrico de carga puntiforme: \\\\(E = k_0 \\\\frac{|Q|}{r^2}\\\\).",
+                explanation: "Substituindo os valores:<br>\\\\(E = 9 \\\\times 10^9 \\\\times \\\\frac{4 \\\\times 10^{-6}}{2^2} = 9 \\\\times 10^9 \\\\times \\\\frac{4 \\\\times 10^{-6}}{4} = 9.000 \\\\text{ N/C}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.fillStyle = "#ef4444"; ctx.beginPath(); ctx.arc(180, 120, 18, 0, Math.PI*2); ctx.fill();
@@ -960,8 +964,8 @@
                 question: "Dois resistores de R1 = 6 Ω e R2 = 12 Ω estão associados em paralelo sob uma tensão constante de 24 V. Qual é a corrente total fornecida pela fonte?",
                 options: ["2,0 A", "4,0 A", "6,0 A", "18,0 A"],
                 correct: 2,
-                hint: "Calcule a resistência equivalente em paralelo: \\(R_{eq} = \\frac{R_1 \\cdot R_2}{R_1 + R_2}\\), e depois use \\(I_{tot} = \\frac{U}{R_{eq}}\\).",
-                explanation: "1) Resistência equivalente: \\(R_{eq} = \\frac{6 \\times 12}{6 + 12} = \\frac{72}{18} = 4 \\text{ }\\Omega\\).<br>2) Corrente total: \\(I_{tot} = \\frac{U}{R_{eq}} = \\frac{24 \\text{ V}}{4 \\text{ }\\Omega} = 6,0 \\text{ A}\\).",
+                hint: "Calcule a resistência equivalente em paralelo: \\\\(R_{eq} = \\\\frac{R_1 \\\\cdot R_2}{R_1 + R_2}\\\\), e depois use \\\\(I_{tot} = \\\\frac{U}{R_{eq}}\\\\).",
+                explanation: "1) Resistência equivalente: \\\\(R_{eq} = \\\\frac{6 \\\\times 12}{6 + 12} = \\\\frac{72}{18} = 4 \\\\text{ }\\\\Omega\\\\).<br>2) Corrente total: \\\\(I_{tot} = \\\\frac{U}{R_{eq}} = \\\\frac{24 \\\\text{ V}}{4 \\\\text{ }\\\\Omega} = 6,0 \\\\text{ A}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 3;
@@ -974,8 +978,8 @@
                 question: "Uma partícula com carga q = +5 μC penetra perpendicularmente (θ = 90°) em um campo magnético B = 0,4 T com velocidade v = 2 x 10⁵ m/s. Qual o módulo da força magnética sobre ela?",
                 options: ["0,1 N", "0,4 N", "2,0 N", "4,0 N"],
                 correct: 1,
-                hint: "Força magnética de Lorentz: \\(F_m = |q| \\cdot v \\cdot B \\cdot \\sen(\\theta)\\).",
-                explanation: "Como \\(\sen(90^\\circ) = 1\\):<br>\\(F_m = (5 \\times 10^{-6}) \\times (2 \\times 10^5) \\times 0,4 \\times 1 = 1,0 \\times 0,4 = 0,4 \\text{ N}\\).",
+                hint: "Força magnética de Lorentz: \\\\(F_m = |q| \\\\cdot v \\\\cdot B \\\\cdot \\\\sen(\\\\theta)\\\\).",
+                explanation: "Como \\\\(\\sen(90^\\\\circ) = 1\\\\):<br>\\\\(F_m = (5 \\\\times 10^{-6}) \\\\times (2 \\\\times 10^5) \\\\times 0,4 \\\\times 1 = 1,0 \\\\times 0,4 = 0,4 \\\\text{ N}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.fillStyle = "#475569"; ctx.font = "20px sans-serif";
@@ -989,8 +993,8 @@
                 question: "Uma carga pontual de Q = 8,85 x 10⁻⁹ C está no centro de uma superfície esférica. Com ε0 = 8,85 x 10⁻¹² C²/(N·m²), qual é o fluxo elétrico total ΦE através da esfera?",
                 options: ["100 N·m²/C", "1.000 N·m²/C", "8.850 N·m²/C", "Zero"],
                 correct: 1,
-                hint: "Lei de Gauss: O fluxo elétrico total através de qualquer superfície fechada é \\(\Phi_E = \\frac{Q_{enc}}{\\varepsilon_0}\\).",
-                explanation: "Pela Lei de Gauss:<br>\\(\Phi_E = \\frac{Q}{\\varepsilon_0} = \\frac{8,85 \\times 10^{-9}}{8,85 \\times 10^{-12}} = 10^3 = 1.000 \\text{ N}\\cdot\\text{m}^2/\\text{C}\\).",
+                hint: "Lei de Gauss: O fluxo elétrico total através de qualquer superfície fechada é \\\\(\\Phi_E = \\\\frac{Q_{enc}}{\\\\varepsilon_0}\\\\).",
+                explanation: "Pela Lei de Gauss:<br>\\\\(\\Phi_E = \\\\frac{Q}{\\\\varepsilon_0} = \\\\frac{8,85 \\\\times 10^{-9}}{8,85 \\\\times 10^{-12}} = 10^3 = 1.000 \\\\text{ N}\\\\cdot\\\\text{m}^2/\\\\text{C}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#38bdf8"; ctx.setLineDash([5, 5]); ctx.lineWidth = 3;
@@ -1003,8 +1007,8 @@
                 question: "Uma espira circular de raio r = 0,1 m (Área A ≈ 0,0314 m²) está perpendicular a um campo magnético que varia de 0,2 T para 1,0 T em Δt = 0,05 s. Qual a fem inducida ε na espira?",
                 options: ["0,10 V", "0,50 V", "1,00 V", "2,00 V"],
                 correct: 1,
-                hint: "Lei de Faraday-Lenz: \\(\varepsilon = \\left| \\frac{\\Delta \\Phi_B}{\\Delta t} \\right| = A \\cdot \\frac{\\Delta B}{\\Delta t}\\).",
-                explanation: "1) Variação do campo magnético: \\(\Delta B = 1,0 - 0,2 = 0,8 \\text{ T}\\).<br>2) Variação de fluxo: \\(\Delta \\Phi_B = A \\cdot \\Delta B = 0,0314 \\times 0,8 = 0,02512 \\text{ Wb}\\).<br>3) Força eletromotriz: \\(\varepsilon = \\frac{0,02512}{0,05} \\approx 0,5024 \\text{ V} \\approx 0,50 \\text{ V}\\).",
+                hint: "Lei de Faraday-Lenz: \\\\(\\varepsilon = \\\\left| \\\\frac{\\\\Delta \\\\Phi_B}{\\\\Delta t} \\\\right| = A \\\\cdot \\\\frac{\\\\Delta B}{\\\\Delta t}\\\\).",
+                explanation: "1) Variação do campo magnético: \\\\(\\Delta B = 1,0 - 0,2 = 0,8 \\\\text{ T}\\\\).<br>2) Variação de fluxo: \\\\(\\Delta \\\\Phi_B = A \\\\cdot \\\\Delta B = 0,0314 \\\\times 0,8 = 0,02512 \\\\text{ Wb}\\\\).<br>3) Força eletromotriz: \\\\(\\varepsilon = \\\\frac{0,02512}{0,05} \\\\approx 0,5024 \\\\text{ V} \\\\approx 0,50 \\\\text{ V}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#eab308"; ctx.lineWidth = 4;
@@ -1016,8 +1020,8 @@
                 question: "Um capacitor C = 50 μF é ligado em série com um resistor R = 20 kΩ (20.000 Ω) e uma bateria ideal de 12 V. Qual é a constante de tempo τ do circuito e a carga máxima final no capacitor?",
                 options: ["τ = 1,0 s; Q = 600 μC", "τ = 0,5 s; Q = 300 μC", "τ = 2,0 s; Q = 1200 μC", "τ = 10,0 s; Q = 60 μC"],
                 correct: 0,
-                hint: "Constante de tempo \\(\tau = R \\cdot C\\) e carga máxima \\(Q = C \\cdot U\\).",
-                explanation: "1) Constante de tempo: \\(\tau = (20.000 \\text{ }\\Omega) \\times (50 \\times 10^{-6} \\text{ F}) = 1,0 \\text{ s}\\).<br>2) Carga máxima: \\(Q_{máx} = (50 \\times 10^{-6} \\text{ F}) \\times 12 \\text{ V} = 600 \\times 10^{-6} \\text{ C} = 600 \\mu \\text{C}\\).",
+                hint: "Constante de tempo \\\\(\\tau = R \\\\cdot C\\\\) e carga máxima \\\\(Q = C \\\\cdot U\\\\).",
+                explanation: "1) Constante de tempo: \\\\(\\tau = (20.000 \\\\text{ }\\\\Omega) \\\\times (50 \\\\times 10^{-6} \\\\text{ F}) = 1,0 \\\\text{ s}\\\\).<br>2) Carga máxima: \\\\(Q_{máx} = (50 \\\\times 10^{-6} \\\\text{ F}) \\\\times 12 \\\\text{ V} = 600 \\\\times 10^{-6} \\\\text{ C} = 600 \\\\mu \\\\text{C}\\\\).",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 3; ctx.strokeRect(100, 50, 280, 140);
@@ -1030,8 +1034,8 @@
                 question: "Um objeto de 4 cm de altura é colocado a 30 cm de uma lente convergente de distância focal f = 20 cm. Onde se forma a imagem e qual é a sua altura?",
                 options: ["p' = 60 cm, imagem invertida de 8 cm", "p' = 30 cm, imagem direita de 4 cm", "p' = 12 cm, imagem invertida de 2 cm", "p' = -60 cm, imagem virtual de 12 cm"],
                 correct: 0,
-                hint: "Equação de Gauss: \\(\frac{1}{f} = \\frac{1}{p} + \\frac{1}{p'}\\). Ampliação lateral: \\(m = -\\frac{p'}{p} = \\frac{i}{o}\\).",
-                explanation: "1) Posição da imagem (Gauss):<br>\\(\frac{1}{20} = \\frac{1}{30} + \\frac{1}{p'} \\implies \\frac{1}{p'} = \\frac{1}{20} - \\frac{1}{30} = \\frac{1}{60} \\implies p' = 60 \\text{ cm}\\).<br>2) Altura da imagem:<br>\\(m = -\\frac{60}{30} = -2 \\implies i = m \\cdot o = -2 \\times 4 = -8 \\text{ cm}\\).<br>Imagem real, invertida e com 8 cm de altura.",
+                hint: "Equação de Gauss: \\\\(\\frac{1}{f} = \\\\frac{1}{p} + \\\\frac{1}{p'}\\\\). Ampliação lateral: \\\\(m = -\\\\frac{p'}{p} = \\\\frac{i}{o}\\\\).",
+                explanation: "1) Posição da imagem (Gauss):<br>\\\\(\\frac{1}{20} = \\\\frac{1}{30} + \\\\frac{1}{p'} \\\\implies \\\\frac{1}{p'} = \\\\frac{1}{20} - \\\\frac{1}{30} = \\\\frac{1}{60} \\\\implies p' = 60 \\\\text{ cm}\\\\).<br>2) Altura da imagem:<br>\\\\(m = -\\\\frac{60}{30} = -2 \\\\implies i = m \\\\cdot o = -2 \\\\times 4 = -8 \\\\text{ cm}\\\\).<br>Imagem real, invertida e com 8 cm de altura.",
                 drawCanvas: (ctx) => {
                     ctx.clearRect(0, 0, 480, 240);
                     ctx.strokeStyle = "#475569"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(20, 120); ctx.lineTo(460, 120); ctx.stroke();
@@ -1250,7 +1254,7 @@
             stopVoice();
             if ('speechSynthesis' in window) {
                 const q = filteredQuestions[currentIndex];
-                const cleanText = q.question.replace(/\\\(.*?\\\)/g, "");
+                const cleanText = q.question.replace(/\\\\\(.*?\\\\\)/g, "");
                 utterance = new SpeechSynthesisUtterance(cleanText);
                 utterance.lang = "pt-BR";
                 utterance.rate = parseFloat(document.getElementById("speechRate").value);
@@ -1274,3 +1278,10 @@
     </script>
 </body>
 </html>
+"""
+
+os.makedirs(os.path.dirname(target_path), exist_ok=True)
+with open(target_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print(f"Successfully generated {target_path}!")
