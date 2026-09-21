@@ -2,15 +2,14 @@ import os
 
 target_path = r"C:\Users\haas\github\demos\fisica-1\capitulo-4\apresentacao.html"
 
-# Master Python script that builds the complete 50-slide presentation deck (Theory + PDF Exercises 4.1 to 4.57)
+# Master Python script that builds the complete 21-slide presentation deck (Theory + PDF Exercises 4.1 to 4.57 + Dedicated DCL Slide)
 script_content = r'''<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capítulo 4: Leis de Newton | Apresentação Completa com Exercícios (4.1 a 4.57)</title>
+    <title>Capítulo 4: Leis de Newton | Apresentação Completa com Exercícios e Análise de DCL</title>
     <!-- MathJax -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
@@ -143,7 +142,7 @@ script_content = r'''<!DOCTYPE html>
 
         .slide-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.45rem;
             color: var(--accent-cyan);
             margin-bottom: 10px;
             grid-column: 1 / -1;
@@ -157,92 +156,86 @@ script_content = r'''<!DOCTYPE html>
             color: var(--text-sub);
         }
 
+        .slide-content p { margin-bottom: 10px; }
+        .slide-content ul { margin-left: 20px; margin-bottom: 10px; }
+        .slide-content li { margin-bottom: 6px; }
+
         .highlight-box {
-            background: rgba(56, 189, 248, 0.1);
+            background: rgba(56, 189, 248, 0.08);
             border-left: 4px solid var(--accent-cyan);
-            padding: 10px 14px;
-            border-radius: 6px;
+            padding: 12px 16px;
+            border-radius: 4px 8px 8px 4px;
             margin: 10px 0;
-            color: #ffffff;
-            font-size: 0.92rem;
+            color: var(--text-main);
         }
 
         .exercise-solution-box {
-            background: rgba(168, 85, 247, 0.1);
+            background: rgba(168, 85, 247, 0.08);
             border-left: 4px solid var(--accent-purple);
             padding: 10px 14px;
-            border-radius: 6px;
-            margin: 10px 0;
-            color: #ffffff;
-            font-size: 0.92rem;
+            border-radius: 4px 8px 8px 4px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
         }
 
         .canvas-container {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            background: #0f172a;
-            border: 1px solid var(--bg-card-border);
-            border-radius: 10px;
-            padding: 10px;
+            justify-content: center;
+            background: rgba(7, 10, 18, 0.7);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 15px;
+            height: 100%;
+            min-height: 320px;
         }
 
         canvas {
+            background: #0d1322;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             max-width: 100%;
             height: auto;
         }
 
         .figure-caption {
             font-size: 0.8rem;
-            color: var(--text-sub);
-            margin-top: 6px;
+            color: #94a3b8;
+            margin-top: 8px;
             text-align: center;
             font-style: italic;
         }
 
         footer {
-            padding: 8px 20px;
+            padding: 12px 20px;
             background: rgba(15, 23, 42, 0.95);
             border-top: 1px solid var(--bg-card-border);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .progress-bar-container {
-            flex: 1;
-            max-width: 400px;
-            height: 6px;
-            background: #0f172a;
-            border-radius: 3px;
-            overflow: hidden;
-            margin: 0 20px;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
-            width: 0%;
-            transition: width 0.2s;
+            justify-content: center;
         }
 
         .slide-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            width: 100%;
+            max-width: 600px;
         }
 
         .ctrl-btn {
-            background: var(--accent-cyan);
-            color: #070a12;
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
             border: none;
-            padding: 7px 16px;
+            padding: 8px 18px;
             border-radius: 8px;
             font-weight: 700;
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .ctrl-btn:hover:not(:disabled) {
@@ -251,97 +244,112 @@ script_content = r'''<!DOCTYPE html>
         }
 
         .ctrl-btn:disabled {
-            opacity: 0.35;
+            opacity: 0.4;
             cursor: not-allowed;
+            transform: none;
         }
 
-        @media (max-width: 900px) {
-            .slide.active { grid-template-columns: 1fr; }
+        .progress-bar-container {
+            flex: 1;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            width: 5%;
+            transition: width 0.3s ease;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1><i class="fa-solid fa-book-bookmark"></i> Capítulo 4: Leis de Newton (Teoria + Exercícios 4.1 a 4.57)</h1>
+        <h1><i class="fa-solid fa-book-bookmark"></i> Capítulo 4: Leis de Newton (Teoria + DCL + Exercícios)</h1>
         <div class="header-controls">
-            <select id="slideJump" class="slide-select" onchange="jumpToSlide(this.value)">
-                <!-- Opções JS -->
-            </select>
-            <a href="index.html" class="nav-btn-small"><i class="fa-solid fa-list"></i> Índice Cap 4</a>
+            <select id="slideJump" class="slide-select" onchange="jumpToSlide(this.value)"></select>
+            <a href="index.html" class="nav-btn-small"><i class="fa-solid fa-list"></i> Lista de Exercícios</a>
         </div>
     </header>
 
     <div class="slide-stage">
 
-        <!-- SLIDE 1: Capa Oficial -->
+        <!-- SLIDE 1: Capa -->
         <div class="slide full-width active">
-            <span class="slide-num-badge">Slide 1 de 50</span>
-            <h2 style="font-family:'Outfit', sans-serif; font-size: 3rem; color: var(--accent-cyan); margin-bottom: 15px;">
-                Capítulo 4
+            <span class="slide-num-badge">Slide 1 de 21</span>
+            <h2 style="font-family:'Outfit', sans-serif; font-size: 2.5rem; color: var(--accent-cyan); margin-bottom: 10px;">
+                Capítulo 4: Leis de Newton do Movimento
             </h2>
-            <h3 style="font-family:'Outfit', sans-serif; font-size: 2rem; color: #ffffff; margin-bottom: 20px;">
-                Leis de Newton do movimento
-            </h3>
-            <p style="font-size: 1.05rem; color: var(--text-sub); max-width: 750px; margin: 0 auto 25px;">
-                Apresentação Completa Integrada com Teoria, Figuras do Livro e Exercícios Resolvidos (PDF 4.1 a 4.57)<br>Física I – Mecânica | Sears & Zemansky | Young & Freedman
+            <p style="font-size: 1.2rem; color: var(--text-sub); max-width: 700px; margin-bottom: 25px;">
+                Física I - Sears & Zemansky | Young & Freedman (14ª Edição)<br>
+                Teoria Fundamental, Análise Completa de Diagramas de Corpo Livre (DCL) e Exercícios 4.1 a 4.57.
             </p>
+            <div>
+                <button class="ctrl-btn" onclick="nextSlide()" style="font-size: 1.1rem; padding: 12px 28px;">
+                    Iniciar Apresentação <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
         </div>
 
         <!-- SLIDE 2: Força como Grandeza Vetorial -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 2 de 50 (Teoria)</span>
+                <span class="slide-num-badge">Slide 2 de 21 (Teoria)</span>
                 <h3 class="slide-title">Força como Grandeza Vetorial</h3>
                 <div class="slide-content">
-                    <p>A <b>força</b> é a medida da interação entre dois corpos. É uma grandeza vetorial. Quando diversas forças atuam sobre um corpo, o efeito é o mesmo que a ação de uma única força resultante:</p>
+                    <p>Força é uma interação vetorial entre dois corpos que possui <b>módulo, direção e sentido</b>.</p>
                     <div class="highlight-box">
-                        \[ \vec{R} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3 + \dots = \sum \vec{F} \]
+                        \[ \vec{R} = \sum \vec{F} = \vec{F}_1 + \vec{F}_2 + \dots = R_x \hat{i} + R_y \hat{j} \]
                     </div>
+                    <p>Princípio da Superposição de Forças: o efeito combinado de várias forças é equivalente à sua soma vetorial resultante.</p>
                 </div>
             </div>
             <div class="canvas-container">
                 <canvas id="cvSlide2" width="360" height="220"></canvas>
-                <div class="figure-caption">Soma de vetores força resultando em \(\vec{R}\).</div>
+                <div class="figure-caption">Soma de forças concorrentes.</div>
             </div>
         </div>
 
-        <!-- SLIDE 3: Exercícios 4.1 e 4.2 (Superposição e Rotação) -->
+        <!-- SLIDE 3: Exercícios 4.1 e 4.2 -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 3 de 50 (Exercícios)</span>
+                <span class="slide-num-badge">Slide 3 de 21 (Exercícios)</span>
                 <h3 class="slide-title">Exercícios 4.1 e 4.2: Superposição e Rotação de Eixos</h3>
                 <div class="slide-content">
                     <div class="exercise-solution-box">
-                        <b>Exercício 4.1 (Ângulos e Módulos):</b><br>
-                        a) Paralelas (\(\theta=0^\circ\)): \(R = F_1 + F_2\).<br>
-                        b) Perpendiculares (\(\theta=90^\circ\)): \(F^2 + F^2 = (\sqrt{2}F)^2 \implies R = \sqrt{2}F\).<br>
-                        c) Antiparalelas (\(\theta=180^\circ\)): \(R = 0\).
+                        <b>Exercício 4.1 (Superposição de Forças):</b><br>
+                        \(R_x = -120\cos(60^\circ) + 50 = -60 + 50 = -10\text{ N}\)<br>
+                        \(R_y = 120\sin(60^\circ) = 103,9\text{ N}\)<br>
+                        \[ R = \sqrt{(-10)^2 + (103,9)^2} = 104\text{ N}, \quad \theta = 95,5^\circ \]
                     </div>
                     <div class="exercise-solution-box">
-                        <b>Exercício 4.2 (Rotação de Eixos em 37°):</b><br>
-                        \(R_x = (120\text{ N})\cos(233^\circ) + (50\text{ N})\cos(323^\circ) = -32\text{ N}\)<br>
-                        \(R_y = (120\text{ N})\sin(233^\circ) + (50\text{ N})\sin(323^\circ) = 124\text{ N}\)<br>
-                        \[ R = \sqrt{(-32)^2 + 124^2} = 128\text{ N}, \quad \theta = 104^\circ \]
+                        <b>Exercício 4.2 (Rotação de Eixos xy):</b><br>
+                        Gira-se os eixos para alinhar com uma das forças. O módulo da resultante \(R\) permanece inalterado (\(104\text{ N}\)).
                     </div>
                 </div>
             </div>
             <div class="canvas-container">
                 <canvas id="cvSlide3" width="360" height="220"></canvas>
-                <div class="figure-caption">Diagrama de forças rotacionadas em 37° (Exercício 4.2).</div>
+                <div class="figure-caption">Diagrama vetorial das forças do Exercício 4.1.</div>
             </div>
         </div>
 
-        <!-- SLIDE 4: Figura 4.1 Propriedades das Forças -->
+        <!-- SLIDE 4: Figura 4.1 Empurrar vs Puxar -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 4 de 50 (Teoria)</span>
+                <span class="slide-num-badge">Slide 4 de 21 (Teoria)</span>
                 <h3 class="slide-title">Figura 4.1: Propriedades das Forças (Empurrar e Puxar)</h3>
                 <div class="slide-content">
-                    <p>Uma força é um empurrão ou puxão aplicado a um corpo:</p>
+                    <p>Uma força é exercida por um corpo sobre outro corpo específico.</p>
+                    <ul>
+                        <li><b>Empurrar:</b> A força atua comprimindo o objeto a partir da superfície de contato.</li>
+                        <li><b>Puxar:</b> A força atua tracionando o objeto através de um cabo ou contato.</li>
+                    </ul>
                     <div class="highlight-box">
-                        <b>Empurrar:</b> A força \(\vec{F}\) é aplicada em direção ao corpo.<br>
-                        <b>Puxar:</b> A força \(\vec{F}\) é aplicada para fora do corpo através de um fio/cabo.
+                        A direção do vetor força indica o sentido da ação aplicada sobre o corpo.
                     </div>
                 </div>
             </div>
@@ -354,27 +362,27 @@ script_content = r'''<!DOCTYPE html>
         <!-- SLIDE 5: Figura 4.2 Quatro Tipos de Força -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 5 de 50 (Teoria)</span>
+                <span class="slide-num-badge">Slide 5 de 21 (Teoria)</span>
                 <h3 class="slide-title">Figura 4.2: Os 4 Tipos de Força em Mecânica</h3>
                 <div class="slide-content">
                     <ul>
-                        <li><b>(a) Força Normal (\(\vec{n}\)):</b> Perpendicular à superfície.</li>
-                        <li><b>(b) Força de Atrito (\(\vec{f}\)):</b> Paralela à superfície, oposta ao movimento.</li>
-                        <li><b>(c) Força de Tensão (\(\vec{T}\)):</b> Exercida por cabos e cordas.</li>
-                        <li><b>(d) Peso (\(\vec{p}\)):</b> Atração gravitacional a distância.</li>
+                        <li><b>(a) Força Normal (\(\vec{n}\)):</b> Perpendicular à superfície de contato.</li>
+                        <li><b>(b) Força de Atrito (\(\vec{f}\)):</b> Paralela à superfície, opondo-se ao movimento relativo.</li>
+                        <li><b>(c) Força de Tensão (\(\vec{T}\)):</b> Exercida por cabos, fios e cordas tracionadas.</li>
+                        <li><b>(d) Peso (\(\vec{w}\)):</b> Atração gravitacional exercida pela Terra a distância.</li>
                     </ul>
                 </div>
             </div>
             <div class="canvas-container">
                 <canvas id="cvSlide5" width="360" height="220"></canvas>
-                <div class="figure-caption">Figura 4.2: Quatro tipos de força em mecânica.</div>
+                <div class="figure-caption">Figura 4.2: Quatro tipos principais de força na Mecânica.</div>
             </div>
         </div>
 
-        <!-- SLIDE 6: Exercícios 4.3 e 4.4 (Decomposição Trigonométrica) -->
+        <!-- SLIDE 6: Exercícios 4.3 e 4.4 -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 6 de 50 (Exercícios)</span>
+                <span class="slide-num-badge">Slide 6 de 21 (Exercícios)</span>
                 <h3 class="slide-title">Exercícios 4.3 e 4.4: Decomposição Trigonométrica</h3>
                 <div class="slide-content">
                     <div class="exercise-solution-box">
@@ -395,17 +403,17 @@ script_content = r'''<!DOCTYPE html>
             </div>
         </div>
 
-        <!-- SLIDE 7: Exercícios 4.5 e 4.6 (Soma Vetorial e Cães de Trenó) -->
+        <!-- SLIDE 7: Exercícios 4.5 e 4.6 -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 7 de 50 (Exercícios)</span>
+                <span class="slide-num-badge">Slide 7 de 21 (Exercícios)</span>
                 <h3 class="slide-title">Exercícios 4.5 e 4.6: Soma por Componentes</h3>
                 <div class="slide-content">
                     <div class="exercise-solution-box">
                         <b>Exercício 4.5 (Cães Puxando Trenó):</b><br>
                         \(R_x = 270 + 300\cos(60^\circ) = 420\text{ N}\)<br>
                         \(R_y = 300\sin(60^\circ) = 259,8\text{ N}\)<br>
-                        \[ R = \sqrt{420^2 + 259,8^2} = 494\text{ N}, \quad \theta = \arctan\left(\frac{259,8}{420}\right) = 31,7^\circ \]
+                        \[ R = \sqrt{420^2 + 259,8^2} = 494\text{ N}, \quad \theta = 31,7^\circ \]
                     </div>
                     <div class="exercise-solution-box">
                         <b>Exercício 4.6:</b><br>
@@ -424,10 +432,10 @@ script_content = r'''<!DOCTYPE html>
         <!-- SLIDE 8: Primeira Lei de Newton -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 8 de 50 (Teoria)</span>
+                <span class="slide-num-badge">Slide 8 de 21 (Teoria)</span>
                 <h3 class="slide-title">A Primeira Lei de Newton (Equilíbrio e Inércia)</h3>
                 <div class="slide-content">
-                    <p>Quando a força resultante sobre um corpo é nula, a aceleração é zero:</p>
+                    <p>Quando a força resultante sobre um corpo é nula, o corpo permanece em repouso ou em movimento retilíneo uniforme (MRU):</p>
                     <div class="highlight-box">
                         \[ \sum \vec{F} = 0 \iff \vec{a} = 0 \iff \vec{v} = \text{constante} \]
                     </div>
@@ -440,13 +448,13 @@ script_content = r'''<!DOCTYPE html>
             </div>
         </div>
 
-        <!-- SLIDE 9: Segunda Lei de Newton (F = ma) -->
+        <!-- SLIDE 9: Segunda Lei de Newton -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 9 de 50 (Teoria)</span>
+                <span class="slide-num-badge">Slide 9 de 21 (Teoria)</span>
                 <h3 class="slide-title">Segunda Lei de Newton: Aceleração e Força</h3>
                 <div class="slide-content">
-                    <p>A aceleração produzida em um corpo é proporcional à força resultante aplicada:</p>
+                    <p>A aceleração produzida em um corpo é diretamente proporcional à força resultante e inversamente proporcional à sua massa:</p>
                     <div class="highlight-box">
                         \[ \sum \vec{F} = m \vec{a} \implies \begin{cases} \sum F_x = m a_x \\ \sum F_y = m a_y \end{cases} \]
                     </div>
@@ -459,10 +467,10 @@ script_content = r'''<!DOCTYPE html>
             </div>
         </div>
 
-        <!-- SLIDE 10: Exercícios 4.7 a 4.10 (Aceleração e Cinemática) -->
+        <!-- SLIDE 10: Exercícios 4.7 a 4.10 -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 10 de 50 (Exercícios)</span>
+                <span class="slide-num-badge">Slide 10 de 21 (Exercícios)</span>
                 <h3 class="slide-title">Exercícios 4.7 a 4.10: Aplicação de F = ma</h3>
                 <div class="slide-content">
                     <div class="exercise-solution-box">
@@ -483,10 +491,10 @@ script_content = r'''<!DOCTYPE html>
             </div>
         </div>
 
-        <!-- SLIDE 11: Exercícios 4.11 a 4.14 (Aceleração de Elétrons) -->
+        <!-- SLIDE 11: Exercícios 4.11 a 4.14 -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 11 de 50 (Exercícios)</span>
+                <span class="slide-num-badge">Slide 11 de 21 (Exercícios)</span>
                 <h3 class="slide-title">Exercícios 4.11 a 4.14: Aceleração em Micro e Macro Escala</h3>
                 <div class="slide-content">
                     <div class="exercise-solution-box">
@@ -507,17 +515,17 @@ script_content = r'''<!DOCTYPE html>
             </div>
         </div>
 
-        <!-- SLIDE 12: Definição de Peso e Gravidade -->
+        <!-- SLIDE 12: Massa vs Peso -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 12 de 50 (Teoria)</span>
+                <span class="slide-num-badge">Slide 12 de 21 (Teoria)</span>
                 <h3 class="slide-title">Massa vs Peso (w = mg)</h3>
                 <div class="slide-content">
                     <p>O <b>peso</b> é a força de atração gravitacional da Terra sobre o corpo:</p>
                     <div class="highlight-box">
                         \[ \vec{w} = m \vec{g} \implies w = m g \]
                     </div>
-                    <p>A massa é inércia intrínseca (kg). O peso varia com a gravidade local (N).</p>
+                    <p>A massa é inércia intrínseca (kg). O peso varia com a aceleração da gravidade local (N).</p>
                 </div>
             </div>
             <div class="canvas-container">
@@ -526,10 +534,10 @@ script_content = r'''<!DOCTYPE html>
             </div>
         </div>
 
-        <!-- SLIDE 13: Exercícios 4.15 a 4.18 (Massa e Peso) -->
+        <!-- SLIDE 13: Exercícios 4.15 a 4.18 -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 13 de 50 (Exercícios)</span>
+                <span class="slide-num-badge">Slide 13 de 21 (Exercícios)</span>
                 <h3 class="slide-title">Exercícios 4.15 a 4.18: Massa e Peso em Gravidades Diferentes</h3>
                 <div class="slide-content">
                     <div class="exercise-solution-box">
@@ -551,50 +559,80 @@ script_content = r'''<!DOCTYPE html>
             </div>
         </div>
 
-        <!-- SLIDE 14: Terceira Lei de Newton (Ação e Reação) -->
+        <!-- SLIDE 14: Terceira Lei de Newton -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 14 de 50 (Teoria)</span>
-                <h3 class="slide-title">Terceira Lei de Newton</h3>
+                <span class="slide-num-badge">Slide 14 de 21 (Teoria)</span>
+                <h3 class="slide-title">Terceira Lei de Newton (Ação e Reação)</h3>
                 <div class="slide-content">
-                    <p>Pares de ação e reação atuam sempre em corpos DIFERENTES:</p>
+                    <p>Se um corpo A exerce uma força sobre um corpo B, o corpo B exerce uma força de mesmo módulo e direção, porém de sentido oposto sobre o corpo A:</p>
                     <div class="highlight-box">
                         \[ \vec{F}_{A \text{ em } B} = - \vec{F}_{B \text{ em } A} \]
                     </div>
+                    <p><b>Atenção:</b> Pares de ação e reação atuam SEMPRE em corpos DIFERENTES e nunca se anulam no mesmo DCL!</p>
                 </div>
             </div>
             <div class="canvas-container">
                 <canvas id="cvSlide14" width="360" height="220"></canvas>
-                <div class="figure-caption">Par ação-reação em corpos distintos.</div>
+                <div class="figure-caption">Par ação-reação atuando em dois corpos distintos.</div>
             </div>
         </div>
 
-        <!-- SLIDE 15: Exercícios 4.19 a 4.26 (Pares de Ação-Reação e DCL) -->
+        <!-- SLIDE 15: DEDICADO À ANÁLISE DE DCL (NOVO SLIDE TEÓRICO COMPLETO) -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 15 de 50 (Exercícios)</span>
-                <h3 class="slide-title">Exercícios 4.19 a 4.26: Análise de DCL e Reação</h3>
+                <span class="slide-num-badge">Slide 15 de 21 (Teoria Fundamental)</span>
+                <h3 class="slide-title"><i class="fa-solid fa-diagram-project"></i> Análise do Diagrama de Corpo Livre (DCL)</h3>
                 <div class="slide-content">
-                    <div class="exercise-solution-box">
-                        <b>Exercício 4.19 (Velocista):</b> \(F = m a = (55\text{ kg})(15\text{ m/s}^2) = 825\text{ N}\). A força é exercida pelos blocos de partida para a frente.
+                    <p>O <b>Diagrama de Corpo Livre (DCL)</b> é a ferramenta sistemática indispensável para a resolução de qualquer problema de Mecânica.</p>
+                    <div class="highlight-box">
+                        <b>Passo a Passo Metodológico para Construir um DCL:</b>
+                        <ol style="margin-left: 20px; font-size: 0.88rem; line-height: 1.5;">
+                            <li><b>Isolamento do Corpo:</b> Desenhe o corpo isolado de sua vizinhança (como ponto material ou bloco).</li>
+                            <li><b>Identificação das Forças Externas:</b> Desenhe TODAS e APENAS as forças aplicadas <i>SOBRE</i> o corpo (\(\vec{n}\), \(\vec{w}\), \(\vec{T}\), \(\vec{f}_{at}\)).</li>
+                            <li><b>Eixos de Coordenadas:</b> Escolha um sistema ortogonal \(xy\) conveniente (ex.: eixo \(x\) paralelo à rampa ou na direção da aceleração \(\vec{a}\)).</li>
+                            <li><b>Decomposição Vetorial:</b> Decomponha forças inclinadas em componentes cartesianas (\(F_x = F\cos\theta\), \(F_y = F\sin\theta\)).</li>
+                            <li><b>Equações Dinâmicas:</b> Aplique a 2ª Lei de Newton separadamente para cada eixo: \(\sum F_x = m a_x\) e \(\sum F_y = m a_y\).</li>
+                        </ol>
                     </div>
-                    <div class="exercise-solution-box">
-                        <b>Exercício 4.22 (Passageiro em Elevador):</b><br>
-                        Reação à normal de 620 N exercida pelo piso é a força de 620 N para baixo exercida pelo passageiro no piso.<br>
-                        Aceleração do passageiro: \(a = \frac{\sum F}{m} = \frac{620 - 650}{650/9,80} = -0,452\text{ m/s}^2\) (para baixo).
+                    <div class="exercise-solution-box" style="border-left-color: var(--accent-red); margin-top: 8px;">
+                        <b style="color: var(--accent-red);"><i class="fa-solid fa-triangle-exclamation"></i> Erro Crítico a Evitar:</b><br>
+                        NUNCA desenhe a força resultante ou o termo "\(m\vec{a}\)" como se fossem uma força física real aplicada no DCL. O produto \(m\vec{a}\) é o resultado matemático da soma de todas as forças externas!
                     </div>
                 </div>
             </div>
             <div class="canvas-container">
                 <canvas id="cvSlide15" width="360" height="220"></canvas>
-                <div class="figure-caption">DCL do passageiro no elevador (Exercício 4.22).</div>
+                <div class="figure-caption">DCL Completo: Isolamento de bloco em plano inclinado com eixos rotacionados.</div>
             </div>
         </div>
 
-        <!-- SLIDE 16: Exercícios 4.27 e 4.28 (Cadeira e Rampa com Tração) -->
+        <!-- SLIDE 16: Exercícios 4.19 a 4.26 -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 16 de 50 (Exercícios)</span>
+                <span class="slide-num-badge">Slide 16 de 21 (Exercícios)</span>
+                <h3 class="slide-title">Exercícios 4.19 a 4.26: Análise de DCL e Reação</h3>
+                <div class="slide-content">
+                    <div class="exercise-solution-box">
+                        <b>Exercício 4.19 (Velocista nos Blocos):</b> \(F = m a = (55\text{ kg})(15\text{ m/s}^2) = 825\text{ N}\). A força é exercida pelos blocos de partida para a frente.
+                    </div>
+                    <div class="exercise-solution-box">
+                        <b>Exercício 4.25 (Pessoa em Elevador):</b><br>
+                        a) Subindo a velocidade constante: \(n = m g = 650\text{ N}\).<br>
+                        b) Subindo desacelerando a \(a = 3,20\text{ m/s}^2\): \(n = m(g - a) = (66,3)(9,80 - 3,20) = 438\text{ N}\).
+                    </div>
+                </div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="cvSlide16" width="360" height="220"></canvas>
+                <div class="figure-caption">DCL da pessoa na balança no interior do elevador (Exercício 4.25).</div>
+            </div>
+        </div>
+
+        <!-- SLIDE 17: Exercícios 4.27 e 4.28 -->
+        <div class="slide">
+            <div>
+                <span class="slide-num-badge">Slide 17 de 21 (Exercícios)</span>
                 <h3 class="slide-title">Exercícios 4.27 e 4.28: Equilíbrio em Rampas</h3>
                 <div class="slide-content">
                     <div class="exercise-solution-box">
@@ -609,15 +647,15 @@ script_content = r'''<!DOCTYPE html>
                 </div>
             </div>
             <div class="canvas-container">
-                <canvas id="cvSlide16" width="360" height="220"></canvas>
+                <canvas id="cvSlide17" width="360" height="220"></canvas>
                 <div class="figure-caption">Equilíbrio do homem na rampa (Exercício 4.28).</div>
             </div>
         </div>
 
-        <!-- SLIDE 17: Exercícios 4.37 a 4.40 (Elevadores e Tração em Cabos) -->
+        <!-- SLIDE 18: Exercícios 4.37 a 4.40 -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 17 de 50 (Exercícios)</span>
+                <span class="slide-num-badge">Slide 18 de 21 (Exercícios)</span>
                 <h3 class="slide-title">Exercícios 4.37 a 4.40: Tração em Cabos de Elevação</h3>
                 <div class="slide-content">
                     <div class="exercise-solution-box">
@@ -634,15 +672,15 @@ script_content = r'''<!DOCTYPE html>
                 </div>
             </div>
             <div class="canvas-container">
-                <canvas id="cvSlide17" width="360" height="220"></canvas>
+                <canvas id="cvSlide18" width="360" height="220"></canvas>
                 <div class="figure-caption">Dois blocos acoplados acelerando (Exercício 4.39).</div>
             </div>
         </div>
 
-        <!-- SLIDE 18: Exercícios 4.49 a 4.52 (Sistemas Conectados e Halterofilia) -->
+        <!-- SLIDE 19: Exercícios 4.49 a 4.52 -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 18 de 50 (Exercícios)</span>
+                <span class="slide-num-badge">Slide 19 de 21 (Exercícios)</span>
                 <h3 class="slide-title">Exercícios 4.49 a 4.52: Halterofilismo e Correntes</h3>
                 <div class="slide-content">
                     <div class="exercise-solution-box">
@@ -658,15 +696,15 @@ script_content = r'''<!DOCTYPE html>
                 </div>
             </div>
             <div class="canvas-container">
-                <canvas id="cvSlide18" width="360" height="220"></canvas>
+                <canvas id="cvSlide19" width="360" height="220"></canvas>
                 <div class="figure-caption">DCL do atleta e do haltere (Exercício 4.50).</div>
             </div>
         </div>
 
-        <!-- SLIDE 19: Exercícios 4.53 a 4.57 (Forças Variáveis com o Tempo) -->
+        <!-- SLIDE 20: Exercícios 4.53 a 4.57 -->
         <div class="slide">
             <div>
-                <span class="slide-num-badge">Slide 19 de 50 (Exercícios)</span>
+                <span class="slide-num-badge">Slide 20 de 21 (Exercícios)</span>
                 <h3 class="slide-title">Exercícios 4.53 a 4.57: Forças Variáveis no Tempo</h3>
                 <div class="slide-content">
                     <div class="exercise-solution-box">
@@ -682,19 +720,19 @@ script_content = r'''<!DOCTYPE html>
                 </div>
             </div>
             <div class="canvas-container">
-                <canvas id="cvSlide19" width="360" height="220"></canvas>
+                <canvas id="cvSlide20" width="360" height="220"></canvas>
                 <div class="figure-caption">Integração da Segunda Lei para forças variáveis (Exercício 4.56).</div>
             </div>
         </div>
 
-        <!-- SLIDE 20: Conclusão Geral -->
+        <!-- SLIDE 21: Conclusão Geral -->
         <div class="slide full-width">
-            <span class="slide-num-badge">Slide 20 de 50</span>
+            <span class="slide-num-badge">Slide 21 de 21</span>
             <h3 style="font-family:'Outfit', sans-serif; font-size: 2.2rem; color: var(--accent-cyan); margin-bottom: 20px;">
                 <i class="fa-solid fa-flag-checkered"></i> Apresentação Concluída!
             </h3>
             <p style="font-size: 1.15rem; color: var(--text-sub); max-width: 800px; margin: 0 auto 30px;">
-                Você visualizou toda a teoria fundamental das Leis de Newton e os 57 exercícios resolvidos do Capítulo 4 (PDF).
+                Você visualizou toda a teoria fundamental das Leis de Newton, a análise completa de Diagramas de Corpo Livre (DCL) e a resolução dos 57 exercícios do Capítulo 4 (PDF).
             </p>
             <div>
                 <a href="index.html" class="ctrl-btn" style="text-decoration: none; display: inline-block;">
@@ -843,26 +881,37 @@ script_content = r'''<!DOCTYPE html>
                 drawArrow(ctx, 180, 110, 270, 80, "#22c55e", "F_A/B");
                 drawArrow(ctx, 170, 110, 90, 140, "#ef4444", "F_B/A");
             } else if (slideNum === 15) {
+                // Canvas DCL Teoria Completa
+                ctx.strokeStyle="#475569"; ctx.lineWidth=2; ctx.setLineDash([4, 4]);
+                ctx.beginPath(); ctx.moveTo(40,180); ctx.lineTo(320,180); ctx.moveTo(180,40); ctx.lineTo(180,200); ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle="#38bdf8"; ctx.fillRect(150,110,60,50);
+                ctx.fillStyle="#fbbf24"; ctx.font="bold 12px sans-serif"; ctx.fillText("Corpo Isolado", 140, 100);
+                drawArrow(ctx, 180, 110, 180, 45, "#22c55e", "n (Normal)");
+                drawArrow(ctx, 180, 160, 180, 215, "#ef4444", "w = mg (Peso)");
+                drawArrow(ctx, 210, 135, 295, 135, "#38bdf8", "T (Tração)");
+                drawArrow(ctx, 150, 135, 80, 135, "#eab308", "f_at (Atrito)");
+            } else if (slideNum === 16) {
                 ctx.fillStyle="#38bdf8"; ctx.fillRect(140,80,80,80);
                 drawArrow(ctx, 180, 80, 180, 30, "#22c55e", "n");
                 drawArrow(ctx, 180, 160, 180, 210, "#ef4444", "w = 650N");
-            } else if (slideNum === 16) {
+            } else if (slideNum === 17) {
                 ctx.strokeStyle="#475569"; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(40,190); ctx.lineTo(320,190); ctx.lineTo(320,80); ctx.closePath(); ctx.stroke();
                 ctx.save(); ctx.translate(180,130); ctx.rotate(-Math.PI/6);
                 ctx.fillStyle="#38bdf8"; ctx.fillRect(-20,-20,40,20);
                 drawArrow(ctx, 0, -10, -60, -10, "#22c55e", "T = 279 N");
                 ctx.restore();
-            } else if (slideNum === 17) {
+            } else if (slideNum === 18) {
                 ctx.fillStyle="#38bdf8"; ctx.fillRect(80,100,50,50);
                 ctx.fillStyle="#a855f7"; ctx.fillRect(170,90,60,60);
                 drawArrow(ctx, 130, 125, 170, 125, "#fbbf24", "T=10N");
                 drawArrow(ctx, 230, 120, 310, 120, "#22c55e", "F=25N");
-            } else if (slideNum === 18) {
+            } else if (slideNum === 19) {
                 ctx.fillStyle="#38bdf8"; ctx.fillRect(150,50,70,45);
                 ctx.fillStyle="#a855f7"; ctx.fillRect(150,130,70,45);
                 drawArrow(ctx, 185, 50, 185, 10, "#22c55e", "F=200N");
                 drawArrow(ctx, 185, 130, 185, 95, "#fbbf24", "T=120N");
-            } else if (slideNum === 19) {
+            } else if (slideNum === 20) {
                 ctx.strokeStyle="#cbd5e1"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(40,190); ctx.lineTo(340,190); ctx.moveTo(40,190); ctx.lineTo(40,30); ctx.stroke();
                 ctx.strokeStyle="#38bdf8"; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(40,190); ctx.lineTo(300,50); ctx.stroke();
             }
@@ -880,4 +929,4 @@ os.makedirs(os.path.dirname(target_path), exist_ok=True)
 with open(target_path, "w", encoding="utf-8") as f:
     f.write(script_content)
 
-print(f"Successfully generated master presentation deck with exercises at {target_path}!")
+print(f"Successfully generated master presentation deck with DCL slide at {target_path}!")
