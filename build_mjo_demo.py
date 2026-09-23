@@ -1,0 +1,2882 @@
+# -*- coding: utf-8 -*-
+"""
+Builder for MJO, Teleconnections, SALLJ and SESA Precipitation Interactive Demo.
+Generates an advanced, high-performance HTML/JS/CSS application.
+"""
+import os
+import json
+import shutil
+
+OUTPUT_DIR = r"C:\Users\haas\github\demos\mesoescala\mjo-teleconexoes-sesa"
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "index.html")
+ONEDRIVE_DIR = r"C:\Users\haas\OneDrive\Documentos\disciplinas\FSC5101_Fisica_I\demos\mesoescala\mjo-teleconexoes-sesa"
+
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(ONEDRIVE_DIR, exist_ok=True)
+
+html_content = r'''<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MJO, Teleconexões, SALLJ & Chuvas no SESA — Demonstração Interativa</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome 6.5.1 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- KaTeX para Fórmulas Matemáticas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #050813;
+            --bg-surface: #0a1122;
+            --card-bg: rgba(13, 22, 42, 0.94);
+            --card-border: rgba(56, 189, 248, 0.28);
+            --card-border-glow: rgba(56, 189, 248, 0.65);
+            --accent-cyan: #38bdf8;
+            --accent-blue: #3b82f6;
+            --accent-emerald: #10b981;
+            --accent-gold: #fbbf24;
+            --accent-orange: #f97316;
+            --accent-rose: #f43f5e;
+            --accent-purple: #a855f7;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-title: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 20% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 45%),
+                linear-gradient(180deg, #070c1a 0%, #03060d 100%);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Top Header */
+        header {
+            padding: 12px 24px;
+            background: rgba(10, 17, 34, 0.96);
+            border-bottom: 1px solid var(--card-border);
+            backdrop-filter: blur(14px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-title-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            padding: 8px 14px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--accent-cyan);
+            color: #020617;
+            transform: translateX(-2px);
+        }
+
+        .header-title {
+            font-family: var(--font-title);
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #fbbf24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-subtitle {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Quick Phase Selector in Header */
+        .phase-strip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(15, 23, 42, 0.85);
+            padding: 4px 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .phase-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+        }
+
+        .phase-btn:hover {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--text-main);
+        }
+
+        .phase-btn.active {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            color: #020617;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+        }
+
+        .play-cycle-btn {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--accent-emerald);
+            color: var(--accent-emerald);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .play-cycle-btn:hover {
+            background: var(--accent-emerald);
+            color: #020617;
+        }
+
+        /* Voice Narration Controls */
+        .voice-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .voice-btn {
+            background: rgba(168, 85, 247, 0.18);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            color: #d8b4fe;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .voice-btn:hover {
+            background: var(--accent-purple);
+            color: #020617;
+        }
+
+        /* Layout Grid */
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 440px;
+            gap: 16px;
+            padding: 16px 20px;
+            flex: 1;
+            max-width: 1920px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        @media (max-width: 1280px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Left Column: Interactive Map & Viewport Controls */
+        .main-stage {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .map-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .map-toolbar {
+            padding: 10px 16px;
+            background: rgba(15, 23, 42, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .view-tabs {
+            display: flex;
+            gap: 6px;
+        }
+
+        .view-tab {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .view-tab.active, .view-tab:hover {
+            background: rgba(56, 189, 248, 0.18);
+            border-color: var(--accent-cyan);
+            color: var(--text-main);
+        }
+
+        .layer-toggles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .layer-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            padding: 5px 10px;
+            border-radius: 7px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .layer-btn.active {
+            border-color: currentColor;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .layer-btn[data-layer="stj"].active { color: #38bdf8; }
+        .layer-btn[data-layer="pfj"].active { color: #c084fc; }
+        .layer-btn[data-layer="sallj"].active { color: #34d399; }
+        .layer-btn[data-layer="rain"].active { color: #38bdf8; }
+        .layer-btn[data-layer="rossby"].active { color: #fbbf24; }
+        .layer-btn[data-layer="olr"].active { color: #f97316; }
+        .layer-btn[data-layer="particles"].active { color: #67e8f9; }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 570px;
+            background: #040711;
+            cursor: grab;
+            overflow: hidden;
+        }
+
+        .canvas-container:active {
+            cursor: grabbing;
+        }
+
+        #mapCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* HUD Overlays on Map */
+        .map-hud-legend {
+            position: absolute;
+            bottom: 12px;
+            left: 14px;
+            background: rgba(7, 12, 24, 0.88);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 10px;
+            padding: 10px 14px;
+            backdrop-filter: blur(8px);
+            font-size: 0.72rem;
+            color: var(--text-main);
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            max-width: 320px;
+        }
+
+        .legend-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-line {
+            width: 24px;
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        .legend-badge {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .map-controls-floating {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 20;
+        }
+
+        .map-control-btn {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.18s;
+            font-size: 0.85rem;
+        }
+
+        .map-control-btn:hover {
+            background: var(--accent-cyan);
+            color: #020617;
+        }
+
+        .map-tooltip {
+            position: absolute;
+            background: rgba(10, 18, 35, 0.95);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.76rem;
+            color: var(--text-main);
+            pointer-events: none;
+            display: none;
+            z-index: 50;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+            white-space: nowrap;
+        }
+
+        /* Bottom Section of Left Column: Vertical Cross Section & Teleconnection Status */
+        .bottom-dash {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .bottom-dash {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sub-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card-header-mini {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 6px;
+        }
+
+        .card-header-mini h3 {
+            font-family: var(--font-title);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cross-section-canvas {
+            width: 100%;
+            height: 180px;
+            background: #040814;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: block;
+        }
+
+        /* Right Column: RMM Diagram, Logit Ruler, & Physical Insight */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* Wheeler-Hendon RMM Diagram Card */
+        .rmm-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rmm-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rmm-header h2 {
+            font-family: var(--font-title);
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rmm-canvas-box {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            background: #060a16;
+            border-radius: 12px;
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #rmmCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: crosshair;
+        }
+
+        .rmm-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 8px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .metric-label {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Logit Ruler Card */
+        .logit-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .logit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logit-header h2 {
+            font-family: var(--font-title);
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--accent-emerald);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logit-ruler-canvas {
+            width: 100%;
+            height: 140px;
+            background: #050a17;
+            border-radius: 10px;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            display: block;
+        }
+
+        .logit-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.78rem;
+        }
+
+        .logit-control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logit-control-row select, .logit-control-row input[type="range"] {
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-main);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.76rem;
+        }
+
+        /* Phase Diagnostic Detail Card */
+        .diagnostic-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+
+        .diag-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            width: fit-content;
+        }
+
+        .diag-status-badge.favoravel {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .diag-status-badge.desfavoravel {
+            background: rgba(244, 63, 94, 0.2);
+            color: #fb7185;
+            border: 1px solid rgba(244, 63, 94, 0.4);
+        }
+
+        .diag-status-badge.neutro {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fcd34d;
+            border: 1px solid rgba(251, 191, 36, 0.4);
+        }
+
+        /* Theory & Terminology Section (Accordion / Bottom) */
+        .theory-section {
+            margin: 10px 20px 30px 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .theory-header {
+            padding: 14px 20px;
+            background: rgba(15, 23, 42, 0.95);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-title);
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .theory-body {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .theory-block h4 {
+            color: var(--accent-gold);
+            font-family: var(--font-title);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .equation-box {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 8px 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .term-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.78rem;
+            margin-top: 6px;
+        }
+
+        .term-table th, .term-table td {
+            padding: 6px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: left;
+        }
+
+        .term-table th {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        .term-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Pulse animation for active convection */
+        @keyframes pulseConvection {
+            0% { transform: scale(0.98); opacity: 0.8; }
+            50% { transform: scale(1.02); opacity: 1.0; }
+            100% { transform: scale(0.98); opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-title-box">
+            <a href="../../index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Demos</a>
+            <div>
+                <h1 class="header-title">MJO, Teleconexões & Chuvas no SESA</h1>
+                <p class="header-subtitle">Modulação de Baixa Frequência, Jato de Baixos Níveis (SALLJ), Jato Subtropical (200 hPa) & Jato Polar (300 hPa)</p>
+            </div>
+        </div>
+
+        <!-- Quick Phase Buttons -->
+        <div class="phase-strip">
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-right: 4px;">FASE MJO:</span>
+            <button class="phase-btn" data-phase="1">1</button>
+            <button class="phase-btn" data-phase="2">2</button>
+            <button class="phase-btn active" data-phase="3">3</button>
+            <button class="phase-btn" data-phase="4">4</button>
+            <button class="phase-btn" data-phase="5">5</button>
+            <button class="phase-btn" data-phase="6">6</button>
+            <button class="phase-btn" data-phase="7">7</button>
+            <button class="phase-btn" data-phase="8">8</button>
+            <button class="play-cycle-btn" id="btnPlayCycle"><i class="fa-solid fa-play"></i> Ciclo 45d</button>
+        </div>
+
+        <!-- Voice Narration -->
+        <div class="voice-controls">
+            <button class="voice-btn" id="btnVoice"><i class="fa-solid fa-volume-high"></i> Explicar Fase</button>
+            <button class="voice-btn" id="btnVoiceStop" style="display:none; background:rgba(244,63,94,0.2); border-color:var(--accent-rose); color:#fda4af;"><i class="fa-solid fa-stop"></i> Parar</button>
+        </div>
+    </header>
+
+    <!-- App Container -->
+    <div class="app-container">
+        
+        <!-- Left Column: Map & Stage -->
+        <div class="main-stage">
+            
+            <div class="map-card">
+                <!-- Toolbar -->
+                <div class="map-toolbar">
+                    <div class="view-tabs">
+                        <button class="view-tab" data-view="global"><i class="fa-solid fa-globe"></i> Global (MJO & PSA)</button>
+                        <button class="view-tab active" data-view="south-america"><i class="fa-solid fa-map-location-dot"></i> América do Sul & SESA</button>
+                        <button class="view-tab" data-view="tropics"><i class="fa-solid fa-sun"></i> Faixa Tropical & Walker</button>
+                    </div>
+
+                    <!-- Layer Toggles -->
+                    <div class="layer-toggles">
+                        <button class="layer-btn active" data-layer="stj" title="Jato Subtropical em 200 hPa"><i class="fa-solid fa-wind"></i> Jato Subtrop. (200 hPa)</button>
+                        <button class="layer-btn active" data-layer="pfj" title="Jato Polar em 300 hPa"><i class="fa-solid fa-snowflake"></i> Jato Polar (300 hPa)</button>
+                        <button class="layer-btn active" data-layer="sallj" title="South American Low-Level Jet (850 hPa)"><i class="fa-solid fa-water"></i> SALLJ (850 hPa)</button>
+                        <button class="layer-btn active" data-layer="rain" title="Anomalia de Chuva (SESA vs ZCAS)"><i class="fa-solid fa-cloud-showers-heavy"></i> Chuva Dipolo</button>
+                        <button class="layer-btn active" data-layer="rossby" title="Trem de Ondas de Rossby / PSA"><i class="fa-solid fa-wave-square"></i> Trem PSA</button>
+                        <button class="layer-btn active" data-layer="olr" title="Envelope de Convecção MJO (OLR)"><i class="fa-solid fa-cloud"></i> OLR MJO</button>
+                        <button class="layer-btn active" data-layer="particles" title="Animação de Linhas de Corrente"><i class="fa-solid fa-ellipsis"></i> Partículas</button>
+                    </div>
+                </div>
+
+                <!-- Canvas Map Container -->
+                <div class="canvas-container" id="mapContainer">
+                    <canvas id="mapCanvas"></canvas>
+                    
+                    <!-- Floating Controls -->
+                    <div class="map-controls-floating">
+                        <button class="map-control-btn" id="btnZoomIn" title="Aumentar Zoom"><i class="fa-solid fa-plus"></i></button>
+                        <button class="map-control-btn" id="btnZoomOut" title="Diminuir Zoom"><i class="fa-solid fa-minus"></i></button>
+                        <button class="map-control-btn" id="btnResetView" title="Centralizar Visualização"><i class="fa-solid fa-crosshairs"></i></button>
+                    </div>
+
+                    <!-- HUD Legend -->
+                    <div class="map-hud-legend" id="hudLegend">
+                        <div style="font-weight: 700; color: var(--accent-cyan); margin-bottom: 2px;">Camadas Meteorológicas</div>
+                        <div class="legend-row">
+                            <div class="legend-line" style="background: #38bdf8;"></div>
+                            <span>Jato Subtropical (~200 hPa, Duto de Rossby Ks)</span>
+                        </div>
+                        <div class="legend-row">
+                            <div class="legend-line" style="background: #c084fc;"></div>
+                            <span>Jato Polar (~300 hPa, Frente Polar Extratropical)</span>
+                        </div>
+                        <div class="legend-row">
+                            <div class="legend-line" style="background: #34d399; height: 5px;"></div>
+                            <span>SALLJ Jato de Baixos Níveis (850 hPa, Fluxo Q)</span>
+                        </div>
+                        <div class="legend-row">
+                            <div class="legend-badge" style="background: #10b981;"></div>
+                            <span>Anomalia Positiva de Precipitação (+ Chuva / SCMs)</span>
+                        </div>
+                        <div class="legend-row">
+                            <div class="legend-badge" style="background: #f97316;"></div>
+                            <span>Anomalia Negativa de Precipitação (Seca / Subsidência)</span>
+                        </div>
+                        <div class="legend-row">
+                            <div class="legend-badge" style="background: #f43f5e; border-radius: 50%;"></div>
+                            <span style="color:#fda4af;">A: Alta/Anticiclone PSA | B: Baixa/Cavado PSA</span>
+                        </div>
+                    </div>
+
+                    <!-- Tooltip -->
+                    <div class="map-tooltip" id="mapTooltip"></div>
+                </div>
+            </div>
+
+            <!-- Bottom Dashboard (Cross Section & Physical Status) -->
+            <div class="bottom-dash">
+                <!-- Vertical Atmospheric Coupling Cross-Section -->
+                <div class="sub-card">
+                    <div class="card-header-mini">
+                        <h3><i class="fa-solid fa-layer-group"></i> Acoplamento Vertical no SESA (1000 hPa a 150 hPa)</h3>
+                        <span style="font-size:0.72rem; color:var(--text-muted);">Corte Zonal ~28°S (Andes ao Atlântico)</span>
+                    </div>
+                    <canvas class="cross-section-canvas" id="crossSectionCanvas"></canvas>
+                    <div style="font-size:0.75rem; color:var(--text-muted); display:flex; justify-content:space-between;">
+                        <span><b style="color:#34d399;">850 hPa:</b> SALLJ convergindo umidade</span>
+                        <span><b style="color:#38bdf8;">200 hPa:</b> Divergência Jet Streak</span>
+                        <span id="verticalCouplingStatus" style="font-weight:700; color:#34d399;">ACOPLADO (SCMs Ativos)</span>
+                    </div>
+                </div>
+
+                <!-- Rossby Wave Train & Teleconnection Details -->
+                <div class="sub-card">
+                    <div class="card-header-mini">
+                        <h3><i class="fa-solid fa-satellite-dish"></i> Teleconexão PSA & Propagação de Rossby</h3>
+                        <span id="rossbyTransitTime" style="font-size:0.72rem; font-family:var(--font-mono); color:var(--accent-gold);">Retardo τ ≈ 9 dias</span>
+                    </div>
+                    <div style="font-size:0.78rem; line-height:1.5; color:#cbd5e1; display:flex; flex-direction:column; gap:6px;">
+                        <div><b>Fonte Tropical:</b> <span id="sourceRossbyText">Aquecimento anômalo no Oceano Índico oriental / Continente Marítimo</span></div>
+                        <div><b>Duto de Guiamento:</b> <span id="ductRossbyText">Jato Subtropical retém Ks e canaliza o trem PSA pelo Pacífico Sul</span></div>
+                        <div><b>Resposta no Atlântico Sudoeste:</b> <span id="responseSesaText">Cavado profundo deslocado para NE, intensificando o gradiente com a ASAS</span></div>
+                        <div style="background:rgba(255,255,255,0.04); border-left:3px solid var(--accent-cyan); padding:6px 10px; border-radius:4px; font-size:0.74rem;">
+                            <i>"A MJO não liga nem desliga a chuva do SESA; ela decide em que latitude o jato de baixos níveis entrega a umidade que já está transportando."</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: RMM Diagram, Logit Ruler, Diagnostic -->
+        <div class="sidebar">
+            
+            <!-- Wheeler-Hendon RMM Diagram -->
+            <div class="rmm-card">
+                <div class="rmm-header">
+                    <h2><i class="fa-solid fa-compass"></i> Diagrama RMM (Wheeler & Hendon)</h2>
+                    <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono);">RMM1 vs RMM2</span>
+                </div>
+
+                <div class="rmm-canvas-box">
+                    <canvas id="rmmCanvas"></canvas>
+                </div>
+
+                <div class="rmm-metrics">
+                    <div class="metric-item">
+                        <span class="metric-label">Fase Ativa</span>
+                        <span class="metric-value" id="rmmPhaseVal" style="color:var(--accent-gold);">Fase 3</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Amplitude A</span>
+                        <span class="metric-value" id="rmmAmpVal" style="color:var(--accent-cyan);">1.85</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Status MJO</span>
+                        <span class="metric-value" id="rmmStatusVal" style="color:var(--accent-emerald);">Ativa (A &gt; 1)</span>
+                    </div>
+                </div>
+
+                <!-- Amplitude Slider & Simulation Controls -->
+                <div style="display:flex; align-items:center; gap:10px; font-size:0.76rem;">
+                    <span style="color:var(--text-muted);">Amplitude (A):</span>
+                    <input type="range" id="sliderAmp" min="0.2" max="2.8" step="0.05" value="1.85" style="flex:1;">
+                    <span id="sliderAmpVal" style="font-family:var(--font-mono); width:28px;">1.85</span>
+                </div>
+            </div>
+
+            <!-- Régua do Logito (Figura 1.3 do Livro) -->
+            <div class="logit-card">
+                <div class="logit-header">
+                    <h2><i class="fa-solid fa-ruler-combined"></i> A Régua do Logito (Equação 1.8)</h2>
+                    <span style="font-size:0.72rem; color:var(--text-muted);">Salio et al. (2007)</span>
+                </div>
+
+                <!-- Visual Logit Dual-Ruler Canvas -->
+                <canvas class="logit-ruler-canvas" id="logitRulerCanvas"></canvas>
+
+                <!-- Controls for Logit Ingredients -->
+                <div class="logit-controls">
+                    <div class="logit-control-row">
+                        <span><i class="fa-solid fa-water" style="color:#34d399;"></i> SALLJ Presente:</span>
+                        <select id="selSALLJ">
+                            <option value="1">Sim (+1.63 no logito, ×5.1 nas chances)</option>
+                            <option value="0">Não (Climatologia base sem jato: 12%)</option>
+                        </select>
+                    </div>
+
+                    <div class="logit-control-row">
+                        <span><i class="fa-solid fa-temperature-high" style="color:#f97316;"></i> Estado do ENOS:</span>
+                        <select id="selENOS">
+                            <option value="0.7">El Niño (+0.7 no logito, maior frequência ν)</option>
+                            <option value="0" selected>Neutro (0.0)</option>
+                            <option value="-0.4">La Niña (-0.4 freq., mas maior r̄ por evento)</option>
+                        </select>
+                    </div>
+
+                    <div class="logit-control-row" style="background:rgba(16,185,129,0.1); padding:6px 8px; border-radius:6px; border:1px solid rgba(16,185,129,0.2);">
+                        <span style="font-weight:700; color:var(--accent-emerald);">Probabilidade Final P(SCM no SESA):</span>
+                        <span id="finalProbVal" style="font-family:var(--font-mono); font-size:1.05rem; font-weight:800; color:#34d399;">63.2%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diagnostic Card -->
+            <div class="diagnostic-card" id="diagCard">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:700; color:var(--text-main);" id="diagTitle">Diagnóstico para SESA & Bacia do Prata</span>
+                    <span class="diag-status-badge favoravel" id="diagBadge">ALTO RISCO DE CHEIA</span>
+                </div>
+                <div id="diagDescription" style="color:var(--text-muted);">
+                    Fase 3 da MJO (DJF): O SALLJ permanece fortemente encostado na barreira dos Andes até o Paraguai e Rio Grande do Sul. Em 200 hPa, a entrada equatorial do jato subtropical gera forte divergência, provocando acoplamento vertical e dobrando a frequência de Complexos Convectivos de Mesoescala (SCMs) no SESA.
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:0.74rem; background:rgba(0,0,0,0.25); padding:6px 8px; border-radius:6px;">
+                    <div><b>Comportamento SALLJ:</b> <span id="diagSalljBehav" style="color:#34d399;">Encostado nos Andes</span></div>
+                    <div><b>Latitude de Curvatura:</b> <span id="diagLatDet" style="color:#38bdf8;">Ao sul de 25°S (Prata)</span></div>
+                    <div><b>Dipolo ZCAS:</b> <span id="diagZcasStatus" style="color:#f97316;">Suprimida / Seca</span></div>
+                    <div><b>Anomalia SESA:</b> <span id="diagSesaAnom" style="color:#34d399;">+60% a +100%</span></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Collapsible Theory & Documentation Section -->
+    <div class="theory-section">
+        <div class="theory-header" id="theoryToggle">
+            <span><i class="fa-solid fa-book-open"></i> Fundamentos Físicos & Terminologia Regional (Complemento ao Livro de Mesoescala)</span>
+            <i class="fa-solid fa-chevron-down" id="theoryIcon"></i>
+        </div>
+        <div class="theory-body" id="theoryBody">
+            <!-- Col 1 -->
+            <div class="theory-block">
+                <h4><i class="fa-solid fa-water"></i> O SALLJ e o Transporte de Umidade</h4>
+                <p>O SALLJ é um jato de barreira: o escoamento de leste dos alísios encontra a Cordilheira dos Andes, não tem energia cinética para transpô-la, e é defletido para sul ao longo dela, gerando uma corrente estreita de norte com máximo entre 1 km e 1,5 km de altura (850 hPa).</p>
+                <div class="equation-box">
+                    $$\vec{Q} = \frac{1}{g} \int_{p_t}^{p_s} q \vec{v} \, dp$$
+                </div>
+                <p>A quantidade que interessa à Bacia do Prata não é apenas a velocidade do jato, mas o fluxo de umidade integrado na vertical $\vec{Q}$. A convergência de $\vec{Q}$ na saída do jato sustenta os Complexos Convectivos de Mesoescala (SCMs).</p>
+            </div>
+
+            <!-- Col 2 -->
+            <div class="theory-block">
+                <h4><i class="fa-solid fa-wind"></i> Teleconexões: Fonte de Rossby & Jato Subtropical</h4>
+                <p>O envelope convectivo da MJO impõe divergência em altitude nos trópicos. Em um escoamento divergente que atravessa gradientes de vorticidade absoluta, gera-se a Fonte de Ondas de Rossby (Sardeshmukh & Hoskins, 1988):</p>
+                <div class="equation-box">
+                    $$S = -\nabla \cdot (\vec{v}_\chi \zeta_a) = -\zeta_a \nabla \cdot \vec{v}_\chi - \vec{v}_\chi \cdot \nabla \zeta_a$$
+                </div>
+                <p>Como $f < 0$ no Hemisfério Sul, o sinal inverte-se. O <b>Jato Subtropical</b> atua como duto condutor com número de onda estacionário $K_s = (\beta_M / \bar{u})^{1/2}$, guiando o trem PSA até a América do Sul com velocidade de grupo $|c_g| \approx 20\text{ m/s}$ e tempo de trânsito $\tau \approx 9\text{ dias}$.</p>
+            </div>
+
+            <!-- Col 3 -->
+            <div class="theory-block">
+                <h4><i class="fa-solid fa-scale-balanced"></i> A Régua do Logito e a Decomposição de Chuva</h4>
+                <p>A composição das modulações do ENOS e da MJO sobre o SALLJ não é aditiva na probabilidade, mas sim no logito:</p>
+                <div class="equation-box">
+                    $$\ln\left(\frac{P}{1-P}\right) = a_0 + a_1 x_{\text{ENOS}} + a_2 A \cos(\phi - \phi_0)$$
+                </div>
+                <p>Com dados do SESA (Salio, Nicolini & Zipser, 2007), a presença do SALLJ adiciona $+1.63$ no logito, multiplicando as chances de tempestade severa por $\times 5.1$. Além disso, $R = \nu \bar{r}$: o El Niño age aumentando o número de episódios ($\delta \nu$), enquanto La Niña eleva a intensidade por episódio ($\delta \bar{r}$).</p>
+            </div>
+
+            <!-- Col 4: Regional Vocabulary -->
+            <div class="theory-block" style="grid-column: 1 / -1;">
+                <h4><i class="fa-solid fa-language"></i> Glossário Operacional e Terminologia Regional (Tabela 2.1)</h4>
+                <table class="term-table">
+                    <thead>
+                        <tr>
+                            <th>Termo Regional</th>
+                            <th>Equivalente Internacional</th>
+                            <th>Região / Escopo</th>
+                            <th>Interpretação Física & Diagnóstico Operacional</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>SALLJ</b></td>
+                            <td>South American low-level jet</td>
+                            <td>Leste dos Andes, Bacia do Prata</td>
+                            <td>Jato de barreira em 850 hPa que transporta umidade amazônica e cisalhamento; alimenta SCMs.</td>
+                        </tr>
+                        <tr>
+                            <td><b>SESA</b></td>
+                            <td>Southeastern South America</td>
+                            <td>Sul do Brasil, Uruguai, N Argentina</td>
+                            <td>Domínio meteorológico amplo de interação Andes-Chaco-ASAS com os maiores SCMs do planeta.</td>
+                        </tr>
+                        <tr>
+                            <td><b>Lestada</b></td>
+                            <td>Persistent easterly maritime flow</td>
+                            <td>Litoral SC, PR e SP (Serra do Mar)</td>
+                            <td>Vento de leste/sudeste persistente contra o relevo por &gt;12h sem queda térmica; nuvem baixa e chuva orográfica.</td>
+                        </tr>
+                        <tr>
+                            <td><b>Sudestada</b></td>
+                            <td>Southeasterly windstorm / surge</td>
+                            <td>Atlântico Sudoeste, Prata, Uruguai, RS</td>
+                            <td>Vento forte de sudeste com ressaca e maré meteorológica (elevação marégrafo); não confundir com Lestada.</td>
+                        </tr>
+                        <tr>
+                            <td><b>Pampero</b></td>
+                            <td>Cold surge / frontal blast</td>
+                            <td>Argentina, Uruguai, RS</td>
+                            <td>Entrada brusca pós-frontal de ar antártico/patagônico com rajadas de SW, queda rápida de T e salto de pressão.</td>
+                        </tr>
+                        <tr>
+                            <td><b>Minuano</b></td>
+                            <td>Cold southerly wind</td>
+                            <td>Sul do Brasil e Uruguai</td>
+                            <td>Vento frio e seco de sul/sudoeste em ar polar estável, céu limpo e baixa umidade após a frente.</td>
+                        </tr>
+                        <tr>
+                            <td><b>Zonda</b></td>
+                            <td>Foehn wind</td>
+                            <td>Oeste da Argentina (Andes)</td>
+                            <td>Vento catabático quente e seco de sotavento; temperatura sobe bruscamente e ponto de orvalho despenca.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic (Interactive GIS Map, Particle Engine, Wheeler-Hendon, Cross-Section, Logit Calculator) -->
+    <script>
+        /* --- DADOS DAS 8 FASES DA MJO & TELECONEXÕES COM SESA --- */
+        const MJO_PHASE_DATA = {
+            1: {
+                phase: 1,
+                name: "Hemisfério Ocidental & África",
+                tropicalConvection: { lon: 10, lat: 2, rLon: 35, rLat: 16, olr: -20 },
+                suppressedConvection: { lon: 105, lat: -4, rLon: 45, rLat: 18, olr: 25 },
+                walkerAscentLon: 10,
+                walkerDescentLon: 105,
+                // Centros de anomalia de geopotencial do trem PSA (Lon, Lat, Tipo 'A'/'B', Força)
+                psaCenters: [
+                    { lon: -150, lat: -30, type: 'A', strength: 0.5 },
+                    { lon: -110, lat: -52, type: 'B', strength: 0.6 },
+                    { lon: -70, lat: -62, type: 'A', strength: 0.5 },
+                    { lon: -40, lat: -32, type: 'B', strength: 0.4 }
+                ],
+                // SALLJ
+                sallj: {
+                    curvatureLat: -21, // Latitude onde desprende
+                    direction: 'eastward', // 'southward' or 'eastward'
+                    intensity: 14, // m/s em 850 hPa
+                    moistureFlux: 320 // g/kg m/s
+                },
+                // Jato Subtropical
+                stj: {
+                    latAvg: -29,
+                    streakLon: -64,
+                    streakLat: -29,
+                    maxSpeed: 46,
+                    divergenceOverSesa: 0.2
+                },
+                // Jato Polar
+                pfj: {
+                    latAvg: -54,
+                    waveAmp: 7
+                },
+                // Anomalias SESA e ZCAS (% em relação à média)
+                sesaRainAnom: -15,
+                zcasRainAnom: +25,
+                coupling: "Parcial",
+                diagnosticStatus: "FASE DE TRANSIÇÃO",
+                badgeClass: "neutro",
+                description: "Envelope convectivo ativo sobre a África e Atlântico tropical. No SESA, o trem de ondas encontra-se enfraquecido e a umidade do SALLJ tende a ser compartilhada entre a ZCAS e o Sudeste, com chuvas próximas ou ligeiramente abaixo da média no Sul do Brasil.",
+                voiceText: "Fase 1 da MJO. O envelope convectivo localiza-se sobre a África e o Atlântico equatorial. Na América do Sul, a circulação é de transição, com o jato de baixos níveis transportando umidade moderada e chuvas dentro da média climatológica no SESA."
+            },
+            2: {
+                phase: 2,
+                name: "Oceano Índico Ocidental",
+                tropicalConvection: { lon: 65, lat: -2, rLon: 32, rLat: 16, olr: -25 },
+                suppressedConvection: { lon: 155, lat: -6, rLon: 45, rLat: 18, olr: 28 },
+                walkerAscentLon: 65,
+                walkerDescentLon: 155,
+                psaCenters: [
+                    { lon: -175, lat: -32, type: 'B', strength: 0.6 },
+                    { lon: -130, lat: -56, type: 'A', strength: 0.7 },
+                    { lon: -85, lat: -64, type: 'B', strength: 0.6 },
+                    { lon: -50, lat: -38, type: 'A', strength: 0.5 }
+                ],
+                sallj: {
+                    curvatureLat: -23,
+                    direction: 'south-east',
+                    intensity: 16,
+                    moistureFlux: 380
+                },
+                stj: {
+                    latAvg: -30,
+                    streakLon: -62,
+                    streakLat: -30,
+                    maxSpeed: 48,
+                    divergenceOverSesa: 0.4
+                },
+                pfj: {
+                    latAvg: -53,
+                    waveAmp: 8
+                },
+                sesaRainAnom: +15,
+                zcasRainAnom: -10,
+                coupling: "Incipiente",
+                diagnosticStatus: "REORGANIZAÇÃO FAVORÁVEL",
+                badgeClass: "neutro",
+                description: "A convecção tropical ganha força no Oceano Índico. O trem de ondas PSA começa a propagar perturbações pelo guia de onda do jato subtropical em direção à América do Sul, iniciando o aprofundamento do cavado no Pacífico Sudeste.",
+                voiceText: "Fase 2 da MJO. Convecção profunda sobre o Oceano Índico ocidental. O trem de ondas de Rossby começa a se formar ao longo do jato subtropical, preparando o ambiente para o transporte de umidade em direção ao sul do continente."
+            },
+            3: {
+                phase: 3,
+                name: "Oceano Índico Oriental & Marítimo",
+                tropicalConvection: { lon: 92, lat: -4, rLon: 36, rLat: 18, olr: -35 },
+                suppressedConvection: { lon: -160, lat: -8, rLon: 45, rLat: 18, olr: 30 },
+                walkerAscentLon: 92,
+                walkerDescentLon: -160,
+                psaCenters: [
+                    { lon: 165, lat: -35, type: 'A', strength: 0.8 },
+                    { lon: -145, lat: -58, type: 'B', strength: 0.9 },
+                    { lon: -95, lat: -66, type: 'A', strength: 0.9 },
+                    { lon: -58, lat: -42, type: 'B', strength: 0.85 } // Cavado profundo Prata/Atlântico
+                ],
+                sallj: {
+                    curvatureLat: -32, // Encostado até o Prata!
+                    direction: 'southward',
+                    intensity: 22,
+                    moistureFlux: 540
+                },
+                stj: {
+                    latAvg: -28,
+                    streakLon: -60,
+                    streakLat: -27,
+                    maxSpeed: 58,
+                    divergenceOverSesa: 0.9
+                },
+                pfj: {
+                    latAvg: -51,
+                    waveAmp: 11
+                },
+                sesaRainAnom: +75,
+                zcasRainAnom: -45,
+                coupling: "TOTALMENTE ACOPLADO (ALTO RISCO)",
+                diagnosticStatus: "ALTO RISCO DE CHEIA NO SESA",
+                badgeClass: "favoravel",
+                description: "CONFIGURAÇÃO CLÁSSICA DE TEMPESTADES SEVERAS NO SESA (DJF). O trem PSA estabelece cavado no Atlântico Sudoeste. O SALLJ permanece colado à encosta dos Andes até o Paraguai e Rio Grande do Sul. Em 200 hPa, o jato subtropical fornece forte divergência em altitude sobre o mesmo ponto. Extremos de precipitação e SCMs multiplicados por 2.",
+                voiceText: "Fase 3 da MJO. Esta é a fase mais crítica para o SESA no verão. A convecção no Índico oriental dispara um poderoso trem de ondas PSA. O Jato de Baixos Níveis permanece encostado nos Andes e descarrega umidade abundante sobre a Bacia do Prata e o Sul do Brasil. Em altos níveis, o Jato Subtropical impõe forte divergência. O acoplamento vertical total dobra a ocorrência de Complexos Convectivos e cheias."
+            },
+            4: {
+                phase: 4,
+                name: "Continente Marítimo (Indonésia)",
+                tropicalConvection: { lon: 125, lat: -2, rLon: 40, rLat: 18, olr: -38 },
+                suppressedConvection: { lon: -120, lat: -6, rLon: 45, rLat: 18, olr: 28 },
+                walkerAscentLon: 125,
+                walkerDescentLon: -120,
+                psaCenters: [
+                    { lon: 180, lat: -38, type: 'A', strength: 0.75 },
+                    { lon: -135, lat: -60, type: 'B', strength: 0.8 },
+                    { lon: -85, lat: -65, type: 'A', strength: 0.85 },
+                    { lon: -52, lat: -39, type: 'B', strength: 0.8 }
+                ],
+                sallj: {
+                    curvatureLat: -30,
+                    direction: 'southward',
+                    intensity: 20,
+                    moistureFlux: 500
+                },
+                stj: {
+                    latAvg: -29,
+                    streakLon: -58,
+                    streakLat: -28,
+                    maxSpeed: 55,
+                    divergenceOverSesa: 0.8
+                },
+                pfj: {
+                    latAvg: -52,
+                    waveAmp: 10
+                },
+                sesaRainAnom: +60,
+                zcasRainAnom: -35,
+                coupling: "TOTALMENTE ACOPLADO",
+                diagnosticStatus: "SESA REFORÇADA / SALLJ ATIVO",
+                badgeClass: "favoravel",
+                description: "Convecção no Continente Marítimo mantém o padrão teleconectado favorável ao SESA. O SALLJ segue ativo canalizando vapor para o Sul do Brasil, Uruguai e Norte da Argentina. A ZCAS permanece retraída/suprimida pelo ramo subsidente associado.",
+                voiceText: "Fase 4 da MJO. O centro convectivo avança sobre o Continente Marítimo. O Jato de Baixos Níveis continua estendido até o Uruguai e Rio Grande do Sul, sustentando precipitação volumosa e temporais organizados no SESA."
+            },
+            5: {
+                phase: 5,
+                name: "Continente Marítimo / Pacífico Oeste",
+                tropicalConvection: { lon: 145, lat: 0, rLon: 38, rLat: 18, olr: -28 },
+                suppressedConvection: { lon: 50, lat: -4, rLon: 40, rLat: 18, olr: 26 },
+                walkerAscentLon: 145,
+                walkerDescentLon: 50,
+                psaCenters: [
+                    { lon: -160, lat: -40, type: 'B', strength: 0.6 },
+                    { lon: -115, lat: -58, type: 'A', strength: 0.65 },
+                    { lon: -70, lat: -60, type: 'B', strength: 0.6 },
+                    { lon: -42, lat: -32, type: 'A', strength: 0.5 }
+                ],
+                sallj: {
+                    curvatureLat: -24,
+                    direction: 'south-east',
+                    intensity: 15,
+                    moistureFlux: 370
+                },
+                stj: {
+                    latAvg: -31,
+                    streakLon: -54,
+                    streakLat: -30,
+                    maxSpeed: 47,
+                    divergenceOverSesa: 0.3
+                },
+                pfj: {
+                    latAvg: -53,
+                    waveAmp: 8
+                },
+                sesaRainAnom: +10,
+                zcasRainAnom: +5,
+                coupling: "Transição",
+                diagnosticStatus: "DESACOPLAMENTO GRADUAL",
+                badgeClass: "neutro",
+                description: "O envelope convectivo cruza para o Pacífico Oeste. O trem de ondas PSA começa a enfraquecer no setor sul-americano e o SALLJ reduz sua velocidade máxima, preparando a reversão do dipolo em direção ao Sudeste do Brasil.",
+                voiceText: "Fase 5 da MJO. A convecção tropical migra para o Pacífico Oeste. O acoplamento vertical sobre o SESA começa a se desfazer e o escoamento do SALLJ passa a infletir mais ao norte."
+            },
+            6: {
+                phase: 6,
+                name: "Pacífico Oeste",
+                tropicalConvection: { lon: 168, lat: 2, rLon: 36, rLat: 18, olr: -30 },
+                suppressedConvection: { lon: 75, lat: -4, rLon: 45, rLat: 18, olr: 32 },
+                walkerAscentLon: 168,
+                walkerDescentLon: 75,
+                psaCenters: [
+                    { lon: -145, lat: -42, type: 'A', strength: 0.7 },
+                    { lon: -100, lat: -60, type: 'B', strength: 0.75 },
+                    { lon: -58, lat: -60, type: 'A', strength: 0.7 },
+                    { lon: -38, lat: -28, type: 'B', strength: 0.6 }
+                ],
+                sallj: {
+                    curvatureLat: -20,
+                    direction: 'eastward',
+                    intensity: 17,
+                    moistureFlux: 410
+                },
+                stj: {
+                    latAvg: -32,
+                    streakLon: -48,
+                    streakLat: -26,
+                    maxSpeed: 50,
+                    divergenceOverSesa: -0.2
+                },
+                pfj: {
+                    latAvg: -55,
+                    waveAmp: 9
+                },
+                sesaRainAnom: -20,
+                zcasRainAnom: +35,
+                coupling: "Invertido (ZCAS Ativando)",
+                diagnosticStatus: "INFLEXÃO PARA ZCAS",
+                badgeClass: "neutro",
+                description: "Convecção robusta no Pacífico Oeste. O trem de ondas altera o balanço geostrófico no continente: o SALLJ começa a se desprender cedo da cordilheira dos Andes (altura da Bolívia/Mato Grosso) e direciona o fluxo de umidade para o Sudeste.",
+                voiceText: "Fase 6 da MJO. Convecção estabelecida no Pacífico Oeste. O SALLJ começa a desviar seu curso para o Centro-Oeste e Sudeste do Brasil, ativando a Zona de Convergência do Atlântico Sul e reduzindo a chuva na Bacia do Prata."
+            },
+            7: {
+                phase: 7,
+                name: "Pacífico Central / Linha de Data",
+                tropicalConvection: { lon: -170, lat: 0, rLon: 40, rLat: 18, olr: -36 },
+                suppressedConvection: { lon: 100, lat: -2, rLon: 45, rLat: 18, olr: 35 },
+                walkerAscentLon: -170,
+                walkerDescentLon: 100,
+                psaCenters: [
+                    { lon: -130, lat: -45, type: 'B', strength: 0.85 },
+                    { lon: -85, lat: -62, type: 'A', strength: 0.9 },
+                    { lon: -45, lat: -55, type: 'B', strength: 0.8 },
+                    { lon: -38, lat: -30, type: 'A', strength: 0.85 } // Anticiclone no Atlântico Sudoeste
+                ],
+                sallj: {
+                    curvatureLat: -17, // Desprende na Bolívia!
+                    direction: 'eastward',
+                    intensity: 20,
+                    moistureFlux: 510
+                },
+                stj: {
+                    latAvg: -33,
+                    streakLon: -42,
+                    streakLat: -23,
+                    maxSpeed: 52,
+                    divergenceOverSesa: -0.7
+                },
+                pfj: {
+                    latAvg: -56,
+                    waveAmp: 11
+                },
+                sesaRainAnom: -55,
+                zcasRainAnom: +80,
+                coupling: "SUPRIMIDO NO SESA / ZCAS MÁXIMA",
+                diagnosticStatus: "ZCAS ATIVA / SECA NO SESA",
+                badgeClass: "desfavoravel",
+                description: "CONFIGURAÇÃO OPÕSTA AO SESA (ZCAS REFORÇADA). O trem PSA posiciona um centro anticiclônico anômalo sobre o Atlântico Sudoeste/Prata. O SALLJ desprende-se precocemente da barreira dos Andes (latitude 17°S-18°S) e vira para leste, descarregando toda a umidade amazônica sobre a ZCAS (SP, MG, RJ, ES). SESA sob subsidência e tempo seco.",
+                voiceText: "Fase 7 da MJO. Padrão de dipolo totalmente invertido. A convecção no Pacífico Central gera uma anomalia anticiclônica no Atlântico Sudoeste que bloqueia o avanço do jato para o sul. O SALLJ curva-se para leste na altura da Bolívia e alimenta uma intensa Zona de Convergência do Atlântico Sul, causando tempo seco no SESA e chuvas torrenciais no Sudeste."
+            },
+            8: {
+                phase: 8,
+                name: "Pacífico Leste & Hemisfério Ocidental",
+                tropicalConvection: { lon: -120, lat: 2, rLon: 42, rLat: 18, olr: -30 },
+                suppressedConvection: { lon: 80, lat: -4, rLon: 45, rLat: 18, olr: 30 },
+                walkerAscentLon: -120,
+                walkerDescentLon: 80,
+                psaCenters: [
+                    { lon: -110, lat: -48, type: 'A', strength: 0.75 },
+                    { lon: -70, lat: -64, type: 'B', strength: 0.8 },
+                    { lon: -35, lat: -50, type: 'A', strength: 0.75 },
+                    { lon: -40, lat: -28, type: 'A', strength: 0.8 }
+                ],
+                sallj: {
+                    curvatureLat: -18,
+                    direction: 'eastward',
+                    intensity: 18,
+                    moistureFlux: 460
+                },
+                stj: {
+                    latAvg: -32,
+                    streakLon: -44,
+                    streakLat: -24,
+                    maxSpeed: 48,
+                    divergenceOverSesa: -0.6
+                },
+                pfj: {
+                    latAvg: -55,
+                    waveAmp: 10
+                },
+                sesaRainAnom: -50,
+                zcasRainAnom: +65,
+                coupling: "SUPRIMIDO NO SESA",
+                diagnosticStatus: "ZCAS PERSISTENTE / SESA SECO",
+                badgeClass: "desfavoravel",
+                description: "A convecção avança sobre o Pacífico Leste e América Central. A ZCAS permanece armada da Amazônia ao Sudeste (+30% a +70% de chuva), enquanto o SESA / Bacia do Prata experimenta estiagem intrassazonal persistente.",
+                voiceText: "Fase 8 da MJO. Convecção tropical sobre o Pacífico leste e América tropical. A ZCAS continua ativa com altos acumulados de chuva no Sudeste brasileiro, enquanto o Sul do Brasil e a Bacia do Prata permanecem sob estabilidade atmosférica e ar seco."
+            }
+        };
+
+        /* --- ESTADO GLOBAL DA APLICAÇÃO --- */
+        const APP = {
+            currentPhase: 3,
+            amplitude: 1.85,
+            isCyclePlaying: false,
+            cycleTimer: null,
+            currentView: 'south-america', // 'global', 'south-america', 'tropics'
+            layers: {
+                stj: true,
+                pfj: true,
+                sallj: true,
+                rain: true,
+                rossby: true,
+                olr: true,
+                particles: true
+            },
+            map: {
+                zoom: 1.0,
+                panX: 0,
+                panY: 0,
+                isDragging: false,
+                startX: 0,
+                startY: 0
+            },
+            particles: [],
+            numParticles: 160,
+            animFrameId: null,
+            speechSynth: window.speechSynthesis || null,
+            isSpeaking: false
+        };
+
+        /* --- CONFIGURAÇÃO DO CANVAS MAPA --- */
+        const mapCanvas = document.getElementById('mapCanvas');
+        const ctxMap = mapCanvas.getContext('2d');
+        const mapContainer = document.getElementById('mapContainer');
+        const tooltip = document.getElementById('mapTooltip');
+
+        function resizeCanvas() {
+            const rect = mapContainer.getBoundingClientRect();
+            mapCanvas.width = rect.width * window.devicePixelRatio;
+            mapCanvas.height = rect.height * window.devicePixelRatio;
+            ctxMap.scale(window.devicePixelRatio, window.devicePixelRatio);
+            renderMap();
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            renderRMM();
+            renderCrossSection();
+            renderLogitRuler();
+        });
+
+        /* --- PROJEÇÃO E CONVERSÃO DE COORDENADAS --- */
+        // Projeção Equirretangular ajustada com Pan & Zoom
+        function lonLatToScreen(lon, lat, width, height) {
+            // View defaults
+            let centerLon = -60;
+            let centerLat = -25;
+            let scaleFactor = 1.0;
+
+            if (APP.currentView === 'south-america') {
+                centerLon = -58;
+                centerLat = -28;
+                scaleFactor = 2.4 * APP.map.zoom;
+            } else if (APP.currentView === 'tropics') {
+                centerLon = 80;
+                centerLat = 0;
+                scaleFactor = 1.1 * APP.map.zoom;
+            } else { // global
+                centerLon = -20;
+                centerLat = -20;
+                scaleFactor = 1.0 * APP.map.zoom;
+            }
+
+            // Normaliza longitude relativa ao centro (-180 a 180)
+            let dLon = lon - centerLon;
+            while (dLon > 180) dLon -= 360;
+            while (dLon < -180) dLon += 360;
+
+            let dLat = lat - centerLat;
+
+            const cx = width / 2 + APP.map.panX;
+            const cy = height / 2 + APP.map.panY;
+
+            const pxPerDegLon = (width / 360) * scaleFactor;
+            const pxPerDegLat = (height / 180) * scaleFactor;
+
+            return {
+                x: cx + dLon * pxPerDegLon,
+                y: cy - dLat * pxPerDegLat
+            };
+        }
+
+        function screenToLonLat(screenX, screenY, width, height) {
+            let centerLon = -60;
+            let centerLat = -25;
+            let scaleFactor = 1.0;
+
+            if (APP.currentView === 'south-america') {
+                centerLon = -58;
+                centerLat = -28;
+                scaleFactor = 2.4 * APP.map.zoom;
+            } else if (APP.currentView === 'tropics') {
+                centerLon = 80;
+                centerLat = 0;
+                scaleFactor = 1.1 * APP.map.zoom;
+            } else {
+                centerLon = -20;
+                centerLat = -20;
+                scaleFactor = 1.0 * APP.map.zoom;
+            }
+
+            const cx = width / 2 + APP.map.panX;
+            const cy = height / 2 + APP.map.panY;
+
+            const pxPerDegLon = (width / 360) * scaleFactor;
+            const pxPerDegLat = (height / 180) * scaleFactor;
+
+            const dLon = (screenX - cx) / pxPerDegLon;
+            const dLat = -(screenY - cy) / pxPerDegLat;
+
+            let lon = centerLon + dLon;
+            let lat = centerLat + dLat;
+
+            while (lon > 180) lon -= 360;
+            while (lon < -180) lon += 360;
+
+            return { lon, lat };
+        }
+
+        /* --- GEOMETRIA DE CONTINENTES (VETORIAL OTIMIZADO) --- */
+        // América do Sul de alta definição didática + Andes
+        const SOUTH_AMERICA_COORDS = [
+            [-80, 8], [-77, 8], [-75, 11], [-71, 12], [-62, 10], [-60, 9],
+            [-50, 1], [-45, -2], [-35, -5], [-35, -9], [-38, -13], [-40, -19],
+            [-43, -23], [-48, -26], [-52, -32], [-54, -34], [-57, -37], [-65, -42],
+            [-66, -46], [-68, -52], [-65, -55], [-70, -55], [-74, -52], [-74, -45],
+            [-73, -40], [-72, -35], [-71, -30], [-70, -20], [-76, -14], [-81, -5],
+            [-80, 0], [-79, 3], [-80, 8]
+        ];
+
+        // Faixa da Cordilheira dos Andes (Barreira Orográfica)
+        const ANDES_POLY = [
+            [-74, 9], [-71, 8], [-70, 4], [-73, -1], [-75, -6], [-76, -12],
+            [-69, -16], [-67, -22], [-67, -28], [-68, -35], [-70, -42], [-72, -50],
+            [-74, -54], [-71, -54], [-68, -48], [-66, -40], [-64, -32], [-64, -24],
+            [-64, -18], [-67, -13], [-72, -5], [-74, 2], [-74, 9]
+        ];
+
+        // Polígono do SESA (Southeastern South America)
+        const SESA_POLY = [
+            [-64, -22], [-54, -22], [-48, -25], [-48, -34], [-53, -37], [-62, -37], [-64, -28], [-64, -22]
+        ];
+
+        // Polígono da ZCAS (Zona de Convergência do Atlântico Sul)
+        const ZCAS_POLY = [
+            [-65, -9], [-55, -11], [-42, -18], [-34, -23], [-37, -27], [-46, -24], [-55, -17], [-66, -14], [-65, -9]
+        ];
+
+        // Esboços dos outros continentes para contexto global
+        const CONTINENTS = [
+            // África
+            [[-17, 15], [-17, 21], [-5, 36], [10, 37], [25, 32], [33, 30], [51, 12], [45, 0], [40, -10], [35, -25], [26, -34], [18, -34], [12, -15], [9, 5], [-15, 10], [-17, 15]],
+            // Austrália
+            [[114, -22], [114, -34], [135, -35], [150, -37], [153, -28], [148, -19], [137, -12], [129, -15], [114, -22]],
+            // Eurásia (Simplificada)
+            [[-9, 36], [-9, 44], [0, 50], [8, 55], [28, 70], [60, 68], [110, 72], [170, 66], [140, 40], [120, 30], [105, 18], [98, 8], [80, 15], [60, 25], [40, 28], [25, 40], [0, 42], [-9, 36]],
+            // América do Norte
+            [[-125, 48], [-125, 32], [-110, 23], [-98, 19], [-85, 22], [-80, 26], [-75, 35], [-65, 44], [-60, 52], [-90, 60], [-120, 60], [-125, 48]],
+            // Indonésia / Continente Marítimo
+            [[95, 5], [105, 0], [115, -8], [125, -8], [140, -3], [148, -5], [150, -10], [130, -5], [110, 2], [95, 5]],
+            // Nova Zelândia
+            [[168, -46], [174, -42], [178, -38], [175, -35], [170, -43], [168, -46]],
+            // Antártica
+            [[-180, -72], [-120, -74], [-60, -65], [0, -70], [60, -68], [120, -66], [180, -72]]
+        ];
+
+        /* --- MOTOR DE PARTÍCULAS (STREAMLINES VENTO) --- */
+        class WindParticle {
+            constructor(type) {
+                this.type = type; // 'stj', 'pfj', 'sallj'
+                this.reset();
+            }
+
+            reset() {
+                const phase = MJO_PHASE_DATA[APP.currentPhase];
+                this.age = 0;
+                this.maxAge = 80 + Math.random() * 80;
+
+                if (this.type === 'sallj') {
+                    // Partícula do SALLJ (Amazônia -> Andes -> Sul ou ZCAS)
+                    this.progress = Math.random();
+                    this.speed = 0.008 + Math.random() * 0.006;
+                } else if (this.type === 'stj') {
+                    // Jato Subtropical (~28°S a ~35°S)
+                    this.lon = -180 + Math.random() * 360;
+                    this.lat = phase.stj.latAvg + (Math.random() - 0.5) * 4;
+                    this.speed = 1.4 + Math.random() * 0.8;
+                } else if (this.type === 'pfj') {
+                    // Jato Polar (~48°S a ~58°S)
+                    this.lon = -180 + Math.random() * 360;
+                    this.lat = phase.pfj.latAvg + (Math.random() - 0.5) * 5;
+                    this.speed = 1.0 + Math.random() * 0.6;
+                }
+            }
+
+            update() {
+                const phase = MJO_PHASE_DATA[APP.currentPhase];
+                this.age++;
+                if (this.age > this.maxAge) {
+                    this.reset();
+                    return;
+                }
+
+                if (this.type === 'sallj') {
+                    this.progress += this.speed;
+                    if (this.progress > 1) {
+                        this.reset();
+                        this.progress = 0;
+                    }
+                } else if (this.type === 'stj') {
+                    this.lon += this.speed;
+                    if (this.lon > 180) this.lon -= 360;
+
+                    // Meandro e Jet Streak modulation
+                    let wave = Math.sin((this.lon + 60) * Math.PI / 60) * 3;
+                    this.lat = phase.stj.latAvg + wave;
+                } else if (this.type === 'pfj') {
+                    this.lon += this.speed;
+                    if (this.lon > 180) this.lon -= 360;
+
+                    let wave = Math.sin((this.lon + 90) * Math.PI / 45) * phase.pfj.waveAmp * 0.6;
+                    this.lat = phase.pfj.latAvg + wave;
+                }
+            }
+
+            getCoordinates() {
+                const phase = MJO_PHASE_DATA[APP.currentPhase];
+                if (this.type === 'sallj') {
+                    const p = this.progress;
+                    // Trajetória do SALLJ
+                    let lon, lat;
+                    if (phase.sallj.direction === 'southward') {
+                        // Encostado nos Andes até o Prata (Fases 3 e 4)
+                        if (p < 0.3) { // Amazônia até Bolívia
+                            let t = p / 0.3;
+                            lon = -65 + t * (-63 - -65);
+                            lat = -5 + t * (-17 - -5);
+                        } else if (p < 0.7) { // Bolívia -> Chaco -> Paraguai
+                            let t = (p - 0.3) / 0.4;
+                            lon = -63 + t * (-59 - -63);
+                            lat = -17 + t * (-27 - -17);
+                        } else { // Paraguai -> RS -> Bacia do Prata
+                            let t = (p - 0.7) / 0.3;
+                            lon = -59 + t * (-55 - -59);
+                            lat = -27 + t * (-35 - -27);
+                        }
+                    } else if (phase.sallj.direction === 'eastward') {
+                        // Desprende precoce e vira para ZCAS (Fases 7 e 8)
+                        if (p < 0.3) {
+                            let t = p / 0.3;
+                            lon = -65 + t * (-62 - -65);
+                            lat = -5 + t * (-17 - -5);
+                        } else {
+                            // Curva para leste / Sudeste (SP, MG, RJ)
+                            let t = (p - 0.3) / 0.7;
+                            lon = -62 + t * (-42 - -62);
+                            lat = -17 + t * (-24 - -17) + Math.sin(t * Math.PI) * (-2);
+                        }
+                    } else {
+                        // Transição (sudeste)
+                        let t = p;
+                        lon = -65 + t * (-50 - -65);
+                        lat = -5 + t * (-30 - -5);
+                    }
+                    return { lon, lat };
+                } else {
+                    return { lon: this.lon, lat: this.lat };
+                }
+            }
+        }
+
+        // Inicializa partículas
+        function initParticles() {
+            APP.particles = [];
+            for (let i = 0; i < 60; i++) APP.particles.push(new WindParticle('stj'));
+            for (let i = 0; i < 50; i++) APP.particles.push(new WindParticle('pfj'));
+            for (let i = 0; i < 50; i++) APP.particles.push(new WindParticle('sallj'));
+        }
+        initParticles();
+
+        /* --- DESENHO DO MAPA --- */
+        function renderMap() {
+            const width = mapCanvas.width / window.devicePixelRatio;
+            const height = mapCanvas.height / window.devicePixelRatio;
+            const phase = MJO_PHASE_DATA[APP.currentPhase];
+
+            ctxMap.clearRect(0, 0, width, height);
+
+            // 1. Fundo Oceânico Profundo
+            ctxMap.fillStyle = "#040916";
+            ctxMap.fillRect(0, 0, width, height);
+
+            // 2. Linhas de Grade (Graticule)
+            ctxMap.strokeStyle = "rgba(255, 255, 255, 0.05)";
+            ctxMap.lineWidth = 1;
+            ctxMap.setLineDash([2, 4]);
+
+            // Meridianos
+            for (let lon = -180; lon <= 180; lon += 30) {
+                ctxMap.beginPath();
+                for (let lat = -80; lat <= 80; lat += 10) {
+                    const pt = lonLatToScreen(lon, lat, width, height);
+                    if (lat === -80) ctxMap.moveTo(pt.x, pt.y);
+                    else ctxMap.lineTo(pt.x, pt.y);
+                }
+                ctxMap.stroke();
+            }
+
+            // Paralelos
+            for (let lat = -70; lat <= 70; lat += 20) {
+                ctxMap.beginPath();
+                for (let lon = -180; lon <= 180; lon += 10) {
+                    const pt = lonLatToScreen(lon, lat, width, height);
+                    if (lon === -180) ctxMap.moveTo(pt.x, pt.y);
+                    else ctxMap.lineTo(pt.x, pt.y);
+                }
+                ctxMap.stroke();
+            }
+            ctxMap.setLineDash([]);
+
+            // Linha do Equador e Trópico de Capricórnio destacados
+            [0, -23.5].forEach((lat, idx) => {
+                ctxMap.beginPath();
+                ctxMap.strokeStyle = idx === 0 ? "rgba(56, 189, 248, 0.25)" : "rgba(251, 191, 36, 0.2)";
+                ctxMap.lineWidth = 1.2;
+                for (let lon = -180; lon <= 180; lon += 5) {
+                    const pt = lonLatToScreen(lon, lat, width, height);
+                    if (lon === -180) ctxMap.moveTo(pt.x, pt.y);
+                    else ctxMap.lineTo(pt.x, pt.y);
+                }
+                ctxMap.stroke();
+            });
+
+            // 3. Desenho dos Continentes
+            ctxMap.fillStyle = "#0c1527";
+            ctxMap.strokeStyle = "rgba(56, 189, 248, 0.35)";
+            ctxMap.lineWidth = 1.2;
+
+            CONTINENTS.forEach(poly => {
+                drawPolygon(poly, width, height, "#0c1527", "rgba(56, 189, 248, 0.25)");
+            });
+
+            // América do Sul com destaque e relevo dos Andes
+            drawPolygon(SOUTH_AMERICA_COORDS, width, height, "#0e1a32", "rgba(56, 189, 248, 0.5)");
+
+            // Cordilheira dos Andes (Topografia de Barreira Física)
+            drawPolygon(ANDES_POLY, width, height, "rgba(217, 119, 6, 0.22)", "rgba(245, 158, 11, 0.45)");
+
+            // 4. CAMADA: Envelopes Convectivos OLR da MJO
+            if (APP.layers.olr) {
+                renderOLREnvelopes(width, height, phase);
+            }
+
+            // 5. CAMADA: Anomalias de Chuva (Dipolo SESA vs ZCAS)
+            if (APP.layers.rain) {
+                renderPrecipitationDipole(width, height, phase);
+            }
+
+            // 6. CAMADA: Trem de Ondas de Rossby (Padrão PSA)
+            if (APP.layers.rossby) {
+                renderRossbyWaveTrain(width, height, phase);
+            }
+
+            // 7. CAMADA: Jatos em Altitude (Jato Subtropical & Jato Polar)
+            if (APP.layers.stj) {
+                renderSubtropicalJet(width, height, phase);
+            }
+            if (APP.layers.pfj) {
+                renderPolarJet(width, height, phase);
+            }
+
+            // 8. CAMADA: SALLJ (Jato de Baixos Níveis da América do Sul)
+            if (APP.layers.sallj) {
+                renderSALLJ(width, height, phase);
+            }
+
+            // 9. CAMADA: Partículas Animadas de Vento
+            if (APP.layers.particles) {
+                renderParticles(width, height);
+            }
+
+            // 10. Rótulos e Pontos de Referência Importantes
+            renderMapLabels(width, height, phase);
+        }
+
+        function drawPolygon(coords, w, h, fillColor, strokeColor) {
+            if (!coords || coords.length === 0) return;
+            ctxMap.beginPath();
+            const first = lonLatToScreen(coords[0][0], coords[0][1], w, h);
+            ctxMap.moveTo(first.x, first.y);
+            for (let i = 1; i < coords.length; i++) {
+                const pt = lonLatToScreen(coords[i][0], coords[i][1], w, h);
+                ctxMap.lineTo(pt.x, pt.y);
+            }
+            ctxMap.closePath();
+            if (fillColor) {
+                ctxMap.fillStyle = fillColor;
+                ctxMap.fill();
+            }
+            if (strokeColor) {
+                ctxMap.strokeStyle = strokeColor;
+                ctxMap.stroke();
+            }
+        }
+
+        // Renderização dos Envelopes OLR da MJO
+        function renderOLREnvelopes(w, h, phase) {
+            const time = Date.now() * 0.002;
+
+            // Centro Convectivo Ativo (OLR Negativo / Muita Chuva / Convecção Profunda)
+            const tc = phase.tropicalConvection;
+            const ptAscent = lonLatToScreen(tc.lon, tc.lat, w, h);
+            const rPxX = (w / 360) * tc.rLon * (APP.currentView === 'south-america' ? 2.4 : 1.0) * APP.map.zoom;
+            const rPxY = (h / 180) * tc.rLat * (APP.currentView === 'south-america' ? 2.4 : 1.0) * APP.map.zoom;
+
+            const pulse = 1 + Math.sin(time) * 0.06;
+
+            const gradConv = ctxMap.createRadialGradient(ptAscent.x, ptAscent.y, 5, ptAscent.x, ptAscent.y, rPxX * pulse);
+            gradConv.addColorStop(0, "rgba(16, 185, 129, 0.45)");
+            gradConv.addColorStop(0.5, "rgba(5, 150, 105, 0.28)");
+            gradConv.addColorStop(1, "rgba(16, 185, 129, 0.0)");
+
+            ctxMap.save();
+            ctxMap.beginPath();
+            ctxMap.ellipse(ptAscent.x, ptAscent.y, rPxX * pulse, rPxY * pulse, 0, 0, Math.PI * 2);
+            ctxMap.fillStyle = gradConv;
+            ctxMap.fill();
+
+            // Borda do envelope
+            ctxMap.strokeStyle = "rgba(52, 211, 153, 0.6)";
+            ctxMap.lineWidth = 1.5;
+            ctxMap.setLineDash([4, 4]);
+            ctxMap.stroke();
+            ctxMap.setLineDash([]);
+            ctxMap.restore();
+
+            // Centro Suprimido (OLR Positivo / Tempo Seco / Subsidência)
+            const sc = phase.suppressedConvection;
+            const ptDesc = lonLatToScreen(sc.lon, sc.lat, w, h);
+            const rPxX2 = (w / 360) * sc.rLon * (APP.currentView === 'south-america' ? 2.4 : 1.0) * APP.map.zoom;
+            const rPxY2 = (h / 180) * sc.rLat * (APP.currentView === 'south-america' ? 2.4 : 1.0) * APP.map.zoom;
+
+            const gradSupp = ctxMap.createRadialGradient(ptDesc.x, ptDesc.y, 5, ptDesc.x, ptDesc.y, rPxX2);
+            gradSupp.addColorStop(0, "rgba(249, 115, 22, 0.35)");
+            gradSupp.addColorStop(0.6, "rgba(234, 88, 12, 0.18)");
+            gradSupp.addColorStop(1, "rgba(249, 115, 22, 0.0)");
+
+            ctxMap.save();
+            ctxMap.beginPath();
+            ctxMap.ellipse(ptDesc.x, ptDesc.y, rPxX2, rPxY2, 0, 0, Math.PI * 2);
+            ctxMap.fillStyle = gradSupp;
+            ctxMap.fill();
+            ctxMap.strokeStyle = "rgba(251, 146, 60, 0.45)";
+            ctxMap.lineWidth = 1;
+            ctxMap.stroke();
+            ctxMap.restore();
+        }
+
+        // Renderização do Dipolo de Chuva SESA vs ZCAS
+        function renderPrecipitationDipole(w, h, phase) {
+            // SESA
+            let sesaColor, sesaStroke;
+            if (phase.sesaRainAnom > 0) {
+                sesaColor = `rgba(16, 185, 129, ${Math.min(0.6, 0.2 + phase.sesaRainAnom * 0.005)})`;
+                sesaStroke = "rgba(52, 211, 153, 0.8)";
+            } else {
+                sesaColor = `rgba(249, 115, 22, ${Math.min(0.5, 0.15 + Math.abs(phase.sesaRainAnom) * 0.005)})`;
+                sesaStroke = "rgba(251, 146, 60, 0.7)";
+            }
+            drawPolygon(SESA_POLY, w, h, sesaColor, sesaStroke);
+
+            // ZCAS
+            let zcasColor, zcasStroke;
+            if (phase.zcasRainAnom > 0) {
+                zcasColor = `rgba(56, 189, 248, ${Math.min(0.6, 0.2 + phase.zcasRainAnom * 0.005)})`;
+                zcasStroke = "rgba(56, 189, 248, 0.8)";
+            } else {
+                zcasColor = `rgba(249, 115, 22, ${Math.min(0.4, 0.15 + Math.abs(phase.zcasRainAnom) * 0.005)})`;
+                zcasStroke = "rgba(251, 146, 60, 0.6)";
+            }
+            drawPolygon(ZCAS_POLY, w, h, zcasColor, zcasStroke);
+        }
+
+        // Renderização do Trem de Ondas de Rossby (Padrão PSA)
+        function renderRossbyWaveTrain(w, h, phase) {
+            const centers = phase.psaCenters;
+            if (!centers || centers.length < 2) return;
+
+            // Linha guia do trem de ondas (Grande Círculo / Arco através do Pacífico)
+            ctxMap.beginPath();
+            ctxMap.strokeStyle = "rgba(251, 191, 36, 0.45)";
+            ctxMap.lineWidth = 2.5;
+            ctxMap.setLineDash([6, 6]);
+
+            const startPt = lonLatToScreen(centers[0].lon, centers[0].lat, w, h);
+            ctxMap.moveTo(startPt.x, startPt.y);
+
+            for (let i = 1; i < centers.length; i++) {
+                const pt = lonLatToScreen(centers[i].lon, centers[i].lat, w, h);
+                ctxMap.lineTo(pt.x, pt.y);
+            }
+            ctxMap.stroke();
+            ctxMap.setLineDash([]);
+
+            // Centros Alternados (Alta 'A' e Baixa 'B')
+            centers.forEach(c => {
+                const pt = lonLatToScreen(c.lon, c.lat, w, h);
+                const isHigh = c.type === 'A';
+
+                ctxMap.beginPath();
+                ctxMap.arc(pt.x, pt.y, 14 * c.strength, 0, Math.PI * 2);
+                ctxMap.fillStyle = isHigh ? "rgba(244, 63, 94, 0.25)" : "rgba(56, 189, 248, 0.25)";
+                ctxMap.fill();
+                ctxMap.strokeStyle = isHigh ? "#f43f5e" : "#38bdf8";
+                ctxMap.lineWidth = 2;
+                ctxMap.stroke();
+
+                // Letra do Centro (A = Alta / Crista; B = Baixa / Cavado)
+                ctxMap.fillStyle = "#ffffff";
+                ctxMap.font = "bold 11px Inter";
+                ctxMap.textAlign = "center";
+                ctxMap.textBaseline = "middle";
+                ctxMap.fillText(c.type, pt.x, pt.y);
+            });
+        }
+
+        // Renderização do Jato Subtropical (200 hPa)
+        function renderSubtropicalJet(w, h, phase) {
+            ctxMap.save();
+            ctxMap.beginPath();
+            ctxMap.strokeStyle = "rgba(56, 189, 248, 0.65)";
+            ctxMap.lineWidth = 5;
+
+            for (let lon = -180; lon <= 180; lon += 5) {
+                let wave = Math.sin((lon + 60) * Math.PI / 60) * 3;
+                let lat = phase.stj.latAvg + wave;
+                const pt = lonLatToScreen(lon, lat, w, h);
+                if (lon === -180) ctxMap.moveTo(pt.x, pt.y);
+                else ctxMap.lineTo(pt.x, pt.y);
+            }
+            ctxMap.stroke();
+
+            // Jet Streak (Núcleo de Vento Máximo) em ~30°S
+            const stPt = lonLatToScreen(phase.stj.streakLon, phase.stj.streakLat, w, h);
+            ctxMap.beginPath();
+            ctxMap.arc(stPt.x, stPt.y, 16, 0, Math.PI * 2);
+            ctxMap.fillStyle = "rgba(56, 189, 248, 0.25)";
+            ctxMap.fill();
+            ctxMap.strokeStyle = "#38bdf8";
+            ctxMap.lineWidth = 2;
+            ctxMap.stroke();
+
+            ctxMap.fillStyle = "#38bdf8";
+            ctxMap.font = "bold 9px JetBrains Mono";
+            ctxMap.textAlign = "center";
+            ctxMap.fillText(`${phase.stj.maxSpeed} m/s`, stPt.x, stPt.y - 18);
+            ctxMap.fillText("Jet Streak 200hPa", stPt.x, stPt.y - 8);
+
+            ctxMap.restore();
+        }
+
+        // Renderização do Jato Polar (300 hPa)
+        function renderPolarJet(w, h, phase) {
+            ctxMap.save();
+            ctxMap.beginPath();
+            ctxMap.strokeStyle = "rgba(192, 132, 252, 0.6)";
+            ctxMap.lineWidth = 4;
+
+            for (let lon = -180; lon <= 180; lon += 5) {
+                let wave = Math.sin((lon + 90) * Math.PI / 45) * phase.pfj.waveAmp * 0.6;
+                let lat = phase.pfj.latAvg + wave;
+                const pt = lonLatToScreen(lon, lat, w, h);
+                if (lon === -180) ctxMap.moveTo(pt.x, pt.y);
+                else ctxMap.lineTo(pt.x, pt.y);
+            }
+            ctxMap.stroke();
+            ctxMap.restore();
+        }
+
+        // Renderização do SALLJ (Jato de Baixos Níveis 850 hPa)
+        function renderSALLJ(w, h, phase) {
+            ctxMap.save();
+            ctxMap.beginPath();
+            ctxMap.strokeStyle = "#10b981";
+            ctxMap.lineWidth = 6;
+            ctxMap.lineCap = "round";
+
+            let pathPoints = [];
+            if (phase.sallj.direction === 'southward') {
+                pathPoints = [
+                    [-65, -5], [-64, -12], [-63, -18], [-61, -24], [-58, -30], [-55, -35]
+                ];
+            } else if (phase.sallj.direction === 'eastward') {
+                pathPoints = [
+                    [-65, -5], [-63, -13], [-62, -18], [-54, -21], [-46, -23], [-40, -25]
+                ];
+            } else {
+                pathPoints = [
+                    [-65, -5], [-63, -14], [-61, -21], [-56, -26], [-52, -31]
+                ];
+            }
+
+            const first = lonLatToScreen(pathPoints[0][0], pathPoints[0][1], w, h);
+            ctxMap.moveTo(first.x, first.y);
+            for (let i = 1; i < pathPoints.length; i++) {
+                const pt = lonLatToScreen(pathPoints[i][0], pathPoints[i][1], w, h);
+                ctxMap.lineTo(pt.x, pt.y);
+            }
+            ctxMap.stroke();
+
+            // Setas de fluxo ao longo do SALLJ
+            for (let i = 1; i < pathPoints.length; i++) {
+                const pPrev = lonLatToScreen(pathPoints[i-1][0], pathPoints[i-1][1], w, h);
+                const pCurr = lonLatToScreen(pathPoints[i][0], pathPoints[i][1], w, h);
+                const angle = Math.atan2(pCurr.y - pPrev.y, pCurr.x - pPrev.x);
+
+                ctxMap.save();
+                ctxMap.translate(pCurr.x, pCurr.y);
+                ctxMap.rotate(angle);
+                ctxMap.beginPath();
+                ctxMap.moveTo(-8, -5);
+                ctxMap.lineTo(4, 0);
+                ctxMap.lineTo(-8, 5);
+                ctxMap.fillStyle = "#34d399";
+                ctxMap.fill();
+                ctxMap.restore();
+            }
+
+            // Rótulo SALLJ
+            const mid = lonLatToScreen(pathPoints[2][0], pathPoints[2][1], w, h);
+            ctxMap.fillStyle = "#34d399";
+            ctxMap.font = "bold 10px JetBrains Mono";
+            ctxMap.fillText(`SALLJ (${phase.sallj.intensity} m/s)`, mid.x + 12, mid.y);
+
+            ctxMap.restore();
+        }
+
+        // Renderização de Partículas
+        function renderParticles(w, h) {
+            APP.particles.forEach(p => {
+                p.update();
+                const coords = p.getCoordinates();
+                const pt = lonLatToScreen(coords.lon, coords.lat, w, h);
+
+                ctxMap.beginPath();
+                if (p.type === 'stj') {
+                    ctxMap.fillStyle = "rgba(56, 189, 248, 0.75)";
+                    ctxMap.arc(pt.x, pt.y, 1.8, 0, Math.PI * 2);
+                } else if (p.type === 'pfj') {
+                    ctxMap.fillStyle = "rgba(192, 132, 252, 0.7)";
+                    ctxMap.arc(pt.x, pt.y, 1.6, 0, Math.PI * 2);
+                } else { // sallj
+                    ctxMap.fillStyle = "rgba(52, 211, 153, 0.9)";
+                    ctxMap.arc(pt.x, pt.y, 2.4, 0, Math.PI * 2);
+                }
+                ctxMap.fill();
+            });
+        }
+
+        // Rótulos do Mapa
+        function renderMapLabels(w, h, phase) {
+            ctxMap.save();
+            ctxMap.font = "bold 11px Outfit";
+
+            // SESA
+            const sesaPt = lonLatToScreen(-56, -30, w, h);
+            ctxMap.fillStyle = phase.sesaRainAnom > 0 ? "#34d399" : "#fb923c";
+            ctxMap.textAlign = "center";
+            ctxMap.fillText("SESA / Bacia do Prata", sesaPt.x, sesaPt.y - 10);
+            ctxMap.font = "bold 10px JetBrains Mono";
+            ctxMap.fillText(`${phase.sesaRainAnom > 0 ? '+' : ''}${phase.sesaRainAnom}% Chuva`, sesaPt.x, sesaPt.y + 4);
+
+            // ZCAS
+            const zcasPt = lonLatToScreen(-46, -21, w, h);
+            ctxMap.fillStyle = phase.zcasRainAnom > 0 ? "#38bdf8" : "#fb923c";
+            ctxMap.font = "bold 11px Outfit";
+            ctxMap.fillText("ZCAS", zcasPt.x, zcasPt.y - 8);
+            ctxMap.font = "bold 10px JetBrains Mono";
+            ctxMap.fillText(`${phase.zcasRainAnom > 0 ? '+' : ''}${phase.zcasRainAnom}%`, zcasPt.x, zcasPt.y + 6);
+
+            // Andes
+            const andesPt = lonLatToScreen(-69, -24, w, h);
+            ctxMap.fillStyle = "rgba(245, 158, 11, 0.85)";
+            ctxMap.font = "italic 10px Inter";
+            ctxMap.fillText("▲ Andes (Barreira Orográfica)", andesPt.x, andesPt.y);
+
+            // Célula de Convecção MJO
+            const convPt = lonLatToScreen(phase.tropicalConvection.lon, phase.tropicalConvection.lat, w, h);
+            ctxMap.fillStyle = "#34d399";
+            ctxMap.font = "bold 11px Outfit";
+            ctxMap.fillText(`MJO Fase ${phase.phase}: Convecção Ativa`, convPt.x, convPt.y - 20);
+
+            ctxMap.restore();
+        }
+
+        /* --- DIAGRAMA RMM DE WHEELER & HENDON --- */
+        const rmmCanvas = document.getElementById('rmmCanvas');
+        const ctxRmm = rmmCanvas.getContext('2d');
+
+        function renderRMM() {
+            const rect = rmmCanvas.getBoundingClientRect();
+            rmmCanvas.width = rect.width * window.devicePixelRatio;
+            rmmCanvas.height = rect.height * window.devicePixelRatio;
+            ctxRmm.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+            const w = rect.width;
+            const h = rect.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            const radius = Math.min(w, h) * 0.42;
+
+            ctxRmm.clearRect(0, 0, w, h);
+
+            // Fundo
+            ctxRmm.fillStyle = "#050914";
+            ctxRmm.fillRect(0, 0, w, h);
+
+            // 8 Octantes de Wheeler-Hendon
+            // Fase 1: [-180°, -135°] -> West Hem & Africa
+            // Fase 2: [-135°, -90°]  -> Indian Ocean
+            // Fase 3: [-90°, -45°]   -> Indian Ocean
+            // Fase 4: [-45°, 0°]     -> Maritime Cont.
+            // Fase 5: [0°, 45°]      -> Maritime Cont.
+            // Fase 6: [45°, 90°]     -> West Pacific
+            // Fase 7: [90°, 135°]    -> West Pacific
+            // Fase 8: [135°, 180°]   -> West Hem
+            const octantLabels = [
+                { num: 5, label: "Continente Marítimo", angle: Math.PI / 8 },
+                { num: 6, label: "Pacífico Oeste", angle: 3 * Math.PI / 8 },
+                { num: 7, label: "Pacífico Oeste", angle: 5 * Math.PI / 8 },
+                { num: 8, label: "Hemisfério Ocidental", angle: 7 * Math.PI / 8 },
+                { num: 1, label: "Hemisfério Ocidental & África", angle: -7 * Math.PI / 8 },
+                { num: 2, label: "Oceano Índico", angle: -5 * Math.PI / 8 },
+                { num: 3, label: "Oceano Índico", angle: -3 * Math.PI / 8 },
+                { num: 4, label: "Continente Marítimo", angle: -Math.PI / 8 }
+            ];
+
+            // Eixos RMM1 e RMM2
+            ctxRmm.strokeStyle = "rgba(255, 255, 255, 0.15)";
+            ctxRmm.lineWidth = 1;
+            ctxRmm.beginPath();
+            ctxRmm.moveTo(cx - radius, cy);
+            ctxRmm.lineTo(cx + radius, cy);
+            ctxRmm.moveTo(cx, cy - radius);
+            ctxRmm.lineTo(cx, cy + radius);
+            ctxRmm.stroke();
+
+            // Linhas diagonais dos octantes
+            ctxRmm.setLineDash([2, 3]);
+            for (let i = 0; i < 4; i++) {
+                let ang = (i * Math.PI / 4) + (Math.PI / 4);
+                ctxRmm.beginPath();
+                ctxRmm.moveTo(cx - Math.cos(ang) * radius, cy - Math.sin(ang) * radius);
+                ctxRmm.lineTo(cx + Math.cos(ang) * radius, cy + Math.sin(ang) * radius);
+                ctxRmm.stroke();
+            }
+            ctxRmm.setLineDash([]);
+
+            // Círculo Central A = 1 (Limiar de MJO Ativa)
+            const rUnit = radius * 0.45;
+            ctxRmm.beginPath();
+            ctxRmm.arc(cx, cy, rUnit, 0, Math.PI * 2);
+            ctxRmm.fillStyle = "rgba(100, 116, 139, 0.12)";
+            ctxRmm.fill();
+            ctxRmm.strokeStyle = "rgba(255, 255, 255, 0.3)";
+            ctxRmm.lineWidth = 1.2;
+            ctxRmm.stroke();
+
+            // Texto |RMM| < 1
+            ctxRmm.fillStyle = "rgba(255, 255, 255, 0.4)";
+            ctxRmm.font = "9px JetBrains Mono";
+            ctxRmm.textAlign = "center";
+            ctxRmm.fillText("|RMM| < 1", cx, cy + 3);
+
+            // Números dos Octantes e Destaque da Fase Atual
+            octantLabels.forEach(oct => {
+                const isActive = oct.num === APP.currentPhase;
+                const dist = radius * 0.82;
+                const ox = cx + Math.cos(oct.angle) * dist;
+                const oy = cy - Math.sin(oct.angle) * dist;
+
+                ctxRmm.beginPath();
+                ctxRmm.arc(ox, oy, 12, 0, Math.PI * 2);
+                ctxRmm.fillStyle = isActive ? "rgba(251, 191, 36, 0.3)" : "rgba(15, 23, 42, 0.6)";
+                ctxRmm.fill();
+                ctxRmm.strokeStyle = isActive ? "#fbbf24" : "rgba(255, 255, 255, 0.2)";
+                ctxRmm.lineWidth = isActive ? 2 : 1;
+                ctxRmm.stroke();
+
+                ctxRmm.fillStyle = isActive ? "#fbbf24" : "#94a3b8";
+                ctxRmm.font = "bold 11px JetBrains Mono";
+                ctxRmm.textAlign = "center";
+                ctxRmm.textBaseline = "middle";
+                ctxRmm.fillText(oct.num, ox, oy);
+            });
+
+            // Ponto da MJO Atual
+            // Ângulo baseado na fase
+            const phaseAngs = {
+                1: -3 * Math.PI / 4,
+                2: -5 * Math.PI / 8,
+                3: -Math.PI / 2,
+                4: -Math.PI / 8,
+                5: Math.PI / 8,
+                6: Math.PI / 2,
+                7: 3 * Math.PI / 4,
+                8: 7 * Math.PI / 8
+            };
+            const currentAng = phaseAngs[APP.currentPhase];
+            const currentDist = rUnit * APP.amplitude;
+            const px = cx + Math.cos(currentAng) * currentDist;
+            const py = cy - Math.sin(currentAng) * currentDist;
+
+            // Trajetória simulada conectando fases anteriores (sentido anti-horário)
+            ctxRmm.beginPath();
+            ctxRmm.strokeStyle = "rgba(56, 189, 248, 0.4)";
+            ctxRmm.lineWidth = 2;
+            for (let i = 1; i <= 8; i++) {
+                let a = phaseAngs[i];
+                let x = cx + Math.cos(a) * (rUnit * 1.6);
+                let y = cy - Math.sin(a) * (rUnit * 1.6);
+                if (i === 1) ctxRmm.moveTo(x, y);
+                else ctxRmm.lineTo(x, y);
+            }
+            ctxRmm.closePath();
+            ctxRmm.stroke();
+
+            // Marcador do Ponto Atual
+            ctxRmm.beginPath();
+            ctxRmm.arc(px, py, 7, 0, Math.PI * 2);
+            ctxRmm.fillStyle = "#38bdf8";
+            ctxRmm.fill();
+            ctxRmm.strokeStyle = "#ffffff";
+            ctxRmm.lineWidth = 2;
+            ctxRmm.stroke();
+
+            // Seta de propagação para leste (anti-horária)
+            ctxRmm.strokeStyle = "rgba(251, 191, 36, 0.8)";
+            ctxRmm.lineWidth = 1.5;
+            ctxRmm.beginPath();
+            ctxRmm.arc(cx, cy, radius * 0.94, -Math.PI/3, Math.PI/3, false);
+            ctxRmm.stroke();
+            ctxRmm.fillStyle = "#fbbf24";
+            ctxRmm.font = "8px Inter";
+            ctxRmm.fillText("Propagação p/ Leste →", cx, cy - radius * 0.96);
+        }
+
+        /* --- CORTE VERTICAL DA TROPOSFERA SOBRE O SESA --- */
+        const crossCanvas = document.getElementById('crossSectionCanvas');
+        const ctxCross = crossCanvas.getContext('2d');
+
+        function renderCrossSection() {
+            const rect = crossCanvas.getBoundingClientRect();
+            crossCanvas.width = rect.width * window.devicePixelRatio;
+            crossCanvas.height = rect.height * window.devicePixelRatio;
+            ctxCross.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+            const w = rect.width;
+            const h = rect.height;
+            const phase = MJO_PHASE_DATA[APP.currentPhase];
+
+            ctxCross.clearRect(0, 0, w, h);
+
+            // Níveis de pressão (1000 hPa a 150 hPa)
+            const levels = [
+                { p: 1000, y: h - 20, label: "1000 hPa" },
+                { p: 850,  y: h - 50, label: "850 hPa (SALLJ)" },
+                { p: 500,  y: h - 95, label: "500 hPa" },
+                { p: 200,  y: 35,     label: "200 hPa (Jato Subtrop.)" }
+            ];
+
+            // Linhas de Nível
+            levels.forEach(lvl => {
+                ctxCross.strokeStyle = "rgba(255, 255, 255, 0.08)";
+                ctxCross.lineWidth = 1;
+                ctxCross.beginPath();
+                ctxCross.moveTo(50, lvl.y);
+                ctxCross.lineTo(w - 10, lvl.y);
+                ctxCross.stroke();
+
+                ctxCross.fillStyle = "#64748b";
+                ctxCross.font = "9px JetBrains Mono";
+                ctxCross.textAlign = "right";
+                ctxCross.fillText(lvl.label, 46, lvl.y + 3);
+            });
+
+            // Andes no lado Oeste (esquerda)
+            ctxCross.beginPath();
+            ctxCross.moveTo(50, h - 20);
+            ctxCross.lineTo(95, h - 100);
+            ctxCross.lineTo(120, h - 20);
+            ctxCross.closePath();
+            ctxCross.fillStyle = "rgba(217, 119, 6, 0.4)";
+            ctxCross.fill();
+            ctxCross.strokeStyle = "#f59e0b";
+            ctxCross.lineWidth = 1.5;
+            ctxCross.stroke();
+
+            ctxCross.fillStyle = "#f59e0b";
+            ctxCross.font = "bold 9px Inter";
+            ctxCross.textAlign = "center";
+            ctxCross.fillText("Andes", 95, h - 105);
+
+            // SALLJ em 850 hPa (Núcleo verde de transporte de umidade)
+            const isCoupled = phase.coupling.includes("ACOPLADO");
+            const salljX = isCoupled ? 165 : 220;
+            const salljY = h - 50;
+
+            ctxCross.beginPath();
+            ctxCross.ellipse(salljX, salljY, 24, 12, 0, 0, Math.PI * 2);
+            ctxCross.fillStyle = "rgba(16, 185, 129, 0.35)";
+            ctxCross.fill();
+            ctxCross.strokeStyle = "#10b981";
+            ctxCross.lineWidth = 1.5;
+            ctxCross.stroke();
+
+            ctxCross.fillStyle = "#34d399";
+            ctxCross.font = "bold 8.5px JetBrains Mono";
+            ctxCross.fillText("SALLJ", salljX, salljY - 14);
+
+            // Jato Subtropical em 200 hPa (Divergência)
+            const stjX = isCoupled ? 180 : 250;
+            const stjY = 35;
+
+            ctxCross.beginPath();
+            ctxCross.ellipse(stjX, stjY, 30, 14, 0, 0, Math.PI * 2);
+            ctxCross.fillStyle = "rgba(56, 189, 248, 0.35)";
+            ctxCross.fill();
+            ctxCross.strokeStyle = "#38bdf8";
+            ctxCross.lineWidth = 1.5;
+            ctxCross.stroke();
+
+            ctxCross.fillStyle = "#38bdf8";
+            ctxCross.font = "bold 8.5px JetBrains Mono";
+            ctxCross.fillText("STJ (200 hPa)", stjX, stjY - 16);
+
+            // Nuvens Convectivas e Setas Ascendentes se Acoplado
+            if (isCoupled) {
+                // Setas Verticais (Updrafts)
+                ctxCross.strokeStyle = "#34d399";
+                ctxCross.lineWidth = 2;
+                for (let x = 150; x <= 195; x += 15) {
+                    ctxCross.beginPath();
+                    ctxCross.moveTo(x, h - 60);
+                    ctxCross.lineTo(x, 55);
+                    ctxCross.stroke();
+
+                    ctxCross.beginPath();
+                    ctxCross.moveTo(x - 4, 62);
+                    ctxCross.lineTo(x, 54);
+                    ctxCross.lineTo(x + 4, 62);
+                    ctxCross.fillStyle = "#34d399";
+                    ctxCross.fill();
+                }
+
+                // Nuvem Cumulonimbus / SCM
+                ctxCross.fillStyle = "rgba(255, 255, 255, 0.25)";
+                ctxCross.beginPath();
+                ctxCross.arc(170, 75, 20, 0, Math.PI * 2);
+                ctxCross.arc(190, 80, 24, 0, Math.PI * 2);
+                ctxCross.arc(155, 88, 16, 0, Math.PI * 2);
+                ctxCross.fill();
+
+                ctxCross.fillStyle = "#fbbf24";
+                ctxCross.font = "bold 9px Outfit";
+                ctxCross.fillText("SCM Subtropical", 175, 115);
+            } else {
+                // Subsidência (Ar Descendente)
+                ctxCross.strokeStyle = "rgba(249, 115, 22, 0.7)";
+                ctxCross.lineWidth = 1.5;
+                for (let x = 160; x <= 220; x += 25) {
+                    ctxCross.beginPath();
+                    ctxCross.moveTo(x, 55);
+                    ctxCross.lineTo(x, h - 55);
+                    ctxCross.stroke();
+
+                    ctxCross.beginPath();
+                    ctxCross.moveTo(x - 4, h - 63);
+                    ctxCross.lineTo(x, h - 55);
+                    ctxCross.lineTo(x + 4, h - 63);
+                    ctxCross.fillStyle = "#f97316";
+                    ctxCross.fill();
+                }
+                ctxCross.fillStyle = "#f97316";
+                ctxCross.font = "bold 9px Outfit";
+                ctxCross.fillText("Subsidência / Céu Limpo", 190, 95);
+            }
+        }
+
+        /* --- RÉGUA DO LOGITO (FIGURA 1.3 DO LIVRO) --- */
+        const logitCanvas = document.getElementById('logitRulerCanvas');
+        const ctxLogit = logitCanvas.getContext('2d');
+
+        function logitToProb(l) {
+            return 1 / (1 + Math.exp(-l));
+        }
+
+        function probToLogit(p) {
+            return Math.log(p / (1 - p));
+        }
+
+        function renderLogitRuler() {
+            const rect = logitCanvas.getBoundingClientRect();
+            logitCanvas.width = rect.width * window.devicePixelRatio;
+            logitCanvas.height = rect.height * window.devicePixelRatio;
+            ctxLogit.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+            const w = rect.width;
+            const h = rect.height;
+
+            ctxLogit.clearRect(0, 0, w, h);
+
+            // Fundo
+            ctxLogit.fillStyle = "#050915";
+            ctxLogit.fillRect(0, 0, w, h);
+
+            // Régua: Logito linear de -4 a +2.5
+            const minLogit = -4.0;
+            const maxLogit = +2.5;
+
+            function logitToX(l) {
+                return 40 + ((l - minLogit) / (maxLogit - minLogit)) * (w - 70);
+            }
+
+            // Eixo principal da régua
+            const axisY = 45;
+            ctxLogit.strokeStyle = "rgba(255, 255, 255, 0.4)";
+            ctxLogit.lineWidth = 1.5;
+            ctxLogit.beginPath();
+            ctxLogit.moveTo(35, axisY);
+            ctxLogit.lineTo(w - 25, axisY);
+            ctxLogit.stroke();
+
+            // Marcas no topo: Logito (-4, -3, -2, -1, 0, +1, +2)
+            for (let l = -4; l <= 2; l++) {
+                const x = logitToX(l);
+                ctxLogit.beginPath();
+                ctxLogit.moveTo(x, axisY - 8);
+                ctxLogit.lineTo(x, axisY);
+                ctxLogit.strokeStyle = "#38bdf8";
+                ctxLogit.stroke();
+
+                ctxLogit.fillStyle = "#38bdf8";
+                ctxLogit.font = "bold 9px JetBrains Mono";
+                ctxLogit.textAlign = "center";
+                ctxLogit.fillText((l > 0 ? '+' : '') + l, x, axisY - 12);
+            }
+            ctxLogit.fillStyle = "#94a3b8";
+            ctxLogit.font = "8px Inter";
+            ctxLogit.textAlign = "right";
+            ctxLogit.fillText("logito", 32, axisY - 12);
+
+            // Marcas embaixo: Probabilidade P não-linear (1%, 2%, 5%, 10%, 20%, 30%, 50%, 70%, 85%)
+            const probs = [0.01, 0.02, 0.05, 0.10, 0.20, 0.30, 0.50, 0.70, 0.85];
+            probs.forEach(p => {
+                const l = probToLogit(p);
+                const x = logitToX(l);
+                ctxLogit.beginPath();
+                ctxLogit.moveTo(x, axisY);
+                ctxLogit.lineTo(x, axisY + 8);
+                ctxLogit.strokeStyle = "#f59e0b";
+                ctxLogit.stroke();
+
+                ctxLogit.fillStyle = "#fcd34d";
+                ctxLogit.font = "8.5px JetBrains Mono";
+                ctxLogit.textAlign = "center";
+                ctxLogit.fillText(`${Math.round(p * 100)}%`, x, axisY + 18);
+            });
+            ctxLogit.fillStyle = "#94a3b8";
+            ctxLogit.font = "8px Inter";
+            ctxLogit.textAlign = "right";
+            ctxLogit.fillText("prob. P", 32, axisY + 18);
+
+            // CÁLCULO DINÂMICO DOS DEGRAUS (EQUAÇÃO 1.8)
+            const hasSallj = document.getElementById('selSALLJ').value === '1';
+            const enosVal = parseFloat(document.getElementById('selENOS').value);
+            const phase = MJO_PHASE_DATA[APP.currentPhase];
+
+            // a0: climatologia sem jato = logit(0.12) ≈ -1.99
+            let baseLogit = -1.99;
+            let currentLogit = baseLogit;
+
+            // Degrau 1: SALLJ presente (+1.63 no logito, Salio et al. 2007)
+            const stepSallj = hasSallj ? 1.63 : 0;
+            // Degrau 2: MJO cos(phi - phi0) com phi0 em fases 3-4 (a2 * A ≈ 0.45 * A)
+            // Para fase 3-4 = positivo (~ +0.8), para fases 7-8 = negativo (~ -0.8)
+            let mjoFactor = 0;
+            if (APP.currentPhase === 3 || APP.currentPhase === 4) mjoFactor = 0.45 * APP.amplitude;
+            else if (APP.currentPhase === 2 || APP.currentPhase === 5) mjoFactor = 0.15 * APP.amplitude;
+            else if (APP.currentPhase === 1 || APP.currentPhase === 6) mjoFactor = -0.15 * APP.amplitude;
+            else if (APP.currentPhase === 7 || APP.currentPhase === 8) mjoFactor = -0.45 * APP.amplitude;
+
+            // Degrau 3: ENOS
+            const stepEnos = enosVal;
+
+            const finalLogit = currentLogit + stepSallj + mjoFactor + stepEnos;
+            const finalP = logitToProb(finalLogit);
+
+            // Atualiza no DOM
+            document.getElementById('finalProbVal').textContent = `${(finalP * 100).toFixed(1)}%`;
+
+            // Desenho dos Degraus / Passos (Setas Alaranjadas)
+            const arrowY = 85;
+            let startX = logitToX(currentLogit);
+
+            // Seta SALLJ
+            if (hasSallj) {
+                let nextX = logitToX(currentLogit + stepSallj);
+                drawStepArrow(startX, nextX, arrowY, "#10b981", `SALLJ (+1.63) ×5.1`);
+                currentLogit += stepSallj;
+                startX = nextX;
+            }
+
+            // Seta MJO
+            if (Math.abs(mjoFactor) > 0.05) {
+                let nextX = logitToX(currentLogit + mjoFactor);
+                drawStepArrow(startX, nextX, arrowY + 18, "#38bdf8", `MJO Fase ${APP.currentPhase} (${mjoFactor > 0 ? '+' : ''}${mjoFactor.toFixed(2)})`);
+                currentLogit += mjoFactor;
+                startX = nextX;
+            }
+
+            // Marcador da Probabilidade Final
+            const finalX = logitToX(finalLogit);
+            ctxLogit.beginPath();
+            ctxLogit.moveTo(finalX, axisY + 4);
+            ctxLogit.lineTo(finalX - 6, axisY + 14);
+            ctxLogit.lineTo(finalX + 6, axisY + 14);
+            ctxLogit.closePath();
+            ctxLogit.fillStyle = "#34d399";
+            ctxLogit.fill();
+
+            ctxLogit.beginPath();
+            ctxLogit.arc(finalX, arrowY + 36, 5, 0, Math.PI * 2);
+            ctxLogit.fillStyle = "#34d399";
+            ctxLogit.fill();
+        }
+
+        function drawStepArrow(x1, x2, y, color, label) {
+            ctxLogit.beginPath();
+            ctxLogit.moveTo(x1, y);
+            ctxLogit.lineTo(x2, y);
+            ctxLogit.strokeStyle = color;
+            ctxLogit.lineWidth = 3;
+            ctxLogit.stroke();
+
+            // Ponta da seta
+            const dir = x2 > x1 ? 1 : -1;
+            ctxLogit.beginPath();
+            ctxLogit.moveTo(x2, y);
+            ctxLogit.lineTo(x2 - dir * 6, y - 4);
+            ctxLogit.lineTo(x2 - dir * 6, y + 4);
+            ctxLogit.closePath();
+            ctxLogit.fillStyle = color;
+            ctxLogit.fill();
+
+            ctxLogit.fillStyle = color;
+            ctxLogit.font = "8px Inter";
+            ctxLogit.textAlign = "center";
+            ctxLogit.fillText(label, (x1 + x2) / 2, y - 6);
+        }
+
+        /* --- SINCRONIZAÇÃO E ATUALIZAÇÃO DA UI --- */
+        function setPhase(p) {
+            APP.currentPhase = parseInt(p);
+            const phase = MJO_PHASE_DATA[APP.currentPhase];
+
+            // Atualiza Botões
+            document.querySelectorAll('.phase-btn').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.phase) === APP.currentPhase);
+            });
+
+            // Atualiza Métricas
+            document.getElementById('rmmPhaseVal').textContent = `Fase ${phase.phase}`;
+            document.getElementById('diagTitle').textContent = `Diagnóstico: MJO Fase ${phase.phase} — ${phase.name}`;
+            document.getElementById('diagBadge').textContent = phase.diagnosticStatus;
+            document.getElementById('diagBadge').className = `diag-status-badge ${phase.badgeClass}`;
+            document.getElementById('diagDescription').textContent = phase.description;
+
+            document.getElementById('diagSalljBehav').textContent = phase.sallj.direction === 'southward' ? 'Estendido para o Sul (Prata)' : (phase.sallj.direction === 'eastward' ? 'Desprende precoce (p/ ZCAS)' : 'Transição');
+            document.getElementById('diagLatDet').textContent = `${Math.abs(phase.sallj.curvatureLat)}°S`;
+            document.getElementById('diagZcasStatus').textContent = phase.zcasRainAnom > 0 ? `Ativa (+${phase.zcasRainAnom}%)` : `Suprimida (${phase.zcasRainAnom}%)`;
+            document.getElementById('diagSesaAnom').textContent = `${phase.sesaRainAnom > 0 ? '+' : ''}${phase.sesaRainAnom}%`;
+            document.getElementById('verticalCouplingStatus').textContent = phase.coupling;
+            document.getElementById('verticalCouplingStatus').style.color = phase.coupling.includes("ACOPLADO") ? "#34d399" : "#fb923c";
+
+            // Detalhes da Teleconexão
+            document.getElementById('sourceRossbyText').textContent = phase.tropicalConvection.lon > 0 ? `Convecção a ~${phase.tropicalConvection.lon}°E (${phase.name})` : `Convecção a ~${Math.abs(phase.tropicalConvection.lon)}°W (${phase.name})`;
+            document.getElementById('responseSesaText').textContent = phase.sesaRainAnom > 0 ? "Cavado no Atlântico Sudoeste acelerando o SALLJ para o sul" : "Anticiclone no Atlântico Sudoeste desviando umidade para o Sudeste";
+
+            renderMap();
+            renderRMM();
+            renderCrossSection();
+            renderLogitRuler();
+        }
+
+        /* --- EVENT LISTENERS E CONTROLES --- */
+        // Clique nas Fases do Cabeçalho
+        document.querySelectorAll('.phase-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                stopCycle();
+                setPhase(btn.dataset.phase);
+            });
+        });
+
+        // Botão Ciclo de 45 dias da MJO
+        const btnPlay = document.getElementById('btnPlayCycle');
+        btnPlay.addEventListener('click', () => {
+            if (APP.isCyclePlaying) {
+                stopCycle();
+            } else {
+                startCycle();
+            }
+        });
+
+        function startCycle() {
+            APP.isCyclePlaying = true;
+            btnPlay.innerHTML = '<i class="fa-solid fa-pause"></i> Pausar';
+            btnPlay.style.background = 'rgba(244, 63, 94, 0.2)';
+            btnPlay.style.borderColor = 'var(--accent-rose)';
+            btnPlay.style.color = '#fda4af';
+
+            APP.cycleTimer = setInterval(() => {
+                let nextPhase = APP.currentPhase + 1;
+                if (nextPhase > 8) nextPhase = 1;
+                setPhase(nextPhase);
+            }, 3000); // 3 segundos por fase (~45 dias em escala acelerada)
+        }
+
+        function stopCycle() {
+            APP.isCyclePlaying = false;
+            clearInterval(APP.cycleTimer);
+            btnPlay.innerHTML = '<i class="fa-solid fa-play"></i> Ciclo 45d';
+            btnPlay.style.background = 'rgba(16, 185, 129, 0.2)';
+            btnPlay.style.borderColor = 'var(--accent-emerald)';
+            btnPlay.style.color = 'var(--accent-emerald)';
+        }
+
+        // Seletor de Visão do Mapa
+        document.querySelectorAll('.view-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                APP.currentView = tab.dataset.view;
+                APP.map.zoom = 1.0;
+                APP.map.panX = 0;
+                APP.map.panY = 0;
+                renderMap();
+            });
+        });
+
+        // Toggles de Camadas
+        document.querySelectorAll('.layer-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const layer = btn.dataset.layer;
+                APP.layers[layer] = !APP.layers[layer];
+                btn.classList.toggle('active', APP.layers[layer]);
+                renderMap();
+            });
+        });
+
+        // Slider de Amplitude RMM
+        const sliderAmp = document.getElementById('sliderAmp');
+        const sliderAmpVal = document.getElementById('sliderAmpVal');
+        sliderAmp.addEventListener('input', (e) => {
+            APP.amplitude = parseFloat(e.target.value);
+            sliderAmpVal.textContent = APP.amplitude.toFixed(2);
+            document.getElementById('rmmAmpVal').textContent = APP.amplitude.toFixed(2);
+            document.getElementById('rmmStatusVal').textContent = APP.amplitude >= 1.0 ? "Ativa (A > 1)" : "Inativa (Disco)";
+            document.getElementById('rmmStatusVal').style.color = APP.amplitude >= 1.0 ? "var(--accent-emerald)" : "var(--text-muted)";
+            renderRMM();
+            renderLogitRuler();
+        });
+
+        // Seletores da Régua do Logito
+        document.getElementById('selSALLJ').addEventListener('change', renderLogitRuler);
+        document.getElementById('selENOS').addEventListener('change', renderLogitRuler);
+
+        // Zoom e Pan no Mapa
+        document.getElementById('btnZoomIn').addEventListener('click', () => {
+            APP.map.zoom = Math.min(4.0, APP.map.zoom * 1.25);
+            renderMap();
+        });
+        document.getElementById('btnZoomOut').addEventListener('click', () => {
+            APP.map.zoom = Math.max(0.6, APP.map.zoom / 1.25);
+            renderMap();
+        });
+        document.getElementById('btnResetView').addEventListener('click', () => {
+            APP.map.zoom = 1.0;
+            APP.map.panX = 0;
+            APP.map.panY = 0;
+            renderMap();
+        });
+
+        // Mouse Drag Pan no Mapa
+        mapContainer.addEventListener('mousedown', (e) => {
+            APP.map.isDragging = true;
+            APP.map.startX = e.clientX - APP.map.panX;
+            APP.map.startY = e.clientY - APP.map.panY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!APP.map.isDragging) return;
+            APP.map.panX = e.clientX - APP.map.startX;
+            APP.map.panY = e.clientY - APP.map.startY;
+            renderMap();
+        });
+
+        window.addEventListener('mouseup', () => {
+            APP.map.isDragging = false;
+        });
+
+        // Wheel Zoom
+        mapContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomFactor = e.deltaY < 0 ? 1.15 : 0.87;
+            APP.map.zoom = Math.max(0.6, Math.min(4.5, APP.map.zoom * zoomFactor));
+            renderMap();
+        }, { passive: false });
+
+        // Tooltip Interativo no Mapa
+        mapContainer.addEventListener('mousemove', (e) => {
+            const rect = mapContainer.getBoundingClientRect();
+            const sx = e.clientX - rect.left;
+            const sy = e.clientY - rect.top;
+
+            const coords = screenToLonLat(sx, sy, rect.width, rect.height);
+            const phase = MJO_PHASE_DATA[APP.currentPhase];
+
+            // Verifica se está sobre SESA ou ZCAS
+            let text = `Lon: ${coords.lon.toFixed(1)}° | Lat: ${coords.lat.toFixed(1)}°`;
+
+            if (coords.lat >= -38 && coords.lat <= -22 && coords.lon >= -64 && coords.lon <= -48) {
+                text = `<b>SESA / Bacia do Prata</b><br>Anomalia: <b>${phase.sesaRainAnom > 0 ? '+' : ''}${phase.sesaRainAnom}%</b><br>Acoplamento: ${phase.coupling}`;
+                tooltip.style.display = 'block';
+                tooltip.style.left = `${sx + 15}px`;
+                tooltip.style.top = `${sy + 15}px`;
+                tooltip.innerHTML = text;
+            } else if (coords.lat >= -25 && coords.lat <= -12 && coords.lon >= -60 && coords.lon <= -38) {
+                text = `<b>Faixa da ZCAS</b><br>Anomalia: <b>${phase.zcasRainAnom > 0 ? '+' : ''}${phase.zcasRainAnom}%</b><br>Status: ${phase.zcasRainAnom > 0 ? 'Convecção Ativa' : 'Suprimida'}`;
+                tooltip.style.display = 'block';
+                tooltip.style.left = `${sx + 15}px`;
+                tooltip.style.top = `${sy + 15}px`;
+                tooltip.innerHTML = text;
+            } else {
+                tooltip.style.display = 'none';
+            }
+        });
+
+        mapContainer.addEventListener('mouseleave', () => {
+            tooltip.style.display = 'none';
+        });
+
+        // Clique interativo no Diagrama RMM para pular para a fase
+        rmmCanvas.addEventListener('click', (e) => {
+            const rect = rmmCanvas.getBoundingClientRect();
+            const x = (e.clientX - rect.left) - rect.width / 2;
+            const y = -((e.clientY - rect.top) - rect.height / 2);
+
+            let angle = Math.atan2(y, x); // -PI a PI
+            // Converte ângulo em octante 1 a 8
+            // Octante 5: [0, PI/4]
+            // Octante 6: [PI/4, PI/2]
+            // Octante 7: [PI/2, 3PI/4]
+            // Octante 8: [3PI/4, PI]
+            // Octante 1: [-PI, -3PI/4]
+            // Octante 2: [-3PI/4, -PI/2]
+            // Octante 3: [-PI/2, -PI/4]
+            // Octante 4: [-PI/4, 0]
+            let p = 3;
+            if (angle >= 0 && angle < Math.PI / 4) p = 5;
+            else if (angle >= Math.PI / 4 && angle < Math.PI / 2) p = 6;
+            else if (angle >= Math.PI / 2 && angle < 3 * Math.PI / 4) p = 7;
+            else if (angle >= 3 * Math.PI / 4 && angle <= Math.PI) p = 8;
+            else if (angle >= -Math.PI && angle < -3 * Math.PI / 4) p = 1;
+            else if (angle >= -3 * Math.PI / 4 && angle < -Math.PI / 2) p = 2;
+            else if (angle >= -Math.PI / 2 && angle < -Math.PI / 4) p = 3;
+            else if (angle >= -Math.PI / 4 && angle < 0) p = 4;
+
+            stopCycle();
+            setPhase(p);
+        });
+
+        // Narração por Voz (Web Speech API)
+        const btnVoice = document.getElementById('btnVoice');
+        const btnVoiceStop = document.getElementById('btnVoiceStop');
+
+        btnVoice.addEventListener('click', () => {
+            if (!APP.speechSynth) {
+                alert("Navegador sem suporte a síntese de voz.");
+                return;
+            }
+            speakCurrentPhase();
+        });
+
+        btnVoiceStop.addEventListener('click', () => {
+            if (APP.speechSynth) {
+                APP.speechSynth.cancel();
+                APP.isSpeaking = false;
+                btnVoiceStop.style.display = 'none';
+                btnVoice.innerHTML = '<i class="fa-solid fa-volume-high"></i> Explicar Fase';
+            }
+        });
+
+        function speakCurrentPhase() {
+            APP.speechSynth.cancel();
+            const phase = MJO_PHASE_DATA[APP.currentPhase];
+            const utterance = new SpeechSynthesisUtterance(phase.voiceText);
+            utterance.lang = 'pt-BR';
+            utterance.rate = 1.05;
+
+            utterance.onstart = () => {
+                APP.isSpeaking = true;
+                btnVoiceStop.style.display = 'inline-flex';
+                btnVoice.innerHTML = '<i class="fa-solid fa-volume-high"></i> Explicando...';
+            };
+
+            utterance.onend = () => {
+                APP.isSpeaking = false;
+                btnVoiceStop.style.display = 'none';
+                btnVoice.innerHTML = '<i class="fa-solid fa-volume-high"></i> Explicar Fase';
+            };
+
+            APP.speechSynth.speak(utterance);
+        }
+
+        // Toggle da Teoria
+        const theoryToggle = document.getElementById('theoryToggle');
+        const theoryBody = document.getElementById('theoryBody');
+        const theoryIcon = document.getElementById('theoryIcon');
+        theoryToggle.addEventListener('click', () => {
+            const isHidden = theoryBody.style.display === 'none';
+            theoryBody.style.display = isHidden ? 'grid' : 'none';
+            theoryIcon.className = isHidden ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
+        });
+
+        // Loop de Animação Principal (60 FPS para partículas e pulsos)
+        function animateLoop() {
+            renderMap();
+            APP.animFrameId = requestAnimationFrame(animateLoop);
+        }
+
+        // Inicialização Completa
+        window.addEventListener('DOMContentLoaded', () => {
+            resizeCanvas();
+            setPhase(3);
+            renderCrossSection();
+            renderLogitRuler();
+            animateLoop();
+
+            // Renderiza KaTeX
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false }
+                    ]
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+'''
+
+# Escreve no diretório principal do repositório
+with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print(f"Salvo com sucesso em: {OUTPUT_FILE}")
+
+# Espelha para o OneDrive (Regra de Ouro)
+onedrive_file = os.path.join(ONEDRIVE_DIR, "index.html")
+with open(onedrive_file, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print(f"Espelhado com sucesso para o OneDrive em: {onedrive_file}")

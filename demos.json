@@ -76,6 +76,26 @@
       "description": "Dinâmica em mesoescala de tempestades severas, correntes ascendentes e vorticidade.",
       "path": "mesoescala/supercell-splat-spin/index.html",
       "date": "2026-09-01"
+    },
+    {
+      "id": "mjo-teleconexoes-sesa",
+      "title": "MJO, Teleconexões, SALLJ & Chuvas no SESA",
+      "category": "Meteorologia & Mesoescala",
+      "llm": "Gemini 3.8 Flash",
+      "icon": "🌧️",
+      "tags": [
+        "MJO",
+        "SALLJ",
+        "SESA",
+        "Teleconexões",
+        "Jato Subtropical",
+        "Jato Polar",
+        "Wheeler-Hendon",
+        "Régua do Logito"
+      ],
+      "description": "Mapa global interativo das fases da MJO, diagrama RMM Wheeler-Hendon, trem de ondas de Rossby PSA, Jato de Baixos Níveis (SALLJ), Jato Subtropical (200 hPa) e Jato Polar (300 hPa), modulação do dipolo SESA vs ZCAS e Régua do Logito.",
+      "path": "mesoescala/mjo-teleconexoes-sesa/index.html",
+      "date": "2026-09-23"
     }
   ]
 }
