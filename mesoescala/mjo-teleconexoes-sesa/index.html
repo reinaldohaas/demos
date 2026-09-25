@@ -399,7 +399,7 @@
       </div>
       <div class="toolbar-group">
         <span class="group-label">MJO nos trópicos:</span>
-        <button id="mjoDipolesLayer" aria-pressed="true">Convecção NOAA</button>
+        <button id="mjoDipolesLayer" aria-pressed="true">Convecção (esquema RMM)</button>
         <button id="mjoTrackLayer" aria-pressed="false">Trilha 1–8</button>
         <button id="mjoNoneLayer" aria-pressed="false">Nenhuma</button>
         <button id="mjoLayer" style="display:none;" aria-hidden="true"></button>
@@ -438,7 +438,7 @@
           <b>Base Cartográfica:</b> Polígonos de terra Natural Earth 1:110m (projeção equirretangular contínua). Visão global com Pacífico centralizado e contexto Índico–Pacífico–América do Sul.
         </div>
         <div>
-          <b>Visualizações da MJO nos Trópicos:</b> Seleção mutuamente exclusiva entre <i>Convecção NOAA</i> (compostos de precipitação/convecção verde ativa [+] e marrom suprimida [−]), <i>Trilha 1–8</i> (marcações ao longo do equador com fase ativa destacada e números clicáveis) ou <i>Nenhuma</i> (sem exibição tropical da MJO para a fase). Ao ligar uma, desliga a outra.
+          <b>Visualizações da MJO nos Trópicos:</b> Seleção mutuamente exclusiva entre <i>Convecção (esquema RMM)</i> (compostos conceituais didáticos de convecção/precipitação com anomalias ativas [+] e suprimidas [−] baseados no padrão climatológico Wheeler & Hendon 2004 e CPC/NOAA), <i>Trilha 1–8</i> (marcações conceituais ao longo do equador com fase ativa destacada e números interativos) ou <i>Nenhuma</i> (sem exibição tropical da MJO para a fase). Ao ligar uma camada, desliga-se a outra.
         </div>
         <div>
           <b>Domínios Geográficos Permanentes:</b> Polígono SESA (Sul do Brasil, Uruguai, Paraguai, Nordeste da Argentina) identificado com "SESA" no topo da região. Polígono ZCAS sempre visível como referência de monção.
@@ -450,10 +450,10 @@
           <b>TSM Equatorial:</b> Sinal anômalo qualitativo no Pacífico central/leste (El Niño quente, La Niña fria e Neutro sem anomalia expressiva). Sem grade numérica artificial.
         </div>
         <div>
-          <b>Jatos (Base Visual Permanente):</b> Jato Subtropical (~200 hPa) em traçado único, com espessura modulada pelo ENOS e posição norte–sul acompanhando a estação; SALLJ (~850 hPa) em seta única a leste dos Andes. Sem jato polar e sem equações arbitrárias.
+          <b>Jatos e Transporte (Base Visual Permanente):</b> Jato Subtropical (~200 hPa) em traçado único qualitativo de referência conceitual, com espessura e extensão longitudinal moduladas pelo ENOS (Roy et al. 2025) e deslocamento médio sazonal; SALLJ (~850 hPa) em traçado único esquemático de canalização meridional de umidade amazônica (Jones et al. 2023). Sem jato polar e sem velocidades pontuais arbitrárias.
         </div>
         <div>
-          <b>Teleconexão PSA:</b> Corredor conceitual de propagação de ondas de Rossby exibido exclusivamente nas combinações com mecanismo verificado na literatura (defasagem de 7 a 12 dias), sem posições fictícias de centros A/B.
+          <b>Teleconexão PSA:</b> Guia conceitual de propagação de ondas de Rossby em arco de grande círculo exibido exclusivamente nas combinações com mecanismo dinâmico verificado na literatura (Fernandes & Grimm 2023; Roy et al. 2025), sem posições fictícias de centros anômalos nem defasagens temporais fixadas universalmente.
         </div>
       </div>
     </div>
@@ -474,9 +474,11 @@
     <div class="panel-card">
       <h2>Resultado Documentado & Fonte</h2>
       <div id="result" aria-live="polite"></div>
-      <p style="margin-top:12px;">
-        <a href="https://doi.org/10.1175/JCLI-D-22-0781.1" target="_blank" rel="noopener">Fernandes & Alice M. Grimm (2023)</a><br>
-        <span class="muted">Journal of Climate · Seção 5 e Figura 12. Mapas de chuva média e frequência de extremos analisados de forma independente.</span>
+      <p style="margin-top:12px; font-size:13px; line-height:1.5;">
+        <a href="https://doi.org/10.1175/JCLI-D-22-0781.1" target="_blank" rel="noopener">Fernandes & Alice M. Grimm (2023)</a> · <i>J. Climate</i><br>
+        <a href="https://doi.org/10.1038/s41612-023-00501-4" target="_blank" rel="noopener">Jones, Mu, Carvalho & Ding (2023)</a> · <i>npj Clim. Atmos. Sci.</i><br>
+        <a href="https://doi.org/10.1029/2024GL113395" target="_blank" rel="noopener">Roy, Arblaster, Wheeler & Lim (2025)</a> · <i>Geophys. Res. Lett.</i><br>
+        <span class="muted">Mapas de chuva média e frequência de extremos analisados de forma independente. Rastreabilidade física e integridade observacional.</span>
       </p>
     </div>
 
@@ -484,7 +486,7 @@
       <h2>Mecanismo Físico & Teleconexão</h2>
       <p class="mechanism" id="psaText"></p>
       <p class="muted" style="margin-top:10px;">
-        Mecanismo verificado em Fernandes & Grimm (2023). Sem centros anticiclônicos/ciclônicos fictícios no mapa.
+        Mecanismo verificado em Fernandes & Grimm (2023) e Roy et al. (2025). Sem centros anticiclônicos/ciclônicos fictícios no mapa.
       </p>
     </div>
 
@@ -535,10 +537,10 @@
           S = -∇ · (v_χ · ζ_a)
         </p>
         <p>
-          Essas perturbações dispersam energia ao longo de arcos de círculo máximo pelo Pacífico Sul em direção à América do Sul (trem de ondas PSA — <i>Pacific–South American</i>). A propagação depende crucialmente do estado básico (ventos de oeste $\bar{u} > 0$ no jato subtropical como guia de onda) e possui um tempo de trânsito típico estimado entre <b>7 e 12 dias</b>.
+          Essas perturbações dispersam energia ao longo de arcos de grande círculo pelo Pacífico Sul em direção à América do Sul (trem de ondas PSA — <i>Pacific–South American</i>). A propagação depende crucialmente do estado básico (ventos de oeste $\bar{u} > 0$ no jato subtropical como guia de onda) e é fortemente modulada pelo ENOS e pela estação do ano (Roy et al. 2025).
         </p>
         <p>
-          <b>Por que o PSA não é desenhado como um trem permanente com centros fixos?</b> Porque a geometria dos cavados e cristas anômalos varia substancialmente com a fase da MJO, o estado do ENOS, a estação do ano e a defasagem temporal pós-convecção. Fernandes & Grimm (2023) mostram que posições fixas de alta e baixa pressão não ocorrem de forma invariante.
+          <b>Por que o PSA não é desenhado como um trem permanente com centros fixos nem defasagem universal?</b> Porque a geometria dos cavados e cristas anômalos varia substancialmente com a fase da MJO, o estado do ENOS, a estação do ano e a defasagem temporal pós-convecção. Fernandes & Grimm (2023) e Roy et al. (2025) mostram que posições fixas de alta e baixa pressão não ocorrem de forma invariante, justificando um guia de onda conceitual.
         </p>
       </div>
     </details>
@@ -547,10 +549,10 @@
       <summary>Jatos e transporte dinâmico: Jato Subtropical e SALLJ</summary>
       <div class="details-content">
         <p>
-          <b>Jato Subtropical (~200 hPa):</b> Corrente de oeste em altos níveis (~12 km de altitude). Atua como guia de ondas planetárias de Rossby e seus ramos de entrada/saída proporcionam divergência em altitude favorável à sustentação de sistemas convectivos. Sua posição média varia sazonalmente (mais ao sul no verão, em torno de 32°S; mais ao norte no inverno, em torno de 27°S) e sua espessura média reflete a modulação pelo ENOS (intensificado no El Niño, menor na La Niña).
+          <b>Jato Subtropical (~200 hPa):</b> Corrente de oeste em altos níveis (~12 km de altitude). Atua como guia de ondas planetárias de Rossby. Sua posição média varia sazonalmente (em torno de 32°S no verão austral; ~27°S no inverno) e sua extensão longitudinal e espessura refletem a modulação pelo ENOS (estendido para leste e reforçado no El Niño; confinado a oeste na La Niña; Roy et al. 2025).
         </p>
         <p>
-          <b>SALLJ (Jato de Baixos Níveis da América do Sul, ~850 hPa):</b> Corrente rápida que escoa ao longo da encosta leste da Cordilheira dos Andes. Resulta da combinação de bloqueio orográfico andino, canalização mecânica, gradiente barométrico sinótico (Alta Subtropical vs. Baixa do Chaco), desacoplamento turbulento no ciclo diurno e forçantes baroclínicas. Descarrega vapor d'água amazônico no SESA, alimentando sistemas convectivos de mesoescala.
+          <b>SALLJ (Jato de Baixos Níveis da América do Sul, ~850 hPa):</b> Corrente rápida que escoa ao longo da encosta leste dos Andes. Conforme demonstrado por Jones, Mu, Carvalho & Ding (2023), o SALLJ exibe quatro tipos espaciais principais (Central, Northern, Andes e Peru). O tipo Central opera como canal primário de transporte meridional de umidade amazônica para o SESA, sendo modulado pelas fases ativas da MJO e fases do ENOS.
         </p>
         <p class="muted">
           Nesta demonstração, ambos os jatos são apresentados com traçados de referência dinâmica geométrica (linha única para o subtropical e seta única para o SALLJ). Foram retiradas fórmulas sintéticas que impunham deslocamentos e velocidades arbitrárias. O jato polar não é representado para manter o foco rigoroso na escala subtropical.

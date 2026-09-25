@@ -17,11 +17,14 @@ const ns = 'http://www.w3.org/2000/svg';
 
 // Estado da Narração
 let isNarrationActive = false;
+let isNarrationPaused = false;
 let isMuted = false;
 const speechSynth = typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis : null;
 
-// Padrões de anomalias tropicais de convecção/precipitação da MJO (Composição NOAA CPC / Wheeler & Hendon)
-// Reproduz os dipolos de convecção ativa (verde/azul) e suprimida (marrom/ocre) para as fases 1 a 8
+// Padrões conceituais estilizados de convecção/precipitação da MJO por fase (1 a 8)
+// Esquema didático ilustrando os dipolos de convecção ativa (verde) e suprimida (marrom)
+// baseados na distribuição típica das fases do índice RMM (Wheeler & Hendon 2004).
+// Não constitui extração raster observacional direta nem produto numérico em tempo real.
 const MJO_COMPOSITES = {
   1: {
     wet: [
@@ -146,14 +149,16 @@ function getMjoPhaseCoords(phase) {
 }
 
 function getSubtropicalJetParams(season, enso) {
-  // Posição norte-sul acompanhando a estação (mais ao sul no verão austral, mais ao norte no inverno)
+  // Representação esquemática didática do guia de ondas subtropical (~200 hPa).
+  // A latitude reflete a migração sazonal média do jato e a espessura ilustra o reforço do guia de ondas sob ENOS.
+  // Não constitui medição instrumental de velocidade nem latitude uniforme independente da longitude (Roy et al. 2025; Jones et al. 2023).
   let lat = -30;
   if (season === 'DJF') lat = -32;
   else if (season === 'MAM') lat = -30;
   else if (season === 'JJA') lat = -27;
   else if (season === 'SON') lat = -29;
 
-  // Espessura qualitativa representando a modulação pelo ENOS (mais intenso no El Niño, menor na La Niña)
+  // Espessura qualitativa representando a modulação do guia de ondas pelo ENOS
   let width = 2.5;
   if (enso === 'el-nino') width = 3.6;
   else if (enso === 'la-nina') width = 1.8;
@@ -302,7 +307,7 @@ function drawGlobalContext(evidence) {
       fill: 'none', stroke: '#fbbf24', 'stroke-width': 2.2, 'stroke-dasharray': '6 5'
     });
     const labelPos = project(-100, -49);
-    svg('text', { x: labelPos[0], y: labelPos[1], fill: '#fde68a', 'font-size': 12, 'text-anchor': 'middle' }, 'Corredor PSA (ondas de Rossby · defasagem ~7–12 d)');
+    svg('text', { x: labelPos[0], y: labelPos[1], fill: '#fde68a', 'font-size': 12, 'text-anchor': 'middle' }, 'Guia PSA de ondas de Rossby (esquema conceitual)');
   }
 }
 
@@ -321,13 +326,13 @@ function drawJets() {
     const d = `M ` + projectedPts.map(p => `${p[0]},${p[1]}`).join(' L ');
     svg('path', { d, fill: 'none', stroke: '#38bdf8', 'stroke-width': width, 'stroke-dasharray': '8 5' });
     const [jx, jy] = project(-115, lat - 1);
-    svg('text', { x: jx, y: jy - 8, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle' }, 'Jato Subtropical (~200 hPa · referência)');
+    svg('text', { x: jx, y: jy - 8, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle' }, 'Jato Subtropical (~200 hPa · referência conceitual)');
   } else {
     const p1 = project(-82, lat);
     const p2 = project(-38, lat + 3);
     svg('line', { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: '#38bdf8', 'stroke-width': width, 'stroke-dasharray': '8 5' });
     const [jx, jy] = project(-60, lat + 1);
-    svg('text', { x: jx, y: jy - 8, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle' }, 'Jato Subtropical (200 hPa)');
+    svg('text', { x: jx, y: jy - 8, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle' }, 'Jato Subtropical (~200 hPa · referência conceitual)');
   }
 
   // SALLJ (~850 hPa): uma única seta, sem partículas ou trajetórias duplicadas
@@ -344,7 +349,7 @@ function drawJets() {
     fill: '#34d399'
   });
   const [sx, sy] = project(-65, -22);
-  svg('text', { x: sx, y: sy, fill: '#6ee7b7', 'font-size': 12, 'font-weight': '600', 'text-anchor': 'end' }, 'SALLJ (~850 hPa)');
+  svg('text', { x: sx, y: sy, fill: '#6ee7b7', 'font-size': 12, 'font-weight': '600', 'text-anchor': 'end' }, 'SALLJ (~850 hPa · transporte de umidade)');
 }
 
 function drawMap(evidence) {
@@ -431,25 +436,25 @@ function generateNarrationText(season, enso, phase, metricVal, evidence) {
 
   // 1. Contexto esquemático da TSM e dos Jatos
   if (enso === 'el-nino') {
-    text += `No Pacífico equatorial central e leste, o padrão qualitativo indica anomalias térmicas positivas da TSM. Em altitude, o traçado de referência do Jato Subtropical (~200 hPa) ilustra o reforço do guia de ondas sob circulação de Hadley intensificada. `;
+    text += `No Pacífico equatorial central e leste, o padrão qualitativo indica anomalias térmicas positivas da TSM. Em altitude, o traçado de referência do Jato Subtropical (~200 hPa) ilustra o guia de ondas reforçado e estendido para leste sob circulação de Hadley intensificada (Roy et al. 2025). `;
   } else if (enso === 'la-nina') {
-    text += `No Pacífico equatorial central e leste, o padrão qualitativo indica anomalias térmicas negativas da TSM. Em altitude, o traçado de referência do Jato Subtropical apresenta guia de ondas com espessura ilustrativa reduzida. `;
+    text += `No Pacífico equatorial central e leste, o padrão qualitativo indica anomalias térmicas negativas da TSM. Em altitude, o traçado de referência do Jato Subtropical ilustra guia de ondas com espessura ilustrativa reduzida e confinamento longitudinal mais a oeste (Roy et al. 2025). `;
   } else {
-    text += `No Pacífico equatorial, a TSM encontra-se próxima à referência climatológica neutra (lembrando que anomalias locais podem ocorrer na natureza). O Jato Subtropical exibe espessura de referência. `;
+    text += `No Pacífico equatorial, a TSM encontra-se próxima à referência climatológica neutra (lembrando que anomalias locais ocorrem na natureza). O Jato Subtropical exibe espessura de referência. `;
   }
 
   if (season === 'DJF') {
-    text += `A latitude média de referência do jato subtropical situa-se em torno de 32 graus sul, típica do verão. `;
+    text += `A latitude média de referência do jato subtropical situa-se em torno de 32 graus sul no verão austral. `;
   } else if (season === 'JJA') {
-    text += `O jato subtropical posiciona-se mais ao norte, em torno de 27 graus sul, próprio do inverno. `;
+    text += `O jato subtropical posiciona-se em torno de 27 graus sul no inverno, com teleconexões intrassazonais para o subtrópico enfraquecidas (Roy et al. 2025). `;
   } else {
     text += `O jato subtropical posiciona-se em latitude de transição sazonal, em torno de 29 a 30 graus sul. `;
   }
-  text += `Este traçado de jato e as anomalias de TSM são esquemas conceituais de contexto e não medidas numéricas de velocidade ou latitude observada ponto a ponto. Em baixos níveis, o SALLJ (~850 hPa) opera como canalização de umidade amazônica para o sul do continente. `;
+  text += `Este traçado de jato e as anomalias de TSM são esquemas conceituais didáticos e não medidas de velocidade ou posições latitudinais uniformes ponto a ponto. Em baixos níveis, o SALLJ (~850 hPa) atua no transporte meridional de umidade amazônica, exibindo modos espaciais diferenciados — Central, Northern, Andes e Peru (Jones et al. 2023). `;
 
   // 2. Efeitos verificados, separando convecção-fonte, circulação/teleconexão e respostas remotas
   if (evidence) {
-    text += `Segundo Fernandes e Alice Grimm (2023): `;
+    text += `Segundo Fernandes e Alice Grimm (2023), Jones et al. (2023) e Roy et al. (2025): `;
     if (evidence.source_convection) {
       text += `1. Convecção-fonte: ${evidence.source_convection} `;
     }
@@ -474,10 +479,10 @@ function generateNarrationText(season, enso, phase, metricVal, evidence) {
     }
   } else {
     text += `Sem resultado específico verificado nesta síntese documental para esta combinação em relação a ${metricVal === 'extremes' ? 'extremos de chuva' : 'chuva média'}. `;
-    text += `Esta ausência de destaque não equivale a efeito físico zero na natureza, ausência do fenômeno ou falta de ciência; reflete a exigência rigorosa de não preencher combinações não estratificadas com parâmetros sintéticos ou extrapolações indevidas. `;
+    text += `Esta ausência de destaque não equivale a efeito físico zero na natureza, ausência do fenômeno ou falta de ciência; reflete a exigência metodológica de registrar apenas resultados fundamentados para o recorte estratificado. `;
   }
 
-  text += `Ressalta-se que a chuva média e a frequência de extremos são variáveis distintas, e extremos de precipitação não autorizam inferência de granizo, tornados ou vendavais.`;
+  text += `Ressalta-se que a chuva média e a frequência de extremos são variáveis meteorológicas distintas, e extremos de precipitação não autorizam inferência de tempo severo como granizo ou tornados.`;
 
   return text;
 }
@@ -488,16 +493,16 @@ function updateVoiceUI(state) {
   const btnMute = $('btnVoiceMute');
 
   if (btnNarrate) {
-    btnNarrate.setAttribute('aria-pressed', String(isNarrationActive));
-    btnNarrate.textContent = isNarrationActive ? 'Narrando...' : 'Ouvir narração';
+    btnNarrate.setAttribute('aria-pressed', String(isNarrationActive && !isNarrationPaused));
+    btnNarrate.textContent = (isNarrationActive && !isNarrationPaused) ? 'Narrando...' : 'Ouvir narração';
   }
   if (btnMute) {
     btnMute.setAttribute('aria-pressed', String(isMuted));
     btnMute.textContent = isMuted ? 'Com som' : 'Silenciar';
   }
   if (btnPause) {
-    const isPaused = speechSynth && speechSynth.paused;
-    btnPause.textContent = isPaused ? 'Retomar' : 'Pausar';
+    btnPause.textContent = isNarrationPaused ? 'Retomar' : 'Pausar';
+    btnPause.setAttribute('aria-pressed', String(isNarrationPaused));
   }
 }
 
@@ -511,6 +516,12 @@ function speakCurrentNarration() {
   }
 
   if (!speechSynth || isMuted || !isNarrationActive) {
+    updateVoiceUI();
+    return;
+  }
+
+  // Se estiver em pausa, preservar a pausa e não iniciar fala ao trocar controles
+  if (isNarrationPaused) {
     updateVoiceUI();
     return;
   }
@@ -717,6 +728,7 @@ for (const [id, layer] of [['sstLayer', 'sst'], ['jetsLayer', 'jets'], ['psaLaye
 if ($('btnVoiceNarrate')) {
   $('btnVoiceNarrate').addEventListener('click', () => {
     isNarrationActive = true;
+    isNarrationPaused = false;
     isMuted = false;
     speakCurrentNarration();
   });
@@ -725,9 +737,15 @@ if ($('btnVoiceNarrate')) {
 if ($('btnVoicePause')) {
   $('btnVoicePause').addEventListener('click', () => {
     if (!speechSynth) return;
-    if (speechSynth.paused) {
-      speechSynth.resume();
+    if (isNarrationPaused || speechSynth.paused) {
+      isNarrationPaused = false;
+      if (speechSynth.paused) {
+        speechSynth.resume();
+      } else if (isNarrationActive) {
+        speakCurrentNarration();
+      }
     } else if (speechSynth.speaking) {
+      isNarrationPaused = true;
       speechSynth.pause();
     }
     updateVoiceUI();
@@ -737,8 +755,9 @@ if ($('btnVoicePause')) {
 if ($('btnVoiceStop')) {
   $('btnVoiceStop').addEventListener('click', () => {
     isNarrationActive = false;
+    isNarrationPaused = false;
     if (speechSynth) speechSynth.cancel();
-    updateVoiceUI();
+    updateVoiceUI('idle');
   });
 }
 
@@ -747,7 +766,7 @@ if ($('btnVoiceMute')) {
     isMuted = !isMuted;
     if (isMuted && speechSynth) {
       speechSynth.cancel();
-    } else if (!isMuted && isNarrationActive) {
+    } else if (!isMuted && isNarrationActive && !isNarrationPaused) {
       speakCurrentNarration();
     }
     updateVoiceUI();
