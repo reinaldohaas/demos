@@ -3,6 +3,8 @@ const $ = id => document.getElementById(id);
 let currentSeason = 'DJF';
 let currentEnso = 'neutro';
 let currentPhase = 4;
+let currentAmplitude = 1.5;
+function displayEvidence() { return currentAmplitude >= 1 ? findDocumentedCase(currentSeason, currentEnso, currentPhase) : null; }
 let metric = 'extremes';
 let mapView = 'global';
 let mjoMode = 'dipoles'; // 'dipoles' | 'track' | 'none'
@@ -18,6 +20,7 @@ const ns = 'http://www.w3.org/2000/svg';
 // Estado da Narração
 let isNarrationActive = false;
 let isNarrationPaused = false;
+let pausedNarrationChanged = false;
 let isMuted = false;
 const speechSynth = typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis : null;
 
@@ -198,6 +201,7 @@ function drawLand() {
 }
 
 function drawMjoConvection() {
+  if (currentAmplitude < 1) return;
   const comp = MJO_COMPOSITES[currentPhase];
   if (!comp) return;
 
@@ -338,7 +342,7 @@ function drawJets() {
   // SALLJ (~850 hPa): uma única seta, sem partículas ou trajetórias duplicadas
   const salljStart = project(-63, -16);
   const salljMid = project(-61, -23);
-  const salljEnd = project(-57, -30);
+  const salljEnd = project(-57, -31);
   svg('path', {
     d: `M ${salljStart[0]} ${salljStart[1]} Q ${salljMid[0]} ${salljMid[1]} ${salljEnd[0]} ${salljEnd[1]}`,
     fill: 'none', stroke: '#34d399', 'stroke-width': 3.2
@@ -381,8 +385,8 @@ function drawMap(evidence) {
   const result = evidence ? evidence[metric] : null;
   const isSesaHighlighted = result && result.region === 'SESA';
   polygon(REGIONS.SESA_POLY, isSesaHighlighted ? 'rgba(56, 189, 248, 0.12)' : 'rgba(56, 189, 248, 0.03)', isSesaHighlighted ? '#38bdf8' : '#486780', isSesaHighlighted ? 2.2 : 1.5);
-  const [sx, sy] = project(-56, -21);
-  svg('text', { x: sx, y: sy - 7, fill: isSesaHighlighted ? '#7dd3fc' : '#a5cce3', 'font-size': 17, 'font-weight': '700', 'text-anchor': 'middle' }, 'SESA');
+  const [sesaLabelX, sesaLabelY] = project(-56, -24);
+  svg('text', { x: sesaLabelX, y: sesaLabelY - 7, fill: isSesaHighlighted ? '#7dd3fc' : '#a5cce3', 'font-size': 17, 'font-weight': '700', 'text-anchor': 'middle' }, 'SESA');
 
   // Delimitação da ZCAS: SEMPRE DELIMITADA E IDENTIFICADA
   const isZcasHighlighted = result && result.region === 'ZCAS';
@@ -392,7 +396,7 @@ function drawMap(evidence) {
 
   // Destaque condicional: somente quando houver resultado comprovado para a combinação e métrica
   if (result) {
-    const location = result.region === 'SESA' ? [-56, -30] : result.region === 'CESA' ? [-46, -15] : [-43, -22];
+    const location = result.region === 'SESA' ? [-56, -33] : result.region === 'CESA' ? [-46, -15] : [-43, -22];
     const [x, y] = project(...location);
 
     svg('path', {
@@ -436,19 +440,19 @@ function generateNarrationText(season, enso, phase, metricVal, evidence) {
 
   // 1. Contexto esquemático da TSM e dos Jatos
   if (enso === 'el-nino') {
-    text += `No Pacífico equatorial central e leste, o padrão qualitativo indica anomalias térmicas positivas da TSM. Em altitude, o traçado de referência do Jato Subtropical (~200 hPa) ilustra o guia de ondas reforçado e estendido para leste sob circulação de Hadley intensificada (Roy et al. 2025). `;
+    text += `No Pacífico equatorial central e leste, o padrão qualitativo indica anomalias térmicas positivas da TSM. Em altitude, o traçado de referência do Jato Subtropical (~200 hPa) ilustra o guia de ondas com espessura qualitativa reforçada sob circulação de Hadley intensificada no El Niño. `;
   } else if (enso === 'la-nina') {
-    text += `No Pacífico equatorial central e leste, o padrão qualitativo indica anomalias térmicas negativas da TSM. Em altitude, o traçado de referência do Jato Subtropical ilustra guia de ondas com espessura ilustrativa reduzida e confinamento longitudinal mais a oeste (Roy et al. 2025). `;
+    text += `No Pacífico equatorial central e leste, o padrão qualitativo indica anomalias térmicas negativas da TSM. Em altitude, o traçado de referência do Jato Subtropical ilustra o guia de ondas com espessura qualitativa reduzida na La Niña. `;
   } else {
-    text += `No Pacífico equatorial, a TSM encontra-se próxima à referência climatológica neutra (lembrando que anomalias locais ocorrem na natureza). O Jato Subtropical exibe espessura de referência. `;
+    text += `No Pacífico equatorial, a TSM encontra-se próxima à referência climatológica neutra (lembrando que anomalias locais ocorrem na natureza). O Jato Subtropical exibe espessura de referência intermediária. `;
   }
 
   if (season === 'DJF') {
-    text += `A latitude média de referência do jato subtropical situa-se em torno de 32 graus sul no verão austral. `;
+    text += `A posição latitudinal adotada para o traçado esquemático do jato situa-se em torno de 32 graus sul no verão austral. `;
   } else if (season === 'JJA') {
-    text += `O jato subtropical posiciona-se em torno de 27 graus sul no inverno, com teleconexões intrassazonais para o subtrópico enfraquecidas (Roy et al. 2025). `;
+    text += `No inverno austral, o traçado do jato posiciona-se em torno de 27 graus sul; quanto às teleconexões extratropicais no Hemisfério Sul, Roy et al. (2025) documentam maior atividade de ondas sob condições de ENOS no outono e inverno, sem que haja suporte nesta síntese para inferir resposta regional de chuva no SESA nesta estação. `;
   } else {
-    text += `O jato subtropical posiciona-se em latitude de transição sazonal, em torno de 29 a 30 graus sul. `;
+    text += `Nas estações de transição sazonal (MAM e SON), o traçado do jato posiciona-se em torno de 29 a 30 graus sul. `;
   }
   text += `Este traçado de jato e as anomalias de TSM são esquemas conceituais didáticos e não medidas de velocidade ou posições latitudinais uniformes ponto a ponto. Em baixos níveis, o SALLJ (~850 hPa) atua no transporte meridional de umidade amazônica, exibindo modos espaciais diferenciados — Central, Northern, Andes e Peru (Jones et al. 2023). `;
 
@@ -464,12 +468,12 @@ function generateNarrationText(season, enso, phase, metricVal, evidence) {
     if (evidence.mean) {
       text += `3. Chuva média: ${evidence.mean.text} `;
     } else {
-      text += `3. Chuva média: sem destaque de anomalia média com suporte estatístico específico nesta fase. `;
+      text += `3. Chuva média: resultado de chuva média não cadastrado nesta síntese para esta fase. `;
     }
     if (evidence.extremes) {
       text += `4. Frequência de extremos: ${evidence.extremes.text} `;
     } else {
-      text += `4. Frequência de extremos: sem destaque de extremos com suporte estatístico específico nesta fase. `;
+      text += `4. Frequência de extremos: resultado de extremos não cadastrado nesta síntese para esta fase. `;
     }
     if (evidence.psa) {
       text += `Mecanismo dinâmico: ${evidence.psa} `;
@@ -484,7 +488,7 @@ function generateNarrationText(season, enso, phase, metricVal, evidence) {
 
   text += `Ressalta-se que a chuva média e a frequência de extremos são variáveis meteorológicas distintas, e extremos de precipitação não autorizam inferência de tempo severo como granizo ou tornados.`;
 
-  return text;
+  return `Amplitude RMM selecionada: ${currentAmplitude.toFixed(1)}. ${currentAmplitude < 1 ? "MJO fraca: os destaques associados às composições de MJO ativa foram ocultados; a base permanece. A fase dentro do círculo unitário não é uma atribuição robusta." : "MJO ativa. A amplitude não foi convertida em magnitudes de chuva, PSA ou jatos; não há calibração dessas relações nesta síntese."} ` + text;
 }
 
 function updateVoiceUI(state) {
@@ -507,7 +511,7 @@ function updateVoiceUI(state) {
 }
 
 function speakCurrentNarration() {
-  const evidence = findDocumentedCase(currentSeason, currentEnso, currentPhase);
+  const evidence = displayEvidence();
   const text = generateNarrationText(currentSeason, currentEnso, currentPhase, metric, evidence);
 
   // Atualizar texto na tela para leitura e acessibilidade
@@ -522,6 +526,7 @@ function speakCurrentNarration() {
 
   // Se estiver em pausa, preservar a pausa e não iniciar fala ao trocar controles
   if (isNarrationPaused) {
+    pausedNarrationChanged = true;
     updateVoiceUI();
     return;
   }
@@ -548,6 +553,7 @@ function setClimateState(opts) {
   if (opts.season !== undefined) currentSeason = opts.season;
   if (opts.enso !== undefined) currentEnso = opts.enso;
   if (opts.phase !== undefined) currentPhase = Number(opts.phase);
+  if (opts.amplitude !== undefined && Number.isFinite(Number(opts.amplitude))) currentAmplitude = Math.max(0, Math.min(3, Number(opts.amplitude)));
   if (opts.metric !== undefined) metric = opts.metric;
   if (opts.view !== undefined) mapView = opts.view;
   if (opts.mjoMode !== undefined) mjoMode = opts.mjoMode;
@@ -555,6 +561,7 @@ function setClimateState(opts) {
 }
 
 function update() {
+  if (typeof renderRMMDiagram === "function") renderRMMDiagram(currentPhase,currentAmplitude);
   // Atualizar atributos dos botões de controle
   document.querySelectorAll('[data-season]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.season === currentSeason)));
   document.querySelectorAll('[data-enso]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.enso === currentEnso)));
@@ -575,7 +582,7 @@ function update() {
   if ($('mjoLayer')) $('mjoLayer').setAttribute('aria-pressed', String(mjoMode !== 'none'));
 
   // Buscar evidência na base curada
-  const evidence = findDocumentedCase(currentSeason, currentEnso, currentPhase);
+  const evidence = displayEvidence();
   const result = evidence ? evidence[metric] : null;
 
   const ensoLabel = currentEnso === 'el-nino' ? 'El Niño' : currentEnso === 'la-nina' ? 'La Niña' : 'ENOS Neutro';
@@ -587,7 +594,7 @@ function update() {
       $('caseSummary').textContent = `${result.text} (${result.figure || 'Fernandes & Grimm 2023'})`;
       if ($('caseSummary').style) $('caseSummary').style.color = 'var(--accent-teal)';
     } else {
-      $('caseSummary').textContent = 'Sem resultado específico verificado nesta síntese.';
+      $('caseSummary').textContent = currentAmplitude < 1 ? 'MJO fraca (A < 1): destaques de fase ativa ocultos; jatos, TSM, ZCAS e SESA preservados.' : 'Sem resultado específico verificado nesta síntese.';
       if ($('caseSummary').style) $('caseSummary').style.color = 'var(--muted)';
     }
   }
@@ -739,7 +746,12 @@ if ($('btnVoicePause')) {
     if (!speechSynth) return;
     if (isNarrationPaused || speechSynth.paused) {
       isNarrationPaused = false;
-      if (speechSynth.paused) {
+      if (pausedNarrationChanged) {
+        pausedNarrationChanged = false;
+        speechSynth.cancel();
+        speechSynth.resume();
+        if (isNarrationActive && !isMuted) speakCurrentNarration();
+      } else if (speechSynth.paused) {
         speechSynth.resume();
       } else if (isNarrationActive) {
         speakCurrentNarration();

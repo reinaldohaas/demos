@@ -177,24 +177,18 @@ const DOCUMENTED_CASES = [
     phase: 8,
     label: 'DJF · Neutro · fase 8',
     source_convection: 'Convecção anômala no Pacífico subtropical central e hemisfério ocidental em anos neutros.',
-    circulation: 'Trem de ondas com anomalia anticiclônica no Atlântico subtropical, favorecendo convergência na porção central da ZCAS.',
-    mean: {
-      region: 'ZCAS',
-      text: 'Anomalias de chuva média na faixa da ZCAS em anos neutros, com maior significância no setor continental leste.',
-      figure: 'Fernandes & Grimm (2023), Figs. 4 e 12',
-      sign: 'positivo',
-      timing: 'composição de fase'
-    },
+    circulation: 'Trem de ondas em fase inicial de estruturação pelo Pacífico Sul; a teleconexão no Atlântico subtropical ainda não atinge a definição madura observada na fase 1 (Fernandes & Grimm 2023).',
+    mean: null,
     extremes: {
       region: 'CESA',
-      text: 'Aumento da frequência de extremos de chuva concentrado no centro-leste da América do Sul (CESA, setor ao norte de 15°S), diferenciando-se da banda principal da ZCAS mais ao sul.',
+      text: 'Aumento na frequência de extremos de chuva localizado no centro-leste da América do Sul (CESA, setor ao norte de 15°S), sem abranger toda a banda da ZCAS.',
       figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
       sign: 'positivo',
       timing: 'composição de fase'
     },
-    psa: 'Trem de ondas PSA induzido pela convecção subtropical no Pacífico em anos neutros, favorecendo a banda da ZCAS.',
+    psa: 'Ondas de Rossby em fase inicial de estruturação; em anos neutros, a teleconexão atinge maior clareza espacial na fase 1 subsequente (Fernandes & Grimm 2023).',
     source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate',
-    limits: 'Composição específica para anos neutros; distinção espacial entre o CESA (ao norte de 15°S) e a ZCAS principal.'
+    limits: 'Em anos neutros, o aumento de extremos na fase 8 restringe-se ao CESA (ao norte de 15°S); a chuva média apresenta anomalias fracas ou sem significância estatística em setores da ZCAS, não justificando destaque para a ZCAS inteira.'
   },
   {
     id: 'DJF-neutro-1',
@@ -202,25 +196,13 @@ const DOCUMENTED_CASES = [
     enso: 'neutro',
     phase: 1,
     label: 'DJF · Neutro · fase 1',
-    source_convection: 'Envelope da MJO migra para o hemisfério ocidental / África.',
-    circulation: 'Trem de ondas e escoamento em transição no Atlântico subtropical.',
-    mean: {
-      region: 'ZCAS',
-      text: 'Anomalias de chuva na ZCAS e borda sul em transição e declínio após a fase 8 em anos neutros.',
-      figure: 'Fernandes & Grimm (2023), Figs. 4 e 12',
-      sign: 'positivo',
-      timing: 'composição de fase / declínio'
-    },
-    extremes: {
-      region: 'CESA',
-      text: 'Aumento de extremos observável no CESA e borda sul da ZCAS em anos neutros antes da transição suprimida.',
-      figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
-      sign: 'positivo',
-      timing: 'composição de fase / declínio'
-    },
-    psa: 'Teleconexão remota residual no Atlântico subtropical em atenuação.',
+    source_convection: 'Envelope convectivo da MJO avança pelo hemisfério ocidental e África.',
+    circulation: 'Teleconexão mais claramente estabelecida na fase 1 em anos neutros (Fernandes & Grimm 2023, discussão das Figs. 5, 8 e 9). Não se atribui aqui um centro de circulação sem reprodução da composição espacial.',
+    mean: null,
+    extremes: null,
+    psa: 'No estado neutro, a teleconexão é mais claramente estabelecida na fase 1. Isso não implica resposta significativa homogênea de chuva em toda a ZCAS (Fernandes & Grimm 2023, Figs. 5 e 12).',
     source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate',
-    limits: 'Evolução documentada na transição para a fase suprimida da ZCAS.'
+    limits: 'Embora a teleconexão de circulação em altos níveis esteja mais claramente estabelecida na fase 1 neutra, a resposta em chuva média e extremos na ZCAS permanece fraca e sem significância homogênea, deslocada para o centro de CESA e norte, não justificando destaque na ZCAS inteira.'
   },
 
   // --- COMPARAÇÃO DJF / NEUTRO: FASES 3 E 4 NO SESA ---

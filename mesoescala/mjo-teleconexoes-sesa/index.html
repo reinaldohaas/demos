@@ -379,11 +379,12 @@
       <span class="pill-label" style="color:var(--accent-teal);">Evolução em DJF:</span>
       <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="la-nina" data-phase="7" data-metric="mean">La Niña · 7 (Fonte)</button>
       <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="la-nina" data-phase="8" data-metric="mean">La Niña · 8 (Pico ZCAS)</button>
-      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="la-nina" data-phase="1" data-metric="mean">La Niña · 1 (Declínio)</button>
+      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="la-nina" data-phase="1" data-metric="mean">La Niña · 1 (Borda sul ZCAS)</button>
       <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="el-nino" data-phase="8" data-metric="extremes">El Niño · 8 (Fonte leste)</button>
       <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="el-nino" data-phase="1" data-metric="extremes">El Niño · 1 (Pico CESA/ZCAS)</button>
       <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="el-nino" data-phase="3" data-metric="extremes">El Niño · 3 (SESA extremos)</button>
-      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="8" data-metric="mean">Neutro · 8 (ZCAS)</button>
+      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="8" data-metric="extremes">Neutro · 8 (CESA extremos)</button>
+      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="1" data-metric="extremes">Neutro · 1 (Circulação PSA)</button>
       <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="3" data-metric="extremes">Neutro · 3 (Precursor SESA)</button>
       <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="4" data-metric="extremes">Neutro · 4 (Pico SESA)</button>
     </div>
@@ -450,7 +451,7 @@
           <b>TSM Equatorial:</b> Sinal anômalo qualitativo no Pacífico central/leste (El Niño quente, La Niña fria e Neutro sem anomalia expressiva). Sem grade numérica artificial.
         </div>
         <div>
-          <b>Jatos e Transporte (Base Visual Permanente):</b> Jato Subtropical (~200 hPa) em traçado único qualitativo de referência conceitual, com espessura e extensão longitudinal moduladas pelo ENOS (Roy et al. 2025) e deslocamento médio sazonal; SALLJ (~850 hPa) em traçado único esquemático de canalização meridional de umidade amazônica (Jones et al. 2023). Sem jato polar e sem velocidades pontuais arbitrárias.
+          <b>Jatos e Transporte (Base Visual Permanente):</b> Jato Subtropical (~200 hPa) em traçado único qualitativo de referência conceitual, com espessura ilustrando a modulação pelo ENOS e latitude ilustrando o ciclo sazonal (convenções didáticas de desenho, sem velocidades ou latitudes universais absolutas); SALLJ (~850 hPa) em traçado único esquemático de canalização meridional de umidade amazônica (Jones et al. 2023). Sem jato polar e sem velocidades pontuais arbitrárias.
         </div>
         <div>
           <b>Teleconexão PSA:</b> Guia conceitual de propagação de ondas de Rossby em arco de grande círculo exibido exclusivamente nas combinações com mecanismo dinâmico verificado na literatura (Fernandes & Grimm 2023; Roy et al. 2025), sem posições fictícias de centros anômalos nem defasagens temporais fixadas universalmente.
@@ -463,6 +464,10 @@
     </p>
   </section>
 
+  <section class="panel-card" style="margin-bottom:20px;display:flex;flex-wrap:wrap;gap:24px;align-items:center">
+    <div style="width:320px;max-width:100%"><h2>Diagrama RMM · MJO</h2><svg id="rmmDiagram" viewBox="0 0 320 320" role="img" aria-label="Diagrama RMM com oito fases e círculo unitário"></svg></div>
+    <div style="flex:1;min-width:220px"><label for="mjoAmplitude">Amplitude da MJO: <output id="mjoAmplitudeValue">1,5</output></label><input id="mjoAmplitude" type="range" min="0" max="3" step="0.1" value="1.5" style="display:block;width:100%;margin:18px 0"><p id="rmmStatus" aria-live="polite"></p><p class="muted">A = √(RMM1² + RMM2²). Controle didático, sem observações em tempo real. A &lt; 1: fase pouco definida; os destaques de MJO ativa ficam ocultos. A ≥ 1: somente associações cadastradas. Não há multiplicação automática dos efeitos pela amplitude.</p><a href="https://www.bom.gov.au/climate/mjo/about/WH04.pdf" target="_blank" rel="noopener">Wheeler e Hendon (2004)</a></div>
+  </section>
   <!-- Narração Explicativa Completa (Leitura e Acessibilidade) -->
   <section class="panel-card" style="margin-bottom: 20px;">
     <h2>Narração Explicativa & Síntese Sonora</h2>
@@ -504,7 +509,7 @@
       <h2>MJO: Fase Selecionada</h2>
       <p id="phaseInfo" style="font-size:14px; font-weight:600; color:#a5f3fc; margin-bottom:8px;"></p>
       <p class="muted">
-        As fases RMM combinam OLR equatorial e ventos zonais em 850 e 200 hPa. Não se atribui amplitude sintética a estes exemplos.
+        As fases RMM combinam OLR equatorial e ventos zonais em 850 e 200 hPa. A amplitude selecionada no diagrama é didática, não uma observação nem uma estimativa da intensidade dos impactos.
       </p>
       <a href="https://www.bom.gov.au/climate/mjo/about/WH04.pdf" target="_blank" rel="noopener">Wheeler & Hendon (2004)</a>
     </div>
@@ -549,7 +554,7 @@
       <summary>Jatos e transporte dinâmico: Jato Subtropical e SALLJ</summary>
       <div class="details-content">
         <p>
-          <b>Jato Subtropical (~200 hPa):</b> Corrente de oeste em altos níveis (~12 km de altitude). Atua como guia de ondas planetárias de Rossby. Sua posição média varia sazonalmente (em torno de 32°S no verão austral; ~27°S no inverno) e sua extensão longitudinal e espessura refletem a modulação pelo ENOS (estendido para leste e reforçado no El Niño; confinado a oeste na La Niña; Roy et al. 2025).
+          <b>Jato Subtropical (~200 hPa):</b> Corrente de oeste em altos níveis (~12 km de altitude). Atua como guia de ondas planetárias de Rossby. Sua posição média no traçado esquemático ilustra o ciclo sazonal (32°S no verão e 27°S no inverno neste desenho, sem equivalência com uma climatologia longitudinal medida como convenção didática) e sua espessura gráfica reflete qualitativamente o reforço do guia de ondas no El Niño e sua atenuação na La Niña. Não se impõem velocidades pontuais arbitrárias nem se apresentam as latitudes do desenho como valores climatológicos rígidos observados.
         </p>
         <p>
           <b>SALLJ (Jato de Baixos Níveis da América do Sul, ~850 hPa):</b> Corrente rápida que escoa ao longo da encosta leste dos Andes. Conforme demonstrado por Jones, Mu, Carvalho & Ding (2023), o SALLJ exibe quatro tipos espaciais principais (Central, Northern, Andes e Peru). O tipo Central opera como canal primário de transporte meridional de umidade amazônica para o SESA, sendo modulado pelas fases ativas da MJO e fases do ENOS.
@@ -583,6 +588,7 @@
 <script src="world-land.js"></script>
 <script src="map-regions.js"></script>
 <script src="documented-cases.js"></script>
+<script src="rmm-diagram.js"></script>
 <script src="documented-view.js"></script>
 </body>
 </html>
