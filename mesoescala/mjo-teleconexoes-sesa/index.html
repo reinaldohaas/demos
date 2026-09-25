@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>MJO, Estações, ENOS & Teleconexões com o SESA — Demonstração Didática</title>
   <style>
     :root {
@@ -536,19 +539,39 @@
       </div>
     </div>
 
-    <!-- Atalhos para os Casos com Destaque Documentado -->
+    <!-- Atalhos para os Casos com Evidência Documentada (Eventos de Interesse por Estação) -->
     <div class="controls-row" style="border-top: 1px solid #1a344e; padding-top: 8px;">
-      <span class="pill-label" style="color:var(--accent-teal);">Evolução em DJF:</span>
-      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="la-nina" data-phase="7" data-metric="mean">La Niña · 7 (Fonte)</button>
-      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="la-nina" data-phase="8" data-metric="mean">La Niña · 8 (Pico ZCAS)</button>
-      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="la-nina" data-phase="1" data-metric="mean">La Niña · 1 (Borda sul ZCAS)</button>
-      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="el-nino" data-phase="8" data-metric="extremes">El Niño · 8 (Fonte leste)</button>
-      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="el-nino" data-phase="1" data-metric="extremes">El Niño · 1 (Pico CESA/ZCAS)</button>
-      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="el-nino" data-phase="3" data-metric="extremes">El Niño · 3 (SESA extremos)</button>
-      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="8" data-metric="extremes">Neutro · 8 (CESA extremos)</button>
-      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="1" data-metric="extremes">Neutro · 1 (Circulação PSA)</button>
-      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="3" data-metric="extremes">Neutro · 3 (Precursor SESA)</button>
-      <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="4" data-metric="extremes">Neutro · 4 (Pico SESA)</button>
+      <span class="pill-label" style="color:var(--accent-teal);">Eventos de interesse:</span>
+      <div style="display:flex; flex-wrap:wrap; gap:4px; align-items:center;">
+        <span style="font-size:11px; font-weight:700; color:#94a3b8; margin-left:4px;">☀️ DJF:</span>
+        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="la-nina" data-phase="7" data-metric="mean">La Niña · 7 (Fonte)</button>
+        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="la-nina" data-phase="8" data-metric="mean">La Niña · 8 (Pico ZCAS)</button>
+        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="la-nina" data-phase="1" data-metric="mean">La Niña · 1 (Borda sul ZCAS)</button>
+        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="el-nino" data-phase="8" data-metric="extremes">El Niño · 8 (Fonte leste)</button>
+        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="el-nino" data-phase="1" data-metric="extremes">El Niño · 1 (Pico CESA/ZCAS)</button>
+        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="el-nino" data-phase="3" data-metric="extremes">El Niño · 3 (SESA extremos)</button>
+        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="8" data-metric="extremes">Neutro · 8 (CESA extremos)</button>
+        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="1" data-metric="extremes">Neutro · 1 (Circulação PSA)</button>
+        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="3" data-metric="extremes">Neutro · 3 (Precursor SESA)</button>
+        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="4" data-metric="extremes">Neutro · 4 (Pico SESA)</button>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:4px; align-items:center; width:100%; margin-top:4px;">
+        <span style="font-size:11px; font-weight:700; color:#94a3b8; margin-left:4px;">🍂 MAM:</span>
+        <button class="btn-shortcut" data-shortcut data-season="MAM" data-enso="neutro" data-phase="4" data-metric="extremes">Neutro · 4 (Par 4–5)</button>
+        <button class="btn-shortcut" data-shortcut data-season="MAM" data-enso="neutro" data-phase="6" data-metric="extremes">Neutro · 6 (Par 6–7)</button>
+        <button class="btn-shortcut" data-shortcut data-season="MAM" data-enso="el-nino" data-phase="4" data-metric="extremes">El Niño · 4 (Par 4–5)</button>
+        <button class="btn-shortcut" data-shortcut data-season="MAM" data-enso="el-nino" data-phase="6" data-metric="extremes">El Niño · 6 (Par 6–7)</button>
+        <button class="btn-shortcut" data-shortcut data-season="MAM" data-enso="la-nina" data-phase="4" data-metric="extremes">La Niña · 4 (Par 4–5)</button>
+        <button class="btn-shortcut" data-shortcut data-season="MAM" data-enso="la-nina" data-phase="6" data-metric="extremes">La Niña · 6 (Par 6–7)</button>
+
+        <span style="font-size:11px; font-weight:700; color:#94a3b8; margin-left:8px;">❄️ JJA:</span>
+        <button class="btn-shortcut" data-shortcut data-season="JJA" data-enso="el-nino" data-phase="2" data-metric="extremes">El Niño · 2 (Par 2–3)</button>
+        <button class="btn-shortcut" data-shortcut data-season="JJA" data-enso="la-nina" data-phase="2" data-metric="extremes">La Niña · 2 (Par 2–3)</button>
+
+        <span style="font-size:11px; font-weight:700; color:#94a3b8; margin-left:8px;">🌸 SON:</span>
+        <button class="btn-shortcut" data-shortcut data-season="SON" data-enso="el-nino" data-phase="4" data-metric="extremes">El Niño · 4 (Par 4–5)</button>
+        <button class="btn-shortcut" data-shortcut data-season="SON" data-enso="la-nina" data-phase="4" data-metric="extremes">La Niña · 4 (Par 4–5)</button>
+      </div>
     </div>
   </section>
 
@@ -565,7 +588,7 @@
         <div class="toolbar-group">
           <span class="group-label">MJO nos trópicos:</span>
           <button id="mjoDipolesLayer" aria-pressed="true">Convecção tropical (esquema RMM)</button>
-          <button id="mjoChiLayer" aria-pressed="false">Potencial de velocidade 200 hPa (NOAA/PSL)</button>
+          <button id="mjoChiLayer" aria-pressed="false">Divergência/convergência em altitude (esquema conceitual)</button>
           <button id="mjoTrackLayer" aria-pressed="false">Trilha 1–8</button>
           <button id="mjoNoneLayer" aria-pressed="false">Nenhuma</button>
           <button id="mjoLayer" style="display:none;" aria-hidden="true"></button>
@@ -623,7 +646,7 @@
             <b>Base Cartográfica:</b> Polígonos de terra Natural Earth 1:110m (projeção equirretangular contínua). Visão global com Pacífico centralizado e contexto Índico–Pacífico–América do Sul. Na visão regional da América do Sul, inclui fronteiras internacionais dos países vizinhos e limites estaduais brasileiros discretos para localização geográfica precisa e desobstruída.
           </div>
           <div>
-            <b>Visualizações da MJO nos Trópicos:</b> Seleção mutuamente exclusiva entre <i>Convecção tropical (esquema RMM)</i> (compostos didáticos conceituais de anomalias ativas [+] e suprimidas [−] baseados no padrão Wheeler & Hendon 2004 e CPC/NOAA), <i>Potencial de velocidade 200 hPa (NOAA/PSL)</i> (compostos planetários contínuos de $\chi_{200}$ da NOAA Physical Sciences Division mostrando convecção ativa/divergência em tons de roxo/azul e convecção suprimida/convergência em tons de amarelo/laranja/vermelho ao longo de 30°S a 30°N), <i>Trilha 1–8</i> (marcações conceituais ao longo do equador com fase ativa destacada e números interativos) ou <i>Nenhuma</i> (sem exibição tropical da MJO para a fase). Ao ligar uma camada, desliga-se a outra.
+            <b>Visualizações da MJO nos Trópicos:</b> Seleção mutuamente exclusiva entre <i>Convecção tropical (esquema RMM)</i> (compostos didáticos conceituais de anomalias ativas [+] e suprimidas [−] baseados no padrão Wheeler & Hendon 2004 e CPC/NOAA), <i>Divergência/convergência em altitude (esquema conceitual)</i> (ilustração didática qualitativa da relação de Poisson $\nabla^2\chi = -\delta$ em ~200 hPa mostrando divergência anômala/convecção ativa em tons de roxo/azul e convergência/convecção suprimida em tons de amarelo/laranja/vermelho ao longo de 30°S a 30°N, restrito à visão global e sem inferir chuva local sobre o Brasil), <i>Trilha 1–8</i> (marcações conceituais ao longo do equador com fase ativa destacada e números interativos) ou <i>Nenhuma</i> (sem exibição tropical da MJO para a fase). Ao ligar uma camada, desliga-se a outra.
           </div>
           <div>
             <b>Domínios Geográficos Permanentes:</b> Polígono SESA (Sul do Brasil, Uruguai, Paraguai, Nordeste da Argentina) identificado com "SESA" no topo da região sem colidir com jatos. Polígono ZCAS sempre visível como referência de monção. Elementos posicionados para evitar sobreposição entre jatos, SALLJ, rótulos e símbolos de precipitação.
@@ -853,11 +876,11 @@
   </section>
 </main>
 
-<script src="world-land.js"></script>
-<script src="map-regions.js"></script>
-<script src="documented-cases.js"></script>
-<script src="rmm-diagram.js"></script>
-<script src="documented-view.js"></script>
-<script src="panels-manager.js"></script>
+<script src="world-land.js?v=20260925e"></script>
+<script src="map-regions.js?v=20260925e"></script>
+<script src="documented-cases.js?v=20260925e"></script>
+<script src="rmm-diagram.js?v=20260925e"></script>
+<script src="documented-view.js?v=20260925e"></script>
+<script src="panels-manager.js?v=20260925e"></script>
 </body>
 </html>

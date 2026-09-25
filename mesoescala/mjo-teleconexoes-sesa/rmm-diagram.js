@@ -90,13 +90,14 @@ function handleRMMClick(event) {
 
   let angleDeg = Math.atan2(dy, dx) * 180 / Math.PI;
   let p = 5;
-  if (angleDeg >= 22.5 && angleDeg < 67.5) p = 6;
-  else if (angleDeg >= 67.5 && angleDeg < 112.5) p = 7;
-  else if (angleDeg >= 112.5 && angleDeg < 157.5) p = 8;
-  else if (angleDeg >= 157.5 || angleDeg < -157.5) p = 1;
-  else if (angleDeg >= -157.5 && angleDeg < -112.5) p = 2;
-  else if (angleDeg >= -112.5 && angleDeg < -67.5) p = 3;
-  else if (angleDeg >= -67.5 && angleDeg < -22.5) p = 4;
+  if (angleDeg >= 0 && angleDeg < 45) p = 5;
+  else if (angleDeg >= 45 && angleDeg < 90) p = 6;
+  else if (angleDeg >= 90 && angleDeg < 135) p = 7;
+  else if (angleDeg >= 135 && angleDeg <= 180) p = 8;
+  else if (angleDeg >= -180 && angleDeg < -135) p = 1;
+  else if (angleDeg >= -135 && angleDeg < -90) p = 2;
+  else if (angleDeg >= -90 && angleDeg < -45) p = 3;
+  else if (angleDeg >= -45 && angleDeg < 0) p = 4;
 
   if (typeof setClimateState === 'function') {
     setClimateState({ phase: p, amplitude: newAmp });

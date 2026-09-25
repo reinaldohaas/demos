@@ -33,8 +33,31 @@ assert.equal(casesModule.findDocumentedCase('DJF', 'neutro', 8).mean, null, 'Neu
 assert.equal(casesModule.findDocumentedCase('DJF', 'neutro', 1).mean, null, 'Neutro 1 em DJF não destaca chuva média em toda a ZCAS');
 assert.equal(new Set(cases.map(c => c.id)).size, cases.length, 'IDs únicos de casos cadastrados');
 
+// Validação dos Casos com Fases Agrupadas e Casos Sazonais de Roy et al. (2025)
+const seasonalCases = cases.filter(c => ['MAM', 'JJA', 'SON'].includes(c.season));
+assert(seasonalCases.length >= 8, 'Deveria conter casos sazonais cadastrados para MAM, JJA e SON');
+for (const c of seasonalCases) {
+  assert(c.groupedPhase, `groupedPhase deve existir para ${c.id}`);
+  assert(c.groupNote && c.groupNote.includes('Evidência para fases agrupadas'), `groupNote deve alertar sobre fases agrupadas em ${c.id}`);
+  assert.equal(c.mean, null, `Chuva média deve ser null para ${c.id} (Roy et al. não avaliam chuva regional)`);
+  assert.equal(c.extremes, null, `Extremos devem ser null para ${c.id} (Roy et al. não avaliam chuva regional)`);
+  assert(c.circulation && c.circulation.length > 10, `Circulação extratropical deve estar documentada para ${c.id}`);
+}
+
 // 2. Controles e interface no HTML
 const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
+
+// Eventos de interesse e atalhos sazonais nas 4 estações
+assert(html.includes('Eventos de interesse:'), 'Seção Eventos de interesse presente');
+assert(html.includes('data-season="MAM" data-enso="neutro" data-phase="4"'), 'Atalho MAM Neutro presente');
+assert(html.includes('data-season="JJA" data-enso="el-nino" data-phase="2"'), 'Atalho JJA El Niño presente');
+assert(html.includes('data-season="SON" data-enso="el-nino" data-phase="4"'), 'Atalho SON El Niño presente');
+
+// Ausência de rotulagem indevida de dados observacionais NOAA e escalas quantitativas falsas
+assert(!html.includes('NOAA/ESRL'), 'Sem atribuição indevida a NOAA/ESRL no HTML');
+assert(!html.includes('10⁶ m² s⁻¹'), 'Sem unidade quantitativa não rastreável no HTML');
+assert(!html.includes('Potencial de velocidade 200 hPa (NOAA/PSL)'), 'Sem rótulo falso de dados da NOAA no botão chi');
+assert(html.includes('Divergência/convergência em altitude (esquema conceitual)'), 'Botão chi com identificação conceitual');
 
 // 4 estações
 for (const season of ['DJF', 'MAM', 'JJA', 'SON']) {
@@ -256,6 +279,41 @@ for (const season of seasons) {
   }
 }
 assert.equal(combinationCount, 96, 'Exatamente 96 combinações básicas (4 estações x 3 ENOS x 8 fases)');
+
+// Teste específico de caso com fases agrupadas (Roy et al. 2025): MAM Neutro Fase 4 (Par 4–5)
+sandbox.setClimateState({ season: 'MAM', enso: 'neutro', phase: 4, amplitude: 1.5, metric: 'extremes' });
+assert(elements.caseTitle.textContent.includes('Par 4–5'), 'caseTitle deve identificar Par 4–5');
+assert(elements.caseSummary.textContent.includes('fases agrupadas'), 'caseSummary deve citar evidência para fases agrupadas');
+assert(elements.narrationText.textContent.includes('fases agrupadas'), 'Narração deve citar evidência para fases agrupadas');
+const hasRainInMAM = createdElements.some(el => el.textContent === 'Extremos mais frequentes' || el.textContent === 'Chuva média favorecida');
+assert(!hasRainInMAM, 'MAM não pode exibir símbolo de chuva (Roy et al. não analisam precipitação regional)');
+
+// Teste de alinhamento matemático dos 8 octantes do diagrama RMM
+// cx=110, cy=110. O clique passa dx e dy = 110 - clickY. angleDeg = Math.atan2(dy, dx) * 180 / Math.PI.
+const testAngles = [
+  { angle: 22.5, expectedPhase: 5 },
+  { angle: 67.5, expectedPhase: 6 },
+  { angle: 112.5, expectedPhase: 7 },
+  { angle: 157.5, expectedPhase: 8 },
+  { angle: -157.5, expectedPhase: 1 },
+  { angle: -112.5, expectedPhase: 2 },
+  { angle: -67.5, expectedPhase: 3 },
+  { angle: -22.5, expectedPhase: 4 }
+];
+elements.rmmDiagram.getBoundingClientRect = () => ({ left: 0, top: 0, width: 220, height: 220 });
+for (const { angle, expectedPhase } of testAngles) {
+  const rad = angle * Math.PI / 180;
+  const clickX = 110 + 60 * Math.cos(rad);
+  const clickY = 110 - 60 * Math.sin(rad);
+  const clickEvent = {
+    type: 'click',
+    clientX: clickX,
+    clientY: clickY,
+    target: { closest: () => null }
+  };
+  sandbox.handleRMMClick(clickEvent);
+  assert(elements.caseTitle.textContent.includes(`Fase ${expectedPhase}`), `Ângulo ${angle}° deve mapear para fase ${expectedPhase} (encontrado: ${elements.caseTitle.textContent})`);
+}
 
 // 6. Testes da Máquina de Estados dos Controles de Voz
 // Cenário A: Com narração inativa, trocar controles NÃO deve chamar speak()
