@@ -13,10 +13,98 @@ let isNarrationActive = false;
 let isMuted = false;
 const speechSynth = typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis : null;
 
-function svg(tag, attributes, text) {
+// Padrões de anomalias tropicais de convecção/precipitação da MJO (Composição NOAA CPC / Wheeler & Hendon)
+// Reproduz os dipolos de convecção ativa (verde/azul) e suprimida (marrom/ocre) para as fases 1 a 8
+const MJO_COMPOSITES = {
+  1: {
+    wet: [
+      { lon: 35, lat: 2, rx: 75, ry: 24, rot: 0, label: 'Convecção MJO (+)' },
+      { lon: -60, lat: -4, rx: 55, ry: 22, rot: -10 }
+    ],
+    dry: [
+      { lon: 120, lat: -6, rx: 90, ry: 28, rot: 0, label: 'Suprimida (−)' }
+    ]
+  },
+  2: {
+    wet: [
+      { lon: 70, lat: -3, rx: 75, ry: 26, rot: 0, label: 'Convecção MJO (+)' },
+      { lon: -62, lat: -3, rx: 50, ry: 20, rot: -10 }
+    ],
+    dry: [
+      { lon: 140, lat: -8, rx: 95, ry: 28, rot: 0, label: 'Suprimida (−)' }
+    ]
+  },
+  3: {
+    wet: [
+      { lon: 86, lat: -2, rx: 80, ry: 28, rot: 0, label: 'Convecção MJO (+)' }
+    ],
+    dry: [
+      { lon: 155, lat: -8, rx: 100, ry: 30, rot: 0, label: 'Suprimida (−)' }
+    ]
+  },
+  4: {
+    wet: [
+      { lon: 118, lat: -5, rx: 80, ry: 28, rot: 0, label: 'Convecção MJO (+)' }
+    ],
+    dry: [
+      { lon: 175, lat: -8, rx: 90, ry: 30, rot: 0, label: 'Suprimida (−)' },
+      { lon: 55, lat: 2, rx: 55, ry: 22, rot: 0 }
+    ]
+  },
+  5: {
+    wet: [
+      { lon: 136, lat: 3, rx: 85, ry: 28, rot: 0, label: 'Convecção MJO (+)' }
+    ],
+    dry: [
+      { lon: 70, lat: -4, rx: 85, ry: 28, rot: 0, label: 'Suprimida (−)' },
+      { lon: -160, lat: -8, rx: 70, ry: 24, rot: 0 }
+    ]
+  },
+  6: {
+    wet: [
+      { lon: 155, lat: 0, rx: 70, ry: 24, rot: 0, label: 'Convecção MJO (+)' },
+      { lon: 178, lat: -14, rx: 75, ry: 24, rot: 25, label: 'SPCZ' }
+    ],
+    dry: [
+      { lon: 85, lat: -5, rx: 110, ry: 30, rot: 0, label: 'Suprimida (−)' }
+    ]
+  },
+  7: {
+    wet: [
+      { lon: -175, lat: -13, rx: 90, ry: 26, rot: 25, label: 'Convecção MJO / SPCZ (+)' }
+    ],
+    dry: [
+      { lon: 105, lat: -6, rx: 115, ry: 32, rot: 0, label: 'Suprimida (−)' }
+    ]
+  },
+  8: {
+    wet: [
+      { lon: -150, lat: -12, rx: 70, ry: 24, rot: 20, label: 'Convecção MJO (+)' },
+      { lon: -56, lat: -7, rx: 60, ry: 22, rot: -10 }
+    ],
+    dry: [
+      { lon: 115, lat: -6, rx: 120, ry: 32, rot: 0, label: 'Suprimida (−)' }
+    ]
+  }
+};
+
+// Trilha de fases da MJO numeradas 1 a 8 ao longo do equador (referência visual esquemática)
+const MJO_TRACK_POINTS = [
+  { phase: 1, lon: 40, label: '1' },
+  { phase: 2, lon: 65, label: '2' },
+  { phase: 3, lon: 85, label: '3' },
+  { phase: 4, lon: 105, label: '4' },
+  { phase: 5, lon: 125, label: '5' },
+  { phase: 6, lon: 150, label: '6' },
+  { phase: 7, lon: 170, label: '7' },
+  { phase: 8, lon: -155, label: '8' }
+];
+
+function svg(tag, attributes, text, onClick) {
   const el = document.createElementNS(ns, tag);
   for (const [k, v] of Object.entries(attributes)) el.setAttribute(k, v);
   if (text !== undefined) el.textContent = text;
+  if (onClick && typeof el.addEventListener === 'function') el.addEventListener('click', onClick);
   $('mapDrawing').appendChild(el);
   return el;
 }
@@ -97,6 +185,69 @@ function drawLand() {
   }
 }
 
+function drawMjoTropicalComposites() {
+  if (!visibleLayers.mjo) return;
+
+  const comp = MJO_COMPOSITES[currentPhase];
+  if (!comp) return;
+
+  // 1. Manchas de convecção ativa (verde/azul tropical)
+  if (comp.wet) {
+    for (const item of comp.wet) {
+      const [cx, cy] = project(item.lon, item.lat);
+      const attrs = {
+        cx, cy, rx: item.rx, ry: item.ry,
+        fill: '#059669', 'fill-opacity': 0.38,
+        stroke: '#34d399', 'stroke-width': 1.4
+      };
+      if (item.rot) attrs.transform = `rotate(${item.rot}, ${cx}, ${cy})`;
+      svg('ellipse', attrs);
+      if (item.label && mapView === 'global') {
+        svg('text', { x: cx, y: cy - item.ry - 4, fill: '#6ee7b7', 'font-size': 11, 'font-weight': '700', 'text-anchor': 'middle' }, item.label);
+      }
+    }
+  }
+
+  // 2. Manchas de convecção suprimida (marrom/âmbar tropical)
+  if (comp.dry) {
+    for (const item of comp.dry) {
+      const [cx, cy] = project(item.lon, item.lat);
+      const attrs = {
+        cx, cy, rx: item.rx, ry: item.ry,
+        fill: '#b45309', 'fill-opacity': 0.30,
+        stroke: '#f59e0b', 'stroke-width': 1.4
+      };
+      if (item.rot) attrs.transform = `rotate(${item.rot}, ${cx}, ${cy})`;
+      svg('ellipse', attrs);
+      if (item.label && mapView === 'global') {
+        svg('text', { x: cx, y: cy + item.ry + 13, fill: '#fcd34d', 'font-size': 11, 'font-weight': '600', 'text-anchor': 'middle' }, item.label);
+      }
+    }
+  }
+
+  // 3. Trilha das fases 1 a 8 ao longo do equador (como no mapa esquemático)
+  if (mapView === 'global') {
+    // Linha guia equatorial
+    const startP = project(30, 0);
+    const endP = project(-140, 0);
+    svg('line', { x1: startP[0], y1: startP[1], x2: endP[0], y2: endP[1], stroke: '#ef4444', 'stroke-width': 1, 'stroke-dasharray': '3 4', opacity: 0.5 });
+
+    for (const pt of MJO_TRACK_POINTS) {
+      const [tx, ty] = project(pt.lon, 0);
+      const isActive = pt.phase === Number(currentPhase);
+
+      if (isActive) {
+        // Realce da fase ativa
+        svg('circle', { cx: tx, cy: ty, r: 15, fill: '#ef4444', stroke: '#ffffff', 'stroke-width': 2.2 });
+        svg('text', { x: tx, y: ty + 5, fill: '#ffffff', 'font-size': 13, 'font-weight': '900', 'text-anchor': 'middle', cursor: 'pointer' }, pt.label, () => setClimateState({ phase: pt.phase }));
+      } else {
+        // Marcação das outras fases ao longo da trilha
+        svg('text', { x: tx, y: ty + 5, fill: '#f87171', 'font-size': 14, 'font-weight': '800', 'text-anchor': 'middle', cursor: 'pointer' }, pt.label, () => setClimateState({ phase: pt.phase }));
+      }
+    }
+  }
+}
+
 function drawGlobalContext(evidence) {
   if (mapView !== 'global') return;
 
@@ -123,15 +274,8 @@ function drawGlobalContext(evidence) {
     svg('text', { x, y, fill: '#5a829e', 'font-size': 14, 'letter-spacing': 2.5, 'text-anchor': 'middle', 'font-weight': '600' }, label);
   }
 
-  // MJO: Referência nominal de fase RMM (Wheeler & Hendon 2004) para as fases 1 a 8
-  if (visibleLayers.mjo) {
-    const phaseInfo = getMjoPhaseCoords(currentPhase);
-    const [mx, my] = project(phaseInfo.lon, 0);
-    svg('ellipse', { cx: mx, cy: my, rx: 48, ry: 24, fill: '#2dd4bf', 'fill-opacity': 0.15, stroke: '#5eead4', 'stroke-dasharray': '5 4' });
-    svg('text', { x: mx, y: my - 34, fill: '#88efdf', 'font-size': 15, 'font-weight': '700', 'text-anchor': 'middle' }, `MJO · fase ${currentPhase}`);
-    svg('text', { x: mx, y: my - 16, fill: '#99d9d2', 'font-size': 11, 'text-anchor': 'middle' }, `ref. nominal RMM · ${phaseInfo.region}`);
-    svg('text', { x: mx, y: my + 38, fill: '#7298a6', 'font-size': 11, 'text-anchor': 'middle' }, '(referência esquemática de fase · não é convecção observada)');
-  }
+  // Padrão tropical da MJO: convecção ativa e suprimida + trilha equatorial 1 a 8
+  drawMjoTropicalComposites();
 
   // Teleconexão PSA conceitual: representada somente quando há mecanismo verificado para a combinação
   if (visibleLayers.psa && evidence && evidence.psa) {
@@ -206,6 +350,7 @@ function drawMap(evidence) {
     drawGlobalContext(evidence);
   } else {
     drawLand();
+    if (visibleLayers.mjo) drawMjoTropicalComposites();
   }
 
   // Jatos (Subtropical e SALLJ como base visual permanente)
