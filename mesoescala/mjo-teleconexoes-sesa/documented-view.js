@@ -42,14 +42,15 @@ if (speechSynth && typeof window !== 'undefined') {
 }
 
 // Padrões conceituais estilizados de convecção/precipitação da MJO por fase (1 a 8)
-// Esquema didático ilustrando os dipolos de convecção ativa (verde) e suprimida (marrom)
+// Esquema didático ilustrando os dipolos equatoriais de convecção ativa (verde) e suprimida (marrom)
 // baseados na distribuição típica das fases do índice RMM (Wheeler & Hendon 2004).
-// Não constitui extração raster observacional direta nem produto numérico em tempo real.
+// Restrito estritamente à bacia tropical/equatorial (Índico, Continente Marítimo, Pacífico e África).
+// Não desenha manchas sobre a América do Sul/Brasil (as respostas brasileiras são tratadas exclusivamente
+// pelas evidências observacionais documentadas).
 const MJO_COMPOSITES = {
   1: {
     wet: [
-      { lon: 35, lat: 2, rx: 75, ry: 24, rot: 0, label: 'Convecção MJO (+)' },
-      { lon: -60, lat: -4, rx: 55, ry: 22, rot: -10 }
+      { lon: 35, lat: 2, rx: 75, ry: 24, rot: 0, label: 'Convecção MJO (+)' }
     ],
     dry: [
       { lon: 120, lat: -6, rx: 90, ry: 28, rot: 0, label: 'Suprimida (−)' }
@@ -57,8 +58,7 @@ const MJO_COMPOSITES = {
   },
   2: {
     wet: [
-      { lon: 70, lat: -3, rx: 75, ry: 26, rot: 0, label: 'Convecção MJO (+)' },
-      { lon: -62, lat: -3, rx: 50, ry: 20, rot: -10 }
+      { lon: 70, lat: -3, rx: 75, ry: 26, rot: 0, label: 'Convecção MJO (+)' }
     ],
     dry: [
       { lon: 140, lat: -8, rx: 95, ry: 28, rot: 0, label: 'Suprimida (−)' }
@@ -109,8 +109,7 @@ const MJO_COMPOSITES = {
   },
   8: {
     wet: [
-      { lon: -150, lat: -12, rx: 70, ry: 24, rot: 20, label: 'Convecção MJO (+)' },
-      { lon: -56, lat: -7, rx: 60, ry: 22, rot: -10 }
+      { lon: -150, lat: -12, rx: 70, ry: 24, rot: 20, label: 'Convecção MJO (+)' }
     ],
     dry: [
       { lon: 115, lat: -6, rx: 120, ry: 32, rot: 0, label: 'Suprimida (−)' }
@@ -215,10 +214,45 @@ function drawLand() {
       }
     }
   }
+
+  // Na visão regional, desenhar fronteiras dos países e limites estaduais discretos para clara orientação geográfica
+  if (mapView === 'regional') {
+    if (REGIONS.COUNTRY_BORDERS) {
+      for (const border of REGIONS.COUNTRY_BORDERS) {
+        const d = 'M ' + border.map(p => project(...p).join(' ')).join(' L ');
+        svg('path', { d, fill: 'none', stroke: '#34526f', 'stroke-width': 1.1, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+      }
+    }
+    if (REGIONS.BRAZIL_STATE_BORDERS) {
+      for (const border of REGIONS.BRAZIL_STATE_BORDERS) {
+        const d = 'M ' + border.map(p => project(...p).join(' ')).join(' L ');
+        svg('path', { d, fill: 'none', stroke: '#274460', 'stroke-width': 0.85, 'stroke-dasharray': '3 3', 'stroke-linecap': 'round' });
+      }
+    }
+    if (REGIONS.GEO_LABELS) {
+      for (const lbl of REGIONS.GEO_LABELS) {
+        const [gx, gy] = project(lbl.lon, lbl.lat);
+        svg('text', {
+          x: gx, y: gy, fill: lbl.color || '#3b5875', 'font-size': lbl.size || 11,
+          'font-weight': lbl.weight || '600', 'letter-spacing': lbl.letterSpacing || 2,
+          'text-anchor': 'middle', 'user-select': 'none'
+        }, lbl.text);
+      }
+    }
+    if (REGIONS.STATE_LABELS) {
+      for (const st of REGIONS.STATE_LABELS) {
+        const [sx, sy] = project(st.lon, st.lat);
+        svg('text', {
+          x: sx, y: sy, fill: '#34516d', 'font-size': 9, 'font-weight': '600',
+          'text-anchor': 'middle', 'user-select': 'none'
+        }, st.text);
+      }
+    }
+  }
 }
 
 function drawMjoConvection() {
-  if (currentAmplitude < 1) return;
+  if (currentAmplitude < 1 || mapView !== 'global') return;
   const comp = MJO_COMPOSITES[currentPhase];
   if (!comp) return;
 
@@ -281,12 +315,12 @@ function drawMjoTrack() {
 }
 
 function drawMjoTropicalVisualizations() {
+  if (mapView !== 'global') return; // Envelope tropical restrito à visão global, sem extrapolação sobre o Brasil
   if (mjoMode === 'dipoles') {
     drawMjoConvection();
   } else if (mjoMode === 'track') {
     drawMjoTrack();
   }
-  // Se mjoMode === 'none', nenhuma representação tropical é desenhada
 }
 
 function drawGlobalContext(evidence) {
@@ -350,16 +384,18 @@ function drawJets() {
     svg('text', { x: jx, y: jy - 8, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle' }, 'Jato Subtropical (~200 hPa · referência conceitual)');
   } else {
     const p1 = project(-82, lat);
-    const p2 = project(-38, lat + 3);
+    const p2 = project(-38, lat + 2.5);
     svg('line', { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: '#38bdf8', 'stroke-width': width, 'stroke-dasharray': '8 5' });
-    const [jx, jy] = project(-60, lat + 1);
-    svg('text', { x: jx, y: jy - 8, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle' }, 'Jato Subtropical (~200 hPa · referência conceitual)');
+    // Na visão regional, posicionar rótulo sobre o Pacífico/Chile para não sobrepor o continente/SESA
+    const [jx, jy] = project(-78, lat - 0.5);
+    svg('text', { x: jx, y: jy - 7, fill: '#7dd3fc', 'font-size': 11, 'font-weight': '600', 'text-anchor': 'start' }, 'Jato Subtropical (~200 hPa · guia)');
   }
 
   // SALLJ (~850 hPa): uma única seta, sem partículas ou trajetórias duplicadas
-  const salljStart = project(-63, -16);
-  const salljMid = project(-61, -23);
-  const salljEnd = project(-57, -31);
+  // Canalização meridional a leste dos Andes da Bolívia ao norte da Argentina/Chaco
+  const salljStart = project(-63, -17);
+  const salljMid = project(-61, -22.5);
+  const salljEnd = project(-58, -28);
   svg('path', {
     d: `M ${salljStart[0]} ${salljStart[1]} Q ${salljMid[0]} ${salljMid[1]} ${salljEnd[0]} ${salljEnd[1]}`,
     fill: 'none', stroke: '#34d399', 'stroke-width': 3.2
@@ -369,8 +405,9 @@ function drawJets() {
     points: `${endX},${endY} ${endX - 7},${endY - 14} ${endX + 7},${endY - 10}`,
     fill: '#34d399'
   });
-  const [sx, sy] = project(-65, -22);
-  svg('text', { x: sx, y: sy, fill: '#6ee7b7', 'font-size': 12, 'font-weight': '600', 'text-anchor': 'end' }, 'SALLJ (~850 hPa · transporte de umidade)');
+  // Rótulo posicionado a oeste do jato para evitar sobreposição com SESA e ícones de chuva
+  const [sx, sy] = project(-64.5, -21.5);
+  svg('text', { x: sx, y: sy, fill: '#6ee7b7', 'font-size': 11.5, 'font-weight': '600', 'text-anchor': 'end' }, 'SALLJ (~850 hPa)');
 }
 
 function drawMap(evidence) {
@@ -391,7 +428,6 @@ function drawMap(evidence) {
     drawGlobalContext(evidence);
   } else {
     drawLand();
-    if (mjoMode === 'dipoles') drawMjoConvection();
   }
 
   // Jatos (Subtropical e SALLJ como base visual permanente)
@@ -402,18 +438,20 @@ function drawMap(evidence) {
   const result = evidence ? evidence[metric] : null;
   const isSesaHighlighted = result && result.region === 'SESA';
   polygon(REGIONS.SESA_POLY, isSesaHighlighted ? 'rgba(56, 189, 248, 0.12)' : 'rgba(56, 189, 248, 0.03)', isSesaHighlighted ? '#38bdf8' : '#486780', isSesaHighlighted ? 2.2 : 1.5);
-  const [sesaLabelX, sesaLabelY] = project(-56, -24);
-  svg('text', { x: sesaLabelX, y: sesaLabelY - 7, fill: isSesaHighlighted ? '#7dd3fc' : '#a5cce3', 'font-size': 17, 'font-weight': '700', 'text-anchor': 'middle' }, 'SESA');
+  // Rótulo posicionado na borda nordeste da região, sem colidir com SALLJ nem com chuva
+  const [sesaLabelX, sesaLabelY] = project(-50, -25.5);
+  svg('text', { x: sesaLabelX, y: sesaLabelY, fill: isSesaHighlighted ? '#7dd3fc' : '#8ab8d4', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'SESA');
 
   // Delimitação da ZCAS: SEMPRE DELIMITADA E IDENTIFICADA
   const isZcasHighlighted = result && result.region === 'ZCAS';
-  polygon(REGIONS.ZCAS_POLY, isZcasHighlighted ? 'rgba(45, 212, 191, 0.14)' : 'rgba(45, 212, 191, 0.02)', isZcasHighlighted ? '#2dd4bf' : '#3e5c76', isZcasHighlighted ? 2.2 : 1.4, '4 3');
-  const [zx, zy] = project(-48, -19);
-  svg('text', { x: zx, y: zy, fill: isZcasHighlighted ? '#5eead4' : '#6b8ca8', 'font-size': 15, 'font-weight': '700', 'text-anchor': 'middle' }, 'ZCAS');
+  polygon(REGIONS.ZCAS_POLY, isZcasHighlighted ? 'rgba(45, 212, 191, 0.12)' : 'rgba(45, 212, 191, 0.02)', isZcasHighlighted ? '#2dd4bf' : '#3e5c76', isZcasHighlighted ? 2.2 : 1.4, '4 3');
+  // Rótulo posicionado na porção oceânica da ZCAS para nunca conflitar com chuva sobre MG/SP/RJ ou CESA
+  const [zx, zy] = project(-35, -20.5);
+  svg('text', { x: zx, y: zy, fill: isZcasHighlighted ? '#5eead4' : '#6b8ca8', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'ZCAS');
 
   // Destaque condicional: somente quando houver resultado comprovado para a combinação e métrica
   if (result) {
-    const location = result.region === 'SESA' ? [-56, -33] : result.region === 'CESA' ? [-46, -15] : [-43, -22];
+    const location = result.region === 'SESA' ? [-55, -34] : result.region === 'CESA' ? [-44, -16] : [-45, -23];
     const [x, y] = project(...location);
 
     svg('path', {
@@ -427,11 +465,11 @@ function drawMap(evidence) {
       });
     }
     svg('text', { x: x + 47, y: y + 5, fill: '#aaf4e7', 'font-size': 24, 'font-weight': '800' }, '↑');
-    svg('text', { x, y: y + 49, fill: '#c6f6ef', 'font-size': 14, 'font-weight': '600', 'text-anchor': 'middle' },
+    svg('text', { x, y: y + 43, fill: '#c6f6ef', 'font-size': 13.5, 'font-weight': '600', 'text-anchor': 'middle' },
       metric === 'extremes' ? 'Extremos mais frequentes' : 'Chuva média favorecida');
 
     if (result.region === 'CESA') {
-      svg('text', { x, y: y - 45, fill: '#a5cce3', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'CESA · centro-leste');
+      svg('text', { x, y: y - 36, fill: '#a5cce3', 'font-size': 15, 'font-weight': '700', 'text-anchor': 'middle' }, 'CESA · centro-leste');
     }
   }
 

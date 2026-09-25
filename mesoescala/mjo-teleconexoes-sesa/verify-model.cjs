@@ -62,6 +62,15 @@ assert(html.includes('id="narrationText"'), 'Área de texto de narração presen
 assert(html.includes('id="rmmDiagram"'), 'Diagrama RMM presente');
 assert(html.includes('id="mjoAmplitude"'), 'Controle de amplitude presente');
 assert(html.includes('rmm-card-compact'), 'Card compacto do diagrama RMM à direita presente');
+assert(html.includes('id="topMainStage"'), 'Top main stage presente com mapa e RMM lado a lado');
+assert(html.includes('id="btnPanelsMenu"'), 'Botão de menu de painéis presente');
+assert(html.includes('id="btnResetLayout"'), 'Botão de restaurar layout presente');
+assert(html.includes('id="panelsDropdown"'), 'Dropdown de gerenciamento de painéis presente');
+
+// Painéis móveis identificados
+for (const pId of ['panelRMM', 'panelNarration', 'panelResult', 'panelPsa', 'panelSst', 'panelPhase']) {
+  assert(html.includes(`data-panel-id="${pId}"`), `Painel móvel ${pId} presente`);
+}
 
 // Glossário removido desta demonstração conforme instrução
 assert(!html.includes('term-table'), 'Glossário deve permanecer removido');
@@ -70,7 +79,7 @@ assert(!html.includes('term-table'), 'Glossário deve permanecer removido');
 assert(!/sliderAmp|btnPlayCycle|logitRulerCanvas|enso-science.js/.test(html), 'Sem elementos legados de cálculos sintéticos');
 
 // 3. Teste de Sintaxe dos Scripts
-for (const file of ['documented-cases.js', 'documented-view.js', 'map-regions.js', 'rmm-diagram.js']) {
+for (const file of ['documented-cases.js', 'documented-view.js', 'map-regions.js', 'rmm-diagram.js', 'panels-manager.js']) {
   new vm.Script(fs.readFileSync(path.join(__dirname, file), 'utf8'));
 }
 
@@ -185,6 +194,12 @@ const regions = vm.runInContext('REGIONS', sandbox);
 const sesaLats = regions.SESA_POLY.map(p => p[1]);
 assert(Math.max(...sesaLats) <= -25, 'SESA com limite norte em 25°S');
 assert(Math.min(...sesaLats) <= -38, 'SESA se estendendo até 40°S');
+
+// Validação de fronteiras e limites estaduais brasileiros
+const countryBorders = regions.COUNTRY_BORDERS;
+const brazilBorders = regions.BRAZIL_STATE_BORDERS;
+assert(countryBorders && countryBorders.length >= 8, 'Fronteiras sul-americanas presentes');
+assert(brazilBorders && brazilBorders.length >= 10, 'Limites estaduais brasileiros presentes');
 
 // Teste do Diagrama RMM e limiar de atividade da MJO (A < 1 fraca vs A >= 1 ativa)
 for (const amplitude of [0, 0.5, 0.99, 1.0, 1.5, 2.0]) {

@@ -240,6 +240,168 @@
     }
     [hidden] { display: none !important; }
 
+    /* Layout Superior: Mapa e Diagrama RMM Juntos na Parte de Cima */
+    .top-main-stage {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 16px;
+      margin-bottom: 20px;
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .top-main-stage {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Sistema de Painéis Móveis, Redimensionáveis e Recolhíveis */
+    .movable-panel {
+      position: relative;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .movable-panel.is-floating {
+      position: absolute;
+      z-index: 55;
+      resize: both;
+      overflow: auto;
+      min-width: 260px;
+      min-height: 120px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(56, 189, 248, 0.35);
+    }
+    .movable-panel.is-dragging {
+      box-shadow: 0 18px 40px rgba(0,0,0,0.6), 0 0 0 2px var(--accent-teal);
+      opacity: 0.96;
+      user-select: none;
+      z-index: 1000 !important;
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      background: rgba(15, 23, 42, 0.7);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      border-radius: 11px 11px 0 0;
+      cursor: grab;
+      user-select: none;
+      gap: 10px;
+    }
+    .panel-header:active {
+      cursor: grabbing;
+    }
+    .panel-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+    }
+    .panel-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-panel-action {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 4px;
+      color: #cbd5e1;
+      font-size: 12px;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      transition: all 0.15s ease;
+    }
+    .btn-panel-action:hover {
+      background: rgba(255,255,255,0.15);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.25);
+    }
+    .btn-panel-action.btn-close:hover {
+      background: rgba(239, 68, 68, 0.4);
+      border-color: #f87171;
+      color: #fee2e2;
+    }
+    .movable-panel.is-collapsed .panel-body {
+      display: none !important;
+    }
+    .movable-panel.is-collapsed {
+      resize: none !important;
+      height: auto !important;
+    }
+    .panel-body {
+      padding: 14px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Botões da barra de layout */
+    .btn-layout {
+      background: rgba(14, 165, 233, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #bae6fd;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-layout:hover {
+      background: rgba(14, 165, 233, 0.25);
+      border-color: #38bdf8;
+      color: #ffffff;
+    }
+    .panels-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: #0d1e30;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      z-index: 1200;
+      min-width: 230px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .panels-dropdown label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      color: #cbd5e1;
+      cursor: pointer;
+    }
+    .panels-dropdown label:hover {
+      color: #ffffff;
+    }
+    .panels-dropdown input[type="checkbox"] {
+      accent-color: var(--accent-teal);
+      cursor: pointer;
+    }
+
     /* Painéis de Síntese do Caso Abaixo do Mapa */
     .dashboard-grid {
       display: grid;
@@ -390,158 +552,233 @@
     </div>
   </section>
 
-  <!-- Card Principal com Prioridade Visual ao Mapa -->
-  <section class="map-card">
-    <div class="map-header">
-      <div class="toolbar-group">
-        <span class="group-label">Visão:</span>
-        <button id="globalView" aria-pressed="true">Visão global</button>
-        <button id="regionalView" aria-pressed="false">América do Sul</button>
+  <!-- Topo Principal: Mapa e Diagrama RMM Juntos na Parte de Cima -->
+  <div class="top-main-stage" id="topMainStage">
+    <!-- Card Principal com Prioridade Visual ao Mapa -->
+    <section class="map-card" id="panelMap" data-panel-id="panelMap">
+      <div class="map-header">
+        <div class="toolbar-group">
+          <span class="group-label">Visão:</span>
+          <button id="globalView" aria-pressed="true">Visão global</button>
+          <button id="regionalView" aria-pressed="false">América do Sul</button>
+        </div>
+        <div class="toolbar-group">
+          <span class="group-label">MJO nos trópicos:</span>
+          <button id="mjoDipolesLayer" aria-pressed="true">Convecção tropical (esquema RMM)</button>
+          <button id="mjoTrackLayer" aria-pressed="false">Trilha 1–8</button>
+          <button id="mjoNoneLayer" aria-pressed="false">Nenhuma</button>
+          <button id="mjoLayer" style="display:none;" aria-hidden="true"></button>
+        </div>
+        <div class="toolbar-group">
+          <span class="group-label">Camadas:</span>
+          <button id="sstLayer" aria-pressed="true">TSM: sinal do ENOS</button>
+          <button id="jetsLayer" aria-pressed="true">Jatos: STJ & SALLJ</button>
+          <button id="psaLayer" aria-pressed="true">PSA: teleconexão</button>
+        </div>
+        <div class="toolbar-group">
+          <span class="group-label">Variável:</span>
+          <button id="extremes" aria-pressed="true">Extremos de chuva</button>
+          <button id="mean" aria-pressed="false">Chuva média</button>
+          <button id="legendButton" aria-expanded="false" aria-controls="legend">Mostrar legenda</button>
+        </div>
+        <!-- Controles de Organização da Interface (Painéis e Restaurar Layout) -->
+        <div class="toolbar-group layout-tools" style="position:relative;">
+          <button id="btnPanelsMenu" class="btn-layout" aria-haspopup="true" aria-expanded="false" title="Gerenciar visibilidade dos painéis">
+            <i class="fa-solid fa-table-columns"></i> Painéis ▼
+          </button>
+          <button id="btnResetLayout" class="btn-layout" title="Restaurar layout original da demonstração">
+            <i class="fa-solid fa-rotate-left"></i> Restaurar layout
+          </button>
+          <!-- Menu Dropdown para Reabrir Painéis -->
+          <div id="panelsDropdown" class="panels-dropdown" hidden>
+            <div style="font-size:11px; font-weight:700; color:var(--accent-teal); text-transform:uppercase; margin-bottom:4px; letter-spacing:.04em;">Exibir / Ocultar Painéis</div>
+            <label><input type="checkbox" data-panel-target="panelRMM" checked> Diagrama RMM & Amplitude</label>
+            <label><input type="checkbox" data-panel-target="panelNarration" checked> Narração Explicativa</label>
+            <label><input type="checkbox" data-panel-target="panelResult" checked> Resultado Documentado & Fonte</label>
+            <label><input type="checkbox" data-panel-target="panelPsa" checked> Mecanismo Físico & PSA</label>
+            <label><input type="checkbox" data-panel-target="panelSst" checked> Pacífico Equatorial & ENOS</label>
+            <label><input type="checkbox" data-panel-target="panelPhase" checked> MJO: Fase Selecionada</label>
+          </div>
+        </div>
       </div>
-      <div class="toolbar-group">
-        <span class="group-label">MJO nos trópicos:</span>
-        <button id="mjoDipolesLayer" aria-pressed="true">Convecção (esquema RMM)</button>
-        <button id="mjoTrackLayer" aria-pressed="false">Trilha 1–8</button>
-        <button id="mjoNoneLayer" aria-pressed="false">Nenhuma</button>
-        <button id="mjoLayer" style="display:none;" aria-hidden="true"></button>
-      </div>
-      <div class="toolbar-group">
-        <span class="group-label">Camadas:</span>
-        <button id="sstLayer" aria-pressed="true">TSM: sinal do ENOS</button>
-        <button id="jetsLayer" aria-pressed="true">Jatos: STJ & SALLJ</button>
-        <button id="psaLayer" aria-pressed="true">PSA: teleconexão</button>
-      </div>
-      <div class="toolbar-group">
-        <span class="group-label">Variável:</span>
-        <button id="extremes" aria-pressed="true">Extremos de chuva</button>
-        <button id="mean" aria-pressed="false">Chuva média</button>
-        <button id="legendButton" aria-expanded="false" aria-controls="legend">Mostrar legenda</button>
-      </div>
-    </div>
 
-    <div class="case-title-row">
-      <h2 id="caseTitle"></h2>
-      <p id="caseSummary" aria-live="polite"></p>
-    </div>
+      <div class="case-title-row">
+        <h2 id="caseTitle"></h2>
+        <p id="caseSummary" aria-live="polite"></p>
+      </div>
 
-    <div class="map-container">
-      <svg id="map" viewBox="0 0 1200 560" role="img" aria-labelledby="mapTitle mapDesc">
-        <title id="mapTitle">Visão global: MJO, Pacífico e América do Sul</title>
-        <desc id="mapDesc"></desc>
-        <g id="mapDrawing"></g>
-      </svg>
-    </div>
+      <div class="map-container">
+        <svg id="map" viewBox="0 0 1200 560" role="img" aria-labelledby="mapTitle mapDesc">
+          <title id="mapTitle">Visão global: MJO, Pacífico e América do Sul</title>
+          <desc id="mapDesc"></desc>
+          <g id="mapDrawing"></g>
+        </svg>
+      </div>
 
-    <!-- Legenda Inicialmente Oculta -->
-    <div id="legend" hidden>
-      <div class="legend-grid">
-        <div>
-          <b>Base Cartográfica:</b> Polígonos de terra Natural Earth 1:110m (projeção equirretangular contínua). Visão global com Pacífico centralizado e contexto Índico–Pacífico–América do Sul.
-        </div>
-        <div>
-          <b>Visualizações da MJO nos Trópicos:</b> Seleção mutuamente exclusiva entre <i>Convecção (esquema RMM)</i> (compostos conceituais didáticos de convecção/precipitação com anomalias ativas [+] e suprimidas [−] baseados no padrão climatológico Wheeler & Hendon 2004 e CPC/NOAA), <i>Trilha 1–8</i> (marcações conceituais ao longo do equador com fase ativa destacada e números interativos) ou <i>Nenhuma</i> (sem exibição tropical da MJO para a fase). Ao ligar uma camada, desliga-se a outra.
-        </div>
-        <div>
-          <b>Domínios Geográficos Permanentes:</b> Polígono SESA (Sul do Brasil, Uruguai, Paraguai, Nordeste da Argentina) identificado com "SESA" no topo da região. Polígono ZCAS sempre visível como referência de monção.
-        </div>
-        <div>
-          <b>Destaque de Chuva:</b> Símbolo de nuvem com chuva e seta indicando aumento documentado para a variável selecionada. Presente apenas em combinações comprovadas na literatura; sem símbolo quando não documentado.
-        </div>
-        <div>
-          <b>TSM Equatorial:</b> Sinal anômalo qualitativo no Pacífico central/leste (El Niño quente, La Niña fria e Neutro sem anomalia expressiva). Sem grade numérica artificial.
-        </div>
-        <div>
-          <b>Jatos e Transporte (Base Visual Permanente):</b> Jato Subtropical (~200 hPa) em traçado único qualitativo de referência conceitual, com espessura ilustrando a modulação pelo ENOS e latitude ilustrando o ciclo sazonal (convenções didáticas de desenho, sem velocidades ou latitudes universais absolutas); SALLJ (~850 hPa) em traçado único esquemático de canalização meridional de umidade amazônica (Jones et al. 2023). Sem jato polar e sem velocidades pontuais arbitrárias.
-        </div>
-        <div>
-          <b>Teleconexão PSA:</b> Guia conceitual de propagação de ondas de Rossby em arco de grande círculo exibido exclusivamente nas combinações com mecanismo dinâmico verificado na literatura (Fernandes & Grimm 2023; Roy et al. 2025), sem posições fictícias de centros anômalos nem defasagens temporais fixadas universalmente.
+      <!-- Legenda Inicialmente Oculta -->
+      <div id="legend" hidden>
+        <div class="legend-grid">
+          <div>
+            <b>Base Cartográfica:</b> Polígonos de terra Natural Earth 1:110m (projeção equirretangular contínua). Visão global com Pacífico centralizado e contexto Índico–Pacífico–América do Sul. Na visão regional da América do Sul, inclui fronteiras internacionais dos países vizinhos e limites estaduais brasileiros discretos para localização geográfica precisa e desobstruída.
+          </div>
+          <div>
+            <b>Visualizações da MJO nos Trópicos:</b> Seleção mutuamente exclusiva entre <i>Convecção tropical (esquema RMM)</i> (compostos didáticos conceituais de anomalias ativas [+] e suprimidas [−] baseados no padrão climatológico Wheeler & Hendon 2004 e CPC/NOAA, restritos às bacias oceânicas equatoriais e sem manchas extrapoladas sobre o Brasil), <i>Trilha 1–8</i> (marcações conceituais ao longo do equador com fase ativa destacada e números interativos) ou <i>Nenhuma</i> (sem exibição tropical da MJO para a fase). Ao ligar uma camada, desliga-se a outra.
+          </div>
+          <div>
+            <b>Domínios Geográficos Permanentes:</b> Polígono SESA (Sul do Brasil, Uruguai, Paraguai, Nordeste da Argentina) identificado com "SESA" no topo da região sem colidir com jatos. Polígono ZCAS sempre visível como referência de monção. Elementos posicionados para evitar sobreposição entre jatos, SALLJ, rótulos e símbolos de precipitação.
+          </div>
+          <div>
+            <b>Destaque de Chuva:</b> Símbolo de nuvem com chuva e seta indicando aumento documentado para a variável selecionada. Presente apenas em combinações comprovadas na literatura; sem símbolo quando não documentado.
+          </div>
+          <div>
+            <b>TSM Equatorial:</b> Sinal anômalo qualitativo no Pacífico central/leste (El Niño quente, La Niña fria e Neutro sem anomalia expressiva). Sem grade numérica artificial.
+          </div>
+          <div>
+            <b>Jatos e Transporte (Base Visual Permanente):</b> Jato Subtropical (~200 hPa) em traçado único qualitativo de referência conceitual, com espessura ilustrando a modulação pelo ENOS e latitude ilustrando o ciclo sazonal (convenções didáticas de desenho, sem velocidades ou latitudes universais absolutas); SALLJ (~850 hPa) em traçado único esquemático de canalização meridional de umidade amazônica (Jones et al. 2023). Sem jato polar e sem velocidades pontuais arbitrárias.
+          </div>
+          <div>
+            <b>Teleconexão PSA:</b> Guia conceitual de propagação de ondas de Rossby em arco de grande círculo exibido exclusivamente nas combinações com mecanismo dinâmico verificado na literatura (Fernandes & Grimm 2023; Roy et al. 2025), sem posições fictícias de centros anômalos nem defasagens temporais fixadas universalmente.
+          </div>
         </div>
       </div>
-    </div>
 
-    <p class="muted" style="margin-top:10px;">
-      Base cartográfica: Natural Earth. ZCAS e SESA permanecem visíveis como referências espaciais permanentes. Ausência de destaque gráfico indica resultado não representado nesta síntese documental, não efeito zero.
-    </p>
-  </section>
-
-  <!-- Painel de Narração Explicativa (Esquerda) e Diagrama RMM Menor com Intensidade Integrada (Direita) -->
-  <div class="narration-rmm-row" style="display:flex; flex-wrap:wrap; gap:16px; margin-bottom:20px; align-items:stretch;">
-    <!-- Narração Explicativa Completa à esquerda -->
-    <section class="panel-card" style="flex:1; min-width:320px; display:flex; flex-direction:column; justify-content:space-between;">
-      <div>
-        <h2 style="margin-top:0; margin-bottom:12px;">Narração Explicativa & Síntese Sonora</h2>
-        <p id="narrationText" style="font-size:14px; line-height:1.6; color:#f1f5f9; background:rgba(15, 23, 42, 0.6); padding:14px 18px; border-radius:8px; border:1px solid var(--card-border); margin:0 0 12px 0;"></p>
-      </div>
-      <p class="muted" style="margin:0; font-size:12.5px; line-height:1.5;">
-        A convecção tropical associada à MJO perturba a alta troposfera gerando fontes de ondas de Rossby (Sardeshmukh & Hoskins 1988). A dispersão de energia pelo Pacífico Sul (trem PSA) modula o Jato Subtropical e os extremos no SESA.
+      <p class="muted" style="margin-top:10px;">
+        Base cartográfica: Natural Earth. ZCAS e SESA permanecem visíveis como referências espaciais permanentes. Ausência de destaque gráfico indica resultado não representado nesta síntese documental, não efeito zero.
       </p>
     </section>
 
-    <!-- Diagrama RMM Menor à direita, com controle de intensidade junto no mesmo card -->
-    <section class="panel-card rmm-card-compact" style="width:250px; max-width:100%; display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:8px;">
-      <div style="width:100%; display:flex; justify-content:space-between; align-items:baseline;">
-        <h2 style="font-size:15px; margin:0;">Diagrama RMM</h2>
-        <span id="rmmStatusTag" style="font-size:11px; font-weight:700; color:var(--accent-teal); font-family:var(--font-mono);">A ≥ 1 (Ativa)</span>
-      </div>
-
-      <div style="width:190px; height:190px; position:relative;">
-        <svg id="rmmDiagram" viewBox="0 0 220 220" style="width:100%; height:100%; display:block; cursor:crosshair;" role="img" aria-label="Diagrama RMM Wheeler-Hendon com oito fases e círculo unitário"></svg>
-      </div>
-
-      <!-- Intensidade/Amplitude JUNTO com o diagrama (sem barra separada avulsa) -->
-      <div style="width:100%; background:rgba(15, 23, 42, 0.5); padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); box-sizing:border-box;">
-        <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom:2px;">
-          <label for="mjoAmplitude" style="font-weight:600; color:#cbd5e1;">Intensidade (A):</label>
-          <span style="font-family:var(--font-mono); font-weight:700; color:var(--accent-gold);"><output id="mjoAmplitudeValue">1,5</output></span>
+    <!-- Diagrama RMM: JUNTO COM O MAPA NA PARTE DE CIMA (Móvel, Redimensionável e Recolhível) -->
+    <section class="panel-card movable-panel rmm-card-compact" id="panelRMM" data-panel-id="panelRMM">
+      <div class="panel-header" data-drag-handle="true">
+        <div class="panel-title">
+          <span>Diagrama RMM · MJO</span>
         </div>
-        <input id="mjoAmplitude" type="range" min="0" max="3" step="0.1" value="1.5" style="width:100%; margin:2px 0 4px 0; accent-color:var(--accent-teal);" aria-label="Intensidade da MJO">
-        <p id="rmmStatus" style="font-size:11px; color:var(--muted); margin:0; line-height:1.3;" aria-live="polite"></p>
+        <div class="panel-actions">
+          <span id="rmmStatusTag" style="font-size:10.5px; font-weight:700; color:var(--accent-teal); font-family:var(--font-mono); margin-right:4px;">A ≥ 1 (Ativa)</span>
+          <button class="btn-panel-action btn-collapse" data-action="collapse" title="Recolher/Expandir painel" aria-label="Recolher painel RMM">_</button>
+          <button class="btn-panel-action btn-close" data-action="close" title="Ocultar painel" aria-label="Ocultar painel RMM">×</button>
+        </div>
       </div>
 
-      <div style="width:100%; text-align:right;">
-        <a href="https://www.bom.gov.au/climate/mjo/about/WH04.pdf" target="_blank" rel="noopener" style="font-size:11px;">Wheeler & Hendon (2004)</a>
+      <div class="panel-body" style="align-items:center; gap:8px;">
+        <div style="width:190px; height:190px; position:relative;">
+          <svg id="rmmDiagram" viewBox="0 0 220 220" style="width:100%; height:100%; display:block; cursor:crosshair;" role="img" aria-label="Diagrama RMM Wheeler-Hendon com oito fases e círculo unitário"></svg>
+        </div>
+
+        <!-- Intensidade/Amplitude JUNTO com o diagrama (sem barra separada avulsa) -->
+        <div style="width:100%; background:rgba(15, 23, 42, 0.5); padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); box-sizing:border-box;">
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom:2px;">
+            <label for="mjoAmplitude" style="font-weight:600; color:#cbd5e1;">Intensidade (A):</label>
+            <span style="font-family:var(--font-mono); font-weight:700; color:var(--accent-gold);"><output id="mjoAmplitudeValue">1,5</output></span>
+          </div>
+          <input id="mjoAmplitude" type="range" min="0" max="3" step="0.1" value="1.5" style="width:100%; margin:2px 0 4px 0; accent-color:var(--accent-teal);" aria-label="Intensidade da MJO">
+          <p id="rmmStatus" style="font-size:11px; color:var(--muted); margin:0; line-height:1.3;" aria-live="polite"></p>
+        </div>
+
+        <div style="width:100%; text-align:right;">
+          <a href="https://www.bom.gov.au/climate/mjo/about/WH04.pdf" target="_blank" rel="noopener" style="font-size:11px;">Wheeler & Hendon (2004)</a>
+        </div>
       </div>
     </section>
   </div>
 
-  <!-- Painéis Resumidos do Caso Ativo -->
+  <!-- Painel de Narração Explicativa Completa (Móvel, Redimensionável e Recolhível) -->
+  <section class="panel-card movable-panel" id="panelNarration" data-panel-id="panelNarration" style="margin-bottom:20px;">
+    <div class="panel-header" data-drag-handle="true">
+      <div class="panel-title">
+        <span>Narração Explicativa & Síntese Sonora</span>
+      </div>
+      <div class="panel-actions">
+        <button class="btn-panel-action btn-collapse" data-action="collapse" title="Recolher/Expandir painel" aria-label="Recolher painel de narração">_</button>
+        <button class="btn-panel-action btn-close" data-action="close" title="Ocultar painel" aria-label="Ocultar painel de narração">×</button>
+      </div>
+    </div>
+    <div class="panel-body">
+      <p id="narrationText" style="font-size:14px; line-height:1.6; color:#f1f5f9; background:rgba(15, 23, 42, 0.6); padding:14px 18px; border-radius:8px; border:1px solid var(--card-border); margin:0;"></p>
+      <p class="muted" style="margin:0; font-size:12.5px; line-height:1.5;">
+        A convecção tropical associada à MJO perturba a alta troposfera gerando fontes de ondas de Rossby (Sardeshmukh & Hoskins 1988). A dispersão de energia pelo Pacífico Sul (trem PSA) modula o Jato Subtropical e os extremos no SESA.
+      </p>
+    </div>
+  </section>
+
+  <!-- Painéis Resumidos do Caso Ativo (Móveis, Redimensionáveis e Recolhíveis) -->
   <section class="dashboard-grid">
-    <div class="panel-card">
-      <h2>Resultado Documentado & Fonte</h2>
-      <div id="result" aria-live="polite"></div>
-      <p style="margin-top:12px; font-size:13px; line-height:1.5;">
-        <a href="https://doi.org/10.1175/JCLI-D-22-0781.1" target="_blank" rel="noopener">Fernandes & Alice M. Grimm (2023)</a> · <i>J. Climate</i><br>
-        <a href="https://doi.org/10.1038/s41612-023-00501-4" target="_blank" rel="noopener">Jones, Mu, Carvalho & Ding (2023)</a> · <i>npj Clim. Atmos. Sci.</i><br>
-        <a href="https://doi.org/10.1029/2024GL113395" target="_blank" rel="noopener">Roy, Arblaster, Wheeler & Lim (2025)</a> · <i>Geophys. Res. Lett.</i><br>
-        <span class="muted">Mapas de chuva média e frequência de extremos analisados de forma independente. Rastreabilidade física e integridade observacional.</span>
-      </p>
+    <div class="panel-card movable-panel" id="panelResult" data-panel-id="panelResult">
+      <div class="panel-header" data-drag-handle="true">
+        <div class="panel-title">
+          <span>Resultado Documentado & Fonte</span>
+        </div>
+        <div class="panel-actions">
+          <button class="btn-panel-action btn-collapse" data-action="collapse" title="Recolher/Expandir painel" aria-label="Recolher painel de resultado">_</button>
+          <button class="btn-panel-action btn-close" data-action="close" title="Ocultar painel" aria-label="Ocultar painel de resultado">×</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div id="result" aria-live="polite"></div>
+        <p style="margin-top:12px; font-size:13px; line-height:1.5;">
+          <a href="https://doi.org/10.1175/JCLI-D-22-0781.1" target="_blank" rel="noopener">Fernandes & Alice M. Grimm (2023)</a> · <i>J. Climate</i><br>
+          <a href="https://doi.org/10.1038/s41612-023-00501-4" target="_blank" rel="noopener">Jones, Mu, Carvalho & Ding (2023)</a> · <i>npj Clim. Atmos. Sci.</i><br>
+          <a href="https://doi.org/10.1029/2024GL113395" target="_blank" rel="noopener">Roy, Arblaster, Wheeler & Lim (2025)</a> · <i>Geophys. Res. Lett.</i><br>
+          <span class="muted">Mapas de chuva média e frequência de extremos analisados de forma independente. Rastreabilidade física e integridade observacional.</span>
+        </p>
+      </div>
     </div>
 
-    <div class="panel-card" id="psaCard">
-      <h2>Mecanismo Físico & Teleconexão</h2>
-      <p class="mechanism" id="psaText"></p>
-      <p class="muted" style="margin-top:10px;">
-        Mecanismo verificado em Fernandes & Grimm (2023) e Roy et al. (2025). Sem centros anticiclônicos/ciclônicos fictícios no mapa.
-      </p>
+    <div class="panel-card movable-panel" id="panelPsa" data-panel-id="panelPsa">
+      <div class="panel-header" data-drag-handle="true">
+        <div class="panel-title">
+          <span>Mecanismo Físico & Teleconexão</span>
+        </div>
+        <div class="panel-actions">
+          <button class="btn-panel-action btn-collapse" data-action="collapse" title="Recolher/Expandir painel" aria-label="Recolher painel PSA">_</button>
+          <button class="btn-panel-action btn-close" data-action="close" title="Ocultar painel" aria-label="Ocultar painel PSA">×</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <p class="mechanism" id="psaText"></p>
+        <p class="muted" style="margin-top:10px;">
+          Mecanismo verificado em Fernandes & Grimm (2023) e Roy et al. (2025). Sem centros anticiclônicos/ciclônicos fictícios no mapa.
+        </p>
+      </div>
     </div>
 
-    <div class="panel-card">
-      <h2>Pacífico Equatorial & ENOS</h2>
-      <div class="labels"><span>Oeste</span><span>Central / Leste</span></div>
-      <div id="sstBand" class="band"></div>
-      <p id="sstText" style="font-size:13.5px;"></p>
-      <p class="muted">
-        Sinal qualitativo associado ao ENOS. Sem escala arbitrária em °C e sem anomalia inventada.
-      </p>
+    <div class="panel-card movable-panel" id="panelSst" data-panel-id="panelSst">
+      <div class="panel-header" data-drag-handle="true">
+        <div class="panel-title">
+          <span>Pacífico Equatorial & ENOS</span>
+        </div>
+        <div class="panel-actions">
+          <button class="btn-panel-action btn-collapse" data-action="collapse" title="Recolher/Expandir painel" aria-label="Recolher painel TSM">_</button>
+          <button class="btn-panel-action btn-close" data-action="close" title="Ocultar painel" aria-label="Ocultar painel TSM">×</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="labels"><span>Oeste</span><span>Central / Leste</span></div>
+        <div id="sstBand" class="band"></div>
+        <p id="sstText" style="font-size:13.5px;"></p>
+        <p class="muted">
+          Sinal qualitativo associado ao ENOS. Sem escala arbitrária em °C e sem anomalia inventada.
+        </p>
+      </div>
     </div>
 
-    <div class="panel-card">
-      <h2>MJO: Fase Selecionada</h2>
-      <p id="phaseInfo" style="font-size:14px; font-weight:600; color:#a5f3fc; margin-bottom:8px;"></p>
-      <p class="muted">
-        As fases RMM combinam OLR equatorial e ventos zonais em 850 e 200 hPa. A amplitude selecionada no diagrama é didática, não uma observação nem uma estimativa da intensidade dos impactos.
-      </p>
-      <a href="https://www.bom.gov.au/climate/mjo/about/WH04.pdf" target="_blank" rel="noopener">Wheeler & Hendon (2004)</a>
+    <div class="panel-card movable-panel" id="panelPhase" data-panel-id="panelPhase">
+      <div class="panel-header" data-drag-handle="true">
+        <div class="panel-title">
+          <span>MJO: Fase Selecionada</span>
+        </div>
+        <div class="panel-actions">
+          <button class="btn-panel-action btn-collapse" data-action="collapse" title="Recolher/Expandir painel" aria-label="Recolher painel de fase">_</button>
+          <button class="btn-panel-action btn-close" data-action="close" title="Ocultar painel" aria-label="Ocultar painel de fase">×</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <p id="phaseInfo" style="font-size:14px; font-weight:600; color:#a5f3fc; margin-bottom:8px;"></p>
+        <p class="muted">
+          As fases RMM combinam OLR equatorial e ventos zonais em 850 e 200 hPa. A amplitude selecionada no diagrama é didática, não uma observação nem uma estimativa da intensidade dos impactos.
+        </p>
+        <a href="https://www.bom.gov.au/climate/mjo/about/WH04.pdf" target="_blank" rel="noopener">Wheeler & Hendon (2004)</a>
+      </div>
     </div>
   </section>
 
@@ -620,5 +857,6 @@
 <script src="documented-cases.js"></script>
 <script src="rmm-diagram.js"></script>
 <script src="documented-view.js"></script>
+<script src="panels-manager.js"></script>
 </body>
 </html>
