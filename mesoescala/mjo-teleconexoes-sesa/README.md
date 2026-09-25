@@ -7,13 +7,14 @@ A aplicação combina exploração interativa completa de escalas planetárias c
 
 Quando uma combinação selecionada não possui evidência cadastrada na base de dados curada:
 - O mapa global permanece plenamente funcional com a cartografia física, oceanos, a referência esquemática da fase da MJO e a TSM correspondente.
-- **ZCAS e SESA permanecem permanentemente visíveis** como domínios geográficos de referência.
+- **ZCAS e SESA permanecem permanentemente delimitadas e identificadas** como domínios geográficos de referência.
+- A **base visual permanente** (Jato Subtropical com espessura modulada pelo ENOS e latitude pela estação, SALLJ em seta única, TSM equatorial qualitativa) permanece preservada em todas as seleções.
 - Não são geradas anomalias, extremos ou respostas de circulação inventadas.
-- A ausência de resultado é indicada discretamente como *"Resultado não representado nesta síntese documental"*, sem equivaler a efeito nulo ou ausência de influência física na natureza.
+- A ausência de resultado é indicada discretamente como *"Sem resultado específico verificado nesta síntese"*, sem equivaler a efeito nulo ou ausência de influência física na natureza.
 - A interface **nunca** troca automaticamente a fase, o ENOS, a estação, a variável ou o enquadramento escolhidos pelo usuário.
 
 ### Principais Características da Interface:
-1. **Controles Completos Restaurados:**
+1. **Controles Completos:**
    - **4 Estações:** DJF (Verão), MAM (Outono), JJA (Inverno) e SON (Primavera).
    - **3 Estados de ENOS:** El Niño, Neutro e La Niña.
    - **8 Fases da MJO:** 1 a 8, cobrindo o ciclo completo ao longo do equador.
@@ -25,10 +26,10 @@ Quando uma combinação selecionada não possui evidência cadastrada na base de
 6. **TSM Equatorial Qualitativa:** Representação do sinal no Pacífico equatorial central/leste (El Niño quente, La Niña fria e Neutro próximo à média), claramente identificada como qualitativa.
 7. **MJO no Contexto Global:** Centros nominais de fase para todas as 8 fases segundo o índice RMM de Wheeler & Hendon (2004), diferenciando a referência de fase de uma grade de convecção observada.
 8. **Teleconexão PSA Não Permanente:** Corredor conceitual de propagação de ondas de Rossby (defasagem de 7 a 12 dias) traçado exclusivamente nas combinações com mecanismo verificado na literatura, sem centros A/B fictícios.
-9. **Jatos de Referência Dinâmica:** Jato Subtropical (~200 hPa) em linha única contínua de referência média; SALLJ (~850 hPa) em seta única a leste dos Andes em direção ao SESA. Sem jato polar e sem equações arbitrárias impondo deslocamentos por ENOS.
+9. **Jatos (Base Visual Permanente):** Jato Subtropical (~200 hPa) em traçado único com espessura representando a modulação pelo ENOS e posição norte–sul acompanhando a estação; SALLJ (~850 hPa) em seta única a leste dos Andes em direção ao SESA. Sem jato polar e sem equações arbitrárias de velocidade ou latitude.
 10. **Rótulo Geográfico Rigoroso:** Mantido estritamente "SESA" no topo da região, sem "Bacia do Prata" no rótulo e sem "Andes (Bloqueio Orográfico)" no mapa.
 11. **Legenda Inicialmente Oculta:** Exibida e recolhida por botão de alternância acessível com ARIA.
-12. **Preservação Integral do Glossário:** Todos os 10 termos regionais, populares e indígenas (`SESA`, `SALLJ`, `Pampero`, `Minuano`, `Toró`, `Pé d'água`, `Saci`, `Lestada`, `Sudestada`, `Zonda`) preservados integralmente.
+12. **Narração Completa & Acessibilidade:** Toda combinação selecionável possui texto explicativo gerado na tela e síntese de voz disponível (com controles de narrar, pausar/retomar, parar e silenciar). Ao alterar controles com a fala ativa, falas anteriores são canceladas e a nova combinação é narrada automaticamente. O glossário foi removido desta demonstração conforme instrução.
 
 ### Fontes Principais:
 - **Fernandes & Alice M. Grimm (2023):** *The Role of the Madden–Julian Oscillation in Modulating Precipitation Extremes in South America during Austral Summer*, Journal of Climate, [https://doi.org/10.1175/JCLI-D-22-0781.1](https://doi.org/10.1175/JCLI-D-22-0781.1).

@@ -5,8 +5,13 @@ let currentEnso = 'neutro';
 let currentPhase = 4;
 let metric = 'extremes';
 let mapView = 'global';
-const visibleLayers = { mjo: true, sst: true, jets: false, psa: true };
+const visibleLayers = { mjo: true, sst: true, jets: true, psa: true };
 const ns = 'http://www.w3.org/2000/svg';
+
+// Estado da Narração
+let isNarrationActive = false;
+let isMuted = false;
+const speechSynth = typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis : null;
 
 function svg(tag, attributes, text) {
   const el = document.createElementNS(ns, tag);
@@ -45,6 +50,22 @@ function getMjoPhaseCoords(phase) {
   }
 }
 
+function getSubtropicalJetParams(season, enso) {
+  // Posição norte-sul acompanhando a estação (mais ao sul no verão austral, mais ao norte no inverno)
+  let lat = -30;
+  if (season === 'DJF') lat = -32;
+  else if (season === 'MAM') lat = -30;
+  else if (season === 'JJA') lat = -27;
+  else if (season === 'SON') lat = -29;
+
+  // Espessura qualitativa representando a modulação pelo ENOS (mais intenso no El Niño, menor na La Niña)
+  let width = 2.5;
+  if (enso === 'el-nino') width = 3.6;
+  else if (enso === 'la-nina') width = 1.8;
+
+  return { lat, width };
+}
+
 function drawLand() {
   for (const feature of WORLD_LAND.features) {
     const polygons = feature.geometry.type === 'MultiPolygon' ? feature.geometry.coordinates : [feature.geometry.coordinates];
@@ -79,7 +100,7 @@ function drawLand() {
 function drawGlobalContext(evidence) {
   if (mapView !== 'global') return;
 
-  // TSM Equatorial no mapa global: distinção qualitativa clara entre El Niño, La Niña e Neutro
+  // TSM Equatorial no mapa global: representação qualitativa das anomalias equatoriais do Pacífico
   if (visibleLayers.sst) {
     const [sx, sy] = project(-135, 0);
     if (currentEnso === 'el-nino') {
@@ -129,23 +150,28 @@ function drawGlobalContext(evidence) {
 function drawJets() {
   if (!visibleLayers.jets) return;
 
-  // Jato Subtropical (200 hPa): representado com uma linha contínua de referência média, sem duplicação e sem jato polar
+  const { lat, width } = getSubtropicalJetParams(currentSeason, currentEnso);
+
+  // Jato Subtropical: um único traçado, espessura modulada pelo ENOS e latitude pela estação
   if (mapView === 'global') {
-    const pts = [[140, -28], [175, -29], [-160, -30], [-120, -31], [-80, -30], [-55, -29], [-30, -28]];
+    const pts = [
+      [140, lat + 2], [175, lat + 1], [-160, lat],
+      [-120, lat - 1], [-80, lat], [-55, lat + 1], [-30, lat + 2]
+    ];
     const projectedPts = pts.map(p => project(...p));
     const d = `M ` + projectedPts.map(p => `${p[0]},${p[1]}`).join(' L ');
-    svg('path', { d, fill: 'none', stroke: '#38bdf8', 'stroke-width': 2.5, 'stroke-dasharray': '8 5' });
-    const [jx, jy] = project(-115, -28);
-    svg('text', { x: jx, y: jy - 7, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle' }, 'Jato Subtropical (~200 hPa · referência)');
+    svg('path', { d, fill: 'none', stroke: '#38bdf8', 'stroke-width': width, 'stroke-dasharray': '8 5' });
+    const [jx, jy] = project(-115, lat - 1);
+    svg('text', { x: jx, y: jy - 8, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle' }, 'Jato Subtropical (~200 hPa · referência)');
   } else {
-    const p1 = project(-82, -31);
-    const p2 = project(-38, -28);
-    svg('line', { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: '#38bdf8', 'stroke-width': 2.5, 'stroke-dasharray': '8 5' });
-    const [jx, jy] = project(-60, -29);
-    svg('text', { x: jx, y: jy - 7, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle' }, 'Jato Subtropical (200 hPa)');
+    const p1 = project(-82, lat);
+    const p2 = project(-38, lat + 3);
+    svg('line', { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: '#38bdf8', 'stroke-width': width, 'stroke-dasharray': '8 5' });
+    const [jx, jy] = project(-60, lat + 1);
+    svg('text', { x: jx, y: jy - 8, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle' }, 'Jato Subtropical (200 hPa)');
   }
 
-  // SALLJ (~850 hPa): representado com uma seta única ao longo do leste dos Andes em direção ao SESA
+  // SALLJ (~850 hPa): uma única seta, sem partículas ou trajetórias duplicadas
   const salljStart = project(-63, -16);
   const salljMid = project(-61, -23);
   const salljEnd = project(-57, -30);
@@ -182,29 +208,28 @@ function drawMap(evidence) {
     drawLand();
   }
 
-  // Jatos (Subtropical e SALLJ)
+  // Jatos (Subtropical e SALLJ como base visual permanente)
   drawJets();
 
-  // Delimitação do SESA: SEMPRE VISÍVEL como referência geográfica
-  // Rótulo mantido rigorosamente como "SESA" no topo da região, sem "Bacia do Prata"
+  // Delimitação do SESA: SEMPRE DELIMITADA E IDENTIFICADA
+  // Rótulo mantido estritamente como "SESA" no topo da região, sem "Bacia do Prata"
   const result = evidence ? evidence[metric] : null;
   const isSesaHighlighted = result && result.region === 'SESA';
   polygon(REGIONS.SESA_POLY, isSesaHighlighted ? 'rgba(56, 189, 248, 0.12)' : 'rgba(56, 189, 248, 0.03)', isSesaHighlighted ? '#38bdf8' : '#486780', isSesaHighlighted ? 2.2 : 1.5);
   const [sx, sy] = project(-56, -21);
   svg('text', { x: sx, y: sy - 7, fill: isSesaHighlighted ? '#7dd3fc' : '#a5cce3', 'font-size': 17, 'font-weight': '700', 'text-anchor': 'middle' }, 'SESA');
 
-  // Delimitação da ZCAS: SEMPRE VISÍVEL como referência geográfica
+  // Delimitação da ZCAS: SEMPRE DELIMITADA E IDENTIFICADA
   const isZcasHighlighted = result && result.region === 'ZCAS';
   polygon(REGIONS.ZCAS_POLY, isZcasHighlighted ? 'rgba(45, 212, 191, 0.14)' : 'rgba(45, 212, 191, 0.02)', isZcasHighlighted ? '#2dd4bf' : '#3e5c76', isZcasHighlighted ? 2.2 : 1.4, '4 3');
   const [zx, zy] = project(-48, -19);
   svg('text', { x: zx, y: zy, fill: isZcasHighlighted ? '#5eead4' : '#6b8ca8', 'font-size': 15, 'font-weight': '700', 'text-anchor': 'middle' }, 'ZCAS');
 
-  // Resultado documentado: exibido SOMENTE quando verificado para a combinação e métrica ativas
+  // Destaque condicional: somente quando houver resultado comprovado para a combinação e métrica
   if (result) {
     const location = result.region === 'SESA' ? [-56, -30] : result.region === 'CESA' ? [-46, -15] : [-43, -22];
     const [x, y] = project(...location);
 
-    // Símbolo de chuva qualitativo
     svg('path', {
       d: `M ${x - 22} ${y} C ${x - 38} ${y - 16}, ${x - 17} ${y - 30}, ${x - 5} ${y - 21} C ${x + 2} ${y - 43}, ${x + 31} ${y - 31}, ${x + 25} ${y - 13} C ${x + 44} ${y - 10}, ${x + 33} ${y + 5}, ${x + 20} ${y + 4} L ${x - 22} ${y + 4} Z`,
       fill: '#73d8da', stroke: '#b4f5f0', 'stroke-width': 2
@@ -225,11 +250,118 @@ function drawMap(evidence) {
   }
 
   $('mapTitle').textContent = mapView === 'global' ? 'Visão global: MJO, Pacífico e América do Sul' : 'América do Sul (visão regional)';
-  $('mapDesc').textContent = result ? `${result.region}: ${result.text} Símbolo regional sem magnitude ou extensão quantitativa.` : 'Mapa de referência com ZCAS e SESA. Sem resultado desenhado para esta combinação.';
+  $('mapDesc').textContent = result ? `${result.region}: ${result.text} Símbolo regional sem magnitude ou extensão quantitativa.` : 'Mapa de referência com ZCAS e SESA. Sem resultado específico verificado nesta síntese.';
+}
+
+function generateNarrationText(season, enso, phase, metricVal, evidence) {
+  const seasonNames = {
+    DJF: 'Verão austral (DJF)',
+    MAM: 'Outono austral (MAM)',
+    JJA: 'Inverno austral (JJA)',
+    SON: 'Primavera austral (SON)'
+  };
+  const ensoNames = {
+    'el-nino': 'El Niño',
+    'neutro': 'ENOS Neutro',
+    'la-nina': 'La Niña'
+  };
+  const phaseInfo = getMjoPhaseCoords(phase);
+
+  let text = `Configuração selecionada: ${seasonNames[season]}, com ${ensoNames[enso]} e a Oscilação Madden-Julian na fase ${phase}, com centro de convecção associado sobre ${phaseInfo.region}. `;
+
+  // Contexto esquemático da TSM e dos Jatos
+  if (enso === 'el-nino') {
+    text += `No Pacífico equatorial, o padrão esquemático indica anomalias térmicas positivas da TSM. Em altitude, o Jato Subtropical encontra-se tipicamente intensificado pela circulação de Hadley fortalecida, `;
+  } else if (enso === 'la-nina') {
+    text += `No Pacífico equatorial, o padrão esquemático indica anomalias térmicas negativas da TSM. Em altitude, o Jato Subtropical apresenta intensidade média reduzida, `;
+  } else {
+    text += `No Pacífico equatorial, a TSM encontra-se próxima à climatologia de referência neutra. O Jato Subtropical exibe intensidade média de referência, `;
+  }
+
+  if (season === 'DJF') {
+    text += `posicionado em sua latitude mais ao sul, em torno de 32 graus sul, característica do verão. `;
+  } else if (season === 'JJA') {
+    text += `deslocado mais para o norte, em torno de 27 graus sul, próprio do inverno austral. `;
+  } else {
+    text += `em latitude de transição sazonal, em torno de 29 a 30 graus sul. `;
+  }
+
+  text += `Em baixos níveis, o Jato de Baixos Níveis da América do Sul (SALLJ) atua como conduto de calor e umidade amazônica para o SESA. `;
+
+  // Efeito documentado ou ausência de resultado
+  const result = evidence ? evidence[metricVal] : null;
+  if (result) {
+    text += `Para esta combinação e considerando ${metricVal === 'extremes' ? 'a frequência de extremos de chuva' : 'a chuva média'}, Fernandes e Alice Grimm (2023) documentam: ${result.text} `;
+    if (evidence.psa) {
+      text += `Como mecanismo de teleconexão de grande escala: ${evidence.psa} `;
+    }
+  } else {
+    text += `Sem resultado específico verificado nesta síntese documental para esta combinação em relação a ${metricVal === 'extremes' ? 'extremos de chuva' : 'chuva média'}. `;
+    text += `Essa ausência de registro na base curada não significa efeito zero na física atmosférica nem ausência de ciência; reflete apenas a exigência estrita de padrões com significância estatística comprovada por estudos observacionais específicos. `;
+  }
+
+  text += `Ressalta-se que a chuva média e a frequência de extremos são variáveis meteorológicas distintas, e extremos de precipitação não equivalem a risco de granizo ou tornados.`;
+
+  return text;
+}
+
+function updateVoiceUI(state) {
+  const btnNarrate = $('btnVoiceNarrate');
+  const btnPause = $('btnVoicePause');
+  const btnMute = $('btnVoiceMute');
+
+  if (btnNarrate) {
+    btnNarrate.setAttribute('aria-pressed', String(isNarrationActive));
+    btnNarrate.textContent = isNarrationActive ? 'Narrando...' : 'Ouvir narração';
+  }
+  if (btnMute) {
+    btnMute.setAttribute('aria-pressed', String(isMuted));
+    btnMute.textContent = isMuted ? 'Com som' : 'Silenciar';
+  }
+  if (btnPause) {
+    const isPaused = speechSynth && speechSynth.paused;
+    btnPause.textContent = isPaused ? 'Retomar' : 'Pausar';
+  }
+}
+
+function speakCurrentNarration() {
+  const evidence = findDocumentedCase(currentSeason, currentEnso, currentPhase);
+  const text = generateNarrationText(currentSeason, currentEnso, currentPhase, metric, evidence);
+
+  // Atualizar texto na tela para leitura e acessibilidade
+  if ($('narrationText')) {
+    $('narrationText').textContent = text;
+  }
+
+  if (!speechSynth || isMuted || !isNarrationActive) {
+    updateVoiceUI();
+    return;
+  }
+
+  speechSynth.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'pt-BR';
+  utterance.rate = 1.05;
+
+  utterance.onstart = () => { updateVoiceUI('speaking'); };
+  utterance.onend = () => { updateVoiceUI('idle'); };
+  utterance.onerror = () => { updateVoiceUI('idle'); };
+
+  speechSynth.speak(utterance);
+  updateVoiceUI('speaking');
+}
+
+function setClimateState(opts) {
+  if (opts.season !== undefined) currentSeason = opts.season;
+  if (opts.enso !== undefined) currentEnso = opts.enso;
+  if (opts.phase !== undefined) currentPhase = Number(opts.phase);
+  if (opts.metric !== undefined) metric = opts.metric;
+  if (opts.view !== undefined) mapView = opts.view;
+  update();
 }
 
 function update() {
-  // Atualizar atributos visuais dos botões de controle
+  // Atualizar atributos dos botões de controle
   document.querySelectorAll('[data-season]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.season === currentSeason)));
   document.querySelectorAll('[data-enso]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.enso === currentEnso)));
   document.querySelectorAll('[data-phase]').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.phase) === Number(currentPhase))));
@@ -250,12 +382,14 @@ function update() {
   $('caseTitle').textContent = `${currentSeason} · ${ensoLabel} · MJO Fase ${currentPhase}`;
 
   // Resumo do Caso
-  if (result) {
-    $('caseSummary').textContent = `${result.text} (${result.figure || 'Fernandes & Grimm 2023'})`;
-    $('caseSummary').style.color = 'var(--accent-teal)';
-  } else {
-    $('caseSummary').textContent = 'Resultado não representado nesta síntese documental.';
-    $('caseSummary').style.color = 'var(--muted)';
+  if ($('caseSummary')) {
+    if (result) {
+      $('caseSummary').textContent = `${result.text} (${result.figure || 'Fernandes & Grimm 2023'})`;
+      if ($('caseSummary').style) $('caseSummary').style.color = 'var(--accent-teal)';
+    } else {
+      $('caseSummary').textContent = 'Sem resultado específico verificado nesta síntese.';
+      if ($('caseSummary').style) $('caseSummary').style.color = 'var(--muted)';
+    }
   }
 
   // Painel de Resultados
@@ -264,7 +398,7 @@ function update() {
   value.className = result ? 'value' : 'muted';
   value.textContent = result
     ? `${metric === 'extremes' ? 'Frequência de extremos' : 'Chuva média'} · ${result.region}`
-    : 'Resultado não representado nesta síntese';
+    : 'Sem resultado específico verificado nesta síntese.';
   $('result').appendChild(value);
 
   const description = document.createElement('p');
@@ -294,49 +428,50 @@ function update() {
     $('psaText').textContent = 'Sem mecanismo de teleconexão PSA documentado especificamente para esta combinação no recorte curado da literatura.';
   }
 
+  // Desenhar mapa com a base permanente e destaques seletivos
   drawMap(evidence);
+
+  // Disparar atualização da narração (fala se ativa e atualiza texto acessível)
+  speakCurrentNarration();
 }
 
 // Event Listeners: Estações (DJF, MAM, JJA, SON)
 document.querySelectorAll('[data-season]').forEach(b => {
   b.addEventListener('click', () => {
-    currentSeason = b.dataset.season;
-    update();
+    setClimateState({ season: b.dataset.season });
   });
 });
 
 // Event Listeners: ENOS (El Niño, Neutro, La Niña)
 document.querySelectorAll('[data-enso]').forEach(b => {
   b.addEventListener('click', () => {
-    currentEnso = b.dataset.enso;
-    update();
+    setClimateState({ enso: b.dataset.enso });
   });
 });
 
 // Event Listeners: MJO Fases 1 a 8
 document.querySelectorAll('[data-phase]').forEach(b => {
   b.addEventListener('click', () => {
-    currentPhase = Number(b.dataset.phase);
-    update();
+    setClimateState({ phase: Number(b.dataset.phase) });
   });
 });
 
 // Event Listeners: Atalhos para os Casos Documentados com Destaque
 document.querySelectorAll('[data-shortcut]').forEach(b => {
   b.addEventListener('click', () => {
-    currentSeason = b.dataset.season;
-    currentEnso = b.dataset.enso;
-    currentPhase = Number(b.dataset.phase);
-    if (b.dataset.metric) metric = b.dataset.metric;
-    update();
+    setClimateState({
+      season: b.dataset.season,
+      enso: b.dataset.enso,
+      phase: Number(b.dataset.phase),
+      metric: b.dataset.metric || metric
+    });
   });
 });
 
 // Variáveis: Extremos vs Chuva Média
 for (const m of ['mean', 'extremes']) {
   $(m).addEventListener('click', () => {
-    metric = m;
-    update();
+    setClimateState({ metric: m });
   });
 }
 
@@ -350,8 +485,7 @@ $('legendButton').addEventListener('click', () => {
 // Alternância de Visão Global / Regional
 for (const [id, view] of [['globalView', 'global'], ['regionalView', 'regional']]) {
   $(id).addEventListener('click', () => {
-    mapView = view;
-    update();
+    setClimateState({ view });
   });
 }
 
@@ -362,6 +496,51 @@ for (const [id, layer] of [['mjoLayer', 'mjo'], ['sstLayer', 'sst'], ['jetsLayer
     $(id).setAttribute('aria-pressed', String(visibleLayers[layer]));
     update();
   });
+}
+
+// Controles de Narração por Voz
+if ($('btnVoiceNarrate')) {
+  $('btnVoiceNarrate').addEventListener('click', () => {
+    isNarrationActive = true;
+    isMuted = false;
+    speakCurrentNarration();
+  });
+}
+
+if ($('btnVoicePause')) {
+  $('btnVoicePause').addEventListener('click', () => {
+    if (!speechSynth) return;
+    if (speechSynth.paused) {
+      speechSynth.resume();
+    } else if (speechSynth.speaking) {
+      speechSynth.pause();
+    }
+    updateVoiceUI();
+  });
+}
+
+if ($('btnVoiceStop')) {
+  $('btnVoiceStop').addEventListener('click', () => {
+    isNarrationActive = false;
+    if (speechSynth) speechSynth.cancel();
+    updateVoiceUI();
+  });
+}
+
+if ($('btnVoiceMute')) {
+  $('btnVoiceMute').addEventListener('click', () => {
+    isMuted = !isMuted;
+    if (isMuted && speechSynth) {
+      speechSynth.cancel();
+    } else if (!isMuted && isNarrationActive) {
+      speakCurrentNarration();
+    }
+    updateVoiceUI();
+  });
+}
+
+if (typeof window !== 'undefined') {
+  window.setClimateState = setClimateState;
 }
 
 // Inicializar interface

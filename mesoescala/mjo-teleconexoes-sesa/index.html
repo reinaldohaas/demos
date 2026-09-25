@@ -14,8 +14,7 @@
       --accent-teal: #2dd4bf;
       --accent-emerald: #34d399;
       --accent-amber: #fbbf24;
-      --accent-orange: #f97316;
-      --accent-rose: #ef4444;
+      --accent-purple: #c084fc;
       --text: #dbe8f4;
       --muted: #9eafc2;
       --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -142,6 +141,15 @@
       border-color: #24415c;
       font-size: 12px;
       padding: 4px 9px;
+    }
+    .btn-voice {
+      background: rgba(192, 132, 252, 0.14);
+      border-color: rgba(192, 132, 252, 0.35);
+      color: #e9d5ff;
+    }
+    .btn-voice:hover {
+      background: rgba(192, 132, 252, 0.25);
+      border-color: var(--accent-purple);
     }
 
     /* Card Principal com Mapa Prioritário */
@@ -305,25 +313,6 @@
     }
     .details-content p { margin: 12px 0; }
 
-    /* Tabela de Glossário */
-    .table-scroll { overflow-x: auto; margin-top: 10px; }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      font-size: 13px;
-    }
-    td, th {
-      padding: 10px 14px;
-      border: 1px solid var(--card-border);
-      vertical-align: top;
-      text-align: left;
-    }
-    th {
-      background: #11263c;
-      color: var(--accent-cyan);
-      font-weight: 700;
-    }
-
     @media (max-width: 900px) {
       main { padding: 14px; }
       .map-card { padding: 12px; }
@@ -338,11 +327,11 @@
     <div class="tag">Mesoescala & Escala Planetária · Demonstração Interativa</div>
     <h1>MJO, Estações, ENOS & Teleconexões com o SESA</h1>
     <p class="muted">
-      Explore todas as combinações de estações, fases da MJO e ENOS no contexto global contínuo. Somente os resultados com respaldo científico documentado na literatura recebem destaques gráficos; combinações sem evidência cadastrada mantêm as referências geográficas de ZCAS e SESA sem imposição de dados artificiais.
+      Explore todas as combinações de estações, fases da MJO e ENOS no contexto global contínuo. A base visual permanente preserva o Jato Subtropical modulado por estação e ENOS, o SALLJ, a TSM equatorial qualitativa e as referências geográficas da ZCAS e do SESA. Destaques visuais são ativados exclusivamente em combinações com respaldo científico verificado.
     </p>
   </header>
 
-  <!-- Painel de Controles: Estações, ENOS, Fases da MJO e Destaques Documentados -->
+  <!-- Painel de Controles: Estações, ENOS, Fases da MJO, Narração e Destaques Documentados -->
   <section class="controls-panel">
     <div class="controls-row">
       <!-- Seletor de Estação do Ano -->
@@ -374,11 +363,20 @@
         <button class="btn-phase" data-phase="7" aria-pressed="false">7</button>
         <button class="btn-phase" data-phase="8" aria-pressed="false">8</button>
       </div>
+
+      <!-- Controles de Narração por Voz -->
+      <div class="control-group-pill" style="border-color: rgba(192, 132, 252, 0.4);">
+        <span class="pill-label" style="color:var(--accent-purple);">Voz:</span>
+        <button class="btn-voice" id="btnVoiceNarrate">Ouvir narração</button>
+        <button class="btn-voice" id="btnVoicePause">Pausar</button>
+        <button class="btn-voice" id="btnVoiceStop">Parar</button>
+        <button class="btn-voice" id="btnVoiceMute">Silenciar</button>
+      </div>
     </div>
 
     <!-- Atalhos para os Casos com Destaque Documentado -->
     <div class="controls-row" style="border-top: 1px solid #1a344e; padding-top: 8px;">
-      <span class="pill-label" style="color:var(--accent-teal);">Casos documentados em DJF:</span>
+      <span class="pill-label" style="color:var(--accent-teal);">Destaques em DJF:</span>
       <button class="btn-shortcut" data-shortcut="DJF-neutro-4" data-season="DJF" data-enso="neutro" data-phase="4" data-metric="extremes" aria-pressed="true">Neutro · Fase 4 (Extremos SESA)</button>
       <button class="btn-shortcut" data-shortcut="DJF-neutro-3" data-season="DJF" data-enso="neutro" data-phase="3" data-metric="extremes" aria-pressed="false">Neutro · Fase 3 (Extremos SESA)</button>
       <button class="btn-shortcut" data-shortcut="DJF-el-nino-3" data-season="DJF" data-enso="el-nino" data-phase="3" data-metric="extremes" aria-pressed="false">El Niño · Fase 3 (Extremos SESA)</button>
@@ -399,7 +397,7 @@
         <span class="group-label">Camadas:</span>
         <button id="mjoLayer" aria-pressed="true">MJO: fase RMM</button>
         <button id="sstLayer" aria-pressed="true">TSM: sinal do ENOS</button>
-        <button id="jetsLayer" aria-pressed="false">Jatos: STJ & SALLJ</button>
+        <button id="jetsLayer" aria-pressed="true">Jatos: STJ & SALLJ</button>
         <button id="psaLayer" aria-pressed="true">PSA: teleconexão</button>
       </div>
       <div class="toolbar-group">
@@ -442,7 +440,7 @@
           <b>MJO (Fases 1 a 8):</b> Posição geográfica nominal do envelope tropical segundo Wheeler & Hendon (2004), distinta de grade contínua de convecção observada.
         </div>
         <div>
-          <b>Jatos (referência):</b> Jato Subtropical (~200 hPa) em linha única de referência; SALLJ (~850 hPa) em seta única a leste dos Andes. Sem jato polar e sem deslocamento artificial por fórmulas.
+          <b>Jatos (Base Visual Permanente):</b> Jato Subtropical (~200 hPa) em traçado único, com espessura modulada pelo ENOS e posição norte–sul acompanhando a estação; SALLJ (~850 hPa) em seta única a leste dos Andes. Sem jato polar e sem equações arbitrárias.
         </div>
         <div>
           <b>Teleconexão PSA:</b> Corredor conceitual de propagação de ondas de Rossby exibido exclusivamente nas combinações com mecanismo verificado na literatura (defasagem de 7 a 12 dias), sem posições fictícias de centros A/B.
@@ -453,6 +451,12 @@
     <p class="muted" style="margin-top:10px;">
       Base cartográfica: Natural Earth. ZCAS e SESA permanecem visíveis como referências espaciais permanentes. Ausência de destaque gráfico indica resultado não representado nesta síntese documental, não efeito zero.
     </p>
+  </section>
+
+  <!-- Narração Explicativa Completa (Leitura e Acessibilidade) -->
+  <section class="panel-card" style="margin-bottom: 20px;">
+    <h2>Narração Explicativa & Síntese Sonora</h2>
+    <p id="narrationText" style="font-size: 14px; line-height: 1.6; color: #f1f5f9; background: rgba(15, 23, 42, 0.6); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--card-border);"></p>
   </section>
 
   <!-- Painéis Resumidos do Caso Ativo -->
@@ -533,13 +537,13 @@
       <summary>Jatos e transporte dinâmico: Jato Subtropical e SALLJ</summary>
       <div class="details-content">
         <p>
-          <b>Jato Subtropical (~200 hPa):</b> Corrente de oeste em altos níveis (~12 km de altitude) localizada tipicamente em torno de 25°S–35°S. Atua como guia de ondas planetárias de Rossby e seus ramos de entrada/saída proporcionam divergência em altitude favorável à sustentação de sistemas convectivos.
+          <b>Jato Subtropical (~200 hPa):</b> Corrente de oeste em altos níveis (~12 km de altitude). Atua como guia de ondas planetárias de Rossby e seus ramos de entrada/saída proporcionam divergência em altitude favorável à sustentação de sistemas convectivos. Sua posição média varia sazonalmente (mais ao sul no verão, em torno de 32°S; mais ao norte no inverno, em torno de 27°S) e sua espessura média reflete a modulação pelo ENOS (intensificado no El Niño, menor na La Niña).
         </p>
         <p>
           <b>SALLJ (Jato de Baixos Níveis da América do Sul, ~850 hPa):</b> Corrente rápida que escoa ao longo da encosta leste da Cordilheira dos Andes. Resulta da combinação de bloqueio orográfico andino, canalização mecânica, gradiente barométrico sinótico (Alta Subtropical vs. Baixa do Chaco), desacoplamento turbulento no ciclo diurno e forçantes baroclínicas. Descarrega vapor d'água amazônico no SESA, alimentando sistemas convectivos de mesoescala.
         </p>
         <p class="muted">
-          Nesta demonstração, ambos os jatos são apresentados com traçados de referência dinâmica geométrica (linha única para o subtropical e seta única para o SALLJ). Foram retiradas fórmulas sintéticas que impunham deslocamentos latitudinais e acelerações artificiais em função do ENOS. O jato polar não é representado para manter o foco rigoroso na escala subtropical.
+          Nesta demonstração, ambos os jatos são apresentados com traçados de referência dinâmica geométrica (linha única para o subtropical e seta única para o SALLJ). Foram retiradas fórmulas sintéticas que impunham deslocamentos e velocidades arbitrárias. O jato polar não é representado para manter o foco rigoroso na escala subtropical.
         </p>
       </div>
     </details>
@@ -548,7 +552,7 @@
       <summary>Limites desta síntese e integridade metodológica</summary>
       <div class="details-content">
         <p>
-          Esta síntese reúne evidências observacionais documentadas por Fernandes & Alice M. Grimm (2023). Quando uma variável consta como <i>"Resultado não representado nesta síntese"</i> (armazenada como <code>null</code> no modelo de dados), isso reflete uma escolha estrita de integridade científica:
+          Esta síntese reúne evidências observacionais documentadas por Fernandes & Alice M. Grimm (2023). Quando uma combinação exibe <i>"Sem resultado específico verificado nesta síntese"</i> (armazenada como <code>null</code> no modelo de dados), isso reflete uma escolha estrita de integridade científica:
         </p>
         <p>
           1. <b>Não inferência automática:</b> A evidência de que a frequência de extremos aumenta em determinada fase não é convertida automaticamente em anomalia de chuva média.
@@ -559,86 +563,6 @@
         <p>
           3. <b>Sem parâmetros artificiais:</b> Foram eliminados geradores livres de combinações não sustentadas, réguas logísticas com probabilidades sintéticas e campos artificiais de TSM.
         </p>
-      </div>
-    </details>
-
-    <details>
-      <summary>Glossário e terminologia regional, indígena e cultural</summary>
-      <div class="details-content">
-        <div class="table-scroll">
-          <table class="term-table">
-            <thead>
-              <tr>
-                <th>Termo</th>
-                <th>Equivalente Internacional</th>
-                <th>Região / Escopo</th>
-                <th>Interpretação Física, Contexto Cultural & Diagnóstico Operacional</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b>SESA</b></td>
-                <td>Southeastern South America</td>
-                <td>Domínio meteorológico amplo</td>
-                <td>Sudeste da América do Sul: o domínio que reúne os Andes, o Chaco, o Paraguai, o norte da Argentina, o Uruguai, o Sul e o Sudeste do Brasil e o Atlântico Sudoeste.</td>
-              </tr>
-              <tr>
-                <td><b>SALLJ</b></td>
-                <td>South American low-level jet</td>
-                <td>Leste dos Andes, Bacia do Prata</td>
-                <td>Jato de baixos níveis da América do Sul. Corrente intensa a leste dos Andes que transporta umidade, calor e cisalhamento para o SESA. Máximo de vento entre 850 e 700 hPa a leste da cordilheira, com razão de mistura elevada e convergência na saída.</td>
-              </tr>
-              <tr>
-                <td><b>Pampero</b></td>
-                <td>Cold surge / frontal blast</td>
-                <td>Pampas, Argentina, Uruguai, RS</td>
-                <td>Irrupção de ar frio de sudoeste nos Pampas, com queda de temperatura e rajadas. É o vento do pampa, «planície» em quíchua. Vira para sudoeste com queda de temperatura e subida de pressão na mesma hora.</td>
-              </tr>
-              <tr>
-                <td><b>Minuano</b></td>
-                <td>Cold southerly wind</td>
-                <td>Sul do Brasil e Uruguai</td>
-                <td>Vento frio de sul ou sudoeste no Sul do Brasil, em geral pós-frontal. O nome vem dos minuanos, povo indígena das terras de onde o vento sopra. Chega depois da frente, com pressão subindo, céu limpando e temperatura baixa e estável.</td>
-              </tr>
-              <tr>
-                <td><b>Toró</b></td>
-                <td>Cloudburst; torrential downpour</td>
-                <td>Brasil</td>
-                <td>Chuva que desaba como cachoeira; o nome é associado ao tupi <i>tororoma</i>, jorro d'água. No radar é célula isolada, sem rotação, de taxa alta e duração curta. O sentido técnico proposto pelo autor, ainda em avaliação, descreve descarga extrema com duração da ordem de um minuto e extensão de dezenas de metros.</td>
-              </tr>
-              <tr>
-                <td><b>Pé d'água</b></td>
-                <td>Heavy downpour</td>
-                <td>Brasil</td>
-                <td>Chuva forte que chega de repente, próxima do sentido popular de toró. Mesmo teste do toró no radar.</td>
-              </tr>
-              <tr>
-                <td><b>Saci</b></td>
-                <td>Dust devil / whirlwind</td>
-                <td>Uso popular e rural</td>
-                <td>Nome popular do redemoinho de poeira que gira no campo, associado ao saci-pererê da tradição oral brasileira. Forma-se junto ao solo aquecido em ar seco, sem depender de nuvem de tempestade; sem nuvem-mãe nem eco de radar.</td>
-              </tr>
-              <tr>
-                <td><b>Lestada</b></td>
-                <td>Persistent easterly maritime flow</td>
-                <td>Litoral SC, PR e SP (Serra do Mar)</td>
-                <td>Vento persistente de leste ou sudeste contra a Serra do Mar, com nuvem baixa, garoa e chuva orográfica. Não é frente costeira: dura mais de doze horas sem passagem frontal e sem queda de temperatura.</td>
-              </tr>
-              <tr>
-                <td><b>Sudestada</b></td>
-                <td>Southeasterly windstorm / surge</td>
-                <td>Atlântico Sudoeste, Prata, Uruguai, RS</td>
-                <td>Vento persistente de sudeste no Prata, no Uruguai e na costa do RS, com maré meteorológica e ressaca. Não é Lestada: o marégrafo acusa a elevação antes de o vento atingir o pico, e a Lestada não move o nível do mar.</td>
-              </tr>
-              <tr>
-                <td><b>Zonda</b></td>
-                <td>Foehn wind</td>
-                <td>Oeste da Argentina (Andes)</td>
-                <td>Foehn do oeste argentino, a sotavento dos Andes, com rajadas fortes, umidade muito baixa e risco de incêndio. A sotavento a temperatura sobe enquanto o ponto de orvalho despenca; o sinal está na razão de mistura, não na umidade relativa.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
     </details>
   </section>
