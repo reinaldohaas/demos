@@ -51,6 +51,12 @@ for (let p = 1; p <= 8; p++) {
   assert(html.includes(`data-phase="${p}"`), `Botão de fase MJO ${p} presente`);
 }
 
+// 4 Modos da MJO nos trópicos
+assert(html.includes('id="mjoDipolesLayer"'), 'Botão Convecção tropical RMM presente');
+assert(html.includes('id="mjoChiLayer"'), 'Botão Potencial de velocidade chi presente');
+assert(html.includes('id="mjoTrackLayer"'), 'Botão Trilha 1-8 presente');
+assert(html.includes('id="mjoNoneLayer"'), 'Botão Nenhuma presente');
+
 // Controles de narração por voz e texto acessível
 assert(html.includes('id="btnVoiceNarrate"'), 'Botão narrar presente');
 assert(html.includes('id="btnVoicePause"'), 'Botão pausar presente');
@@ -112,11 +118,11 @@ function makeMockElement(id) {
 }
 
 const elementIds = [
-  'globalView', 'regionalView', 'mjoLayer', 'mjoDipolesLayer', 'mjoTrackLayer', 'mjoNoneLayer',
+  'globalView', 'regionalView', 'mjoLayer', 'mjoDipolesLayer', 'mjoChiLayer', 'mjoTrackLayer', 'mjoNoneLayer',
   'sstLayer', 'jetsLayer', 'psaLayer', 'extremes', 'mean', 'legendButton', 'legend',
   'caseTitle', 'caseSummary', 'narrationText', 'btnVoiceNarrate', 'btnVoicePause',
   'btnVoiceStop', 'btnVoiceMute', 'mapTitle', 'mapDesc', 'map', 'mapDrawing',
-  'result', 'sstBand', 'sstText', 'phaseInfo', 'psaCard', 'psaText',
+  'result', 'sstBand', 'sstText', 'phaseInfo', 'panelPsa', 'psaCard', 'psaText',
   'rmmDiagram', 'mjoAmplitude', 'mjoAmplitudeValue', 'rmmStatus'
 ];
 
@@ -278,8 +284,8 @@ assert(cancelCalls > 0, 'Silenciar deve chamar cancel()');
 // Cenário E: Clicar em Parar deve desativar narração
 elements.btnVoiceStop.click();
 
-// 7. Modos da MJO nos trópicos (dipolos RMM, trilha 1 a 8 e nenhuma)
-for (const mode of ['dipoles', 'track', 'none']) {
+// 7. Modos da MJO nos trópicos (dipolos RMM, potencial de velocidade chi, trilha 1 a 8 e nenhuma)
+for (const mode of ['dipoles', 'chi', 'track', 'none']) {
   for (const phase of phases) {
     sandbox.setClimateState({ phase, mjoMode: mode });
   }

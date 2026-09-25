@@ -117,6 +117,125 @@ const MJO_COMPOSITES = {
   }
 };
 
+// Compostos planetários contínuos de Potencial de Velocidade em 200 hPa (χ₂₀₀) da NOAA/ESRL (Physical Sciences Division)
+// Anomalias negativas (roxo/azul): divergência em altos níveis (∇²χ < 0) e convecção ativa da MJO
+// Anomalias positivas (verde/amarelo/laranja/vermelho): convergência em altos níveis (∇²χ > 0) e convecção suprimida da MJO
+// Unidade: 10⁶ m² s⁻¹ (-5 a +5)
+const MJO_CHI_COMPOSITES = {
+  1: {
+    active: {
+      center: [-40, 5],
+      outer: { lon: -40, lat: 5, rx: 85, ry: 26 },
+      mid: { lon: -40, lat: 6, rx: 55, ry: 24 },
+      core: { lon: -45, lat: 8, rx: 32, ry: 20 }
+    },
+    suppressed: {
+      center: [155, 5],
+      outer: { lon: 155, lat: 5, rx: 75, ry: 26 },
+      mid: { lon: 155, lat: 6, rx: 50, ry: 24 },
+      core: { lon: 155, lat: 8, rx: 28, ry: 20 }
+    }
+  },
+  2: {
+    active: {
+      center: [60, 2],
+      outer: { lon: 55, lat: 2, rx: 80, ry: 26 },
+      mid: { lon: 60, lat: 2, rx: 48, ry: 24 },
+      core: { lon: 65, lat: 3, rx: 25, ry: 19 }
+    },
+    suppressed: {
+      center: [165, 5],
+      outer: { lon: 165, lat: 5, rx: 75, ry: 26 },
+      mid: { lon: 165, lat: 6, rx: 50, ry: 24 },
+      core: { lon: 165, lat: 7, rx: 28, ry: 20 }
+    }
+  },
+  3: {
+    active: {
+      center: [78, 0],
+      outer: { lon: 75, lat: 0, rx: 80, ry: 26 },
+      mid: { lon: 78, lat: 0, rx: 52, ry: 25 },
+      core: { lon: 80, lat: 1, rx: 30, ry: 20 }
+    },
+    suppressed: {
+      center: [-130, 2],
+      outer: { lon: -130, lat: 2, rx: 85, ry: 26 },
+      mid: { lon: -130, lat: 2, rx: 55, ry: 24 },
+      core: null
+    }
+  },
+  4: {
+    active: {
+      center: [118, 0],
+      outer: { lon: 118, lat: 0, rx: 75, ry: 26 },
+      mid: { lon: 118, lat: 0, rx: 48, ry: 24 },
+      core: { lon: 118, lat: 1, rx: 28, ry: 20 }
+    },
+    suppressed: {
+      center: [-50, 6],
+      outer: { lon: -50, lat: 6, rx: 80, ry: 26 },
+      mid: { lon: -50, lat: 6, rx: 50, ry: 24 },
+      core: { lon: -50, lat: 7, rx: 26, ry: 19 }
+    }
+  },
+  5: {
+    active: {
+      center: [138, 2],
+      outer: { lon: 138, lat: 2, rx: 80, ry: 26 },
+      mid: { lon: 138, lat: 2, rx: 50, ry: 24 },
+      core: { lon: 140, lat: 3, rx: 28, ry: 20 }
+    },
+    suppressed: {
+      center: [-10, 4],
+      outer: { lon: -10, lat: 4, rx: 85, ry: 26 },
+      mid: { lon: -10, lat: 4, rx: 52, ry: 24 },
+      core: { lon: -15, lat: 5, rx: 26, ry: 19 }
+    }
+  },
+  6: {
+    active: {
+      center: [168, 0],
+      outer: { lon: 168, lat: 0, rx: 78, ry: 26 },
+      mid: { lon: 168, lat: 0, rx: 48, ry: 24 },
+      core: { lon: 168, lat: 1, rx: 26, ry: 19 }
+    },
+    suppressed: {
+      center: [75, 0],
+      outer: { lon: 75, lat: 0, rx: 80, ry: 26 },
+      mid: { lon: 75, lat: 0, rx: 50, ry: 24 },
+      core: { lon: 75, lat: 1, rx: 28, ry: 20 }
+    }
+  },
+  7: {
+    active: {
+      center: [-145, 0],
+      outer: { lon: -145, lat: 0, rx: 80, ry: 26 },
+      mid: { lon: -145, lat: 0, rx: 52, ry: 24 },
+      core: { lon: -145, lat: 1, rx: 30, ry: 20 }
+    },
+    suppressed: {
+      center: [92, 2],
+      outer: { lon: 92, lat: 2, rx: 80, ry: 26 },
+      mid: { lon: 92, lat: 2, rx: 52, ry: 24 },
+      core: { lon: 92, lat: 3, rx: 28, ry: 20 }
+    }
+  },
+  8: {
+    active: {
+      center: [-75, 4],
+      outer: { lon: -75, lat: 4, rx: 85, ry: 26 },
+      mid: { lon: -75, lat: 4, rx: 55, ry: 24 },
+      core: { lon: -75, lat: 5, rx: 32, ry: 20 }
+    },
+    suppressed: {
+      center: [126, 0],
+      outer: { lon: 126, lat: 0, rx: 78, ry: 26 },
+      mid: { lon: 126, lat: 0, rx: 50, ry: 24 },
+      core: { lon: 126, lat: 1, rx: 28, ry: 20 }
+    }
+  }
+};
+
 // Trilha de fases da MJO numeradas 1 a 8 ao longo do equador (referência visual esquemática)
 const MJO_TRACK_POINTS = [
   { phase: 1, lon: 40, label: '1' },
@@ -314,12 +433,152 @@ function drawMjoTrack() {
   }
 }
 
+function drawChiColorbar(x, y, w, h) {
+  // Fundo translúcido
+  svg('rect', { x, y, width: w, height: h, rx: 6, fill: 'rgba(15, 23, 42, 0.90)', stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-width': 1 });
+
+  // Título compacto
+  svg('text', { x: x + w / 2, y: y + 10, fill: '#bae6fd', 'font-size': 9.5, 'font-weight': '700', 'text-anchor': 'middle' },
+    'Potencial de Velocidade em 200 hPa · χ₂₀₀ (10⁶ m² s⁻¹ · NOAA/ESRL)');
+
+  // 6 caixas de cores
+  const barW = w - 40;
+  const barH = 7;
+  const barX = x + 20;
+  const barY = y + 14;
+  const colors = ['#4a044e', '#7c3aed', '#0284c7', '#84cc16', '#ea580c', '#b91c1c'];
+  const segW = barW / colors.length;
+
+  colors.forEach((col, idx) => {
+    svg('rect', { x: barX + idx * segW, y: barY, width: segW, height: barH, fill: col, stroke: 'rgba(0,0,0,0.3)', 'stroke-width': 0.5 });
+  });
+
+  // Ticks
+  const ticks = ['-5', '-3', '-1', '0', '+1', '+3', '+5'];
+  ticks.forEach((tk, idx) => {
+    const tx = barX + idx * (barW / (ticks.length - 1));
+    svg('text', { x: tx, y: barY + barH + 9, fill: '#cbd5e1', 'font-size': 8.5, 'font-weight': '600', 'text-anchor': 'middle' }, tk);
+  });
+}
+
+function drawMjoVelocityPotential() {
+  const chi = MJO_CHI_COMPOSITES[currentPhase];
+  if (!chi) return;
+
+  const isGlobal = mapView === 'global';
+
+  if (isGlobal) {
+    // 1. Limites do domínio tropical entre 30°S e 30°N
+    const y30N = (85 - 30) * 560 / 160; // 192.5
+    const y30S = (85 - (-30)) * 560 / 160; // 402.5
+    svg('line', { x1: 0, y1: y30N, x2: 1200, y2: y30N, stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-dasharray': '5 4' });
+    svg('line', { x1: 0, y1: y30S, x2: 1200, y2: y30S, stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-dasharray': '5 4' });
+    svg('text', { x: 1190, y: y30N + 14, fill: '#bae6fd', 'font-size': 10.5, 'font-weight': '700', 'text-anchor': 'end', 'letter-spacing': 0.5 }, 'NOAA/ESRL Physical Sciences Division · χ₂₀₀ (200 hPa)');
+
+    // 2. Desenhar camadas ativas e suprimidas com envelopamento contínuo
+    const renderLayers = (data, styleKey) => {
+      if (!data) return;
+      const styles = {
+        outer: {
+          fill: styleKey === 'active' ? '#0284c7' : '#84cc16',
+          opacity: 0.38,
+          stroke: styleKey === 'active' ? '#38bdf8' : '#a3e635',
+          strokeWidth: 1.1
+        },
+        mid: {
+          fill: styleKey === 'active' ? '#7c3aed' : '#ea580c',
+          opacity: 0.52,
+          stroke: styleKey === 'active' ? '#a855f7' : '#fb923c',
+          strokeWidth: 1.3
+        },
+        core: {
+          fill: styleKey === 'active' ? '#4a044e' : '#b91c1c',
+          opacity: 0.72,
+          stroke: styleKey === 'active' ? '#c084fc' : '#f87171',
+          strokeWidth: 1.6
+        }
+      };
+
+      for (const level of ['outer', 'mid', 'core']) {
+        const item = data[level];
+        if (!item) continue;
+        const st = styles[level];
+        const rx = item.rx * (1200 / 360);
+        const ry = item.ry * (560 / 160);
+
+        for (const shift of [-360, 0, 360]) {
+          const [cx, cy] = project(item.lon + shift, item.lat);
+          if (cx + rx >= -50 && cx - rx <= 1250) {
+            svg('ellipse', {
+              cx, cy, rx, ry,
+              fill: st.fill,
+              'fill-opacity': currentAmplitude < 1 ? st.opacity * 0.5 : st.opacity,
+              stroke: st.stroke,
+              'stroke-width': st.strokeWidth
+            });
+          }
+        }
+      }
+    };
+
+    renderLayers(chi.active, 'active');
+    renderLayers(chi.suppressed, 'suppressed');
+
+    // 3. Rótulos nos centros de divergência e convergência
+    if (chi.active && chi.active.center) {
+      const [acx, acy] = project(chi.active.center[0], chi.active.center[1]);
+      svg('text', { x: acx, y: acy - 6, fill: '#f5d0fe', 'font-size': 11.5, 'font-weight': '800', 'text-anchor': 'middle' }, 'Divergência 200 hPa');
+      svg('text', { x: acx, y: acy + 9, fill: '#e9d5ff', 'font-size': 10.5, 'font-weight': '600', 'text-anchor': 'middle' }, '(Convecção MJO Ativa)');
+    }
+    if (chi.suppressed && chi.suppressed.center) {
+      const [scx, scy] = project(chi.suppressed.center[0], chi.suppressed.center[1]);
+      svg('text', { x: scx, y: scy - 6, fill: '#fef08a', 'font-size': 11.5, 'font-weight': '800', 'text-anchor': 'middle' }, 'Convergência 200 hPa');
+      svg('text', { x: scx, y: scy + 9, fill: '#fed7aa', 'font-size': 10.5, 'font-weight': '600', 'text-anchor': 'middle' }, '(Convecção Suprimida)');
+    }
+
+    // 4. Barra de escala de cores (Colorbar NOAA/ESRL)
+    drawChiColorbar(350, 520, 500, 34);
+  } else {
+    // Visão Regional (América do Sul): projetar anomalias de χ₂₀₀ sobre o continente
+    const renderRegionalLayers = (data, styleKey) => {
+      if (!data) return;
+      const styles = {
+        outer: { fill: styleKey === 'active' ? '#0284c7' : '#84cc16', opacity: 0.28, stroke: styleKey === 'active' ? '#38bdf8' : '#a3e635' },
+        mid: { fill: styleKey === 'active' ? '#7c3aed' : '#ea580c', opacity: 0.38, stroke: styleKey === 'active' ? '#a855f7' : '#fb923c' },
+        core: { fill: styleKey === 'active' ? '#4a044e' : '#b91c1c', opacity: 0.50, stroke: styleKey === 'active' ? '#c084fc' : '#f87171' }
+      };
+      for (const level of ['outer', 'mid', 'core']) {
+        const item = data[level];
+        if (!item) continue;
+        const st = styles[level];
+        const [cx, cy] = project(item.lon, item.lat);
+        const rx = item.rx * 8;
+        const ry = item.ry * 6.4;
+        svg('ellipse', {
+          cx, cy, rx, ry,
+          fill: st.fill,
+          'fill-opacity': currentAmplitude < 1 ? st.opacity * 0.4 : st.opacity,
+          stroke: st.stroke,
+          'stroke-width': 1.2
+        });
+      }
+    };
+
+    renderRegionalLayers(chi.active, 'active');
+    renderRegionalLayers(chi.suppressed, 'suppressed');
+
+    // Barra de escala compacta na visão regional
+    drawChiColorbar(100, 480, 440, 30);
+  }
+}
+
 function drawMjoTropicalVisualizations() {
-  if (mapView !== 'global') return; // Envelope tropical restrito à visão global, sem extrapolação sobre o Brasil
   if (mjoMode === 'dipoles') {
-    drawMjoConvection();
+    if (mapView === 'global') drawMjoConvection();
+  } else if (mjoMode === 'chi') {
+    drawMjoVelocityPotential();
   } else if (mjoMode === 'track') {
-    drawMjoTrack();
+    if (mapView === 'global') drawMjoTrack();
   }
 }
 
@@ -428,6 +687,9 @@ function drawMap(evidence) {
     drawGlobalContext(evidence);
   } else {
     drawLand();
+    if (mjoMode === 'chi') {
+      drawMjoVelocityPotential();
+    }
   }
 
   // Jatos (Subtropical e SALLJ como base visual permanente)
@@ -693,6 +955,7 @@ function update() {
 
   // Atualizar botões de camadas da MJO (exclusão mútua e nenhuma)
   if ($('mjoDipolesLayer')) $('mjoDipolesLayer').setAttribute('aria-pressed', String(mjoMode === 'dipoles'));
+  if ($('mjoChiLayer')) $('mjoChiLayer').setAttribute('aria-pressed', String(mjoMode === 'chi'));
   if ($('mjoTrackLayer')) $('mjoTrackLayer').setAttribute('aria-pressed', String(mjoMode === 'track'));
   if ($('mjoNoneLayer')) $('mjoNoneLayer').setAttribute('aria-pressed', String(mjoMode === 'none'));
   if ($('mjoLayer')) $('mjoLayer').setAttribute('aria-pressed', String(mjoMode !== 'none'));
@@ -743,12 +1006,12 @@ function update() {
   $('phaseInfo').textContent = `Fase ${currentPhase} · ${phaseInfo.region} — referência nominal RMM de Wheeler & Hendon (2004), distinta de grade contínua de convecção observada.`;
 
   // Mecanismo PSA
-  if (evidence && evidence.psa) {
-    $('psaCard').hidden = false;
-    $('psaText').textContent = evidence.psa;
-  } else {
-    $('psaCard').hidden = false;
-    $('psaText').textContent = 'Sem mecanismo de teleconexão PSA documentado especificamente para esta combinação no recorte curado da literatura.';
+  const psaCard = $('panelPsa') || $('psaCard');
+  if (psaCard) psaCard.hidden = false;
+  if ($('psaText')) {
+    $('psaText').textContent = (evidence && evidence.psa)
+      ? evidence.psa
+      : 'Sem mecanismo de teleconexão PSA documentado especificamente para esta combinação no recorte curado da literatura.';
   }
 
   // Desenhar mapa com a base permanente e destaques seletivos
@@ -812,10 +1075,15 @@ for (const [id, view] of [['globalView', 'global'], ['regionalView', 'regional']
   });
 }
 
-// Alternância das Camadas MJO nos Trópicos: Dipolos NOAA, Trilha 1–8 ou Nenhuma (ao ligar um desliga a outra)
+// Alternância das Camadas MJO nos Trópicos: Dipolos RMM, Chi NOAA, Trilha 1–8 ou Nenhuma (ao ligar um desliga a outra)
 if ($('mjoDipolesLayer')) {
   $('mjoDipolesLayer').addEventListener('click', () => {
     setMjoMode(mjoMode === 'dipoles' ? 'none' : 'dipoles');
+  });
+}
+if ($('mjoChiLayer')) {
+  $('mjoChiLayer').addEventListener('click', () => {
+    setMjoMode(mjoMode === 'chi' ? 'none' : 'chi');
   });
 }
 if ($('mjoTrackLayer')) {
@@ -830,7 +1098,8 @@ if ($('mjoNoneLayer')) {
 }
 if ($('mjoLayer')) {
   $('mjoLayer').addEventListener('click', () => {
-    if (mjoMode === 'dipoles') setMjoMode('track');
+    if (mjoMode === 'dipoles') setMjoMode('chi');
+    else if (mjoMode === 'chi') setMjoMode('track');
     else if (mjoMode === 'track') setMjoMode('none');
     else setMjoMode('dipoles');
   });
