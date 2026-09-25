@@ -280,3 +280,8 @@ Referências: https://doi.org/10.1175/JCLI-D-22-0781.1 e https://www.bom.gov.au/
 ### Recuperação da visão global
 
 A visualização inicial voltou a ser global, centrada no Pacífico, com alternância para América do Sul e camadas qualitativas MJO/TSM. O mapa ocupa a largura principal; os textos ficam abaixo. A base cartográfica local `world-land.js` é Natural Earth 1:110m (domínio público), obtida de https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_land.geojson. Os cinco casos e a separação de variáveis foram mantidos; nenhum gerador de probabilidades foi restaurado.
+
+### Integração do Diagrama RMM e Controle de Intensidade
+
+O diagrama RMM Wheeler-Hendon foi reformatado para tamanho compacto (190 px, viewBox 220×220) e posicionado à direita da tela, formando um par responsivo com a narração explicativa à esquerda. A intensidade (amplitude $A$) foi integrada diretamente junto com o diagrama no mesmo card compacto, eliminando a barra estendida em bloco separado e permitindo ajuste tanto via slider/teclado quanto por clique georreferenciado direto nos octantes e raios do diagrama.
+

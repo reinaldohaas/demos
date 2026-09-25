@@ -58,6 +58,11 @@ assert(html.includes('id="btnVoiceStop"'), 'Botão parar presente');
 assert(html.includes('id="btnVoiceMute"'), 'Botão silenciar presente');
 assert(html.includes('id="narrationText"'), 'Área de texto de narração presente');
 
+// Diagrama RMM compacto e controle de intensidade integrado
+assert(html.includes('id="rmmDiagram"'), 'Diagrama RMM presente');
+assert(html.includes('id="mjoAmplitude"'), 'Controle de amplitude presente');
+assert(html.includes('rmm-card-compact'), 'Card compacto do diagrama RMM à direita presente');
+
 // Glossário removido desta demonstração conforme instrução
 assert(!html.includes('term-table'), 'Glossário deve permanecer removido');
 
