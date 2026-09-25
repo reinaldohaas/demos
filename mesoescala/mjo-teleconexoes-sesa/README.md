@@ -1,26 +1,39 @@
-# Versão atual: cinco casos documentados em DJF e visão global interativa
+# MJO, Estações, ENOS & Teleconexões com o SESA — Demonstração Didática
 
-A aplicação utiliza `documented-cases.js`, `documented-view.js`, `map-regions.js` e a base vetorial contínua Natural Earth 1:110m (`world-land.js`).
+A aplicação combina exploração interativa completa de escalas planetárias com rigor científico documental, utilizando `documented-cases.js`, `documented-view.js`, `map-regions.js` e a cartografia global contínua Natural Earth 1:110m (`world-land.js`).
 
-### Principais Características da Implementação Atual:
-1. **Visão Global como Abertura:** Mapa global amplo (1200×560 px) centrado no Oceano Pacífico, ilustrando o arco completo de teleconexões Índico–Pacífico–América do Sul. A visão regional da América do Sul (640×520 px) está disponível via alternador de visão.
-2. **Prioridade Visual ao Mapa:** O mapa ocupa a posição de destaque na interface; explicações conceituais e teóricas extensas foram organizadas em painéis recolhíveis (`<details>`).
-3. **Casos Documentados Verificados:** Conjunto curado de cinco casos em DJF com suporte bibliográfico em Fernandes & Alice M. Grimm (2023), iniciando didaticamente por **ENOS neutro · fase 4**, seguido de **ENOS neutro · fase 3**, **El Niño · fase 3**, **La Niña · fase 8** e **El Niño · fase 1**.
-4. **Separação de Variáveis:** Seletores independentes para *Chuva média* e *Frequência de extremos*. Extremos de chuva não são convertidos nem associados indevidamente a risco de granizo ou tornados.
-5. **Sem Parâmetros Fictícios:** Foram eliminados geradores combinatórios livres, percentuais artificiais, probabilidades sintéticas ou magnitudes numéricas não calibradas. Variáveis ausentes permanecem estritamente como `null` no modelo, explicitando que a ausência de dado representado reflete o recorte desta síntese, não ausência de efeito físico.
-6. **TSM Equatorial Qualitativa no Mapa Global:** Distinção gráfica clara entre **El Niño** (anomalia quente), **La Niña** (anomalia fria) e **ENOS Neutro** (próxima à média), devidamente identificadas como representações conceituais qualitativas sem grade contínua ou magnitudes inventadas.
-7. **MJO no Contexto Global:** Posições nominais dos centros de fase segundo o índice multivariado RMM de Wheeler & Hendon (2004), diferenciando claramente a referência de fase geométrica de um campo contínuo de OLR ou convecção observada.
-8. **Teleconexão PSA:** O trem de ondas PSA não é desenhado como um trem permanente nem com centros fixos de alta/baixa pressão inventados. Quando ativo para o caso (com defasagem típica de 7 a 12 dias), exibe-se o corredor conceitual de propagação de ondas de Rossby verificado por Fernandes & Grimm (2023).
-9. **Jatos de Referência Dinâmica:** Jato Subtropical (~200 hPa) representado em uma única linha contínua de referência climatológica; SALLJ (~850 hPa) em uma única seta de transporte de umidade a leste dos Andes. Sem duplicações, sem jato polar e sem equações arbitrárias impondo deslocamentos artificiais pelo ENOS.
-10. **Identificação Geográfica Rigorosa:** Rótulo "SESA" no topo do polígono regional, sem "Bacia do Prata" no rótulo e sem "Andes (Bloqueio Orográfico)" no mapa.
+### Arquitetura & Regra Central de Validade Científica:
+> **Todas as 96 combinações (4 estações × 3 estados de ENOS × 8 fases da MJO) são selecionáveis na interface, mas somente os resultados com suporte bibliográfico verificado recebem destaques gráficos.**
+
+Quando uma combinação selecionada não possui evidência cadastrada na base de dados curada:
+- O mapa global permanece plenamente funcional com a cartografia física, oceanos, a referência esquemática da fase da MJO e a TSM correspondente.
+- **ZCAS e SESA permanecem permanentemente visíveis** como domínios geográficos de referência.
+- Não são geradas anomalias, extremos ou respostas de circulação inventadas.
+- A ausência de resultado é indicada discretamente como *"Resultado não representado nesta síntese documental"*, sem equivaler a efeito nulo ou ausência de influência física na natureza.
+- A interface **nunca** troca automaticamente a fase, o ENOS, a estação, a variável ou o enquadramento escolhidos pelo usuário.
+
+### Principais Características da Interface:
+1. **Controles Completos Restaurados:**
+   - **4 Estações:** DJF (Verão), MAM (Outono), JJA (Inverno) e SON (Primavera).
+   - **3 Estados de ENOS:** El Niño, Neutro e La Niña.
+   - **8 Fases da MJO:** 1 a 8, cobrindo o ciclo completo ao longo do equador.
+   - **Atalhos Rápidos:** Botões para seleção imediata dos casos com destaque documentado na literatura em DJF.
+2. **Visão Global como Padrão:** Mapa amplo (1200×560 px) centrado no Oceano Pacífico, ilustrando o arco completo de teleconexões Índico–Pacífico–América do Sul. Alternador disponível para visão regional da América do Sul (640×520 px).
+3. **Prioridade Visual ao Mapa:** O mapa ocupa a posição central superior; análises conceituais aprofundadas foram organizadas em painéis recolhíveis (`<details>`).
+4. **Separação Rigorosa de Variáveis:** Camadas independentes para *Extremos de chuva* e *Chuva média*. Extremos de precipitação não são inferidos como risco de granizo ou tornados.
+5. **Sem Parâmetros ou Cálculos Fictícios:** Sem geradores combinatórios livres, sem probabilidades sintéticas e sem percentuais artificiais.
+6. **TSM Equatorial Qualitativa:** Representação do sinal no Pacífico equatorial central/leste (El Niño quente, La Niña fria e Neutro próximo à média), claramente identificada como qualitativa.
+7. **MJO no Contexto Global:** Centros nominais de fase para todas as 8 fases segundo o índice RMM de Wheeler & Hendon (2004), diferenciando a referência de fase de uma grade de convecção observada.
+8. **Teleconexão PSA Não Permanente:** Corredor conceitual de propagação de ondas de Rossby (defasagem de 7 a 12 dias) traçado exclusivamente nas combinações com mecanismo verificado na literatura, sem centros A/B fictícios.
+9. **Jatos de Referência Dinâmica:** Jato Subtropical (~200 hPa) em linha única contínua de referência média; SALLJ (~850 hPa) em seta única a leste dos Andes em direção ao SESA. Sem jato polar e sem equações arbitrárias impondo deslocamentos por ENOS.
+10. **Rótulo Geográfico Rigoroso:** Mantido estritamente "SESA" no topo da região, sem "Bacia do Prata" no rótulo e sem "Andes (Bloqueio Orográfico)" no mapa.
 11. **Legenda Inicialmente Oculta:** Exibida e recolhida por botão de alternância acessível com ARIA.
-12. **Preservação Integral do Glossário:** Glossário regional, indígena e cultural totalmente preservado no painel recolhível dedicado.
+12. **Preservação Integral do Glossário:** Todos os 10 termos regionais, populares e indígenas (`SESA`, `SALLJ`, `Pampero`, `Minuano`, `Toró`, `Pé d'água`, `Saci`, `Lestada`, `Sudestada`, `Zonda`) preservados integralmente.
 
-### Fonte Principal e Referências:
+### Fontes Principais:
 - **Fernandes & Alice M. Grimm (2023):** *The Role of the Madden–Julian Oscillation in Modulating Precipitation Extremes in South America during Austral Summer*, Journal of Climate, [https://doi.org/10.1175/JCLI-D-22-0781.1](https://doi.org/10.1175/JCLI-D-22-0781.1).
 - **Wheeler & Hendon (2004):** *An All-Season Real-Time Multivariate MJO Index*, Mon. Wea. Rev.
-- **Natural Earth:** Vetores de polígonos de terra em escala 1:110m (domínio público).
-- **Teste de Verificação:** `node verify-model.cjs` (execução 100% aprovada).
+- **Teste de Verificação Automatizado:** `node verify-model.cjs` (100% aprovado para todas as 96 combinações).
 
 ---
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MJO, ENOS e Teleconexões com o SESA — Casos Documentados em DJF</title>
+  <title>MJO, Estações, ENOS & Teleconexões com o SESA — Demonstração Didática</title>
   <style>
     :root {
       color-scheme: dark;
@@ -14,10 +14,12 @@
       --accent-teal: #2dd4bf;
       --accent-emerald: #34d399;
       --accent-amber: #fbbf24;
+      --accent-orange: #f97316;
       --accent-rose: #ef4444;
       --text: #dbe8f4;
       --muted: #9eafc2;
       --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     }
     * { box-sizing: border-box; }
     body {
@@ -33,7 +35,7 @@
       padding: 24px;
     }
     header {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     .tag {
       color: var(--accent-cyan);
@@ -59,18 +61,54 @@
     a:hover { text-decoration: underline; }
     .muted { color: var(--muted); font-size: 13.5px; }
 
-    /* Controles e Botões */
+    /* Barra de Controles Globais */
+    .controls-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+    .controls-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .control-group-pill {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #0f2237;
+      padding: 5px 8px;
+      border-radius: 10px;
+      border: 1px solid #1f374f;
+      flex-wrap: wrap;
+    }
+    .pill-label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-right: 4px;
+    }
+
     button {
       font: inherit;
       border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 8px 13px;
+      border-radius: 7px;
+      padding: 6px 11px;
       background: #122438;
       color: #e3eef9;
       cursor: pointer;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
-      transition: all 0.18s ease;
+      transition: all 0.16s ease;
     }
     button:hover {
       background: #1a3552;
@@ -80,28 +118,30 @@
       background: #164454;
       border-color: var(--accent-teal);
       color: #bbf7d0;
-      box-shadow: 0 0 10px rgba(45, 212, 191, 0.2);
+      box-shadow: 0 0 10px rgba(45, 212, 191, 0.25);
     }
-
-    /* Seletor de Casos Documentados */
-    .cases-bar {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-bottom: 18px;
-      padding: 12px 16px;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
+    .btn-phase {
+      font-family: var(--font-mono);
+      min-width: 28px;
+      padding: 6px 9px;
+      text-align: center;
+      font-weight: 700;
     }
-    .cases-label {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--accent-cyan);
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      margin-right: 4px;
+    .btn-enso[data-enso="el-nino"][aria-pressed=true] {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.35), rgba(249, 115, 22, 0.35));
+      border-color: #f87171;
+      color: #fecaca;
+    }
+    .btn-enso[data-enso="la-nina"][aria-pressed=true] {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.35), rgba(56, 189, 248, 0.35));
+      border-color: #60a5fa;
+      color: #bfdbfe;
+    }
+    .btn-shortcut {
+      background: #0d1e30;
+      border-color: #24415c;
+      font-size: 12px;
+      padding: 4px 9px;
     }
 
     /* Card Principal com Mapa Prioritário */
@@ -295,18 +335,57 @@
 <body>
 <main>
   <header>
-    <div class="tag">DJF · Verão Austral · Casos Publicados na Literatura</div>
-    <h1>MJO e ENOS: Teleconexões com o SESA</h1>
+    <div class="tag">Mesoescala & Escala Planetária · Demonstração Interativa</div>
+    <h1>MJO, Estações, ENOS & Teleconexões com o SESA</h1>
     <p class="muted">
-      Síntese didática baseada exclusivamente em resultados observacionais verificados por Fernandes & Alice M. Grimm (2023). Cada caso exibe apenas a variável e a região documentadas, sem sínteses numéricas não calibradas ou probabilidades sintéticas.
+      Explore todas as combinações de estações, fases da MJO e ENOS no contexto global contínuo. Somente os resultados com respaldo científico documentado na literatura recebem destaques gráficos; combinações sem evidência cadastrada mantêm as referências geográficas de ZCAS e SESA sem imposição de dados artificiais.
     </p>
   </header>
 
-  <!-- Barra de Seleção dos Casos Documentados -->
-  <nav class="cases-bar" aria-label="Casos documentados">
-    <span class="cases-label">Casos DJF:</span>
-    <div id="cases" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
-  </nav>
+  <!-- Painel de Controles: Estações, ENOS, Fases da MJO e Destaques Documentados -->
+  <section class="controls-panel">
+    <div class="controls-row">
+      <!-- Seletor de Estação do Ano -->
+      <div class="control-group-pill">
+        <span class="pill-label">Estação:</span>
+        <button data-season="DJF" aria-pressed="true">☀️ DJF (Verão)</button>
+        <button data-season="MAM" aria-pressed="false">🍂 MAM (Outono)</button>
+        <button data-season="JJA" aria-pressed="false">❄️ JJA (Inverno)</button>
+        <button data-season="SON" aria-pressed="false">🌸 SON (Primavera)</button>
+      </div>
+
+      <!-- Seletor de ENOS -->
+      <div class="control-group-pill">
+        <span class="pill-label">ENOS:</span>
+        <button class="btn-enso" data-enso="el-nino" aria-pressed="false">🔥 El Niño</button>
+        <button class="btn-enso" data-enso="neutro" aria-pressed="true">⚖️ Neutro</button>
+        <button class="btn-enso" data-enso="la-nina" aria-pressed="false">🧊 La Niña</button>
+      </div>
+
+      <!-- Seletor de Fases da MJO (1 a 8) -->
+      <div class="control-group-pill">
+        <span class="pill-label">MJO (Fase):</span>
+        <button class="btn-phase" data-phase="1" aria-pressed="false">1</button>
+        <button class="btn-phase" data-phase="2" aria-pressed="false">2</button>
+        <button class="btn-phase" data-phase="3" aria-pressed="false">3</button>
+        <button class="btn-phase" data-phase="4" aria-pressed="true">4</button>
+        <button class="btn-phase" data-phase="5" aria-pressed="false">5</button>
+        <button class="btn-phase" data-phase="6" aria-pressed="false">6</button>
+        <button class="btn-phase" data-phase="7" aria-pressed="false">7</button>
+        <button class="btn-phase" data-phase="8" aria-pressed="false">8</button>
+      </div>
+    </div>
+
+    <!-- Atalhos para os Casos com Destaque Documentado -->
+    <div class="controls-row" style="border-top: 1px solid #1a344e; padding-top: 8px;">
+      <span class="pill-label" style="color:var(--accent-teal);">Casos documentados em DJF:</span>
+      <button class="btn-shortcut" data-shortcut="DJF-neutro-4" data-season="DJF" data-enso="neutro" data-phase="4" data-metric="extremes" aria-pressed="true">Neutro · Fase 4 (Extremos SESA)</button>
+      <button class="btn-shortcut" data-shortcut="DJF-neutro-3" data-season="DJF" data-enso="neutro" data-phase="3" data-metric="extremes" aria-pressed="false">Neutro · Fase 3 (Extremos SESA)</button>
+      <button class="btn-shortcut" data-shortcut="DJF-el-nino-3" data-season="DJF" data-enso="el-nino" data-phase="3" data-metric="extremes" aria-pressed="false">El Niño · Fase 3 (Extremos SESA)</button>
+      <button class="btn-shortcut" data-shortcut="DJF-la-nina-8" data-season="DJF" data-enso="la-nina" data-phase="8" data-metric="mean" aria-pressed="false">La Niña · Fase 8 (Chuva ZCAS)</button>
+      <button class="btn-shortcut" data-shortcut="DJF-el-nino-1" data-season="DJF" data-enso="el-nino" data-phase="1" data-metric="extremes" aria-pressed="false">El Niño · Fase 1 (Extremos CESA & ZCAS)</button>
+    </div>
+  </section>
 
   <!-- Card Principal com Prioridade Visual ao Mapa -->
   <section class="map-card">
@@ -351,28 +430,28 @@
           <b>Base Cartográfica:</b> Polígonos de terra Natural Earth 1:110m (projeção equirretangular contínua). Visão global com Pacífico centralizado e contexto Índico–Pacífico–América do Sul.
         </div>
         <div>
-          <b>Domínios Regionais:</b> Polígono SESA (Sul do Brasil, Uruguai, Paraguai, Nordeste da Argentina) identificado com "SESA" no topo do domínio. Polígono ZCAS destacado quando documentado.
+          <b>Domínios Geográficos Permanentes:</b> Polígono SESA (Sul do Brasil, Uruguai, Paraguai, Nordeste da Argentina) identificado com "SESA" no topo da região. Polígono ZCAS sempre visível como referência de monção.
         </div>
         <div>
-          <b>Sinal de Chuva:</b> Símbolo de nuvem com chuva e seta indicando aumento regional documentado. Não representa magnitude numérica nem área de significância estatística.
+          <b>Destaque de Chuva:</b> Símbolo de nuvem com chuva e seta indicando aumento documentado para a variável selecionada. Presente apenas em combinações comprovadas na literatura; sem símbolo quando não documentado.
         </div>
         <div>
           <b>TSM Equatorial:</b> Sinal anômalo qualitativo no Pacífico central/leste (El Niño quente, La Niña fria e Neutro sem anomalia expressiva). Sem grade numérica artificial.
         </div>
         <div>
-          <b>MJO (Fase RMM):</b> Posição geográfica nominal do envelope tropical segundo Wheeler & Hendon (2004), distinta de grade contínua de convecção observada.
+          <b>MJO (Fases 1 a 8):</b> Posição geográfica nominal do envelope tropical segundo Wheeler & Hendon (2004), distinta de grade contínua de convecção observada.
         </div>
         <div>
           <b>Jatos (referência):</b> Jato Subtropical (~200 hPa) em linha única de referência; SALLJ (~850 hPa) em seta única a leste dos Andes. Sem jato polar e sem deslocamento artificial por fórmulas.
         </div>
         <div>
-          <b>Teleconexão PSA:</b> Corredor conceitual de propagação de ondas de Rossby nas fases com mecanismo verificado na literatura (defasagem típica de 7 a 12 dias), sem posições fictícias de centros A/B.
+          <b>Teleconexão PSA:</b> Corredor conceitual de propagação de ondas de Rossby exibido exclusivamente nas combinações com mecanismo verificado na literatura (defasagem de 7 a 12 dias), sem posições fictícias de centros A/B.
         </div>
       </div>
     </div>
 
     <p class="muted" style="margin-top:10px;">
-      Mapa com base em Natural Earth. Símbolos localizam resultados regionais; manchas de TSM, MJO, jatos e teleconexões são qualitativas e didáticas, sem magnitudes ou áreas de significância impostas.
+      Base cartográfica: Natural Earth. ZCAS e SESA permanecem visíveis como referências espaciais permanentes. Ausência de destaque gráfico indica resultado não representado nesta síntese documental, não efeito zero.
     </p>
   </section>
 
@@ -383,7 +462,7 @@
       <div id="result" aria-live="polite"></div>
       <p style="margin-top:12px;">
         <a href="https://doi.org/10.1175/JCLI-D-22-0781.1" target="_blank" rel="noopener">Fernandes & Alice M. Grimm (2023)</a><br>
-        <span class="muted">J. Climate · Seção 5 e Figura 12 (DJF). Mapas de chuva média e frequência de extremos analisados separadamente.</span>
+        <span class="muted">Journal of Climate · Seção 5 e Figura 12. Mapas de chuva média e frequência de extremos analisados de forma independente.</span>
       </p>
     </div>
 
@@ -427,7 +506,7 @@
           <b>Extremos de chuva não equivalem a risco de granizo ou tornados:</b> Eventos extremos de precipitação refletem acumulados elevados em curto ou médio período (associados a transporte intenso de umidade e convergência de baixos níveis). Granizo e tornados dependem criticamente de instabilidade termodinâmica local concentrada (CAPE) e cisalhamento vertical do vento na camada 0–1 km e 0–6 km, que não devem ser inferidos automaticamente a partir de anomalias de precipitação.
         </p>
         <p class="muted">
-          A ordem inicial da demonstração (Neutro fase 4 seguida de fase 3) é uma comparação didática orientada pelos maiores destaques de extremos no SESA em anos neutros; a progressão física natural no ciclo da MJO ocorre de oeste para leste (fase 3 → fase 4). O ENOS neutro constitui o recorte de referência específico, não a média de todos os estados do ENOS.
+          A progressão física natural no ciclo da MJO ocorre de oeste para leste (fase 1 → 2 → ... → 8 → 1). O ENOS neutro constitui o recorte de referência específico, não a média de todos os estados do ENOS.
         </p>
       </div>
     </details>
@@ -460,7 +539,7 @@
           <b>SALLJ (Jato de Baixos Níveis da América do Sul, ~850 hPa):</b> Corrente rápida que escoa ao longo da encosta leste da Cordilheira dos Andes. Resulta da combinação de bloqueio orográfico andino, canalização mecânica, gradiente barométrico sinótico (Alta Subtropical vs. Baixa do Chaco), desacoplamento turbulento no ciclo diurno e forçantes baroclínicas. Descarrega vapor d'água amazônico no SESA, alimentando sistemas convectivos de mesoescala.
         </p>
         <p class="muted">
-          Nesta demonstração, ambos os jatos são apresentados com traçados de referência dinâmica geométrica (linha para o subtropical e seta para o SALLJ). Foram retiradas fórmulas sintéticas que impunham deslocamentos latitudinais e acelerações artificiais em função do ENOS. O jato polar não é representado para manter o foco rigoroso na escala subtropical.
+          Nesta demonstração, ambos os jatos são apresentados com traçados de referência dinâmica geométrica (linha única para o subtropical e seta única para o SALLJ). Foram retiradas fórmulas sintéticas que impunham deslocamentos latitudinais e acelerações artificiais em função do ENOS. O jato polar não é representado para manter o foco rigoroso na escala subtropical.
         </p>
       </div>
     </details>
@@ -469,13 +548,13 @@
       <summary>Limites desta síntese e integridade metodológica</summary>
       <div class="details-content">
         <p>
-          Esta síntese reúne cinco casos documentados em DJF com base em Fernandes & Alice M. Grimm (2023). Quando uma variável consta como <i>"Não representado nesta síntese"</i> (armazenada como <code>null</code> no modelo de dados), isso reflete uma escolha de integridade:
+          Esta síntese reúne evidências observacionais documentadas por Fernandes & Alice M. Grimm (2023). Quando uma variável consta como <i>"Resultado não representado nesta síntese"</i> (armazenada como <code>null</code> no modelo de dados), isso reflete uma escolha estrita de integridade científica:
         </p>
         <p>
           1. <b>Não inferência automática:</b> A evidência de que a frequência de extremos aumenta em determinada fase não é convertida automaticamente em anomalia de chuva média.
         </p>
         <p>
-          2. <b>Sem falsos zeros:</b> Ausência de resultado selecionado não significa ausência de impacto físico ou anomalia nula na natureza; significa unicamente que o dado específico não compõe o recorte curado desta demonstração.
+          2. <b>Sem falsos zeros:</b> Ausência de resultado cadastrado não significa ausência de impacto físico ou anomalia nula na natureza; significa unicamente que o dado específico não compõe o recorte curado desta demonstração.
         </p>
         <p>
           3. <b>Sem parâmetros artificiais:</b> Foram eliminados geradores livres de combinações não sustentadas, réguas logísticas com probabilidades sintéticas e campos artificiais de TSM.

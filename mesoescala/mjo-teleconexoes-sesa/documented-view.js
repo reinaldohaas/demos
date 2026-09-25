@@ -1,8 +1,11 @@
 const $ = id => document.getElementById(id);
-let selectedCase = DOCUMENTED_CASES[0];
+
+let currentSeason = 'DJF';
+let currentEnso = 'neutro';
+let currentPhase = 4;
 let metric = 'extremes';
 let mapView = 'global';
-const visibleLayers = {mjo:true, sst:true, jets:false, psa:true};
+const visibleLayers = { mjo: true, sst: true, jets: false, psa: true };
 const ns = 'http://www.w3.org/2000/svg';
 
 function svg(tag, attributes, text) {
@@ -26,6 +29,20 @@ function polygon(points, fill, stroke, strokeWidth = 1.5, dash = null) {
   };
   if (dash) attrs['stroke-dasharray'] = dash;
   return svg('polygon', attrs);
+}
+
+function getMjoPhaseCoords(phase) {
+  switch (Number(phase)) {
+    case 1: return { lon: 30, region: 'África e Índico Ocidental' };
+    case 2: return { lon: 65, region: 'Oceano Índico Ocidental/Central' };
+    case 3: return { lon: 85, region: 'Oceano Índico Central/Leste' };
+    case 4: return { lon: 120, region: 'Continente Marítimo' };
+    case 5: return { lon: 140, region: 'Continente Marítimo Oriental' };
+    case 6: return { lon: 160, region: 'Pacífico Ocidental' };
+    case 7: return { lon: -175, region: 'Pacífico Central (Linha de Data)' };
+    case 8: return { lon: -45, region: 'Hemisfério Ocidental e Atlântico' };
+    default: return { lon: 0, region: 'Global' };
+  }
 }
 
 function drawLand() {
@@ -59,21 +76,21 @@ function drawLand() {
   }
 }
 
-function drawGlobalContext() {
+function drawGlobalContext(evidence) {
   if (mapView !== 'global') return;
 
-  // TSM Equatorial no mapa global: distinção qualitativa de El Niño, La Niña e Neutralidade
+  // TSM Equatorial no mapa global: distinção qualitativa clara entre El Niño, La Niña e Neutro
   if (visibleLayers.sst) {
     const [sx, sy] = project(-135, 0);
-    if (selectedCase.enso === 'el-nino') {
-      svg('ellipse', {cx: sx, cy: sy, rx: 130, ry: 26, fill: '#ef4444', 'fill-opacity': 0.35, stroke: '#f87171', 'stroke-dasharray': '5 4'});
-      svg('text', {x: sx, y: sy + 44, fill: '#fca5a5', 'font-size': 13, 'font-weight': '600', 'text-anchor': 'middle'}, 'El Niño · TSM equatorial anômala quente (qualitativo)');
-    } else if (selectedCase.enso === 'la-nina') {
-      svg('ellipse', {cx: sx, cy: sy, rx: 130, ry: 26, fill: '#2563eb', 'fill-opacity': 0.35, stroke: '#60a5fa', 'stroke-dasharray': '5 4'});
-      svg('text', {x: sx, y: sy + 44, fill: '#93c5fd', 'font-size': 13, 'font-weight': '600', 'text-anchor': 'middle'}, 'La Niña · TSM equatorial anômala fria (qualitativo)');
+    if (currentEnso === 'el-nino') {
+      svg('ellipse', { cx: sx, cy: sy, rx: 130, ry: 26, fill: '#ef4444', 'fill-opacity': 0.35, stroke: '#f87171', 'stroke-dasharray': '5 4' });
+      svg('text', { x: sx, y: sy + 44, fill: '#fca5a5', 'font-size': 13, 'font-weight': '600', 'text-anchor': 'middle' }, 'El Niño · TSM equatorial anômala quente (qualitativo)');
+    } else if (currentEnso === 'la-nina') {
+      svg('ellipse', { cx: sx, cy: sy, rx: 130, ry: 26, fill: '#2563eb', 'fill-opacity': 0.35, stroke: '#60a5fa', 'stroke-dasharray': '5 4' });
+      svg('text', { x: sx, y: sy + 44, fill: '#93c5fd', 'font-size': 13, 'font-weight': '600', 'text-anchor': 'middle' }, 'La Niña · TSM equatorial anômala fria (qualitativo)');
     } else {
-      svg('ellipse', {cx: sx, cy: sy, rx: 130, ry: 20, fill: '#0ea5e9', 'fill-opacity': 0.12, stroke: '#64748b', 'stroke-dasharray': '4 4'});
-      svg('text', {x: sx, y: sy + 38, fill: '#94a3b8', 'font-size': 13, 'text-anchor': 'middle'}, 'ENOS Neutro · TSM equatorial próxima à média (qualitativo)');
+      svg('ellipse', { cx: sx, cy: sy, rx: 130, ry: 20, fill: '#0ea5e9', 'fill-opacity': 0.12, stroke: '#64748b', 'stroke-dasharray': '4 4' });
+      svg('text', { x: sx, y: sy + 38, fill: '#94a3b8', 'font-size': 13, 'text-anchor': 'middle' }, 'ENOS Neutro · TSM equatorial próxima à média (qualitativo)');
     }
   }
 
@@ -82,21 +99,21 @@ function drawGlobalContext() {
   // Rótulos de referência dos Oceanos
   for (const [lon, lat, label] of [[80, -48, 'OCEANO ÍNDICO'], [-145, -48, 'OCEANO PACÍFICO'], [-30, -48, 'OCEANO ATLÂNTICO']]) {
     const [x, y] = project(lon, lat);
-    svg('text', {x, y, fill: '#5a829e', 'font-size': 14, 'letter-spacing': 2.5, 'text-anchor': 'middle', 'font-weight': '600'}, label);
+    svg('text', { x, y, fill: '#5a829e', 'font-size': 14, 'letter-spacing': 2.5, 'text-anchor': 'middle', 'font-weight': '600' }, label);
   }
 
-  // MJO: Referência nominal de fase RMM (Wheeler & Hendon 2004)
+  // MJO: Referência nominal de fase RMM (Wheeler & Hendon 2004) para as fases 1 a 8
   if (visibleLayers.mjo) {
-    const phaseLon = selectedCase.phase === 1 ? 30 : selectedCase.phase === 3 ? 85 : selectedCase.phase === 4 ? 125 : -45;
-    const [mx, my] = project(phaseLon, 0);
-    svg('ellipse', {cx: mx, cy: my, rx: 46, ry: 24, fill: '#2dd4bf', 'fill-opacity': 0.15, stroke: '#5eead4', 'stroke-dasharray': '5 4'});
-    svg('text', {x: mx, y: my - 34, fill: '#88efdf', 'font-size': 15, 'font-weight': '700', 'text-anchor': 'middle'}, `MJO · fase ${selectedCase.phase}`);
-    svg('text', {x: mx, y: my - 16, fill: '#99d9d2', 'font-size': 11, 'text-anchor': 'middle'}, 'ref. nominal RMM');
-    svg('text', {x: mx, y: my + 38, fill: '#7298a6', 'font-size': 11, 'text-anchor': 'middle'}, '(não é convecção observada)');
+    const phaseInfo = getMjoPhaseCoords(currentPhase);
+    const [mx, my] = project(phaseInfo.lon, 0);
+    svg('ellipse', { cx: mx, cy: my, rx: 48, ry: 24, fill: '#2dd4bf', 'fill-opacity': 0.15, stroke: '#5eead4', 'stroke-dasharray': '5 4' });
+    svg('text', { x: mx, y: my - 34, fill: '#88efdf', 'font-size': 15, 'font-weight': '700', 'text-anchor': 'middle' }, `MJO · fase ${currentPhase}`);
+    svg('text', { x: mx, y: my - 16, fill: '#99d9d2', 'font-size': 11, 'text-anchor': 'middle' }, `ref. nominal RMM · ${phaseInfo.region}`);
+    svg('text', { x: mx, y: my + 38, fill: '#7298a6', 'font-size': 11, 'text-anchor': 'middle' }, '(referência esquemática de fase · não é convecção observada)');
   }
 
-  // Teleconexão PSA conceitual: representada somente quando há mecanismo verificado para o caso
-  if (visibleLayers.psa && selectedCase.psa) {
+  // Teleconexão PSA conceitual: representada somente quando há mecanismo verificado para a combinação
+  if (visibleLayers.psa && evidence && evidence.psa) {
     const p1 = project(-140, -32);
     const p2 = project(-100, -46);
     const p3 = project(-60, -36);
@@ -105,7 +122,7 @@ function drawGlobalContext() {
       fill: 'none', stroke: '#fbbf24', 'stroke-width': 2.2, 'stroke-dasharray': '6 5'
     });
     const labelPos = project(-100, -49);
-    svg('text', {x: labelPos[0], y: labelPos[1], fill: '#fde68a', 'font-size': 12, 'text-anchor': 'middle'}, 'Corredor PSA (ondas de Rossby · defasagem ~7–12 d)');
+    svg('text', { x: labelPos[0], y: labelPos[1], fill: '#fde68a', 'font-size': 12, 'text-anchor': 'middle' }, 'Corredor PSA (ondas de Rossby · defasagem ~7–12 d)');
   }
 }
 
@@ -117,15 +134,15 @@ function drawJets() {
     const pts = [[140, -28], [175, -29], [-160, -30], [-120, -31], [-80, -30], [-55, -29], [-30, -28]];
     const projectedPts = pts.map(p => project(...p));
     const d = `M ` + projectedPts.map(p => `${p[0]},${p[1]}`).join(' L ');
-    svg('path', {d, fill: 'none', stroke: '#38bdf8', 'stroke-width': 2.5, 'stroke-dasharray': '8 5'});
+    svg('path', { d, fill: 'none', stroke: '#38bdf8', 'stroke-width': 2.5, 'stroke-dasharray': '8 5' });
     const [jx, jy] = project(-115, -28);
-    svg('text', {x: jx, y: jy - 7, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle'}, 'Jato Subtropical (~200 hPa · referência)');
+    svg('text', { x: jx, y: jy - 7, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle' }, 'Jato Subtropical (~200 hPa · referência)');
   } else {
     const p1 = project(-82, -31);
     const p2 = project(-38, -28);
-    svg('line', {x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: '#38bdf8', 'stroke-width': 2.5, 'stroke-dasharray': '8 5'});
+    svg('line', { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: '#38bdf8', 'stroke-width': 2.5, 'stroke-dasharray': '8 5' });
     const [jx, jy] = project(-60, -29);
-    svg('text', {x: jx, y: jy - 7, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle'}, 'Jato Subtropical (200 hPa)');
+    svg('text', { x: jx, y: jy - 7, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle' }, 'Jato Subtropical (200 hPa)');
   }
 
   // SALLJ (~850 hPa): representado com uma seta única ao longo do leste dos Andes em direção ao SESA
@@ -136,17 +153,16 @@ function drawJets() {
     d: `M ${salljStart[0]} ${salljStart[1]} Q ${salljMid[0]} ${salljMid[1]} ${salljEnd[0]} ${salljEnd[1]}`,
     fill: 'none', stroke: '#34d399', 'stroke-width': 3.2
   });
-  // Ponta da seta do SALLJ
   const endX = salljEnd[0], endY = salljEnd[1];
   svg('polygon', {
     points: `${endX},${endY} ${endX - 7},${endY - 14} ${endX + 7},${endY - 10}`,
     fill: '#34d399'
   });
   const [sx, sy] = project(-65, -22);
-  svg('text', {x: sx, y: sy, fill: '#6ee7b7', 'font-size': 12, 'font-weight': '600', 'text-anchor': 'end'}, 'SALLJ (~850 hPa)');
+  svg('text', { x: sx, y: sy, fill: '#6ee7b7', 'font-size': 12, 'font-weight': '600', 'text-anchor': 'end' }, 'SALLJ (~850 hPa)');
 }
 
-function drawMap(result) {
+function drawMap(evidence) {
   $('mapDrawing').replaceChildren();
   $('map').setAttribute('viewBox', mapView === 'global' ? '0 0 1200 560' : '0 0 640 520');
 
@@ -161,7 +177,7 @@ function drawMap(result) {
   }
 
   if (mapView === 'global') {
-    drawGlobalContext();
+    drawGlobalContext(evidence);
   } else {
     drawLand();
   }
@@ -169,18 +185,23 @@ function drawMap(result) {
   // Jatos (Subtropical e SALLJ)
   drawJets();
 
-  // Delimitação do SESA: rótulo mantido rigorosamente como "SESA" no topo da região, sem "Bacia do Prata"
-  // As duas regiões são referências permanentes, mesmo sem efeito documentado.
-  polygon(REGIONS.SESA_POLY, result?.region === 'SESA' ? '#2dd4bf26' : 'none', result?.region === 'SESA' ? '#5eead4' : '#486780', 1.8);
-  polygon(REGIONS.ZCAS_POLY, result?.region === 'ZCAS' ? '#2dd4bf26' : 'none', result?.region === 'ZCAS' ? '#5eead4' : '#486780', 1.8, '4 3');
-  const [zx, zy] = project(-37, -17);
-  svg('text', {x: zx + 8, y: zy, fill: '#a5cce3', 'font-size': 15, 'font-weight': '700', 'text-anchor': 'start'}, 'ZCAS');
+  // Delimitação do SESA: SEMPRE VISÍVEL como referência geográfica
+  // Rótulo mantido rigorosamente como "SESA" no topo da região, sem "Bacia do Prata"
+  const result = evidence ? evidence[metric] : null;
+  const isSesaHighlighted = result && result.region === 'SESA';
+  polygon(REGIONS.SESA_POLY, isSesaHighlighted ? 'rgba(56, 189, 248, 0.12)' : 'rgba(56, 189, 248, 0.03)', isSesaHighlighted ? '#38bdf8' : '#486780', isSesaHighlighted ? 2.2 : 1.5);
   const [sx, sy] = project(-56, -21);
-  svg('text', {x: sx, y: sy - 7, fill: '#a5cce3', 'font-size': 17, 'font-weight': '700', 'text-anchor': 'middle'}, 'SESA');
+  svg('text', { x: sx, y: sy - 7, fill: isSesaHighlighted ? '#7dd3fc' : '#a5cce3', 'font-size': 17, 'font-weight': '700', 'text-anchor': 'middle' }, 'SESA');
 
-  // Resultado documentado para a variável selecionada (Chuva média ou Extremos)
+  // Delimitação da ZCAS: SEMPRE VISÍVEL como referência geográfica
+  const isZcasHighlighted = result && result.region === 'ZCAS';
+  polygon(REGIONS.ZCAS_POLY, isZcasHighlighted ? 'rgba(45, 212, 191, 0.14)' : 'rgba(45, 212, 191, 0.02)', isZcasHighlighted ? '#2dd4bf' : '#3e5c76', isZcasHighlighted ? 2.2 : 1.4, '4 3');
+  const [zx, zy] = project(-48, -19);
+  svg('text', { x: zx, y: zy, fill: isZcasHighlighted ? '#5eead4' : '#6b8ca8', 'font-size': 15, 'font-weight': '700', 'text-anchor': 'middle' }, 'ZCAS');
+
+  // Resultado documentado: exibido SOMENTE quando verificado para a combinação e métrica ativas
   if (result) {
-    const location = result.region === 'SESA' ? [-56, -30] : result.region === 'CESA' ? [-46, -15] : [-43, -21];
+    const location = result.region === 'SESA' ? [-56, -30] : result.region === 'CESA' ? [-46, -15] : [-43, -22];
     const [x, y] = project(...location);
 
     // Símbolo de chuva qualitativo
@@ -194,70 +215,124 @@ function drawMap(result) {
         stroke: '#73d8da', 'stroke-width': metric === 'extremes' ? 4 : 2.5, 'stroke-linecap': 'round'
       });
     }
-    svg('text', {x: x + 47, y: y + 5, fill: '#aaf4e7', 'font-size': 24, 'font-weight': '800'}, '↑');
-    svg('text', {x, y: y + 49, fill: '#c6f6ef', 'font-size': 14, 'font-weight': '600', 'text-anchor': 'middle'},
+    svg('text', { x: x + 47, y: y + 5, fill: '#aaf4e7', 'font-size': 24, 'font-weight': '800' }, '↑');
+    svg('text', { x, y: y + 49, fill: '#c6f6ef', 'font-size': 14, 'font-weight': '600', 'text-anchor': 'middle' },
       metric === 'extremes' ? 'Extremos mais frequentes' : 'Chuva média favorecida');
 
     if (result.region === 'CESA') {
-      svg('text', {x, y: y - 45, fill: '#a5cce3', 'font-size': 17, 'font-weight': '700', 'text-anchor': 'middle'},
-        result.region === 'CESA' ? 'CESA · centro-leste' : result.region);
+      svg('text', { x, y: y - 45, fill: '#a5cce3', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'CESA · centro-leste');
     }
   }
 
   $('mapTitle').textContent = mapView === 'global' ? 'Visão global: MJO, Pacífico e América do Sul' : 'América do Sul (visão regional)';
-  $('mapDesc').textContent = 'ZCAS e SESA permanecem como referências geográficas. ' + (result ? `${result.region}: ${result.text} Símbolo regional sem magnitude ou extensão quantitativa.` : 'Sem destaque de efeito para esta variável; isso não indica efeito zero.');
+  $('mapDesc').textContent = result ? `${result.region}: ${result.text} Símbolo regional sem magnitude ou extensão quantitativa.` : 'Mapa de referência com ZCAS e SESA. Sem resultado desenhado para esta combinação.';
 }
 
 function update() {
-  const c = selectedCase;
-  const result = c[metric];
+  // Atualizar atributos visuais dos botões de controle
+  document.querySelectorAll('[data-season]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.season === currentSeason)));
+  document.querySelectorAll('[data-enso]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.enso === currentEnso)));
+  document.querySelectorAll('[data-phase]').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.phase) === Number(currentPhase))));
+  document.querySelectorAll('[data-shortcut]').forEach(b => {
+    const isCurrent = b.dataset.season === currentSeason && b.dataset.enso === currentEnso && Number(b.dataset.phase) === Number(currentPhase);
+    b.setAttribute('aria-pressed', String(isCurrent));
+  });
 
   $('globalView').setAttribute('aria-pressed', String(mapView === 'global'));
   $('regionalView').setAttribute('aria-pressed', String(mapView === 'regional'));
-  document.querySelectorAll('[data-case]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.case === c.id)));
   for (const m of ['mean', 'extremes']) $(m).setAttribute('aria-pressed', String(m === metric));
 
-  $('caseTitle').textContent = `DJF · ${c.label}`;
-  $('caseSummary').textContent = result ? result.text : 'Não representado nesta síntese: nenhum efeito é desenhado para esta variável.';
+  // Buscar evidência na base curada
+  const evidence = findDocumentedCase(currentSeason, currentEnso, currentPhase);
+  const result = evidence ? evidence[metric] : null;
 
+  const ensoLabel = currentEnso === 'el-nino' ? 'El Niño' : currentEnso === 'la-nina' ? 'La Niña' : 'ENOS Neutro';
+  $('caseTitle').textContent = `${currentSeason} · ${ensoLabel} · MJO Fase ${currentPhase}`;
+
+  // Resumo do Caso
+  if (result) {
+    $('caseSummary').textContent = `${result.text} (${result.figure || 'Fernandes & Grimm 2023'})`;
+    $('caseSummary').style.color = 'var(--accent-teal)';
+  } else {
+    $('caseSummary').textContent = 'Resultado não representado nesta síntese documental.';
+    $('caseSummary').style.color = 'var(--muted)';
+  }
+
+  // Painel de Resultados
   $('result').replaceChildren();
   const value = document.createElement('p');
   value.className = result ? 'value' : 'muted';
-  value.textContent = result ? `${metric === 'extremes' ? 'Frequência de extremos' : 'Chuva média'} · ${result.region}` : 'Sem resultado selecionado para esta variável';
+  value.textContent = result
+    ? `${metric === 'extremes' ? 'Frequência de extremos' : 'Chuva média'} · ${result.region}`
+    : 'Resultado não representado nesta síntese';
   $('result').appendChild(value);
 
   const description = document.createElement('p');
-  description.textContent = result ? result.text : 'A evidência de outra variável não foi transferida automaticamente para esta.';
+  description.textContent = result
+    ? result.text
+    : `Não há evidência curada desta combinação (${currentSeason}, ${ensoLabel}, Fase ${currentPhase}) para ${metric === 'extremes' ? 'frequência de extremos' : 'chuva média'} no recorte documental atual de Fernandes & Alice M. Grimm (2023). A ausência de resultado não equivale a efeito zero ou ausência de influência física.`;
   $('result').appendChild(description);
 
-  $('sstBand').className = 'band' + (c.enso === 'el-nino' ? ' warm' : c.enso === 'la-nina' ? ' cold' : '');
-  $('sstText').textContent = c.enso === 'el-nino'
+  // Faixa de TSM do ENOS
+  $('sstBand').className = 'band' + (currentEnso === 'el-nino' ? ' warm' : currentEnso === 'la-nina' ? ' cold' : '');
+  $('sstText').textContent = currentEnso === 'el-nino'
     ? 'El Niño · anomalias quentes no Pacífico equatorial central/leste'
-    : c.enso === 'la-nina'
+    : currentEnso === 'la-nina'
       ? 'La Niña · anomalias frias no Pacífico equatorial central/leste'
       : 'ENOS neutro · sem padrão forte de El Niño ou La Niña; não significa anomalia local zero.';
 
-  $('phaseInfo').textContent = `Fase ${c.phase} · ${c.phase === 3 ? 'Oceano Índico' : c.phase === 4 ? 'Continente Marítimo' : c.phase === 1 ? 'África e Oceano Índico Ocidental' : 'Hemisfério Ocidental e Atlântico'} — referência nominal RMM de Wheeler & Hendon (2004), distinta de grade contínua de convecção observada.`;
+  // Informações de Fase da MJO
+  const phaseInfo = getMjoPhaseCoords(currentPhase);
+  $('phaseInfo').textContent = `Fase ${currentPhase} · ${phaseInfo.region} — referência nominal RMM de Wheeler & Hendon (2004), distinta de grade contínua de convecção observada.`;
 
-  $('psaCard').hidden = !c.psa;
-  $('psaText').textContent = c.psa || '';
+  // Mecanismo PSA
+  if (evidence && evidence.psa) {
+    $('psaCard').hidden = false;
+    $('psaText').textContent = evidence.psa;
+  } else {
+    $('psaCard').hidden = false;
+    $('psaText').textContent = 'Sem mecanismo de teleconexão PSA documentado especificamente para esta combinação no recorte curado da literatura.';
+  }
 
-  drawMap(result);
+  drawMap(evidence);
 }
 
-// Inicialização dos botões de casos documentados
-for (const c of DOCUMENTED_CASES) {
-  const b = document.createElement('button');
-  b.dataset.case = c.id;
-  b.textContent = c.label;
+// Event Listeners: Estações (DJF, MAM, JJA, SON)
+document.querySelectorAll('[data-season]').forEach(b => {
   b.addEventListener('click', () => {
-    selectedCase = c;
-    // Preservar a variável escolhida ao comparar casos; apenas o destaque muda.
+    currentSeason = b.dataset.season;
     update();
   });
-  $('cases').appendChild(b);
-}
+});
 
+// Event Listeners: ENOS (El Niño, Neutro, La Niña)
+document.querySelectorAll('[data-enso]').forEach(b => {
+  b.addEventListener('click', () => {
+    currentEnso = b.dataset.enso;
+    update();
+  });
+});
+
+// Event Listeners: MJO Fases 1 a 8
+document.querySelectorAll('[data-phase]').forEach(b => {
+  b.addEventListener('click', () => {
+    currentPhase = Number(b.dataset.phase);
+    update();
+  });
+});
+
+// Event Listeners: Atalhos para os Casos Documentados com Destaque
+document.querySelectorAll('[data-shortcut]').forEach(b => {
+  b.addEventListener('click', () => {
+    currentSeason = b.dataset.season;
+    currentEnso = b.dataset.enso;
+    currentPhase = Number(b.dataset.phase);
+    if (b.dataset.metric) metric = b.dataset.metric;
+    update();
+  });
+});
+
+// Variáveis: Extremos vs Chuva Média
 for (const m of ['mean', 'extremes']) {
   $(m).addEventListener('click', () => {
     metric = m;
@@ -265,12 +340,14 @@ for (const m of ['mean', 'extremes']) {
   });
 }
 
+// Alternância da Legenda
 $('legendButton').addEventListener('click', () => {
   $('legend').hidden = !$('legend').hidden;
   $('legendButton').setAttribute('aria-expanded', String(!$('legend').hidden));
   $('legendButton').textContent = $('legend').hidden ? 'Mostrar legenda' : 'Ocultar legenda';
 });
 
+// Alternância de Visão Global / Regional
 for (const [id, view] of [['globalView', 'global'], ['regionalView', 'regional']]) {
   $(id).addEventListener('click', () => {
     mapView = view;
@@ -278,6 +355,7 @@ for (const [id, view] of [['globalView', 'global'], ['regionalView', 'regional']
   });
 }
 
+// Alternância de Camadas
 for (const [id, layer] of [['mjoLayer', 'mjo'], ['sstLayer', 'sst'], ['jetsLayer', 'jets'], ['psaLayer', 'psa']]) {
   $(id).addEventListener('click', () => {
     visibleLayers[layer] = !visibleLayers[layer];
@@ -286,4 +364,5 @@ for (const [id, layer] of [['mjoLayer', 'mjo'], ['sstLayer', 'sst'], ['jetsLayer
   });
 }
 
+// Inicializar interface
 update();
