@@ -427,40 +427,57 @@ function generateNarrationText(season, enso, phase, metricVal, evidence) {
   };
   const phaseInfo = getMjoPhaseCoords(phase);
 
-  let text = `Configuração selecionada: ${seasonNames[season]}, com ${ensoNames[enso]} e a Oscilação Madden-Julian na fase ${phase}, com centro de convecção associado sobre ${phaseInfo.region}. `;
+  let text = `Configuração selecionada: ${seasonNames[season]}, com ${ensoNames[enso]} e a Oscilação Madden-Julian na fase ${phase}, correspondente à convecção nominal sobre ${phaseInfo.region}. `;
 
-  // Contexto esquemático da TSM e dos Jatos
+  // 1. Contexto esquemático da TSM e dos Jatos
   if (enso === 'el-nino') {
-    text += `No Pacífico equatorial, o padrão esquemático indica anomalias térmicas positivas da TSM. Em altitude, o Jato Subtropical encontra-se tipicamente intensificado pela circulação de Hadley fortalecida, `;
+    text += `No Pacífico equatorial central e leste, o padrão qualitativo indica anomalias térmicas positivas da TSM. Em altitude, o traçado de referência do Jato Subtropical (~200 hPa) ilustra o reforço do guia de ondas sob circulação de Hadley intensificada. `;
   } else if (enso === 'la-nina') {
-    text += `No Pacífico equatorial, o padrão esquemático indica anomalias térmicas negativas da TSM. Em altitude, o Jato Subtropical apresenta intensidade média reduzida, `;
+    text += `No Pacífico equatorial central e leste, o padrão qualitativo indica anomalias térmicas negativas da TSM. Em altitude, o traçado de referência do Jato Subtropical apresenta guia de ondas com espessura ilustrativa reduzida. `;
   } else {
-    text += `No Pacífico equatorial, a TSM encontra-se próxima à climatologia de referência neutra. O Jato Subtropical exibe intensidade média de referência, `;
+    text += `No Pacífico equatorial, a TSM encontra-se próxima à referência climatológica neutra (lembrando que anomalias locais podem ocorrer na natureza). O Jato Subtropical exibe espessura de referência. `;
   }
 
   if (season === 'DJF') {
-    text += `posicionado em sua latitude mais ao sul, em torno de 32 graus sul, característica do verão. `;
+    text += `A latitude média de referência do jato subtropical situa-se em torno de 32 graus sul, típica do verão. `;
   } else if (season === 'JJA') {
-    text += `deslocado mais para o norte, em torno de 27 graus sul, próprio do inverno austral. `;
+    text += `O jato subtropical posiciona-se mais ao norte, em torno de 27 graus sul, próprio do inverno. `;
   } else {
-    text += `em latitude de transição sazonal, em torno de 29 a 30 graus sul. `;
+    text += `O jato subtropical posiciona-se em latitude de transição sazonal, em torno de 29 a 30 graus sul. `;
   }
+  text += `Este traçado de jato e as anomalias de TSM são esquemas conceituais de contexto e não medidas numéricas de velocidade ou latitude observada ponto a ponto. Em baixos níveis, o SALLJ (~850 hPa) opera como canalização de umidade amazônica para o sul do continente. `;
 
-  text += `Em baixos níveis, o Jato de Baixos Níveis da América do Sul (SALLJ) atua como conduto de calor e umidade amazônica para o SESA. `;
-
-  // Efeito documentado ou ausência de resultado
-  const result = evidence ? evidence[metricVal] : null;
-  if (result) {
-    text += `Para esta combinação e considerando ${metricVal === 'extremes' ? 'a frequência de extremos de chuva' : 'a chuva média'}, Fernandes e Alice Grimm (2023) documentam: ${result.text} `;
+  // 2. Efeitos verificados, separando convecção-fonte, circulação/teleconexão e respostas remotas
+  if (evidence) {
+    text += `Segundo Fernandes e Alice Grimm (2023): `;
+    if (evidence.source_convection) {
+      text += `1. Convecção-fonte: ${evidence.source_convection} `;
+    }
+    if (evidence.circulation) {
+      text += `2. Circulação e PSA: ${evidence.circulation} `;
+    }
+    if (evidence.mean) {
+      text += `3. Chuva média: ${evidence.mean.text} `;
+    } else {
+      text += `3. Chuva média: sem destaque de anomalia média com suporte estatístico específico nesta fase. `;
+    }
+    if (evidence.extremes) {
+      text += `4. Frequência de extremos: ${evidence.extremes.text} `;
+    } else {
+      text += `4. Frequência de extremos: sem destaque de extremos com suporte estatístico específico nesta fase. `;
+    }
     if (evidence.psa) {
-      text += `Como mecanismo de teleconexão de grande escala: ${evidence.psa} `;
+      text += `Mecanismo dinâmico: ${evidence.psa} `;
+    }
+    if (evidence.limits) {
+      text += `Limitações e incertezas: ${evidence.limits} `;
     }
   } else {
     text += `Sem resultado específico verificado nesta síntese documental para esta combinação em relação a ${metricVal === 'extremes' ? 'extremos de chuva' : 'chuva média'}. `;
-    text += `Essa ausência de registro na base curada não significa efeito zero na física atmosférica nem ausência de ciência; reflete apenas a exigência estrita de padrões com significância estatística comprovada por estudos observacionais específicos. `;
+    text += `Esta ausência de destaque não equivale a efeito físico zero na natureza, ausência do fenômeno ou falta de ciência; reflete a exigência rigorosa de não preencher combinações não estratificadas com parâmetros sintéticos ou extrapolações indevidas. `;
   }
 
-  text += `Ressalta-se que a chuva média e a frequência de extremos são variáveis meteorológicas distintas, e extremos de precipitação não equivalem a risco de granizo ou tornados.`;
+  text += `Ressalta-se que a chuva média e a frequência de extremos são variáveis distintas, e extremos de precipitação não autorizam inferência de granizo, tornados ou vendavais.`;
 
   return text;
 }

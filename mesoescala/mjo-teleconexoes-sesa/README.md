@@ -32,9 +32,15 @@ Quando uma combinação selecionada não possui evidência cadastrada na base de
 12. **Narração Completa & Acessibilidade:** Toda combinação selecionável possui texto explicativo gerado na tela e síntese de voz disponível (com controles de narrar, pausar/retomar, parar e silenciar). Ao alterar controles com a fala ativa, falas anteriores são canceladas e a nova combinação é narrada automaticamente. O glossário foi removido desta demonstração conforme instrução.
 
 ### Fontes Principais:
-- **Fernandes & Alice M. Grimm (2023):** *The Role of the Madden–Julian Oscillation in Modulating Precipitation Extremes in South America during Austral Summer*, Journal of Climate, [https://doi.org/10.1175/JCLI-D-22-0781.1](https://doi.org/10.1175/JCLI-D-22-0781.1).
-- **Wheeler & Hendon (2004):** *An All-Season Real-Time Multivariate MJO Index*, Mon. Wea. Rev.
-- **Teste de Verificação Automatizado:** `node verify-model.cjs` (100% aprovado para todas as 96 combinações).
+- **Fernandes, L. A., & Grimm, A. M. (2023):** *ENSO Modulation of Global MJO and Its Impacts on South America*, Journal of Climate, 36(22), 7715–7738, [https://doi.org/10.1175/JCLI-D-22-0781.1](https://doi.org/10.1175/JCLI-D-22-0781.1).
+- **Wheeler, M. C., & Hendon, H. H. (2004):** *An All-Season Real-Time Multivariate MJO Index*, Mon. Wea. Rev., [https://doi.org/10.1175/1520-0493(2004)132<1917:AARMMI>2.0.CO;2](https://doi.org/10.1175/1520-0493(2004)132<1917:AARMMI>2.0.CO;2).
+- **Teste de Verificação Automatizado:** `node verify-model.cjs` (100% aprovado para as 96 combinações e sequências físicas).
+
+### Sequência Física MJO 7 → 8 → 1 e Comparação 3–4 (DJF):
+1. **La Niña:** A convecção-fonte subtropical organiza-se no Pacífico Sul centro-oeste na fase 7 (precursora) e atinge o pico na fase 8; o trem de ondas PSA impõe anomalia anticiclônica no Atlântico subtropical e produz **máximo de anomalias de chuva média na ZCAS na fase 8**. Na fase 1, a resposta na ZCAS entra em declínio e desloca-se para a borda sul / oceano (não há exclusão de efeito, mas o pico é na fase 8).
+2. **El Niño:** A piscina quente deslocada para leste altera o estado básico; a convecção-fonte no Pacífico subtropical ocorre **deslocada para leste nas fases 8–1**. Com a defasagem dinâmica de cerca de uma fase na propagação de ondas, a **resposta destacada na ZCAS e o maior aumento de extremos no CESA (centro-leste) manifestam-se na fase 1**. Em contrapartida, na fase 3, a convecção no Índico interage construtivamente com o El Niño para gerar o maior aumento de extremos no SESA.
+3. **ENOS Neutro:** Composições específicas mostram aumento de chuva na ZCAS e extremos no CESA na fase 8, com declínio na fase 1. Para o SESA, a forçante no Índico e Continente Marítimo nas fases 3–4 produz o **maior aumento da frequência de extremos no SESA na fase 4** (sendo a fase 3 precursora), associado ao dipolo com a ZCAS suprimida.
+4. **Distinção de Variáveis e Escalas:** Convecção-fonte, circulação/teleconexão (PSA), chuva média e frequência de extremos são representadas como grandezas distintas. Extremos de precipitação não autorizam inferência de tempo severo (tornados ou granizo). A ausência de resultado documentado em outras combinações é indicada como ausência de registro verificado nesta síntese, nunca como efeito físico nulo.
 
 ---
 

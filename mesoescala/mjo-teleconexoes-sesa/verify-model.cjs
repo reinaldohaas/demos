@@ -19,6 +19,23 @@ for (const c of cases) {
   }
 }
 
+// Verificação da sequência científica 7 -> 8 -> 1 e comparação 3-4
+const ln8 = cases.find(c => c.season === 'DJF' && c.enso === 'la-nina' && c.phase === 8);
+const ln1 = cases.find(c => c.season === 'DJF' && c.enso === 'la-nina' && c.phase === 1);
+const en1 = cases.find(c => c.season === 'DJF' && c.enso === 'el-nino' && c.phase === 1);
+const en8 = cases.find(c => c.season === 'DJF' && c.enso === 'el-nino' && c.phase === 8);
+const nt4 = cases.find(c => c.season === 'DJF' && c.enso === 'neutro' && c.phase === 4);
+const nt3 = cases.find(c => c.season === 'DJF' && c.enso === 'neutro' && c.phase === 3);
+
+assert(ln8 && ln8.mean && ln8.mean.region === 'ZCAS', 'La Niña fase 8 deve ter resposta de chuva na ZCAS');
+assert(ln8.mean.text.includes('máxima') || ln8.mean.text.includes('destacada'), 'La Niña fase 8 tem resposta destacada na ZCAS');
+assert(ln1 && ln1.mean && ln1.mean.region === 'ZCAS', 'La Niña fase 1 documentada na evolução');
+assert(en1 && en1.mean && en1.mean.region === 'ZCAS', 'El Niño fase 1 deve ter resposta de chuva na ZCAS');
+assert(en1 && en1.extremes && en1.extremes.region === 'CESA', 'El Niño fase 1 deve ter resposta de extremos no CESA');
+assert(en8 && en8.source_convection.includes('leste'), 'El Niño fase 8 com convecção-fonte deslocada para leste');
+assert(nt4 && nt4.extremes && nt4.extremes.region === 'SESA', 'Neutro fase 4 com maior aumento de extremos no SESA');
+assert(nt3 && nt3.extremes && nt3.extremes.region === 'SESA', 'Neutro fase 3 precursor de extremos no SESA');
+
 // 2. Verificar HTML: controles completos, narração e ausência de legados
 const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
 
