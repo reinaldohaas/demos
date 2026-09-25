@@ -226,3 +226,7 @@ A camada MJO agora identifica convecção favorecida/suprimida sem magnitudes si
 Removidos os centros PSA arbitrários das oito fases e a linha contínua permanente. A camada apresenta dois exemplos qualitativos em DJF com MJO ativa: La Niña/fase 8 e El Niño/fase 1, conforme Fernandes e Grimm (2023), figuras 9–12. A seta indica ligação, não trajetória calculada; A/B são posições ilustrativas do par de circulação, não coordenadas digitalizadas de composições. Nos outros estados a interface informa que a composição não está representada, sem inferir ausência de teleconexão. Não se trata de uma climatologia completa do PSA.
 
 Referências: https://doi.org/10.1175/JCLI-D-22-0781.1 e https://www.bom.gov.au/climate/mjo/about/WH04.pdf.
+
+### Recuperação da visão global
+
+A visualização inicial voltou a ser global, centrada no Pacífico, com alternância para América do Sul e camadas qualitativas MJO/TSM. O mapa ocupa a largura principal; os textos ficam abaixo. A base cartográfica local `world-land.js` é Natural Earth 1:110m (domínio público), obtida de https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_land.geojson. Os cinco casos e a separação de variáveis foram mantidos; nenhum gerador de probabilidades foi restaurado.
