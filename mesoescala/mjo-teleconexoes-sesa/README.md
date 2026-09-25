@@ -1,12 +1,29 @@
-# Versão atual: cinco casos documentados em DJF
+# Versão atual: cinco casos documentados em DJF e visão global interativa
 
-A página usa `documented-cases.js`, `documented-view.js` e `map-regions.js`. Começa em ENOS neutro/fase 4, seguido de neutro/fase 3; inclui El Niño/fase 3, La Niña/fase 8 e El Niño/fase 1. Resultados ausentes são `null`, nunca anomalia zero. Chuva média e frequência de extremos são camadas separadas. A seleção não esgota a literatura.
+A aplicação utiliza `documented-cases.js`, `documented-view.js`, `map-regions.js` e a base vetorial contínua Natural Earth 1:110m (`world-land.js`).
 
-Foram retirados o gerador combinatório, a régua de probabilidades, percentuais sintéticos, amplitude contínua, ciclo automático, campos numéricos artificiais de TSM e inferências automáticas de intensidade/posição dos jatos. O PSA é descrito somente nos casos selecionados com suporte bibliográfico, sem coordenadas de centros inventadas. O glossário anterior foi preservado integralmente. `enso-science.js` é legado não carregado pela página.
+### Principais Características da Implementação Atual:
+1. **Visão Global como Abertura:** Mapa global amplo (1200×560 px) centrado no Oceano Pacífico, ilustrando o arco completo de teleconexões Índico–Pacífico–América do Sul. A visão regional da América do Sul (640×520 px) está disponível via alternador de visão.
+2. **Prioridade Visual ao Mapa:** O mapa ocupa a posição de destaque na interface; explicações conceituais e teóricas extensas foram organizadas em painéis recolhíveis (`<details>`).
+3. **Casos Documentados Verificados:** Conjunto curado de cinco casos em DJF com suporte bibliográfico em Fernandes & Alice M. Grimm (2023), iniciando didaticamente por **ENOS neutro · fase 4**, seguido de **ENOS neutro · fase 3**, **El Niño · fase 3**, **La Niña · fase 8** e **El Niño · fase 1**.
+4. **Separação de Variáveis:** Seletores independentes para *Chuva média* e *Frequência de extremos*. Extremos de chuva não são convertidos nem associados indevidamente a risco de granizo ou tornados.
+5. **Sem Parâmetros Fictícios:** Foram eliminados geradores combinatórios livres, percentuais artificiais, probabilidades sintéticas ou magnitudes numéricas não calibradas. Variáveis ausentes permanecem estritamente como `null` no modelo, explicitando que a ausência de dado representado reflete o recorte desta síntese, não ausência de efeito físico.
+6. **TSM Equatorial Qualitativa no Mapa Global:** Distinção gráfica clara entre **El Niño** (anomalia quente), **La Niña** (anomalia fria) e **ENOS Neutro** (próxima à média), devidamente identificadas como representações conceituais qualitativas sem grade contínua ou magnitudes inventadas.
+7. **MJO no Contexto Global:** Posições nominais dos centros de fase segundo o índice multivariado RMM de Wheeler & Hendon (2004), diferenciando claramente a referência de fase geométrica de um campo contínuo de OLR ou convecção observada.
+8. **Teleconexão PSA:** O trem de ondas PSA não é desenhado como um trem permanente nem com centros fixos de alta/baixa pressão inventados. Quando ativo para o caso (com defasagem típica de 7 a 12 dias), exibe-se o corredor conceitual de propagação de ondas de Rossby verificado por Fernandes & Grimm (2023).
+9. **Jatos de Referência Dinâmica:** Jato Subtropical (~200 hPa) representado em uma única linha contínua de referência climatológica; SALLJ (~850 hPa) em uma única seta de transporte de umidade a leste dos Andes. Sem duplicações, sem jato polar e sem equações arbitrárias impondo deslocamentos artificiais pelo ENOS.
+10. **Identificação Geográfica Rigorosa:** Rótulo "SESA" no topo do polígono regional, sem "Bacia do Prata" no rótulo e sem "Andes (Bloqueio Orográfico)" no mapa.
+11. **Legenda Inicialmente Oculta:** Exibida e recolhida por botão de alternância acessível com ARIA.
+12. **Preservação Integral do Glossário:** Glossário regional, indígena e cultural totalmente preservado no painel recolhível dedicado.
 
-Fonte principal: Fernandes e Alice M. Grimm (2023), https://doi.org/10.1175/JCLI-D-22-0781.1, discussão e figura 12. As magnitudes e máscaras de significância não foram transcritas; ícones apenas localizam o resultado regional. Teste: `node verify-model.cjs`.
+### Fonte Principal e Referências:
+- **Fernandes & Alice M. Grimm (2023):** *The Role of the Madden–Julian Oscillation in Modulating Precipitation Extremes in South America during Austral Summer*, Journal of Climate, [https://doi.org/10.1175/JCLI-D-22-0781.1](https://doi.org/10.1175/JCLI-D-22-0781.1).
+- **Wheeler & Hendon (2004):** *An All-Season Real-Time Multivariate MJO Index*, Mon. Wea. Rev.
+- **Natural Earth:** Vetores de polígonos de terra em escala 1:110m (domínio público).
+- **Teste de Verificação:** `node verify-model.cjs` (execução 100% aprovada).
 
 ---
+
 ## Histórico da implementação anterior (não descreve a versão atual)
 
 # 📘 Documentação Técnica & Especificação Física: MJO, Teleconexões, Jatos e Chuvas no SESA
