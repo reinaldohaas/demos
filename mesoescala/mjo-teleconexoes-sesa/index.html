@@ -394,8 +394,14 @@
         <button id="regionalView" aria-pressed="false">América do Sul</button>
       </div>
       <div class="toolbar-group">
+        <span class="group-label">MJO nos trópicos:</span>
+        <button id="mjoDipolesLayer" aria-pressed="true">Convecção NOAA</button>
+        <button id="mjoTrackLayer" aria-pressed="false">Trilha 1–8</button>
+        <button id="mjoNoneLayer" aria-pressed="false">Nenhuma</button>
+        <button id="mjoLayer" style="display:none;" aria-hidden="true"></button>
+      </div>
+      <div class="toolbar-group">
         <span class="group-label">Camadas:</span>
-        <button id="mjoLayer" aria-pressed="true">MJO: convecção & trilha 1–8</button>
         <button id="sstLayer" aria-pressed="true">TSM: sinal do ENOS</button>
         <button id="jetsLayer" aria-pressed="true">Jatos: STJ & SALLJ</button>
         <button id="psaLayer" aria-pressed="true">PSA: teleconexão</button>
@@ -428,10 +434,7 @@
           <b>Base Cartográfica:</b> Polígonos de terra Natural Earth 1:110m (projeção equirretangular contínua). Visão global com Pacífico centralizado e contexto Índico–Pacífico–América do Sul.
         </div>
         <div>
-          <b>MJO Tropical (Composição NOAA CPC):</b> Áreas em verde/esmeralda indicam anomalias tropicais de convecção ativa / chuva (+); áreas em castanho/marrom indicam convecção suprimida (−) características da fase, baseadas nos compostos de precipitação/OLR de Wheeler & Hendon / NOAA.
-        </div>
-        <div>
-          <b>Trilha MJO 1 a 8 no Equador:</b> Números em vermelho ao longo do equador mapeando a propagação para leste da África ao Pacífico (clicáveis para selecionar a fase diretamente).
+          <b>Visualizações da MJO nos Trópicos:</b> Seleção mutuamente exclusiva entre <i>Convecção NOAA</i> (compostos de precipitação/convecção verde ativa [+] e marrom suprimida [−]), <i>Trilha 1–8</i> (marcações ao longo do equador com fase ativa destacada e números clicáveis) ou <i>Nenhuma</i> (sem exibição tropical da MJO para a fase). Ao ligar uma, desliga a outra.
         </div>
         <div>
           <b>Domínios Geográficos Permanentes:</b> Polígono SESA (Sul do Brasil, Uruguai, Paraguai, Nordeste da Argentina) identificado com "SESA" no topo da região. Polígono ZCAS sempre visível como referência de monção.

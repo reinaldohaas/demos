@@ -61,6 +61,9 @@ const elements = {
   globalView: { setAttribute: () => {}, addEventListener: () => {} },
   regionalView: { setAttribute: () => {}, addEventListener: () => {} },
   mjoLayer: { setAttribute: () => {}, addEventListener: () => {} },
+  mjoDipolesLayer: { setAttribute: () => {}, addEventListener: () => {} },
+  mjoTrackLayer: { setAttribute: () => {}, addEventListener: () => {} },
+  mjoNoneLayer: { setAttribute: () => {}, addEventListener: () => {} },
   sstLayer: { setAttribute: () => {}, addEventListener: () => {} },
   jetsLayer: { setAttribute: () => {}, addEventListener: () => {} },
   psaLayer: { setAttribute: () => {}, addEventListener: () => {} },
@@ -144,4 +147,11 @@ for (const season of seasons) {
   }
 }
 
-console.log('Validação completa aprovada: 8 fases MJO, 3 ENOS e 4 estações; narração por voz e texto acessível verificadas; ZCAS e SESA permanentes; todas as 96 combinações testadas com 100% de sucesso!');
+// Testar os 3 modos da MJO: dipolos NOAA, trilha 1 a 8 e nenhuma
+for (const mode of ['dipoles', 'track', 'none']) {
+  for (const phase of phases) {
+    sandbox.setClimateState({ phase, mjoMode: mode });
+  }
+}
+
+console.log('Validação completa aprovada: 8 fases MJO, 3 ENOS e 4 estações; modos MJO (dipolos NOAA, trilha 1-8 e nenhuma) testados; narração por voz e texto acessível verificadas; ZCAS e SESA permanentes; todas as 96 combinações testadas com 100% de sucesso!');

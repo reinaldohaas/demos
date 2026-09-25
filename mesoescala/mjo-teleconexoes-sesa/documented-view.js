@@ -5,7 +5,14 @@ let currentEnso = 'neutro';
 let currentPhase = 4;
 let metric = 'extremes';
 let mapView = 'global';
-const visibleLayers = { mjo: true, sst: true, jets: true, psa: true };
+let mjoMode = 'dipoles'; // 'dipoles' | 'track' | 'none'
+const visibleLayers = {
+  get mjo() { return mjoMode !== 'none'; },
+  set mjo(v) { if (!v) mjoMode = 'none'; else if (mjoMode === 'none') mjoMode = 'dipoles'; },
+  sst: true,
+  jets: true,
+  psa: true
+};
 const ns = 'http://www.w3.org/2000/svg';
 
 // Estado da Narração
@@ -185,9 +192,7 @@ function drawLand() {
   }
 }
 
-function drawMjoTropicalComposites() {
-  if (!visibleLayers.mjo) return;
-
+function drawMjoConvection() {
   const comp = MJO_COMPOSITES[currentPhase];
   if (!comp) return;
 
@@ -224,28 +229,38 @@ function drawMjoTropicalComposites() {
       }
     }
   }
+}
 
-  // 3. Trilha das fases 1 a 8 ao longo do equador (como no mapa esquemático)
-  if (mapView === 'global') {
-    // Linha guia equatorial
-    const startP = project(30, 0);
-    const endP = project(-140, 0);
-    svg('line', { x1: startP[0], y1: startP[1], x2: endP[0], y2: endP[1], stroke: '#ef4444', 'stroke-width': 1, 'stroke-dasharray': '3 4', opacity: 0.5 });
+function drawMjoTrack() {
+  if (mapView !== 'global') return;
 
-    for (const pt of MJO_TRACK_POINTS) {
-      const [tx, ty] = project(pt.lon, 0);
-      const isActive = pt.phase === Number(currentPhase);
+  // Linha guia equatorial
+  const startP = project(30, 0);
+  const endP = project(-140, 0);
+  svg('line', { x1: startP[0], y1: startP[1], x2: endP[0], y2: endP[1], stroke: '#ef4444', 'stroke-width': 1, 'stroke-dasharray': '3 4', opacity: 0.5 });
 
-      if (isActive) {
-        // Realce da fase ativa
-        svg('circle', { cx: tx, cy: ty, r: 15, fill: '#ef4444', stroke: '#ffffff', 'stroke-width': 2.2 });
-        svg('text', { x: tx, y: ty + 5, fill: '#ffffff', 'font-size': 13, 'font-weight': '900', 'text-anchor': 'middle', cursor: 'pointer' }, pt.label, () => setClimateState({ phase: pt.phase }));
-      } else {
-        // Marcação das outras fases ao longo da trilha
-        svg('text', { x: tx, y: ty + 5, fill: '#f87171', 'font-size': 14, 'font-weight': '800', 'text-anchor': 'middle', cursor: 'pointer' }, pt.label, () => setClimateState({ phase: pt.phase }));
-      }
+  for (const pt of MJO_TRACK_POINTS) {
+    const [tx, ty] = project(pt.lon, 0);
+    const isActive = pt.phase === Number(currentPhase);
+
+    if (isActive) {
+      // Realce da fase ativa
+      svg('circle', { cx: tx, cy: ty, r: 15, fill: '#ef4444', stroke: '#ffffff', 'stroke-width': 2.2 });
+      svg('text', { x: tx, y: ty + 5, fill: '#ffffff', 'font-size': 13, 'font-weight': '900', 'text-anchor': 'middle', cursor: 'pointer' }, pt.label, () => setClimateState({ phase: pt.phase }));
+    } else {
+      // Marcação das outras fases ao longo da trilha
+      svg('text', { x: tx, y: ty + 5, fill: '#f87171', 'font-size': 14, 'font-weight': '800', 'text-anchor': 'middle', cursor: 'pointer' }, pt.label, () => setClimateState({ phase: pt.phase }));
     }
   }
+}
+
+function drawMjoTropicalVisualizations() {
+  if (mjoMode === 'dipoles') {
+    drawMjoConvection();
+  } else if (mjoMode === 'track') {
+    drawMjoTrack();
+  }
+  // Se mjoMode === 'none', nenhuma representação tropical é desenhada
 }
 
 function drawGlobalContext(evidence) {
@@ -274,8 +289,8 @@ function drawGlobalContext(evidence) {
     svg('text', { x, y, fill: '#5a829e', 'font-size': 14, 'letter-spacing': 2.5, 'text-anchor': 'middle', 'font-weight': '600' }, label);
   }
 
-  // Padrão tropical da MJO: convecção ativa e suprimida + trilha equatorial 1 a 8
-  drawMjoTropicalComposites();
+  // Visualização tropical da MJO: Dipolos NOAA, Trilha 1–8 ou Nenhuma
+  drawMjoTropicalVisualizations();
 
   // Teleconexão PSA conceitual: representada somente quando há mecanismo verificado para a combinação
   if (visibleLayers.psa && evidence && evidence.psa) {
@@ -350,7 +365,7 @@ function drawMap(evidence) {
     drawGlobalContext(evidence);
   } else {
     drawLand();
-    if (visibleLayers.mjo) drawMjoTropicalComposites();
+    if (mjoMode === 'dipoles') drawMjoConvection();
   }
 
   // Jatos (Subtropical e SALLJ como base visual permanente)
@@ -496,12 +511,18 @@ function speakCurrentNarration() {
   updateVoiceUI('speaking');
 }
 
+function setMjoMode(mode) {
+  mjoMode = mode; // 'dipoles' | 'track' | 'none'
+  update();
+}
+
 function setClimateState(opts) {
   if (opts.season !== undefined) currentSeason = opts.season;
   if (opts.enso !== undefined) currentEnso = opts.enso;
   if (opts.phase !== undefined) currentPhase = Number(opts.phase);
   if (opts.metric !== undefined) metric = opts.metric;
   if (opts.view !== undefined) mapView = opts.view;
+  if (opts.mjoMode !== undefined) mjoMode = opts.mjoMode;
   update();
 }
 
@@ -518,6 +539,12 @@ function update() {
   $('globalView').setAttribute('aria-pressed', String(mapView === 'global'));
   $('regionalView').setAttribute('aria-pressed', String(mapView === 'regional'));
   for (const m of ['mean', 'extremes']) $(m).setAttribute('aria-pressed', String(m === metric));
+
+  // Atualizar botões de camadas da MJO (exclusão mútua e nenhuma)
+  if ($('mjoDipolesLayer')) $('mjoDipolesLayer').setAttribute('aria-pressed', String(mjoMode === 'dipoles'));
+  if ($('mjoTrackLayer')) $('mjoTrackLayer').setAttribute('aria-pressed', String(mjoMode === 'track'));
+  if ($('mjoNoneLayer')) $('mjoNoneLayer').setAttribute('aria-pressed', String(mjoMode === 'none'));
+  if ($('mjoLayer')) $('mjoLayer').setAttribute('aria-pressed', String(mjoMode !== 'none'));
 
   // Buscar evidência na base curada
   const evidence = findDocumentedCase(currentSeason, currentEnso, currentPhase);
@@ -634,13 +661,39 @@ for (const [id, view] of [['globalView', 'global'], ['regionalView', 'regional']
   });
 }
 
-// Alternância de Camadas
-for (const [id, layer] of [['mjoLayer', 'mjo'], ['sstLayer', 'sst'], ['jetsLayer', 'jets'], ['psaLayer', 'psa']]) {
-  $(id).addEventListener('click', () => {
-    visibleLayers[layer] = !visibleLayers[layer];
-    $(id).setAttribute('aria-pressed', String(visibleLayers[layer]));
-    update();
+// Alternância das Camadas MJO nos Trópicos: Dipolos NOAA, Trilha 1–8 ou Nenhuma (ao ligar um desliga a outra)
+if ($('mjoDipolesLayer')) {
+  $('mjoDipolesLayer').addEventListener('click', () => {
+    setMjoMode(mjoMode === 'dipoles' ? 'none' : 'dipoles');
   });
+}
+if ($('mjoTrackLayer')) {
+  $('mjoTrackLayer').addEventListener('click', () => {
+    setMjoMode(mjoMode === 'track' ? 'none' : 'track');
+  });
+}
+if ($('mjoNoneLayer')) {
+  $('mjoNoneLayer').addEventListener('click', () => {
+    setMjoMode('none');
+  });
+}
+if ($('mjoLayer')) {
+  $('mjoLayer').addEventListener('click', () => {
+    if (mjoMode === 'dipoles') setMjoMode('track');
+    else if (mjoMode === 'track') setMjoMode('none');
+    else setMjoMode('dipoles');
+  });
+}
+
+// Alternância de Outras Camadas
+for (const [id, layer] of [['sstLayer', 'sst'], ['jetsLayer', 'jets'], ['psaLayer', 'psa']]) {
+  if ($(id)) {
+    $(id).addEventListener('click', () => {
+      visibleLayers[layer] = !visibleLayers[layer];
+      $(id).setAttribute('aria-pressed', String(visibleLayers[layer]));
+      update();
+    });
+  }
 }
 
 // Controles de Narração por Voz
