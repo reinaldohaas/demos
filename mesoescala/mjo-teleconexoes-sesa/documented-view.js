@@ -20,9 +20,26 @@ const ns = 'http://www.w3.org/2000/svg';
 // Estado da Narração
 let isNarrationActive = false;
 let isNarrationPaused = false;
-let pausedNarrationChanged = false;
 let isMuted = false;
 const speechSynth = typeof window !== 'undefined' && 'speechSynthesis' in window ? window.speechSynthesis : null;
+let ptVoice = null;
+
+function updatePortugueseVoice() {
+  if (!speechSynth || typeof speechSynth.getVoices !== 'function') return;
+  const voices = speechSynth.getVoices();
+  if (!voices || voices.length === 0) return;
+  // Priorizar vozes pt-BR naturais (ex: Microsoft Maria/Daniel, Google português do Brasil)
+  ptVoice = voices.find(v => v.lang === 'pt-BR' || v.lang === 'pt_BR') ||
+            voices.find(v => v.lang && v.lang.toLowerCase().startsWith('pt')) ||
+            null;
+}
+
+if (speechSynth && typeof window !== 'undefined') {
+  if (speechSynth.onvoiceschanged !== undefined) {
+    speechSynth.onvoiceschanged = updatePortugueseVoice;
+  }
+  updatePortugueseVoice();
+}
 
 // Padrões conceituais estilizados de convecção/precipitação da MJO por fase (1 a 8)
 // Esquema didático ilustrando os dipolos de convecção ativa (verde) e suprimida (marrom)
@@ -510,6 +527,64 @@ function updateVoiceUI(state) {
   }
 }
 
+function formatTextForSpeech(raw) {
+  if (!raw) return '';
+  let s = raw;
+
+  // 1. Remover parênteses de citações e referências a figuras para leitura fluida
+  s = s.replace(/\s*\((?:Fernandes|Grimm|Jones|Roy|Wheeler|Hendon)[^)]*\)/gi, '');
+  s = s.replace(/\s*\((?:Figs?\.|Seção|Seções)[^)]*\)/gi, '');
+  s = s.replace(/\s*\(20\d\d\)/g, '');
+  s = s.replace(/et\s+al\./gi, 'e colaboradores');
+
+  // 2. Coordenadas geográficas: converter 'S' e 'W' para português falado natural
+  s = s.replace(/(\d+)[°º]\s*S\s*[–-]\s*(\d+)[°º]\s*S/gi, '$1 a $2 graus sul');
+  s = s.replace(/(\d+)[°º]\s*W\s*[–-]\s*(\d+)[°º]\s*W/gi, '$1 a $2 graus oeste');
+  s = s.replace(/(\d+)[°º]\s*N\s*[–-]\s*(\d+)[°º]\s*N/gi, '$1 a $2 graus norte');
+  s = s.replace(/(\d+)[°º]\s*E\s*[–-]\s*(\d+)[°º]\s*E/gi, '$1 a $2 graus leste');
+  s = s.replace(/(\d+)[°º]\s*S\b/gi, '$1 graus sul');
+  s = s.replace(/(\d+)[°º]\s*W\b/gi, '$1 graus oeste');
+  s = s.replace(/(\d+)[°º]\s*N\b/gi, '$1 graus norte');
+  s = s.replace(/(\d+)[°º]\s*E\b/gi, '$1 graus leste');
+
+  // 3. Unidades de pressão e altitude (hPa -> hectopascais, ~ -> cerca de)
+  s = s.replace(/~200\s*hPa/gi, 'cerca de duzentos hectopascais');
+  s = s.replace(/~850\s*hPa/gi, 'cerca de oitocentos e cinquenta hectopascais');
+  s = s.replace(/(\d+)\s*hPa\b/gi, '$1 hectopascais');
+  s = s.replace(/~/g, 'cerca de ');
+
+  // 4. Siglas e termos técnicos para pronúncia em português
+  s = s.replace(/\bSALLJ\b/g, 'jato de baixos níveis SALLJ');
+  s = s.replace(/\bTSM\b/g, 'temperatura da superfície do mar');
+  s = s.replace(/\bCESA\b/g, 'região centro-leste CESA');
+  s = s.replace(/\bSESA\b/g, 'região do SESA');
+  s = s.replace(/\bNorthern\b/g, 'Norte');
+
+  // 5. Transições de tópicos sem enumerar mecanicamente
+  s = s.replace(/\b1\.\s*Convecção-fonte:\s*/gi, 'Quanto à convecção-fonte: ');
+  s = s.replace(/\b2\.\s*Circulação e PSA:\s*/gi, 'Sobre a circulação e o trem de ondas PSA: ');
+  s = s.replace(/\b3\.\s*Chuva média:\s*/gi, 'Em relação à chuva média: ');
+  s = s.replace(/\b4\.\s*Frequência de extremos:\s*/gi, 'Em relação aos extremos de chuva: ');
+  s = s.replace(/Mecanismo dinâmico:\s*/gi, 'Quanto ao mecanismo dinâmico: ');
+  s = s.replace(/Limitações e incertezas:\s*/gi, 'Sobre as limitações: ');
+  s = s.replace(/Limites físicos da síntese:\s*/gi, 'Sobre os limites físicos: ');
+
+  // 6. Expressões de amplitude
+  s = s.replace(/A\s*<\s*1/gi, 'amplitude menor que um');
+  s = s.replace(/A\s*≥\s*1/gi, 'amplitude maior ou igual a um');
+  s = s.replace(/Amplitude RMM selecionada:\s*([\d,.]+)\./gi, 'Amplitude RMM selecionada: $1.');
+
+  // 7. Pontuação e limpeza
+  s = s.replace(/\s*–\s*/g, ' a ');
+  s = s.replace(/\s*—\s*/g, ', ');
+  s = s.replace(/\s+/g, ' ');
+  s = s.replace(/\s*([,.:;])\s*/g, '$1 ');
+  s = s.replace(/\s+,/g, ',');
+  s = s.replace(/\.{2,}/g, '.');
+
+  return s.trim();
+}
+
 function speakCurrentNarration() {
   const evidence = displayEvidence();
   const text = generateNarrationText(currentSeason, currentEnso, currentPhase, metric, evidence);
@@ -532,9 +607,12 @@ function speakCurrentNarration() {
   }
 
   speechSynth.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
+  const spokenText = formatTextForSpeech(text);
+  const utterance = new SpeechSynthesisUtterance(spokenText);
   utterance.lang = 'pt-BR';
-  utterance.rate = 1.05;
+  if (!ptVoice) updatePortugueseVoice();
+  if (ptVoice) utterance.voice = ptVoice;
+  utterance.rate = 1.0;
 
   utterance.onstart = () => { updateVoiceUI('speaking'); };
   utterance.onend = () => { updateVoiceUI('idle'); };
