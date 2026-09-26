@@ -122,122 +122,6 @@ const MJO_COMPOSITES = {
 // Anomalias negativas (roxo/azul): divergência em altos níveis (∇²χ < 0, δ > 0), favorecendo convecção e ascendência ativa da MJO.
 // Anomalias positivas (verde/amarelo/laranja/vermelho): convergência em altos níveis (∇²χ > 0, δ < 0), favorecendo convecção suprimida e subsidência.
 // Representação estritamente qualitativa e esquemática; sem inferência de chuva local no Brasil a partir deste campo.
-const MJO_CHI_COMPOSITES = {
-  1: {
-    active: {
-      center: [-40, 5],
-      outer: { lon: -40, lat: 5, rx: 85, ry: 26 },
-      mid: { lon: -40, lat: 6, rx: 55, ry: 24 },
-      core: { lon: -45, lat: 8, rx: 32, ry: 20 }
-    },
-    suppressed: {
-      center: [155, 5],
-      outer: { lon: 155, lat: 5, rx: 75, ry: 26 },
-      mid: { lon: 155, lat: 6, rx: 50, ry: 24 },
-      core: { lon: 155, lat: 8, rx: 28, ry: 20 }
-    }
-  },
-  2: {
-    active: {
-      center: [60, 2],
-      outer: { lon: 55, lat: 2, rx: 80, ry: 26 },
-      mid: { lon: 60, lat: 2, rx: 48, ry: 24 },
-      core: { lon: 65, lat: 3, rx: 25, ry: 19 }
-    },
-    suppressed: {
-      center: [165, 5],
-      outer: { lon: 165, lat: 5, rx: 75, ry: 26 },
-      mid: { lon: 165, lat: 6, rx: 50, ry: 24 },
-      core: { lon: 165, lat: 7, rx: 28, ry: 20 }
-    }
-  },
-  3: {
-    active: {
-      center: [78, 0],
-      outer: { lon: 75, lat: 0, rx: 80, ry: 26 },
-      mid: { lon: 78, lat: 0, rx: 52, ry: 25 },
-      core: { lon: 80, lat: 1, rx: 30, ry: 20 }
-    },
-    suppressed: {
-      center: [-130, 2],
-      outer: { lon: -130, lat: 2, rx: 85, ry: 26 },
-      mid: { lon: -130, lat: 2, rx: 55, ry: 24 },
-      core: null
-    }
-  },
-  4: {
-    active: {
-      center: [118, 0],
-      outer: { lon: 118, lat: 0, rx: 75, ry: 26 },
-      mid: { lon: 118, lat: 0, rx: 48, ry: 24 },
-      core: { lon: 118, lat: 1, rx: 28, ry: 20 }
-    },
-    suppressed: {
-      center: [-50, 6],
-      outer: { lon: -50, lat: 6, rx: 80, ry: 26 },
-      mid: { lon: -50, lat: 6, rx: 50, ry: 24 },
-      core: { lon: -50, lat: 7, rx: 26, ry: 19 }
-    }
-  },
-  5: {
-    active: {
-      center: [138, 2],
-      outer: { lon: 138, lat: 2, rx: 80, ry: 26 },
-      mid: { lon: 138, lat: 2, rx: 50, ry: 24 },
-      core: { lon: 140, lat: 3, rx: 28, ry: 20 }
-    },
-    suppressed: {
-      center: [-10, 4],
-      outer: { lon: -10, lat: 4, rx: 85, ry: 26 },
-      mid: { lon: -10, lat: 4, rx: 52, ry: 24 },
-      core: { lon: -15, lat: 5, rx: 26, ry: 19 }
-    }
-  },
-  6: {
-    active: {
-      center: [168, 0],
-      outer: { lon: 168, lat: 0, rx: 78, ry: 26 },
-      mid: { lon: 168, lat: 0, rx: 48, ry: 24 },
-      core: { lon: 168, lat: 1, rx: 26, ry: 19 }
-    },
-    suppressed: {
-      center: [75, 0],
-      outer: { lon: 75, lat: 0, rx: 80, ry: 26 },
-      mid: { lon: 75, lat: 0, rx: 50, ry: 24 },
-      core: { lon: 75, lat: 1, rx: 28, ry: 20 }
-    }
-  },
-  7: {
-    active: {
-      center: [-145, 0],
-      outer: { lon: -145, lat: 0, rx: 80, ry: 26 },
-      mid: { lon: -145, lat: 0, rx: 52, ry: 24 },
-      core: { lon: -145, lat: 1, rx: 30, ry: 20 }
-    },
-    suppressed: {
-      center: [92, 2],
-      outer: { lon: 92, lat: 2, rx: 80, ry: 26 },
-      mid: { lon: 92, lat: 2, rx: 52, ry: 24 },
-      core: { lon: 92, lat: 3, rx: 28, ry: 20 }
-    }
-  },
-  8: {
-    active: {
-      center: [-75, 4],
-      outer: { lon: -75, lat: 4, rx: 85, ry: 26 },
-      mid: { lon: -75, lat: 4, rx: 55, ry: 24 },
-      core: { lon: -75, lat: 5, rx: 32, ry: 20 }
-    },
-    suppressed: {
-      center: [126, 0],
-      outer: { lon: 126, lat: 0, rx: 78, ry: 26 },
-      mid: { lon: 126, lat: 0, rx: 50, ry: 24 },
-      core: { lon: 126, lat: 1, rx: 28, ry: 20 }
-    }
-  }
-};
-
-// Trilha de fases da MJO numeradas 1 a 8 ao longo do equador (referência visual esquemática)
 const MJO_TRACK_POINTS = [
   { phase: 1, lon: 40, label: '1' },
   { phase: 2, lon: 65, label: '2' },
@@ -421,7 +305,7 @@ function drawMjoTrack() {
 
   for (const pt of MJO_TRACK_POINTS) {
     const [tx, ty] = project(pt.lon, 0);
-    const isActive = pt.phase === Number(currentPhase);
+    const isActive = currentAmplitude >= 1 && pt.phase === Number(currentPhase);
 
     if (isActive) {
       // Realce da fase ativa
@@ -434,118 +318,10 @@ function drawMjoTrack() {
   }
 }
 
-function drawChiColorbar(x, y, w, h) {
-  // Fundo translúcido
-  svg('rect', { x, y, width: w, height: h, rx: 6, fill: 'rgba(15, 23, 42, 0.90)', stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-width': 1 });
-
-  // Título explicativo da relação física (v_χ = ∇χ, ∇²χ = −δ)
-  svg('text', { x: x + w / 2, y: y + 10, fill: '#bae6fd', 'font-size': 9.5, 'font-weight': '700', 'text-anchor': 'middle' },
-    'Divergência / Convergência em altitude (~200 hPa · esquema didático conceitual: ∇²χ = −δ)');
-
-  // Faixa de cores qualitativa
-  const barW = w - 40;
-  const barH = 7;
-  const barX = x + 20;
-  const barY = y + 14;
-  const colors = ['#4a044e', '#7c3aed', '#0284c7', '#84cc16', '#ea580c', '#b91c1c'];
-  const segW = barW / colors.length;
-
-  colors.forEach((col, idx) => {
-    svg('rect', { x: barX + idx * segW, y: barY, width: segW, height: barH, fill: col, stroke: 'rgba(0,0,0,0.3)', 'stroke-width': 0.5 });
-  });
-
-  // Legenda qualitativa com classes físicas de divergência e convergência
-  svg('text', { x: barX, y: barY + barH + 9, fill: '#d8b4fe', 'font-size': 8.5, 'font-weight': '700', 'text-anchor': 'start' },
-    '← Divergência em 200 hPa (∇²χ < 0 · convecção ativa)');
-  svg('text', { x: barX + barW, y: barY + barH + 9, fill: '#fde047', 'font-size': 8.5, 'font-weight': '700', 'text-anchor': 'end' },
-    'Convergência em 200 hPa (∇²χ > 0 · convecção suprimida) →');
-}
-
-function drawMjoVelocityPotential() {
-  // Na visão regional, não desenhar manchas tropicais conceituais sobre a América do Sul / Brasil
-  if (mapView !== 'global') return;
-
-  const chi = MJO_CHI_COMPOSITES[currentPhase];
-  if (!chi) return;
-
-  // 1. Limites do domínio tropical entre 30°S e 30°N
-  const y30N = (85 - 30) * 560 / 160; // 192.5
-  const y30S = (85 - (-30)) * 560 / 160; // 402.5
-  svg('line', { x1: 0, y1: y30N, x2: 1200, y2: y30N, stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-dasharray': '5 4' });
-  svg('line', { x1: 0, y1: y30S, x2: 1200, y2: y30S, stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-dasharray': '5 4' });
-  svg('text', { x: 1190, y: y30N + 14, fill: '#bae6fd', 'font-size': 10.5, 'font-weight': '700', 'text-anchor': 'end', 'letter-spacing': 0.5 },
-    'Esquema conceitual: Divergência e Convergência em ~200 hPa (∇²χ = −δ)');
-
-  // 2. Desenhar camadas ativas e suprimidas com envelopamento contínuo
-  const renderLayers = (data, styleKey) => {
-    if (!data) return;
-    const styles = {
-      outer: {
-        fill: styleKey === 'active' ? '#0284c7' : '#84cc16',
-        opacity: 0.38,
-        stroke: styleKey === 'active' ? '#38bdf8' : '#a3e635',
-        strokeWidth: 1.1
-      },
-      mid: {
-        fill: styleKey === 'active' ? '#7c3aed' : '#ea580c',
-        opacity: 0.52,
-        stroke: styleKey === 'active' ? '#a855f7' : '#fb923c',
-        strokeWidth: 1.3
-      },
-      core: {
-        fill: styleKey === 'active' ? '#4a044e' : '#b91c1c',
-        opacity: 0.72,
-        stroke: styleKey === 'active' ? '#c084fc' : '#f87171',
-        strokeWidth: 1.6
-      }
-    };
-
-    for (const level of ['outer', 'mid', 'core']) {
-      const item = data[level];
-      if (!item) continue;
-      const st = styles[level];
-      const rx = item.rx * (1200 / 360);
-      const ry = item.ry * (560 / 160);
-
-      for (const shift of [-360, 0, 360]) {
-        const [cx, cy] = project(item.lon + shift, item.lat);
-        if (cx + rx >= -50 && cx - rx <= 1250) {
-          svg('ellipse', {
-            cx, cy, rx, ry,
-            fill: st.fill,
-            'fill-opacity': currentAmplitude < 1 ? st.opacity * 0.5 : st.opacity,
-            stroke: st.stroke,
-            'stroke-width': st.strokeWidth
-          });
-        }
-      }
-    }
-  };
-
-  renderLayers(chi.active, 'active');
-  renderLayers(chi.suppressed, 'suppressed');
-
-  // 3. Rótulos nos centros de divergência e convergência
-  if (chi.active && chi.active.center) {
-    const [acx, acy] = project(chi.active.center[0], chi.active.center[1]);
-    svg('text', { x: acx, y: acy - 6, fill: '#f5d0fe', 'font-size': 11.5, 'font-weight': '800', 'text-anchor': 'middle' }, 'Divergência 200 hPa');
-    svg('text', { x: acx, y: acy + 9, fill: '#e9d5ff', 'font-size': 10.5, 'font-weight': '600', 'text-anchor': 'middle' }, '(Convecção MJO Ativa · ∇²χ < 0)');
-  }
-  if (chi.suppressed && chi.suppressed.center) {
-    const [scx, scy] = project(chi.suppressed.center[0], chi.suppressed.center[1]);
-    svg('text', { x: scx, y: scy - 6, fill: '#fef08a', 'font-size': 11.5, 'font-weight': '800', 'text-anchor': 'middle' }, 'Convergência 200 hPa');
-    svg('text', { x: scx, y: scy + 9, fill: '#fed7aa', 'font-size': 10.5, 'font-weight': '600', 'text-anchor': 'middle' }, '(Convecção Suprimida · ∇²χ > 0)');
-  }
-
-  // 4. Barra de escala qualitativa didática
-  drawChiColorbar(350, 520, 500, 34);
-}
-
 function drawMjoTropicalVisualizations() {
   if (mjoMode === 'dipoles') {
     if (mapView === 'global') drawMjoConvection();
-  } else if (mjoMode === 'chi') {
-    drawMjoVelocityPotential();
+
   } else if (mjoMode === 'track') {
     if (mapView === 'global') drawMjoTrack();
   }
@@ -581,7 +357,7 @@ function drawGlobalContext(evidence) {
   drawMjoTropicalVisualizations();
 
   // Teleconexão PSA conceitual: representada somente quando há mecanismo verificado para a combinação
-  if (visibleLayers.psa && evidence && evidence.psa) {
+  if (visibleLayers.psa && evidence && evidence.psa && !evidence.groupedPhase) {
     const p1 = project(-140, -32);
     const p2 = project(-100, -46);
     const p3 = project(-60, -36);
@@ -663,7 +439,7 @@ function drawMap(evidence) {
 
   // Delimitação do SESA: SEMPRE DELIMITADA E IDENTIFICADA
   // Rótulo mantido estritamente como "SESA" no topo da região, sem "Bacia do Prata"
-  const result = evidence ? evidence[metric] : null;
+  const result = evidence && metric !== 'circulation' ? evidence[metric] : null;
   const isSesaHighlighted = result && result.region === 'SESA';
   polygon(REGIONS.SESA_POLY, isSesaHighlighted ? 'rgba(56, 189, 248, 0.12)' : 'rgba(56, 189, 248, 0.03)', isSesaHighlighted ? '#38bdf8' : '#486780', isSesaHighlighted ? 2.2 : 1.5);
   // Rótulo posicionado na borda nordeste da região, sem colidir com SALLJ nem com chuva
@@ -768,7 +544,7 @@ function generateNarrationText(season, enso, phase, metricVal, evidence) {
       text += `Limitações e incertezas: ${evidence.limits} `;
     }
   } else {
-    text += `Sem resultado específico verificado nesta síntese documental para esta combinação em relação a ${metricVal === 'extremes' ? 'extremos de chuva' : 'chuva média'}. `;
+    text += `Sem resultado específico verificado nesta síntese documental para esta combinação em relação a ${metricVal === 'circulation' ? 'circulação' : metricVal === 'extremes' ? 'extremos de chuva' : 'chuva média'}. `;
     text += `Esta ausência de destaque não equivale a efeito físico zero na natureza, ausência do fenômeno ou falta de ciência; reflete a exigência metodológica de registrar apenas resultados fundamentados para o recorte estratificado. `;
   }
 
@@ -855,6 +631,7 @@ function formatTextForSpeech(raw) {
 }
 
 function speakCurrentNarration() {
+  if (typeof forecastModeActive !== 'undefined' && forecastModeActive) return;
   const evidence = displayEvidence();
   const text = generateNarrationText(currentSeason, currentEnso, currentPhase, metric, evidence);
 
@@ -892,7 +669,7 @@ function speakCurrentNarration() {
 }
 
 function setMjoMode(mode) {
-  mjoMode = mode; // 'dipoles' | 'track' | 'none'
+  mjoMode = mode === 'chi' ? 'none' : mode; // 'dipoles' | 'track' | 'none'
   update();
 }
 
@@ -903,16 +680,16 @@ function setClimateState(opts) {
   if (opts.amplitude !== undefined && Number.isFinite(Number(opts.amplitude))) currentAmplitude = Math.max(0, Math.min(3, Number(opts.amplitude)));
   if (opts.metric !== undefined) metric = opts.metric;
   if (opts.view !== undefined) mapView = opts.view;
-  if (opts.mjoMode !== undefined) mjoMode = opts.mjoMode;
+  if (opts.mjoMode !== undefined) mjoMode = opts.mjoMode === 'chi' ? 'none' : opts.mjoMode;
   update();
 }
 
 function update() {
   if (typeof renderRMMDiagram === "function") renderRMMDiagram(currentPhase,currentAmplitude);
   // Atualizar atributos dos botões de controle
-  document.querySelectorAll('[data-season]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.season === currentSeason)));
-  document.querySelectorAll('[data-enso]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.enso === currentEnso)));
-  document.querySelectorAll('[data-phase]').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.phase) === Number(currentPhase))));
+  document.querySelectorAll('[data-season]:not([data-shortcut])').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.season === currentSeason)));
+  document.querySelectorAll('[data-enso]:not([data-shortcut])').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.enso === currentEnso)));
+  document.querySelectorAll('[data-phase]:not([data-shortcut])').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.phase) === Number(currentPhase))));
   document.querySelectorAll('[data-shortcut]').forEach(b => {
     const isCurrent = b.dataset.season === currentSeason && b.dataset.enso === currentEnso && Number(b.dataset.phase) === Number(currentPhase);
     b.setAttribute('aria-pressed', String(isCurrent));
@@ -920,7 +697,7 @@ function update() {
 
   $('globalView').setAttribute('aria-pressed', String(mapView === 'global'));
   $('regionalView').setAttribute('aria-pressed', String(mapView === 'regional'));
-  for (const m of ['mean', 'extremes']) $(m).setAttribute('aria-pressed', String(m === metric));
+  for (const m of ['mean', 'extremes', 'circulation']) $(m).setAttribute('aria-pressed', String(m === metric));
 
   // Atualizar botões de camadas da MJO (exclusão mútua e nenhuma)
   if ($('mjoDipolesLayer')) $('mjoDipolesLayer').setAttribute('aria-pressed', String(mjoMode === 'dipoles'));
@@ -931,7 +708,7 @@ function update() {
 
   // Buscar evidência na base curada
   const evidence = displayEvidence();
-  const result = evidence ? evidence[metric] : null;
+  const result = evidence && metric !== 'circulation' ? evidence[metric] : null;
 
   const ensoLabel = currentEnso === 'el-nino' ? 'El Niño' : currentEnso === 'la-nina' ? 'La Niña' : 'ENOS Neutro';
   let title = `${currentSeason} · ${ensoLabel} · MJO Fase ${currentPhase}`;
@@ -946,7 +723,7 @@ function update() {
       const note = evidence.groupNote ? `[${evidence.groupNote}] ` : '';
       $('caseSummary').textContent = `${note}${result.text} (${result.figure || evidence.source})`;
       if ($('caseSummary').style) $('caseSummary').style.color = 'var(--accent-teal)';
-    } else if (evidence && evidence.circulation) {
+    } else if (metric === 'circulation' && evidence && evidence.circulation) {
       const note = evidence.groupNote ? `[${evidence.groupNote}] ` : '';
       $('caseSummary').textContent = `${note}${evidence.circulation} (${evidence.source})`;
       if ($('caseSummary').style) $('caseSummary').style.color = 'var(--accent-cyan)';
@@ -962,7 +739,7 @@ function update() {
   if (result) {
     value.className = 'value';
     value.textContent = `${metric === 'extremes' ? 'Frequência de extremos' : 'Chuva média'} · ${result.region}`;
-  } else if (evidence && evidence.circulation) {
+  } else if (metric === 'circulation' && evidence && evidence.circulation) {
     value.className = 'value';
     value.textContent = 'Circulação extratropical e teleconexões · Hemisfério Sul';
   } else {
@@ -975,11 +752,11 @@ function update() {
   if (result) {
     const note = evidence.groupNote ? `${evidence.groupNote} ` : '';
     description.textContent = `${note}${result.text}`;
-  } else if (evidence && evidence.circulation) {
+  } else if (metric === 'circulation' && evidence && evidence.circulation) {
     const note = evidence.groupNote ? `${evidence.groupNote} ` : '';
-    description.textContent = `${note}${evidence.circulation} Anomalias de altura geopotencial e propagação: ${evidence.psa || 'Dispersão de ondas de Rossby.'} Nota de precipitação: Ausência de resultado de ${metric === 'extremes' ? 'frequência de extremos' : 'chuva média'} regional para SESA/ZCAS neste recorte documental (Roy et al. 2025).`;
+    description.textContent = `${note}${evidence.circulation} Anomalias de altura geopotencial e propagação: ${evidence.psa || 'Dispersão de ondas de Rossby.'} Sem inferência de chuva regional a partir deste resultado de circulação. Fonte: ${evidence.source}.`;
   } else {
-    description.textContent = `Não há evidência curada desta combinação (${currentSeason}, ${ensoLabel}, Fase ${currentPhase}) para ${metric === 'extremes' ? 'frequência de extremos' : 'chuva média'} no recorte documental atual de Fernandes & Alice M. Grimm (2023) e Roy et al. (2025). A ausência de resultado não equivale a efeito zero ou ausência de influência física.`;
+    description.textContent = `Não há evidência curada desta combinação (${currentSeason}, ${ensoLabel}, Fase ${currentPhase}) para ${metric === 'circulation' ? 'circulação' : metric === 'extremes' ? 'frequência de extremos' : 'chuva média'} no recorte documental atual de Fernandes & Alice M. Grimm (2023) e Roy et al. (2025). A ausência de resultado não equivale a efeito zero ou ausência de influência física.`;
   }
   $('result').appendChild(description);
 
@@ -1012,21 +789,21 @@ function update() {
 }
 
 // Event Listeners: Estações (DJF, MAM, JJA, SON)
-document.querySelectorAll('[data-season]').forEach(b => {
+document.querySelectorAll('[data-season]:not([data-shortcut])').forEach(b => {
   b.addEventListener('click', () => {
     setClimateState({ season: b.dataset.season });
   });
 });
 
 // Event Listeners: ENOS (El Niño, Neutro, La Niña)
-document.querySelectorAll('[data-enso]').forEach(b => {
+document.querySelectorAll('[data-enso]:not([data-shortcut])').forEach(b => {
   b.addEventListener('click', () => {
     setClimateState({ enso: b.dataset.enso });
   });
 });
 
 // Event Listeners: MJO Fases 1 a 8
-document.querySelectorAll('[data-phase]').forEach(b => {
+document.querySelectorAll('[data-phase]:not([data-shortcut])').forEach(b => {
   b.addEventListener('click', () => {
     setClimateState({ phase: Number(b.dataset.phase) });
   });
@@ -1045,7 +822,7 @@ document.querySelectorAll('[data-shortcut]').forEach(b => {
 });
 
 // Variáveis: Extremos vs Chuva Média
-for (const m of ['mean', 'extremes']) {
+for (const m of ['mean', 'extremes', 'circulation']) {
   $(m).addEventListener('click', () => {
     setClimateState({ metric: m });
   });
@@ -1088,8 +865,7 @@ if ($('mjoNoneLayer')) {
 }
 if ($('mjoLayer')) {
   $('mjoLayer').addEventListener('click', () => {
-    if (mjoMode === 'dipoles') setMjoMode('chi');
-    else if (mjoMode === 'chi') setMjoMode('track');
+    if (mjoMode === 'dipoles') setMjoMode('track');
     else if (mjoMode === 'track') setMjoMode('none');
     else setMjoMode('dipoles');
   });

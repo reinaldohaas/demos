@@ -57,7 +57,6 @@ assert(html.includes('data-season="SON" data-enso="el-nino" data-phase="4"'), 'A
 assert(!html.includes('NOAA/ESRL'), 'Sem atribuição indevida a NOAA/ESRL no HTML');
 assert(!html.includes('10⁶ m² s⁻¹'), 'Sem unidade quantitativa não rastreável no HTML');
 assert(!html.includes('Potencial de velocidade 200 hPa (NOAA/PSL)'), 'Sem rótulo falso de dados da NOAA no botão chi');
-assert(html.includes('Divergência/convergência em altitude (esquema conceitual)'), 'Botão chi com identificação conceitual');
 
 // 4 estações
 for (const season of ['DJF', 'MAM', 'JJA', 'SON']) {
@@ -76,7 +75,6 @@ for (let p = 1; p <= 8; p++) {
 
 // 4 Modos da MJO nos trópicos
 assert(html.includes('id="mjoDipolesLayer"'), 'Botão Convecção tropical RMM presente');
-assert(html.includes('id="mjoChiLayer"'), 'Botão Potencial de velocidade chi presente');
 assert(html.includes('id="mjoTrackLayer"'), 'Botão Trilha 1-8 presente');
 assert(html.includes('id="mjoNoneLayer"'), 'Botão Nenhuma presente');
 
@@ -281,7 +279,7 @@ for (const season of seasons) {
 assert.equal(combinationCount, 96, 'Exatamente 96 combinações básicas (4 estações x 3 ENOS x 8 fases)');
 
 // Teste específico de caso com fases agrupadas (Roy et al. 2025): MAM Neutro Fase 4 (Par 4–5)
-sandbox.setClimateState({ season: 'MAM', enso: 'neutro', phase: 4, amplitude: 1.5, metric: 'extremes' });
+sandbox.setClimateState({ season: 'MAM', enso: 'neutro', phase: 4, amplitude: 1.5, metric: 'circulation' });
 assert(elements.caseTitle.textContent.includes('Par 4–5'), 'caseTitle deve identificar Par 4–5');
 assert(elements.caseSummary.textContent.includes('fases agrupadas'), 'caseSummary deve citar evidência para fases agrupadas');
 assert(elements.narrationText.textContent.includes('fases agrupadas'), 'Narração deve citar evidência para fases agrupadas');
@@ -363,3 +361,14 @@ console.log([
   'Nota: Estes testes atestam exclusivamente a conformidade do código, dados estruturados e eventos da interface.',
   'A fundamentação científica e os limites físicos decorrem da revisão bibliográfica das fontes citadas.'
 ].join('\n'));
+// O modo circulação nunca é tratado como um objeto de precipitação.
+for (const season of seasons) {
+ sandbox.setClimateState({season, enso:'el-nino', phase:season==='JJA'?2:4, metric:'circulation', amplitude:1.5, view:'global'});
+ assert(!createdElements.some(e=>/Extremos mais frequentes|Chuva média favorecida/.test(e.textContent)));
+ if(season!=='DJF') assert(!createdElements.some(e=>e.textContent.includes('Guia PSA')));
+}
+const viewSource=fs.readFileSync(path.join(__dirname,'documented-view.js'),'utf8');
+assert(!viewSource.includes('const MJO_CHI_COMPOSITES'));
+assert(html.includes('id="forecastPanel"') && html.includes('id="circulation"'));
+new vm.Script(fs.readFileSync(path.join(__dirname,'forecast-sesa.js'),'utf8'));
+console.log('Circulação sem chuva/arco sazonal artificial; campo sintético retirado; módulo de previsão com sintaxe válida.');
