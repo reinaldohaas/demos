@@ -18,7 +18,7 @@ for (const c of cases) {
   for (const metric of ['mean', 'extremes']) {
     const result = c[metric];
     if (result !== null) {
-      assert(['SESA', 'ZCAS', 'CESA'].includes(result.region), `Região válida para ${c.id}: ${result.region}`);
+      assert(['SESA', 'ZCAS'].includes(result.region), `Região válida para ${c.id}: ${result.region}`);
       assert(typeof result.text === 'string' && result.text.length > 10, `Texto explicativo presente para ${c.id}`);
       assert(typeof result.figure === 'string' && result.figure.length > 3, `Figura/seção rastreável para ${c.id}`);
       assert(['positivo', 'negativo', 'neutro'].includes(result.sign), `Sinal meteorológico válido para ${c.id}`);

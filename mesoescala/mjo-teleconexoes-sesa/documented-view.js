@@ -700,13 +700,14 @@ function drawMap(evidence) {
   // Delimitação da ZCAS: SEMPRE DELIMITADA E IDENTIFICADA
   const isZcasHighlighted = result && (result.region === 'ZCAS' || result.region === 'CESA');
   polygon(REGIONS.ZCAS_POLY, isZcasHighlighted ? 'rgba(45, 212, 191, 0.12)' : 'rgba(45, 212, 191, 0.02)', isZcasHighlighted ? '#2dd4bf' : '#3e5c76', isZcasHighlighted ? 2.2 : 1.4, '4 3');
-  // Rótulo posicionado na porção oceânica da ZCAS para nunca conflitar com chuva sobre MG/SP/RJ ou CESA
+  // Rótulo posicionado na porção oceânica da ZCAS para nunca conflitar com chuva sobre MG/SP/RJ ou interior da ZCAS
   const [zx, zy] = project(-35, -20.5);
   svg('text', { x: zx, y: zy, fill: isZcasHighlighted ? '#5eead4' : '#6b8ca8', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'ZCAS');
 
   // Destaque condicional: somente quando houver resultado comprovado para a combinação e métrica
   if (result) {
-    const location = result.region === 'SESA' ? [-55, -34] : [-45, -23];
+    const isZcasNorth = currentSeason === 'DJF' && currentEnso === 'neutro' && currentPhase === 8 && metric === 'extremes';
+    const location = result.region === 'SESA' ? [-55, -34] : (isZcasNorth ? [-50, -13] : [-45, -23]);
     const [x, y] = project(...location);
 
     svg('path', {
@@ -848,7 +849,7 @@ function formatTextForSpeech(raw) {
   // 4. Siglas e termos técnicos para pronúncia em português
   s = s.replace(/\bSALLJ\b/g, 'jato de baixos níveis SALLJ');
   s = s.replace(/\bTSM\b/g, 'temperatura da superfície do mar');
-  s = s.replace(/\bCESA\b/g, 'região centro-leste CESA');
+  s = s.replace(/\bCESA\b/g, 'região CESA');
   s = s.replace(/\bSESA\b/g, 'região do SESA');
   s = s.replace(/\bNorthern\b/g, 'Norte');
 
@@ -943,16 +944,20 @@ function update() {
   if (ensoSel) ensoSel.value = currentEnso;
   const phaseSel = $('phaseSelect');
   if (phaseSel) phaseSel.value = String(currentPhase);
+  const ampInput = $('mjoAmplitude');
+  if (ampInput) ampInput.value = currentAmplitude;
+  const ampVal = $('mjoAmplitudeValue');
+  if (ampVal) ampVal.textContent = currentAmplitude.toFixed(1).replace('.', ',');
   document.querySelectorAll('.event-select').forEach(select => {
     const match = [...select.options].find(o => o.value === [currentSeason,currentEnso,currentPhase,metric].join('|'));
     select.value = match ? match.value : '';
   });
   $('globalView').setAttribute('aria-pressed', String(mapView === 'global'));
   $('regionalView').setAttribute('aria-pressed', String(mapView === 'regional'));
-  $('metricSelect').value = metric;
-  $('mjoSelect').value = mjoMode;
-  for (const [id, layer] of [['sstLayer','sst'],['jetsLayer','jets'],['psaLayer','psa']]) $(id).checked = visibleLayers[layer];
-  $('layerCount').textContent = `(${['sst','jets','psa'].filter(key => visibleLayers[key]).length}/3)`;
+  if ($('metricSelect')) $('metricSelect').value = metric;
+  if ($('mjoSelect')) $('mjoSelect').value = mjoMode;
+  for (const [id, layer] of [['sstLayer','sst'],['jetsLayer','jets'],['psaLayer','psa']]) if ($(id)) $(id).checked = visibleLayers[layer];
+  if ($('layerCount')) $('layerCount').textContent = `(${['sst','jets','psa'].filter(key => visibleLayers[key]).length}/3)`;
 
   // Buscar evidência na base curada
   const evidence = displayEvidence();
@@ -1078,8 +1083,16 @@ document.querySelectorAll('[data-phase]:not([data-shortcut])').forEach(b => {
 document.querySelectorAll('.event-select').forEach(select => {
   select.addEventListener('change', () => {
     if (!select.value) return;
-    const [season,enso,phase,metric] = select.value.split('|');
-    setClimateState({season,enso,phase:Number(phase),metric});
+    const [season, enso, phase, metricVal] = select.value.split('|');
+    // Ao escolher evento de interesse: todos os controles ENSO, fase de MJO, intensidade ativa e o padrão nos trópicos seguem essa escolha
+    setClimateState({
+      season,
+      enso,
+      phase: Number(phase),
+      metric: metricVal,
+      amplitude: 1.5,
+      mjoMode: 'chi'
+    });
   });
 });
 $('metricSelect').addEventListener('change', e => setClimateState({metric:e.target.value}));

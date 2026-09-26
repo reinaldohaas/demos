@@ -24,8 +24,8 @@ const DOCUMENTED_CASES = [
       timing: 'composição de fase / precursora'
     },
     extremes: {
-      region: 'CESA',
-      text: 'Sinal incipiente de aumento de extremos no CESA (centro-leste), antecedendo a resposta madura da fase 8.',
+      region: 'ZCAS',
+      text: 'Sinal incipiente de aumento de extremos na ZCAS (região CESA), antecedendo a resposta madura da fase 8.',
       figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
       sign: 'positivo',
       timing: 'composição de fase / precursora'
@@ -50,8 +50,8 @@ const DOCUMENTED_CASES = [
       timing: 'composição de fase / madura'
     },
     extremes: {
-      region: 'CESA',
-      text: 'Aumento pronunciado da frequência de extremos de chuva na ZCAS e no CESA em La Niña.',
+      region: 'ZCAS',
+      text: 'Aumento pronunciado da frequência de extremos de chuva na ZCAS (região CESA) em La Niña.',
       figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
       sign: 'positivo',
       timing: 'composição de fase / madura'
@@ -76,8 +76,8 @@ const DOCUMENTED_CASES = [
       timing: 'composição de fase / transição'
     },
     extremes: {
-      region: 'CESA',
-      text: 'Extremos concentrados na borda sul da ZCAS e faixa costeira de SP/RJ, em declínio no interior do CESA.',
+      region: 'ZCAS',
+      text: 'Extremos concentrados na borda sul da ZCAS e faixa costeira de SP/RJ, em declínio no interior da ZCAS.',
       figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
       sign: 'positivo',
       timing: 'composição de fase / transição'
@@ -118,15 +118,15 @@ const DOCUMENTED_CASES = [
       timing: 'composição de fase / precursora'
     },
     extremes: {
-      region: 'CESA',
-      text: 'Aumento inicial de extremos no CESA e borda da ZCAS sob El Niño, antecedendo o pico da fase 1.',
+      region: 'ZCAS',
+      text: 'Aumento inicial de extremos na borda da ZCAS (região CESA) sob El Niño, antecedendo o pico da fase 1.',
       figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
       sign: 'positivo',
       timing: 'composição de fase / precursora'
     },
     psa: 'A divergência anômala no Pacífico subtropical centro-leste excita trem de ondas de Rossby; defasagem de cerca de uma fase entre o forçamento da fonte e a resposta madura sobre a América do Sul (Fernandes & Grimm 2023; Roy et al. 2025).',
     source: 'Fernandes & Grimm (2023), Journal of Climate',
-    limits: 'Fase precursora; a resposta de maior amplitude na ZCAS e CESA em El Niño desloca-se para a fase 1.'
+    limits: 'Fase precursora; a resposta de maior amplitude na ZCAS (região CESA) em El Niño desloca-se para a fase 1.'
   },
   {
     id: 'DJF-el-nino-1',
@@ -144,13 +144,13 @@ const DOCUMENTED_CASES = [
       timing: 'composição de fase / madura'
     },
     extremes: {
-      region: 'CESA',
-      text: 'Maior aumento da frequência de extremos no centro-leste da América do Sul (CESA) destacado para El Niño.',
+      region: 'ZCAS',
+      text: 'Maior aumento da frequência de extremos na ZCAS (região CESA) destacado para El Niño.',
       figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
       sign: 'positivo',
       timing: 'composição de fase / madura'
     },
-    psa: 'Trem de ondas PSA plenamente estabelecido a partir da fonte subtropical no Pacífico central/leste; acoplamento dinâmico intensifica a convergência na ZCAS e CESA (Fernandes & Grimm 2023, Figs. 5 e 12).',
+    psa: 'Trem de ondas PSA plenamente estabelecido a partir da fonte subtropical no Pacífico central/leste; acoplamento dinâmico intensifica a convergência na ZCAS (região CESA) (Fernandes & Grimm 2023, Figs. 5 e 12).',
     source: 'Fernandes & Grimm (2023), Journal of Climate',
     limits: 'Resposta máxima defasada em relação à fonte (forçante em 8–1, resposta remota de pico na fase 1 condicionada pelo El Niño).'
   },
@@ -180,15 +180,15 @@ const DOCUMENTED_CASES = [
     circulation: 'Trem de ondas em fase inicial de estruturação pelo Pacífico Sul; a teleconexão no Atlântico subtropical ainda não atinge a definição madura observada na fase 1 (Fernandes & Grimm 2023).',
     mean: null,
     extremes: {
-      region: 'CESA',
-      text: 'Aumento na frequência de extremos de chuva localizado no centro-leste da América do Sul (CESA, setor ao norte de 15°S), sem abranger toda a banda da ZCAS.',
+      region: 'ZCAS',
+      text: 'Aumento na frequência de extremos de chuva localizado no setor norte da ZCAS (ao norte de 15°S, região CESA), sem abranger toda a banda da ZCAS.',
       figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
       sign: 'positivo',
       timing: 'composição de fase'
     },
     psa: 'Ondas de Rossby em fase inicial de estruturação; em anos neutros, a teleconexão atinge maior clareza espacial na fase 1 subsequente (Fernandes & Grimm 2023).',
     source: 'Fernandes & Grimm (2023), Journal of Climate',
-    limits: 'Em anos neutros, o aumento de extremos na fase 8 restringe-se ao CESA (ao norte de 15°S); a chuva média apresenta anomalias fracas ou sem significância estatística em setores da ZCAS, não justificando destaque para a ZCAS inteira.'
+    limits: 'Em anos neutros, o aumento de extremos na fase 8 restringe-se ao setor norte da ZCAS (ao norte de 15°S); a chuva média apresenta anomalias fracas ou sem significância estatística em setores da ZCAS, não justificando destaque para a ZCAS inteira.'
   },
   {
     id: 'DJF-neutro-1',
@@ -202,7 +202,7 @@ const DOCUMENTED_CASES = [
     extremes: null,
     psa: 'No estado neutro, a teleconexão é mais claramente estabelecida na fase 1. Isso não implica resposta significativa homogênea de chuva em toda a ZCAS (Fernandes & Grimm 2023, Figs. 5 e 12).',
     source: 'Fernandes & Grimm (2023), Journal of Climate',
-    limits: 'Embora a teleconexão de circulação em altos níveis esteja mais claramente estabelecida na fase 1 neutra, a resposta em chuva média e extremos na ZCAS permanece fraca e sem significância homogênea, deslocada para o centro de CESA e norte, não justificando destaque na ZCAS inteira.'
+    limits: 'Embora a teleconexão de circulação em altos níveis esteja mais claramente estabelecida na fase 1 neutra, a resposta em chuva média e extremos na ZCAS permanece fraca e sem significância homogênea, deslocada para o setor centro-norte da ZCAS, não justificando destaque na ZCAS inteira.'
   },
 
   // --- COMPARAÇÃO DJF / NEUTRO: FASES 3 E 4 NO SESA ---
