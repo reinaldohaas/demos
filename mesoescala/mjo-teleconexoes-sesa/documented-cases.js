@@ -31,7 +31,7 @@ const DOCUMENTED_CASES = [
       timing: 'composição de fase / precursora'
     },
     psa: 'Início de dispersão de trem de ondas de Rossby a partir da fonte subtropical no Pacífico central-leste. Há uma defasagem dinâmica de aproximadamente uma fase entre a divergência na fonte e a resposta madura na América do Sul (Fernandes & Grimm 2023; Roy et al. 2025).',
-    source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate',
+    source: 'Fernandes & Grimm (2023), Journal of Climate',
     limits: 'Fase precursora; a resposta mais robusta e destacada na ZCAS ocorre na fase 8 subsequente.'
   },
   {
@@ -57,7 +57,7 @@ const DOCUMENTED_CASES = [
       timing: 'composição de fase / madura'
     },
     psa: 'Trem de ondas PSA maduro impõe anomalia anticiclônica no Atlântico subtropical e convergência sobre a ZCAS, mantendo subsidência compensatória e supressão de chuva sobre o SESA (dipolo clássico).',
-    source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate',
+    source: 'Fernandes & Grimm (2023), Journal of Climate',
     limits: 'Destaque de pico na ZCAS em La Niña com dipolo em relação ao SESA; não extrapolar para ausência de efeito na fase 1.'
   },
   {
@@ -83,7 +83,7 @@ const DOCUMENTED_CASES = [
       timing: 'composição de fase / transição'
     },
     psa: 'Teleconexão remota residual das fases 7–8 em declínio; relaxamento gradual da anomalia anticiclônica sobre o Atlântico subtropical.',
-    source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate',
+    source: 'Fernandes & Grimm (2023), Journal of Climate',
     limits: 'Não se trata de declínio homogêneo geral: há migração meridional do sinal para a borda sul da ZCAS e oceano antes da dissipação.'
   },
 
@@ -99,7 +99,7 @@ const DOCUMENTED_CASES = [
     mean: null,
     extremes: null,
     psa: null,
-    source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate; Roy et al. (2025)',
+    source: 'Fernandes & Grimm (2023), Journal of Climate; Roy et al. (2025)',
     limits: 'Em El Niño, o forçamento subtropical que excita a teleconexão para a ZCAS ocorre deslocado para leste apenas nas fases 8–1.'
   },
   {
@@ -108,7 +108,7 @@ const DOCUMENTED_CASES = [
     enso: 'el-nino',
     phase: 8,
     label: 'DJF · El Niño · fase 8',
-    source_convection: 'Convecção-fonte anômala organiza-se no Pacífico Sul subtropical, deslocada para leste (~140°W–120°W) em virtude do estado básico de El Niño (Fernandes & Grimm 2023, Figs. 5 e 9).',
+    source_convection: 'Convecção-fonte anômala organiza-se no Pacífico Sul subtropical (~140°W–120°W), ocorrendo em fases posteriores (fases 8–1) em comparação com a La Niña (fases 7–8) em virtude do acoplamento ao estado básico de El Niño (Fernandes & Grimm 2023, Figs. 5 e 9).',
     circulation: 'Fase precursora do trem de ondas PSA: divergência em altos níveis e trem de ondas desenvolvem-se com defasagem dinâmica de cerca de uma fase até a resposta remota plena.',
     mean: {
       region: 'ZCAS',
@@ -125,7 +125,7 @@ const DOCUMENTED_CASES = [
       timing: 'composição de fase / precursora'
     },
     psa: 'A divergência anômala no Pacífico subtropical centro-leste excita trem de ondas de Rossby; defasagem de cerca de uma fase entre o forçamento da fonte e a resposta madura sobre a América do Sul (Fernandes & Grimm 2023; Roy et al. 2025).',
-    source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate',
+    source: 'Fernandes & Grimm (2023), Journal of Climate',
     limits: 'Fase precursora; a resposta de maior amplitude na ZCAS e CESA em El Niño desloca-se para a fase 1.'
   },
   {
@@ -134,7 +134,7 @@ const DOCUMENTED_CASES = [
     enso: 'el-nino',
     phase: 1,
     label: 'DJF · El Niño · fase 1',
-    source_convection: 'Convecção-fonte das fases 8–1 culmina em divergência de grande escala sobre o continente / Atlântico tropical.',
+    source_convection: 'Convecção-fonte anômala no Pacífico Sul subtropical central/leste (~140°W–120°W; fases 8–1), cuja resposta remota culmina na fase 1 sobre a América do Sul (Fernandes & Grimm 2023, Figs. 5 e 9). Não confundir com o envelope equatorial da MJO, que na fase 1 se encontra sobre o Hemisfério Ocidental e África.',
     circulation: 'Trem de ondas PSA maduro no Atlântico Sudoeste acoplado à circulação sobre o sudeste e centro-leste da América do Sul.',
     mean: {
       region: 'ZCAS',
@@ -151,7 +151,7 @@ const DOCUMENTED_CASES = [
       timing: 'composição de fase / madura'
     },
     psa: 'Trem de ondas PSA plenamente estabelecido a partir da fonte subtropical no Pacífico central/leste; acoplamento dinâmico intensifica a convergência na ZCAS e CESA (Fernandes & Grimm 2023, Figs. 5 e 12).',
-    source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate',
+    source: 'Fernandes & Grimm (2023), Journal of Climate',
     limits: 'Resposta máxima defasada em relação à fonte (forçante em 8–1, resposta remota de pico na fase 1 condicionada pelo El Niño).'
   },
 
@@ -167,7 +167,7 @@ const DOCUMENTED_CASES = [
     mean: null,
     extremes: null,
     psa: null,
-    source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate; Roy et al. (2025)',
+    source: 'Fernandes & Grimm (2023), Journal of Climate; Roy et al. (2025)',
     limits: 'Composição própria de anos neutros; transição precursora que antecede a organização observada nas fases 8–1.'
   },
   {
@@ -187,7 +187,7 @@ const DOCUMENTED_CASES = [
       timing: 'composição de fase'
     },
     psa: 'Ondas de Rossby em fase inicial de estruturação; em anos neutros, a teleconexão atinge maior clareza espacial na fase 1 subsequente (Fernandes & Grimm 2023).',
-    source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate',
+    source: 'Fernandes & Grimm (2023), Journal of Climate',
     limits: 'Em anos neutros, o aumento de extremos na fase 8 restringe-se ao CESA (ao norte de 15°S); a chuva média apresenta anomalias fracas ou sem significância estatística em setores da ZCAS, não justificando destaque para a ZCAS inteira.'
   },
   {
@@ -201,7 +201,7 @@ const DOCUMENTED_CASES = [
     mean: null,
     extremes: null,
     psa: 'No estado neutro, a teleconexão é mais claramente estabelecida na fase 1. Isso não implica resposta significativa homogênea de chuva em toda a ZCAS (Fernandes & Grimm 2023, Figs. 5 e 12).',
-    source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate',
+    source: 'Fernandes & Grimm (2023), Journal of Climate',
     limits: 'Embora a teleconexão de circulação em altos níveis esteja mais claramente estabelecida na fase 1 neutra, a resposta em chuva média e extremos na ZCAS permanece fraca e sem significância homogênea, deslocada para o centro de CESA e norte, não justificando destaque na ZCAS inteira.'
   },
 
@@ -223,7 +223,7 @@ const DOCUMENTED_CASES = [
     },
     mean: null,
     psa: 'Trem de ondas a partir do Oceano Índico com cavado anômalo no Atlântico Sudoeste, favorecendo transporte de umidade para o SESA (Fernandes & Grimm 2023, Figs. 4 e 12; Jones et al. 2023).',
-    source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate; Jones et al. (2023)',
+    source: 'Fernandes & Grimm (2023), Journal of Climate; Jones et al. (2023)',
     limits: 'Fase precursora do pico de extremos observado na fase 4 em anos neutros.'
   },
   {
@@ -243,7 +243,7 @@ const DOCUMENTED_CASES = [
     },
     mean: null,
     psa: 'Forçante de convecção suprimida no Pacífico central gera trem de ondas com sinal oposto às fases 8–1; cavado bem configurado no Atlântico Sudoeste favorece o tipo Central de SALLJ para o SESA (Jones et al. 2023) e ZCAS em subsidência compensatória (Fernandes & Grimm 2023, Figs. 4 e 11).',
-    source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate; Jones et al. (2023)',
+    source: 'Fernandes & Grimm (2023), Journal of Climate; Jones et al. (2023)',
     limits: 'Maior aumento de extremos no SESA em anos neutros; dipolo com a ZCAS suprimida.'
   },
 
@@ -265,7 +265,7 @@ const DOCUMENTED_CASES = [
     },
     mean: null,
     psa: 'Interação construtiva de grande escala: onda excitada no Índico reforçada pelo aquecimento do Pacífico equatorial aprofunda o cavado no Atlântico Sudoeste e favorece o SALLJ para o SESA (Fernandes & Grimm 2023, Figs. 5 e 12; Jones et al. 2023).',
-    source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate; Jones et al. (2023)',
+    source: 'Fernandes & Grimm (2023), Journal of Climate; Jones et al. (2023)',
     limits: 'Efeito acoplado entre a modulação sazonal do El Niño e a escala intrassazonal da MJO.'
   },
   {
@@ -285,7 +285,7 @@ const DOCUMENTED_CASES = [
     },
     mean: null,
     psa: 'Atenuação gradual da resposta ciclônica sobre a Bacia do Prata após o pico da fase 3 em El Niño.',
-    source: 'Fernandes e Alice M. Grimm (2023), Journal of Climate',
+    source: 'Fernandes & Grimm (2023), Journal of Climate',
     limits: 'Evolução em declínio do impacto extremo no SESA durante El Niño.'
   },
 

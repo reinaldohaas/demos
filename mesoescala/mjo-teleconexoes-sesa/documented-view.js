@@ -47,10 +47,22 @@ if (speechSynth && typeof window !== 'undefined') {
 // Restrito estritamente à bacia tropical/equatorial (Índico, Continente Marítimo, Pacífico e África).
 // Não desenha manchas sobre a América do Sul/Brasil (as respostas brasileiras são tratadas exclusivamente
 // pelas evidências observacionais documentadas).
+// Âncoras gráficas convencionais coerentes com Wheeler & Hendon (2004); não são centros observados.
+const MJO_PHASE_REF = {
+  1: { lon: 30, region: 'Hemisfério Ocidental e África' },
+  2: { lon: 65, region: 'Oceano Índico Ocidental' },
+  3: { lon: 85, region: 'Oceano Índico Central/Leste' },
+  4: { lon: 115, region: 'Continente Marítimo' },
+  5: { lon: 135, region: 'Continente Marítimo Oriental' },
+  6: { lon: 155, region: 'Pacífico Ocidental' },
+  7: { lon: -175, region: 'Pacífico Central (Linha de Data)' },
+  8: { lon: -140, region: 'Pacífico Leste / Hemisfério Ocidental' }
+};
+
 const MJO_COMPOSITES = {
   1: {
     wet: [
-      { lon: 35, lat: 2, rx: 75, ry: 24, rot: 0, label: 'Convecção MJO (+)' }
+      { lon: MJO_PHASE_REF[1].lon, lat: 2, rx: 75, ry: 24, rot: 0, label: 'Convecção MJO (+)' }
     ],
     dry: [
       { lon: 120, lat: -6, rx: 90, ry: 28, rot: 0, label: 'Suprimida (−)' }
@@ -58,7 +70,7 @@ const MJO_COMPOSITES = {
   },
   2: {
     wet: [
-      { lon: 70, lat: -3, rx: 75, ry: 26, rot: 0, label: 'Convecção MJO (+)' }
+      { lon: MJO_PHASE_REF[2].lon, lat: -3, rx: 75, ry: 26, rot: 0, label: 'Convecção MJO (+)' }
     ],
     dry: [
       { lon: 140, lat: -8, rx: 95, ry: 28, rot: 0, label: 'Suprimida (−)' }
@@ -66,7 +78,7 @@ const MJO_COMPOSITES = {
   },
   3: {
     wet: [
-      { lon: 86, lat: -2, rx: 80, ry: 28, rot: 0, label: 'Convecção MJO (+)' }
+      { lon: MJO_PHASE_REF[3].lon, lat: -2, rx: 80, ry: 28, rot: 0, label: 'Convecção MJO (+)' }
     ],
     dry: [
       { lon: 155, lat: -8, rx: 100, ry: 30, rot: 0, label: 'Suprimida (−)' }
@@ -74,7 +86,7 @@ const MJO_COMPOSITES = {
   },
   4: {
     wet: [
-      { lon: 118, lat: -5, rx: 80, ry: 28, rot: 0, label: 'Convecção MJO (+)' }
+      { lon: MJO_PHASE_REF[4].lon, lat: -5, rx: 80, ry: 28, rot: 0, label: 'Convecção MJO (+)' }
     ],
     dry: [
       { lon: 175, lat: -8, rx: 90, ry: 30, rot: 0, label: 'Suprimida (−)' },
@@ -83,7 +95,7 @@ const MJO_COMPOSITES = {
   },
   5: {
     wet: [
-      { lon: 136, lat: 3, rx: 85, ry: 28, rot: 0, label: 'Convecção MJO (+)' }
+      { lon: MJO_PHASE_REF[5].lon, lat: 3, rx: 85, ry: 28, rot: 0, label: 'Convecção MJO (+)' }
     ],
     dry: [
       { lon: 70, lat: -4, rx: 85, ry: 28, rot: 0, label: 'Suprimida (−)' },
@@ -92,7 +104,7 @@ const MJO_COMPOSITES = {
   },
   6: {
     wet: [
-      { lon: 155, lat: 0, rx: 70, ry: 24, rot: 0, label: 'Convecção MJO (+)' },
+      { lon: MJO_PHASE_REF[6].lon, lat: 0, rx: 70, ry: 24, rot: 0, label: 'Convecção MJO (+)' },
       { lon: 178, lat: -14, rx: 75, ry: 24, rot: 25, label: 'SPCZ' }
     ],
     dry: [
@@ -101,7 +113,7 @@ const MJO_COMPOSITES = {
   },
   7: {
     wet: [
-      { lon: -175, lat: -13, rx: 90, ry: 26, rot: 25, label: 'Convecção MJO / SPCZ (+)' }
+      { lon: MJO_PHASE_REF[7].lon, lat: -13, rx: 90, ry: 26, rot: 25, label: 'Convecção MJO / SPCZ (+)' }
     ],
     dry: [
       { lon: 105, lat: -6, rx: 115, ry: 32, rot: 0, label: 'Suprimida (−)' }
@@ -109,7 +121,7 @@ const MJO_COMPOSITES = {
   },
   8: {
     wet: [
-      { lon: -150, lat: -12, rx: 70, ry: 24, rot: 20, label: 'Convecção MJO (+)' }
+      { lon: MJO_PHASE_REF[8].lon, lat: -12, rx: 70, ry: 24, rot: 20, label: 'Convecção MJO (+)' }
     ],
     dry: [
       { lon: 115, lat: -6, rx: 120, ry: 32, rot: 0, label: 'Suprimida (−)' }
@@ -122,16 +134,10 @@ const MJO_COMPOSITES = {
 // Anomalias negativas (roxo/azul): divergência em altos níveis (∇²χ < 0, δ > 0), favorecendo convecção e ascendência ativa da MJO.
 // Anomalias positivas (verde/amarelo/laranja/vermelho): convergência em altos níveis (∇²χ > 0, δ < 0), favorecendo convecção suprimida e subsidência.
 // Representação estritamente qualitativa e esquemática; sem inferência de chuva local no Brasil a partir deste campo.
-const MJO_TRACK_POINTS = [
-  { phase: 1, lon: 40, label: '1' },
-  { phase: 2, lon: 65, label: '2' },
-  { phase: 3, lon: 85, label: '3' },
-  { phase: 4, lon: 105, label: '4' },
-  { phase: 5, lon: 125, label: '5' },
-  { phase: 6, lon: 150, label: '6' },
-  { phase: 7, lon: 170, label: '7' },
-  { phase: 8, lon: -155, label: '8' }
-];
+const MJO_TRACK_POINTS = Object.entries(MJO_PHASE_REF)
+  .map(([phase, ref]) => ({
+    phase: Number(phase), lon: ref.lon, label: phase
+  }));
 
 function svg(tag, attributes, text, onClick) {
   const el = document.createElementNS(ns, tag);
@@ -158,17 +164,7 @@ function polygon(points, fill, stroke, strokeWidth = 1.5, dash = null) {
 }
 
 function getMjoPhaseCoords(phase) {
-  switch (Number(phase)) {
-    case 1: return { lon: 30, region: 'África e Índico Ocidental' };
-    case 2: return { lon: 65, region: 'Oceano Índico Ocidental/Central' };
-    case 3: return { lon: 85, region: 'Oceano Índico Central/Leste' };
-    case 4: return { lon: 120, region: 'Continente Marítimo' };
-    case 5: return { lon: 140, region: 'Continente Marítimo Oriental' };
-    case 6: return { lon: 160, region: 'Pacífico Ocidental' };
-    case 7: return { lon: -175, region: 'Pacífico Central (Linha de Data)' };
-    case 8: return { lon: -45, region: 'Hemisfério Ocidental e Atlântico' };
-    default: return { lon: 0, region: 'Global' };
-  }
+  return MJO_PHASE_REF[Number(phase)] || { lon: 0, region: 'Global' };
 }
 
 function getSubtropicalJetParams(season, enso) {
@@ -447,7 +443,7 @@ function drawMap(evidence) {
   svg('text', { x: sesaLabelX, y: sesaLabelY, fill: isSesaHighlighted ? '#7dd3fc' : '#8ab8d4', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'SESA');
 
   // Delimitação da ZCAS: SEMPRE DELIMITADA E IDENTIFICADA
-  const isZcasHighlighted = result && result.region === 'ZCAS';
+  const isZcasHighlighted = result && (result.region === 'ZCAS' || result.region === 'CESA');
   polygon(REGIONS.ZCAS_POLY, isZcasHighlighted ? 'rgba(45, 212, 191, 0.12)' : 'rgba(45, 212, 191, 0.02)', isZcasHighlighted ? '#2dd4bf' : '#3e5c76', isZcasHighlighted ? 2.2 : 1.4, '4 3');
   // Rótulo posicionado na porção oceânica da ZCAS para nunca conflitar com chuva sobre MG/SP/RJ ou CESA
   const [zx, zy] = project(-35, -20.5);
@@ -455,7 +451,7 @@ function drawMap(evidence) {
 
   // Destaque condicional: somente quando houver resultado comprovado para a combinação e métrica
   if (result) {
-    const location = result.region === 'SESA' ? [-55, -34] : result.region === 'CESA' ? [-44, -16] : [-45, -23];
+    const location = result.region === 'SESA' ? [-55, -34] : [-45, -23];
     const [x, y] = project(...location);
 
     svg('path', {
@@ -471,10 +467,6 @@ function drawMap(evidence) {
     svg('text', { x: x + 47, y: y + 5, fill: '#aaf4e7', 'font-size': 24, 'font-weight': '800' }, '↑');
     svg('text', { x, y: y + 43, fill: '#c6f6ef', 'font-size': 13.5, 'font-weight': '600', 'text-anchor': 'middle' },
       metric === 'extremes' ? 'Extremos mais frequentes' : 'Chuva média favorecida');
-
-    if (result.region === 'CESA') {
-      svg('text', { x, y: y - 36, fill: '#a5cce3', 'font-size': 15, 'font-weight': '700', 'text-anchor': 'middle' }, 'CESA · centro-leste');
-    }
   }
 
   $('mapTitle').textContent = mapView === 'global' ? 'Visão global: MJO, Pacífico e América do Sul' : 'América do Sul (visão regional)';
@@ -513,7 +505,7 @@ function generateNarrationText(season, enso, phase, metricVal, evidence) {
   } else {
     text += `Nas estações de transição sazonal (MAM e SON), o traçado do jato posiciona-se em torno de 29 a 30 graus sul. `;
   }
-  text += `Este traçado de jato e as anomalias de TSM são esquemas conceituais didáticos e não medidas de velocidade ou posições latitudinais uniformes ponto a ponto. Em baixos níveis, o SALLJ (~850 hPa) atua no transporte meridional de umidade amazônica, exibindo modos espaciais diferenciados — Central, Northern, Andes e Peru (Jones et al. 2023). `;
+  text += `Este traçado de jato e as anomalias de TSM são esquemas conceituais didáticos e não medidas de velocidade ou posições latitudinais uniformes ponto a ponto. Em baixos níveis, o SALLJ (~850 hPa) atua no transporte meridional de umidade amazônica, exibindo modos espaciais diferenciados — Central, Northern, Andes e Peru (estudo de novembro–março, Jones et al. 2023). `;
 
   // 2. Efeitos verificados, separando convecção-fonte, circulação/teleconexão e respostas remotas
   if (evidence) {
@@ -690,6 +682,12 @@ function update() {
   document.querySelectorAll('[data-season]:not([data-shortcut])').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.season === currentSeason)));
   document.querySelectorAll('[data-enso]:not([data-shortcut])').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.enso === currentEnso)));
   document.querySelectorAll('[data-phase]:not([data-shortcut])').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.phase) === Number(currentPhase))));
+  const seasonSel = $('seasonSelect');
+  if (seasonSel) seasonSel.value = currentSeason;
+  const ensoSel = $('ensoSelect');
+  if (ensoSel) ensoSel.value = currentEnso;
+  const phaseSel = $('phaseSelect');
+  if (phaseSel) phaseSel.value = String(currentPhase);
   document.querySelectorAll('.event-select').forEach(select => {
     const match = [...select.options].find(o => o.value === [currentSeason,currentEnso,currentPhase,metric].join('|'));
     select.value = match ? match.value : '';
@@ -786,6 +784,12 @@ function update() {
 }
 
 // Event Listeners: Estações (DJF, MAM, JJA, SON)
+const seasonSelect = $('seasonSelect');
+if (seasonSelect) {
+  seasonSelect.addEventListener('change', () => {
+    setClimateState({ season: seasonSelect.value });
+  });
+}
 document.querySelectorAll('[data-season]:not([data-shortcut])').forEach(b => {
   b.addEventListener('click', () => {
     setClimateState({ season: b.dataset.season });
@@ -793,6 +797,12 @@ document.querySelectorAll('[data-season]:not([data-shortcut])').forEach(b => {
 });
 
 // Event Listeners: ENOS (El Niño, Neutro, La Niña)
+const ensoSelect = $('ensoSelect');
+if (ensoSelect) {
+  ensoSelect.addEventListener('change', () => {
+    setClimateState({ enso: ensoSelect.value });
+  });
+}
 document.querySelectorAll('[data-enso]:not([data-shortcut])').forEach(b => {
   b.addEventListener('click', () => {
     setClimateState({ enso: b.dataset.enso });
@@ -800,6 +810,12 @@ document.querySelectorAll('[data-enso]:not([data-shortcut])').forEach(b => {
 });
 
 // Event Listeners: MJO Fases 1 a 8
+const phaseSelect = $('phaseSelect');
+if (phaseSelect) {
+  phaseSelect.addEventListener('change', () => {
+    setClimateState({ phase: Number(phaseSelect.value) });
+  });
+}
 document.querySelectorAll('[data-phase]:not([data-shortcut])').forEach(b => {
   b.addEventListener('click', () => {
     setClimateState({ phase: Number(b.dataset.phase) });

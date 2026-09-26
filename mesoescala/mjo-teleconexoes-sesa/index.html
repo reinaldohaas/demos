@@ -100,6 +100,22 @@
       margin-right: 4px;
     }
 
+    .control-select {
+      background: #122438;
+      color: #e3eef9;
+      border: 1px solid var(--card-border);
+      border-radius: 7px;
+      padding: 5px 9px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color-scheme: dark;
+    }
+    .control-select:focus-visible {
+      outline: 2px solid #5eead4;
+      outline-offset: 2px;
+    }
+
     button {
       font: inherit;
       border: 1px solid var(--card-border);
@@ -530,7 +546,7 @@
         <li><strong>Wheeler e Hendon (2004):</strong> estabelecem o índice multivariado usado para acompanhar fase e amplitude. É uma ferramenta de monitoramento tropical, não uma previsão local de precipitação.</li>
         <li><strong>Laís G. Fernandes e Alice M. Grimm (2023):</strong> investigam a modulação da MJO pelo ENOS e seus impactos na América do Sul. É a referência regional central desta demonstração. Os resultados devem ser consultados por região, variável e condição de ENOS, respeitando a significância espacial. <a href="https://doi.org/10.1175/JCLI-D-22-0781.1" target="_blank" rel="noopener">ENSO Modulation of Global MJO and Its Impacts on South America</a>.</li>
         <li><strong>Jones, Mu, Carvalho e Ding (2023):</strong> estudam novembro–março e distinguem quatro tipos de jatos de baixos níveis: Central, Northern, Andes e Peru. Associam sua variabilidade a trens de ondas e mostram influência da MJO sobretudo na frequência do tipo Central. Essa diversidade não se resume a um único jato sempre mais forte ou mais fraco. <a href="https://www.nature.com/articles/s41612-023-00501-4" target="_blank" rel="noopener">Estudo do SALLJ</a>.</li>
-        <li><strong>Roy, Arblaster, Wheeler e Lim (2025):</strong> comparam teleconexões no Hemisfério Sul nas quatro estações e nos três estados de ENOS. Trabalham com pares de fases (8–1, 2–3, 4–5 e 6–7). Seus resultados de circulação não devem ser convertidos automaticamente em chuva no SESA nem atribuídos exclusivamente a uma fase do par. <a href="https://doi.org/10.1029/2024GL113395" target="_blank" rel="noopener">Estudo das teleconexões sazonais</a>.</li>
+        <li><strong>Roy, Arblaster, Wheeler e Lim (2025):</strong> comparam teleconexões no Hemisfério Sul nas quatro estações e nos três estados de ENOS. Trabalham com pares de fases (8–1, 2–3, 4–5 e 6–7; nesta síntese didática, incluem-se casos selecionados dos pares 2–3, 4–5 e 6–7, com o par 8–1 não individualizado). Seus resultados de circulação não devem ser convertidos automaticamente em chuva no SESA nem atribuídos exclusivamente a uma fase do par. <a href="https://doi.org/10.1029/2024GL113395" target="_blank" rel="noopener">Estudo das teleconexões sazonais</a>.</li>
       </ul>
       <h3>Consenso, diferenças e questões abertas</h3>
       <p>Esses trabalhos sustentam a importância do contexto de grande escala, mas respondem a perguntas diferentes. Comparar autores exige manter iguais a estação, o estado de ENOS, a região, a variável, o agrupamento das fases e a defasagem temporal. Diferenças nesses recortes podem explicar resultados distintos; uma divergência só pode ser avaliada após essa comparação.</p>
@@ -545,32 +561,38 @@
     <div class="controls-row">
       <!-- Seletor de Estação do Ano -->
       <div class="control-group-pill">
-        <span class="pill-label">Estação:</span>
-        <button data-season="DJF" aria-pressed="true">☀️ DJF (Verão)</button>
-        <button data-season="MAM" aria-pressed="false">🍂 MAM (Outono)</button>
-        <button data-season="JJA" aria-pressed="false">❄️ JJA (Inverno)</button>
-        <button data-season="SON" aria-pressed="false">🌸 SON (Primavera)</button>
+        <label for="seasonSelect" class="pill-label">Estação:</label>
+        <select id="seasonSelect" class="control-select" aria-label="Selecione a estação do ano">
+          <option value="DJF" data-season="DJF">☀️ DJF (Verão)</option>
+          <option value="MAM" data-season="MAM">🍂 MAM (Outono)</option>
+          <option value="JJA" data-season="JJA">❄️ JJA (Inverno)</option>
+          <option value="SON" data-season="SON">🌸 SON (Primavera)</option>
+        </select>
       </div>
 
       <!-- Seletor de ENOS -->
       <div class="control-group-pill">
-        <span class="pill-label">ENOS:</span>
-        <button class="btn-enso" data-enso="el-nino" aria-pressed="false">🔥 El Niño</button>
-        <button class="btn-enso" data-enso="neutro" aria-pressed="true">⚖️ Neutro</button>
-        <button class="btn-enso" data-enso="la-nina" aria-pressed="false">🧊 La Niña</button>
+        <label for="ensoSelect" class="pill-label">ENOS:</label>
+        <select id="ensoSelect" class="control-select" aria-label="Selecione o estado do ENOS">
+          <option value="neutro" data-enso="neutro">⚖️ Neutro</option>
+          <option value="el-nino" data-enso="el-nino">🔥 El Niño</option>
+          <option value="la-nina" data-enso="la-nina">🧊 La Niña</option>
+        </select>
       </div>
 
       <!-- Seletor de Fases da MJO (1 a 8) -->
       <div class="control-group-pill">
-        <span class="pill-label">MJO (Fase):</span>
-        <button class="btn-phase" data-phase="1" aria-pressed="false">1</button>
-        <button class="btn-phase" data-phase="2" aria-pressed="false">2</button>
-        <button class="btn-phase" data-phase="3" aria-pressed="false">3</button>
-        <button class="btn-phase" data-phase="4" aria-pressed="true">4</button>
-        <button class="btn-phase" data-phase="5" aria-pressed="false">5</button>
-        <button class="btn-phase" data-phase="6" aria-pressed="false">6</button>
-        <button class="btn-phase" data-phase="7" aria-pressed="false">7</button>
-        <button class="btn-phase" data-phase="8" aria-pressed="false">8</button>
+        <label for="phaseSelect" class="pill-label">MJO (Fase):</label>
+        <select id="phaseSelect" class="control-select" aria-label="Selecione a fase da MJO de 1 a 8">
+          <option value="1" data-phase="1">Fase 1 · Hemisfério Ocidental/África</option>
+          <option value="2" data-phase="2">Fase 2 · Oceano Índico Ocidental</option>
+          <option value="3" data-phase="3">Fase 3 · Oceano Índico Central/Leste</option>
+          <option value="4" data-phase="4">Fase 4 · Continente Marítimo</option>
+          <option value="5" data-phase="5">Fase 5 · Continente Marítimo Oriental</option>
+          <option value="6" data-phase="6">Fase 6 · Pacífico Ocidental</option>
+          <option value="7" data-phase="7">Fase 7 · Linha de Data</option>
+          <option value="8" data-phase="8">Fase 8 · Pacífico Leste/Hemisfério Ocidental</option>
+        </select>
       </div>
 
       <!-- Controles de Narração por Voz -->
@@ -668,7 +690,7 @@
             <b>Visualizações da MJO nos Trópicos:</b> Seleção mutuamente exclusiva entre <i>Convecção tropical (esquema RMM)</i> (compostos didáticos conceituais de anomalias ativas [+] e suprimidas [−] baseados no padrão Wheeler & Hendon 2004 e CPC/NOAA), <i>Trilha 1–8</i> (marcações conceituais ao longo do equador com fase ativa destacada e números interativos) ou <i>Nenhuma</i> (sem exibição tropical da MJO para a fase). Ao ligar uma camada, desliga-se a outra.
           </div>
           <div>
-            <b>Domínios Geográficos Permanentes:</b> Polígono SESA (Sul do Brasil, Uruguai, Paraguai, Nordeste da Argentina) identificado com "SESA" no topo da região sem colidir com jatos. Polígono ZCAS sempre visível como referência de monção. Elementos posicionados para evitar sobreposição entre jatos, SALLJ, rótulos e símbolos de precipitação.
+            <b>Domínios Geográficos Permanentes:</b> Polígono SESA (Sul do Brasil, Uruguai e Nordeste da Argentina) identificado com "SESA" no topo da região sem colidir com jatos. Polígono ZCAS sempre visível como referência de monção. Elementos posicionados para evitar sobreposição entre jatos, SALLJ, rótulos e símbolos de precipitação.
           </div>
           <div>
             <b>Destaque de Chuva:</b> Símbolo de nuvem com chuva e seta indicando aumento documentado para a variável selecionada. Presente apenas em combinações comprovadas na literatura; sem símbolo quando não documentado.
@@ -867,7 +889,7 @@
           <b>Jato Subtropical (~200 hPa):</b> Corrente de oeste em altos níveis (~12 km de altitude). Atua como guia de ondas planetárias de Rossby. Sua posição média no traçado esquemático ilustra o ciclo sazonal (32°S no verão e 27°S no inverno neste desenho, sem equivalência com uma climatologia longitudinal medida como convenção didática) e sua espessura gráfica reflete qualitativamente o reforço do guia de ondas no El Niño e sua atenuação na La Niña. Não se impõem velocidades pontuais arbitrárias nem se apresentam as latitudes do desenho como valores climatológicos rígidos observados.
         </p>
         <p>
-          <b>SALLJ (Jato de Baixos Níveis da América do Sul, ~850 hPa):</b> Corrente rápida que escoa ao longo da encosta leste dos Andes. Conforme demonstrado por Jones, Mu, Carvalho & Ding (2023), o SALLJ exibe quatro tipos espaciais principais (Central, Northern, Andes e Peru). O tipo Central opera como canal primário de transporte meridional de umidade amazônica para o SESA, sendo modulado pelas fases ativas da MJO e fases do ENOS.
+          <b>SALLJ (Jato de Baixos Níveis da América do Sul, ~850 hPa):</b> Corrente rápida que escoa ao longo da encosta leste dos Andes. Conforme demonstrado por Jones, Mu, Carvalho & Ding (2023) para o período de novembro a março, o SALLJ exibe quatro tipos espaciais principais (Central, Northern, Andes e Peru). O tipo Central opera como canal primário de transporte meridional de umidade amazônica para o SESA, sendo modulado pelas fases ativas da MJO e fases do ENOS.
         </p>
         <p class="muted">
           Nesta demonstração, ambos os jatos são apresentados com traçados de referência dinâmica geométrica (linha única para o subtropical e seta única para o SALLJ). Foram retiradas fórmulas sintéticas que impunham deslocamentos e velocidades arbitrárias. O jato polar não é representado para manter o foco rigoroso na escala subtropical.
@@ -896,12 +918,12 @@
 </div>
 </main>
 
-<script src="world-land.js?v=20260926c"></script>
-<script src="map-regions.js?v=20260926c"></script>
-<script src="documented-cases.js?v=20260926c"></script>
-<script src="rmm-diagram.js?v=20260926c"></script>
-<script src="documented-view.js?v=20260926c"></script>
-<script src="panels-manager.js?v=20260926c"></script>
-<script src="forecast-sesa.js?v=20260926c"></script>
+<script src="world-land.js?v=20260926d"></script>
+<script src="map-regions.js?v=20260926d"></script>
+<script src="documented-cases.js?v=20260926d"></script>
+<script src="rmm-diagram.js?v=20260926d"></script>
+<script src="documented-view.js?v=20260926d"></script>
+<script src="panels-manager.js?v=20260926d"></script>
+<script src="forecast-sesa.js?v=20260926d"></script>
 </body>
 </html>
