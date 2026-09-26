@@ -7,10 +7,10 @@ let currentAmplitude = 1.5;
 function displayEvidence() { return currentAmplitude >= 1 ? findDocumentedCase(currentSeason, currentEnso, currentPhase) : null; }
 let metric = 'extremes';
 let mapView = 'global';
-let mjoMode = 'dipoles'; // 'dipoles' | 'track' | 'none'
+let mjoMode = 'chi'; // 'chi' | 'dipoles' | 'track' | 'none'
 const visibleLayers = {
   get mjo() { return mjoMode !== 'none'; },
-  set mjo(v) { if (!v) mjoMode = 'none'; else if (mjoMode === 'none') mjoMode = 'dipoles'; },
+  set mjo(v) { if (!v) mjoMode = 'none'; else if (mjoMode === 'none') mjoMode = 'chi'; },
   sst: true,
   jets: true,
   psa: true
@@ -134,6 +134,120 @@ const MJO_COMPOSITES = {
 // Anomalias negativas (roxo/azul): divergência em altos níveis (∇²χ < 0, δ > 0), favorecendo convecção e ascendência ativa da MJO.
 // Anomalias positivas (verde/amarelo/laranja/vermelho): convergência em altos níveis (∇²χ > 0, δ < 0), favorecendo convecção suprimida e subsidência.
 // Representação estritamente qualitativa e esquemática; sem inferência de chuva local no Brasil a partir deste campo.
+const MJO_CHI_SCHEMATIC = {
+  1: {
+    active: {
+      center: [-40, 5],
+      outer: { lon: -40, lat: 5, rx: 85, ry: 26 },
+      mid: { lon: -40, lat: 6, rx: 55, ry: 24 },
+      core: { lon: -45, lat: 8, rx: 32, ry: 20 }
+    },
+    suppressed: {
+      center: [155, 5],
+      outer: { lon: 155, lat: 5, rx: 75, ry: 26 },
+      mid: { lon: 155, lat: 6, rx: 50, ry: 24 },
+      core: { lon: 155, lat: 8, rx: 28, ry: 20 }
+    }
+  },
+  2: {
+    active: {
+      center: [60, 2],
+      outer: { lon: 55, lat: 2, rx: 80, ry: 26 },
+      mid: { lon: 60, lat: 2, rx: 48, ry: 24 },
+      core: { lon: 65, lat: 3, rx: 25, ry: 19 }
+    },
+    suppressed: {
+      center: [165, 5],
+      outer: { lon: 165, lat: 5, rx: 75, ry: 26 },
+      mid: { lon: 165, lat: 6, rx: 50, ry: 24 },
+      core: { lon: 165, lat: 7, rx: 28, ry: 20 }
+    }
+  },
+  3: {
+    active: {
+      center: [78, 0],
+      outer: { lon: 75, lat: 0, rx: 80, ry: 26 },
+      mid: { lon: 78, lat: 0, rx: 52, ry: 25 },
+      core: { lon: 80, lat: 1, rx: 30, ry: 20 }
+    },
+    suppressed: {
+      center: [-130, 2],
+      outer: { lon: -130, lat: 2, rx: 85, ry: 26 },
+      mid: { lon: -130, lat: 2, rx: 55, ry: 24 },
+      core: null
+    }
+  },
+  4: {
+    active: {
+      center: [118, 0],
+      outer: { lon: 118, lat: 0, rx: 75, ry: 26 },
+      mid: { lon: 118, lat: 0, rx: 48, ry: 24 },
+      core: { lon: 118, lat: 1, rx: 28, ry: 20 }
+    },
+    suppressed: {
+      center: [-50, 6],
+      outer: { lon: -50, lat: 6, rx: 80, ry: 26 },
+      mid: { lon: -50, lat: 6, rx: 50, ry: 24 },
+      core: { lon: -50, lat: 7, rx: 26, ry: 19 }
+    }
+  },
+  5: {
+    active: {
+      center: [138, 2],
+      outer: { lon: 138, lat: 2, rx: 80, ry: 26 },
+      mid: { lon: 138, lat: 2, rx: 50, ry: 24 },
+      core: { lon: 140, lat: 3, rx: 28, ry: 20 }
+    },
+    suppressed: {
+      center: [-10, 4],
+      outer: { lon: -10, lat: 4, rx: 85, ry: 26 },
+      mid: { lon: -10, lat: 4, rx: 52, ry: 24 },
+      core: { lon: -15, lat: 5, rx: 26, ry: 19 }
+    }
+  },
+  6: {
+    active: {
+      center: [168, 0],
+      outer: { lon: 168, lat: 0, rx: 78, ry: 26 },
+      mid: { lon: 168, lat: 0, rx: 48, ry: 24 },
+      core: { lon: 168, lat: 1, rx: 26, ry: 19 }
+    },
+    suppressed: {
+      center: [75, 0],
+      outer: { lon: 75, lat: 0, rx: 80, ry: 26 },
+      mid: { lon: 75, lat: 0, rx: 50, ry: 24 },
+      core: { lon: 75, lat: 1, rx: 28, ry: 20 }
+    }
+  },
+  7: {
+    active: {
+      center: [-145, 0],
+      outer: { lon: -145, lat: 0, rx: 80, ry: 26 },
+      mid: { lon: -145, lat: 0, rx: 52, ry: 24 },
+      core: { lon: -145, lat: 1, rx: 30, ry: 20 }
+    },
+    suppressed: {
+      center: [92, 2],
+      outer: { lon: 92, lat: 2, rx: 80, ry: 26 },
+      mid: { lon: 92, lat: 2, rx: 52, ry: 24 },
+      core: { lon: 92, lat: 3, rx: 28, ry: 20 }
+    }
+  },
+  8: {
+    active: {
+      center: [-75, 4],
+      outer: { lon: -75, lat: 4, rx: 85, ry: 26 },
+      mid: { lon: -75, lat: 4, rx: 55, ry: 24 },
+      core: { lon: -75, lat: 5, rx: 32, ry: 20 }
+    },
+    suppressed: {
+      center: [126, 0],
+      outer: { lon: 126, lat: 0, rx: 78, ry: 26 },
+      mid: { lon: 126, lat: 0, rx: 50, ry: 24 },
+      core: { lon: 126, lat: 1, rx: 28, ry: 20 }
+    }
+  }
+};
 const MJO_TRACK_POINTS = Object.entries(MJO_PHASE_REF)
   .map(([phase, ref]) => ({
     phase: Number(phase), lon: ref.lon, label: phase
@@ -314,10 +428,148 @@ function drawMjoTrack() {
   }
 }
 
+function drawChiColorbar(x, y, w, h) {
+  // Fundo translúcido
+  svg('rect', { x, y, width: w, height: h, rx: 6, fill: 'rgba(15, 23, 42, 0.90)', stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-width': 1 });
+
+  // Título didático conceitual
+  svg('text', { x: x + w / 2, y: y + 10, fill: '#bae6fd', 'font-size': 9.5, 'font-weight': '700', 'text-anchor': 'middle' },
+    'Divergência / Convergência em 200 hPa · χ₂₀₀ (Esquema conceitual didático · CPC)');
+
+  // 6 caixas de cores
+  const barW = w - 40;
+  const barH = 7;
+  const barX = x + 20;
+  const barY = y + 14;
+  const colors = ['#0369a1', '#0284c7', '#38bdf8', '#facc15', '#f97316', '#dc2626'];
+  const segW = barW / colors.length;
+
+  colors.forEach((col, idx) => {
+    svg('rect', { x: barX + idx * segW, y: barY, width: segW, height: barH, fill: col, stroke: 'rgba(0,0,0,0.3)', 'stroke-width': 0.5 });
+  });
+
+  // Ticks conceituais qualitativos
+  svg('text', { x: barX, y: barY + barH + 9, fill: '#38bdf8', 'font-size': 8.5, 'font-weight': '700', 'text-anchor': 'start' }, '← Divergência (Ativa · χ < 0)');
+  svg('text', { x: barX + barW / 2, y: barY + barH + 9, fill: '#94a3b8', 'font-size': 8.5, 'font-weight': '600', 'text-anchor': 'middle' }, 'Neutro');
+  svg('text', { x: barX + barW, y: barY + barH + 9, fill: '#f87171', 'font-size': 8.5, 'font-weight': '700', 'text-anchor': 'end' }, 'Convergência (Suprimida · χ > 0) →');
+}
+
+function drawMjoVelocityPotential() {
+  const chi = MJO_CHI_SCHEMATIC[currentPhase];
+  if (!chi) return;
+
+  const isGlobal = mapView === 'global';
+
+  if (isGlobal) {
+    // 1. Limites do domínio tropical entre 30°S e 30°N
+    const y30N = (85 - 30) * 560 / 160;
+    const y30S = (85 - (-30)) * 560 / 160;
+    svg('line', { x1: 0, y1: y30N, x2: 1200, y2: y30N, stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-dasharray': '5 4' });
+    svg('line', { x1: 0, y1: y30S, x2: 1200, y2: y30S, stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-dasharray': '5 4' });
+    svg('text', { x: 1190, y: y30N + 14, fill: '#bae6fd', 'font-size': 10.5, 'font-weight': '700', 'text-anchor': 'end', 'letter-spacing': 0.5 }, 'χ₂₀₀ · Potencial de velocidade em altitude (esquema conceitual)');
+
+    // 2. Desenhar camadas ativas e suprimidas com envelopamento contínuo
+    const renderLayers = (data, styleKey) => {
+      if (!data) return;
+      const styles = {
+        outer: {
+          fill: styleKey === 'active' ? '#38bdf8' : '#facc15',
+          opacity: 0.38,
+          stroke: styleKey === 'active' ? '#7dd3fc' : '#fde047',
+          strokeWidth: 1.1
+        },
+        mid: {
+          fill: styleKey === 'active' ? '#0284c7' : '#f97316',
+          opacity: 0.52,
+          stroke: styleKey === 'active' ? '#38bdf8' : '#fb923c',
+          strokeWidth: 1.3
+        },
+        core: {
+          fill: styleKey === 'active' ? '#0369a1' : '#dc2626',
+          opacity: 0.72,
+          stroke: styleKey === 'active' ? '#0284c7' : '#ef4444',
+          strokeWidth: 1.6
+        }
+      };
+
+      for (const level of ['outer', 'mid', 'core']) {
+        const item = data[level];
+        if (!item) continue;
+        const st = styles[level];
+        const rx = item.rx * (1200 / 360);
+        const ry = item.ry * (560 / 160);
+
+        for (const shift of [-360, 0, 360]) {
+          const [cx, cy] = project(item.lon + shift, item.lat);
+          if (cx + rx >= -50 && cx - rx <= 1250) {
+            svg('ellipse', {
+              cx, cy, rx, ry,
+              fill: st.fill,
+              'fill-opacity': currentAmplitude < 1 ? st.opacity * 0.5 : st.opacity,
+              stroke: st.stroke,
+              'stroke-width': st.strokeWidth
+            });
+          }
+        }
+      }
+    };
+
+    renderLayers(chi.active, 'active');
+    renderLayers(chi.suppressed, 'suppressed');
+
+    // 3. Rótulos nos centros de divergência e convergência
+    if (chi.active && chi.active.center) {
+      const [acx, acy] = project(chi.active.center[0], chi.active.center[1]);
+      svg('text', { x: acx, y: acy - 6, fill: '#bae6fd', 'font-size': 11.5, 'font-weight': '800', 'text-anchor': 'middle' }, 'Divergência 200 hPa');
+      svg('text', { x: acx, y: acy + 9, fill: '#e0f2fe', 'font-size': 10.5, 'font-weight': '600', 'text-anchor': 'middle' }, '(Convecção MJO Ativa · χ < 0)');
+    }
+    if (chi.suppressed && chi.suppressed.center) {
+      const [scx, scy] = project(chi.suppressed.center[0], chi.suppressed.center[1]);
+      svg('text', { x: scx, y: scy - 6, fill: '#fef08a', 'font-size': 11.5, 'font-weight': '800', 'text-anchor': 'middle' }, 'Convergência 200 hPa');
+      svg('text', { x: scx, y: scy + 9, fill: '#fed7aa', 'font-size': 10.5, 'font-weight': '600', 'text-anchor': 'middle' }, '(Convecção Suprimida · χ > 0)');
+    }
+
+    // 4. Barra de escala didática conceitual
+    drawChiColorbar(350, 520, 500, 34);
+  } else {
+    // Visão Regional (América do Sul): contornos didáticos suaves sobre o continente
+    const renderRegionalLayers = (data, styleKey) => {
+      if (!data) return;
+      const styles = {
+        outer: { fill: styleKey === 'active' ? '#38bdf8' : '#facc15', opacity: 0.28, stroke: styleKey === 'active' ? '#7dd3fc' : '#fde047' },
+        mid: { fill: styleKey === 'active' ? '#0284c7' : '#f97316', opacity: 0.38, stroke: styleKey === 'active' ? '#38bdf8' : '#fb923c' },
+        core: { fill: styleKey === 'active' ? '#0369a1' : '#dc2626', opacity: 0.50, stroke: styleKey === 'active' ? '#0284c7' : '#ef4444' }
+      };
+      for (const level of ['outer', 'mid', 'core']) {
+        const item = data[level];
+        if (!item) continue;
+        const st = styles[level];
+        const [cx, cy] = project(item.lon, item.lat);
+        const rx = item.rx * 8;
+        const ry = item.ry * 6.4;
+        svg('ellipse', {
+          cx, cy, rx, ry,
+          fill: st.fill,
+          'fill-opacity': currentAmplitude < 1 ? st.opacity * 0.4 : st.opacity,
+          stroke: st.stroke,
+          'stroke-width': 1.2
+        });
+      }
+    };
+
+    renderRegionalLayers(chi.active, 'active');
+    renderRegionalLayers(chi.suppressed, 'suppressed');
+
+    // Barra de legenda compacta na visão regional
+    drawChiColorbar(100, 480, 440, 30);
+  }
+}
+
 function drawMjoTropicalVisualizations() {
   if (mjoMode === 'dipoles') {
     if (mapView === 'global') drawMjoConvection();
-
+  } else if (mjoMode === 'chi') {
+    drawMjoVelocityPotential();
   } else if (mjoMode === 'track') {
     if (mapView === 'global') drawMjoTrack();
   }
@@ -428,6 +680,9 @@ function drawMap(evidence) {
     drawGlobalContext(evidence);
   } else {
     drawLand();
+    if (mjoMode === 'chi') {
+      drawMjoVelocityPotential();
+    }
   }
 
   // Jatos (Subtropical e SALLJ como base visual permanente)
@@ -661,7 +916,7 @@ function speakCurrentNarration() {
 }
 
 function setMjoMode(mode) {
-  mjoMode = mode === 'chi' ? 'dipoles' : mode; // 'dipoles' | 'track' | 'none'
+  mjoMode = mode; // 'dipoles' | 'chi' | 'track' | 'none'
   update();
 }
 
@@ -672,7 +927,7 @@ function setClimateState(opts) {
   if (opts.amplitude !== undefined && Number.isFinite(Number(opts.amplitude))) currentAmplitude = Math.max(0, Math.min(3, Number(opts.amplitude)));
   if (opts.metric !== undefined) metric = opts.metric;
   if (opts.view !== undefined) mapView = opts.view;
-  if (opts.mjoMode !== undefined) mjoMode = opts.mjoMode === 'chi' ? 'dipoles' : opts.mjoMode;
+  if (opts.mjoMode !== undefined) mjoMode = opts.mjoMode;
   update();
 }
 

@@ -624,7 +624,7 @@
           <button id="regionalView" aria-pressed="false">América do Sul</button>
         </div>
         <label class="toolbar-group" for="mjoSelect">MJO nos trópicos:
-          <select id="mjoSelect"><option value="dipoles">Convecção tropical (esquema)</option><option value="track">Trilha 1–8</option><option value="none">Nenhuma</option></select>
+          <select id="mjoSelect"><option value="chi" selected>χ200 · potencial de velocidade (esquema didático)</option><option value="dipoles">Dipolos simples</option><option value="track">Trilha 1–8</option><option value="none">Nenhuma</option></select>
         </label>
         <details class="layer-choices"><summary>Camadas <span id="layerCount"></span></summary><div>
           <label><input id="sstLayer" type="checkbox" checked> TSM · sinal do ENOS</label>
@@ -676,7 +676,7 @@
             <b>Base Cartográfica:</b> Polígonos de terra Natural Earth 1:110m (projeção equirretangular contínua). Visão global com Pacífico centralizado e contexto Índico–Pacífico–América do Sul. Na visão regional da América do Sul, inclui fronteiras internacionais dos países vizinhos e limites estaduais brasileiros discretos para localização geográfica precisa e desobstruída.
           </div>
           <div>
-            <b>Visualizações da MJO nos Trópicos:</b> Seleção mutuamente exclusiva entre <i>Convecção tropical (esquema RMM)</i> (compostos didáticos conceituais de anomalias ativas [+] e suprimidas [−] baseados no padrão Wheeler & Hendon 2004 e CPC/NOAA), <i>Trilha 1–8</i> (marcações conceituais ao longo do equador com fase ativa destacada e números interativos) ou <i>Nenhuma</i> (sem exibição tropical da MJO para a fase). Ao ligar uma camada, desliga-se a outra.
+            <b>Visualizações da MJO nos Trópicos:</b> Seleção mutuamente exclusiva entre <i>Convecção tropical (esquema)</i> (dipolos equatoriais didáticos), <i>χ200 (esquema conceitual)</i> (contornos didáticos de divergência/convergência em altitude), <i>Trilha 1–8</i> (marcações conceituais ao longo do equador com fase ativa destacada e números interativos) ou <i>Nenhuma</i>. Ao selecionar uma camada, desliga-se a outra.
           </div>
           <div>
             <b>Domínios Geográficos Permanentes:</b> Polígono SESA (Sul do Brasil, Uruguai e Nordeste da Argentina) identificado com "SESA" no topo da região sem colidir com jatos. Polígono ZCAS sempre visível como referência de monção. Elementos posicionados para evitar sobreposição entre jatos, SALLJ, rótulos e símbolos de precipitação.
@@ -907,12 +907,12 @@
 </div>
 </main>
 
-<script src="world-land.js?v=20260926e"></script>
-<script src="map-regions.js?v=20260926e"></script>
-<script src="documented-cases.js?v=20260926e"></script>
-<script src="rmm-diagram.js?v=20260926e"></script>
-<script src="documented-view.js?v=20260926e"></script>
-<script src="panels-manager.js?v=20260926e"></script>
-<script src="forecast-sesa.js?v=20260926e"></script>
+<script src="world-land.js?v=20260926f"></script>
+<script src="map-regions.js?v=20260926f"></script>
+<script src="documented-cases.js?v=20260926f"></script>
+<script src="rmm-diagram.js?v=20260926f"></script>
+<script src="documented-view.js?v=20260926f"></script>
+<script src="panels-manager.js?v=20260926f"></script>
+<script src="forecast-sesa.js?v=20260926f"></script>
 </body>
 </html>
