@@ -484,7 +484,19 @@
       svg#map { min-height: 280px; }
       .dashboard-grid { grid-template-columns: 1fr; }
     }
-  </style>
+  
+    select {background:#102638;color:#e2e8f0;border:1px solid #36556e;border-radius:7px;padding:9px;max-width:100%;font:inherit;color-scheme:dark;}
+    select:focus-visible, summary:focus-visible {outline:2px solid #5eead4;outline-offset:3px;}
+    .event-choices {display:flex;flex-wrap:wrap;gap:12px;align-items:end;border-top:1px solid #1a344e;padding-top:12px;}
+    .event-choices>label {display:flex;flex-direction:column;gap:5px;flex:1 1 190px;min-width:0;color:#a7c4d5;font-size:12px;}
+    .event-choices>.pill-label {width:100%;}
+    .layer-choices {position:relative;font-size:13px;}
+    .layer-choices summary {cursor:pointer;padding:10px;border:1px solid #36556e;border-radius:7px;background:#102638;}
+    .layer-choices>div {position:absolute;top:100%;left:0;z-index:100;background:#102638;border:1px solid #36556e;border-radius:7px;padding:12px;min-width:220px;box-shadow:0 8px 24px #0008;}
+    .layer-choices label {display:block;padding:8px 0;white-space:nowrap;}
+    .map-header {align-items:center;}
+    @media(max-width:600px){.toolbar-group select{width:100%;}.layer-choices>div{left:auto;right:0;}}
+</style>
 </head>
 <body>
 <main>
@@ -546,40 +558,12 @@
       </div>
     </div>
 
-    <!-- Atalhos para os Casos com Evidência Documentada (Eventos de Interesse por Estação) -->
-    <div class="controls-row" style="border-top: 1px solid #1a344e; padding-top: 8px;">
-      <span class="pill-label" style="color:var(--accent-teal);">Eventos de interesse:</span>
-      <div style="display:flex; flex-wrap:wrap; gap:4px; align-items:center;">
-        <span style="font-size:11px; font-weight:700; color:#94a3b8; margin-left:4px;">☀️ DJF:</span>
-        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="la-nina" data-phase="7" data-metric="mean">La Niña · 7 (Fonte)</button>
-        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="la-nina" data-phase="8" data-metric="mean">La Niña · 8 (Pico ZCAS)</button>
-        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="la-nina" data-phase="1" data-metric="mean">La Niña · 1 (Borda sul ZCAS)</button>
-        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="el-nino" data-phase="8" data-metric="extremes">El Niño · 8 (Fonte leste)</button>
-        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="el-nino" data-phase="1" data-metric="extremes">El Niño · 1 (Pico CESA/ZCAS)</button>
-        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="el-nino" data-phase="3" data-metric="extremes">El Niño · 3 (SESA extremos)</button>
-        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="8" data-metric="extremes">Neutro · 8 (CESA extremos)</button>
-        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="1" data-metric="circulation">Neutro · 1 (Circulação PSA)</button>
-        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="3" data-metric="extremes">Neutro · 3 (Precursor SESA)</button>
-        <button class="btn-shortcut" data-shortcut data-season="DJF" data-enso="neutro" data-phase="4" data-metric="extremes">Neutro · 4 (Pico SESA)</button>
-      </div>
-      <div style="display:flex; flex-wrap:wrap; gap:4px; align-items:center; width:100%; margin-top:4px;">
-        <span style="font-size:11px; font-weight:700; color:#94a3b8; margin-left:4px;">🍂 MAM:</span>
-        <button class="btn-shortcut" data-shortcut data-season="MAM" data-enso="neutro" data-phase="4" data-metric="circulation">Neutro · 4 (Par 4–5)</button>
-        <button class="btn-shortcut" data-shortcut data-season="MAM" data-enso="neutro" data-phase="6" data-metric="circulation">Neutro · 6 (Par 6–7)</button>
-        <button class="btn-shortcut" data-shortcut data-season="MAM" data-enso="el-nino" data-phase="4" data-metric="circulation">El Niño · 4 (Par 4–5)</button>
-        <button class="btn-shortcut" data-shortcut data-season="MAM" data-enso="el-nino" data-phase="6" data-metric="circulation">El Niño · 6 (Par 6–7)</button>
-        <button class="btn-shortcut" data-shortcut data-season="MAM" data-enso="la-nina" data-phase="4" data-metric="circulation">La Niña · 4 (Par 4–5)</button>
-        <button class="btn-shortcut" data-shortcut data-season="MAM" data-enso="la-nina" data-phase="6" data-metric="circulation">La Niña · 6 (Par 6–7)</button>
-
-        <span style="font-size:11px; font-weight:700; color:#94a3b8; margin-left:8px;">❄️ JJA:</span>
-        <button class="btn-shortcut" data-shortcut data-season="JJA" data-enso="el-nino" data-phase="2" data-metric="circulation">El Niño · 2 (Par 2–3)</button>
-        <button class="btn-shortcut" data-shortcut data-season="JJA" data-enso="la-nina" data-phase="2" data-metric="circulation">La Niña · 2 (Par 2–3)</button>
-
-        <span style="font-size:11px; font-weight:700; color:#94a3b8; margin-left:8px;">🌸 SON:</span>
-        <button class="btn-shortcut" data-shortcut data-season="SON" data-enso="el-nino" data-phase="4" data-metric="circulation">El Niño · 4 (Par 4–5)</button>
-        <button class="btn-shortcut" data-shortcut data-season="SON" data-enso="la-nina" data-phase="4" data-metric="circulation">La Niña · 4 (Par 4–5)</button>
-      </div>
-    </div>
+<div class="event-choices"><span class="pill-label">Eventos de interesse:</span>
+<label>DJF · Verão<select id="eventsDJF" class="event-select" aria-label="Eventos de interesse — DJF"><option value="">Escolher caso…</option><option value="DJF|la-nina|7|mean">La Niña · 7 (Fonte)</option><option value="DJF|la-nina|8|mean">La Niña · 8 (Pico ZCAS)</option><option value="DJF|la-nina|1|mean">La Niña · 1 (Borda sul ZCAS)</option><option value="DJF|el-nino|8|extremes">El Niño · 8 (Fonte leste)</option><option value="DJF|el-nino|1|extremes">El Niño · 1 (Pico CESA/ZCAS)</option><option value="DJF|el-nino|3|extremes">El Niño · 3 (SESA extremos)</option><option value="DJF|neutro|8|extremes">Neutro · 8 (CESA extremos)</option><option value="DJF|neutro|1|circulation">Neutro · 1 (Circulação PSA)</option><option value="DJF|neutro|3|extremes">Neutro · 3 (Precursor SESA)</option><option value="DJF|neutro|4|extremes">Neutro · 4 (Pico SESA)</option></select></label>
+<label>MAM · Outono<select id="eventsMAM" class="event-select" aria-label="Eventos de interesse — MAM"><option value="">Escolher caso…</option><option value="MAM|neutro|4|circulation">Neutro · 4 (Par 4–5)</option><option value="MAM|neutro|6|circulation">Neutro · 6 (Par 6–7)</option><option value="MAM|el-nino|4|circulation">El Niño · 4 (Par 4–5)</option><option value="MAM|el-nino|6|circulation">El Niño · 6 (Par 6–7)</option><option value="MAM|la-nina|4|circulation">La Niña · 4 (Par 4–5)</option><option value="MAM|la-nina|6|circulation">La Niña · 6 (Par 6–7)</option></select></label>
+<label>JJA · Inverno<select id="eventsJJA" class="event-select" aria-label="Eventos de interesse — JJA"><option value="">Escolher caso…</option><option value="JJA|el-nino|2|circulation">El Niño · 2 (Par 2–3)</option><option value="JJA|la-nina|2|circulation">La Niña · 2 (Par 2–3)</option></select></label>
+<label>SON · Primavera<select id="eventsSON" class="event-select" aria-label="Eventos de interesse — SON"><option value="">Escolher caso…</option><option value="SON|el-nino|4|circulation">El Niño · 4 (Par 4–5)</option><option value="SON|la-nina|4|circulation">La Niña · 4 (Par 4–5)</option></select></label>
+</div>
   </section>
 
   <!-- Topo Principal: Mapa e Diagrama RMM Juntos na Parte de Cima -->
@@ -592,27 +576,18 @@
           <button id="globalView" aria-pressed="true">Visão global</button>
           <button id="regionalView" aria-pressed="false">América do Sul</button>
         </div>
-        <div class="toolbar-group">
-          <span class="group-label">MJO nos trópicos:</span>
-          <button id="mjoDipolesLayer" aria-pressed="true">Convecção tropical (esquema RMM)</button>
-          <span class="muted" title="Sem campo de dados rastreável: camada retirada">Potencial de velocidade: indisponível</span>
-          <button id="mjoTrackLayer" aria-pressed="false">Trilha 1–8</button>
-          <button id="mjoNoneLayer" aria-pressed="false">Nenhuma</button>
-          <button id="mjoLayer" style="display:none;" aria-hidden="true"></button>
-        </div>
-        <div class="toolbar-group">
-          <span class="group-label">Camadas:</span>
-          <button id="sstLayer" aria-pressed="true">TSM: sinal do ENOS</button>
-          <button id="jetsLayer" aria-pressed="true">Jatos: STJ & SALLJ</button>
-          <button id="psaLayer" aria-pressed="true">PSA: teleconexão</button>
-        </div>
-        <div class="toolbar-group">
-          <span class="group-label">Variável:</span>
-          <button id="extremes" aria-pressed="true">Extremos de chuva</button>
-          <button id="circulation" aria-pressed="false">Circulação</button>
-          <button id="mean" aria-pressed="false">Chuva média</button>
-          <button id="legendButton" aria-expanded="false" aria-controls="legend">Mostrar legenda</button>
-        </div>
+        <label class="toolbar-group" for="mjoSelect">MJO nos trópicos:
+          <select id="mjoSelect"><option value="dipoles">Convecção tropical (esquema)</option><option value="track">Trilha 1–8</option><option value="none">Nenhuma</option></select>
+        </label>
+        <details class="layer-choices"><summary>Camadas <span id="layerCount"></span></summary><div>
+          <label><input id="sstLayer" type="checkbox" checked> TSM · sinal do ENOS</label>
+          <label><input id="jetsLayer" type="checkbox" checked> Jatos · STJ e SALLJ</label>
+          <label><input id="psaLayer" type="checkbox" checked> PSA · teleconexão</label>
+        </div></details>
+        <label class="toolbar-group" for="metricSelect">Variável:
+          <select id="metricSelect"><option value="extremes">Extremos de chuva</option><option value="mean">Chuva média</option><option value="circulation">Circulação</option></select>
+        </label>
+        <button id="legendButton" aria-expanded="false" aria-controls="legend">Mostrar legenda</button>
         <!-- Controles de Organização da Interface (Painéis e Restaurar Layout) -->
         <div class="toolbar-group layout-tools" style="position:relative;">
           <button id="btnPanelsMenu" class="btn-layout" aria-haspopup="true" aria-expanded="false" title="Gerenciar visibilidade dos painéis">
@@ -885,12 +860,12 @@
 </div>
 </main>
 
-<script src="world-land.js?v=20260925f"></script>
-<script src="map-regions.js?v=20260925f"></script>
-<script src="documented-cases.js?v=20260925f"></script>
-<script src="rmm-diagram.js?v=20260925f"></script>
-<script src="documented-view.js?v=20260925f"></script>
-<script src="panels-manager.js?v=20260925f"></script>
-<script src="forecast-sesa.js?v=20260925f"></script>
+<script src="world-land.js?v=20260926a"></script>
+<script src="map-regions.js?v=20260926a"></script>
+<script src="documented-cases.js?v=20260926a"></script>
+<script src="rmm-diagram.js?v=20260926a"></script>
+<script src="documented-view.js?v=20260926a"></script>
+<script src="panels-manager.js?v=20260926a"></script>
+<script src="forecast-sesa.js?v=20260926a"></script>
 </body>
 </html>

@@ -49,9 +49,9 @@ const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
 
 // Eventos de interesse e atalhos sazonais nas 4 estações
 assert(html.includes('Eventos de interesse:'), 'Seção Eventos de interesse presente');
-assert(html.includes('data-season="MAM" data-enso="neutro" data-phase="4"'), 'Atalho MAM Neutro presente');
-assert(html.includes('data-season="JJA" data-enso="el-nino" data-phase="2"'), 'Atalho JJA El Niño presente');
-assert(html.includes('data-season="SON" data-enso="el-nino" data-phase="4"'), 'Atalho SON El Niño presente');
+assert(html.includes('value="MAM|neutro|4|circulation"'), 'Atalho MAM Neutro presente');
+assert(html.includes('value="JJA|el-nino|2|circulation"'), 'Atalho JJA El Niño presente');
+assert(html.includes('value="SON|el-nino|4|circulation"'), 'Atalho SON El Niño presente');
 
 // Ausência de rotulagem indevida de dados observacionais NOAA e escalas quantitativas falsas
 assert(!html.includes('NOAA/ESRL'), 'Sem atribuição indevida a NOAA/ESRL no HTML');
@@ -73,10 +73,10 @@ for (let p = 1; p <= 8; p++) {
   assert(html.includes(`data-phase="${p}"`), `Botão de fase MJO ${p} presente`);
 }
 
-// 4 Modos da MJO nos trópicos
-assert(html.includes('id="mjoDipolesLayer"'), 'Botão Convecção tropical RMM presente');
-assert(html.includes('id="mjoTrackLayer"'), 'Botão Trilha 1-8 presente');
-assert(html.includes('id="mjoNoneLayer"'), 'Botão Nenhuma presente');
+// Opções do seletor MJO nos trópicos
+assert(html.includes('value="dipoles"'), 'Opção Convecção tropical RMM presente');
+assert(html.includes('value="track"'), 'Opção Trilha 1-8 presente');
+assert(html.includes('value="none"'), 'Opção Nenhuma presente');
 
 // Controles de narração por voz e texto acessível
 assert(html.includes('id="btnVoiceNarrate"'), 'Botão narrar presente');
@@ -369,6 +369,6 @@ for (const season of seasons) {
 }
 const viewSource=fs.readFileSync(path.join(__dirname,'documented-view.js'),'utf8');
 assert(!viewSource.includes('const MJO_CHI_COMPOSITES'));
-assert(html.includes('id="forecastPanel"') && html.includes('id="circulation"'));
+assert(html.includes('id="forecastPanel"') && html.includes('id="metricSelect"'));
 new vm.Script(fs.readFileSync(path.join(__dirname,'forecast-sesa.js'),'utf8'));
 console.log('Circulação sem chuva/arco sazonal artificial; campo sintético retirado; módulo de previsão com sintaxe válida.');

@@ -690,21 +690,16 @@ function update() {
   document.querySelectorAll('[data-season]:not([data-shortcut])').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.season === currentSeason)));
   document.querySelectorAll('[data-enso]:not([data-shortcut])').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.enso === currentEnso)));
   document.querySelectorAll('[data-phase]:not([data-shortcut])').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.phase) === Number(currentPhase))));
-  document.querySelectorAll('[data-shortcut]').forEach(b => {
-    const isCurrent = b.dataset.season === currentSeason && b.dataset.enso === currentEnso && Number(b.dataset.phase) === Number(currentPhase);
-    b.setAttribute('aria-pressed', String(isCurrent));
+  document.querySelectorAll('.event-select').forEach(select => {
+    const match = [...select.options].find(o => o.value === [currentSeason,currentEnso,currentPhase,metric].join('|'));
+    select.value = match ? match.value : '';
   });
-
   $('globalView').setAttribute('aria-pressed', String(mapView === 'global'));
   $('regionalView').setAttribute('aria-pressed', String(mapView === 'regional'));
-  for (const m of ['mean', 'extremes', 'circulation']) $(m).setAttribute('aria-pressed', String(m === metric));
-
-  // Atualizar botões de camadas da MJO (exclusão mútua e nenhuma)
-  if ($('mjoDipolesLayer')) $('mjoDipolesLayer').setAttribute('aria-pressed', String(mjoMode === 'dipoles'));
-  if ($('mjoChiLayer')) $('mjoChiLayer').setAttribute('aria-pressed', String(mjoMode === 'chi'));
-  if ($('mjoTrackLayer')) $('mjoTrackLayer').setAttribute('aria-pressed', String(mjoMode === 'track'));
-  if ($('mjoNoneLayer')) $('mjoNoneLayer').setAttribute('aria-pressed', String(mjoMode === 'none'));
-  if ($('mjoLayer')) $('mjoLayer').setAttribute('aria-pressed', String(mjoMode !== 'none'));
+  $('metricSelect').value = metric;
+  $('mjoSelect').value = mjoMode;
+  for (const [id, layer] of [['sstLayer','sst'],['jetsLayer','jets'],['psaLayer','psa']]) $(id).checked = visibleLayers[layer];
+  $('layerCount').textContent = `(${['sst','jets','psa'].filter(key => visibleLayers[key]).length}/3)`;
 
   // Buscar evidência na base curada
   const evidence = displayEvidence();
@@ -809,24 +804,15 @@ document.querySelectorAll('[data-phase]:not([data-shortcut])').forEach(b => {
   });
 });
 
-// Event Listeners: Atalhos para os Casos Documentados com Destaque
-document.querySelectorAll('[data-shortcut]').forEach(b => {
-  b.addEventListener('click', () => {
-    setClimateState({
-      season: b.dataset.season,
-      enso: b.dataset.enso,
-      phase: Number(b.dataset.phase),
-      metric: b.dataset.metric || metric
-    });
+document.querySelectorAll('.event-select').forEach(select => {
+  select.addEventListener('change', () => {
+    if (!select.value) return;
+    const [season,enso,phase,metric] = select.value.split('|');
+    setClimateState({season,enso,phase:Number(phase),metric});
   });
 });
-
-// Variáveis: Extremos vs Chuva Média
-for (const m of ['mean', 'extremes', 'circulation']) {
-  $(m).addEventListener('click', () => {
-    setClimateState({ metric: m });
-  });
-}
+$('metricSelect').addEventListener('change', e => setClimateState({metric:e.target.value}));
+$('mjoSelect').addEventListener('change', e => setMjoMode(e.target.value));
 
 // Alternância da Legenda
 $('legendButton').addEventListener('click', () => {
@@ -842,41 +828,11 @@ for (const [id, view] of [['globalView', 'global'], ['regionalView', 'regional']
   });
 }
 
-// Alternância das Camadas MJO nos Trópicos: Dipolos RMM, Chi NOAA, Trilha 1–8 ou Nenhuma (ao ligar um desliga a outra)
-if ($('mjoDipolesLayer')) {
-  $('mjoDipolesLayer').addEventListener('click', () => {
-    setMjoMode(mjoMode === 'dipoles' ? 'none' : 'dipoles');
-  });
-}
-if ($('mjoChiLayer')) {
-  $('mjoChiLayer').addEventListener('click', () => {
-    setMjoMode(mjoMode === 'chi' ? 'none' : 'chi');
-  });
-}
-if ($('mjoTrackLayer')) {
-  $('mjoTrackLayer').addEventListener('click', () => {
-    setMjoMode(mjoMode === 'track' ? 'none' : 'track');
-  });
-}
-if ($('mjoNoneLayer')) {
-  $('mjoNoneLayer').addEventListener('click', () => {
-    setMjoMode('none');
-  });
-}
-if ($('mjoLayer')) {
-  $('mjoLayer').addEventListener('click', () => {
-    if (mjoMode === 'dipoles') setMjoMode('track');
-    else if (mjoMode === 'track') setMjoMode('none');
-    else setMjoMode('dipoles');
-  });
-}
-
 // Alternância de Outras Camadas
 for (const [id, layer] of [['sstLayer', 'sst'], ['jetsLayer', 'jets'], ['psaLayer', 'psa']]) {
   if ($(id)) {
-    $(id).addEventListener('click', () => {
-      visibleLayers[layer] = !visibleLayers[layer];
-      $(id).setAttribute('aria-pressed', String(visibleLayers[layer]));
+    $(id).addEventListener('change', () => {
+      visibleLayers[layer] = $(id).checked;
       update();
     });
   }
