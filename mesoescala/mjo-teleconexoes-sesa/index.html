@@ -602,7 +602,7 @@
           <button id="regionalView" aria-pressed="false">América do Sul</button>
         </div>
         <label class="toolbar-group" for="mjoSelect">MJO nos trópicos:
-          <select id="mjoSelect"><option value="dipoles">Convecção tropical (esquema)</option><option value="track">Trilha 1–8</option><option value="none">Nenhuma</option></select>
+          <select id="mjoSelect"><option value="dipoles">Convecção tropical (esquema)</option><option value="chi">χ200 · compostos por fase (CPC)</option><option value="track">Trilha 1–8</option><option value="none">Nenhuma</option></select>
         </label>
         <details class="layer-choices"><summary>Camadas <span id="layerCount"></span></summary><div>
           <label><input id="sstLayer" type="checkbox" checked> TSM · sinal do ENOS</label>
@@ -635,6 +635,17 @@
       </div>
 
       <div class="case-title-row">
+        <section id="chiComposites" hidden aria-label="Compostos de potencial de velocidade em 200 hPa" style="margin:16px 0;padding:16px;border:1px solid var(--border);border-radius:12px">
+          <h3>Anomalia do potencial de velocidade em 200 hPa · CPC</h3>
+          <p id="chiSelection" aria-live="polite"></p>
+          <label for="chiPeriod">Período do composto:</label>
+          <select id="chiPeriod"><option value="novmar">Novembro–março</option><option value="maysep">Maio–setembro</option></select>
+          <p>Compare o painel da fase selecionada com as demais fases. Os períodos disponíveis não correspondem exatamente a DJF, MAM, JJA e SON; a escolha deste período é independente da estação do mapa.</p>
+          <div style="max-height:480px;overflow:auto;margin:12px 0" tabindex="0" role="region" aria-label="Figura CPC das oito fases; role para comparar os painéis"><img id="chiCompositeImage" alt="Compostos CPC de χ200: oito fases da MJO, contornos e áreas de significância" style="display:block;width:100%;height:auto;background:white;margin:0"></div>
+          <p id="chiLoadError" hidden>Não foi possível carregar a figura. Consulte a fonte abaixo; falha de carregamento não indica ausência de sinal.</p>
+          <p>Figura original: sombreamento indica significância a 95%; contornos são apresentados também fora dessas áreas. O índice empregado remove ENOS e outras variações de baixa frequência para isolar a MJO. Estes compostos não são estratificados pelos três estados de ENOS e não são redimensionados pela amplitude escolhida no RMM. χ200 não é vento zonal nem altura geopotencial em 200 hPa.</p>
+          <a href="https://www.cpc.ncep.noaa.gov/products/precip/CWlink/MJO/Composites/Tropical/" target="_blank" rel="noopener">Figura e períodos no CPC</a> · <a href="https://www.cpc.ncep.noaa.gov/products/precip/CWlink/MJO/Composites/Tropical/information.shtml" target="_blank" rel="noopener">Método e significância</a>
+        </section>
         <h2 id="caseTitle"></h2>
         <p id="caseSummary" aria-live="polite"></p>
       </div>
@@ -885,12 +896,12 @@
 </div>
 </main>
 
-<script src="world-land.js?v=20260926a"></script>
-<script src="map-regions.js?v=20260926a"></script>
-<script src="documented-cases.js?v=20260926a"></script>
-<script src="rmm-diagram.js?v=20260926a"></script>
-<script src="documented-view.js?v=20260926a"></script>
-<script src="panels-manager.js?v=20260926a"></script>
-<script src="forecast-sesa.js?v=20260926a"></script>
+<script src="world-land.js?v=20260926b"></script>
+<script src="map-regions.js?v=20260926b"></script>
+<script src="documented-cases.js?v=20260926b"></script>
+<script src="rmm-diagram.js?v=20260926b"></script>
+<script src="documented-view.js?v=20260926b"></script>
+<script src="panels-manager.js?v=20260926b"></script>
+<script src="forecast-sesa.js?v=20260926b"></script>
 </body>
 </html>

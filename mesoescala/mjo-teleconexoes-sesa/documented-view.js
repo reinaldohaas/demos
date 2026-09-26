@@ -669,7 +669,7 @@ function speakCurrentNarration() {
 }
 
 function setMjoMode(mode) {
-  mjoMode = mode === 'chi' ? 'none' : mode; // 'dipoles' | 'track' | 'none'
+  mjoMode = mode; // 'dipoles' | 'track' | 'none'
   update();
 }
 
@@ -680,7 +680,7 @@ function setClimateState(opts) {
   if (opts.amplitude !== undefined && Number.isFinite(Number(opts.amplitude))) currentAmplitude = Math.max(0, Math.min(3, Number(opts.amplitude)));
   if (opts.metric !== undefined) metric = opts.metric;
   if (opts.view !== undefined) mapView = opts.view;
-  if (opts.mjoMode !== undefined) mjoMode = opts.mjoMode === 'chi' ? 'none' : opts.mjoMode;
+  if (opts.mjoMode !== undefined) mjoMode = opts.mjoMode;
   update();
 }
 
@@ -698,6 +698,8 @@ function update() {
   $('regionalView').setAttribute('aria-pressed', String(mapView === 'regional'));
   $('metricSelect').value = metric;
   $('mjoSelect').value = mjoMode;
+  $('chiComposites').hidden = mjoMode !== 'chi';
+  $('chiSelection').textContent = `Fase selecionada: ${currentPhase}. ${currentAmplitude < 1 ? 'Amplitude RMM inferior a 1: a figura permanece apenas como referência dos compostos, sem atribuir um padrão ativo à seleção.' : 'Consulte o painel correspondente na figura original.'} O ENOS e a estação do mapa não alteram estes compostos.`;
   for (const [id, layer] of [['sstLayer','sst'],['jetsLayer','jets'],['psaLayer','psa']]) $(id).checked = visibleLayers[layer];
   $('layerCount').textContent = `(${['sst','jets','psa'].filter(key => visibleLayers[key]).length}/3)`;
 
@@ -898,3 +900,15 @@ if (typeof window !== 'undefined') {
 
 // Inicializar interface
 update();
+
+// Produto original CPC; não gerar campos sintéticos nem alterar sua escala.
+function updateChiComposite() {
+  const period = $('chiPeriod').value === 'maysep' ? 'maysep' : 'novmar';
+  $('chiLoadError').hidden = true;
+  $('chiCompositeImage').src = `https://www.cpc.ncep.noaa.gov/products/precip/CWlink/MJO/plot_chi_tvalue_8pan_${period}.gif`;
+  $('chiCompositeImage').alt = `Compostos CPC de anomalia de potencial de velocidade em 200 hPa, fases 1–8, ${period === 'novmar' ? 'novembro–março' : 'maio–setembro'}, com legenda original e significância`;
+}
+$('chiPeriod').addEventListener('change', updateChiComposite);
+$('chiCompositeImage').addEventListener('error', () => { $('chiLoadError').hidden = false; });
+$('chiCompositeImage').addEventListener('load', () => { $('chiLoadError').hidden = true; });
+updateChiComposite();
