@@ -28,6 +28,7 @@ Lote completo de melhorias implementado e validado no branch `revisao`. Aguardan
 - Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics: Figs. 2 e 5 (VERIFICADO).
 - Wheeler & Hendon (2004), Monthly Weather Review (VERIFICADO).
 - Jones, Mu, Carvalho & Ding (2023), npj Climate and Atmospheric Science (VERIFICADO).
+- Arquivos PDF locais armazenados em: C:\Users\haas\github\mjo-sesa\ (fora do git da demonstração).
 
 ## Validações
 - 2026-09-27T16:42:27-03:00: console do navegador com 0 erros de JavaScript capturados via CDP Chrome headless.
