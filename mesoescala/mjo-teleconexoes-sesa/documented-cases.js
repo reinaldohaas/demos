@@ -100,7 +100,7 @@ const DOCUMENTED_CASES = [
     extremes: null,
     psa: null,
     source: 'Fernandes & Grimm (2023), Journal of Climate; Roy et al. (2025)',
-    limits: 'Em El Niño, o forçamento subtropical que excita a teleconexão para a ZCAS ocorre deslocado para leste apenas nas fases 8–1.'
+    limits: 'Em El Niño, o forçamento subtropical que excita a teleconexão para a ZCAS apresenta defasagem de fase, ocorrendo nas fases 8–1 (em contraste com as fases 7–8 na La Niña).'
   },
   {
     id: 'DJF-el-nino-8',
@@ -138,7 +138,7 @@ const DOCUMENTED_CASES = [
     circulation: 'Trem de ondas PSA maduro no Atlântico Sudoeste acoplado à circulação sobre o sudeste e centro-leste da América do Sul.',
     mean: {
       region: 'ZCAS',
-      text: 'Resposta máxima destacada de chuva média na ZCAS em El Niño (resposta remota da convecção-fonte deslocada para leste nas fases 8–1).',
+      text: 'Resposta máxima destacada de chuva média na ZCAS em El Niño (resposta remota da convecção-fonte com defasagem de fase para 8–1 no El Niño, contra 7–8 na La Niña).',
       figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
       sign: 'positivo',
       timing: 'composição de fase / madura'

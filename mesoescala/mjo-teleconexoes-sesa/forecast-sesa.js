@@ -27,10 +27,13 @@ let forecastModeActive = false;
     <figure style="margin:18px 0"><div id="forecastImages"></div><figcaption id="forecastCaption"></figcaption></figure>
     <p><a id="forecastSource" target="_blank" rel="noopener">Abrir produto na fonte oficial</a></p>
     <div style="margin:24px 0;padding:16px;background:rgba(15,34,55,0.7);border:1px solid #38bdf8;border-radius:10px">
-      <h3 style="color:#7dd3fc;margin-top:0">Previsão da MJO: Potencial de Velocidade em 200 hPa (EWP · CPC/NOAA)</h3>
-      <p>Diagrama Hovmöller (tempo × longitude, 5°S–5°N) com observações recentes e previsão da propagação para leste da onda de potencial de velocidade em 200 hPa pelo modelo <em>Extended Wheeler-Peña (EWP)</em>. Áreas em verde indicam divergência em altitude e convecção tropical ativa; áreas em amarelo/laranja indicam convergência e convecção suprimida.</p>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+        <h3 style="color:#7dd3fc;margin:0">Previsão da MJO: Potencial de Velocidade em 200 hPa (EWP · CPC/NOAA)</h3>
+        <span style="display:inline-block;padding:3px 9px;border-radius:4px;background:#0369a1;color:#ffffff;font-size:12px;font-weight:700">χ₂₀₀ · fase 8 (boletim de 21/09)</span>
+      </div>
+      <p>Diagrama Hovmöller (tempo × longitude, 5°S–5°N) com observações recentes e previsão da propagação para leste da onda de potencial de velocidade em 200 hPa pelo modelo <em>Empirical Wave Propagation (EWP)</em>. Áreas em verde indicam divergência em altitude e convecção tropical ativa; áreas em amarelo/laranja indicam convergência e convecção suprimida.</p>
       <div style="text-align:center;margin:12px 0"><img src="https://www.cpc.ncep.noaa.gov/products/people/wd52qz/mjo/chi/ewp.gif" alt="Diagrama Hovmöller de Previsão da MJO em 200 hPa (EWP - CPC/NOAA)" style="max-width:100%;background:white;border-radius:6px;border:1px solid #36556e" loading="lazy"></div>
-      <p><a href="https://www.cpc.ncep.noaa.gov/products/people/wd52qz/mjo/chi/" target="_blank" rel="noopener">Fonte operacional CPC/NOAA: Previsão de χ200 (EWP)</a> · <a href="https://www.cpc.ncep.noaa.gov/products/precip/CWlink/MJO/mjo.shtml" target="_blank" rel="noopener">Página MJO do CPC</a></p>
+      <p><a href="https://www.cpc.ncep.noaa.gov/products/precip/CWlink/MJO/time_lon.shtml" target="_blank" rel="noopener">Time-longitude operacional de χ200 (CPC/NOAA)</a> · <a href="https://www.cpc.ncep.noaa.gov/products/people/wd52qz/mjo/chi/" target="_blank" rel="noopener">Fonte operacional CPC/NOAA: Previsão de χ200 (EWP)</a> · <a href="https://www.cpc.ncep.noaa.gov/products/precip/CWlink/MJO/mjo.shtml" target="_blank" rel="noopener">Página MJO do CPC</a></p>
     </div>
     <details><summary>RMM observado e previsto · produto original GEFS</summary>
       <p>O produto original distingue observações, membros e média do conjunto. Horizonte informado pelo CPC: 15 dias; não cobre os 45 dias. A data válida está na figura; ela pode ser mais recente que este boletim.</p>

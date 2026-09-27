@@ -80,6 +80,7 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 8px;
+      max-width: 100%;
     }
     .control-group-pill {
       display: flex;
@@ -90,6 +91,8 @@
       border-radius: 10px;
       border: 1px solid #1f374f;
       flex-wrap: wrap;
+      max-width: 100%;
+      min-width: 0;
     }
     .pill-label {
       font-size: 12px;
@@ -98,6 +101,7 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-right: 4px;
+      min-width: 0;
     }
 
     .control-select {
@@ -110,6 +114,8 @@
       font-weight: 600;
       cursor: pointer;
       color-scheme: dark;
+      max-width: 100%;
+      min-width: 0;
     }
     .control-select:focus-visible {
       outline: 2px solid #5eead4;
@@ -683,7 +689,7 @@
             <b>Visualizações da MJO nos Trópicos:</b> Seleção mutuamente exclusiva entre <i>Convecção tropical (esquema)</i> (dipolos equatoriais didáticos), <i>χ200 (esquema conceitual)</i> (contornos didáticos de divergência/convergência em altitude), <i>Trilha 1–8</i> (marcações conceituais ao longo do equador com fase ativa destacada e números interativos) ou <i>Nenhuma</i>. Ao selecionar uma camada, desliga-se a outra.
           </div>
           <div>
-            <b>Domínios Geográficos Permanentes:</b> Polígono SESA (Sul do Brasil, Uruguai e Nordeste da Argentina) identificado com "SESA" no topo da região sem colidir com jatos. Polígono ZCAS sempre visível como referência de monção. Elementos posicionados para evitar sobreposição entre jatos, SALLJ, rótulos e símbolos de precipitação.
+            <b>Domínios Geográficos Permanentes:</b> Polígono SESA (porção sul da Bacia do Prata: Sul do Brasil, Uruguai, Paraguai e Nordeste da Argentina) identificado com "SESA" no topo da região sem colidir com jatos. Polígono ZCAS sempre visível como referência de monção. Elementos posicionados para evitar sobreposição entre jatos, SALLJ, rótulos e símbolos de precipitação.
           </div>
           <div>
             <b>Destaque de Chuva:</b> Símbolo de nuvem com chuva e seta indicando aumento documentado para a variável selecionada. Presente apenas em combinações comprovadas na literatura; sem símbolo quando não documentado.
@@ -701,7 +707,7 @@
       </div>
 
       <p class="muted" style="margin-top:10px;">
-        Base cartográfica: Natural Earth. ZCAS e SESA permanecem visíveis como referências espaciais permanentes. Ausência de destaque gráfico indica resultado não representado nesta síntese documental, não efeito zero.
+        Base cartográfica: Natural Earth. ZCAS e SESA (porção sul da Bacia do Prata) permanecem visíveis como referências espaciais permanentes. Ausência de destaque gráfico indica resultado não representado nesta síntese documental, não efeito zero.
       </p>
     </section>
 
@@ -774,7 +780,7 @@
       <div class="panel-body">
         <div id="result" aria-live="polite"></div>
         <p style="margin-top:12px; font-size:13px; line-height:1.5;">
-          <a href="https://doi.org/10.1175/JCLI-D-22-0781.1" target="_blank" rel="noopener">Fernandes & Alice M. Grimm (2023)</a> · <i>J. Climate</i><br>
+          <a href="https://doi.org/10.1175/JCLI-D-22-0781.1" target="_blank" rel="noopener">Fernandes & Grimm (2023)</a> · <i>J. Climate</i><br>
           <a href="https://doi.org/10.1038/s41612-023-00501-4" target="_blank" rel="noopener">Jones, Mu, Carvalho & Ding (2023)</a> · <i>npj Clim. Atmos. Sci.</i><br>
           <a href="https://doi.org/10.1029/2024GL113395" target="_blank" rel="noopener">Roy, Arblaster, Wheeler & Lim (2025)</a> · <i>Geophys. Res. Lett.</i><br>
           <span class="muted">Mapas de chuva média e frequência de extremos analisados de forma independente. Rastreabilidade física e integridade observacional.</span>
@@ -894,7 +900,7 @@
       <summary>Limites desta síntese e integridade metodológica</summary>
       <div class="details-content">
         <p>
-          Esta síntese reúne evidências observacionais documentadas por Fernandes & Alice M. Grimm (2023). Quando uma combinação exibe <i>"Sem resultado específico verificado nesta síntese"</i> (armazenada como <code>null</code> no modelo de dados), isso reflete uma escolha estrita de integridade científica:
+          Esta síntese reúne evidências observacionais documentadas por Fernandes & Grimm (2023). Quando uma combinação exibe <i>"Sem resultado específico verificado nesta síntese"</i> (armazenada como <code>null</code> no modelo de dados), isso reflete uma escolha estrita de integridade científica:
         </p>
         <p>
           1. <b>Não inferência automática:</b> A evidência de que a frequência de extremos aumenta em determinada fase não é convertida automaticamente em anomalia de chuva média.
@@ -911,12 +917,12 @@
 </div>
 </main>
 
-<script src="world-land.js?v=20260926h"></script>
-<script src="map-regions.js?v=20260926h"></script>
-<script src="documented-cases.js?v=20260926h"></script>
-<script src="rmm-diagram.js?v=20260926h"></script>
-<script src="documented-view.js?v=20260926h"></script>
-<script src="panels-manager.js?v=20260926h"></script>
-<script src="forecast-sesa.js?v=20260926h"></script>
+<script src="world-land.js?v=20260927a"></script>
+<script src="map-regions.js?v=20260927a"></script>
+<script src="documented-cases.js?v=20260927a"></script>
+<script src="rmm-diagram.js?v=20260927a"></script>
+<script src="documented-view.js?v=20260927a"></script>
+<script src="panels-manager.js?v=20260927a"></script>
+<script src="forecast-sesa.js?v=20260927a"></script>
 </body>
 </html>
