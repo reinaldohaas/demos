@@ -300,23 +300,36 @@ function drawMjoConvection() {
 function drawMjoTrack() {
   if (mapView !== 'global') return;
 
-  const seasonKey = (currentSeason === 'JJA' || currentSeason === 'SON') ? 'maysep' : 'novmar';
-  const chiSeason = MJO_CHI_REF[seasonKey];
+  const RMM_TRACK_LON = {1: 20, 2: 65, 3: 90, 4: 115, 5: 135, 6: 155, 7: 175, 8: -90};
   const evidence = displayEvidence();
 
   // Linha guia equatorial
   const yEq = (85 - 0) * 560 / 160;
-  svg('line', { x1: 0, y1: yEq, x2: 1200, y2: yEq, stroke: '#ef4444', 'stroke-width': 1, 'stroke-dasharray': '3 4', opacity: 0.4 });
+  svg('line', { x1: 0, y1: yEq, x2: 1200, y2: yEq, stroke: '#ef4444', 'stroke-width': 1, 'stroke-dasharray': '3 4', opacity: currentAmplitude < 1 ? 0.2 : 0.4 });
+
+  // Rótulo da trilha: "Fases RMM (Wheeler & Hendon 2004)"
+  svg('text', {
+    x: 1190, y: yEq - 10,
+    fill: currentAmplitude < 1 ? '#64748b' : '#fca5a5',
+    'font-size': 11, 'font-weight': '700', 'text-anchor': 'end',
+    stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+  }, 'Fases RMM (Wheeler & Hendon 2004)');
 
   for (let p = 1; p <= 8; p++) {
-    const pt = chiSeason[p];
-    const [tx, ty] = project(pt.div[0], pt.div[1]);
+    const [tx, ty] = project(RMM_TRACK_LON[p], 0);
     const isCurrent = p === Number(currentPhase);
     const isGrouped = evidence && evidence.groupedPhases && evidence.groupedPhases.includes(p);
     const isActive = currentAmplitude >= 1 && (isCurrent || isGrouped);
 
-    if (isActive) {
-      // Realce da fase ativa pelo centro de divergência χ200 (sólido para primária, tracejado para parceira do par)
+    if (currentAmplitude < 1) {
+      // Números em cinza, sem nenhum destaque
+      svg('text', {
+        x: tx, y: ty + 5,
+        fill: '#64748b', 'font-size': 14, 'font-weight': '700',
+        'text-anchor': 'middle', cursor: 'pointer'
+      }, String(p), () => setClimateState({ phase: p }));
+    } else if (isActive) {
+      // Realce da fase ativa
       svg('circle', {
         cx: tx, cy: ty, r: 15,
         fill: isCurrent ? '#ef4444' : '#b91c1c',
@@ -324,10 +337,17 @@ function drawMjoTrack() {
         'stroke-width': isCurrent ? 2.5 : 1.8,
         'stroke-dasharray': isCurrent ? null : '3 2'
       });
-      svg('text', { x: tx, y: ty + 5, fill: '#ffffff', 'font-size': 13, 'font-weight': '900', 'text-anchor': 'middle', cursor: 'pointer' }, String(p), () => setClimateState({ phase: p }));
+      svg('text', {
+        x: tx, y: ty + 5,
+        fill: '#ffffff', 'font-size': 13, 'font-weight': '900',
+        'text-anchor': 'middle', cursor: 'pointer'
+      }, String(p), () => setClimateState({ phase: p }));
     } else {
-      // Marcação das outras fases ao longo da trilha pelo centro de divergência χ200
-      svg('text', { x: tx, y: ty + 5, fill: '#f87171', 'font-size': 14, 'font-weight': '800', 'text-anchor': 'middle', cursor: 'pointer' }, String(p), () => setClimateState({ phase: p }));
+      svg('text', {
+        x: tx, y: ty + 5,
+        fill: '#f87171', 'font-size': 14, 'font-weight': '800',
+        'text-anchor': 'middle', cursor: 'pointer'
+      }, String(p), () => setClimateState({ phase: p }));
     }
   }
 }
@@ -359,6 +379,7 @@ function drawChiColorbar(x, y, w, h) {
 }
 
 function drawMjoVelocityPotential() {
+  if (currentAmplitude < 1) return;
   const chi = getMjoChiSchematic(currentPhase, currentSeason);
   if (!chi) return;
 
@@ -406,7 +427,7 @@ function drawMjoVelocityPotential() {
             svg('ellipse', {
               cx, cy, rx, ry,
               fill: st.fill,
-              'fill-opacity': currentAmplitude < 1 ? st.opacity * 0.5 : st.opacity,
+              'fill-opacity': st.opacity,
               stroke: st.stroke,
               'stroke-width': st.strokeWidth
             });
@@ -463,7 +484,7 @@ function drawMjoVelocityPotential() {
           attrs.fill = 'none';
         } else {
           attrs.fill = st.fill;
-          attrs['fill-opacity'] = currentAmplitude < 1 ? st.opacity * 0.4 : st.opacity;
+          attrs['fill-opacity'] = st.opacity;
         }
         svg('ellipse', attrs);
       }
@@ -520,7 +541,7 @@ function drawGlobalContext(evidence) {
   }
 
   // Teleconexão PSA: 6 centros da EOF1 de v em 200 hPa, NDJFMA (Cavalcanti 2018, slide 12)
-  if (visibleLayers.psa && (currentSeason === 'DJF' || currentSeason === 'MAM')) {
+  if (currentAmplitude >= 1 && visibleLayers.psa && (currentSeason === 'DJF' || currentSeason === 'MAM')) {
     const centers = [
       { lon: 135, lat: -40, sign: '−', r: 10 },
       { lon: 175, lat: -45, sign: '+', r: 16 },
@@ -640,7 +661,7 @@ function drawMap(evidence) {
 
   // Delimitação do SESA: SEMPRE DELIMITADA E IDENTIFICADA
   // Rótulo mantido estritamente como "SESA" no topo da região, sem "Bacia do Prata"
-  const result = evidence && metric !== 'circulation' ? evidence[metric] : null;
+  const result = (currentAmplitude >= 1 && evidence && metric !== 'circulation') ? evidence[metric] : null;
   const isSesaHighlighted = result && result.region === 'SESA';
   polygon(REGIONS.SESA_POLY, isSesaHighlighted ? 'rgba(56, 189, 248, 0.12)' : 'rgba(56, 189, 248, 0.03)', isSesaHighlighted ? '#38bdf8' : '#486780', isSesaHighlighted ? 2.2 : 1.5);
   // Rótulo posicionado na borda nordeste da região, sem colidir com SALLJ nem com chuva
@@ -654,7 +675,7 @@ function drawMap(evidence) {
   const [zx, zy] = project(-35, -20.5);
   svg('text', { x: zx, y: zy, fill: isZcasHighlighted ? '#5eead4' : '#6b8ca8', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'ZCAS');
 
-  // Destaque condicional: somente quando houver resultado comprovado para a combinação e métrica
+  // Destaque condicional: somente quando houver resultado comprovado para a combinação e métrica (A >= 1)
   if (result) {
     const defaultLoc = result.region === 'SESA' ? [-55, -34] : [-45, -23];
     const location = result.anchor || defaultLoc;
@@ -673,7 +694,18 @@ function drawMap(evidence) {
         stroke: '#f59e0b', 'stroke-width': 2.5, 'stroke-linecap': 'round', 'stroke-dasharray': '4 3'
       });
       svg('text', { x: x + 47, y: y + 7, fill: '#fbbf24', 'font-size': 26, 'font-weight': '900' }, '↓');
-
+    } else {
+      svg('path', {
+        d: `M ${x - 22} ${y} C ${x - 38} ${y - 16}, ${x - 17} ${y - 30}, ${x - 5} ${y - 21} C ${x + 2} ${y - 43}, ${x + 31} ${y - 31}, ${x + 25} ${y - 13} C ${x + 44} ${y - 10}, ${x + 33} ${y + 5}, ${x + 20} ${y + 4} L ${x - 22} ${y + 4} Z`,
+        fill: '#73d8da', stroke: '#b4f5f0', 'stroke-width': 2
+      });
+      for (const dx of [-16, 0, 16]) {
+        svg('line', {
+          x1: x + dx, y1: y + 12, x2: x + dx - 5, y2: y + 24,
+          stroke: '#73d8da', 'stroke-width': metric === 'extremes' ? 4 : 2.5, 'stroke-linecap': 'round'
+        });
+      }
+      svg('text', { x: x + 47, y: y + 5, fill: '#aaf4e7', 'font-size': 24, 'font-weight': '800' }, '↑');
     }
 
     // Deslocar o texto do símbolo de chuva para o oceano Atlântico para desamontoar de SESA/ZCAS/SALLJ
@@ -711,8 +743,22 @@ function drawMap(evidence) {
     }, labelText);
   }
 
+  // Texto no mapa quando amplitude < 1: "MJO fraca (amplitude < 1) — sem padrão associado"
+  if (currentAmplitude < 1) {
+    const bannerX = mapView === 'global' ? 600 : 320;
+    const bannerY = 46;
+    svg('rect', {
+      x: bannerX - 210, y: bannerY - 18, width: 420, height: 32, rx: 6,
+      fill: 'rgba(15, 23, 42, 0.90)', stroke: '#475569', 'stroke-width': 1.2
+    });
+    svg('text', {
+      x: bannerX, y: bannerY + 4,
+      fill: '#94a3b8', 'font-size': 13, 'font-weight': '700', 'text-anchor': 'middle'
+    }, 'MJO fraca (amplitude < 1) — sem padrão associado');
+  }
+
   $('mapTitle').textContent = mapView === 'global' ? 'Visão global: MJO, Pacífico e América do Sul' : 'América do Sul (visão regional)';
-  $('mapDesc').textContent = result ? `${result.region}: ${result.text} Símbolo regional sem magnitude ou extensão quantitativa.` : 'Mapa de referência com ZCAS e SESA. Sem resultado específico verificado nesta síntese.';
+  $('mapDesc').textContent = result ? `${result.region}: ${result.text} Símbolo regional sem magnitude ou extensão quantitativa.` : (currentAmplitude < 1 ? 'MJO fraca (amplitude < 1) — sem padrão associado.' : 'Mapa de referência com ZCAS e SESA. Sem resultado específico verificado nesta síntese.');
 }
 
 function generateNarrationText(season, enso, phase, metricVal, evidence) {
