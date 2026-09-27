@@ -26,9 +26,11 @@ Lote completo de melhorias implementado e validado no branch `revisao`. Aguardan
 ## Fontes
 - Fernandes & Grimm (2023), Journal of Climate: Seção 5 e Figs. 5, 9 e 12 (VERIFICADO).
 - Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics: Figs. 2 e 5 (VERIFICADO).
+- Grimm (2019), Climate Dynamics (VERIFICADO).
+- Roy, Arblaster, Wheeler & Lim (2025), Geophysical Research Letters (VERIFICADO).
 - Wheeler & Hendon (2004), Monthly Weather Review (VERIFICADO).
 - Jones, Mu, Carvalho & Ding (2023), npj Climate and Atmospheric Science (VERIFICADO).
-- Arquivos PDF locais armazenados em: C:\Users\haas\github\mjo-sesa\ (fora do git da demonstração).
+- Acervo completo dos 6 artigos científicos em PDF armazenado em: C:\Users\haas\github\mjo-sesa\ (fora do git da demonstração). Pronto para conferência de El Niño 3 e Neutro 4 de Fernandes & Grimm.
 
 ## Validações
 - 2026-09-27T16:42:27-03:00: console do navegador com 0 erros de JavaScript capturados via CDP Chrome headless.
