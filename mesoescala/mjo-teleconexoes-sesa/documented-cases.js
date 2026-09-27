@@ -181,6 +181,7 @@ const DOCUMENTED_CASES = [
     mean: null,
     extremes: {
       region: 'ZCAS',
+      anchor: [-44, -13],
       text: 'Aumento na frequência de extremos de chuva localizado no setor norte da ZCAS (ao norte de 15°S, região CESA), sem abranger toda a banda da ZCAS.',
       figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
       sign: 'positivo',

@@ -706,8 +706,8 @@ function drawMap(evidence) {
 
   // Destaque condicional: somente quando houver resultado comprovado para a combinação e métrica
   if (result) {
-    const isZcasNorth = currentSeason === 'DJF' && currentEnso === 'neutro' && currentPhase === 8 && metric === 'extremes';
-    const location = result.region === 'SESA' ? [-55, -34] : (isZcasNorth ? [-50, -13] : [-45, -23]);
+    const defaultLoc = result.region === 'SESA' ? [-55, -34] : [-45, -23];
+    const location = result.anchor || defaultLoc;
     const [x, y] = project(...location);
 
     svg('path', {
@@ -721,8 +721,16 @@ function drawMap(evidence) {
       });
     }
     svg('text', { x: x + 47, y: y + 5, fill: '#aaf4e7', 'font-size': 24, 'font-weight': '800' }, '↑');
-    svg('text', { x, y: y + 43, fill: '#c6f6ef', 'font-size': 13.5, 'font-weight': '600', 'text-anchor': 'middle' },
-      metric === 'extremes' ? 'Extremos mais frequentes' : 'Chuva média favorecida');
+
+    // Deslocar texto à esquerda caso a âncora seja ao norte da ZCAS para desobstruir o mapa
+    const isNorthernAnchor = location[1] > -18;
+    if (isNorthernAnchor) {
+      svg('text', { x: x - 32, y: y + 6, fill: '#c6f6ef', 'font-size': 13, 'font-weight': '600', 'text-anchor': 'end' },
+        metric === 'extremes' ? 'Extremos mais frequentes' : 'Chuva média favorecida');
+    } else {
+      svg('text', { x, y: y + 43, fill: '#c6f6ef', 'font-size': 13.5, 'font-weight': '600', 'text-anchor': 'middle' },
+        metric === 'extremes' ? 'Extremos mais frequentes' : 'Chuva média favorecida');
+    }
   }
 
   $('mapTitle').textContent = mapView === 'global' ? 'Visão global: MJO, Pacífico e América do Sul' : 'América do Sul (visão regional)';
@@ -847,10 +855,22 @@ function formatTextForSpeech(raw) {
   s = s.replace(/~/g, 'cerca de ');
 
   // 4. Siglas e termos técnicos para pronúncia em português
-  s = s.replace(/\bSALLJ\b/g, 'jato de baixos níveis SALLJ');
+  s = s.replace(/(?:jato\s+(?:de\s+baixos\s+níveis\s+)?)?\bSALLJ\b/gi, 'jato de baixos níveis SALLJ');
   s = s.replace(/\bTSM\b/g, 'temperatura da superfície do mar');
-  s = s.replace(/\bCESA\b/g, 'região CESA');
-  s = s.replace(/\bSESA\b/g, 'região do SESA');
+
+  // CESA sem duplicar "região"
+  s = s.replace(/(?<!região\s+)\bCESA\b/g, 'região CESA');
+
+  // SESA com preposições tratadas
+  s = s.replace(/\bno\s+SESA\b/gi, 'na região do SESA');
+  s = s.replace(/\bdo\s+SESA\b/gi, 'da região do SESA');
+  s = s.replace(/\bao\s+SESA\b/gi, 'à região do SESA');
+  s = s.replace(/\bpelo\s+SESA\b/gi, 'pela região do SESA');
+  s = s.replace(/\bpara\s+o\s+SESA\b/gi, 'para a região do SESA');
+  s = s.replace(/\bsobre\s+o\s+SESA\b/gi, 'sobre a região do SESA');
+  s = s.replace(/\bo\s+SESA\b/gi, 'a região do SESA');
+  s = s.replace(/(?<!região\s+(?:do\s+|da\s+|de\s+)?)\bSESA\b/g, 'região do SESA');
+
   s = s.replace(/\bNorthern\b/g, 'Norte');
 
   s = s.replace(/\bZ200\b/g, 'geopotencial em duzentos hectopascais');
@@ -947,11 +967,20 @@ function update() {
   const ampInput = $('mjoAmplitude');
   if (ampInput) ampInput.value = currentAmplitude;
   const ampVal = $('mjoAmplitudeValue');
-  if (ampVal) ampVal.textContent = currentAmplitude.toFixed(1).replace('.', ',');
+  let activeEventMatch = false;
   document.querySelectorAll('.event-select').forEach(select => {
     const match = [...select.options].find(o => o.value === [currentSeason,currentEnso,currentPhase,metric].join('|'));
     select.value = match ? match.value : '';
+    if (match) activeEventMatch = true;
   });
+  const evNotice = $('eventNotice');
+  if (evNotice) {
+    if (activeEventMatch && currentAmplitude >= 1 && mjoMode === 'chi') {
+      evNotice.textContent = 'modo χ200 e A = 1,5 aplicados para o caso';
+    } else {
+      evNotice.textContent = '';
+    }
+  }
   $('globalView').setAttribute('aria-pressed', String(mapView === 'global'));
   $('regionalView').setAttribute('aria-pressed', String(mapView === 'regional'));
   if ($('metricSelect')) $('metricSelect').value = metric;

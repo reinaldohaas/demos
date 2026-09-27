@@ -347,6 +347,16 @@ for (const mode of ['dipoles', 'chi', 'track', 'none']) {
   }
 }
 
+// Teste de fluência da narração: ausência de duplicação e concordância de preposições
+for (const c of cases) {
+  for (const met of ['extremes', 'mean', 'circulation']) {
+    const raw = sandbox.generateNarrationText(c.season, c.enso, c.phase, met, c);
+    const spoken = sandbox.formatTextForSpeech(raw);
+    const m = spoken.match(/região região|(?:no|o|ao|pelo|para o)\s+região/i);
+    assert(!m, `Erro de concordância na narração falada em ${c.id} (${met}): "${m && m[0]}"`);
+  }
+}
+
 // 8. Relatório fiel e estritamente programático do que foi executado
 console.log([
   '--- RELATÓRIO DE TESTES FUNCIONAIS E ESTRUTURAIS ---',
