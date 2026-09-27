@@ -23,23 +23,38 @@ Lote completo de melhorias implementado e validado no branch `revisao`. Aguardan
 ## Aguardando decisão do Reinaldo
 - Aprovação do lote do branch `revisao` para posterior merge no `main`.
 
-## Resumo da Verificação Científica Documental (2026-09-27)
-- **Relatório completo:** salvo em `C:\Users\haas\github\mjo-sesa\verificacao_casos.md` (fora do repositório).
-- **Afirmações verificadas:** 24 afirmações (9 casos ativos + 2 casos pendentes desdobrados em precipitação, extremos e teleconexão).
-- **Confirmados:** 24 de 24 (100% de confirmação dos mecanismos e respostas nos artigos originais).
+## Resumo da Verificação Científica Documental — Etapa 1 (2026-09-27)
+- **Relatório detalhado:** salvo em `C:\Users\haas\github\mjo-sesa\verificacao_casos.md` (fora do repositório).
+- **Afirmações verificadas:** 24 afirmações (9 casos ativos + 2 casos pendentes desdobrados em convecção-fonte, circulação/PSA, precipitação média e frequência de extremos).
+- **Confirmados:** 24 de 24 (100% de confirmação física e bibliográfica).
 - **Não confirmados:** 0.
-- **Casos a remover:** 0 (nenhum caso a remover; todas as respostas físicas e regionais são sustentadas pelos artigos).
+- **Casos a remover:** 0 (nenhum caso a remover).
 - **Casos pendentes checados:**
-  - *El Niño · fase 3* (Fernandes & Grimm 2023): **CONFIRMADO** (p. 7734, p. 7736 e Fig. 12 na p. 7733) — pico de extremos e chuva no SESA.
-  - *Neutro · fase 4* (Fernandes & Grimm 2023): **CONFIRMADO** (p. 7731, p. 7734 e Fig. 12 na p. 7733) — pico de extremos no SESA.
+  - *El Niño · fase 3* (Fernandes & Grimm 2023): **CONFIRMADO** (p. 7734, p. 7736 e Fig. 12 na p. 7733) — aumento acentuado de extremos e chuva no SESA com inversão do dipolo.
+  - *Neutro · fase 4* (Fernandes & Grimm 2023): **CONFIRMADO** (p. 7731, p. 7734 e Fig. 12 na p. 7733) — pico de frequência de extremos no SESA em anos neutros associado ao trem PSA bem definido.
 - **Casos a ajustar (metadados de figuras em `documented-cases.js` para lote futuro quando autorizado):**
-  - As relações físicas e os impactos regionais estão 100% corretos.
-  - Ajuste recomendado apenas nos números das figuras de Alvarez et al. (2016) no código:
+  - Ajustar números das figuras de Alvarez et al. (2016):
     - `DJF-todos-3-4` e `DJF-todos-8-1`: referenciar Figs. 1 (circulação 250 hPa, p. 248) e 11 (precipitação, p. 254).
     - `MAM-todos-3-4` e `MAM-todos-8-1`: referenciar Figs. 2 (circulação 250 hPa, p. 248) e 12 (precipitação, p. 255).
     - `JJA-todos-4-5`: referenciar Figs. 3 (circulação, p. 249), 9 (temperatura, p. 252) e 13 (precipitação, p. 256).
     - `SON-todos-4-5`: referenciar Figs. 4 (circulação, p. 249), 10 (temperatura, p. 253) e 14 (precipitação, p. 257).
     - `SON-todos-7-8`: referenciar Figs. 4 (circulação, p. 249) e 14 (precipitação, p. 257).
+- **Páginas e Figuras-Chave Identificadas:**
+  - **Wheeler & Hendon (2004):**
+    - Setores das fases no diagrama RMM: **Figura 7**, p. 1923 (PDF p. 7).
+    - Compostos de OLR por fase (DJF): **Figura 8**, p. 1924 (PDF p. 8).
+  - **Fernandes & Grimm (2023):**
+    - Chuva média e extremos por fase e ENOS: **Figura 12**, p. 7733 (PDF p. 19); Seção 5, pp. 7726–7736.
+  - **Palestra Cavalcanti (2018):**
+    - EOF1 de v200 NDJFMA (PSA intrassazonal): **CONFIRMADA** no **Slide 12** (p. 12).
+  - **Complemento Haas (2026):**
+    - Espaço de fase da MJO: **Figura 1.1**, p. 9.
+    - Dipolo ZCAS–Bacia do Prata e PSA: **Figura 1.2**, p. 11.
+- **Três Figuras PNG de Alta Resolução (300 DPI) exportadas para `C:\Users\haas\github\mjo-sesa\`:**
+  1. `figura_wheeler_hendon_2004_olr_fases.png` (WH04, Fig. 8, p. 1924).
+  2. `figura_fernandes_grimm_2023_extremos_fases.png` (FG23, Fig. 12, p. 7733).
+  3. `figura_eof1_v200_palestra_cavalcanti_2018.png` (Palestra Cavalcanti 2018, slide 12, p. 12).
+
 
 
 ## Fontes
