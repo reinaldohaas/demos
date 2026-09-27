@@ -5,9 +5,13 @@ let currentEnso = 'neutro';
 let currentPhase = 4;
 let currentAmplitude = 1.5;
 function displayEvidence() { return currentAmplitude >= 1 ? findDocumentedCase(currentSeason, currentEnso, currentPhase) : null; }
+function displayAllEvidences() {
+  if (currentAmplitude < 1) return { specific: null, alvarez: null, primary: null };
+  return findDocumentedCases(currentSeason, currentEnso, currentPhase);
+}
 let metric = 'extremes';
 let mapView = 'global';
-let mjoMode = 'chi'; // 'chi' | 'dipoles' | 'track' | 'none'
+let mjoMode = 'none'; // 'none' | 'chi' | 'dipoles' | 'track'
 const visibleLayers = {
   get mjo() { return mjoMode !== 'none'; },
   set mjo(v) { if (!v) mjoMode = 'none'; else if (mjoMode === 'none') mjoMode = 'chi'; },
@@ -444,16 +448,26 @@ function drawMjoVelocityPotential() {
     svg('line', { x1: 0, y1: y30S, x2: 1200, y2: y30S, stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-dasharray': '5 4' });
     svg('text', { x: 1190, y: y30N + 14, fill: '#bae6fd', 'font-size': 10.5, 'font-weight': '700', 'text-anchor': 'end', 'letter-spacing': 0.5, stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'χ₂₀₀ · Potencial de velocidade em altitude (esquema conceitual)');
 
-    // 3. Rótulos nos centros de divergência e convergência
+    // 3. Marcadores em losango e rótulos nos centros de divergência e convergência
     if (chi.active && chi.active.center) {
       const [acx, acy] = project(chi.active.center[0], chi.active.center[1]);
-      svg('text', { x: acx, y: acy - 6, fill: '#bae6fd', 'font-size': 11.5, 'font-weight': '800', 'text-anchor': 'middle' }, 'Divergência 200 hPa');
-      svg('text', { x: acx, y: acy + 9, fill: '#e0f2fe', 'font-size': 10.5, 'font-weight': '600', 'text-anchor': 'middle' }, '(Convecção MJO Ativa · χ < 0)');
+      const r = 7;
+      svg('polygon', {
+        points: `${acx},${acy - r} ${acx + r},${acy} ${acx},${acy + r} ${acx - r},${acy}`,
+        fill: '#38bdf8', stroke: '#ffffff', 'stroke-width': 1.6
+      });
+      svg('text', { x: acx, y: acy - 11, fill: '#bae6fd', 'font-size': 11.5, 'font-weight': '800', 'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'Divergência 200 hPa');
+      svg('text', { x: acx, y: acy + 17, fill: '#e0f2fe', 'font-size': 10, 'font-weight': '600', 'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, '(Convecção MJO Ativa · χ < 0)');
     }
     if (chi.suppressed && chi.suppressed.center) {
       const [scx, scy] = project(chi.suppressed.center[0], chi.suppressed.center[1]);
-      svg('text', { x: scx, y: scy - 6, fill: '#fef08a', 'font-size': 11.5, 'font-weight': '800', 'text-anchor': 'middle' }, 'Convergência 200 hPa');
-      svg('text', { x: scx, y: scy + 9, fill: '#fed7aa', 'font-size': 10.5, 'font-weight': '600', 'text-anchor': 'middle' }, '(Convecção Suprimida · χ > 0)');
+      const r = 7;
+      svg('polygon', {
+        points: `${scx},${scy - r} ${scx + r},${scy} ${scx},${scy + r} ${scx - r},${scy}`,
+        fill: '#f97316', stroke: '#ffffff', 'stroke-width': 1.6
+      });
+      svg('text', { x: scx, y: scy - 11, fill: '#fef08a', 'font-size': 11.5, 'font-weight': '800', 'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'Convergência 200 hPa');
+      svg('text', { x: scx, y: scy + 17, fill: '#fed7aa', 'font-size': 10, 'font-weight': '600', 'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, '(Convecção Suprimida · χ > 0)');
     }
 
     // 4. Barra de escala didática conceitual
@@ -520,9 +534,7 @@ function drawGlobalContext(evidence) {
   // TSM Equatorial no mapa global: desenhada sobre Chi para legibilidade garantida
   if (visibleLayers.sst) {
     const [sx, sy] = project(-135, 0);
-    if (currentEnso === 'todos') {
-      svg('text', { x: sx, y: sy + 38, fill: '#cbd5e1', 'font-size': 13, 'font-weight': '600', 'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'Composição de todos os anos');
-    } else if (currentEnso === 'el-nino') {
+    if (currentEnso === 'el-nino') {
       svg('ellipse', { cx: sx, cy: sy, rx: 130, ry: 26, fill: '#ef4444', 'fill-opacity': 0.35, stroke: '#f87171', 'stroke-dasharray': '5 4' });
       svg('text', { x: sx, y: sy + 44, fill: '#fca5a5', 'font-size': 13, 'font-weight': '600', 'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'El Niño · TSM equatorial anômala quente (qualitativo)');
     } else if (currentEnso === 'la-nina') {
@@ -541,7 +553,7 @@ function drawGlobalContext(evidence) {
   }
 
   // Teleconexão PSA: 6 centros da EOF1 de v em 200 hPa, NDJFMA (Cavalcanti 2018, slide 12)
-  if (currentAmplitude >= 1 && visibleLayers.psa && (currentSeason === 'DJF' || currentSeason === 'MAM')) {
+  if (visibleLayers.psa && (currentSeason === 'DJF' || currentSeason === 'MAM')) {
     const centers = [
       { lon: 135, lat: -40, sign: '−', r: 10 },
       { lon: 175, lat: -45, sign: '+', r: 16 },
@@ -661,7 +673,11 @@ function drawMap(evidence) {
 
   // Delimitação do SESA: SEMPRE DELIMITADA E IDENTIFICADA
   // Rótulo mantido estritamente como "SESA" no topo da região, sem "Bacia do Prata"
-  const result = (currentAmplitude >= 1 && evidence && metric !== 'circulation') ? evidence[metric] : null;
+  const cases = displayAllEvidences();
+  const primaryEvidence = cases.primary;
+  const result = (currentAmplitude >= 1 && primaryEvidence && metric !== 'circulation')
+    ? (primaryEvidence[metric] || (metric === 'extremes' ? primaryEvidence.mean : primaryEvidence.extremes))
+    : null;
   const isSesaHighlighted = result && result.region === 'SESA';
   polygon(REGIONS.SESA_POLY, isSesaHighlighted ? 'rgba(56, 189, 248, 0.12)' : 'rgba(56, 189, 248, 0.03)', isSesaHighlighted ? '#38bdf8' : '#486780', isSesaHighlighted ? 2.2 : 1.5);
   // Rótulo posicionado na borda nordeste da região, sem colidir com SALLJ nem com chuva
@@ -758,7 +774,11 @@ function drawMap(evidence) {
   }
 
   $('mapTitle').textContent = mapView === 'global' ? 'Visão global: MJO, Pacífico e América do Sul' : 'América do Sul (visão regional)';
-  $('mapDesc').textContent = result ? `${result.region}: ${result.text} Símbolo regional sem magnitude ou extensão quantitativa.` : (currentAmplitude < 1 ? 'MJO fraca (amplitude < 1) — sem padrão associado.' : 'Mapa de referência com ZCAS e SESA. Sem resultado específico verificado nesta síntese.');
+  $('mapDesc').textContent = result
+    ? `${result.region}: ${result.text} Símbolo regional sem magnitude ou extensão quantitativa.`
+    : (currentAmplitude < 1
+      ? 'MJO fraca (amplitude < 1) — sem padrão associado.'
+      : 'Sem resultado documentado para esta combinação.');
 }
 
 function generateNarrationText(season, enso, phase, metricVal, evidence) {
@@ -1003,37 +1023,35 @@ function update() {
   const ampInput = $('mjoAmplitude');
   if (ampInput) ampInput.value = currentAmplitude;
   const ampVal = $('mjoAmplitudeValue');
-  // Buscar evidência na base curada
-  const evidence = displayEvidence();
-  const result = evidence && metric !== 'circulation' ? evidence[metric] : null;
+  // Buscar evidências na base curada
+  const cases = displayAllEvidences();
+  const specific = cases.specific;
+  const alvarez = cases.alvarez;
+  const primaryEvidence = cases.primary;
+  const result = (currentAmplitude >= 1 && primaryEvidence && metric !== 'circulation')
+    ? (primaryEvidence[metric] || (metric === 'extremes' ? primaryEvidence.mean : primaryEvidence.extremes))
+    : null;
 
-  let activeEventMatch = false;
   document.querySelectorAll('.event-select').forEach(select => {
     const match = [...select.options].find(o => {
       if (!o.value) return false;
       const [s, e, p, m] = o.value.split('|');
       if (s !== currentSeason) return false;
-      if (m !== metric) return false;
+      if (m && m !== metric) return false;
       const pNum = Number(p);
       const phaseMatches = (pNum === Number(currentPhase)) ||
-        (evidence && evidence.groupedPhases && evidence.groupedPhases.includes(pNum) && evidence.groupedPhases.includes(Number(currentPhase)));
+        (primaryEvidence && primaryEvidence.groupedPhases && primaryEvidence.groupedPhases.includes(pNum) && primaryEvidence.groupedPhases.includes(Number(currentPhase)));
       if (!phaseMatches) return false;
       if (e === 'todos') {
-        return evidence ? evidence.enso === 'todos' : false;
+        return alvarez !== null;
       }
       return e === currentEnso;
     });
     select.value = match ? match.value : '';
-    if (match) activeEventMatch = true;
   });
   const evNotice = $('eventNotice');
-  if (evNotice) {
-    if (activeEventMatch && Math.abs(currentAmplitude - 1.5) < 0.05 && mjoMode === 'chi') {
-      evNotice.textContent = 'modo χ200 e A = 1,5 aplicados para o caso';
-    } else {
-      evNotice.textContent = '';
-    }
-  }
+  if (evNotice) evNotice.textContent = '';
+
   $('globalView').setAttribute('aria-pressed', String(mapView === 'global'));
   $('regionalView').setAttribute('aria-pressed', String(mapView === 'regional'));
   if ($('metricSelect')) $('metricSelect').value = metric;
@@ -1041,73 +1059,114 @@ function update() {
   for (const [id, layer] of [['sstLayer','sst'],['jetsLayer','jets'],['psaLayer','psa']]) if ($(id)) $(id).checked = visibleLayers[layer];
   if ($('layerCount')) $('layerCount').textContent = `(${['sst','jets','psa'].filter(key => visibleLayers[key]).length}/3)`;
 
-  const ensoLabel = currentEnso === 'todos'
-    ? 'Todos os anos'
-    : (currentEnso === 'el-nino' ? 'El Niño' : currentEnso === 'la-nina' ? 'La Niña' : 'ENOS Neutro');
+  const ensoLabel = currentEnso === 'el-nino' ? 'El Niño' : currentEnso === 'la-nina' ? 'La Niña' : 'ENOS Neutro';
   let title = `${currentSeason} · ${ensoLabel} · MJO Fase ${currentPhase}`;
-  if (evidence && evidence.groupedPhase) {
-    title += ` (Fases ${evidence.groupedPhase})`;
+  if (primaryEvidence && primaryEvidence.groupedPhase) {
+    title += ` (Fases ${primaryEvidence.groupedPhase})`;
   }
   $('caseTitle').textContent = title;
 
   // Resumo do Caso
   if ($('caseSummary')) {
-    if (result) {
-      const note = evidence.groupNote ? `[${evidence.groupNote}] ` : '';
-      $('caseSummary').textContent = `${note}${result.text} (${result.figure || evidence.source})`;
-      if ($('caseSummary').style) $('caseSummary').style.color = result.sign === 'negativo' ? '#fbbf24' : 'var(--accent-teal)';
-    } else if (metric === 'circulation' && evidence && evidence.circulation) {
-      const note = evidence.groupNote ? `[${evidence.groupNote}] ` : '';
-      $('caseSummary').textContent = `${note}${evidence.circulation} (${evidence.source})`;
-      if ($('caseSummary').style) $('caseSummary').style.color = 'var(--accent-cyan)';
+    if (currentAmplitude < 1) {
+      $('caseSummary').textContent = 'MJO fraca (amplitude < 1) — sem padrão associado.';
+      $('caseSummary').style.color = 'var(--muted)';
+    } else if (specific && alvarez) {
+      const sRes = specific[metric] || specific.mean || specific.circulation || {};
+      const aRes = alvarez[metric] || alvarez.mean || alvarez.circulation || {};
+      $('caseSummary').textContent = `${sRes.text || specific.circulation} | Média de todos os anos (Alvarez et al.): ${aRes.text || alvarez.circulation}`;
+      $('caseSummary').style.color = 'var(--accent-teal)';
+    } else if (specific) {
+      const sRes = specific[metric] || specific.mean || specific.circulation || {};
+      $('caseSummary').textContent = `${sRes.text || specific.circulation} (${specific.source})`;
+      $('caseSummary').style.color = sRes.sign === 'negativo' ? '#fbbf24' : 'var(--accent-teal)';
+    } else if (alvarez) {
+      const aRes = alvarez[metric] || alvarez.mean || alvarez.circulation || {};
+      $('caseSummary').textContent = `Média de todos os anos (Alvarez et al.): ${aRes.text || alvarez.circulation} (${alvarez.source})`;
+      $('caseSummary').style.color = aRes.sign === 'negativo' ? '#fbbf24' : 'var(--accent-teal)';
     } else {
-      $('caseSummary').textContent = currentAmplitude < 1 ? 'MJO fraca (A < 1): destaques de fase ativa ocultos; jatos, TSM, ZCAS e SESA preservados.' : 'Sem resultado específico verificado nesta síntese.';
-      if ($('caseSummary').style) $('caseSummary').style.color = 'var(--muted)';
+      $('caseSummary').textContent = 'Sem resultado documentado para esta combinação.';
+      $('caseSummary').style.color = 'var(--muted)';
     }
   }
 
   // Painel de Resultados
   $('result').replaceChildren();
-  const value = document.createElement('p');
-  if (result) {
-    value.className = 'value';
-    if (result.sign === 'negativo') {
-      value.style.color = '#fbbf24';
-      value.textContent = `Chuva reduzida / Subsidência · ${result.region}`;
-    } else {
-      value.style.color = 'var(--accent-teal)';
-      value.textContent = `${metric === 'extremes' ? 'Frequência de extremos' : 'Chuva média'} · ${result.region}`;
-    }
-  } else if (metric === 'circulation' && evidence && evidence.circulation) {
-    value.className = 'value';
-    value.textContent = 'Circulação extratropical e teleconexões · Hemisfério Sul';
-  } else {
-    value.className = 'muted';
-    value.textContent = 'Sem resultado específico verificado nesta síntese.';
-  }
-  $('result').appendChild(value);
+  if (currentAmplitude < 1) {
+    const val = document.createElement('p');
+    val.className = 'muted';
+    val.textContent = 'MJO fraca (A < 1): destaques de fase ativa ocultos; jatos, TSM, ZCAS, SESA e PSA preservados.';
+    $('result').appendChild(val);
+  } else if (specific && alvarez) {
+    // 1. Específico do ENOS (Fernandes & Grimm)
+    const sBlock = document.createElement('div');
+    const sTitle = document.createElement('p');
+    sTitle.className = 'value';
+    const sRes = specific[metric] || specific.mean;
+    sTitle.style.color = (sRes && sRes.sign === 'negativo') ? '#fbbf24' : 'var(--accent-teal)';
+    sTitle.textContent = `${specific.source.split(',')[0]} (Específico · ${ensoLabel})`;
+    sBlock.appendChild(sTitle);
+    const sDesc = document.createElement('p');
+    sDesc.textContent = sRes ? sRes.text : (specific.circulation || '');
+    sBlock.appendChild(sDesc);
+    $('result').appendChild(sBlock);
 
-  const description = document.createElement('p');
-  if (result) {
-    const note = evidence.groupNote ? `${evidence.groupNote} ` : '';
-    description.textContent = `${note}${result.text}`;
-  } else if (metric === 'circulation' && evidence && evidence.circulation) {
-    const note = evidence.groupNote ? `${evidence.groupNote} ` : '';
-    description.textContent = `${note}${evidence.circulation} Anomalias de altura geopotencial e propagação: ${evidence.psa || 'Dispersão de ondas de Rossby.'} Sem inferência de chuva regional a partir deste resultado de circulação. Fonte: ${evidence.source}.`;
+    // 2. Média de todos os anos (Alvarez et al.)
+    const aBlock = document.createElement('div');
+    aBlock.style.marginTop = '12px';
+    aBlock.style.paddingTop = '10px';
+    aBlock.style.borderTop = '1px solid rgba(255,255,255,0.12)';
+    const aTitle = document.createElement('p');
+    aTitle.className = 'value';
+    const aRes = alvarez[metric] || alvarez.mean;
+    aTitle.style.color = (aRes && aRes.sign === 'negativo') ? '#fbbf24' : 'var(--accent-teal)';
+    aTitle.textContent = 'Média de todos os anos (Alvarez et al. 2016)';
+    aBlock.appendChild(aTitle);
+    const aDesc = document.createElement('p');
+    aDesc.textContent = aRes ? aRes.text : (alvarez.circulation || '');
+    aBlock.appendChild(aDesc);
+    $('result').appendChild(aBlock);
+  } else if (specific) {
+    const sBlock = document.createElement('div');
+    const sTitle = document.createElement('p');
+    sTitle.className = 'value';
+    const sRes = specific[metric] || specific.mean;
+    sTitle.style.color = (sRes && sRes.sign === 'negativo') ? '#fbbf24' : 'var(--accent-teal)';
+    sTitle.textContent = `${specific.source.split(',')[0]} (Específico · ${ensoLabel})`;
+    sBlock.appendChild(sTitle);
+    const sDesc = document.createElement('p');
+    sDesc.textContent = sRes ? sRes.text : (specific.circulation || '');
+    sBlock.appendChild(sDesc);
+    $('result').appendChild(sBlock);
+  } else if (alvarez) {
+    const aBlock = document.createElement('div');
+    const aTitle = document.createElement('p');
+    aTitle.className = 'value';
+    const aRes = alvarez[metric] || alvarez.mean;
+    aTitle.style.color = (aRes && aRes.sign === 'negativo') ? '#fbbf24' : 'var(--accent-teal)';
+    aTitle.textContent = 'Média de todos os anos (Alvarez et al. 2016)';
+    aBlock.appendChild(aTitle);
+    const aDesc = document.createElement('p');
+    aDesc.textContent = aRes ? aRes.text : (alvarez.circulation || '');
+    aBlock.appendChild(aDesc);
+    $('result').appendChild(aBlock);
   } else {
-    description.textContent = `Não há evidência curada desta combinação (${currentSeason}, ${ensoLabel}, Fase ${currentPhase}) para ${metric === 'circulation' ? 'circulação' : metric === 'extremes' ? 'frequência de extremos' : 'chuva média'} no recorte documental atual de Fernandes & Grimm (2023) e Alvarez et al. (2016). A ausência de resultado não equivale a efeito zero ou ausência de influência física.`;
+    const val = document.createElement('p');
+    val.className = 'muted';
+    val.textContent = 'Sem resultado documentado para esta combinação.';
+    $('result').appendChild(val);
+    const desc = document.createElement('p');
+    desc.textContent = `Não há caso específico catalogado para ${currentSeason} · ${ensoLabel} · Fase ${currentPhase} nesta síntese documental. As feições da base continuam disponíveis para análise no sandbox.`;
+    $('result').appendChild(desc);
   }
-  $('result').appendChild(description);
 
   // Faixa de TSM do ENOS
   $('sstBand').className = 'band' + (currentEnso === 'el-nino' ? ' warm' : currentEnso === 'la-nina' ? ' cold' : '');
-  $('sstText').textContent = currentEnso === 'todos'
-    ? 'Composição de todos os anos · análise climatológica média sem estratificação por ENOS'
-    : currentEnso === 'el-nino'
-      ? 'El Niño · anomalias quentes no Pacífico equatorial central/leste'
-      : currentEnso === 'la-nina'
-        ? 'La Niña · anomalias frias no Pacífico equatorial central/leste'
-        : 'ENOS neutro · sem padrão forte de El Niño ou La Niña; não significa anomalia local zero.';
+  $('sstText').textContent = currentEnso === 'el-nino'
+    ? 'El Niño · anomalias quentes no Pacífico equatorial central/leste'
+    : currentEnso === 'la-nina'
+      ? 'La Niña · anomalias frias no Pacífico equatorial central/leste'
+      : 'ENOS neutro · sem padrão forte de El Niño ou La Niña; não significa anomalia local zero.';
 
   // Informações de Fase da MJO
   const phaseInfo = getMjoPhaseCoords(currentPhase);
@@ -1117,13 +1176,14 @@ function update() {
   const psaCard = $('panelPsa') || $('psaCard');
   if (psaCard) psaCard.hidden = false;
   if ($('psaText')) {
-    $('psaText').textContent = (evidence && evidence.psa)
-      ? evidence.psa
-      : 'Sem mecanismo de teleconexão PSA documentado especificamente para esta combinação no recorte curado da literatura.';
+    const psaEvidence = specific || alvarez;
+    $('psaText').textContent = (psaEvidence && psaEvidence.psa)
+      ? psaEvidence.psa
+      : 'Padrão PSA · onda de Rossby intrassazonal no Pacífico Sul (~200 hPa). Em DJF e MAM, centros da EOF1 de v200 (Cavalcanti 2018) ilustram o guia de onda.';
   }
 
   // Desenhar mapa com a base permanente e destaques seletivos
-  drawMap(evidence);
+  drawMap(primaryEvidence);
 
   // Disparar atualização da narração (fala se ativa e atualiza texto acessível)
   speakCurrentNarration();
@@ -1142,7 +1202,7 @@ document.querySelectorAll('[data-season]:not([data-shortcut])').forEach(b => {
   });
 });
 
-// Event Listeners: ENOS (El Niño, Neutro, La Niña, Todos os anos)
+// Event Listeners: ENOS (El Niño, Neutro, La Niña)
 const ensoSelect = $('ensoSelect');
 if (ensoSelect) {
   ensoSelect.addEventListener('change', () => {
@@ -1172,16 +1232,19 @@ document.querySelectorAll('.event-select').forEach(select => {
   select.addEventListener('change', () => {
     if (!select.value) return;
     const [season, enso, phase, metricVal] = select.value.split('|');
-    // Ao escolher evento de interesse: todos os controles de fase, intensidade ativa e padrão nos trópicos seguem essa escolha.
-    // Eventos do Alvarez selecionam ENOS = 'todos'; eventos do Fernandes & Grimm selecionam o ENOS correspondente.
+    // Eventos de interesse = ATALHOS: só ajustam estação, fase e ENOS (quando definido; se 'todos', mantém ENOS atual) e amplitude = 1,5.
+    // NÃO mudam o modo "MJO nos trópicos" nem desativam nenhum controle.
     const stateOpts = {
       season,
-      enso,
       phase: Number(phase),
-      metric: metricVal,
-      amplitude: 1.5,
-      mjoMode: 'chi'
+      amplitude: 1.5
     };
+    if (enso && enso !== 'todos') {
+      stateOpts.enso = enso;
+    }
+    if (metricVal) {
+      stateOpts.metric = metricVal;
+    }
     setClimateState(stateOpts);
   });
 });

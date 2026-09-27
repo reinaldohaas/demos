@@ -579,9 +579,8 @@
       <div class="control-group-pill">
         <label for="ensoSelect" class="pill-label">ENOS:</label>
         <select id="ensoSelect" class="control-select" aria-label="Selecione o estado do ENOS">
-          <option value="todos" data-enso="todos">🌐 Todos os anos</option>
-          <option value="neutro" data-enso="neutro">⚖️ Neutro</option>
           <option value="el-nino" data-enso="el-nino">🔥 El Niño</option>
+          <option value="neutro" data-enso="neutro" selected>⚖️ Neutro</option>
           <option value="la-nina" data-enso="la-nina">🧊 La Niña</option>
         </select>
       </div>
@@ -634,7 +633,7 @@
           <button id="regionalView" aria-pressed="false">América do Sul</button>
         </div>
         <label class="toolbar-group" for="mjoSelect">MJO nos trópicos:
-          <select id="mjoSelect"><option value="chi" selected>χ200 · potencial de velocidade (esquema didático)</option><option value="dipoles">Dipolos simples</option><option value="track">Trilha 1–8</option><option value="none">Nenhuma</option></select>
+          <select id="mjoSelect"><option value="none" selected>Nenhuma</option><option value="chi">χ200 · potencial de velocidade (esquema didático)</option><option value="dipoles">Dipolos simples</option><option value="track">Trilha 1–8</option></select>
         </label>
         <details class="layer-choices"><summary>Camadas <span id="layerCount"></span></summary><div>
           <label><input id="sstLayer" type="checkbox" checked> TSM · sinal do ENOS</label>
@@ -917,12 +916,12 @@
 </div>
 </main>
 
-<script src="world-land.js?v=20260927f"></script>
-<script src="map-regions.js?v=20260927f"></script>
-<script src="documented-cases.js?v=20260927f"></script>
-<script src="rmm-diagram.js?v=20260927f"></script>
-<script src="documented-view.js?v=20260927f"></script>
-<script src="panels-manager.js?v=20260927f"></script>
-<script src="forecast-sesa.js?v=20260927f"></script>
+<script src="world-land.js?v=20260927g"></script>
+<script src="map-regions.js?v=20260927g"></script>
+<script src="documented-cases.js?v=20260927g"></script>
+<script src="rmm-diagram.js?v=20260927g"></script>
+<script src="documented-view.js?v=20260927g"></script>
+<script src="panels-manager.js?v=20260927g"></script>
+<script src="forecast-sesa.js?v=20260927g"></script>
 </body>
 </html>

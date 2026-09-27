@@ -2,21 +2,24 @@
 
 ## Estado
 - Branch: revisao, criado do main a partir da base 3376bc9.
-- Data e hora: 2026-09-27T17:48:00-03:00.
-- Cópia local no branch revisao com o lote de melhorias e correções implementado e validado.
-- Arquivos modificados no lote: `index.html` (cachebuster `?v=20260927e`), `documented-view.js` (PSA com 6 centros da EOF1 de v200 Cavalcanti 2018, χ200 global core vazado, texto de chuva e extremos mantido dentro do mapa), `STATUS.md`, capturas canônicas completas.
+- Data e hora: 2026-09-27T19:42:00-03:00.
+- Cópia local no branch revisao com restauração completa do Sandbox, seletor de ENOS de 3 opções e regras didáticas.
+- Arquivos modificados no lote: `index.html` (cachebuster `?v=20260927g`), `documented-cases.js` (suporte a Alvarez em qualquer ENOS e retorno duplo), `documented-view.js` (sandbox 96 combinações, modo default 'none', losangos no χ200, atalhos sem interferir em modos), `_revisao/PROTOCOLO.md` (regras permanentes de estabilidade e regressão), `STATUS.md`, capturas de validação.
 
 ## Em andamento
-Lote completo de correções no branch `revisao`. Aguardando validação do Consultor das figuras exportadas e decisão do Reinaldo.
+Lote completo de restauração do Sandbox testado e validado. Aguardando aprovação para merge no `main`.
 
 ## Feito (nesta rodada)
-- Verificação documental: artigos de Fernandes & Grimm (2023) e Alvarez et al. (2016) marcados integralmente como **NÃO VERIFICADO** no STATUS.md e em `verificacao_casos.md`. Mantidas intactas as figuras/páginas no código para conferência posterior pelo Consultor. Retirado "Roy (VERIFICADO)" das fontes.
-- PSA (Cavalcanti 2018, slide 12): representação substituída pelos 6 centros da EOF1 de v em 200 hPa (135°E 40°S −; 175°E 45°S +; 145°W 50°S −; 100°W 50°S +; 65°W 40°S −; 30°W 35°S +), raios proporcionais aos centros (145°W e 100°W maiores; 175°E grande; 65°W e 30°W médios; 135°E pequeno), contorno sem preenchimento, cor própria (`#c084fc`), "+" / "−", linha tracejada ligando os centros e legenda: "Padrão PSA · EOF1 de v em 200 hPa, NDJFMA (Cavalcanti 2018, INPE)".
-- χ200 GLOBAL: mesmas regras da visão regional aplicadas ao mapa global (núcleo só com contorno sem preenchimento, `mid <= 0.12`, `outer <= 0.10`, opacidade central somada 0.22 ≤ 0.25).
-- Desamontoamento e enquadramento: texto "Extremos mais frequentes" e "Chuva média favorecida" com limite de margem seguro (`maxTx`) para permanecer 100% visível dentro do mapa sem corte na borda direita.
-- Capturas do painel refeitas: conexão WebSocket CDP ajustada para a aba ativa da aplicação, aguardando o SVG ter elementos e mais 900 ms de repaint. As seis capturas canônicas (`global_DJF_f1`, `global_DJF_f8`, `global_JJA_f8`, `regional_DJF_f8`, `boletim`, `celular_390`) e os comparativos antes/depois foram todos gerados com sucesso (arquivos completos entre 54 KB e 107 KB, eliminando quadros em branco).
-- Atualização de cachebuster para `?v=20260927e`.
-- Pendências da ETAPA 2 mantidas: trilha 1–8 pela convenção de Wheeler & Hendon e amplitude < 1 apagando tudo continuam pendentes para momento oportuno; dipolo simples aguarda leitura dos centros pelo Consultor.
+- **Seletor de ENOS:** voltado estritamente às 3 opções canônicas (El Niño, Neutro, La Niña). Removido "Todos os anos" da interface.
+- **Restauração do Sandbox:** todas as 96 combinações (4 estações × 3 ENOS × 8 fases) operam livremente:
+  - Base sempre desenhada: TSM equatorial correspondente ao ENOS, Jato Subtropical modulado por ENOS e estação, SALLJ (~850 hPa), polígonos e identificadores de ZCAS e SESA, e teleconexão PSA (em DJF e MAM).
+  - Padrões de "MJO nos trópicos" ativos exclusivamente conforme o modo selecionado (Nenhuma / χ200 / dipolos / trilha), iniciando por padrão em "Nenhuma".
+  - Casos documentados apenas acrescentam destaque e texto sobre a base; quando não há caso catalogado, exibe "Sem resultado documentado para esta combinação" e toda a base cartográfica e física permanece ativa.
+- **Composições de todos os anos (Alvarez et al. 2016):** aplicam-se a qualquer ENOS selecionado naquela estação e fase. Se houver caso específico do ENOS (Fernandes & Grimm 2023), o painel e o resumo exibem os dois em conjunto (primeiro o específico, depois "Média de todos os anos (Alvarez et al.)").
+- **Eventos de interesse como atalhos puros:** apenas ajustam estação, fase, ENOS (quando específico; mantendo o atual se Alvarez) e amplitude = 1,5, sem alterar o modo "MJO nos trópicos" nem desativar controles.
+- **Amplitude RMM < 1:** os padrões tropicais da MJO (χ200, dipolos, realce da trilha) e os destaques de casos desaparecem totalmente; a base permanente permanece 100% íntegra.
+- **Modo padrão e marcadores de χ200:** inicialização em "Nenhuma"; trilha fixa de Wheeler & Hendon (2004, Fig. 7); marcadores em losango nos centros de divergência e convergência do χ200.
+- **Regra permanente:** adicionada ao `PROTOCOLO.md` proibindo restrições ou mudanças de comportamento de controles sem solicitação explícita e exigindo teste de regressão das 96 combinações em todo lote.
 
 ## Aguardando decisão do Reinaldo
 - Retorno do Consultor sobre as figuras exportadas e aprovação para futuros passos. Sem merge no `main`.
@@ -54,20 +57,23 @@ Lote completo de correções no branch `revisao`. Aguardando validação do Cons
 
 
 ## Validações
-- 2026-09-27T16:42:27-03:00: console do navegador com 0 erros de JavaScript capturados via CDP Chrome headless.
-- 2026-09-27T16:42:27-03:00: narração textual testada em 384 combinações (4 estações × 4 ENOS × 8 fases × 3 variáveis) com 0 falhas, sem undefined/NaN.
-- 2026-09-27T16:42:27-03:00: verificação de responsividade mobile nas larguras 360 px, 390 px e 414 px — scrollWidth == innerWidth, sem overflow horizontal; captura em 390 px salva.
-- 2026-09-27T16:42:27-03:00: teste de regra de ENOS:
-  - DJF + La Niña + fase 8 → Fernandes & Grimm (2023)
-  - DJF + Todos os anos + fase 8 → Alvarez et al. (2016)
-  - DJF + Neutro + fase 8 → null (sem caso cadastrado)
-  - JJA + Todos os anos + fase 4 → Alvarez et al. (2016)
-- Capturas antes/depois: `JJA_4_5_antes.png` e `JJA_4_5_depois.png`; `DJF_8_1_antes.png` e `DJF_8_1_depois.png`.
-- Seis capturas canônicas salvas em `_revisao/capturas/` até 1200 px de largura.
+- 2026-09-27T19:42:00-03:00: **Teste de regressão completo das 96 combinações × 4 modos × amplitudes {0,5; 1,5} (768 estados testados via CDP Chrome headless):**
+  - Erros de JavaScript: **0** (zero falhas no console).
+  - Integridade da base permanente: **100% presente** em todos os 768 estados (TSM equatorial modulada por ENOS, Jato Subtropical, SALLJ, polígonos SESA e ZCAS, e PSA nos 384 estados de DJF/MAM).
+  - Comportamento de MJO fraca ($A = 0{,}5$): **0 vazamentos** (potencial de velocidade $\chi_{200}$, dipolos, destaques da trilha e símbolos de casos 100% ocultos em todos os 384 estados com $A < 1$; base sempre preservada).
+  - Atalhos de eventos de interesse: **9 de 9 atalhos validados**, configurando a estação, fase, ENOS e amplitude sem alterar o modo "MJO nos trópicos".
+  - DJF + La Niña + Fase 8: Fernandes & Grimm (2023) E Alvarez et al. (2016) exibidos simultaneamente no painel e no resumo.
+  - JJA + El Niño + Fase 4: caso de Alvarez et al. (2016) exibido corretamente no painel e destacado no mapa sobre a base de El Niño.
+- Capturas de validação salvas em `_revisao/capturas/`:
+  - `DJF_la_nina_f8_duplo.png`: exibição simultânea de Fernandes & Grimm e Alvarez no painel.
+  - `JJA_el_nino_f4_alvarez.png`: aplicação de Alvarez em JJA sob El Niño no sandbox com modo "Nenhuma".
+  - `chi_A050.png`: base permanente completa (TSM fria, jatos, SESA, ZCAS e PSA) sem nenhum padrão tropical ativo.
+  - `trilha_DJF_f6.png`: trilha 1–8 fixa de Wheeler & Hendon (2004) com realce na fase 6.
 
 ## Decisões registradas
 - 27/09/2026: trabalhar sempre em `revisao`; commit e push autorizados no branch `revisao`. Merge em `main` somente após Reinaldo dizer “aprovado”.
 - 27/09/2026: acompanhamento por `STATUS.md`, `painel.html` e capturas a cada lote.
-- 27/09/2026: casos Alvarez selecionam ENOS = "Todos os anos"; casos Fernandes & Grimm selecionam o ENOS correspondente.
-- 27/09/2026: χ200 regional com core apenas contorno e opacidade total ≤ 0,25.
-- 27/09/2026: texto do símbolo de chuva no Atlântico para desamontoar do continente.
+- 27/09/2026: sandbox totalmente aberto com 96 combinações (4 estações × 3 ENOS × 8 fases) e modo padrão "Nenhuma".
+- 27/09/2026: casos de todos os anos (Alvarez et al. 2016) válidos para qualquer ENOS; se houver caso específico (Fernandes & Grimm 2023), ambos são apresentados no painel.
+- 27/09/2026: eventos de interesse são atalhos puros, sem travar nem alterar o modo de visualização tropical.
+- 27/09/2026: regra permanente incremental e teste de regressão obrigatório antes de cada push registrados no PROTOCOLO.md.

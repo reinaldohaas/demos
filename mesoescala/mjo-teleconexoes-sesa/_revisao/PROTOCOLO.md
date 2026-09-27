@@ -12,3 +12,8 @@
 - painel.html autossuficiente, sem scripts externos; meta refresh30; andamento e decisões no topo; feito/pendente; grade antes/depois lendo capturas; link ../index.html.
 - Cada item: atualizar acompanhamento e capturas; commit e push em revisao. Chat no máximo cinco linhas.
 - Fim de lote: validações completas, cache-busting novo, STATUS final; “Lote pronto no revisao (hash X). Aguardo aprovação para merge no main.” Não declarar lote pronto com validações pendentes.
+
+## Regras permanentes de comportamento e estabilidade
+- Mudanças são INCREMENTAIS: não remover, restringir nem mudar o comportamento de controles existentes (seletores, eventos, modos, amplitude) sem pedido explícito do Reinaldo.
+- Se uma instrução implicar mudança de comportamento, PARAR antes e descrever no STATUS.md: "o que muda para o usuário", com as opções — e aguardar confirmação.
+- O teste de regressão das 96 combinações roda em TODO lote, antes do push.

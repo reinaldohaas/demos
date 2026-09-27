@@ -239,15 +239,35 @@ const DOCUMENTED_CASES = [
   }
 ];
 
-function findDocumentedCase(season, enso, phase) {
+function findDocumentedCases(season, enso, phase) {
   const p = Number(phase);
-  return DOCUMENTED_CASES.find(c =>
+  // 1. Caso específico para o ENOS selecionado (ex.: Fernandes & Grimm 2023)
+  const specific = DOCUMENTED_CASES.find(c =>
     c.season === season &&
     c.enso === enso &&
     (Number(c.phase) === p || (c.groupedPhases && c.groupedPhases.includes(p)))
   ) || null;
+
+  // 2. Caso de média de todos os anos (Alvarez et al. 2016) — válido para qualquer ENOS
+  const alvarez = DOCUMENTED_CASES.find(c =>
+    c.season === season &&
+    c.enso === 'todos' &&
+    (Number(c.phase) === p || (c.groupedPhases && c.groupedPhases.includes(p)))
+  ) || null;
+
+  return {
+    specific,
+    alvarez,
+    // Caso primário para orientar o destaque no mapa: o específico tem precedência
+    primary: specific || alvarez
+  };
+}
+
+function findDocumentedCase(season, enso, phase) {
+  const res = findDocumentedCases(season, enso, phase);
+  return res.primary;
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { DOCUMENTED_CASES, findDocumentedCase };
+  module.exports = { DOCUMENTED_CASES, findDocumentedCase, findDocumentedCases };
 }
