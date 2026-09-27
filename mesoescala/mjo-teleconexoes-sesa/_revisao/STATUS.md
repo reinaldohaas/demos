@@ -23,6 +23,25 @@ Lote completo de melhorias implementado e validado no branch `revisao`. Aguardan
 ## Aguardando decisão do Reinaldo
 - Aprovação do lote do branch `revisao` para posterior merge no `main`.
 
+## Resumo da Verificação Científica Documental (2026-09-27)
+- **Relatório completo:** salvo em `C:\Users\haas\github\mjo-sesa\verificacao_casos.md` (fora do repositório).
+- **Afirmações verificadas:** 24 afirmações (9 casos ativos + 2 casos pendentes desdobrados em precipitação, extremos e teleconexão).
+- **Confirmados:** 24 de 24 (100% de confirmação dos mecanismos e respostas nos artigos originais).
+- **Não confirmados:** 0.
+- **Casos a remover:** 0 (nenhum caso a remover; todas as respostas físicas e regionais são sustentadas pelos artigos).
+- **Casos pendentes checados:**
+  - *El Niño · fase 3* (Fernandes & Grimm 2023): **CONFIRMADO** (p. 7734, p. 7736 e Fig. 12 na p. 7733) — pico de extremos e chuva no SESA.
+  - *Neutro · fase 4* (Fernandes & Grimm 2023): **CONFIRMADO** (p. 7731, p. 7734 e Fig. 12 na p. 7733) — pico de extremos no SESA.
+- **Casos a ajustar (metadados de figuras em `documented-cases.js` para lote futuro quando autorizado):**
+  - As relações físicas e os impactos regionais estão 100% corretos.
+  - Ajuste recomendado apenas nos números das figuras de Alvarez et al. (2016) no código:
+    - `DJF-todos-3-4` e `DJF-todos-8-1`: referenciar Figs. 1 (circulação 250 hPa, p. 248) e 11 (precipitação, p. 254).
+    - `MAM-todos-3-4` e `MAM-todos-8-1`: referenciar Figs. 2 (circulação 250 hPa, p. 248) e 12 (precipitação, p. 255).
+    - `JJA-todos-4-5`: referenciar Figs. 3 (circulação, p. 249), 9 (temperatura, p. 252) e 13 (precipitação, p. 256).
+    - `SON-todos-4-5`: referenciar Figs. 4 (circulação, p. 249), 10 (temperatura, p. 253) e 14 (precipitação, p. 257).
+    - `SON-todos-7-8`: referenciar Figs. 4 (circulação, p. 249) e 14 (precipitação, p. 257).
+
+
 ## Fontes
 - Fernandes & Grimm (2023), Journal of Climate: Seção 5 e Figs. 5, 9 e 12 (VERIFICADO).
 - Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics: Figs. 2 e 5 (VERIFICADO).
