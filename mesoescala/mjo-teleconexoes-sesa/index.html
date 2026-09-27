@@ -579,6 +579,7 @@
       <div class="control-group-pill">
         <label for="ensoSelect" class="pill-label">ENOS:</label>
         <select id="ensoSelect" class="control-select" aria-label="Selecione o estado do ENOS">
+          <option value="todos" data-enso="todos">🌐 Todos os anos</option>
           <option value="neutro" data-enso="neutro">⚖️ Neutro</option>
           <option value="el-nino" data-enso="el-nino">🔥 El Niño</option>
           <option value="la-nina" data-enso="la-nina">🧊 La Niña</option>
@@ -615,10 +616,10 @@
     <span class="pill-label" style="width:auto;">Eventos de interesse:</span>
     <span id="eventNotice" style="font-size:11.5px; color:#5eead4; font-weight:600; font-family:var(--font-mono, monospace);" role="status"></span>
   </div>
-<label>DJF · Verão<select id="eventsDJF" class="event-select" aria-label="Eventos de interesse — DJF"><option value="">Escolher caso…</option><option value="DJF|la-nina|8|mean">La Niña · 8 — pico na ZCAS (Fernandes & Grimm)</option><option value="DJF|el-nino|1|mean">El Niño · 1 — pico na ZCAS, uma fase depois (Fernandes & Grimm)</option><option value="DJF|todos|3|mean">Todos os anos · 3–4 (Bacia do Prata)</option><option value="DJF|todos|8|mean">Média de todos os anos · 8–1 — ZCAS (Alvarez et al.)</option></select></label>
-<label>MAM · Outono<select id="eventsMAM" class="event-select" aria-label="Eventos de interesse — MAM"><option value="">Escolher caso…</option><option value="MAM|todos|3|mean">Todos os anos · 3–4 (Bacia do Prata)</option><option value="MAM|todos|8|mean">Todos os anos · 8–1 (ZCAS)</option></select></label>
-<label>JJA · Inverno<select id="eventsJJA" class="event-select" aria-label="Eventos de interesse — JJA"><option value="">Escolher caso…</option><option value="JJA|todos|4|mean">Todos os anos · 4–5 (ZCAS seca ↓)</option></select></label>
-<label>SON · Primavera<select id="eventsSON" class="event-select" aria-label="Eventos de interesse — SON"><option value="">Escolher caso…</option><option value="SON|todos|4|mean">Todos os anos · 4–5 (ZCAS seca ↓)</option><option value="SON|todos|7|mean">Todos os anos · 7–8 (ZCAS ↑)</option></select></label>
+<label>DJF · Verão<select id="eventsDJF" class="event-select" aria-label="Eventos de interesse — DJF"><option value="">Escolher caso…</option><option value="DJF|la-nina|8|mean">Fernandes & Grimm · 8 — mais chuva (ZCAS)</option><option value="DJF|el-nino|1|mean">Fernandes & Grimm · 1 — mais chuva (ZCAS)</option><option value="DJF|todos|3|mean">Alvarez · 3–4 — mais chuva (Bacia do Prata)</option><option value="DJF|todos|8|mean">Alvarez · 8–1 — mais chuva (ZCAS)</option></select></label>
+<label>MAM · Outono<select id="eventsMAM" class="event-select" aria-label="Eventos de interesse — MAM"><option value="">Escolher caso…</option><option value="MAM|todos|3|mean">Alvarez · 3–4 — mais chuva (Bacia do Prata)</option><option value="MAM|todos|8|mean">Alvarez · 8–1 — mais chuva (ZCAS)</option></select></label>
+<label>JJA · Inverno<select id="eventsJJA" class="event-select" aria-label="Eventos de interesse — JJA"><option value="">Escolher caso…</option><option value="JJA|todos|4|mean">Alvarez · 4–5 — menos chuva (ZCAS)</option></select></label>
+<label>SON · Primavera<select id="eventsSON" class="event-select" aria-label="Eventos de interesse — SON"><option value="">Escolher caso…</option><option value="SON|todos|4|mean">Alvarez · 4–5 — menos chuva (ZCAS)</option><option value="SON|todos|7|mean">Alvarez · 7–8 — mais chuva (ZCAS)</option></select></label>
 </div>
   </section>
 
@@ -916,12 +917,12 @@
 </div>
 </main>
 
-<script src="world-land.js?v=20260927c"></script>
-<script src="map-regions.js?v=20260927c"></script>
-<script src="documented-cases.js?v=20260927c"></script>
-<script src="rmm-diagram.js?v=20260927c"></script>
-<script src="documented-view.js?v=20260927c"></script>
-<script src="panels-manager.js?v=20260927c"></script>
-<script src="forecast-sesa.js?v=20260927c"></script>
+<script src="world-land.js?v=20260927d"></script>
+<script src="map-regions.js?v=20260927d"></script>
+<script src="documented-cases.js?v=20260927d"></script>
+<script src="rmm-diagram.js?v=20260927d"></script>
+<script src="documented-view.js?v=20260927d"></script>
+<script src="panels-manager.js?v=20260927d"></script>
+<script src="forecast-sesa.js?v=20260927d"></script>
 </body>
 </html>

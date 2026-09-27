@@ -439,12 +439,13 @@ function drawMjoVelocityPotential() {
     drawChiColorbar(350, 520, 500, 34);
   } else {
     // Visão Regional (América do Sul): contornos didáticos suaves sobre o continente
+    // Núcleo (core) só com contorno, sem preenchimento; mid <= 0.12; outer <= 0.10. Opacidade somada no centro <= 0.25.
     const renderRegionalLayers = (data, styleKey) => {
       if (!data) return;
       const styles = {
-        outer: { fill: styleKey === 'active' ? '#38bdf8' : '#facc15', opacity: 0.12, stroke: styleKey === 'active' ? '#7dd3fc' : '#fde047', strokeWidth: 1.1 },
-        mid: { fill: styleKey === 'active' ? '#0284c7' : '#f97316', opacity: 0.16, stroke: styleKey === 'active' ? '#38bdf8' : '#fb923c', strokeWidth: 1.3 },
-        core: { fill: styleKey === 'active' ? '#0369a1' : '#dc2626', opacity: 0.22, stroke: styleKey === 'active' ? '#0284c7' : '#ef4444', strokeWidth: 1.8 }
+        outer: { fill: styleKey === 'active' ? '#38bdf8' : '#facc15', opacity: 0.10, stroke: styleKey === 'active' ? '#7dd3fc' : '#fde047', strokeWidth: 1.1 },
+        mid: { fill: styleKey === 'active' ? '#0284c7' : '#f97316', opacity: 0.12, stroke: styleKey === 'active' ? '#38bdf8' : '#fb923c', strokeWidth: 1.3 },
+        core: { fill: 'none', opacity: 0, stroke: styleKey === 'active' ? '#0284c7' : '#ef4444', strokeWidth: 1.8 }
       };
       for (const level of ['outer', 'mid', 'core']) {
         const item = data[level];
@@ -453,13 +454,18 @@ function drawMjoVelocityPotential() {
         const [cx, cy] = project(item.lon, item.lat);
         const rx = item.rx * 8;
         const ry = item.ry * 6.4;
-        svg('ellipse', {
+        const attrs = {
           cx, cy, rx, ry,
-          fill: st.fill,
-          'fill-opacity': currentAmplitude < 1 ? st.opacity * 0.4 : st.opacity,
           stroke: st.stroke,
           'stroke-width': st.strokeWidth
-        });
+        };
+        if (st.fill === 'none') {
+          attrs.fill = 'none';
+        } else {
+          attrs.fill = st.fill;
+          attrs['fill-opacity'] = currentAmplitude < 1 ? st.opacity * 0.4 : st.opacity;
+        }
+        svg('ellipse', attrs);
       }
     };
 
@@ -493,7 +499,9 @@ function drawGlobalContext(evidence) {
   // TSM Equatorial no mapa global: desenhada sobre Chi para legibilidade garantida
   if (visibleLayers.sst) {
     const [sx, sy] = project(-135, 0);
-    if (currentEnso === 'el-nino') {
+    if (currentEnso === 'todos') {
+      svg('text', { x: sx, y: sy + 38, fill: '#cbd5e1', 'font-size': 13, 'font-weight': '600', 'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'Composição de todos os anos');
+    } else if (currentEnso === 'el-nino') {
       svg('ellipse', { cx: sx, cy: sy, rx: 130, ry: 26, fill: '#ef4444', 'fill-opacity': 0.35, stroke: '#f87171', 'stroke-dasharray': '5 4' });
       svg('text', { x: sx, y: sy + 44, fill: '#fca5a5', 'font-size': 13, 'font-weight': '600', 'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'El Niño · TSM equatorial anômala quente (qualitativo)');
     } else if (currentEnso === 'la-nina') {
@@ -511,17 +519,41 @@ function drawGlobalContext(evidence) {
     svg('text', { x, y, fill: '#5a829e', 'font-size': 14, 'letter-spacing': 2.5, 'text-anchor': 'middle', 'font-weight': '600' }, label);
   }
 
-  // Teleconexão PSA conceitual: representada somente quando há mecanismo verificado para a combinação
-  if (visibleLayers.psa && evidence && evidence.psa && !evidence.groupedPhase) {
-    const p1 = project(-140, -32);
-    const p2 = project(-100, -46);
-    const p3 = project(-60, -36);
+  // Teleconexão PSA conceitual: representada por círculos/nós ao longo do guia de ondas
+  if (visibleLayers.psa && evidence && evidence.psa && evidence.psa.includes('PSA')) {
+    const centers = [
+      { lon: -140, lat: -32, sign: '+' },
+      { lon: -110, lat: -46, sign: '−' },
+      { lon: -80, lat: -50, sign: '+' },
+      { lon: -56, lat: -38, sign: '−' }
+    ];
+    const pts = centers.map(c => project(c.lon, c.lat));
+    // Traçado guia em arco interligando os nós conceituais
+    const d = `M ${pts[0][0]} ${pts[0][1]} Q ${pts[1][0]} ${pts[1][1]} ${(pts[1][0] + pts[2][0]) / 2} ${(pts[1][1] + pts[2][1]) / 2} T ${pts[3][0]} ${pts[3][1]}`;
     svg('path', {
-      d: `M ${p1[0]} ${p1[1]} Q ${p2[0]} ${p2[1]} ${p3[0]} ${p3[1]}`,
+      d,
       fill: 'none', stroke: '#fbbf24', 'stroke-width': 2.2, 'stroke-dasharray': '6 5'
     });
-    const labelPos = project(-100, -49);
-    svg('text', { x: labelPos[0], y: labelPos[1], fill: '#fde68a', 'font-size': 12, 'text-anchor': 'middle' }, 'Guia PSA de ondas de Rossby (esquema conceitual)');
+    // Centros de ação do trem de ondas PSA por círculos/nós com contorno e sinais alternados
+    for (const c of centers) {
+      const [cx, cy] = project(c.lon, c.lat);
+      svg('circle', {
+        cx, cy, r: 15,
+        fill: 'rgba(251, 191, 36, 0.15)',
+        stroke: '#fbbf24',
+        'stroke-width': 1.6
+      });
+      svg('text', {
+        x: cx, y: cy + 5,
+        fill: '#fef08a', 'font-size': 14, 'font-weight': '800', 'text-anchor': 'middle'
+      }, c.sign);
+    }
+    const labelPos = project(-105, -50);
+    svg('text', {
+      x: labelPos[0], y: labelPos[1],
+      fill: '#fde68a', 'font-size': 12, 'font-weight': '600', 'text-anchor': 'middle',
+      stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+    }, 'Trem de ondas PSA (centros conceituais de anomalia)');
   }
 }
 
@@ -631,37 +663,37 @@ function drawMap(evidence) {
       });
       svg('text', { x: x + 47, y: y + 7, fill: '#fbbf24', 'font-size': 26, 'font-weight': '900' }, '↓');
 
-      const isNorthernAnchor = location[1] > -18;
-      if (isNorthernAnchor) {
-        svg('text', { x: x - 32, y: y + 6, fill: '#fef08a', 'font-size': 13, 'font-weight': '700', 'text-anchor': 'end' },
-          'Chuva reduzida / Frio');
-      } else {
-        svg('text', { x, y: y + 43, fill: '#fef08a', 'font-size': 13.5, 'font-weight': '700', 'text-anchor': 'middle' },
-          'Chuva reduzida / Frio');
-      }
-    } else {
-      svg('path', {
-        d: `M ${x - 22} ${y} C ${x - 38} ${y - 16}, ${x - 17} ${y - 30}, ${x - 5} ${y - 21} C ${x + 2} ${y - 43}, ${x + 31} ${y - 31}, ${x + 25} ${y - 13} C ${x + 44} ${y - 10}, ${x + 33} ${y + 5}, ${x + 20} ${y + 4} L ${x - 22} ${y + 4} Z`,
-        fill: '#73d8da', stroke: '#b4f5f0', 'stroke-width': 2
-      });
-      for (const dx of [-16, 0, 16]) {
-        svg('line', {
-          x1: x + dx, y1: y + 12, x2: x + dx - 5, y2: y + 24,
-          stroke: '#73d8da', 'stroke-width': metric === 'extremes' ? 4 : 2.5, 'stroke-linecap': 'round'
-        });
-      }
-      svg('text', { x: x + 47, y: y + 5, fill: '#aaf4e7', 'font-size': 24, 'font-weight': '800' }, '↑');
-
-      // Deslocar texto à esquerda caso a âncora seja ao norte da ZCAS para desobstruir o mapa
-      const isNorthernAnchor = location[1] > -18;
-      if (isNorthernAnchor) {
-        svg('text', { x: x - 32, y: y + 6, fill: '#c6f6ef', 'font-size': 13, 'font-weight': '600', 'text-anchor': 'end' },
-          metric === 'extremes' ? 'Extremos mais frequentes' : 'Chuva média favorecida');
-      } else {
-        svg('text', { x, y: y + 43, fill: '#c6f6ef', 'font-size': 13.5, 'font-weight': '600', 'text-anchor': 'middle' },
-          metric === 'extremes' ? 'Extremos mais frequentes' : 'Chuva média favorecida');
-      }
     }
+
+    // Deslocar o texto do símbolo de chuva para o oceano Atlântico para desamontoar de SESA/ZCAS/SALLJ
+    const labelText = isNegative
+      ? 'Chuva reduzida / Frio'
+      : (metric === 'extremes' ? 'Extremos mais frequentes' : 'Chuva média favorecida');
+
+    const isSesa = result.region === 'SESA';
+    const oceanLon = isSesa ? -44 : -34;
+    const oceanLat = location[1] !== undefined ? location[1] : (isSesa ? -34 : -23);
+    const [tx, ty] = project(oceanLon, oceanLat);
+
+    // Linha guia sutil conectando o símbolo de chuva ao texto no oceano
+    svg('line', {
+      x1: x + 30, y1: y,
+      x2: tx - 6, y2: ty - 3,
+      stroke: isNegative ? 'rgba(245, 158, 11, 0.45)' : 'rgba(115, 216, 218, 0.45)',
+      'stroke-width': 1.1,
+      'stroke-dasharray': '3 3'
+    });
+
+    svg('text', {
+      x: tx, y: ty,
+      fill: isNegative ? '#fef08a' : '#c6f6ef',
+      'font-size': 13,
+      'font-weight': '700',
+      'text-anchor': 'start',
+      stroke: '#081726',
+      'stroke-width': 2.5,
+      'paint-order': 'stroke fill'
+    }, labelText);
   }
 
   $('mapTitle').textContent = mapView === 'global' ? 'Visão global: MJO, Pacífico e América do Sul' : 'América do Sul (visão regional)';
@@ -678,7 +710,8 @@ function generateNarrationText(season, enso, phase, metricVal, evidence) {
   const ensoNames = {
     'el-nino': 'El Niño',
     'neutro': 'ENOS Neutro',
-    'la-nina': 'La Niña'
+    'la-nina': 'La Niña',
+    'todos': 'Todos os anos'
   };
   const phaseInfo = getMjoPhaseCoords(phase, season);
   const seasonKey = (season === 'JJA' || season === 'SON') ? 'maysep' : 'novmar';
@@ -690,10 +723,12 @@ function generateNarrationText(season, enso, phase, metricVal, evidence) {
   const scLonStr = scLon < 0 ? `${Math.abs(scLon)} graus oeste` : `${scLon} graus leste`;
 
   let text = `Em 200 hPa, o potencial de velocidade (χ₂₀₀) na fase ${phase} posiciona o centro de divergência em altitude e convecção ativa em ${adLonStr} e a convergência com subsidência em ${scLonStr}, no contexto de convecção nominal sobre ${phaseInfo.region}. `;
-  text += `Configuração selecionada: ${seasonNames[season]}, com ${ensoNames[enso]}. `;
+  text += `Configuração selecionada: ${seasonNames[season]}, com ${ensoNames[enso] || 'Todos os anos'}. `;
 
   // 1. Contexto esquemático da TSM e dos Jatos
-  if (enso === 'el-nino') {
+  if (enso === 'todos') {
+    text += `Na composição de todos os anos (sem estratificação por ENOS), a análise reflete a média geral. O Jato Subtropical exibe espessura de referência intermediária. `;
+  } else if (enso === 'el-nino') {
     text += `No Pacífico equatorial central e leste, o padrão qualitativo indica anomalias térmicas positivas da TSM. Em altitude, o traçado de referência do Jato Subtropical (~200 hPa) ilustra o guia de ondas com espessura qualitativa reforçada sob circulação de Hadley intensificada no El Niño. `;
   } else if (enso === 'la-nina') {
     text += `No Pacífico equatorial central e leste, o padrão qualitativo indica anomalias térmicas negativas da TSM. Em altitude, o traçado de referência do Jato Subtropical ilustra o guia de ondas com espessura qualitativa reduzida na La Niña. `;
@@ -945,7 +980,7 @@ function update() {
   for (const [id, layer] of [['sstLayer','sst'],['jetsLayer','jets'],['psaLayer','psa']]) if ($(id)) $(id).checked = visibleLayers[layer];
   if ($('layerCount')) $('layerCount').textContent = `(${['sst','jets','psa'].filter(key => visibleLayers[key]).length}/3)`;
 
-  const ensoLabel = (evidence && evidence.enso === 'todos')
+  const ensoLabel = currentEnso === 'todos'
     ? 'Todos os anos'
     : (currentEnso === 'el-nino' ? 'El Niño' : currentEnso === 'la-nina' ? 'La Niña' : 'ENOS Neutro');
   let title = `${currentSeason} · ${ensoLabel} · MJO Fase ${currentPhase}`;
@@ -1005,11 +1040,13 @@ function update() {
 
   // Faixa de TSM do ENOS
   $('sstBand').className = 'band' + (currentEnso === 'el-nino' ? ' warm' : currentEnso === 'la-nina' ? ' cold' : '');
-  $('sstText').textContent = currentEnso === 'el-nino'
-    ? 'El Niño · anomalias quentes no Pacífico equatorial central/leste'
-    : currentEnso === 'la-nina'
-      ? 'La Niña · anomalias frias no Pacífico equatorial central/leste'
-      : 'ENOS neutro · sem padrão forte de El Niño ou La Niña; não significa anomalia local zero.';
+  $('sstText').textContent = currentEnso === 'todos'
+    ? 'Composição de todos os anos · análise climatológica média sem estratificação por ENOS'
+    : currentEnso === 'el-nino'
+      ? 'El Niño · anomalias quentes no Pacífico equatorial central/leste'
+      : currentEnso === 'la-nina'
+        ? 'La Niña · anomalias frias no Pacífico equatorial central/leste'
+        : 'ENOS neutro · sem padrão forte de El Niño ou La Niña; não significa anomalia local zero.';
 
   // Informações de Fase da MJO
   const phaseInfo = getMjoPhaseCoords(currentPhase);
@@ -1044,7 +1081,7 @@ document.querySelectorAll('[data-season]:not([data-shortcut])').forEach(b => {
   });
 });
 
-// Event Listeners: ENOS (El Niño, Neutro, La Niña)
+// Event Listeners: ENOS (El Niño, Neutro, La Niña, Todos os anos)
 const ensoSelect = $('ensoSelect');
 if (ensoSelect) {
   ensoSelect.addEventListener('change', () => {
@@ -1075,17 +1112,15 @@ document.querySelectorAll('.event-select').forEach(select => {
     if (!select.value) return;
     const [season, enso, phase, metricVal] = select.value.split('|');
     // Ao escolher evento de interesse: todos os controles de fase, intensidade ativa e padrão nos trópicos seguem essa escolha.
-    // Se o evento for de composição de todos os anos (enso === 'todos'), preserva o estado de ENOS selecionado.
+    // Eventos do Alvarez selecionam ENOS = 'todos'; eventos do Fernandes & Grimm selecionam o ENOS correspondente.
     const stateOpts = {
       season,
+      enso,
       phase: Number(phase),
       metric: metricVal,
       amplitude: 1.5,
       mjoMode: 'chi'
     };
-    if (enso !== 'todos') {
-      stateOpts.enso = enso;
-    }
     setClimateState(stateOpts);
   });
 });

@@ -241,19 +241,9 @@ const DOCUMENTED_CASES = [
 
 function findDocumentedCase(season, enso, phase) {
   const p = Number(phase);
-  // 1. Busca por combinação específica com o ENOS selecionado
-  if (enso && enso !== 'todos') {
-    const specific = DOCUMENTED_CASES.find(c =>
-      c.season === season &&
-      c.enso === enso &&
-      (Number(c.phase) === p || (c.groupedPhases && c.groupedPhases.includes(p)))
-    );
-    if (specific) return specific;
-  }
-  // 2. Fallback para composição de todos os anos (sem separação por ENOS)
   return DOCUMENTED_CASES.find(c =>
     c.season === season &&
-    c.enso === 'todos' &&
+    c.enso === enso &&
     (Number(c.phase) === p || (c.groupedPhases && c.groupedPhases.includes(p)))
   ) || null;
 }

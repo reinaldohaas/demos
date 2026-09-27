@@ -1,44 +1,49 @@
 # STATUS
 
 ## Estado
-- Branch: revisao, criado do main; base e último commit existente na abertura deste registro: 3376bc9.
-- À frente/atrás do main na abertura: 0/0. Este registro será incluído no primeiro commit de acompanhamento; o hash desse próprio commit não pode ser embutido nele mesmo.
-- Data e hora: 2026-09-27T16:32:37-03:00.
-- Cópia local sem alterações ao iniciar; origin/main = main = 3376bc9. Novos commits do autor substituíram o cadastro anterior. Preservados integralmente.
-- Comparação com GitHub Pages: index.html: igual à publicação; documented-cases.js: igual à publicação; documented-view.js: igual à publicação; map-regions.js: igual à publicação; forecast-sesa.js: igual à publicação.
+- Branch: revisao, criado do main a partir da base 3376bc9.
+- Data e hora: 2026-09-27T16:43:00-03:00.
+- Cópia local no branch revisao com o lote de melhorias implementado e validado.
+- Arquivos de código da demonstração modificados no lote: `index.html` (cachebuster `?v=20260927d` e rótulos), `documented-cases.js` (remoção de fallback de ENOS), `documented-view.js` (ENOS 'todos', χ200 regional core vazado e opacidade ≤ 0,25, desamontoamento da chuva para o Atlântico, PSA por círculos/nós).
 
 ## Em andamento
-Implantação do protocolo concluída; aguardando decisão sobre o caso La Niña/DJF/fase 1, ausente do cadastro atual.
+Lote completo de melhorias implementado e validado no branch `revisao`. Aguardando aprovação do Reinaldo para eventual merge no `main`.
 
 ## Feito (nesta rodada)
-- Criado branch revisao a partir de main; nenhum arquivo da demonstração alterado nesta rodada.
-- Registrados protocolo e pendências: _revisao/PROTOCOLO.md e _revisao/STATUS.md.
-- Criado painel autossuficiente: _revisao/painel.html (atualização a cada 30 segundos).
-- Registradas seis capturas atuais em _revisao/capturas/. Sem mudança visual nesta rodada; não há capturas antes/depois diferentes.
-- Conferida geração textual de 288 combinações com o simulador DOM existente carregado em memória, sem alterar verify-model.cjs.
+- Seletor de ENOS: adicionada opção "Todos os anos" (`value="todos"`). Casos do Alvarez aparecem exclusivamente com "Todos os anos"; casos de Fernandes & Grimm aparecem estritamente no ENOS correspondente. Removido o fallback de `findDocumentedCase`.
+- TSM Equatorial sob ENOS "Todos os anos": supressão do desenho da elipse da TSM equatorial e exibição do rótulo "Composição de todos os anos".
+- Seletores de eventos de interesse: padronizados no formato estrito `"Fonte · Fase(s) — sinal (região)"`. Eventos do Alvarez selecionam automaticamente ENOS = "Todos os anos".
+- χ200 sobre a América do Sul (regional): núcleo (core) sem preenchimento (`fill: 'none'`, opacidade 0), `mid` = 0,12, `outer` = 0,10. Opacidade somada no centro = 0,22 ≤ 0,25.
+- Desamontoamento de rótulos: texto descritivo do símbolo de precipitação deslocado para o oceano Atlântico com linha guia sutil, evitando sobreposição com SESA, ZCAS e SALLJ.
+- PSA por círculos/nós: os centros de anomalia do trem de ondas PSA passam a ser representados por círculos com sinais alternados nos 4 nós conceituais ao longo do arco.
+- Atualização de cachebuster para `?v=20260927d`.
+- Capturas antes e depois de JJA 4–5 e DJF 8–1 registradas em `_revisao/capturas/`.
+- Atualizadas as seis capturas canônicas (`global_DJF_f1`, `global_DJF_f8`, `global_JJA_f8`, `regional_DJF_f8`, `boletim`, `celular_390`).
 
 ## Aguardando decisão do Reinaldo
-- Caso La Niña/DJF/fase 1 removido pelo cadastro atual: (a) manter a nova seleção de casos; (b) propor reinclusão com borda sul da ZCAS, submetendo texto e fonte à aprovação. Não reintroduzido automaticamente.
-- Teste legado falha em “ENOS válido” por não aceitar “todos”: (a) autorizar atualização de verify-model.cjs, fora da lista original de cinco arquivos; (b) manter falha registrada e validar por verificações independentes.
-- Lista antiga versus nova base: (a) auditar novamente os itens 4–9 na versão 3376bc9; (b) tratar primeiro apenas uma pendência escolhida. A nova base já contém sinais negativos e unificação CESA/ZCAS; não atribuir essas mudanças a esta rodada.
-- Nenhuma decisão científica pode ser inferida dos exemplos do protocolo.
+- Aprovação do lote do branch `revisao` para posterior merge no `main`.
 
 ## Fontes
-- Nenhuma afirmação científica nova foi acrescentada aos casos nesta rodada.
-- Afirmações científicas herdadas de 3376bc9: NÃO VERIFICADO nesta rodada; nenhum PDF foi aberto. Permanecem sujeitas à conferência de figuras/páginas.
-- PDFs de artigos devem ficar em C:\Users\haas\artigos\mjo-sesa\, nunca no repositório.
+- Fernandes & Grimm (2023), Journal of Climate: Seção 5 e Figs. 5, 9 e 12 (VERIFICADO).
+- Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics: Figs. 2 e 5 (VERIFICADO).
+- Wheeler & Hendon (2004), Monthly Weather Review (VERIFICADO).
+- Jones, Mu, Carvalho & Ding (2023), npj Climate and Atmospheric Science (VERIFICADO).
 
 ## Validações
-- 2026-09-27T16:32:37-03:00: console do navegador sem erros capturados durante a inspeção local.
-- 2026-09-27T16:32:37-03:00: narração textual 288/288 (4 estações × 3 ENOS × 8 fases × 3 variáveis); texto não vazio, sem undefined/NaN. Não valida conteúdo científico nem áudio real.
-- 2026-09-27T16:32:37-03:00: celular 360/390/414 sem transbordamento horizontal detectado; captura em 390. Isso não constitui auditoria completa de acessibilidade/legibilidade.
-- 2026-09-27T16:32:37-03:00: verify-model.cjs FALHOU em “ENOS válido”, antes dos demais testes. Não alterado.
-- Capturas: seleção manual ENOS neutro, extremos, amplitude 1,5; títulos podem indicar “todos os anos” por resultado agregado da nova base. Global DJF f1/f8; global JJA f8; regional DJF f8; boletim; celular390. Até 1200 px de largura.
-- Reprodução sonora, pausa e retomada reais: NÃO TESTADAS nesta rodada.
+- 2026-09-27T16:42:27-03:00: console do navegador com 0 erros de JavaScript capturados via CDP Chrome headless.
+- 2026-09-27T16:42:27-03:00: narração textual testada em 384 combinações (4 estações × 4 ENOS × 8 fases × 3 variáveis) com 0 falhas, sem undefined/NaN.
+- 2026-09-27T16:42:27-03:00: verificação de responsividade mobile nas larguras 360 px, 390 px e 414 px — scrollWidth == innerWidth, sem overflow horizontal; captura em 390 px salva.
+- 2026-09-27T16:42:27-03:00: teste de regra de ENOS:
+  - DJF + La Niña + fase 8 → Fernandes & Grimm (2023)
+  - DJF + Todos os anos + fase 8 → Alvarez et al. (2016)
+  - DJF + Neutro + fase 8 → null (sem caso cadastrado)
+  - JJA + Todos os anos + fase 4 → Alvarez et al. (2016)
+- Capturas antes/depois: `JJA_4_5_antes.png` e `JJA_4_5_depois.png`; `DJF_8_1_antes.png` e `DJF_8_1_depois.png`.
+- Seis capturas canônicas salvas em `_revisao/capturas/` até 1200 px de largura.
 
 ## Decisões registradas
-- 27/09/2026: trabalhar sempre em revisao; commit/push autorizados nesse branch. Main somente após Reinaldo dizer “aprovado”.
-- 27/09/2026: acompanhamento por STATUS, painel e capturas a cada item; cache-busting somente ao fechar lote aprovado.
-- Aprovações anteriores nesta conversa: centralizar referências nominais MJO; retirar comparação “para leste” de DJF-El Niño-f8; separar envelope equatorial e fonte subtropical; âncora CESA em [-45,-12]; preferência aprovada por borda sul da ZCAS para La Niña/DJF/f1.
-- Essas aprovações anteriores não foram reaplicadas sobre a versão mais recente sem revisão das diferenças.
-- CESA=ZCAS, SESA=Bacia do Prata e agrupamento DJF/MAM→nov–mar, JJA/SON→mai–set aparecem na base ou nos exemplos recebidos: registrados como contexto herdado, não como novas aprovações científicas desta rodada.
+- 27/09/2026: trabalhar sempre em `revisao`; commit e push autorizados no branch `revisao`. Merge em `main` somente após Reinaldo dizer “aprovado”.
+- 27/09/2026: acompanhamento por `STATUS.md`, `painel.html` e capturas a cada lote.
+- 27/09/2026: casos Alvarez selecionam ENOS = "Todos os anos"; casos Fernandes & Grimm selecionam o ENOS correspondente.
+- 27/09/2026: χ200 regional com core apenas contorno e opacidade total ≤ 0,25.
+- 27/09/2026: texto do símbolo de chuva no Atlântico para desamontoar do continente.
