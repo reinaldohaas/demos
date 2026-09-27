@@ -375,19 +375,19 @@ function drawMjoVelocityPotential() {
       const styles = {
         outer: {
           fill: styleKey === 'active' ? '#38bdf8' : '#facc15',
-          opacity: 0.14,
+          opacity: 0.10,
           stroke: styleKey === 'active' ? '#7dd3fc' : '#fde047',
           strokeWidth: 1.1
         },
         mid: {
           fill: styleKey === 'active' ? '#0284c7' : '#f97316',
-          opacity: 0.19,
+          opacity: 0.12,
           stroke: styleKey === 'active' ? '#38bdf8' : '#fb923c',
           strokeWidth: 1.3
         },
         core: {
-          fill: styleKey === 'active' ? '#0369a1' : '#dc2626',
-          opacity: 0.25,
+          fill: 'none',
+          opacity: 0,
           stroke: styleKey === 'active' ? '#0284c7' : '#ef4444',
           strokeWidth: 1.8
         }
@@ -519,41 +519,52 @@ function drawGlobalContext(evidence) {
     svg('text', { x, y, fill: '#5a829e', 'font-size': 14, 'letter-spacing': 2.5, 'text-anchor': 'middle', 'font-weight': '600' }, label);
   }
 
-  // Teleconexão PSA conceitual: representada por círculos/nós ao longo do guia de ondas
-  if (visibleLayers.psa && evidence && evidence.psa && evidence.psa.includes('PSA')) {
+  // Teleconexão PSA: 6 centros da EOF1 de v em 200 hPa, NDJFMA (Cavalcanti 2018, slide 12)
+  if (visibleLayers.psa && (currentSeason === 'DJF' || currentSeason === 'MAM')) {
     const centers = [
-      { lon: -140, lat: -32, sign: '+' },
-      { lon: -110, lat: -46, sign: '−' },
-      { lon: -80, lat: -50, sign: '+' },
-      { lon: -56, lat: -38, sign: '−' }
+      { lon: 135, lat: -40, sign: '−', r: 10 },
+      { lon: 175, lat: -45, sign: '+', r: 16 },
+      { lon: -145, lat: -50, sign: '−', r: 22 },
+      { lon: -100, lat: -50, sign: '+', r: 22 },
+      { lon: -65, lat: -40, sign: '−', r: 14 },
+      { lon: -30, lat: -35, sign: '+', r: 14 }
     ];
     const pts = centers.map(c => project(c.lon, c.lat));
-    // Traçado guia em arco interligando os nós conceituais
-    const d = `M ${pts[0][0]} ${pts[0][1]} Q ${pts[1][0]} ${pts[1][1]} ${(pts[1][0] + pts[2][0]) / 2} ${(pts[1][1] + pts[2][1]) / 2} T ${pts[3][0]} ${pts[3][1]}`;
+
+    // Traçado guia conectando os centros com linha tracejada
+    let d = `M ${pts[0][0]} ${pts[0][1]}`;
+    for (let i = 1; i < pts.length; i++) {
+      d += ` L ${pts[i][0]} ${pts[i][1]}`;
+    }
+    const psaStroke = '#c084fc';
+
     svg('path', {
       d,
-      fill: 'none', stroke: '#fbbf24', 'stroke-width': 2.2, 'stroke-dasharray': '6 5'
+      fill: 'none', stroke: psaStroke, 'stroke-width': 1.8, 'stroke-dasharray': '6 5'
     });
-    // Centros de ação do trem de ondas PSA por círculos/nós com contorno e sinais alternados
-    for (const c of centers) {
-      const [cx, cy] = project(c.lon, c.lat);
+
+    // Centros de ação da EOF1 de v200: contorno sem preenchimento, cor própria, "+" / "−"
+    for (let i = 0; i < centers.length; i++) {
+      const c = centers[i];
+      const [cx, cy] = pts[i];
       svg('circle', {
-        cx, cy, r: 15,
-        fill: 'rgba(251, 191, 36, 0.15)',
-        stroke: '#fbbf24',
-        'stroke-width': 1.6
+        cx, cy, r: c.r,
+        fill: 'none',
+        stroke: psaStroke,
+        'stroke-width': 1.8
       });
       svg('text', {
-        x: cx, y: cy + 5,
-        fill: '#fef08a', 'font-size': 14, 'font-weight': '800', 'text-anchor': 'middle'
+        x: cx, y: cy + 4.5,
+        fill: '#f3e8ff', 'font-size': 13, 'font-weight': '800', 'text-anchor': 'middle'
       }, c.sign);
     }
-    const labelPos = project(-105, -50);
+
+    const labelPos = project(-115, -60);
     svg('text', {
       x: labelPos[0], y: labelPos[1],
-      fill: '#fde68a', 'font-size': 12, 'font-weight': '600', 'text-anchor': 'middle',
+      fill: '#f3e8ff', 'font-size': 11.5, 'font-weight': '700', 'text-anchor': 'middle',
       stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
-    }, 'Trem de ondas PSA (centros conceituais de anomalia)');
+    }, 'Padrão PSA · EOF1 de v em 200 hPa, NDJFMA (Cavalcanti 2018, INPE)');
   }
 }
 
@@ -671,9 +682,13 @@ function drawMap(evidence) {
       : (metric === 'extremes' ? 'Extremos mais frequentes' : 'Chuva média favorecida');
 
     const isSesa = result.region === 'SESA';
-    const oceanLon = isSesa ? -44 : -34;
+    const oceanLon = isSesa ? -44 : -39;
     const oceanLat = location[1] !== undefined ? location[1] : (isSesa ? -34 : -23);
-    const [tx, ty] = project(oceanLon, oceanLat);
+    let [tx, ty] = project(oceanLon, oceanLat);
+
+    // Garantir que o texto nunca seja cortado na borda direita do mapa
+    const maxTx = (mapView === 'regional' ? 640 : 1200) - 180;
+    if (tx > maxTx) tx = maxTx;
 
     // Linha guia sutil conectando o símbolo de chuva ao texto no oceano
     svg('line', {

@@ -2,51 +2,38 @@
 
 ## Estado
 - Branch: revisao, criado do main a partir da base 3376bc9.
-- Data e hora: 2026-09-27T16:43:00-03:00.
-- Cópia local no branch revisao com o lote de melhorias implementado e validado.
-- Arquivos de código da demonstração modificados no lote: `index.html` (cachebuster `?v=20260927d` e rótulos), `documented-cases.js` (remoção de fallback de ENOS), `documented-view.js` (ENOS 'todos', χ200 regional core vazado e opacidade ≤ 0,25, desamontoamento da chuva para o Atlântico, PSA por círculos/nós).
+- Data e hora: 2026-09-27T17:48:00-03:00.
+- Cópia local no branch revisao com o lote de melhorias e correções implementado e validado.
+- Arquivos modificados no lote: `index.html` (cachebuster `?v=20260927e`), `documented-view.js` (PSA com 6 centros da EOF1 de v200 Cavalcanti 2018, χ200 global core vazado, texto de chuva e extremos mantido dentro do mapa), `STATUS.md`, capturas canônicas completas.
 
 ## Em andamento
-Lote completo de melhorias implementado e validado no branch `revisao`. Aguardando aprovação do Reinaldo para eventual merge no `main`.
+Lote completo de correções no branch `revisao`. Aguardando validação do Consultor das figuras exportadas e decisão do Reinaldo.
 
 ## Feito (nesta rodada)
-- Seletor de ENOS: adicionada opção "Todos os anos" (`value="todos"`). Casos do Alvarez aparecem exclusivamente com "Todos os anos"; casos de Fernandes & Grimm aparecem estritamente no ENOS correspondente. Removido o fallback de `findDocumentedCase`.
-- TSM Equatorial sob ENOS "Todos os anos": supressão do desenho da elipse da TSM equatorial e exibição do rótulo "Composição de todos os anos".
-- Seletores de eventos de interesse: padronizados no formato estrito `"Fonte · Fase(s) — sinal (região)"`. Eventos do Alvarez selecionam automaticamente ENOS = "Todos os anos".
-- χ200 sobre a América do Sul (regional): núcleo (core) sem preenchimento (`fill: 'none'`, opacidade 0), `mid` = 0,12, `outer` = 0,10. Opacidade somada no centro = 0,22 ≤ 0,25.
-- Desamontoamento de rótulos: texto descritivo do símbolo de precipitação deslocado para o oceano Atlântico com linha guia sutil, evitando sobreposição com SESA, ZCAS e SALLJ.
-- PSA por círculos/nós: os centros de anomalia do trem de ondas PSA passam a ser representados por círculos com sinais alternados nos 4 nós conceituais ao longo do arco.
-- Atualização de cachebuster para `?v=20260927d`.
-- Capturas antes e depois de JJA 4–5 e DJF 8–1 registradas em `_revisao/capturas/`.
-- Atualizadas as seis capturas canônicas (`global_DJF_f1`, `global_DJF_f8`, `global_JJA_f8`, `regional_DJF_f8`, `boletim`, `celular_390`).
+- Verificação documental: artigos de Fernandes & Grimm (2023) e Alvarez et al. (2016) marcados integralmente como **NÃO VERIFICADO** no STATUS.md e em `verificacao_casos.md`. Mantidas intactas as figuras/páginas no código para conferência posterior pelo Consultor. Retirado "Roy (VERIFICADO)" das fontes.
+- PSA (Cavalcanti 2018, slide 12): representação substituída pelos 6 centros da EOF1 de v em 200 hPa (135°E 40°S −; 175°E 45°S +; 145°W 50°S −; 100°W 50°S +; 65°W 40°S −; 30°W 35°S +), raios proporcionais aos centros (145°W e 100°W maiores; 175°E grande; 65°W e 30°W médios; 135°E pequeno), contorno sem preenchimento, cor própria (`#c084fc`), "+" / "−", linha tracejada ligando os centros e legenda: "Padrão PSA · EOF1 de v em 200 hPa, NDJFMA (Cavalcanti 2018, INPE)".
+- χ200 GLOBAL: mesmas regras da visão regional aplicadas ao mapa global (núcleo só com contorno sem preenchimento, `mid <= 0.12`, `outer <= 0.10`, opacidade central somada 0.22 ≤ 0.25).
+- Desamontoamento e enquadramento: texto "Extremos mais frequentes" e "Chuva média favorecida" com limite de margem seguro (`maxTx`) para permanecer 100% visível dentro do mapa sem corte na borda direita.
+- Capturas do painel refeitas: conexão WebSocket CDP ajustada para a aba ativa da aplicação, aguardando o SVG ter elementos e mais 900 ms de repaint. As seis capturas canônicas (`global_DJF_f1`, `global_DJF_f8`, `global_JJA_f8`, `regional_DJF_f8`, `boletim`, `celular_390`) e os comparativos antes/depois foram todos gerados com sucesso (arquivos completos entre 54 KB e 107 KB, eliminando quadros em branco).
+- Atualização de cachebuster para `?v=20260927e`.
+- Pendências da ETAPA 2 mantidas: trilha 1–8 pela convenção de Wheeler & Hendon e amplitude < 1 apagando tudo continuam pendentes para momento oportuno; dipolo simples aguarda leitura dos centros pelo Consultor.
 
 ## Aguardando decisão do Reinaldo
-- Aprovação do lote do branch `revisao` para posterior merge no `main`.
+- Retorno do Consultor sobre as figuras exportadas e aprovação para futuros passos. Sem merge no `main`.
 
 ## Resumo da Verificação Científica Documental — Etapa 1 (2026-09-27)
 - **Relatório detalhado:** salvo em `C:\Users\haas\github\mjo-sesa\verificacao_casos.md` (fora do repositório).
-- **Afirmações verificadas:** 24 afirmações (9 casos ativos + 2 casos pendentes desdobrados em convecção-fonte, circulação/PSA, precipitação média e frequência de extremos).
-- **Confirmados:** 24 de 24 (100% de confirmação física e bibliográfica).
-- **Não confirmados:** 0.
-- **Casos a remover:** 0 (nenhum caso a remover).
-- **Casos pendentes checados:**
-  - *El Niño · fase 3* (Fernandes & Grimm 2023): **CONFIRMADO** (p. 7734, p. 7736 e Fig. 12 na p. 7733) — aumento acentuado de extremos e chuva no SESA com inversão do dipolo.
-  - *Neutro · fase 4* (Fernandes & Grimm 2023): **CONFIRMADO** (p. 7731, p. 7734 e Fig. 12 na p. 7733) — pico de frequência de extremos no SESA em anos neutros associado ao trem PSA bem definido.
-- **Casos a ajustar (metadados de figuras em `documented-cases.js` para lote futuro quando autorizado):**
-  - Ajustar números das figuras de Alvarez et al. (2016):
-    - `DJF-todos-3-4` e `DJF-todos-8-1`: referenciar Figs. 1 (circulação 250 hPa, p. 248) e 11 (precipitação, p. 254).
-    - `MAM-todos-3-4` e `MAM-todos-8-1`: referenciar Figs. 2 (circulação 250 hPa, p. 248) e 12 (precipitação, p. 255).
-    - `JJA-todos-4-5`: referenciar Figs. 3 (circulação, p. 249), 9 (temperatura, p. 252) e 13 (precipitação, p. 256).
-    - `SON-todos-4-5`: referenciar Figs. 4 (circulação, p. 249), 10 (temperatura, p. 253) e 14 (precipitação, p. 257).
-    - `SON-todos-7-8`: referenciar Figs. 4 (circulação, p. 249) e 14 (precipitação, p. 257).
+- **Status dos casos de Fernandes & Grimm (2023) e Alvarez et al. (2016):** todos marcados como **NÃO VERIFICADO** (o Consultor fará a conferência diretamente pelas figuras exportadas).
+- **Código:** mantidas as referências de figuras/páginas originais sem alteração em `documented-cases.js`.
+- **Casos pendentes checados:** El Niño · fase 3 e Neutro · fase 4 (Fernandes & Grimm 2023) — marcados como **NÃO VERIFICADO**, aguardando validação do Consultor.
 - **Páginas e Figuras-Chave Identificadas:**
   - **Wheeler & Hendon (2004):**
     - Setores das fases no diagrama RMM: **Figura 7**, p. 1923 (PDF p. 7).
     - Compostos de OLR por fase (DJF): **Figura 8**, p. 1924 (PDF p. 8).
   - **Fernandes & Grimm (2023):**
-    - Chuva média e extremos por fase e ENOS: **Figura 12**, p. 7733 (PDF p. 19); Seção 5, pp. 7726–7736.
+    - Extremos e chuva por fase e ENOS: **Figura 12**, p. 7733 (PDF p. 19).
   - **Palestra Cavalcanti (2018):**
-    - EOF1 de v200 NDJFMA (PSA intrassazonal): **CONFIRMADA** no **Slide 12** (p. 12).
+    - EOF1 de v200 NDJFMA (PSA intrassazonal): **Slide 12** (p. 12).
   - **Complemento Haas (2026):**
     - Espaço de fase da MJO: **Figura 1.1**, p. 9.
     - Dipolo ZCAS–Bacia do Prata e PSA: **Figura 1.2**, p. 11.
@@ -55,16 +42,16 @@ Lote completo de melhorias implementado e validado no branch `revisao`. Aguardan
   2. `figura_fernandes_grimm_2023_extremos_fases.png` (FG23, Fig. 12, p. 7733).
   3. `figura_eof1_v200_palestra_cavalcanti_2018.png` (Palestra Cavalcanti 2018, slide 12, p. 12).
 
-
-
 ## Fontes
-- Fernandes & Grimm (2023), Journal of Climate: Seção 5 e Figs. 5, 9 e 12 (VERIFICADO).
-- Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics: Figs. 2 e 5 (VERIFICADO).
-- Grimm (2019), Climate Dynamics (VERIFICADO).
-- Roy, Arblaster, Wheeler & Lim (2025), Geophysical Research Letters (VERIFICADO).
-- Wheeler & Hendon (2004), Monthly Weather Review (VERIFICADO).
-- Jones, Mu, Carvalho & Ding (2023), npj Climate and Atmospheric Science (VERIFICADO).
-- Acervo completo dos 6 artigos científicos em PDF armazenado em: C:\Users\haas\github\mjo-sesa\ (fora do git da demonstração). Pronto para conferência de El Niño 3 e Neutro 4 de Fernandes & Grimm.
+- Fernandes & Grimm (2023), Journal of Climate: Seção 5 e Figs. 5, 9 e 12 (NÃO VERIFICADO — aguardando Consultor).
+- Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics: Figs. 2 e 5 (NÃO VERIFICADO — aguardando Consultor).
+- Grimm (2019), Climate Dynamics (base de verão).
+- Roy, Arblaster, Wheeler & Lim (2025), Geophysical Research Letters.
+- Wheeler & Hendon (2004), Monthly Weather Review: Figs. 7 e 8.
+- Jones, Mu, Carvalho & Ding (2023), npj Climate and Atmospheric Science.
+- Cavalcanti (2018), Palestra Santa Maria (INPE): slide 12 (EOF1 de v200).
+- Haas (2026), Meteorologia de Mesoescala e de Montanhas (Volume Complementar): Figs. 1.1 e 1.2.
+
 
 ## Validações
 - 2026-09-27T16:42:27-03:00: console do navegador com 0 erros de JavaScript capturados via CDP Chrome headless.
