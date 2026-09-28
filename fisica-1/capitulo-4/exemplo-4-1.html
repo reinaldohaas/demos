@@ -209,7 +209,7 @@
 
         .canvas-holder {
             width: 100%;
-            height: 450px;
+            height: 540px;
             background: #050811;
             border-radius: 10px;
             overflow: hidden;
@@ -513,9 +513,9 @@
             const len = Math.hypot(dx, dy);
             if (len < 2) return;
             const angle = Math.atan2(dy, dx);
-            const headLen = Math.min(14, Math.max(10, len * 0.35));
+            const headLen = Math.min(18, Math.max(12, len * 0.35));
 
-            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 3.5;
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 4;
             ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); ctx.stroke();
 
             ctx.beginPath(); ctx.moveTo(x + dx, y + dy);
@@ -525,14 +525,14 @@
 
             if (label) {
                 const labelX = x + dx * 0.5;
-                const labelY = labelBelow ? (y + dy + 22) : (y + dy - 12);
+                const labelY = labelBelow ? (y + dy + 24) : (y + dy - 14);
                 
-                ctx.font = 'bold 12px Inter';
+                ctx.font = 'bold 13px Inter';
                 const textWidth = ctx.measureText(label).width;
-                ctx.fillStyle = 'rgba(5, 8, 17, 0.92)';
-                ctx.fillRect(labelX - textWidth / 2 - 7, labelY - 13, textWidth + 14, 18);
-                ctx.strokeStyle = color; ctx.lineWidth = 1.5;
-                ctx.strokeRect(labelX - textWidth / 2 - 7, labelY - 13, textWidth + 14, 18);
+                ctx.fillStyle = 'rgba(5, 8, 17, 0.94)';
+                ctx.fillRect(labelX - textWidth / 2 - 8, labelY - 14, textWidth + 16, 20);
+                ctx.strokeStyle = color; ctx.lineWidth = 1.8;
+                ctx.strokeRect(labelX - textWidth / 2 - 8, labelY - 14, textWidth + 16, 20);
 
                 ctx.fillStyle = color; ctx.textAlign = 'center';
                 ctx.fillText(label, labelX, labelY);
@@ -744,8 +744,8 @@
             const angleDeg = 30;
             const angleRad = (angleDeg * Math.PI) / 180;
             const startX = 40;
-            const startY = h - 50;
-            const inclineLen = w - 100;
+            const startY = h - 60;
+            const inclineLen = w - 90;
             const endX = startX + inclineLen * Math.cos(angleRad);
             const endY = startY - inclineLen * Math.sin(angleRad);
 
@@ -761,51 +761,51 @@
             ctx.fillText('θ = 30°', startX + 50, startY - 10);
 
             // Block Position on incline
-            const bx = startX + inclineLen * 0.5 * Math.cos(angleRad);
-            const by = startY - inclineLen * 0.5 * Math.sin(angleRad);
-            const blockW = 100, blockH = 60;
+            const bx = startX + inclineLen * 0.45 * Math.cos(angleRad);
+            const by = startY - inclineLen * 0.45 * Math.sin(angleRad);
+            const blockW = 110, blockH = 65;
 
             ctx.save();
             ctx.translate(bx, by);
             ctx.rotate(-angleRad);
 
             // Draw Block
-            ctx.fillStyle = '#38bdf8'; ctx.strokeStyle = '#0284c7'; ctx.lineWidth = 3;
+            ctx.fillStyle = '#38bdf8'; ctx.strokeStyle = '#0284c7'; ctx.lineWidth = 3.5;
             ctx.fillRect(-blockW/2, -blockH, blockW, blockH);
             ctx.strokeRect(-blockW/2, -blockH, blockW, blockH);
-            ctx.fillStyle = '#0f172a'; ctx.font = 'bold 14px Inter'; ctx.textAlign = 'center';
-            ctx.fillText('m = 2,0 kg', 0, -blockH/2 + 5);
+            ctx.fillStyle = '#0f172a'; ctx.font = 'bold 15px Inter'; ctx.textAlign = 'center';
+            ctx.fillText('m = 2,0 kg', 0, -blockH/2 + 6);
 
-            // Normal Force Vector
+            // Normal Force Vector (doubled length: 210px)
             if (currentSlide === 1 || currentSlide === 4) {
-                drawVectorArrow(ctx, 0, -blockH/2, 0, -110, '#10b981', 'N = 16,97 N');
+                drawVectorArrow(ctx, 0, -blockH/2, 0, -210, '#10b981', 'N = 16,97 N');
             } else {
-                drawVectorArrow(ctx, 0, -blockH/2, 0, -70, 'rgba(16, 185, 129, 0.4)', 'N');
+                drawVectorArrow(ctx, 0, -blockH/2, 0, -120, 'rgba(16, 185, 129, 0.4)', 'N');
             }
 
-            // Friction Force Vector
+            // Friction Force Vector (doubled length: 160px)
             if (currentSlide === 2 || currentSlide === 4) {
-                drawVectorArrow(ctx, 0, -blockH/2, 85, 0, '#eab308', 'f_k = 3,39 N');
+                drawVectorArrow(ctx, 0, -blockH/2, 160, 0, '#eab308', 'f_k = 3,39 N');
             } else {
-                drawVectorArrow(ctx, 0, -blockH/2, 60, 0, 'rgba(234, 179, 8, 0.4)', 'f_k');
+                drawVectorArrow(ctx, 0, -blockH/2, 100, 0, 'rgba(234, 179, 8, 0.4)', 'f_k');
             }
 
-            // Acceleration Vector
+            // Acceleration Vector (doubled length: -180px)
             if (currentSlide === 4) {
-                drawVectorArrow(ctx, 0, -blockH - 25, -100, 0, '#a855f7', 'a = 3,21 m/s²');
+                drawVectorArrow(ctx, 0, -blockH - 28, -180, 0, '#a855f7', 'a = 3,21 m/s²');
             }
 
             ctx.restore();
 
-            // Weight Force Vector (straight down)
+            // Weight Force Vector (doubled length: 210px, straight down)
             if (currentSlide === 3 || currentSlide === 4) {
-                drawVectorArrow(ctx, bx, by - blockH/2, 0, 115, '#ef4444', 'P = mg = 19,6 N');
+                drawVectorArrow(ctx, bx, by - blockH/2, 0, 210, '#ef4444', 'P = mg = 19,6 N');
             } else {
-                drawVectorArrow(ctx, bx, by - blockH/2, 0, 75, 'rgba(239, 68, 68, 0.4)', 'P');
+                drawVectorArrow(ctx, bx, by - blockH/2, 0, 120, 'rgba(239, 68, 68, 0.4)', 'P');
             }
 
             // Title telemetry
-            ctx.font = 'bold 14px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
+            ctx.font = 'bold 15px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
             ctx.fillText('Exemplo 4.1 — Diagrama de Corpo Livre (Item ' + currentSlide + ')', 20, 30);
         }
 
