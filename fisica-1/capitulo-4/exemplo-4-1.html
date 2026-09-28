@@ -209,7 +209,7 @@
 
         .canvas-holder {
             width: 100%;
-            height: 320px;
+            height: 450px;
             background: #050811;
             border-radius: 10px;
             overflow: hidden;
@@ -386,9 +386,10 @@
             <!-- SIMULAÇÕES PÚBLICAS RECOMENDADAS (PhET Colorado & GeoGebra) -->
             <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 14px; margin-top: 14px;">
                 <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; margin-bottom:8px;">🌐 SIMULAÇÕES PÚBLICAS RECOMENDADAS:</div>
-                <ul style="font-size:0.85rem; color:#cbd5e1; padding-left:18px; line-height:1.6;">
-                    <li><a href="https://phet.colorado.edu/sims/html/moving-man/latest/moving-man_all.html" target="_blank" style="color:#fbbf24; font-weight:700; text-decoration:none;">🔗 PhET Colorado - Moving Man (Posição, Velocidade e Aceleração)</a></li>
-                    <li><a href="https://www.geogebra.org/m/vcbqfzkf" target="_blank" style="color:#38bdf8; font-weight:700; text-decoration:none;">🔗 GeoGebra - Cinemática Vetorial 1D e 2D Interativa</a></li>
+                <ul style="font-size:0.85rem; color:#cbd5e1; padding-left:18px; line-height:1.8;">
+                    <li><a href="https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_all.html" target="_blank" rel="noopener noreferrer" style="color:#fbbf24; font-weight:700; text-decoration:underline;">🔗 PhET Colorado - Forças e Movimento: Fundamentos (Interativo)</a></li>
+                    <li><a href="https://phet.colorado.edu/sims/cheerpj/ramps/latest/ramps.html?simulation=ramps" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">🔗 PhET Colorado - Forças em Rampa e Plano Inclinado</a></li>
+                    <li><a href="https://www.geogebra.org/m/JcK8S7c8" target="_blank" rel="noopener noreferrer" style="color:#a855f7; font-weight:700; text-decoration:underline;">🔗 GeoGebra - Decomposição de Forças no Plano Inclinado</a></li>
                 </ul>
             </div>
 </div>
@@ -512,9 +513,9 @@
             const len = Math.hypot(dx, dy);
             if (len < 2) return;
             const angle = Math.atan2(dy, dx);
-            const headLen = Math.min(10, len * 0.35);
+            const headLen = Math.min(14, Math.max(10, len * 0.35));
 
-            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2.8;
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 3.5;
             ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); ctx.stroke();
 
             ctx.beginPath(); ctx.moveTo(x + dx, y + dy);
@@ -524,14 +525,14 @@
 
             if (label) {
                 const labelX = x + dx * 0.5;
-                const labelY = labelBelow ? (y + dy + 18) : (y + dy - 10);
+                const labelY = labelBelow ? (y + dy + 22) : (y + dy - 12);
                 
-                ctx.font = 'bold 11px Inter';
+                ctx.font = 'bold 12px Inter';
                 const textWidth = ctx.measureText(label).width;
                 ctx.fillStyle = 'rgba(5, 8, 17, 0.92)';
-                ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
-                ctx.strokeStyle = color; ctx.lineWidth = 1;
-                ctx.strokeRect(labelX - textWidth / 2 - 6, labelY - 12, textWidth + 12, 16);
+                ctx.fillRect(labelX - textWidth / 2 - 7, labelY - 13, textWidth + 14, 18);
+                ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+                ctx.strokeRect(labelX - textWidth / 2 - 7, labelY - 13, textWidth + 14, 18);
 
                 ctx.fillStyle = color; ctx.textAlign = 'center';
                 ctx.fillText(label, labelX, labelY);
@@ -762,45 +763,45 @@
             // Block Position on incline
             const bx = startX + inclineLen * 0.5 * Math.cos(angleRad);
             const by = startY - inclineLen * 0.5 * Math.sin(angleRad);
-            const blockW = 60, blockH = 40;
+            const blockW = 100, blockH = 60;
 
             ctx.save();
             ctx.translate(bx, by);
             ctx.rotate(-angleRad);
 
             // Draw Block
-            ctx.fillStyle = '#38bdf8'; ctx.strokeStyle = '#0284c7'; ctx.lineWidth = 2;
+            ctx.fillStyle = '#38bdf8'; ctx.strokeStyle = '#0284c7'; ctx.lineWidth = 3;
             ctx.fillRect(-blockW/2, -blockH, blockW, blockH);
             ctx.strokeRect(-blockW/2, -blockH, blockW, blockH);
-            ctx.fillStyle = '#0f172a'; ctx.font = 'bold 12px Inter'; ctx.textAlign = 'center';
-            ctx.fillText('m = 2kg', 0, -blockH/2 + 4);
+            ctx.fillStyle = '#0f172a'; ctx.font = 'bold 14px Inter'; ctx.textAlign = 'center';
+            ctx.fillText('m = 2,0 kg', 0, -blockH/2 + 5);
 
             // Normal Force Vector
             if (currentSlide === 1 || currentSlide === 4) {
-                drawVectorArrow(ctx, 0, -blockH/2, 0, -70, '#10b981', 'N = 16,97 N');
+                drawVectorArrow(ctx, 0, -blockH/2, 0, -110, '#10b981', 'N = 16,97 N');
             } else {
-                drawVectorArrow(ctx, 0, -blockH/2, 0, -50, 'rgba(16, 185, 129, 0.4)', 'N');
+                drawVectorArrow(ctx, 0, -blockH/2, 0, -70, 'rgba(16, 185, 129, 0.4)', 'N');
             }
 
             // Friction Force Vector
             if (currentSlide === 2 || currentSlide === 4) {
-                drawVectorArrow(ctx, 0, -blockH/2, 50, 0, '#eab308', 'f_k = 3,39 N');
+                drawVectorArrow(ctx, 0, -blockH/2, 85, 0, '#eab308', 'f_k = 3,39 N');
             } else {
-                drawVectorArrow(ctx, 0, -blockH/2, 40, 0, 'rgba(234, 179, 8, 0.4)', 'f_k');
+                drawVectorArrow(ctx, 0, -blockH/2, 60, 0, 'rgba(234, 179, 8, 0.4)', 'f_k');
             }
 
             // Acceleration Vector
             if (currentSlide === 4) {
-                drawVectorArrow(ctx, 0, -blockH - 20, -70, 0, '#a855f7', 'a = 3,21 m/s²');
+                drawVectorArrow(ctx, 0, -blockH - 25, -100, 0, '#a855f7', 'a = 3,21 m/s²');
             }
 
             ctx.restore();
 
             // Weight Force Vector (straight down)
             if (currentSlide === 3 || currentSlide === 4) {
-                drawVectorArrow(ctx, bx, by - blockH/2, 0, 75, '#ef4444', 'P = mg = 19,6 N');
+                drawVectorArrow(ctx, bx, by - blockH/2, 0, 115, '#ef4444', 'P = mg = 19,6 N');
             } else {
-                drawVectorArrow(ctx, bx, by - blockH/2, 0, 50, 'rgba(239, 68, 68, 0.4)', 'P');
+                drawVectorArrow(ctx, bx, by - blockH/2, 0, 75, 'rgba(239, 68, 68, 0.4)', 'P');
             }
 
             // Title telemetry
