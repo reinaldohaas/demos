@@ -2,42 +2,45 @@
 
 ## Estado
 - Branch: `revisao`, criado do `main`.
-- Data e hora: 2026-09-27T23:20:00-03:00.
-- Versão de cache: `?v=20260927l`.
-- Revisão do lote concluída e validada (paralelogramos de χ200 estritamente paralelos entre si com inclinação uniforme em todos os níveis, estrito SESA e ZCAS, 10 casos curados).
+- Data e hora: 2026-09-28T00:10:00-03:00.
+- Versão de cache: `?v=20260927m`.
+- Revisão concluída e validada (Jato Subtropical em onda planetária, remoção de Camada (3/3) e cabeçalhos fixos, espaço reorganizado com Guia Geral e Conheça a MJO dentro da Legenda).
 - Arquivos modificados:
-  - `documented-view.js`:
-    - χ200: geometria ajustada para paralelogramos estritamente paralelos entre si:
-      - Externo: borda norte em 30°N e borda sul em 30°S (fixas, independentemente da latitude do centro); W = 60°.
-      - Médio: H = 20° em torno da latitude do centro; W = 40°.
-      - Núcleo (só contorno): H = 10° em torno da latitude do centro; W = 22°.
-      - Inclinação estritamente uniforme e paralela em todos os níveis e centros:
-        `dlon = -(lat - latC)`, com `dlonNW = -(latN - latC) - W`, `dlonNE = -(latN - latC) + W`, `dlonSE = -(latS - latC) + W`, `dlonSW = -(latS - latC) - W`.
-        A inclinação das arestas laterais é idêntica (-1.0 em coordenadas e 0.9524 em pixels de tela), garantindo paralelismo geométrico rigoroso e concentricidade perfeita.
-      - Nenhum vértice além de ±30° de latitude.
-      - Renderização em polígonos nas visões global e regional com suporte a wrap contínuo nos limites do mapa.
   - `index.html`:
-    - Cache-buster atualizado para `?v=20260927l`.
-  - `verify-model.cjs`:
-    - Testes estendidos verificando a geometria e o paralelismo estrito dos paralelogramos em todas as 8 fases (inclinação lateral constante em -1.0, dimensões W, alturas H=20° e H=10°, limites fixos em ±30° e ausência de elipses no χ200).
+    - Removidas as linhas de cabeçalho: `"Mesoescala & Escala Planetária · Demonstração Interativa"` e `"MJO, Estações, ENOS & Teleconexões com o SESA"`.
+    - Removido o controle `"Camadas (3/3)"` da barra de ferramentas do mapa, mantendo a base visual (TSM, jatos, PSA) permanente.
+    - Barra de modos (`Explorar combinações` / `Boletim 45 dias`) e painel unificado de controles (`Estação`, `ENOS`, `Fase`, `Voz`, `Eventos de interesse`) posicionados diretamente no topo.
+    - Mapa global e regional junto com o Diagrama RMM & Amplitude no topo imediato, sem necessidade de rolagem vertical.
+    - Transferido para a Legenda & Guia:
+      - Guia Geral de Exploração destacado no topo da legenda.
+      - Descrições detalhadas de cada elemento (Cartografia, Jato Subtropical, SALLJ, MJO, Setores SESA e ZCAS, TSM, PSA, Chuva).
+      - Apresentação completa "Conheça a MJO e as pesquisas" em seção recolhível limpa.
+      - Configuração opcional de camadas da base (sstLayer, jetsLayer, psaLayer).
+    - Cache-buster atualizado para `?v=20260927m`.
+  - `documented-view.js`:
+    - Jato Subtropical (~200 hPa) modelado como uma onda planetária de Rossby ondulada contínua (`getSubtropicalJetLat`), modulado em latitude pela estação (32°S no DJF, 27°S no JJA) e em espessura pelo ENOS (4.5 px no El Niño, 2.2 px na La Niña).
+    - Na visão global: onda contínua sem descontinuidades de 20°E a 380°E (1200 px), com rótulo desobstruído sobre o Pacífico Central.
+    - Na visão regional: amostragem densa da onda cruzando o Pacífico, Andes, SESA e Atlântico com seta direcional de fluxo a leste.
+    - Rótulo do botão de legenda atualizado para `Legenda & Guia`.
   - `_revisao/STATUS.md` e `_revisao/painel.html`: documentação e capturas atualizadas.
   - `_revisao/capturas/`:
-    - `chi_fase1.png`: Fase 1 global com paralelogramos estritamente paralelos.
-    - `chi_fase4.png`: Fase 4 global com paralelogramos estritamente paralelos.
-    - `chi_fase8.png`: Fase 8 global com paralelogramos estritamente paralelos.
-    - `chi_fase4_regional.png`: Fase 4 regional com paralelogramos estritamente paralelos sobre a América do Sul.
+    - `topo_pagina_organizado.png`: Visão do topo da página com espaço limpo e controles no topo.
+    - `global_DJF_f1.png`: Jato Subtropical em onda planetária na visão global.
+    - `regional_DJF_f4.png`: Jato Subtropical em onda cruzando SESA com seta no Atlântico.
+    - `legenda_guia_aberta.png`: Legenda & Guia aberta com Guia Geral e Conheça a MJO integrados.
 
 ## Em andamento
 - Revisão aprovada nos testes automatizados e visuais. Pronto para merge.
 
 ## Feito (nesta revisão)
-1. **χ200 com Paralelogramos Estritamente Paralelos e Concêntricos:**
-   - Todas as arestas laterais possuem inclinação idêntica constante (slope = -1.0), tornando todos os paralelogramos perfeitamente paralelos entre si.
-   - Camada externa fixa entre 30°N e 30°S com W = 60°.
-   - Camada média com altura H = 20° e W = 40°.
-   - Núcleo com altura H = 10° e W = 22° desenhado exclusivamente com contorno (`fill: none`).
-   - Nenhum vértice ultrapassa ±30° de latitude.
-   - Aplicação na visão global (com wrap contínuo nas bordas) e na visão regional.
+1. **Remoção de "Camadas (3/3)" e Cabeçalhos:**
+   - Eliminado o dropdown `"Camadas (3/3)"` da toolbar; base visual permanente preservada.
+   - Removidos `"Mesoescala & Escala Planetária"` e títulos grandes do topo.
+2. **Jato Subtropical como Onda Planetária:**
+   - Traçado em onda de Rossby contínua em projeção global e regional, modulado por estação e ENOS.
+3. **Organização Espacial e Transferência para Legenda:**
+   - Controles e mapa trazidos para a área visível principal.
+   - Todo o conteúdo explicativo, Guia Geral e "Conheça a MJO" organizados na Legenda & Guia.
 
 2. **Capturas Visuais Geradas e Verificadas:**
    - `chi_fase1.png`: global fase 1 com paralelismo estrito.

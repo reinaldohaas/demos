@@ -522,44 +522,15 @@
 </head>
 <body>
 <main>
-<section class="card" style="margin-bottom:16px;padding:16px">
-<button id="exploreMode" aria-pressed="true">Explorar combinações</button>
-<button id="forecastMode" aria-pressed="false">SESA · boletim e horizonte de 45 dias</button>
-<span id="modeNotice" class="muted">Modo didático: seleções manuais, não observações.</span>
+<section class="card" style="margin-bottom:12px; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+  <div style="display:flex; align-items:center; gap:8px;">
+    <button id="exploreMode" aria-pressed="true">Explorar combinações</button>
+    <button id="forecastMode" aria-pressed="false">SESA · boletim e horizonte de 45 dias</button>
+  </div>
+  <span id="modeNotice" class="muted" style="font-size:12.5px;">Modo didático: seleções manuais, não observações.</span>
 </section>
 <section id="forecastPanel" class="card" hidden style="padding:20px;margin-bottom:20px"></section>
 <div id="explorationContent">
-  <header>
-    <div class="tag">Mesoescala & Escala Planetária · Demonstração Interativa</div>
-    <h1>MJO, Estações, ENOS & Teleconexões com o SESA</h1>
-    <p class="muted">
-      Explore todas as combinações de estações, fases da MJO e ENOS no contexto global contínuo. A base visual permanente preserva o Jato Subtropical modulado por estação e ENOS, o SALLJ, a TSM equatorial qualitativa e as referências geográficas da ZCAS e do SESA. Destaques visuais são ativados exclusivamente em combinações com respaldo científico verificado.
-    </p>
-  </header>
-
-  <details id="mjoIntroduction" style="margin-bottom:20px">
-    <summary>Conheça a MJO e as pesquisas · apresentação geral</summary>
-    <div class="details-content">
-      <h2>Uma oscilação tropical com efeitos a distância</h2>
-      <p>A Oscilação Madden–Julian (MJO) é uma organização de grande escala da convecção, da chuva e dos ventos tropicais. Seu sinal costuma avançar para leste, especialmente sobre os oceanos Índico e Pacífico, com recorrência típica de 30–60 dias. Alternam-se setores de convecção favorecida e suprimida. A evolução é irregular: cada episódio tem duração, intensidade e trajetória próprias. <a href="https://www.bom.gov.au/resources/learn-and-explore/climate-knowledge-centre/climate-factors/madden-julian-oscillation" target="_blank" rel="noopener">Introdução do Bureau of Meteorology</a>.</p>
-      <h3>Como ler as oito fases e a amplitude</h3>
-      <p>O índice RMM de Wheeler e Hendon (2004) combina radiação de onda longa emergente (OLR) e ventos zonais em 850 e 200 hPa. As oito fases situam o estado do padrão tropical; não representam oito categorias de chuva no Brasil. No diagrama, a distância ao centro expressa a amplitude do índice. Dentro do círculo unitário, a identificação da fase é menos robusta. Uma amplitude maior não implica aumento proporcional da chuva ou da força dos jatos no SESA. <a href="https://www.bom.gov.au/climate/mjo/about/WH04.pdf" target="_blank" rel="noopener">Artigo do índice RMM</a>.</p>
-      <p>A OLR é uma medida indireta da convecção: valores anormalmente baixos nos trópicos costumam acompanhar nuvens altas e frias. Por isso, OLR, circulação e precipitação devem ser examinadas em conjunto. O desenho tropical desta demonstração é um esquema, não um campo observado de OLR.</p>
-      <h3>Do aquecimento tropical à América do Sul</h3>
-      <p>A convecção tropical pode excitar trens de ondas de Rossby que modificam a circulação extratropical. No Pacífico Sul, essas perturbações podem alcançar a América do Sul e alterar condições ligadas ao transporte de umidade. O estado do ENOS e a estação modificam o ambiente no qual as ondas se propagam. Assim, uma fase da MJO não determina sozinha a chuva na Zona de Convergência do Atlântico Sul (ZCAS) ou no sudeste da América do Sul (SESA).</p>
-      <h3>O que cada pesquisa acrescenta</h3>
-      <ul>
-        <li><strong>Wheeler e Hendon (2004):</strong> estabelecem o índice multivariado usado para acompanhar fase e amplitude. É uma ferramenta de monitoramento tropical, não uma previsão local de precipitação.</li>
-        <li><strong>Laís G. Fernandes e Alice M. Grimm (2023):</strong> investigam a modulação da MJO pelo ENOS e seus impactos na América do Sul durante o verão (DJF), identificando teleconexões do Pacífico subtropical e respostas na ZCAS. <a href="https://doi.org/10.1175/JCLI-D-22-0781.1" target="_blank" rel="noopener">ENSO Modulation of Global MJO and Its Impacts on South America</a>.</li>
-        <li><strong>Alvarez, Vera, Kiladis e Liebmann (2016):</strong> avaliam a probabilidade de precipitação semanal acima do tercil superior na América do Sul nas quatro estações em relação às fases da MJO, detalhando os padrões de anomalia na Bacia do Prata e na ZCAS. <a href="https://doi.org/10.1007/s00382-015-2581-6" target="_blank" rel="noopener">Influence of the MJO on South American precipitation</a>.</li>
-        <li><strong>Jones, Mu, Carvalho e Ding (2023):</strong> estudam novembro–março e distinguem quatro tipos de jatos de baixos níveis: Central, Northern, Andes e Peru. Associam sua variabilidade a trens de ondas e mostram influência da MJO sobretudo na frequência do tipo Central. Essa diversidade não se resume a um único jato sempre mais forte ou mais fraco. <a href="https://www.nature.com/articles/s41612-023-00501-4" target="_blank" rel="noopener">Estudo do SALLJ</a>.</li>
-      </ul>
-      <h3>Consenso, diferenças e questões abertas</h3>
-      <p>Esses trabalhos sustentam a importância do contexto de grande escala, mas respondem a perguntas diferentes. Comparar autores exige manter iguais a estação, o estado de ENOS, a região, a variável, o agrupamento das fases e a defasagem temporal. Diferenças nesses recortes podem explicar resultados distintos; uma divergência só pode ser avaliada após essa comparação.</p>
-      <p>Chuva média, frequência de extremos e circulação são resultados distintos. Extremos de chuva também não equivalem a granizo ou tornados. Permanecem desafios de previsão regional: representar bem a propagação da MJO, sua interação com o estado de fundo e a resposta dos sistemas meteorológicos locais.</p>
-      <p>Roteiro para explorar: Escolha um caso de interesse por estação. Observe fase e amplitude no RMM, compare as variáveis e leia a fonte e os limites do resultado. Depois altere o ENOS mantendo a estação e a variável. Onde não houver resultado cadastrado, a base visual permanece: ausência de destaque significa lacuna nesta síntese, não ausência de efeito físico. Para a situação observada e a previsão, use a aba separada com produtos oficiais e suas datas.</p>
-    </div>
-  </details>
 
   <!-- Painel de Controles: Estações, ENOS, Fases da MJO, Narração e Destaques Documentados -->
   <section class="controls-panel">
@@ -635,12 +606,7 @@
         <label class="toolbar-group" for="mjoSelect">MJO nos trópicos:
           <select id="mjoSelect"><option value="none" selected>Nenhuma</option><option value="chi">χ200 · potencial de velocidade (esquema didático)</option><option value="dipoles">Dipolos simples</option><option value="track">Trilha 1–8</option></select>
         </label>
-        <details class="layer-choices"><summary>Camadas <span id="layerCount"></span></summary><div>
-          <label><input id="sstLayer" type="checkbox" checked> TSM · sinal do ENOS</label>
-          <label><input id="jetsLayer" type="checkbox" checked> Jatos · STJ e SALLJ</label>
-          <label><input id="psaLayer" type="checkbox" checked> PSA · teleconexão</label>
-        </div></details>
-        <button id="legendButton" aria-expanded="false" aria-controls="legend">Mostrar legenda</button>
+        <button id="legendButton" aria-expanded="false" aria-controls="legend">Legenda & Guia</button>
         <!-- Controles de Organização da Interface (Painéis e Restaurar Layout) -->
         <div class="toolbar-group layout-tools" style="position:relative;">
           <button id="btnPanelsMenu" class="btn-layout" aria-haspopup="true" aria-expanded="false" title="Gerenciar visibilidade dos painéis">
@@ -675,31 +641,75 @@
         </svg>
       </div>
 
-      <!-- Legenda Inicialmente Oculta -->
+      <!-- Legenda e Guia Inicialmente Ocultos -->
       <div id="legend" hidden>
+        <div class="legend-intro" style="background:rgba(14, 165, 233, 0.08); border:1px solid rgba(56, 189, 248, 0.25); border-radius:10px; padding:14px 18px; margin-bottom:14px;">
+          <div style="font-weight:700; color:var(--accent-cyan); font-size:14px; margin-bottom:6px; letter-spacing:0.02em;">
+            Guia Geral de Exploração
+          </div>
+          <p style="margin:0; font-size:13.5px; line-height:1.6; color:#e2e8f0;">
+            Explore todas as combinações de estações, fases da MJO e ENOS no contexto global contínuo. A base visual permanente preserva o Jato Subtropical modulado por estação e ENOS, o SALLJ, a TSM equatorial qualitativa e as referências geográficas da ZCAS e do SESA. Destaques visuais são ativados exclusivamente em combinações com respaldo científico verificado.
+          </p>
+        </div>
+
         <div class="legend-grid">
           <div>
             <b>Base Cartográfica:</b> Polígonos de terra Natural Earth 1:110m (projeção equirretangular contínua). Visão global com Pacífico centralizado e contexto Índico–Pacífico–América do Sul. Na visão regional da América do Sul, inclui fronteiras internacionais dos países vizinhos e limites estaduais brasileiros discretos para localização geográfica precisa e desobstruída.
           </div>
           <div>
-            <b>Visualizações da MJO nos Trópicos:</b> Seleção mutuamente exclusiva entre <i>Convecção tropical (esquema)</i> (dipolos equatoriais didáticos), <i>χ200 (esquema conceitual)</i> (contornos didáticos de divergência/convergência em altitude), <i>Trilha 1–8</i> (marcações conceituais ao longo do equador com fase ativa destacada e números interativos) ou <i>Nenhuma</i>. Ao selecionar uma camada, desliga-se a outra.
+            <b>Jato Subtropical (~200 hPa · Onda Planetária):</b> Desenhado como uma onda de Rossby contínua ondulando pelo hemisfério sul. Sua espessura ilustra o reforço do guia de ondas no El Niño e sua atenuação na La Niña; sua latitude média migra sazonalmente (32°S no verão/DJF, 27°S no inverno/JJA).
+          </div>
+          <div>
+            <b>SALLJ (~850 hPa · Base Permanente):</b> Jato de Baixos Níveis da América do Sul conectando o transporte de umidade amazônica para o SESA ou ZCAS, modulado pelo dipolo ZCAS × SESA (Liebmann et al. 2004; Nogués-Paegle & Mo 1997).
+          </div>
+          <div>
+            <b>Visualizações da MJO nos Trópicos:</b> Seleção entre <i>χ200 (esquema conceitual de Deemer)</i> (paralelogramos paralelos de divergência/convergência em ~200 hPa), <i>Dipolos simples</i>, <i>Trilha 1–8</i> (Wheeler & Hendon 2004 sobre o equador) ou <i>Nenhuma</i>.
           </div>
           <div>
             <b>Domínios Geográficos Permanentes (SESA e ZCAS):</b> SESA e ZCAS têm recortes diferentes conforme o autor: Fernandes & Grimm usam CESA (inclui a ZCAS) e o médio/baixo Paraná–Prata; Liebmann et al. usam os pontos 30°S 60°W e 20°S 45°W; Muza et al. chamam de SEBr a ZCAS continental. O mapa mostra os setores calculados por R. Haas.
           </div>
           <div>
-            <b>Destaque de Chuva:</b> Símbolo de nuvem com chuva e seta indicando aumento documentado para a variável selecionada. Presente apenas em combinações comprovadas na literatura; sem símbolo quando não documentado.
-          </div>
-          <div>
             <b>TSM Equatorial:</b> Sinal anômalo qualitativo no Pacífico central/leste (El Niño quente, La Niña fria e Neutro sem anomalia expressiva). Sem grade numérica artificial.
-          </div>
-          <div>
-            <b>Jatos e Transporte (Base Visual Permanente):</b> Jato Subtropical (~200 hPa) em traçado único qualitativo de referência conceitual, com espessura ilustrando a modulação pelo ENOS e latitude ilustrando o ciclo sazonal (convenções didáticas de desenho, sem velocidades ou latitudes universais absolutas); SALLJ (~850 hPa) com dipolo ZCAS × SESA (Liebmann et al. 2004; Nogués-Paegle & Mo 1997). Sem jato polar e sem velocidades pontuais arbitrárias.
           </div>
           <div>
             <b>Teleconexão PSA:</b> Guia conceitual de propagação de ondas de Rossby em arco de grande círculo exibido exclusivamente nas combinações com mecanismo dinâmico verificado na literatura (Fernandes & Grimm 2023; Roy et al. 2025), sem posições fictícias de centros anômalos nem defasagens temporais fixadas universalmente.
           </div>
+          <div>
+            <b>Destaque de Chuva:</b> Símbolo de nuvem com chuva e seta indicando aumento documentado para a variável selecionada. Presente apenas em combinações comprovadas na literatura (com amplitude A ≥ 1); sem símbolo quando não documentado.
+          </div>
         </div>
+
+        <details id="mjoIntroduction" style="margin-top:14px; background:#0b192b; border:1px solid #1e3955;">
+          <summary style="font-size:14px; font-weight:700; color:var(--accent-teal);">Conheça a MJO e as pesquisas · apresentação geral</summary>
+          <div class="details-content" style="padding:14px 18px; font-size:13.5px; line-height:1.65; color:#cbd5e1;">
+            <h3 style="color:#7dd3fc; margin-top:8px;">Uma oscilação tropical com efeitos a distância</h3>
+            <p>A Oscilação Madden–Julian (MJO) é uma organização de grande escala da convecção, da chuva e dos ventos tropicais. Seu sinal costuma avançar para leste, especialmente sobre os oceanos Índico e Pacífico, com recorrência típica de 30–60 dias. Alternam-se setores de convecção favorecida e suprimida. A evolução é irregular: cada episódio tem duração, intensidade e trajetória próprias. <a href="https://www.bom.gov.au/resources/learn-and-explore/climate-knowledge-centre/climate-factors/madden-julian-oscillation" target="_blank" rel="noopener">Introdução do Bureau of Meteorology</a>.</p>
+            <h3 style="color:#7dd3fc;">Como ler as oito fases e a amplitude</h3>
+            <p>O índice RMM de Wheeler e Hendon (2004) combina radiação de onda longa emergente (OLR) e ventos zonais em 850 e 200 hPa. As oito fases situam o estado do padrão tropical; não representam oito categorias de chuva no Brasil. No diagrama, a distância ao centro expressa a amplitude do índice. Dentro do círculo unitário, a identificação da fase é menos robusta. Uma amplitude maior não implica aumento proporcional da chuva ou da força dos jatos no SESA. <a href="https://www.bom.gov.au/climate/mjo/about/WH04.pdf" target="_blank" rel="noopener">Artigo do índice RMM</a>.</p>
+            <p>A OLR é uma medida indireta da convecção: valores anormalmente baixos nos trópicos costumam acompanhar nuvens altas e frias. Por isso, OLR, circulação e precipitação devem ser examinadas em conjunto. O desenho tropical desta demonstração é um esquema, não um campo observado de OLR.</p>
+            <h3 style="color:#7dd3fc;">Do aquecimento tropical à América do Sul</h3>
+            <p>A convecção tropical pode excitar trens de ondas de Rossby que modificam a circulação extratropical. No Pacífico Sul, essas perturbações podem alcançar a América do Sul e alterar condições ligadas ao transporte de umidade. O estado do ENOS e a estação modificam o ambiente no qual as ondas se propagam. Assim, uma fase da MJO não determina sozinha a chuva na Zona de Convergência do Atlântico Sul (ZCAS) ou no sudeste da América do Sul (SESA).</p>
+            <h3 style="color:#7dd3fc;">O que cada pesquisa acrescenta</h3>
+            <ul style="padding-left:20px; margin:8px 0;">
+              <li><strong>Wheeler e Hendon (2004):</strong> estabelecem o índice multivariado usado para acompanhar fase e amplitude. É uma ferramenta de monitoramento tropical, não uma previsão local de precipitação.</li>
+              <li><strong>Laís G. Fernandes e Alice M. Grimm (2023):</strong> investigam a modulação da MJO pelo ENOS e seus impactos na América do Sul durante o verão (DJF), identificando teleconexões do Pacífico subtropical e respostas na ZCAS. <a href="https://doi.org/10.1175/JCLI-D-22-0781.1" target="_blank" rel="noopener">ENSO Modulation of Global MJO and Its Impacts on South America</a>.</li>
+              <li><strong>Alvarez, Vera, Kiladis e Liebmann (2016):</strong> avaliam a probabilidade de precipitação semanal acima do tercil superior na América do Sul nas quatro estações em relação às fases da MJO, detalhando os padrões de anomalia na Bacia do Prata e na ZCAS. <a href="https://doi.org/10.1007/s00382-015-2581-6" target="_blank" rel="noopener">Influence of the MJO on South American precipitation</a>.</li>
+              <li><strong>Jones, Mu, Carvalho e Ding (2023):</strong> estudam novembro–março e distinguem quatro tipos de jatos de baixos níveis: Central, Northern, Andes e Peru. Associam sua variabilidade a trens de ondas e mostram influência da MJO sobretudo na frequência do tipo Central. Essa diversidade não se resume a um único jato sempre mais forte ou mais fraco. <a href="https://www.nature.com/articles/s41612-023-00501-4" target="_blank" rel="noopener">Estudo do SALLJ</a>.</li>
+            </ul>
+            <h3 style="color:#7dd3fc;">Consenso, diferenças e questões abertas</h3>
+            <p>Esses trabalhos sustentam a importância do contexto de grande escala, mas respondem a perguntas diferentes. Comparar autores exige manter iguais a estação, o estado de ENOS, a região, a variável, o agrupamento das fases e a defasagem temporal. Diferenças nesses recortes podem explicar resultados distintos; uma divergência só pode ser avaliada após essa comparação.</p>
+            <p>Chuva média, frequência de extremos e circulação são resultados distintos. Extremos de chuva também não equivalem a granizo ou tornados. Permanecem desafios de previsão regional: representar bem a propagação da MJO, sua interação com o estado de fundo e a resposta dos sistemas meteorológicos locais.</p>
+          </div>
+        </details>
+
+        <details style="margin-top:10px; background:rgba(15,23,42,0.4); border:1px solid #1a344e;">
+          <summary style="font-size:12.5px; padding:8px 12px; color:#94a3b8;">Configuração das Camadas da Base (Opcional)</summary>
+          <div style="padding:10px 14px; display:flex; gap:16px; flex-wrap:wrap; font-size:12.5px;">
+            <label><input id="sstLayer" type="checkbox" checked> TSM · sinal do ENOS</label>
+            <label><input id="jetsLayer" type="checkbox" checked> Jatos · STJ e SALLJ</label>
+            <label><input id="psaLayer" type="checkbox" checked> PSA · teleconexão</label>
+          </div>
+        </details>
       </div>
 
       <p class="muted" style="margin-top:10px;">
@@ -913,12 +923,12 @@
 </div>
 </main>
 
-<script src="world-land.js?v=20260927l"></script>
-<script src="map-regions.js?v=20260927l"></script>
-<script src="documented-cases.js?v=20260927l"></script>
-<script src="rmm-diagram.js?v=20260927l"></script>
-<script src="documented-view.js?v=20260927l"></script>
-<script src="panels-manager.js?v=20260927l"></script>
-<script src="forecast-sesa.js?v=20260927l"></script>
+<script src="world-land.js?v=20260927m"></script>
+<script src="map-regions.js?v=20260927m"></script>
+<script src="documented-cases.js?v=20260927m"></script>
+<script src="rmm-diagram.js?v=20260927m"></script>
+<script src="documented-view.js?v=20260927m"></script>
+<script src="panels-manager.js?v=20260927m"></script>
+<script src="forecast-sesa.js?v=20260927m"></script>
 </body>
 </html>

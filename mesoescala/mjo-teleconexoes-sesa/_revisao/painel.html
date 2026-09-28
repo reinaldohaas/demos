@@ -39,32 +39,65 @@
   </p>
 
   <section>
-    <h2>Resumo das Alterações (v=20260927l)</h2>
+    <h2>Resumo das Alterações (v=20260927m)</h2>
     <ul>
-      <li><b>Geometria dos Paralelogramos (&chi;<sub>200</sub>) Estritamente Paralelos:</b>
+      <li><b>Remoção de Camada (3/3) e Cabeçalhos do Topo:</b>
         <ul>
-          <li><b>Paralelismo rigoroso:</b> inclinação uniforme de todas as arestas laterais (slope = -1.0 em coordenadas, 0.9524 em tela), tornando todos os paralelogramos perfeitamente paralelos entre si e concêntricos.</li>
-          <li><b>Externo:</b> borda norte em 30°N e borda sul em 30°S (fixas, independentemente da latitude do centro); W = 60°.</li>
-          <li><b>Médio:</b> H = 20° em torno da latitude do centro; W = 40°.</li>
-          <li><b>Núcleo (só contorno):</b> H = 10° em torno da latitude do centro; W = 22°.</li>
-          <li><b>Limites de latitude:</b> nenhum vértice além de ±30° de latitude.</li>
+          <li>Removido o controle <code>Camadas (3/3)</code> da barra de ferramentas do mapa. A base visual (TSM equatorial, Jato Subtropical, SALLJ e PSA) permanece desenhada permanentemente.</li>
+          <li>Removidas as linhas <code>Mesoescala &amp; Escala Planetária · Demonstração Interativa</code> e <code>MJO, Estações, ENOS &amp; Teleconexões com o SESA</code> do topo.</li>
+          <li>Controles e mapa posicionados diretamente no topo visível da página, eliminando rolagem desnecessária.</li>
         </ul>
       </li>
-      <li><b>Nomenclatura estrita de setores:</b> uso exclusivo de "SESA" e "ZCAS" em eventos, painel, mapa e narração.</li>
-      <li><b>Base curada com 10 casos:</b> incluídos El Niño · Fase 3 (SESA) e Neutro · Fase 4 (SESA) documentados por Fernandes &amp; Grimm (2023).</li>
-      <li><b>SALLJ Direcional:</b> citação integrada de Liebmann et al. (2004) e Nogués-Paegle &amp; Mo (1997).</li>
+      <li><b>Jato Subtropical em Onda Planetária:</b>
+        <ul>
+          <li>Substituído o traçado por uma onda de Rossby contínua (número de onda zonal 7 no hemisfério sul), modulada em latitude pela estação (32°S no DJF, 27°S no JJA) e em espessura pelo ENOS.</li>
+          <li>Na visão global: onda contínua sem quebras de 20° a 380° com rótulo central desobstruído sobre o Pacífico.</li>
+          <li>Na visão regional: onda cruzando Chile, Argentina, SESA e Atlântico com seta indicadora de fluxo zonal a leste.</li>
+        </ul>
+      </li>
+      <li><b>Guia Geral e Conheça a MJO Integrados na Legenda:</b>
+        <ul>
+          <li>O texto <i>"Explore todas as combinações de estações, fases da MJO e ENOS no contexto global contínuo..."</i> encabeça o painel retrátil de Legenda &amp; Guia.</li>
+          <li>Apresentação aprofundada "Conheça a MJO e as pesquisas" inserida em seção recolhível dentro da legenda.</li>
+          <li>Configuração opcional das camadas da base (TSM, jatos, PSA) preservada na legenda.</li>
+        </ul>
+      </li>
     </ul>
   </section>
 
   <section>
-    <h2>Capturas de Validação (v=20260927l)</h2>
+    <h2>Capturas de Validação (v=20260927m)</h2>
     <div class="grid-2">
       <div class="capture-card">
-        <h3>1. DJF 3–4 · SESA (Alvarez et al. 2016)</h3>
-        <a href="capturas/DJF_3_4_prata.png" target="_blank">
-          <img src="capturas/DJF_3_4_prata.png" alt="DJF 3-4 SESA">
+        <h3>1. Topo da Página Organizado (Controles e Mapa no Topo)</h3>
+        <a href="capturas/topo_pagina_organizado.png" target="_blank">
+          <img src="capturas/topo_pagina_organizado.png" alt="Topo da página organizado">
         </a>
-        <p>Sem elipse de TSM do ENOS ("composição de todos os anos"), SALLJ estendido ao SESA com rótulos a oeste dos Andes sobre o Pacífico sem corte, centro ciclônico C (~38°S 62°W) desamontoado da nuvem e PSA.</p>
+        <p>Espaço limpo sem cabeçalhos volumosos: botões de modo, painel de controles e mapa principal imediatamente visíveis.</p>
+      </div>
+
+      <div class="capture-card">
+        <h3>2. Jato Subtropical em Onda Planetária (Global)</h3>
+        <a href="capturas/global_DJF_f1.png" target="_blank">
+          <img src="capturas/global_DJF_f1.png" alt="Jato Subtropical em onda global">
+        </a>
+        <p>Jato Subtropical contínuo ondulando como onda de Rossby pelo hemisfério sul, rótulo central sobre o Pacífico e barra de ferramentas sem "Camadas (3/3)".</p>
+      </div>
+
+      <div class="capture-card">
+        <h3>3. Jato Subtropical em Onda (Visão Regional da América do Sul)</h3>
+        <a href="capturas/regional_DJF_f4.png" target="_blank">
+          <img src="capturas/regional_DJF_f4.png" alt="Jato Subtropical em onda regional">
+        </a>
+        <p>Onda cruzando o Pacífico, Andes e SESA, com seta direcional indicando escoamento para o Atlântico Sul e destaque de extremos no SESA.</p>
+      </div>
+
+      <div class="capture-card">
+        <h3>4. Legenda &amp; Guia Aberta</h3>
+        <a href="capturas/legenda_guia_aberta.png" target="_blank">
+          <img src="capturas/legenda_guia_aberta.png" alt="Legenda e Guia Aberta">
+        </a>
+        <p>Guia Geral de Exploração no topo da legenda, grade de especificações conceituais e seção "Conheça a MJO e as pesquisas" integrada.</p>
       </div>
 
       <div class="capture-card">

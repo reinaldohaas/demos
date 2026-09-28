@@ -192,6 +192,21 @@ function getMjoPhaseCoords(phase, season = currentSeason) {
   return item ? { lon: item.active[0], lat: item.active[1], active: item.active, suppressed: item.suppressed, region: item.region } : { lon: 0, lat: 0, region: 'Global' };
 }
 
+function getSubtropicalJetLat(lon, season = currentSeason) {
+  let baseLat = -29.5;
+  if (season === 'DJF') baseLat = -32;
+  else if (season === 'JJA') baseLat = -27;
+  else if (season === 'SON') baseLat = -29;
+  else if (season === 'MAM') baseLat = -30;
+
+  // Onda planetária de Rossby (número de onda zonal 7, com ondulação típica no hemisfério sul)
+  const amp = 3.6;
+  const k = 7;
+  const phi = -60;
+  const rad = (k * (lon - phi) * Math.PI) / 180;
+  return baseLat - amp * Math.sin(rad);
+}
+
 function getSubtropicalJetParams(season, enso) {
   // Representação esquemática didática do guia de ondas subtropical (~200 hPa).
   // A latitude reflete a migração sazonal média do jato e a espessura ilustra o reforço do guia de ondas sob ENOS.
@@ -203,9 +218,9 @@ function getSubtropicalJetParams(season, enso) {
   else if (season === 'SON') lat = -29;
 
   // Espessura qualitativa representando a modulação do guia de ondas pelo ENOS
-  let width = 2.5;
-  if (enso === 'el-nino') width = 3.6;
-  else if (enso === 'la-nina') width = 1.8;
+  let width = 3.2;
+  if (enso === 'el-nino') width = 4.5;
+  else if (enso === 'la-nina') width = 2.2;
 
   return { lat, width };
 }
@@ -726,27 +741,62 @@ function drawSallj() {
 function drawJets() {
   if (!visibleLayers.jets) return;
 
-  const lat = (currentSeason === 'DJF') ? -32 : (currentSeason === 'JJA') ? -27 : -29.5;
   const width = (currentEnso === 'el-nino') ? 4.5 : (currentEnso === 'la-nina') ? 2.2 : 3.2;
 
   if (mapView === 'global') {
-    const pts = [
-      [140, lat], [180, lat - 1], [-140, lat], [-100, lat + 1],
-      [-60, lat + 2], [-20, lat + 1], [20, lat], [60, lat - 1],
-      [100, lat], [140, lat]
-    ];
-    const projectedPts = pts.map(p => project(...p));
-    const d = `M ` + projectedPts.map(p => `${p[0]},${p[1]}`).join(' L ');
+    // Mapear de lon = 20° a 380° de forma contínua em projeção equirretangular (1200x560)
+    const pts = [];
+    for (let lon = 20; lon <= 380; lon += 2) {
+      const lat = getSubtropicalJetLat(lon, currentSeason);
+      const x = ((lon - 20) / 360) * 1200;
+      const y = ((85 - lat) / 160) * 560;
+      pts.push([x, y]);
+    }
+    const d = 'M ' + pts.map(p => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' L ');
     svg('path', { d, fill: 'none', stroke: '#38bdf8', 'stroke-width': width, 'stroke-dasharray': '8 5' });
-    const [jx, jy] = project(-86, lat - 1.5);
-    svg('text', { x: jx, y: jy - 8, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'Jato Subtropical (~200 hPa · referência conceitual)');
+
+    // Rótulo sobre o Pacífico central para não sobrepor continentes nem feições equatoriais
+    const latLbl = getSubtropicalJetLat(-140, currentSeason);
+    const [jx, jy] = project(-140, latLbl);
+    svg('text', {
+      x: jx, y: jy - 9,
+      fill: '#7dd3fc', 'font-size': 12, 'font-weight': '600', 'text-anchor': 'middle',
+      stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+    }, 'Jato Subtropical (~200 hPa · onda planetária)');
   } else {
-    const p1 = project(-82, lat);
-    const p2 = project(-38, lat + 2.5);
-    svg('line', { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: '#38bdf8', 'stroke-width': width, 'stroke-dasharray': '8 5' });
+    // Na visão regional, amostragem densa da onda ao cruzar o Pacífico, Andes, SESA e Atlântico
+    const pts = [];
+    for (let lon = -85; lon <= -35; lon += 1) {
+      const lat = getSubtropicalJetLat(lon, currentSeason);
+      pts.push(project(lon, lat));
+    }
+    const d = 'M ' + pts.map(p => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' L ');
+    svg('path', { d, fill: 'none', stroke: '#38bdf8', 'stroke-width': width, 'stroke-dasharray': '8 5' });
+
+    // Seta direcional no extremo leste (Atlântico) indicando fluxo zonal de oeste para leste
+    if (pts.length >= 2) {
+      const lastPt = pts[pts.length - 1];
+      const prevPt = pts[pts.length - 2];
+      const angle = Math.atan2(lastPt[1] - prevPt[1], lastPt[0] - prevPt[0]);
+      const headLen = 10;
+      const ax1 = lastPt[0] - headLen * Math.cos(angle - Math.PI / 6);
+      const ay1 = lastPt[1] - headLen * Math.sin(angle - Math.PI / 6);
+      const ax2 = lastPt[0] - headLen * Math.cos(angle + Math.PI / 6);
+      const ay2 = lastPt[1] - headLen * Math.sin(angle + Math.PI / 6);
+      svg('polygon', {
+        points: `${lastPt[0].toFixed(1)},${lastPt[1].toFixed(1)} ${ax1.toFixed(1)},${ay1.toFixed(1)} ${ax2.toFixed(1)},${ay2.toFixed(1)}`,
+        fill: '#38bdf8'
+      });
+    }
+
     // Na visão regional, posicionar rótulo sobre o Pacífico/Chile para não sobrepor o continente/SESA
-    const [jx, jy] = project(-78, lat - 0.5);
-    svg('text', { x: jx, y: jy - 7, fill: '#7dd3fc', 'font-size': 11, 'font-weight': '600', 'text-anchor': 'start', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'Jato Subtropical (~200 hPa · guia)');
+    const latLbl = getSubtropicalJetLat(-80, currentSeason);
+    const [jx, jy] = project(-80, latLbl);
+    svg('text', {
+      x: jx, y: jy - 9,
+      fill: '#7dd3fc', 'font-size': 11, 'font-weight': '600', 'text-anchor': 'start',
+      stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+    }, 'Jato Subtropical (~200 hPa · onda)');
   }
 
   // SALLJ direcional (só DJF; Nogués-Paegle & Mo 1997)
@@ -1590,7 +1640,7 @@ if ($('mjoSelect')) $('mjoSelect').addEventListener('change', e => setMjoMode(e.
 $('legendButton').addEventListener('click', () => {
   $('legend').hidden = !$('legend').hidden;
   $('legendButton').setAttribute('aria-expanded', String(!$('legend').hidden));
-  $('legendButton').textContent = $('legend').hidden ? 'Mostrar legenda' : 'Ocultar legenda';
+  $('legendButton').textContent = $('legend').hidden ? 'Mostrar legenda & guia' : 'Ocultar legenda & guia';
 });
 
 // Alternância de Visão Global / Regional
