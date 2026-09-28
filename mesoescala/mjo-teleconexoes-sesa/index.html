@@ -615,10 +615,10 @@
     <span class="pill-label" style="width:auto;">Eventos de interesse:</span>
     <span id="eventNotice" style="font-size:11.5px; color:#5eead4; font-weight:600; font-family:var(--font-mono, monospace);" role="status"></span>
   </div>
-<label>DJF · Verão<select id="eventsDJF" class="event-select" aria-label="Eventos de interesse — DJF"><option value="">Escolher caso…</option><option value="DJF-la-nina-8">Fernandes & Grimm · La Niña 8 — pico na ZCAS</option><option value="DJF-el-nino-1">Fernandes & Grimm · El Niño 1 — pico na ZCAS</option><option value="DJF-alvarez-3-4">Alvarez · 3–4 — mais chance de semana chuvosa (Bacia do Prata)</option><option value="DJF-alvarez-8-1">Alvarez · 8–1 — mais chance de semana chuvosa (ZCAS)</option></select></label>
-<label>MAM · Outono<select id="eventsMAM" class="event-select" aria-label="Eventos de interesse — MAM"><option value="">Escolher caso…</option><option value="MAM-alvarez-1">Alvarez · 1 — mais chance de semana chuvosa (Leste do Brasil)</option></select></label>
-<label>JJA · Inverno<select id="eventsJJA" class="event-select" aria-label="Eventos de interesse — JJA"><option value="">Escolher caso…</option><option value="JJA-alvarez-8">Alvarez · 8 — mais chance de semana chuvosa (Sudeste do Brasil)</option></select></label>
-<label>SON · Primavera<select id="eventsSON" class="event-select" aria-label="Eventos de interesse — SON"><option value="">Escolher caso…</option><option value="SON-alvarez-7-8">Alvarez · 7–8 — mais chance de semana chuvosa (ZCAS)</option><option value="SON-alvarez-1">Alvarez · 1 — mais chance de semana chuvosa (Bacia do Prata)</option></select></label>
+<label>DJF · Verão<select id="eventsDJF" class="event-select" aria-label="Eventos de interesse — DJF"><option value="">Escolher caso…</option><option value="DJF-la-nina-8">Fernandes & Grimm · La Niña 8 — pico na ZCAS</option><option value="DJF-el-nino-1">Fernandes & Grimm · El Niño 1 — pico na ZCAS</option><option value="DJF-el-nino-3">Fernandes & Grimm · El Niño 3 — pico no SESA</option><option value="DJF-neutro-4">Fernandes & Grimm · Neutro 4 — maior aumento no SESA</option><option value="DJF-alvarez-3-4">Alvarez · 3–4 — mais chance de semana chuvosa (SESA)</option><option value="DJF-alvarez-8-1">Alvarez · 8–1 — mais chance de semana chuvosa (ZCAS)</option></select></label>
+<label>MAM · Outono<select id="eventsMAM" class="event-select" aria-label="Eventos de interesse — MAM"><option value="">Escolher caso…</option><option value="MAM-alvarez-1">Alvarez · 1 — mais chance de semana chuvosa (ZCAS)</option></select></label>
+<label>JJA · Inverno<select id="eventsJJA" class="event-select" aria-label="Eventos de interesse — JJA"><option value="">Escolher caso…</option><option value="JJA-alvarez-8">Alvarez · 8 — mais chance de semana chuvosa (ZCAS)</option></select></label>
+<label>SON · Primavera<select id="eventsSON" class="event-select" aria-label="Eventos de interesse — SON"><option value="">Escolher caso…</option><option value="SON-alvarez-7-8">Alvarez · 7–8 — mais chance de semana chuvosa (ZCAS)</option><option value="SON-alvarez-1">Alvarez · 1 — mais chance de semana chuvosa (SESA)</option></select></label>
 </div>
   </section>
 
@@ -685,7 +685,7 @@
             <b>Visualizações da MJO nos Trópicos:</b> Seleção mutuamente exclusiva entre <i>Convecção tropical (esquema)</i> (dipolos equatoriais didáticos), <i>χ200 (esquema conceitual)</i> (contornos didáticos de divergência/convergência em altitude), <i>Trilha 1–8</i> (marcações conceituais ao longo do equador com fase ativa destacada e números interativos) ou <i>Nenhuma</i>. Ao selecionar uma camada, desliga-se a outra.
           </div>
           <div>
-            <b>Domínios Geográficos Permanentes:</b> Polígono SESA (porção sul da Bacia do Prata: Sul do Brasil, Uruguai, Paraguai e Nordeste da Argentina) identificado com "SESA" no topo da região sem colidir com jatos. Polígono ZCAS sempre visível como referência de monção. Elementos posicionados para evitar sobreposição entre jatos, SALLJ, rótulos e símbolos de precipitação.
+            <b>Domínios Geográficos Permanentes (SESA e ZCAS):</b> SESA e ZCAS têm recortes diferentes conforme o autor: Fernandes & Grimm usam CESA (inclui a ZCAS) e o médio/baixo Paraná–Prata; Liebmann et al. usam os pontos 30°S 60°W e 20°S 45°W; Muza et al. chamam de SEBr a ZCAS continental. O mapa mostra os setores calculados por R. Haas.
           </div>
           <div>
             <b>Destaque de Chuva:</b> Símbolo de nuvem com chuva e seta indicando aumento documentado para a variável selecionada. Presente apenas em combinações comprovadas na literatura; sem símbolo quando não documentado.
@@ -694,7 +694,7 @@
             <b>TSM Equatorial:</b> Sinal anômalo qualitativo no Pacífico central/leste (El Niño quente, La Niña fria e Neutro sem anomalia expressiva). Sem grade numérica artificial.
           </div>
           <div>
-            <b>Jatos e Transporte (Base Visual Permanente):</b> Jato Subtropical (~200 hPa) em traçado único qualitativo de referência conceitual, com espessura ilustrando a modulação pelo ENOS e latitude ilustrando o ciclo sazonal (convenções didáticas de desenho, sem velocidades ou latitudes universais absolutas); SALLJ (~850 hPa) em traçado único esquemático de canalização meridional de umidade amazônica (Jones et al. 2023). Sem jato polar e sem velocidades pontuais arbitrárias.
+            <b>Jatos e Transporte (Base Visual Permanente):</b> Jato Subtropical (~200 hPa) em traçado único qualitativo de referência conceitual, com espessura ilustrando a modulação pelo ENOS e latitude ilustrando o ciclo sazonal (convenções didáticas de desenho, sem velocidades ou latitudes universais absolutas); SALLJ (~850 hPa) com dipolo ZCAS × SESA (Liebmann et al. 2004; Nogués-Paegle & Mo 1997). Sem jato polar e sem velocidades pontuais arbitrárias.
           </div>
           <div>
             <b>Teleconexão PSA:</b> Guia conceitual de propagação de ondas de Rossby em arco de grande círculo exibido exclusivamente nas combinações com mecanismo dinâmico verificado na literatura (Fernandes & Grimm 2023; Roy et al. 2025), sem posições fictícias de centros anômalos nem defasagens temporais fixadas universalmente.
@@ -703,7 +703,7 @@
       </div>
 
       <p class="muted" style="margin-top:10px;">
-        Base cartográfica: Natural Earth. ZCAS e SESA (porção sul da Bacia do Prata) permanecem visíveis como referências espaciais permanentes. Ausência de destaque gráfico indica resultado não representado nesta síntese documental, não efeito zero.
+        Base cartográfica: Natural Earth. ZCAS e SESA permanecem visíveis como referências espaciais permanentes. Ausência de destaque gráfico indica resultado não representado nesta síntese documental, não efeito zero.
       </p>
     </section>
 
@@ -913,12 +913,12 @@
 </div>
 </main>
 
-<script src="world-land.js?v=20260927i"></script>
-<script src="map-regions.js?v=20260927i"></script>
-<script src="documented-cases.js?v=20260927i"></script>
-<script src="rmm-diagram.js?v=20260927i"></script>
-<script src="documented-view.js?v=20260927i"></script>
-<script src="panels-manager.js?v=20260927i"></script>
-<script src="forecast-sesa.js?v=20260927i"></script>
+<script src="world-land.js?v=20260927j"></script>
+<script src="map-regions.js?v=20260927j"></script>
+<script src="documented-cases.js?v=20260927j"></script>
+<script src="rmm-diagram.js?v=20260927j"></script>
+<script src="documented-view.js?v=20260927j"></script>
+<script src="panels-manager.js?v=20260927j"></script>
+<script src="forecast-sesa.js?v=20260927j"></script>
 </body>
 </html>

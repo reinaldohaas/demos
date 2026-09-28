@@ -19,10 +19,11 @@ const DOCUMENTED_CASES = [
     regionName: 'ZCAS',
     sign: 'positivo',
     chance: 'pico de chuva na ZCAS',
-    text: 'Pico na ZCAS em La Niña (fase 8). Mecanismo: trem de ondas PSA excitado por convecção reforçada no Pacífico Sul subtropical centro-leste (fases 7+8).',
+    text: 'Pico na ZCAS em La Niña (fase 8). Mecanismo: trem de ondas PSA excitado por convecção reforçada no Pacífico Sul subtropical centro-leste (fases 7+8); fluxo de umidade da Amazônia para a ZCAS e divergência de umidade no SESA (Fernandes & Grimm 2023).',
     source_convection: 'Convecção reforçada no Pacífico Sul subtropical centro-leste (fases 7+8)',
     sourceMarker: { lat: -25, lon: -125, label: 'fonte: convecção subtropical (fases 7+8)' },
-    source: 'Fernandes & Grimm (2023), Journal of Climate'
+    source: 'Fernandes & Grimm (2023), Journal of Climate',
+    authorSectorDef: 'Fernandes & Grimm (2023) definem CESA (centro-leste da América do Sul, englobando a ZCAS) e o setor médio/baixo Paraná–Prata (SESA).'
   },
   {
     id: 'DJF-el-nino-1',
@@ -35,10 +36,41 @@ const DOCUMENTED_CASES = [
     regionName: 'ZCAS',
     sign: 'positivo',
     chance: 'pico de chuva na ZCAS (uma fase depois)',
-    text: 'Pico na ZCAS em El Niño (fase 1, uma fase depois que em La Niña). Mecanismo: fonte de convecção subtropical no Pacífico Sul centro-leste deslocada um pouco mais a leste (fases 8+1).',
+    text: 'Pico na ZCAS em El Niño (fase 1, uma fase depois que em La Niña). Mecanismo: fonte de convecção subtropical no Pacífico Sul centro-leste deslocada um pouco mais a leste (fases 8+1); fluxo de umidade da Amazônia para a ZCAS e divergência de umidade no SESA (Fernandes & Grimm 2023).',
     source_convection: 'Convecção reforçada no Pacífico Sul subtropical centro-leste, um pouco mais a leste (fases 8+1)',
     sourceMarker: { lat: -25, lon: -110, label: 'fonte: convecção subtropical (fases 8+1)' },
-    source: 'Fernandes & Grimm (2023), Journal of Climate'
+    source: 'Fernandes & Grimm (2023), Journal of Climate',
+    authorSectorDef: 'Fernandes & Grimm (2023) definem CESA (centro-leste da América do Sul, englobando a ZCAS) e o setor médio/baixo Paraná–Prata (SESA).'
+  },
+  {
+    id: 'DJF-el-nino-3',
+    season: 'DJF',
+    enso: 'el-nino',
+    phase: 3,
+    label: 'DJF · El Niño · Fase 3 — pico de extremos no SESA (Fernandes & Grimm 2023)',
+    shortLabel: 'Fernandes & Grimm · El Niño 3 — pico no SESA',
+    region: 'SESA',
+    regionName: 'SESA',
+    sign: 'positivo',
+    chance: 'pico de extremos no SESA',
+    text: 'Pico de extremos no SESA em El Niño (fase 3). Mecanismo: par ciclone–anticiclone do El Niño em 200 hPa projeta-se na circulação da fase 3 e adianta o reforço; Hadley anômala do El Niño favorece chuva no SESA.',
+    source: 'Fernandes & Grimm (2023), Journal of Climate, pp. 7731–7734',
+    authorSectorDef: 'Fernandes & Grimm (2023) delimitam o setor médio/baixo Paraná–Prata (SESA).'
+  },
+  {
+    id: 'DJF-neutro-4',
+    season: 'DJF',
+    enso: 'neutro',
+    phase: 4,
+    label: 'DJF · Neutro · Fase 4 — maior aumento de extremos no SESA (Fernandes & Grimm 2023)',
+    shortLabel: 'Fernandes & Grimm · Neutro 4 — maior aumento no SESA',
+    region: 'SESA',
+    regionName: 'SESA',
+    sign: 'positivo',
+    chance: 'maior aumento de extremos no SESA',
+    text: 'Maior aumento de extremos no SESA no neutro (fase 4). Mecanismo: convecção suprimida no Pacífico central equatorial e no Pacífico Sul subtropical centro-leste; teleconexão invertida.',
+    source: 'Fernandes & Grimm (2023), Journal of Climate, pp. 7731–7734',
+    authorSectorDef: 'Fernandes & Grimm (2023) delimitam o setor médio/baixo Paraná–Prata (SESA).'
   },
 
   // =========================================================================
@@ -54,16 +86,17 @@ const DOCUMENTED_CASES = [
     phase: 3,
     groupedPhases: [3, 4],
     groupedPhase: '3–4',
-    label: 'DJF · Fases 3–4 — Bacia do Prata (Alvarez et al. 2016)',
-    shortLabel: 'Alvarez · 3–4 — mais chance de semana chuvosa (Bacia do Prata)',
+    label: 'DJF · Fases 3–4 — SESA (Alvarez et al. 2016)',
+    shortLabel: 'Alvarez · 3–4 — mais chance de semana chuvosa (SESA)',
     region: 'SESA',
-    regionName: 'Bacia do Prata',
+    regionName: 'SESA',
     sign: 'positivo',
-    chance: 'mais chance de semana chuvosa',
-    text: 'Mais chance de semana chuvosa na Bacia do Prata. Mecanismos: tropical com convergência em altos níveis (χ₂₀₀ > 0 / subsidência sobre a AS tropical) e extratropical com centro ciclônico C sobre a AS subtropical/extratropical (~38°S 62°W).',
+    chance: 'mais chance de semana chuvosa (SESA)',
+    text: 'Mais chance de semana chuvosa no SESA. Mecanismos: tropical com convergência em altos níveis (χ₂₀₀ > 0 / subsidência sobre a AS tropical) e extratropical com centro ciclônico C sobre a AS subtropical/extratropical (~38°S 62°W).',
     tropicalChi: 'convergencia', // χ > 0 sobre a AS
     extratropical: { type: 'C', lat: -38, lon: -62, desc: 'C sobre a AS subtropical/extratropical (~38°S 62°W)' },
-    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics'
+    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics',
+    authorSectorDef: 'Alvarez et al. (2016) analisam precipitação semanal no setor sul-subtropical (referenciado aqui no setor SESA).'
   },
   {
     id: 'DJF-alvarez-8-1',
@@ -77,11 +110,12 @@ const DOCUMENTED_CASES = [
     region: 'ZCAS',
     regionName: 'ZCAS',
     sign: 'positivo',
-    chance: 'mais chance de semana chuvosa',
+    chance: 'mais chance de semana chuvosa (ZCAS)',
     text: 'Mais chance de semana chuvosa na ZCAS. Mecanismos: tropical com divergência em altos níveis (χ₂₀₀ < 0 / subida sobre a AS tropical) e extratropical com centro anticiclônico A no extremo sul (~50°S 68°W).',
     tropicalChi: 'divergencia', // χ < 0 sobre a AS
     extratropical: { type: 'A', lat: -50, lon: -68, desc: 'A no extremo sul (~50°S 68°W)' },
-    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics'
+    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics',
+    authorSectorDef: 'Alvarez et al. (2016) analisam precipitação semanal no setor da ZCAS.'
   },
 
   // --- MAM (OUTONO AUSTRAL) ---
@@ -92,17 +126,18 @@ const DOCUMENTED_CASES = [
     phase: 1,
     groupedPhases: [1],
     groupedPhase: '1',
-    label: 'MAM · Fase 1 — Leste do Brasil (Alvarez et al. 2016)',
-    shortLabel: 'Alvarez · 1 — mais chance de semana chuvosa (Leste do Brasil)',
-    region: 'LESTE',
-    regionName: 'Leste do Brasil',
+    label: 'MAM · Fase 1 — ZCAS (Alvarez et al. 2016)',
+    shortLabel: 'Alvarez · 1 — mais chance de semana chuvosa (ZCAS)',
+    region: 'ZCAS',
+    regionName: 'ZCAS',
     anchor: [-40, -14],
     sign: 'positivo',
-    chance: 'mais chance de semana chuvosa',
-    text: 'Mais chance de semana chuvosa no leste do Brasil. Mecanismos: tropical com divergência em altos níveis (χ₂₀₀ < 0 / subida sobre a AS tropical) e extratropical com centro ciclônico C sobre a Bacia do Prata (~30°S 55°W).',
+    chance: 'mais chance de semana chuvosa (ZCAS)',
+    text: 'Mais chance de semana chuvosa na ZCAS (descrito no artigo original como leste do Brasil). Mecanismos: tropical com divergência em altos níveis (χ₂₀₀ < 0 / subida sobre a AS tropical) e extratropical com centro ciclônico C sobre o SESA (~30°S 55°W).',
     tropicalChi: 'divergencia', // χ < 0 sobre a AS
-    extratropical: { type: 'C', lat: -30, lon: -55, desc: 'C sobre a Bacia do Prata (~30°S 55°W)' },
-    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics'
+    extratropical: { type: 'C', lat: -30, lon: -55, desc: 'C sobre o SESA (~30°S 55°W)' },
+    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics',
+    authorSectorDef: 'Alvarez et al. (2016) identificam o padrão como leste do Brasil (referenciado aqui no setor ZCAS).'
   },
 
   // --- JJA (INVERNO AUSTRAL) ---
@@ -113,17 +148,18 @@ const DOCUMENTED_CASES = [
     phase: 8,
     groupedPhases: [8],
     groupedPhase: '8',
-    label: 'JJA · Fase 8 — Sudeste do Brasil (Alvarez et al. 2016)',
-    shortLabel: 'Alvarez · 8 — mais chance de semana chuvosa (Sudeste do Brasil)',
-    region: 'SUDESTE',
-    regionName: 'Sudeste do Brasil',
+    label: 'JJA · Fase 8 — ZCAS (Alvarez et al. 2016)',
+    shortLabel: 'Alvarez · 8 — mais chance de semana chuvosa (ZCAS)',
+    region: 'ZCAS',
+    regionName: 'ZCAS',
     anchor: [-46, -23],
     sign: 'positivo',
-    chance: 'mais chance de semana chuvosa',
-    text: 'Mais chance de semana chuvosa no sudeste do Brasil. Mecanismo extratropical: centro ciclônico C no leste da AS subtropical (~25°S 45°W).',
+    chance: 'mais chance de semana chuvosa (ZCAS)',
+    text: 'Mais chance de semana chuvosa na ZCAS (descrito no artigo original como sudeste do Brasil). Mecanismo extratropical: centro ciclônico C no leste da AS subtropical (~25°S 45°W).',
     tropicalChi: null,
     extratropical: { type: 'C', lat: -25, lon: -45, desc: 'C no leste da AS subtropical (~25°S 45°W)' },
-    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics'
+    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics',
+    authorSectorDef: 'Alvarez et al. (2016) identificam o padrão como sudeste do Brasil (referenciado aqui no setor ZCAS).'
   },
 
   // --- SON (PRIMAVERA AUSTRAL) ---
@@ -139,12 +175,13 @@ const DOCUMENTED_CASES = [
     region: 'ZCAS',
     regionName: 'ZCAS',
     sign: 'positivo',
-    chance: 'mais chance de semana chuvosa',
+    chance: 'mais chance de semana chuvosa (ZCAS)',
     note: 'O índice de OLR adianta o RMM em uma fase nesta estação.',
     text: 'Mais chance de semana chuvosa na ZCAS. Mecanismos: tropical com divergência em altos níveis (χ₂₀₀ < 0 / subida sobre a AS tropical) e extratropical com centro ciclônico C em torno de 20°S (~20°S 50°W). Nota em SON: o índice de OLR adianta o RMM em uma fase nesta estação.',
     tropicalChi: 'divergencia', // χ < 0 sobre a AS
     extratropical: { type: 'C', lat: -20, lon: -50, desc: 'C em torno de 20°S (~20°S 50°W)' },
-    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics'
+    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics',
+    authorSectorDef: 'Alvarez et al. (2016) analisam precipitação semanal no setor da ZCAS.'
   },
   {
     id: 'SON-alvarez-1',
@@ -153,17 +190,18 @@ const DOCUMENTED_CASES = [
     phase: 1,
     groupedPhases: [1],
     groupedPhase: '1',
-    label: 'SON · Fase 1 — Bacia do Prata (Alvarez et al. 2016)',
-    shortLabel: 'Alvarez · 1 — mais chance de semana chuvosa (Bacia do Prata)',
+    label: 'SON · Fase 1 — SESA (Alvarez et al. 2016)',
+    shortLabel: 'Alvarez · 1 — mais chance de semana chuvosa (SESA)',
     region: 'SESA',
-    regionName: 'Bacia do Prata',
+    regionName: 'SESA',
     sign: 'positivo',
-    chance: 'mais chance de semana chuvosa',
+    chance: 'mais chance de semana chuvosa (SESA)',
     note: 'O índice de OLR adianta o RMM em uma fase nesta estação.',
-    text: 'Mais chance de semana chuvosa na Bacia do Prata. Mecanismo extratropical: centro ciclônico C na AS subtropical (~30°S 60°W), vindo do oeste da Península Antártica (fase 7). Nota em SON: o índice de OLR adianta o RMM em uma fase nesta estação.',
+    text: 'Mais chance de semana chuvosa no SESA. Mecanismo extratropical: centro ciclônico C na AS subtropical (~30°S 60°W), vindo do oeste da Península Antártica (fase 7). Nota em SON: o índice de OLR adianta o RMM em uma fase nesta estação.',
     tropicalChi: null,
     extratropical: { type: 'C', lat: -30, lon: -60, desc: 'C na AS subtropical (~30°S 60°W), vindo do oeste da Península Antártica (fase 7)' },
-    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics'
+    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics',
+    authorSectorDef: 'Alvarez et al. (2016) analisam precipitação semanal no setor sul-subtropical (referenciado aqui no setor SESA).'
   }
 ];
 

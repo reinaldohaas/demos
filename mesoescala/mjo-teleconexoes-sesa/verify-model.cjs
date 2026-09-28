@@ -6,11 +6,13 @@ const assert = require('assert/strict');
 // 1. Integridade da Base Curada (documented-cases.js)
 const casesModule = require(path.join(__dirname, 'documented-cases.js'));
 const cases = casesModule.DOCUMENTED_CASES || casesModule;
-assert.equal(cases.length, 8, 'A base deve conter exatamente os 8 casos autorizados');
+assert.equal(cases.length, 10, 'A base deve conter exatamente os 10 casos autorizados');
 
 const expectedIds = [
   'DJF-la-nina-8',
   'DJF-el-nino-1',
+  'DJF-el-nino-3',
+  'DJF-neutro-4',
   'DJF-alvarez-3-4',
   'DJF-alvarez-8-1',
   'MAM-alvarez-1',
@@ -18,24 +20,30 @@ const expectedIds = [
   'SON-alvarez-7-8',
   'SON-alvarez-1'
 ];
-assert.deepEqual(cases.map(c => c.id).sort(), expectedIds.sort(), 'Os IDs dos 8 casos devem corresponder exatamente aos autorizados');
+assert.deepEqual(cases.map(c => c.id).sort(), expectedIds.sort(), 'Os IDs dos 10 casos devem corresponder exatamente aos autorizados');
 
 for (const c of cases) {
   assert(['DJF', 'MAM', 'JJA', 'SON'].includes(c.season), `Estação válida para ${c.id}`);
-  assert(['el-nino', 'la-nina', 'todos'].includes(c.enso), `ENOS válido para ${c.id}`);
+  assert(['el-nino', 'la-nina', 'neutro', 'todos'].includes(c.enso), `ENOS válido para ${c.id}`);
   assert(Number(c.phase) >= 1 && Number(c.phase) <= 8, `Fase MJO válida para ${c.id}`);
   assert.equal(c.sign, 'positivo', `Somente casos com sinal aumentado ("mais") autorizados (${c.id})`);
   assert(typeof c.chance === 'string' && c.chance.length > 5, `Rótulo de chance presente para ${c.id}`);
   assert(typeof c.text === 'string' && c.text.length > 15, `Texto de síntese física presente para ${c.id}`);
   assert(typeof c.source === 'string' && c.source.length > 10, `Fonte identificada para ${c.id}`);
 
+  // Regiões estritamente SESA ou ZCAS
+  assert(['SESA', 'ZCAS'].includes(c.region), `Região deve ser estritamente SESA ou ZCAS para ${c.id} (atual: ${c.region})`);
+  assert(['SESA', 'ZCAS'].includes(c.regionName), `Nome da região deve ser estritamente SESA ou ZCAS para ${c.id} (atual: ${c.regionName})`);
+  assert(typeof c.authorSectorDef === 'string' && c.authorSectorDef.length > 15, `authorSectorDef presente para ${c.id}`);
+
   // Verificar mecanismos
   if (c.id.includes('alvarez')) {
     assert(c.extratropical && ['C', 'A'].includes(c.extratropical.type), `Centro extratropical C ou A obrigatório para ${c.id}`);
     assert(Number.isFinite(c.extratropical.lat) && Number.isFinite(c.extratropical.lon), `Coordenadas extratropicais válidas para ${c.id}`);
   }
-  if (c.id.includes('fernandes') || c.id.includes('DJF-la-nina') || c.id.includes('DJF-el-nino')) {
+  if (c.id === 'DJF-la-nina-8' || c.id === 'DJF-el-nino-1') {
     assert(c.sourceMarker && Number.isFinite(c.sourceMarker.lat) && Number.isFinite(c.sourceMarker.lon), `Marcador qualitativo de fonte obrigatório para ${c.id}`);
+    assert(c.text.includes('fluxo de umidade da Amazônia para a ZCAS e divergência de umidade no SESA (Fernandes & Grimm 2023)'), `Mecanismo de divergência no SESA e umidade da Amazônia presente para ${c.id}`);
   }
 }
 
@@ -221,10 +229,10 @@ assert.equal(elements.ensoGroup.style.display, '', 'Caso Fernandes & Grimm mant�
 assert(elements.caseTitle.textContent.includes('La Niña'), 'Título deve indicar La Niña');
 
 // 8. Teste do SALLJ Direcional em DJF
-// Prata (DJF 3 ou 4) -> SALLJ para o sul (Bacia do Prata)
+// SESA (DJF 3 ou 4) -> SALLJ para o sul (SESA)
 sandbox.setClimateState({ season: 'DJF', enso: 'neutro', phase: 3, amplitude: 1.5 });
-const salljLegend = createdElements.some(el => el.textContent && el.textContent.includes('alternância ZCAS × Prata (Nogués-Paegle & Mo 1997)'));
-assert(salljLegend, 'SALLJ deve incluir a legenda de alternância ZCAS x Prata');
+const salljLegend = createdElements.some(el => el.textContent && el.textContent.includes('dipolo ZCAS × SESA (Liebmann 2004; Nogués-Paegle & Mo 1997)'));
+assert(salljLegend, 'SALLJ deve incluir a legenda do dipolo ZCAS x SESA com Liebmann 2004 e Nogués-Paegle & Mo 1997');
 const pathPrata = createdElements.find(el => el.attributes && el.attributes.stroke === '#34d399');
 assert(pathPrata && pathPrata.attributes.d, 'Caminho do SALLJ deve existir para fase 3');
 
@@ -275,20 +283,44 @@ assert(!sstEllipseInAlvarez, 'No evento Alvarez não deve desenhar elipse de TSM
 assert(elements.sstText.textContent.includes('Composição de todos os anos'), 'Texto da TSM deve indicar composição de todos os anos no evento Alvarez');
 assert(!elements.sstBand.className.includes('warm') && !elements.sstBand.className.includes('cold'), 'sstBand não deve ter classe warm ou cold no evento Alvarez');
 
-// 11. Teste da Narrativa do SALLJ para ZCAS
+// 11. Teste da Narrativa do SALLJ (Liebmann et al. 2004; Nogués-Paegle & Mo 1997)
 sandbox.setClimateState({ season: 'DJF', enso: 'la-nina', phase: 8, amplitude: 1.5 });
 const narZcas = elements.narrationText.textContent;
-assert(narZcas.includes('curva para leste/nordeste, em direção ao setor ZCAS (Nogués-Paegle & Mo 1997).'), 'Narrativa deve usar a frase solicitada para o SALLJ ZCAS');
-assert(!narZcas.includes('reforçando a convergência de umidade sobre o Sudeste'), 'Narrativa NÃO deve conter "reforçando a convergência de umidade sobre o Sudeste"');
+assert(narZcas.includes('curva para leste/nordeste, em direção ao setor ZCAS'), 'Narrativa deve indicar curva para ZCAS');
+assert(narZcas.includes('Liebmann et al. 2004; dipolo: Nogués-Paegle & Mo 1997'), 'Narrativa do SALLJ deve citar Liebmann et al. 2004 e Nogués-Paegle & Mo 1997');
+
+sandbox.setClimateState({ season: 'DJF', enso: 'el-nino', phase: 3, amplitude: 1.5 });
+const narSesa = elements.narrationText.textContent;
+assert(narSesa.includes('atua direcionado até o SESA'), 'Narrativa deve indicar SALLJ direcionado até o SESA');
+assert(narSesa.includes('Liebmann et al. 2004; dipolo: Nogués-Paegle & Mo 1997'), 'Narrativa deve citar Liebmann et al. 2004 e Nogués-Paegle & Mo 1997 no SESA');
+
+// 12. Teste da Nota de La Niña em DJF (fases 2–8)
+sandbox.setClimateState({ season: 'DJF', enso: 'la-nina', phase: 4, amplitude: 1.5 });
+const narLaNina = elements.narrationText.textContent;
+assert(narLaNina.includes('extremos no SESA diminuem mesmo quando a chuva média aumenta (subsidência favorecida pela La Niña)'), 'Nota La Niña (DJF fases 2-8) deve estar presente na narração');
+
+// 13. Teste da Nota de Inverno em JJA
+sandbox.setClimateState({ season: 'JJA', enso: 'neutro', phase: 1, amplitude: 1.5 });
+const narJja = elements.narrationText.textContent;
+assert(narJja.includes('No inverno, extremos no SESA ligam-se a um ciclone travado por anticiclone perto da Península Antártica (Alvarez et al. 2013)'), 'Nota de inverno JJA deve estar presente na narração');
+
+// 14. Teste dos Novos Eventos (El Niño 3 e Neutro 4)
+sandbox.selectEvent('DJF-el-nino-3');
+assert.equal(elements.caseTitle.textContent.includes('El Niño'), true, 'DJF-el-nino-3 deve carregar evento El Niño');
+assert.equal(elements.ensoGroup.style.display, '', 'ENOS visível em DJF-el-nino-3');
+
+sandbox.selectEvent('DJF-neutro-4');
+assert.equal(elements.caseTitle.textContent.includes('Neutro'), true, 'DJF-neutro-4 deve carregar evento Neutro');
 
 console.log('====================================================');
 console.log('TODAS AS VALIDAÇÕES AUTOMATIZADAS PASSARAM COM SUCESSO:');
-console.log('1. 8 casos documentados autorizados (só mais, só mecanismo físico).');
-console.log('2. ZERO ocorrências de "metric" nos arquivos de produção.');
-console.log('3. Seletor de ENOS oculto em eventos Alvarez e restaurado na interação manual.');
-console.log('4. SALLJ direcional validado (Prata vs ZCAS vs neutro) e narrativa corrigida.');
-console.log('5. χ200 Deemer com tabela única e losangos (zero elipses).');
-console.log('6. Evento Alvarez sem elipse de TSM e rótulo "composição de todos os anos".');
-console.log('7. 1536 configurações de sandbox executadas sem erros.');
+console.log('1. 10 casos documentados autorizados (só mais, só mecanismo físico).');
+console.log('2. Regiões estritamente SESA e ZCAS (sem Bacia do Prata, leste ou sudeste).');
+console.log('3. ZERO ocorrências de "metric" nos arquivos de produção.');
+console.log('4. Seletor de ENOS oculto em eventos Alvarez e restaurado na interação manual.');
+console.log('5. SALLJ direcional citando Liebmann et al. (2004) e Nogués-Paegle & Mo (1997).');
+console.log('6. Notas de La Niña (DJF 2-8), inverno (JJA) e recortes de setores validados.');
+console.log('7. χ200 Deemer com tabela única e losangos (zero elipses).');
+console.log('8. 1536 configurações de sandbox executadas sem erros.');
 console.log('====================================================');
 

@@ -597,11 +597,11 @@ function drawGlobalContext(evidence) {
 
 function drawSallj() {
   const p = Number(currentPhase);
-  let salljMode = 'neutro'; // 'prata' | 'zcas' | 'neutro'
+  let salljMode = 'neutro'; // 'sesa' | 'zcas' | 'neutro'
 
   if (currentSeason === 'DJF') {
     if (p === 3 || p === 4) {
-      salljMode = 'prata';
+      salljMode = 'sesa';
     } else if (p === 8 || p === 1) {
       salljMode = 'zcas';
     }
@@ -611,8 +611,8 @@ function drawSallj() {
   let midPt, endPt;
   let arrowAngle = 0;
 
-  if (salljMode === 'prata') {
-    // Caso com mais chuva na Bacia do Prata (DJF 3–4): seta até a Bacia do Prata
+  if (salljMode === 'sesa') {
+    // Caso com mais chuva no SESA (DJF 3–4): seta até o SESA
     midPt = project(-61, -22.5);
     endPt = project(-58, -28.5);
     arrowAngle = Math.atan2(endPt[1] - midPt[1], endPt[0] - midPt[0]);
@@ -662,7 +662,7 @@ function drawSallj() {
     x: subX, y: subY,
     fill: '#a7f3d0', 'font-size': 9.5, 'font-weight': '600', 'text-anchor': anchor,
     stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
-  }, 'alternância ZCAS × Prata (Nogués-Paegle & Mo 1997)');
+  }, 'dipolo ZCAS × SESA (Liebmann 2004; Nogués-Paegle & Mo 1997)');
 }
 
 function drawJets() {
@@ -970,14 +970,24 @@ function generateNarrationText(season, enso, phase, evidence) {
     text += `Nas estações de transição sazonal (MAM e SON), o traçado do jato posiciona-se em torno de 29 a 30 graus sul. `;
   }
 
-  // SALLJ direcional (só DJF; Nogués-Paegle & Mo 1997)
+  // SALLJ direcional (Liebmann et al. 2004; Nogués-Paegle & Mo 1997)
   const p = Number(phase);
   if (season === 'DJF' && (p === 3 || p === 4)) {
-    text += `Em baixos níveis, o SALLJ (~850 hPa) atua direcionado até a Bacia do Prata, intensificando a advecção de umidade amazônica para o sul (Nogués-Paegle & Mo 1997). `;
+    text += `Em baixos níveis, o SALLJ (~850 hPa) atua direcionado até o SESA. Jato forte favorece chuva e extremos no SESA; jato fraco favorece a ZCAS; a fase do trem de ondas ao cruzar os Andes decide o lado (Liebmann et al. 2004; dipolo: Nogués-Paegle & Mo 1997). `;
   } else if (season === 'DJF' && (p === 8 || p === 1)) {
-    text += `Em baixos níveis, o SALLJ (~850 hPa) curva para leste/nordeste, em direção ao setor ZCAS (Nogués-Paegle & Mo 1997). `;
+    text += `Em baixos níveis, o SALLJ (~850 hPa) curva para leste/nordeste, em direção ao setor ZCAS. Jato fraco para o sul favorece a ZCAS; a fase do trem de ondas ao cruzar os Andes decide o lado (Liebmann et al. 2004; dipolo: Nogués-Paegle & Mo 1997). `;
   } else {
-    text += `Em baixos níveis, o SALLJ (~850 hPa) atua no traçado neutro ao longo dos Andes. `;
+    text += `Em baixos níveis, o SALLJ (~850 hPa) atua no traçado neutro ao longo dos Andes (dipolo ZCAS × SESA: Liebmann et al. 2004; Nogués-Paegle & Mo 1997). `;
+  }
+
+  // Nota de La Niña em DJF (fases 2–8)
+  if (season === 'DJF' && enso === 'la-nina' && p >= 2 && p <= 8) {
+    text += `Nota de La Niña: extremos no SESA diminuem mesmo quando a chuva média aumenta (subsidência favorecida pela La Niña). `;
+  }
+
+  // Nota de inverno em JJA
+  if (season === 'JJA') {
+    text += `No inverno, extremos no SESA ligam-se a um ciclone travado por anticiclone perto da Península Antártica (Alvarez et al. 2013); a relação com as fases da MJO não foi estabelecida. `;
   }
 
   // 2. Efeitos verificados e mecanismos dos autores
@@ -1054,15 +1064,6 @@ function formatTextForSpeech(raw) {
   // CESA sem duplicar "região"
   s = s.replace(/(?<!região\s+)\bCESA\b/g, 'região CESA');
 
-  // SESA = Bacia do Prata (preposições tratadas antes da regra geral, preservando caixa alta)
-  s = s.replace(/\b(no)\s+SESA\b/gi, (_, a) => (a === 'No' ? 'Na' : 'na') + ' Bacia do Prata');
-  s = s.replace(/\b(do)\s+SESA\b/gi, (_, a) => (a === 'Do' ? 'Da' : 'da') + ' Bacia do Prata');
-  s = s.replace(/\b(ao)\s+SESA\b/gi, (_, a) => (a === 'Ao' ? 'À' : 'à') + ' Bacia do Prata');
-  s = s.replace(/\b(pelo)\s+SESA\b/gi, (_, a) => (a === 'Pelo' ? 'Pela' : 'pela') + ' Bacia do Prata');
-  s = s.replace(/\b(para\s+o)\s+SESA\b/gi, (_, a) => (a[0] === 'P' ? 'Para a' : 'para a') + ' Bacia do Prata');
-  s = s.replace(/\b(sobre\s+o)\s+SESA\b/gi, (_, a) => (a[0] === 'S' ? 'Sobre a' : 'sobre a') + ' Bacia do Prata');
-  s = s.replace(/\b(o)\s+SESA\b/gi, (_, a) => (a === 'O' ? 'A' : 'a') + ' Bacia do Prata');
-  s = s.replace(/(?<!Bacia\s+(?:do\s+|da\s+|de\s+)?)\bSESA\b/g, 'Bacia do Prata');
 
   s = s.replace(/\bNorthern\b/g, 'Norte');
 
@@ -1310,6 +1311,13 @@ function update() {
     const sDesc = document.createElement('p');
     sDesc.textContent = specific.text;
     sBlock.appendChild(sDesc);
+    if (specific.authorSectorDef) {
+      const sDef = document.createElement('p');
+      sDef.className = 'muted';
+      sDef.style.marginTop = '4px';
+      sDef.innerHTML = `<strong>Definição do autor:</strong> ${specific.authorSectorDef}`;
+      sBlock.appendChild(sDef);
+    }
     $('result').appendChild(sBlock);
 
     // 2. Média de todos os anos (Alvarez et al.)
@@ -1332,6 +1340,13 @@ function update() {
     const aDesc = document.createElement('p');
     aDesc.textContent = alvarez.text;
     aBlock.appendChild(aDesc);
+    if (alvarez.authorSectorDef) {
+      const aDef = document.createElement('p');
+      aDef.className = 'muted';
+      aDef.style.marginTop = '4px';
+      aDef.innerHTML = `<strong>Definição do autor:</strong> ${alvarez.authorSectorDef}`;
+      aBlock.appendChild(aDef);
+    }
     $('result').appendChild(aBlock);
   } else if (specific) {
     const sBlock = document.createElement('div');
@@ -1343,6 +1358,13 @@ function update() {
     const sDesc = document.createElement('p');
     sDesc.textContent = specific.text;
     sBlock.appendChild(sDesc);
+    if (specific.authorSectorDef) {
+      const sDef = document.createElement('p');
+      sDef.className = 'muted';
+      sDef.style.marginTop = '4px';
+      sDef.innerHTML = `<strong>Definição do autor:</strong> ${specific.authorSectorDef}`;
+      sBlock.appendChild(sDef);
+    }
     $('result').appendChild(sBlock);
   } else if (alvarez) {
     const aBlock = document.createElement('div');
@@ -1361,6 +1383,13 @@ function update() {
     const aDesc = document.createElement('p');
     aDesc.textContent = alvarez.text;
     aBlock.appendChild(aDesc);
+    if (alvarez.authorSectorDef) {
+      const aDef = document.createElement('p');
+      aDef.className = 'muted';
+      aDef.style.marginTop = '4px';
+      aDef.innerHTML = `<strong>Definição do autor:</strong> ${alvarez.authorSectorDef}`;
+      aBlock.appendChild(aDef);
+    }
     $('result').appendChild(aBlock);
   } else {
     const val = document.createElement('p');
@@ -1371,6 +1400,50 @@ function update() {
     desc.textContent = `Não há caso específico catalogado para ${currentSeason} · ${ensoLabel} · Fase ${currentPhase} nesta síntese documental. As feições da base continuam disponíveis para análise no sandbox.`;
     $('result').appendChild(desc);
   }
+
+  // Nota de La Niña em DJF (fases 2–8)
+  const pVal = Number(currentPhase);
+  if (currentSeason === 'DJF' && currentEnso === 'la-nina' && pVal >= 2 && pVal <= 8) {
+    const lnBox = document.createElement('div');
+    lnBox.className = 'card-note';
+    lnBox.style.marginTop = '10px';
+    lnBox.style.padding = '8px 10px';
+    lnBox.style.background = 'rgba(37, 99, 235, 0.15)';
+    lnBox.style.borderLeft = '3px solid #60a5fa';
+    lnBox.style.borderRadius = '4px';
+    lnBox.style.fontSize = '12px';
+    lnBox.style.lineHeight = '1.45';
+    lnBox.innerHTML = '<strong>Nota La Niña (DJF, fases 2–8):</strong> extremos no SESA diminuem mesmo quando a chuva média aumenta (subsidência favorecida pela La Niña).';
+    $('result').appendChild(lnBox);
+  }
+
+  // Nota de Inverno em JJA
+  if (currentSeason === 'JJA') {
+    const jjaBox = document.createElement('div');
+    jjaBox.className = 'card-note';
+    jjaBox.style.marginTop = '10px';
+    jjaBox.style.padding = '8px 10px';
+    jjaBox.style.background = 'rgba(56, 189, 248, 0.12)';
+    jjaBox.style.borderLeft = '3px solid #38bdf8';
+    jjaBox.style.borderRadius = '4px';
+    jjaBox.style.fontSize = '12px';
+    jjaBox.style.lineHeight = '1.45';
+    jjaBox.innerHTML = '<strong>Nota de inverno (JJA):</strong> No inverno, extremos no SESA ligam-se a um ciclone travado por anticiclone perto da Península Antártica (Alvarez et al. 2013); a relação com as fases da MJO não foi estabelecida.';
+    $('result').appendChild(jjaBox);
+  }
+
+  // Nota fixa dos setores (recortes por autor)
+  const sectorBox = document.createElement('div');
+  sectorBox.className = 'card-note';
+  sectorBox.style.marginTop = '12px';
+  sectorBox.style.padding = '8px 10px';
+  sectorBox.style.background = 'rgba(14, 165, 233, 0.08)';
+  sectorBox.style.borderLeft = '3px solid var(--accent-teal)';
+  sectorBox.style.borderRadius = '4px';
+  sectorBox.style.fontSize = '11.5px';
+  sectorBox.style.lineHeight = '1.45';
+  sectorBox.innerHTML = '<strong>Recortes dos setores:</strong> SESA e ZCAS têm recortes diferentes conforme o autor: Fernandes & Grimm usam CESA (inclui a ZCAS) e o médio/baixo Paraná–Prata; Liebmann et al. usam os pontos 30°S 60°W e 20°S 45°W; Muza et al. chamam de SEBr a ZCAS continental. O mapa mostra os setores calculados por R. Haas.';
+  $('result').appendChild(sectorBox);
 
   // Faixa de TSM do ENOS
   const isAlvarezEvent = isEventMode && activeEventId && activeEventId.includes('alvarez');

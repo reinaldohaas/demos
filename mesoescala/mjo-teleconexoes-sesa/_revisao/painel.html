@@ -28,7 +28,7 @@
   
   <div class="alert">
     <h2>Lote Concluído no branch <code>revisao</code></h2>
-    <p>Todos os requisitos do lote fechado foram implementados e validados por 1536 configurações automatizadas e testes funcionais (0 erros de console, 0 ocorrências de <code>metric</code>, SALLJ direcional, toggle dinâmico de ENOS em Alvarez vs Fernandes &amp; Grimm).</p>
+    <p>Todos os requisitos do lote fechado foram implementados e validados por 1536 configurações automatizadas e testes funcionais (0 erros de console, 0 ocorrências de <code>metric</code>, nomenclatura estrita SESA e ZCAS, 10 casos curados, SALLJ acoplado com Liebmann 2004 e Nogués-Paegle &amp; Mo 1997).</p>
     <p><b>Aguardando decisão:</b> Avaliação do Reinaldo no branch <code>revisao</code> antes de qualquer merge no <code>main</code>.</p>
   </div>
 
@@ -39,38 +39,54 @@
   </p>
 
   <section>
-    <h2>Resumo das Alterações</h2>
+    <h2>Resumo das Alterações (v=20260927j)</h2>
     <ul>
-      <li><b>Base de casos curada:</b> restrita estritamente aos 8 casos autorizados com sinal aumentado ("mais") e mecanismos físicos dos autores (Alvarez et al. 2016 e Fernandes &amp; Grimm 2023).</li>
-      <li><b>Mecanismos no mapa:</b> sinal de &chi;<sub>200</sub> na América do Sul tropical, centros C e A de trem de ondas extratropicais (Alvarez et al.), marcador qualitativo de fonte subtropical (Fernandes &amp; Grimm).</li>
-      <li><b>Eliminação de <code>metric</code>:</b> seletor de métrica removido; texto único e integrado por caso; ZERO ocorrências no código de produção.</li>
-      <li><b>ENOS em Eventos de Interesse:</b> seleção de Alvarez oculta o seletor de ENOS; Fernandes &amp; Grimm fixa estação, ENOS e fase; qualquer interação manual restaura o seletor.</li>
-      <li><b>SALLJ Direcional (DJF; Nogués-Paegle &amp; Mo 1997):</b> seta direcionada à Bacia do Prata nas fases 3–4; seta curvando à ZCAS nas fases 8 e 1; neutro nas demais.</li>
-      <li><b>Trilha RMM 1–8:</b> 9 pontos de referência de Wheeler &amp; Hendon (2004, Fig. 7) com repetição e realce duplo da fase 1 em 165°W.</li>
+      <li><b>Nomenclatura estrita de setores:</b> uso exclusivo de "SESA" e "ZCAS" em eventos, painel, mapa e narração. Casos com recortes históricos mostram notas dedicadas do autor.</li>
+      <li><b>Base curada com 10 casos:</b> incluídos El Niño · Fase 3 (SESA) e Neutro · Fase 4 (SESA) documentados por Fernandes &amp; Grimm (2023, pp. 7731–7734).</li>
+      <li><b>Nota fixa de setores:</b> explicita as diferenças metodológicas entre Fernandes &amp; Grimm (CESA / Paraná–Prata), Liebmann et al., Muza et al. (SEBr) e os setores calculados por R. Haas.</li>
+      <li><b>SALLJ Direcional:</b> citação integrada de Liebmann et al. (2004) ("jato forte → chuva e extremos no SESA; jato fraco → ZCAS; a fase do trem de ondas ao cruzar os Andes decide o lado") e Nogués-Paegle &amp; Mo (1997).</li>
+      <li><b>Notas físicas essenciais:</b> alerta sobre divergência de extremos na La Niña DJF (fases 2–8) e dinâmica de bloqueio no inverno JJA (Alvarez et al. 2013).</li>
+      <li><b>&chi;<sub>200</sub> de G. Deemer:</b> losangos poligonais (4 vértices) e zero elipses.</li>
     </ul>
   </section>
 
   <section>
-    <h2>Capturas de Validação (v=20260927i)</h2>
+    <h2>Capturas de Validação (v=20260927j)</h2>
     <div class="grid-2">
       <div class="capture-card">
-        <h3>1. DJF 3–4 · Bacia do Prata (Alvarez et al. 2016)</h3>
+        <h3>1. DJF 3–4 · SESA (Alvarez et al. 2016)</h3>
         <a href="capturas/DJF_3_4_prata.png" target="_blank">
-          <img src="capturas/DJF_3_4_prata.png" alt="DJF 3-4 Bacia do Prata">
+          <img src="capturas/DJF_3_4_prata.png" alt="DJF 3-4 SESA">
         </a>
-        <p>Sem elipse de TSM do ENOS ("composição de todos os anos"), SALLJ estendido ao Prata com rótulos a oeste dos Andes sobre o Pacífico sem corte, centro ciclônico C (~38°S 62°W) desamontoado da nuvem e PSA.</p>
+        <p>Sem elipse de TSM do ENOS ("composição de todos os anos"), SALLJ estendido ao SESA com rótulos a oeste dos Andes sobre o Pacífico sem corte, centro ciclônico C (~38°S 62°W) desamontoado da nuvem e PSA.</p>
       </div>
 
       <div class="capture-card">
-        <h3>2. DJF La Niña 8 · Pico na ZCAS (Fernandes &amp; Grimm 2023)</h3>
+        <h3>2. DJF La Niña 8 · ZCAS (Fernandes &amp; Grimm 2023)</h3>
         <a href="capturas/DJF_lanina_8_zcas.png" target="_blank">
           <img src="capturas/DJF_lanina_8_zcas.png" alt="DJF La Niña 8 ZCAS">
         </a>
-        <p>SALLJ curvando para leste/nordeste em direção à ZCAS, convecção fonte subtropical desamontoada do Jato Subtropical, centro anticiclônico A (~50°S 68°W) e seletor de ENOS visível.</p>
+        <p>SALLJ curvando para leste/nordeste em direção à ZCAS, fluxo de umidade da Amazônia para a ZCAS e divergência no SESA, convecção fonte subtropical desamontoada do Jato Subtropical, centro anticiclônico A (~50°S 68°W).</p>
       </div>
 
       <div class="capture-card">
-        <h3>3. &chi;<sub>200</sub> Fase 1 · Padrão Único de G. Deemer</h3>
+        <h3>3. DJF El Niño 3 · SESA (Fernandes &amp; Grimm 2023)</h3>
+        <a href="capturas/DJF_elnino_3_sesa.png" target="_blank">
+          <img src="capturas/DJF_elnino_3_sesa.png" alt="DJF El Niño 3 SESA">
+        </a>
+        <p>Pico de extremos no SESA. Par ciclone–anticiclone do El Niño em 200 hPa reforçando a fase 3 e Hadley anômala favorecendo chuva e extremos no SESA.</p>
+      </div>
+
+      <div class="capture-card">
+        <h3>4. DJF Neutro 4 · SESA (Fernandes &amp; Grimm 2023)</h3>
+        <a href="capturas/DJF_neutro_4_sesa.png" target="_blank">
+          <img src="capturas/DJF_neutro_4_sesa.png" alt="DJF Neutro 4 SESA">
+        </a>
+        <p>Maior aumento de extremos no neutro. Convecção suprimida no Pacífico Central e trem de ondas invertido estimulando extremos sobre o SESA.</p>
+      </div>
+
+      <div class="capture-card">
+        <h3>5. &chi;<sub>200</sub> Fase 1 · Padrão Único de G. Deemer</h3>
         <a href="capturas/chi_fase1.png" target="_blank">
           <img src="capturas/chi_fase1.png" alt="chi200 Fase 1">
         </a>
@@ -78,7 +94,7 @@
       </div>
 
       <div class="capture-card">
-        <h3>4. &chi;<sub>200</sub> Fase 4 · Padrão Único de G. Deemer</h3>
+        <h3>6. &chi;<sub>200</sub> Fase 4 · Padrão Único de G. Deemer</h3>
         <a href="capturas/chi_fase4.png" target="_blank">
           <img src="capturas/chi_fase4.png" alt="chi200 Fase 4">
         </a>
@@ -86,7 +102,7 @@
       </div>
 
       <div class="capture-card">
-        <h3>5. &chi;<sub>200</sub> Fase 8 · Padrão Único de G. Deemer</h3>
+        <h3>7. &chi;<sub>200</sub> Fase 8 · Padrão Único de G. Deemer</h3>
         <a href="capturas/chi_fase8.png" target="_blank">
           <img src="capturas/chi_fase8.png" alt="chi200 Fase 8">
         </a>
