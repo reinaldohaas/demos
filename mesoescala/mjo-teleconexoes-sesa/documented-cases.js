@@ -1,10 +1,8 @@
 // Base de Evidências Científicas Documentadas
-// Cada resultado registra: referência, figura/seção, combinação, região, variável, sinal, defasagem e limites.
-// Null significa ausência de resultado representado nesta síntese documental (nunca efeito zero).
+// Somente casos com sinal aumentado ("mais") e mecanismo físico dos autores.
 // Fontes centrais:
-// - Fernandes & Grimm (2023), Journal of Climate, DOI: 10.1175/JCLI-D-22-0781.1
-// - Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics, DOI: 10.1007/s00382-015-2581-6
-// - Jones, Mu, Carvalho & Ding (2023), npj Climate and Atmospheric Science, DOI: 10.1038/s41612-023-00501-4
+// - Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics 46, 245–262 (texto completo, NOAA)
+// - Fernandes & Grimm (2023), Journal of Climate 36, 7715–7738, DOI: 10.1175/JCLI-D-22-0781.1
 
 const DOCUMENTED_CASES = [
   // =========================================================================
@@ -15,233 +13,163 @@ const DOCUMENTED_CASES = [
     season: 'DJF',
     enso: 'la-nina',
     phase: 8,
-    label: 'DJF · La Niña · 8 — pico na ZCAS (Fernandes & Grimm)',
-    source_convection: 'Convecção reforçada no Pacífico Sul subtropical centro-leste nas fases 7+8 (La Niña; Fernandes & Grimm 2023, Figs. 9 e 12).',
-    circulation: 'Trem de ondas PSA maduro com centro anticiclônico anômalo no Atlântico subtropical, favorecendo convergência na ZCAS.',
-    mean: {
-      region: 'ZCAS',
-      text: 'Resposta máxima destacada de chuva média sobre a ZCAS em La Niña (resposta remota da convecção-fonte nas fases 7–8).',
-      figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
-      sign: 'positivo',
-      timing: 'composição de fase / madura'
-    },
-    extremes: {
-      region: 'ZCAS',
-      text: 'Aumento pronunciado da frequência de extremos de chuva na ZCAS (região CESA) em La Niña.',
-      figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
-      sign: 'positivo',
-      timing: 'composição de fase / madura'
-    },
-    psa: 'Trem de ondas PSA maduro impõe anomalia anticiclônica no Atlântico subtropical e convergência sobre a ZCAS, mantendo subsidência compensatória e supressão de chuva sobre o SESA (dipolo clássico).',
-    source: 'Fernandes & Grimm (2023), Journal of Climate',
-    limits: 'Destaque de pico na ZCAS em La Niña com dipolo em relação ao SESA; não extrapolar para ausência de efeito na fase 1.'
+    label: 'DJF · La Niña · Fase 8 — pico na ZCAS (Fernandes & Grimm 2023)',
+    shortLabel: 'Fernandes & Grimm · La Niña 8 — pico na ZCAS',
+    region: 'ZCAS',
+    regionName: 'ZCAS',
+    sign: 'positivo',
+    chance: 'pico de chuva na ZCAS',
+    text: 'Pico na ZCAS em La Niña (fase 8). Mecanismo: trem de ondas PSA excitado por convecção reforçada no Pacífico Sul subtropical centro-leste (fases 7+8).',
+    source_convection: 'Convecção reforçada no Pacífico Sul subtropical centro-leste (fases 7+8)',
+    sourceMarker: { lat: -25, lon: -125, label: 'fonte: convecção subtropical (fases 7+8)' },
+    source: 'Fernandes & Grimm (2023), Journal of Climate'
   },
   {
     id: 'DJF-el-nino-1',
     season: 'DJF',
     enso: 'el-nino',
     phase: 1,
-    label: 'DJF · El Niño · 1 — pico na ZCAS, uma fase depois (Fernandes & Grimm)',
-    source_convection: 'Convecção reforçada no Pacífico Sul subtropical centro-leste, um pouco mais a leste nas fases 8+1 (El Niño; Fernandes & Grimm 2023, Figs. 5 e 9). Não confundir com o envelope equatorial da MJO, que na fase 1 se encontra sobre o Hemisfério Ocidental e África.',
-    circulation: 'Trem de ondas PSA maduro no Atlântico Sudoeste acoplado à circulação sobre o sudeste e centro-leste da América do Sul.',
-    mean: {
-      region: 'ZCAS',
-      text: 'Resposta máxima destacada de chuva média na ZCAS em El Niño (resposta remota da convecção-fonte com defasagem de fase para 8–1 no El Niño, contra 7–8 na La Niña).',
-      figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
-      sign: 'positivo',
-      timing: 'composição de fase / madura'
-    },
-    extremes: {
-      region: 'ZCAS',
-      text: 'Maior aumento da frequência de extremos na ZCAS (região CESA) destacado para El Niño.',
-      figure: 'Fernandes & Grimm (2023), Seção 5 e Fig. 12',
-      sign: 'positivo',
-      timing: 'composição de fase / madura'
-    },
-    psa: 'Trem de ondas PSA plenamente estabelecido a partir da fonte subtropical no Pacífico central-leste; acoplamento dinâmico intensifica a convergência na ZCAS (região CESA) (Fernandes & Grimm 2023, Figs. 5 e 12).',
-    source: 'Fernandes & Grimm (2023), Journal of Climate',
-    limits: 'Resposta máxima defasada em relação à fonte (forçante em 8–1, resposta remota de pico na fase 1 condicionada pelo El Niño).'
+    label: 'DJF · El Niño · Fase 1 — pico na ZCAS, uma fase depois (Fernandes & Grimm 2023)',
+    shortLabel: 'Fernandes & Grimm · El Niño 1 — pico na ZCAS (fase posterior)',
+    region: 'ZCAS',
+    regionName: 'ZCAS',
+    sign: 'positivo',
+    chance: 'pico de chuva na ZCAS (uma fase depois)',
+    text: 'Pico na ZCAS em El Niño (fase 1, uma fase depois que em La Niña). Mecanismo: fonte de convecção subtropical no Pacífico Sul centro-leste deslocada um pouco mais a leste (fases 8+1).',
+    source_convection: 'Convecção reforçada no Pacífico Sul subtropical centro-leste, um pouco mais a leste (fases 8+1)',
+    sourceMarker: { lat: -25, lon: -110, label: 'fonte: convecção subtropical (fases 8+1)' },
+    source: 'Fernandes & Grimm (2023), Journal of Climate'
   },
 
   // =========================================================================
-  // 2. COMPOSIÇÕES DE TODOS OS ANOS NAS 4 ESTAÇÕES — Alvarez et al. (2016)
-  // Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics 46, 245–262
-  // Probabilidade de chuva semanal acima do tercil superior pelas fases do RMM
+  // 2. COMPOSIÇÕES DE TODOS OS ANOS — Alvarez et al. (2016)
+  // Sem ENOS; rótulo: "mais chance de semana chuvosa"
   // =========================================================================
 
   // --- DJF (VERÃO AUSTRAL) ---
   {
-    id: 'DJF-todos-3-4',
+    id: 'DJF-alvarez-3-4',
     season: 'DJF',
     enso: 'todos',
     phase: 3,
     groupedPhases: [3, 4],
     groupedPhase: '3–4',
-    groupNote: 'Composição de todos os anos (sem separação por ENOS) — Alvarez et al. (2016).',
-    label: 'DJF · Todos os anos · fases 3–4 (Bacia do Prata)',
-    source_convection: 'Convecção anômala ativa da MJO sobre o Oceano Índico central/leste e Continente Marítimo (fases 3–4).',
-    circulation: 'Convergência em altos níveis (200 hPa) sobre a América do Sul tropical e escoamento ciclônico anômalo próximo ao extremo sul do continente.',
-    mean: {
-      region: 'SESA',
-      text: 'Aumento significativo na probabilidade de precipitação semanal acima do tercil superior na Bacia do Prata.',
-      figure: 'Alvarez et al. (2016), Figs. 2 e 5',
-      sign: 'positivo',
-      timing: 'composição de fases 3–4'
-    },
-    extremes: null,
-    psa: 'Convergência anômala em 200 hPa sobre a América do Sul tropical acoplada a circulação ciclônica no extremo sul do continente favorece convergência de umidade e intensificação de chuvas na Bacia do Prata (Alvarez et al. 2016).',
-    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics',
-    limits: 'Composição de todos os anos (sem separação por ENOS); fases agrupadas 3–4.'
+    label: 'DJF · Fases 3–4 — Bacia do Prata (Alvarez et al. 2016)',
+    shortLabel: 'Alvarez · 3–4 — mais chance de semana chuvosa (Bacia do Prata)',
+    region: 'SESA',
+    regionName: 'Bacia do Prata',
+    sign: 'positivo',
+    chance: 'mais chance de semana chuvosa',
+    text: 'Mais chance de semana chuvosa na Bacia do Prata. Mecanismos: tropical com convergência em altos níveis (χ₂₀₀ > 0 / subsidência sobre a AS tropical) e extratropical com centro ciclônico C sobre a AS subtropical/extratropical (~38°S 62°W).',
+    tropicalChi: 'convergencia', // χ > 0 sobre a AS
+    extratropical: { type: 'C', lat: -38, lon: -62, desc: 'C sobre a AS subtropical/extratropical (~38°S 62°W)' },
+    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics'
   },
   {
-    id: 'DJF-todos-8-1',
+    id: 'DJF-alvarez-8-1',
     season: 'DJF',
     enso: 'todos',
     phase: 8,
     groupedPhases: [8, 1],
-    groupedPhase: '8–1',
-    groupNote: 'Composição de todos os anos (sem separação por ENOS) — Alvarez et al. (2016).',
-    label: 'DJF · Média de todos os anos · 8–1 — ZCAS (Alvarez et al.)',
-    source_convection: 'Convecção da MJO no Hemisfério Ocidental e África (fases 8–1).',
-    circulation: 'Divergência em altos níveis (200 hPa) sobre a América do Sul tropical/subtropical e circulação anticiclônica anômala em altitude.',
-    mean: {
-      region: 'ZCAS',
-      text: 'Aumento na probabilidade de precipitação semanal acima do tercil superior na região da ZCAS.',
-      figure: 'Alvarez et al. (2016), Figs. 2 e 5',
-      sign: 'positivo',
-      timing: 'composição de fases 8–1'
-    },
-    extremes: null,
-    psa: 'Divergência em 200 hPa sobre a América do Sul e circulação anticiclônica anômala no Atlântico subtropical favorecem convecção na ZCAS, gerando dipolo com precipitação suprimida na Bacia do Prata (Alvarez et al. 2016).',
-    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics',
-    limits: 'Composição de todos os anos (sem separação por ENOS); fases agrupadas 8–1.'
+    groupedPhase: '8 e 1',
+    label: 'DJF · Fases 8 e 1 — ZCAS (Alvarez et al. 2016)',
+    shortLabel: 'Alvarez · 8 e 1 — mais chance de semana chuvosa (ZCAS)',
+    region: 'ZCAS',
+    regionName: 'ZCAS',
+    sign: 'positivo',
+    chance: 'mais chance de semana chuvosa',
+    text: 'Mais chance de semana chuvosa na ZCAS. Mecanismos: tropical com divergência em altos níveis (χ₂₀₀ < 0 / subida sobre a AS tropical) e extratropical com centro anticiclônico A no extremo sul (~50°S 68°W).',
+    tropicalChi: 'divergencia', // χ < 0 sobre a AS
+    extratropical: { type: 'A', lat: -50, lon: -68, desc: 'A no extremo sul (~50°S 68°W)' },
+    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics'
   },
 
   // --- MAM (OUTONO AUSTRAL) ---
   {
-    id: 'MAM-todos-3-4',
+    id: 'MAM-alvarez-1',
     season: 'MAM',
     enso: 'todos',
-    phase: 3,
-    groupedPhases: [3, 4],
-    groupedPhase: '3–4',
-    groupNote: 'Composição de todos os anos (sem separação por ENOS) — Alvarez et al. (2016).',
-    label: 'MAM · Todos os anos · fases 3–4 (Bacia do Prata)',
-    source_convection: 'Convecção ativa no Oceano Índico e Continente Marítimo em fases 3–4 no outono austral.',
-    circulation: 'Convergência em 200 hPa sobre a América do Sul tropical e perturbações ciclônicas no Atlântico Sudoeste; padrão similar ao de verão com resposta atenuada nos extratrópicos.',
-    mean: {
-      region: 'SESA',
-      text: 'Aumento na probabilidade de precipitação semanal acima do tercil superior na Bacia do Prata, com padrão similar a DJF, porém com resposta atenuada nos extratrópicos.',
-      figure: 'Alvarez et al. (2016), Figs. 2 e 6',
-      sign: 'positivo',
-      timing: 'composição de fases 3–4'
-    },
-    extremes: null,
-    psa: 'Convergência em 200 hPa sobre o Brasil tropical e circulação ciclônica no Atlântico Sudoeste; padrão similar a DJF com magnitude atenuada no outono (Alvarez et al. 2016).',
-    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics',
-    limits: 'Composição de todos os anos (sem separação por ENOS); teleconexão atenuada nos extratrópicos no outono.'
-  },
-  {
-    id: 'MAM-todos-8-1',
-    season: 'MAM',
-    enso: 'todos',
-    phase: 8,
-    groupedPhases: [8, 1],
-    groupedPhase: '8–1',
-    groupNote: 'Composição de todos os anos (sem separação por ENOS) — Alvarez et al. (2016).',
-    label: 'MAM · Todos os anos · fases 8–1 (ZCAS)',
-    source_convection: 'Convecção ativa no Hemisfério Ocidental e África em fases 8–1 no outono.',
-    circulation: 'Divergência em 200 hPa sobre a América do Sul tropical/subtropical e anomalia anticiclônica em altitude.',
-    mean: {
-      region: 'ZCAS',
-      text: 'Aumento na probabilidade de precipitação semanal acima do tercil superior na região da ZCAS, semelhante ao verão.',
-      figure: 'Alvarez et al. (2016), Figs. 2 e 6',
-      sign: 'positivo',
-      timing: 'composição de fases 8–1'
-    },
-    extremes: null,
-    psa: 'Divergência em 200 hPa sobre a América do Sul e escoamento anticiclônico anômalo favorecem a convecção na faixa da ZCAS, semelhante ao verão (Alvarez et al. 2016).',
-    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics',
-    limits: 'Composição de todos os anos (sem separação por ENOS); fases agrupadas 8–1 no outono, com padrão semelhante ao verão.'
+    phase: 1,
+    groupedPhases: [1],
+    groupedPhase: '1',
+    label: 'MAM · Fase 1 — Leste do Brasil (Alvarez et al. 2016)',
+    shortLabel: 'Alvarez · 1 — mais chance de semana chuvosa (Leste do Brasil)',
+    region: 'LESTE',
+    regionName: 'Leste do Brasil',
+    anchor: [-40, -14],
+    sign: 'positivo',
+    chance: 'mais chance de semana chuvosa',
+    text: 'Mais chance de semana chuvosa no leste do Brasil. Mecanismos: tropical com divergência em altos níveis (χ₂₀₀ < 0 / subida sobre a AS tropical) e extratropical com centro ciclônico C sobre a Bacia do Prata (~30°S 55°W).',
+    tropicalChi: 'divergencia', // χ < 0 sobre a AS
+    extratropical: { type: 'C', lat: -30, lon: -55, desc: 'C sobre a Bacia do Prata (~30°S 55°W)' },
+    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics'
   },
 
   // --- JJA (INVERNO AUSTRAL) ---
   {
-    id: 'JJA-todos-4-5',
+    id: 'JJA-alvarez-8',
     season: 'JJA',
     enso: 'todos',
-    phase: 4,
-    groupedPhases: [4, 5],
-    groupedPhase: '4–5',
-    groupNote: 'Composição de todos os anos (sem separação por ENOS) — Alvarez et al. (2016).',
-    label: 'JJA · Todos os anos · fases 4–5 (ZCAS seca / frio)',
-    source_convection: 'Convecção ativa no Continente Marítimo em fases 4–5 no inverno austral.',
-    circulation: 'Convergência em altos níveis (200 hPa) sobre a América do Sul tropical e anomalia anticiclônica no sul do continente.',
-    mean: {
-      region: 'ZCAS',
-      text: 'Chuva reduzida e anomalias frias no litoral da região da ZCAS, associadas a convergência em 200 hPa sobre a América do Sul tropical e anomalia anticiclônica no sul do continente.',
-      figure: 'Alvarez et al. (2016), Figs. 4, 7 e Seção 4',
-      sign: 'negativo',
-      timing: 'composição de fases 4–5'
-    },
-    extremes: null,
-    psa: 'Convergência anômala em 200 hPa sobre a América do Sul tropical e anomalia anticiclônica no sul do continente induzem subsidência e supressão de chuva no litoral da ZCAS no inverno (Alvarez et al. 2016).',
-    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics',
-    limits: 'Composição de todos os anos (junho a novembro, fases 4–5); sinal seco / supressão convectiva no litoral da ZCAS.'
+    phase: 8,
+    groupedPhases: [8],
+    groupedPhase: '8',
+    label: 'JJA · Fase 8 — Sudeste do Brasil (Alvarez et al. 2016)',
+    shortLabel: 'Alvarez · 8 — mais chance de semana chuvosa (Sudeste do Brasil)',
+    region: 'SUDESTE',
+    regionName: 'Sudeste do Brasil',
+    anchor: [-46, -23],
+    sign: 'positivo',
+    chance: 'mais chance de semana chuvosa',
+    text: 'Mais chance de semana chuvosa no sudeste do Brasil. Mecanismo extratropical: centro ciclônico C no leste da AS subtropical (~25°S 45°W).',
+    tropicalChi: null,
+    extratropical: { type: 'C', lat: -25, lon: -45, desc: 'C no leste da AS subtropical (~25°S 45°W)' },
+    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics'
   },
 
   // --- SON (PRIMAVERA AUSTRAL) ---
   {
-    id: 'SON-todos-4-5',
-    season: 'SON',
-    enso: 'todos',
-    phase: 4,
-    groupedPhases: [4, 5],
-    groupedPhase: '4–5',
-    groupNote: 'Composição de todos os anos (sem separação por ENOS) — Alvarez et al. (2016).',
-    label: 'SON · Todos os anos · fases 4–5 (ZCAS seca / frio)',
-    source_convection: 'Convecção ativa no Continente Marítimo em fases 4–5 na primavera austral.',
-    circulation: 'Convergência em 200 hPa sobre a América do Sul tropical e anomalia anticiclônica no sul do continente.',
-    mean: {
-      region: 'ZCAS',
-      text: 'Chuva reduzida e anomalias frias no litoral da região da ZCAS, sob convergência em 200 hPa sobre a América do Sul tropical e anomalia anticiclônica no sul do continente.',
-      figure: 'Alvarez et al. (2016), Figs. 4, 8 e Seção 4',
-      sign: 'negativo',
-      timing: 'composição de fases 4–5'
-    },
-    extremes: null,
-    psa: 'Convergência em 200 hPa sobre o Brasil tropical e anomalia anticiclônica no sul do continente impõem subsidência e reduzem a precipitação na faixa costeira da ZCAS (Alvarez et al. 2016).',
-    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics',
-    limits: 'Composição de todos os anos (junho a novembro, fases 4–5); sinal seco no litoral da ZCAS.'
-  },
-  {
-    id: 'SON-todos-7-8',
+    id: 'SON-alvarez-7-8',
     season: 'SON',
     enso: 'todos',
     phase: 7,
     groupedPhases: [7, 8],
     groupedPhase: '7–8',
-    groupNote: 'Composição de todos os anos (sem separação por ENOS) — Alvarez et al. (2016).',
-    label: 'SON · Todos os anos · fases 7–8 (ZCAS)',
-    source_convection: 'Convecção ativa no Pacífico oeste e linha de data / Hemisfério Ocidental (fases 7–8).',
-    circulation: 'Divergência em altos níveis (200 hPa) sobre a região da ZCAS, impulsionada por trem de ondas de Rossby excitado pela convecção da MJO.',
-    mean: {
-      region: 'ZCAS',
-      text: 'Chuva aumentada na região da ZCAS associada a divergência em altos níveis (200 hPa), gerada por trem de ondas de Rossby da MJO.',
-      figure: 'Alvarez et al. (2016), Figs. 4, 8 e Seção 4',
-      sign: 'positivo',
-      timing: 'composição de fases 7–8'
-    },
-    extremes: null,
-    psa: 'Trem de ondas de Rossby excitado pela convecção da MJO no Pacífico induz divergência em 200 hPa sobre a região da ZCAS, favorecendo o aumento da precipitação na primavera austral (Alvarez et al. 2016).',
-    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics',
-    limits: 'Composição de todos os anos na primavera austral (SON); fases agrupadas 7–8.'
+    label: 'SON · Fases 7–8 — ZCAS (Alvarez et al. 2016)',
+    shortLabel: 'Alvarez · 7–8 — mais chance de semana chuvosa (ZCAS)',
+    region: 'ZCAS',
+    regionName: 'ZCAS',
+    sign: 'positivo',
+    chance: 'mais chance de semana chuvosa',
+    note: 'O índice de OLR adianta o RMM em uma fase nesta estação.',
+    text: 'Mais chance de semana chuvosa na ZCAS. Mecanismos: tropical com divergência em altos níveis (χ₂₀₀ < 0 / subida sobre a AS tropical) e extratropical com centro ciclônico C em torno de 20°S (~20°S 50°W). Nota em SON: o índice de OLR adianta o RMM em uma fase nesta estação.',
+    tropicalChi: 'divergencia', // χ < 0 sobre a AS
+    extratropical: { type: 'C', lat: -20, lon: -50, desc: 'C em torno de 20°S (~20°S 50°W)' },
+    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics'
+  },
+  {
+    id: 'SON-alvarez-1',
+    season: 'SON',
+    enso: 'todos',
+    phase: 1,
+    groupedPhases: [1],
+    groupedPhase: '1',
+    label: 'SON · Fase 1 — Bacia do Prata (Alvarez et al. 2016)',
+    shortLabel: 'Alvarez · 1 — mais chance de semana chuvosa (Bacia do Prata)',
+    region: 'SESA',
+    regionName: 'Bacia do Prata',
+    sign: 'positivo',
+    chance: 'mais chance de semana chuvosa',
+    note: 'O índice de OLR adianta o RMM em uma fase nesta estação.',
+    text: 'Mais chance de semana chuvosa na Bacia do Prata. Mecanismo extratropical: centro ciclônico C na AS subtropical (~30°S 60°W), vindo do oeste da Península Antártica (fase 7). Nota em SON: o índice de OLR adianta o RMM em uma fase nesta estação.',
+    tropicalChi: null,
+    extratropical: { type: 'C', lat: -30, lon: -60, desc: 'C na AS subtropical (~30°S 60°W), vindo do oeste da Península Antártica (fase 7)' },
+    source: 'Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics'
   }
 ];
 
 function findDocumentedCases(season, enso, phase) {
   const p = Number(phase);
-  // 1. Caso específico para o ENOS selecionado (ex.: Fernandes & Grimm 2023)
+  // 1. Caso específico para o ENOS selecionado (Fernandes & Grimm 2023)
   const specific = DOCUMENTED_CASES.find(c =>
     c.season === season &&
     c.enso === enso &&
@@ -258,14 +186,13 @@ function findDocumentedCases(season, enso, phase) {
   return {
     specific,
     alvarez,
-    // Caso primário para orientar o destaque no mapa: o específico tem precedência
+    // Caso primário para orientar o destaque principal no mapa: o específico tem precedência
     primary: specific || alvarez
   };
 }
 
 function findDocumentedCase(season, enso, phase) {
-  const res = findDocumentedCases(season, enso, phase);
-  return res.primary;
+  return findDocumentedCases(season, enso, phase).primary;
 }
 
 if (typeof module !== 'undefined') {

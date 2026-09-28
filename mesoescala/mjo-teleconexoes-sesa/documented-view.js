@@ -9,7 +9,8 @@ function displayAllEvidences() {
   if (currentAmplitude < 1) return { specific: null, alvarez: null, primary: null };
   return findDocumentedCases(currentSeason, currentEnso, currentPhase);
 }
-let metric = 'extremes';
+let isEventMode = false;
+let activeEventId = null;
 let mapView = 'global';
 let mjoMode = 'none'; // 'none' | 'chi' | 'dipoles' | 'track'
 const visibleLayers = {
@@ -122,6 +123,7 @@ const MJO_CHI_REF = {
     8: { div: [ -59, 3], conv: [ 109, 1] }
   }
 };
+const MJO_CHI_CENTERS = MJO_CHI_REF;
 
 // Esquema didático derivado dinamicamente por estação (DJF/MAM -> novmar; JJA/SON -> maysep)
 function getMjoChiSchematic(phase, season = currentSeason) {
@@ -304,7 +306,17 @@ function drawMjoConvection() {
 function drawMjoTrack() {
   if (mapView !== 'global') return;
 
-  const RMM_TRACK_LON = {1: 20, 2: 65, 3: 90, 4: 115, 5: 135, 6: 155, 7: 175, 8: -90};
+  const TRACK_POINTS = [
+    { phase: 1, lon: 50 },
+    { phase: 2, lon: 70 },
+    { phase: 3, lon: 90 },
+    { phase: 4, lon: 108 },
+    { phase: 5, lon: 128 },
+    { phase: 6, lon: 148 },
+    { phase: 7, lon: 165 },
+    { phase: 8, lon: 180 },
+    { phase: 1, lon: -165, repeated: true }
+  ];
   const evidence = displayEvidence();
 
   // Linha guia equatorial
@@ -319,8 +331,9 @@ function drawMjoTrack() {
     stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
   }, 'Fases RMM (Wheeler & Hendon 2004)');
 
-  for (let p = 1; p <= 8; p++) {
-    const [tx, ty] = project(RMM_TRACK_LON[p], 0);
+  for (const pt of TRACK_POINTS) {
+    const p = pt.phase;
+    const [tx, ty] = project(pt.lon, 0);
     const isCurrent = p === Number(currentPhase);
     const isGrouped = evidence && evidence.groupedPhases && evidence.groupedPhases.includes(p);
     const isActive = currentAmplitude >= 1 && (isCurrent || isGrouped);
@@ -331,9 +344,9 @@ function drawMjoTrack() {
         x: tx, y: ty + 5,
         fill: '#64748b', 'font-size': 14, 'font-weight': '700',
         'text-anchor': 'middle', cursor: 'pointer'
-      }, String(p), () => setClimateState({ phase: p }));
+      }, String(p), () => setClimateState({ phase: p }, true));
     } else if (isActive) {
-      // Realce da fase ativa
+      // Realce da fase ativa (destaca ambas as ocorrências do 1 se fase 1)
       svg('circle', {
         cx: tx, cy: ty, r: 15,
         fill: isCurrent ? '#ef4444' : '#b91c1c',
@@ -345,13 +358,13 @@ function drawMjoTrack() {
         x: tx, y: ty + 5,
         fill: '#ffffff', 'font-size': 13, 'font-weight': '900',
         'text-anchor': 'middle', cursor: 'pointer'
-      }, String(p), () => setClimateState({ phase: p }));
+      }, String(p), () => setClimateState({ phase: p }, true));
     } else {
       svg('text', {
         x: tx, y: ty + 5,
         fill: '#f87171', 'font-size': 14, 'font-weight': '800',
         'text-anchor': 'middle', cursor: 'pointer'
-      }, String(p), () => setClimateState({ phase: p }));
+      }, String(p), () => setClimateState({ phase: p }, true));
     }
   }
 }
@@ -601,16 +614,75 @@ function drawGlobalContext(evidence) {
   }
 }
 
+function drawSallj() {
+  const p = Number(currentPhase);
+  let salljMode = 'neutro'; // 'prata' | 'zcas' | 'neutro'
+
+  if (currentSeason === 'DJF') {
+    if (p === 3 || p === 4) {
+      salljMode = 'prata';
+    } else if (p === 8 || p === 1) {
+      salljMode = 'zcas';
+    }
+  }
+
+  const startPt = project(-63, -17);
+  let midPt, endPt;
+  let arrowAngle = 0;
+
+  if (salljMode === 'prata') {
+    // Caso com mais chuva na Bacia do Prata (DJF 3–4): seta até a Bacia do Prata
+    midPt = project(-61, -22.5);
+    endPt = project(-58, -28.5);
+    arrowAngle = Math.atan2(endPt[1] - midPt[1], endPt[0] - midPt[0]);
+  } else if (salljMode === 'zcas') {
+    // Caso com mais chuva na ZCAS (DJF 8–1, La Niña 8, El Niño 1): seta curvando para leste/nordeste, em direção ao setor ZCAS
+    midPt = project(-57, -19);
+    endPt = project(-47, -21);
+    arrowAngle = Math.atan2(endPt[1] - midPt[1], endPt[0] - midPt[0]);
+  } else {
+    // Demais combinações e outras estações: seta neutra (a atual, mais curta)
+    midPt = project(-62, -20);
+    endPt = project(-61, -23.5);
+    arrowAngle = Math.atan2(endPt[1] - midPt[1], endPt[0] - midPt[0]);
+  }
+
+  svg('path', {
+    d: `M ${startPt[0]} ${startPt[1]} Q ${midPt[0]} ${midPt[1]} ${endPt[0]} ${endPt[1]}`,
+    fill: 'none', stroke: '#34d399', 'stroke-width': 3.2
+  });
+
+  const arrowLen = 13;
+  const arrowWidth = 6.5;
+  const tipX = endPt[0], tipY = endPt[1];
+  const leftX = tipX - arrowLen * Math.cos(arrowAngle) + arrowWidth * Math.sin(arrowAngle);
+  const leftY = tipY - arrowLen * Math.sin(arrowAngle) - arrowWidth * Math.cos(arrowAngle);
+  const rightX = tipX - arrowLen * Math.cos(arrowAngle) - arrowWidth * Math.sin(arrowAngle);
+  const rightY = tipY - arrowLen * Math.sin(arrowAngle) + arrowWidth * Math.cos(arrowAngle);
+
+  svg('polygon', {
+    points: `${tipX},${tipY} ${leftX},${leftY} ${rightX},${rightY}`,
+    fill: '#34d399'
+  });
+
+  // Rótulo posicionado a oeste do jato para evitar sobreposição com SESA e ícones de chuva
+  const [sx, sy] = project(-64.5, -20.5);
+  svg('text', { x: sx, y: sy, fill: '#6ee7b7', 'font-size': 11.5, 'font-weight': '600', 'text-anchor': 'end' }, 'SALLJ (~850 hPa)');
+  const [subX, subY] = project(-64.5, -22.5);
+  svg('text', { x: subX, y: subY, fill: '#a7f3d0', 'font-size': 9.5, 'font-weight': '500', 'text-anchor': 'end' }, 'alternância ZCAS × Prata (Nogués-Paegle & Mo 1997)');
+}
+
 function drawJets() {
   if (!visibleLayers.jets) return;
 
-  const { lat, width } = getSubtropicalJetParams(currentSeason, currentEnso);
+  const lat = (currentSeason === 'DJF') ? -32 : (currentSeason === 'JJA') ? -27 : -29.5;
+  const width = (currentEnso === 'el-nino') ? 4.5 : (currentEnso === 'la-nina') ? 2.2 : 3.2;
 
-  // Jato Subtropical: um único traçado, espessura modulada pelo ENOS e latitude pela estação
   if (mapView === 'global') {
     const pts = [
-      [140, lat + 2], [175, lat + 1], [-160, lat],
-      [-120, lat - 1], [-80, lat], [-55, lat + 1], [-30, lat + 2]
+      [140, lat], [180, lat - 1], [-140, lat], [-100, lat + 1],
+      [-60, lat + 2], [-20, lat + 1], [20, lat], [60, lat - 1],
+      [100, lat], [140, lat]
     ];
     const projectedPts = pts.map(p => project(...p));
     const d = `M ` + projectedPts.map(p => `${p[0]},${p[1]}`).join(' L ');
@@ -626,23 +698,8 @@ function drawJets() {
     svg('text', { x: jx, y: jy - 7, fill: '#7dd3fc', 'font-size': 11, 'font-weight': '600', 'text-anchor': 'start' }, 'Jato Subtropical (~200 hPa · guia)');
   }
 
-  // SALLJ (~850 hPa): uma única seta, sem partículas ou trajetórias duplicadas
-  // Canalização meridional a leste dos Andes da Bolívia ao norte da Argentina/Chaco
-  const salljStart = project(-63, -17);
-  const salljMid = project(-61, -22.5);
-  const salljEnd = project(-58, -28);
-  svg('path', {
-    d: `M ${salljStart[0]} ${salljStart[1]} Q ${salljMid[0]} ${salljMid[1]} ${salljEnd[0]} ${salljEnd[1]}`,
-    fill: 'none', stroke: '#34d399', 'stroke-width': 3.2
-  });
-  const endX = salljEnd[0], endY = salljEnd[1];
-  svg('polygon', {
-    points: `${endX},${endY} ${endX - 7},${endY - 14} ${endX + 7},${endY - 10}`,
-    fill: '#34d399'
-  });
-  // Rótulo posicionado a oeste do jato para evitar sobreposição com SESA e ícones de chuva
-  const [sx, sy] = project(-64.5, -21.5);
-  svg('text', { x: sx, y: sy, fill: '#6ee7b7', 'font-size': 11.5, 'font-weight': '600', 'text-anchor': 'end' }, 'SALLJ (~850 hPa)');
+  // SALLJ direcional (só DJF; Nogués-Paegle & Mo 1997)
+  drawSallj();
 }
 
 function drawMap(evidence) {
@@ -672,84 +729,64 @@ function drawMap(evidence) {
   drawJets();
 
   // Delimitação do SESA: SEMPRE DELIMITADA E IDENTIFICADA
-  // Rótulo mantido estritamente como "SESA" no topo da região, sem "Bacia do Prata"
   const cases = displayAllEvidences();
   const primaryEvidence = cases.primary;
-  const result = (currentAmplitude >= 1 && primaryEvidence && metric !== 'circulation')
-    ? (primaryEvidence[metric] || (metric === 'extremes' ? primaryEvidence.mean : primaryEvidence.extremes))
-    : null;
-  const isSesaHighlighted = result && result.region === 'SESA';
+  const isSesaHighlighted = currentAmplitude >= 1 && primaryEvidence && primaryEvidence.region === 'SESA';
   polygon(REGIONS.SESA_POLY, isSesaHighlighted ? 'rgba(56, 189, 248, 0.12)' : 'rgba(56, 189, 248, 0.03)', isSesaHighlighted ? '#38bdf8' : '#486780', isSesaHighlighted ? 2.2 : 1.5);
-  // Rótulo posicionado na borda nordeste da região, sem colidir com SALLJ nem com chuva
   const [sesaLabelX, sesaLabelY] = project(-50, -25.5);
   svg('text', { x: sesaLabelX, y: sesaLabelY, fill: isSesaHighlighted ? '#7dd3fc' : '#8ab8d4', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'SESA');
 
   // Delimitação da ZCAS: SEMPRE DELIMITADA E IDENTIFICADA
-  const isZcasHighlighted = result && (result.region === 'ZCAS' || result.region === 'CESA');
+  const isZcasHighlighted = currentAmplitude >= 1 && primaryEvidence && primaryEvidence.region === 'ZCAS';
   polygon(REGIONS.ZCAS_POLY, isZcasHighlighted ? 'rgba(45, 212, 191, 0.12)' : 'rgba(45, 212, 191, 0.02)', isZcasHighlighted ? '#2dd4bf' : '#3e5c76', isZcasHighlighted ? 2.2 : 1.4, '4 3');
-  // Rótulo posicionado na porção oceânica da ZCAS para nunca conflitar com chuva sobre MG/SP/RJ ou interior da ZCAS
   const [zx, zy] = project(-35, -20.5);
   svg('text', { x: zx, y: zy, fill: isZcasHighlighted ? '#5eead4' : '#6b8ca8', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'ZCAS');
 
-  // Destaque condicional: somente quando houver resultado comprovado para a combinação e métrica (A >= 1)
-  if (result) {
-    const defaultLoc = result.region === 'SESA' ? [-55, -34] : [-45, -23];
-    const location = result.anchor || defaultLoc;
+  // Destaque condicional do caso documentado (somente quando A >= 1)
+  if (currentAmplitude >= 1 && primaryEvidence) {
+    let location = [-45, -23];
+    if (primaryEvidence.region === 'SESA') location = [-55, -34];
+    else if (primaryEvidence.region === 'ZCAS') location = [-45, -23];
+    else if (primaryEvidence.region === 'LESTE') location = [-40, -14];
+    else if (primaryEvidence.region === 'SUDESTE') location = [-46, -23];
+    if (primaryEvidence.anchor) location = primaryEvidence.anchor;
+
     const [x, y] = project(...location);
-    const isNegative = result.sign === 'negativo';
 
-    if (isNegative) {
-      // Sinal seco / chuva reduzida: nuvem âmbar/seca com linha tracejada e seta para baixo
-      svg('path', {
-        d: `M ${x - 22} ${y} C ${x - 38} ${y - 16}, ${x - 17} ${y - 30}, ${x - 5} ${y - 21} C ${x + 2} ${y - 43}, ${x + 31} ${y - 31}, ${x + 25} ${y - 13} C ${x + 44} ${y - 10}, ${x + 33} ${y + 5}, ${x + 20} ${y + 4} L ${x - 22} ${y + 4} Z`,
-        fill: 'rgba(245, 158, 11, 0.28)', stroke: '#f59e0b', 'stroke-width': 2
-      });
-      // Linha de bloqueio/supressão cortando a base da nuvem
+    // Nuvem de chuva com setas de precipitação e seta de aumento
+    svg('path', {
+      d: `M ${x - 22} ${y} C ${x - 38} ${y - 16}, ${x - 17} ${y - 30}, ${x - 5} ${y - 21} C ${x + 2} ${y - 43}, ${x + 31} ${y - 31}, ${x + 25} ${y - 13} C ${x + 44} ${y - 10}, ${x + 33} ${y + 5}, ${x + 20} ${y + 4} L ${x - 22} ${y + 4} Z`,
+      fill: '#73d8da', stroke: '#b4f5f0', 'stroke-width': 2
+    });
+    for (const dx of [-16, 0, 16]) {
       svg('line', {
-        x1: x - 16, y1: y + 14, x2: x + 16, y2: y + 14,
-        stroke: '#f59e0b', 'stroke-width': 2.5, 'stroke-linecap': 'round', 'stroke-dasharray': '4 3'
+        x1: x + dx, y1: y + 12, x2: x + dx - 5, y2: y + 24,
+        stroke: '#73d8da', 'stroke-width': 3, 'stroke-linecap': 'round'
       });
-      svg('text', { x: x + 47, y: y + 7, fill: '#fbbf24', 'font-size': 26, 'font-weight': '900' }, '↓');
-    } else {
-      svg('path', {
-        d: `M ${x - 22} ${y} C ${x - 38} ${y - 16}, ${x - 17} ${y - 30}, ${x - 5} ${y - 21} C ${x + 2} ${y - 43}, ${x + 31} ${y - 31}, ${x + 25} ${y - 13} C ${x + 44} ${y - 10}, ${x + 33} ${y + 5}, ${x + 20} ${y + 4} L ${x - 22} ${y + 4} Z`,
-        fill: '#73d8da', stroke: '#b4f5f0', 'stroke-width': 2
-      });
-      for (const dx of [-16, 0, 16]) {
-        svg('line', {
-          x1: x + dx, y1: y + 12, x2: x + dx - 5, y2: y + 24,
-          stroke: '#73d8da', 'stroke-width': metric === 'extremes' ? 4 : 2.5, 'stroke-linecap': 'round'
-        });
-      }
-      svg('text', { x: x + 47, y: y + 5, fill: '#aaf4e7', 'font-size': 24, 'font-weight': '800' }, '↑');
     }
+    svg('text', { x: x + 47, y: y + 5, fill: '#aaf4e7', 'font-size': 24, 'font-weight': '800' }, '↑');
 
-    // Deslocar o texto do símbolo de chuva para o oceano Atlântico para desamontoar de SESA/ZCAS/SALLJ
-    const labelText = isNegative
-      ? 'Chuva reduzida / Frio'
-      : (metric === 'extremes' ? 'Extremos mais frequentes' : 'Chuva média favorecida');
-
-    const isSesa = result.region === 'SESA';
-    const oceanLon = isSesa ? -44 : -39;
+    // Rótulo descritivo posicionado no Atlântico para legibilidade
+    const labelText = primaryEvidence.chance || 'Mais chance de semana chuvosa';
+    const isSesa = primaryEvidence.region === 'SESA';
+    const oceanLon = isSesa ? -44 : -38;
     const oceanLat = location[1] !== undefined ? location[1] : (isSesa ? -34 : -23);
     let [tx, ty] = project(oceanLon, oceanLat);
 
-    // Garantir que o texto nunca seja cortado na borda direita do mapa
-    const maxTx = (mapView === 'regional' ? 640 : 1200) - 180;
+    const maxTx = (mapView === 'regional' ? 640 : 1200) - 210;
     if (tx > maxTx) tx = maxTx;
 
-    // Linha guia sutil conectando o símbolo de chuva ao texto no oceano
     svg('line', {
       x1: x + 30, y1: y,
       x2: tx - 6, y2: ty - 3,
-      stroke: isNegative ? 'rgba(245, 158, 11, 0.45)' : 'rgba(115, 216, 218, 0.45)',
+      stroke: 'rgba(115, 216, 218, 0.45)',
       'stroke-width': 1.1,
       'stroke-dasharray': '3 3'
     });
 
     svg('text', {
       x: tx, y: ty,
-      fill: isNegative ? '#fef08a' : '#c6f6ef',
+      fill: '#c6f6ef',
       'font-size': 13,
       'font-weight': '700',
       'text-anchor': 'start',
@@ -757,6 +794,89 @@ function drawMap(evidence) {
       'stroke-width': 2.5,
       'paint-order': 'stroke fill'
     }, labelText);
+  }
+
+  // Mecanismos físicos dos autores no mapa (aparecem junto com o caso; somem com A < 1)
+  if (currentAmplitude >= 1) {
+    const alv = cases.alvarez;
+    const spec = cases.specific;
+
+    // 1. Mecanismo Tropical (Alvarez et al. 2016): sinal do χ200 sobre a AS tropical
+    if (alv && alv.tropicalChi) {
+      const [tcx, tcy] = project(-53, -7.5);
+      const isConv = alv.tropicalChi === 'convergencia';
+      const bgFill = isConv ? 'rgba(245, 158, 11, 0.20)' : 'rgba(56, 189, 248, 0.20)';
+      const strCol = isConv ? '#f59e0b' : '#38bdf8';
+      const txtCol = isConv ? '#fef08a' : '#bae6fd';
+      const labelChi = isConv
+        ? 'χ₂₀₀ > 0 — convergência / subsidência'
+        : 'χ₂₀₀ < 0 — divergência / subida';
+
+      svg('rect', {
+        x: tcx - 120, y: tcy - 14, width: 240, height: 26, rx: 6,
+        fill: bgFill, stroke: strCol, 'stroke-width': 1.4, 'stroke-dasharray': '4 2'
+      });
+      svg('text', {
+        x: tcx, y: tcy + 4,
+        fill: txtCol, 'font-size': 11, 'font-weight': '700',
+        'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2, 'paint-order': 'stroke fill'
+      }, labelChi);
+    }
+
+    // 2. Mecanismo Extratropical (Alvarez et al. 2016): centro C ou A (trem de ondas)
+    if (alv && alv.extratropical) {
+      const ext = alv.extratropical;
+      const [ecx, ecy] = project(ext.lon, ext.lat);
+      const isC = ext.type === 'C';
+      const circleFill = isC ? 'rgba(14, 165, 233, 0.30)' : 'rgba(245, 158, 11, 0.30)';
+      const circleStroke = isC ? '#38bdf8' : '#f59e0b';
+      const letterCol = isC ? '#38bdf8' : '#fbbf24';
+
+      svg('circle', {
+        cx: ecx, cy: ecy, r: 16,
+        fill: circleFill, stroke: circleStroke, 'stroke-width': 2
+      });
+      svg('text', {
+        x: ecx, y: ecy + 6,
+        fill: letterCol, 'font-size': 16, 'font-weight': '900',
+        'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2, 'paint-order': 'stroke fill'
+      }, ext.type);
+
+      // Legenda: "trem de ondas (Alvarez et al. 2016)"
+      svg('text', {
+        x: ecx, y: ecy + 27,
+        fill: '#cbd5e1', 'font-size': 10, 'font-weight': '600',
+        'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+      }, 'trem de ondas (Alvarez et al. 2016)');
+    }
+
+    // 3. Marcador qualitativo "fonte" (Fernandes & Grimm 2023)
+    if (spec && spec.sourceMarker) {
+      if (mapView === 'global') {
+        const [scx, scy] = project(spec.sourceMarker.lon, spec.sourceMarker.lat);
+        svg('circle', {
+          cx: scx, cy: scy, r: 18,
+          fill: 'rgba(245, 158, 11, 0.25)', stroke: '#f59e0b', 'stroke-width': 1.8, 'stroke-dasharray': '4 3'
+        });
+        svg('text', {
+          x: scx, y: scy + 4,
+          fill: '#fcd34d', 'font-size': 12, 'font-weight': '800',
+          'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2, 'paint-order': 'stroke fill'
+        }, 'fonte');
+        svg('text', {
+          x: scx, y: scy + 24,
+          fill: '#fef08a', 'font-size': 10, 'font-weight': '600',
+          'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+        }, 'convecção subtropical');
+      } else {
+        const edgeY = project(-85, spec.sourceMarker.lat)[1];
+        svg('text', {
+          x: 12, y: edgeY,
+          fill: '#fcd34d', 'font-size': 11, 'font-weight': '700',
+          'text-anchor': 'start', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+        }, '← fonte: convecção no Pacífico subtropical');
+      }
+    }
   }
 
   // Texto no mapa quando amplitude < 1: "MJO fraca (amplitude < 1) — sem padrão associado"
@@ -774,14 +894,14 @@ function drawMap(evidence) {
   }
 
   $('mapTitle').textContent = mapView === 'global' ? 'Visão global: MJO, Pacífico e América do Sul' : 'América do Sul (visão regional)';
-  $('mapDesc').textContent = result
-    ? `${result.region}: ${result.text} Símbolo regional sem magnitude ou extensão quantitativa.`
+  $('mapDesc').textContent = (primaryEvidence && currentAmplitude >= 1)
+    ? `${primaryEvidence.regionName || primaryEvidence.region}: ${primaryEvidence.text} Símbolo regional sem magnitude ou extensão quantitativa.`
     : (currentAmplitude < 1
       ? 'MJO fraca (amplitude < 1) — sem padrão associado.'
       : 'Sem resultado documentado para esta combinação.');
 }
 
-function generateNarrationText(season, enso, phase, metricVal, evidence) {
+function generateNarrationText(season, enso, phase, evidence) {
   const seasonNames = {
     DJF: 'Verão austral (DJF)',
     MAM: 'Outono austral (MAM)',
@@ -804,10 +924,14 @@ function generateNarrationText(season, enso, phase, metricVal, evidence) {
   const scLonStr = scLon < 0 ? `${Math.abs(scLon)} graus oeste` : `${scLon} graus leste`;
 
   let text = `Em 200 hPa, o potencial de velocidade (χ₂₀₀) na fase ${phase} posiciona o centro de divergência em altitude e convecção ativa em ${adLonStr} e a convergência com subsidência em ${scLonStr}, no contexto de convecção nominal sobre ${phaseInfo.region}. `;
-  text += `Configuração selecionada: ${seasonNames[season]}, com ${ensoNames[enso] || 'Todos os anos'}. `;
+  if (isEventMode && evidence && evidence.enso === 'todos') {
+    text += `Configuração selecionada: ${seasonNames[season]}, na composição de todos os anos (sem separação por ENOS). `;
+  } else {
+    text += `Configuração selecionada: ${seasonNames[season]}, com ${ensoNames[enso] || 'Todos os anos'}. `;
+  }
 
   // 1. Contexto esquemático da TSM e dos Jatos
-  if (enso === 'todos') {
+  if (enso === 'todos' || (isEventMode && evidence && evidence.enso === 'todos')) {
     text += `Na composição de todos os anos (sem estratificação por ENOS), a análise reflete a média geral. O Jato Subtropical exibe espessura de referência intermediária. `;
   } else if (enso === 'el-nino') {
     text += `No Pacífico equatorial central e leste, o padrão qualitativo indica anomalias térmicas positivas da TSM. Em altitude, o traçado de referência do Jato Subtropical (~200 hPa) ilustra o guia de ondas com espessura qualitativa reforçada sob circulação de Hadley intensificada no El Niño. `;
@@ -824,42 +948,35 @@ function generateNarrationText(season, enso, phase, metricVal, evidence) {
   } else {
     text += `Nas estações de transição sazonal (MAM e SON), o traçado do jato posiciona-se em torno de 29 a 30 graus sul. `;
   }
-  text += `Este traçado de jato e as anomalias de TSM são esquemas conceituais didáticos e não medidas de velocidade ou posições latitudinais uniformes ponto a ponto. Em baixos níveis, o SALLJ (~850 hPa) atua no transporte meridional de umidade amazônica, exibindo modos espaciais diferenciados — Central, Northern, Andes e Peru (estudo de novembro–março, Jones et al. 2023). `;
 
-  // 2. Efeitos verificados, separando convecção-fonte, circulação/teleconexão e respostas remotas
-  if (evidence) {
-    if (evidence.groupNote) {
-      text += `Atenção: ${evidence.groupNote} `;
-    }
-    text += `Base bibliográfica: ${evidence.source}. `;
-    if (evidence.source_convection) {
-      text += `1. Convecção-fonte: ${evidence.source_convection} `;
-    }
-    if (evidence.circulation) {
-      text += `2. Circulação e teleconexão: ${evidence.circulation} `;
-    }
-    if (evidence.mean) {
-      text += `3. Chuva média: ${evidence.mean.text} `;
-    } else {
-      text += `3. Chuva média: resultado de chuva média regional não cadastrado nesta síntese para esta fase. `;
-    }
-    if (evidence.extremes) {
-      text += `4. Frequência de extremos: ${evidence.extremes.text} `;
-    } else {
-      text += `4. Frequência de extremos: resultado de extremos regionais não cadastrado nesta síntese para esta fase. `;
-    }
-    if (evidence.psa) {
-      text += `Mecanismo dinâmico: ${evidence.psa} `;
-    }
-    if (evidence.limits) {
-      text += `Limitações e incertezas: ${evidence.limits} `;
-    }
+  // SALLJ direcional (só DJF; Nogués-Paegle & Mo 1997)
+  const p = Number(phase);
+  if (season === 'DJF' && (p === 3 || p === 4)) {
+    text += `Em baixos níveis, o SALLJ (~850 hPa) atua direcionado até a Bacia do Prata, intensificando a advecção de umidade amazônica para o sul (Nogués-Paegle & Mo 1997). `;
+  } else if (season === 'DJF' && (p === 8 || p === 1)) {
+    text += `Em baixos níveis, o SALLJ (~850 hPa) curva para leste/nordeste em direção ao setor ZCAS, reforçando a convergência de umidade sobre o Sudeste (Nogués-Paegle & Mo 1997). `;
   } else {
-    text += `Sem resultado específico verificado nesta síntese documental para esta combinação em relação a ${metricVal === 'circulation' ? 'circulação' : metricVal === 'extremes' ? 'extremos de chuva' : 'chuva média'}. `;
-    text += `Esta ausência de destaque não equivale a efeito físico zero na natureza, ausência do fenômeno ou falta de ciência; reflete a exigência metodológica de registrar apenas resultados fundamentados para o recorte estratificado. `;
+    text += `Em baixos níveis, o SALLJ (~850 hPa) atua no traçado neutro ao longo dos Andes. `;
   }
 
-  text += `Ressalta-se que a chuva média e a frequência de extremos são variáveis meteorológicas distintas, e extremos de precipitação não autorizam inferência de tempo severo como granizo ou tornados.`;
+  // 2. Efeitos verificados e mecanismos dos autores
+  if (evidence) {
+    text += `Resultado documentado (${evidence.source}): ${evidence.text} `;
+    if (evidence.tropicalChi) {
+      text += `Mecanismo tropical em 200 hPa: ${evidence.tropicalChi === 'convergencia' ? 'convergência e subsidência anômala (χ₂₀₀ > 0)' : 'divergência e movimentos ascendentes (χ₂₀₀ < 0)'} sobre a América do Sul tropical. `;
+    }
+    if (evidence.extratropical) {
+      text += `Mecanismo extratropical: ${evidence.extratropical.desc}, associado a trem de ondas de Rossby (Alvarez et al. 2016). `;
+    }
+    if (evidence.source_convection) {
+      text += `Fonte convectiva: ${evidence.source_convection}. `;
+    }
+    if (evidence.note) {
+      text += `Nota observacional: ${evidence.note} `;
+    }
+  } else {
+    text += `Sem resultado documentado para esta combinação nesta síntese documental. As feições da base cartográfica e física permanecem ativas para exploração no sandbox. `;
+  }
 
   return `Amplitude RMM selecionada: ${currentAmplitude.toFixed(1)}. ${currentAmplitude < 1 ? "MJO fraca: os destaques associados às composições de MJO ativa foram ocultados; a base permanece. A fase dentro do círculo unitário não é uma atribuição robusta." : "MJO ativa. A amplitude não foi convertida em magnitudes de chuva, PSA ou jatos; não há calibração dessas relações nesta síntese."} ` + text;
 }
@@ -957,7 +1074,7 @@ function formatTextForSpeech(raw) {
 function speakCurrentNarration() {
   if (typeof forecastModeActive !== 'undefined' && forecastModeActive) return;
   const evidence = displayEvidence();
-  const text = generateNarrationText(currentSeason, currentEnso, currentPhase, metric, evidence);
+  const text = generateNarrationText(currentSeason, currentEnso, currentPhase, evidence);
 
   // Atualizar texto na tela para leitura e acessibilidade
   if ($('narrationText')) {
@@ -997,19 +1114,73 @@ function setMjoMode(mode) {
   update();
 }
 
-function setClimateState(opts) {
+function exitEventMode() {
+  if (isEventMode) {
+    isEventMode = false;
+    activeEventId = null;
+    const eg = $('ensoGroup');
+    if (eg) eg.style.display = '';
+    document.querySelectorAll('.event-select').forEach(sel => { sel.value = ''; });
+    if ($('eventNotice')) $('eventNotice').textContent = '';
+  }
+}
+
+function selectEvent(eventId) {
+  if (!eventId) {
+    exitEventMode();
+    update();
+    return;
+  }
+  const c = DOCUMENTED_CASES.find(item => item.id === eventId);
+  if (!c) return;
+
+  isEventMode = true;
+  activeEventId = eventId;
+
+  // Sincronizar todos os selects de eventos
+  document.querySelectorAll('.event-select').forEach(sel => {
+    const hasOption = [...sel.options].some(o => o.value === eventId);
+    sel.value = hasOption ? eventId : '';
+  });
+
+  const stateOpts = {
+    season: c.season,
+    phase: Number(c.phase),
+    amplitude: 1.5
+  };
+
+  if (c.enso === 'todos') {
+    const eg = $('ensoGroup');
+    if (eg) eg.style.display = 'none';
+  } else {
+    const eg = $('ensoGroup');
+    if (eg) eg.style.display = '';
+    stateOpts.enso = c.enso;
+  }
+
+  setClimateState(stateOpts, false);
+}
+
+function setClimateState(opts, fromUser = false) {
+  if (fromUser) {
+    if (opts.season !== undefined || opts.enso !== undefined || opts.phase !== undefined) {
+      exitEventMode();
+    }
+  }
+
   if (opts.season !== undefined) currentSeason = opts.season;
   if (opts.enso !== undefined) currentEnso = opts.enso;
   if (opts.phase !== undefined) currentPhase = Number(opts.phase);
-  if (opts.amplitude !== undefined && Number.isFinite(Number(opts.amplitude))) currentAmplitude = Math.max(0, Math.min(3, Number(opts.amplitude)));
-  if (opts.metric !== undefined) metric = opts.metric;
+  if (opts.amplitude !== undefined && Number.isFinite(Number(opts.amplitude))) {
+    currentAmplitude = Math.max(0, Math.min(3, Number(opts.amplitude)));
+  }
   if (opts.view !== undefined) mapView = opts.view;
   if (opts.mjoMode !== undefined) mjoMode = opts.mjoMode;
   update();
 }
 
 function update() {
-  if (typeof renderRMMDiagram === "function") renderRMMDiagram(currentPhase,currentAmplitude);
+  if (typeof renderRMMDiagram === "function") renderRMMDiagram(currentPhase, currentAmplitude);
   // Atualizar atributos dos botões de controle
   document.querySelectorAll('[data-season]:not([data-shortcut])').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.season === currentSeason)));
   document.querySelectorAll('[data-enso]:not([data-shortcut])').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.enso === currentEnso)));
@@ -1023,44 +1194,58 @@ function update() {
   const ampInput = $('mjoAmplitude');
   if (ampInput) ampInput.value = currentAmplitude;
   const ampVal = $('mjoAmplitudeValue');
+  if (ampVal) ampVal.textContent = currentAmplitude.toFixed(1);
+
   // Buscar evidências na base curada
   const cases = displayAllEvidences();
   const specific = cases.specific;
   const alvarez = cases.alvarez;
   const primaryEvidence = cases.primary;
-  const result = (currentAmplitude >= 1 && primaryEvidence && metric !== 'circulation')
-    ? (primaryEvidence[metric] || (metric === 'extremes' ? primaryEvidence.mean : primaryEvidence.extremes))
-    : null;
 
-  document.querySelectorAll('.event-select').forEach(select => {
-    const match = [...select.options].find(o => {
-      if (!o.value) return false;
-      const [s, e, p, m] = o.value.split('|');
-      if (s !== currentSeason) return false;
-      if (m && m !== metric) return false;
-      const pNum = Number(p);
-      const phaseMatches = (pNum === Number(currentPhase)) ||
-        (primaryEvidence && primaryEvidence.groupedPhases && primaryEvidence.groupedPhases.includes(pNum) && primaryEvidence.groupedPhases.includes(Number(currentPhase)));
-      if (!phaseMatches) return false;
-      if (e === 'todos') {
-        return alvarez !== null;
-      }
-      return e === currentEnso;
+  // Sincronizar select de eventos se não estiver em modo de evento ativo
+  if (!isEventMode) {
+    document.querySelectorAll('.event-select').forEach(select => {
+      const match = [...select.options].find(o => {
+        if (!o.value) return false;
+        const c = DOCUMENTED_CASES.find(item => item.id === o.value);
+        if (!c) return false;
+        if (c.season !== currentSeason) return false;
+        const pNum = Number(currentPhase);
+        const phaseMatches = (Number(c.phase) === pNum) || (c.groupedPhases && c.groupedPhases.includes(pNum));
+        if (!phaseMatches) return false;
+        if (c.enso === 'todos') return alvarez !== null;
+        return c.enso === currentEnso;
+      });
+      select.value = match ? match.value : '';
     });
-    select.value = match ? match.value : '';
-  });
-  const evNotice = $('eventNotice');
-  if (evNotice) evNotice.textContent = '';
+    const evNotice = $('eventNotice');
+    if (evNotice) evNotice.textContent = '';
+  } else {
+    const evNotice = $('eventNotice');
+    if (evNotice) {
+      const activeCase = DOCUMENTED_CASES.find(c => c.id === activeEventId);
+      evNotice.textContent = activeCase ? `Evento ativo: ${activeCase.shortLabel}` : 'Evento de interesse ativo';
+    }
+  }
 
   $('globalView').setAttribute('aria-pressed', String(mapView === 'global'));
   $('regionalView').setAttribute('aria-pressed', String(mapView === 'regional'));
-  if ($('metricSelect')) $('metricSelect').value = metric;
   if ($('mjoSelect')) $('mjoSelect').value = mjoMode;
   for (const [id, layer] of [['sstLayer','sst'],['jetsLayer','jets'],['psaLayer','psa']]) if ($(id)) $(id).checked = visibleLayers[layer];
   if ($('layerCount')) $('layerCount').textContent = `(${['sst','jets','psa'].filter(key => visibleLayers[key]).length}/3)`;
 
   const ensoLabel = currentEnso === 'el-nino' ? 'El Niño' : currentEnso === 'la-nina' ? 'La Niña' : 'ENOS Neutro';
-  let title = `${currentSeason} · ${ensoLabel} · MJO Fase ${currentPhase}`;
+  let title = '';
+  if (isEventMode) {
+    const activeCase = DOCUMENTED_CASES.find(c => c.id === activeEventId);
+    if (activeCase && activeCase.enso === 'todos') {
+      title = `${currentSeason} · Todos os anos · MJO Fase ${currentPhase}`;
+    } else {
+      title = `${currentSeason} · ${ensoLabel} · MJO Fase ${currentPhase}`;
+    }
+  } else {
+    title = `${currentSeason} · ${ensoLabel} · MJO Fase ${currentPhase}`;
+  }
   if (primaryEvidence && primaryEvidence.groupedPhase) {
     title += ` (Fases ${primaryEvidence.groupedPhase})`;
   }
@@ -1072,18 +1257,14 @@ function update() {
       $('caseSummary').textContent = 'MJO fraca (amplitude < 1) — sem padrão associado.';
       $('caseSummary').style.color = 'var(--muted)';
     } else if (specific && alvarez) {
-      const sRes = specific[metric] || specific.mean || specific.circulation || {};
-      const aRes = alvarez[metric] || alvarez.mean || alvarez.circulation || {};
-      $('caseSummary').textContent = `${sRes.text || specific.circulation} | Média de todos os anos (Alvarez et al.): ${aRes.text || alvarez.circulation}`;
+      $('caseSummary').textContent = `${specific.text} | Média de todos os anos (Alvarez et al.): ${alvarez.text}`;
       $('caseSummary').style.color = 'var(--accent-teal)';
     } else if (specific) {
-      const sRes = specific[metric] || specific.mean || specific.circulation || {};
-      $('caseSummary').textContent = `${sRes.text || specific.circulation} (${specific.source})`;
-      $('caseSummary').style.color = sRes.sign === 'negativo' ? '#fbbf24' : 'var(--accent-teal)';
+      $('caseSummary').textContent = `${specific.text} (${specific.source})`;
+      $('caseSummary').style.color = 'var(--accent-teal)';
     } else if (alvarez) {
-      const aRes = alvarez[metric] || alvarez.mean || alvarez.circulation || {};
-      $('caseSummary').textContent = `Média de todos os anos (Alvarez et al.): ${aRes.text || alvarez.circulation} (${alvarez.source})`;
-      $('caseSummary').style.color = aRes.sign === 'negativo' ? '#fbbf24' : 'var(--accent-teal)';
+      $('caseSummary').textContent = `Média de todos os anos (Alvarez et al. 2016): ${alvarez.text} (${alvarez.source})`;
+      $('caseSummary').style.color = 'var(--accent-teal)';
     } else {
       $('caseSummary').textContent = 'Sem resultado documentado para esta combinação.';
       $('caseSummary').style.color = 'var(--muted)';
@@ -1102,12 +1283,11 @@ function update() {
     const sBlock = document.createElement('div');
     const sTitle = document.createElement('p');
     sTitle.className = 'value';
-    const sRes = specific[metric] || specific.mean;
-    sTitle.style.color = (sRes && sRes.sign === 'negativo') ? '#fbbf24' : 'var(--accent-teal)';
+    sTitle.style.color = 'var(--accent-teal)';
     sTitle.textContent = `${specific.source.split(',')[0]} (Específico · ${ensoLabel})`;
     sBlock.appendChild(sTitle);
     const sDesc = document.createElement('p');
-    sDesc.textContent = sRes ? sRes.text : (specific.circulation || '');
+    sDesc.textContent = specific.text;
     sBlock.appendChild(sDesc);
     $('result').appendChild(sBlock);
 
@@ -1118,36 +1298,47 @@ function update() {
     aBlock.style.borderTop = '1px solid rgba(255,255,255,0.12)';
     const aTitle = document.createElement('p');
     aTitle.className = 'value';
-    const aRes = alvarez[metric] || alvarez.mean;
-    aTitle.style.color = (aRes && aRes.sign === 'negativo') ? '#fbbf24' : 'var(--accent-teal)';
+    aTitle.style.color = 'var(--accent-teal)';
     aTitle.textContent = 'Média de todos os anos (Alvarez et al. 2016)';
     aBlock.appendChild(aTitle);
+    if (isEventMode && activeEventId && activeEventId.includes('alvarez')) {
+      const aSub = document.createElement('p');
+      aSub.className = 'muted';
+      aSub.style.marginBottom = '6px';
+      aSub.textContent = 'composição de todos os anos (sem separação por ENOS)';
+      aBlock.appendChild(aSub);
+    }
     const aDesc = document.createElement('p');
-    aDesc.textContent = aRes ? aRes.text : (alvarez.circulation || '');
+    aDesc.textContent = alvarez.text;
     aBlock.appendChild(aDesc);
     $('result').appendChild(aBlock);
   } else if (specific) {
     const sBlock = document.createElement('div');
     const sTitle = document.createElement('p');
     sTitle.className = 'value';
-    const sRes = specific[metric] || specific.mean;
-    sTitle.style.color = (sRes && sRes.sign === 'negativo') ? '#fbbf24' : 'var(--accent-teal)';
+    sTitle.style.color = 'var(--accent-teal)';
     sTitle.textContent = `${specific.source.split(',')[0]} (Específico · ${ensoLabel})`;
     sBlock.appendChild(sTitle);
     const sDesc = document.createElement('p');
-    sDesc.textContent = sRes ? sRes.text : (specific.circulation || '');
+    sDesc.textContent = specific.text;
     sBlock.appendChild(sDesc);
     $('result').appendChild(sBlock);
   } else if (alvarez) {
     const aBlock = document.createElement('div');
     const aTitle = document.createElement('p');
     aTitle.className = 'value';
-    const aRes = alvarez[metric] || alvarez.mean;
-    aTitle.style.color = (aRes && aRes.sign === 'negativo') ? '#fbbf24' : 'var(--accent-teal)';
+    aTitle.style.color = 'var(--accent-teal)';
     aTitle.textContent = 'Média de todos os anos (Alvarez et al. 2016)';
     aBlock.appendChild(aTitle);
+    if (isEventMode && activeEventId && activeEventId.includes('alvarez')) {
+      const aSub = document.createElement('p');
+      aSub.className = 'muted';
+      aSub.style.marginBottom = '6px';
+      aSub.textContent = 'composição de todos os anos (sem separação por ENOS)';
+      aBlock.appendChild(aSub);
+    }
     const aDesc = document.createElement('p');
-    aDesc.textContent = aRes ? aRes.text : (alvarez.circulation || '');
+    aDesc.textContent = alvarez.text;
     aBlock.appendChild(aDesc);
     $('result').appendChild(aBlock);
   } else {
@@ -1193,12 +1384,12 @@ function update() {
 const seasonSelect = $('seasonSelect');
 if (seasonSelect) {
   seasonSelect.addEventListener('change', () => {
-    setClimateState({ season: seasonSelect.value });
+    setClimateState({ season: seasonSelect.value }, true);
   });
 }
 document.querySelectorAll('[data-season]:not([data-shortcut])').forEach(b => {
   b.addEventListener('click', () => {
-    setClimateState({ season: b.dataset.season });
+    setClimateState({ season: b.dataset.season }, true);
   });
 });
 
@@ -1206,12 +1397,12 @@ document.querySelectorAll('[data-season]:not([data-shortcut])').forEach(b => {
 const ensoSelect = $('ensoSelect');
 if (ensoSelect) {
   ensoSelect.addEventListener('change', () => {
-    setClimateState({ enso: ensoSelect.value });
+    setClimateState({ enso: ensoSelect.value }, true);
   });
 }
 document.querySelectorAll('[data-enso]:not([data-shortcut])').forEach(b => {
   b.addEventListener('click', () => {
-    setClimateState({ enso: b.dataset.enso });
+    setClimateState({ enso: b.dataset.enso }, true);
   });
 });
 
@@ -1219,37 +1410,23 @@ document.querySelectorAll('[data-enso]:not([data-shortcut])').forEach(b => {
 const phaseSelect = $('phaseSelect');
 if (phaseSelect) {
   phaseSelect.addEventListener('change', () => {
-    setClimateState({ phase: Number(phaseSelect.value) });
+    setClimateState({ phase: Number(phaseSelect.value) }, true);
   });
 }
 document.querySelectorAll('[data-phase]:not([data-shortcut])').forEach(b => {
   b.addEventListener('click', () => {
-    setClimateState({ phase: Number(b.dataset.phase) });
+    setClimateState({ phase: Number(b.dataset.phase) }, true);
   });
 });
 
+// Event Selects
 document.querySelectorAll('.event-select').forEach(select => {
   select.addEventListener('change', () => {
-    if (!select.value) return;
-    const [season, enso, phase, metricVal] = select.value.split('|');
-    // Eventos de interesse = ATALHOS: só ajustam estação, fase e ENOS (quando definido; se 'todos', mantém ENOS atual) e amplitude = 1,5.
-    // NÃO mudam o modo "MJO nos trópicos" nem desativam nenhum controle.
-    const stateOpts = {
-      season,
-      phase: Number(phase),
-      amplitude: 1.5
-    };
-    if (enso && enso !== 'todos') {
-      stateOpts.enso = enso;
-    }
-    if (metricVal) {
-      stateOpts.metric = metricVal;
-    }
-    setClimateState(stateOpts);
+    selectEvent(select.value);
   });
 });
-$('metricSelect').addEventListener('change', e => setClimateState({metric:e.target.value}));
-$('mjoSelect').addEventListener('change', e => setMjoMode(e.target.value));
+
+if ($('mjoSelect')) $('mjoSelect').addEventListener('change', e => setMjoMode(e.target.value));
 
 // Alternância da Legenda
 $('legendButton').addEventListener('click', () => {

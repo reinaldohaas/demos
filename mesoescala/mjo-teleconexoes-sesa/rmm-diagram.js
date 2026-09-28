@@ -71,7 +71,7 @@ function handleRMMClick(event) {
   if (button) {
     event.preventDefault();
     if (typeof setClimateState === 'function') {
-      setClimateState({ phase: Number(button.dataset.rmmPhase) });
+      setClimateState({ phase: Number(button.dataset.rmmPhase) }, true);
     }
     return;
   }
@@ -100,7 +100,7 @@ function handleRMMClick(event) {
   else if (angleDeg >= -45 && angleDeg < 0) p = 4;
 
   if (typeof setClimateState === 'function') {
-    setClimateState({ phase: p, amplitude: newAmp });
+    setClimateState({ phase: p, amplitude: newAmp }, true);
   }
 }
 

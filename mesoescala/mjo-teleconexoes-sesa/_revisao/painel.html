@@ -1,1 +1,90 @@
-<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="30"><title>Acompanhamento MJO–ENOS–SESA</title><style>body{margin:24px auto;padding:0 16px;max-width:1150px;font:16px/1.5 system-ui;background:#0b1727;color:#eef4ff}a{color:#6ed9f3}.alert,section{padding:18px;border:1px solid #557189;border-radius:10px;margin:16px 0}.alert{background:#20354c}h1{font-size:26px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}img{width:100%;height:350px;object-fit:contain;object-position:top;background:#102035}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.6 system-ui}@media(max-width:600px){.pair{grid-template-columns:1fr}}</style><h1>Acompanhamento · MJO–ENOS–SESA</h1><div class="alert"><h2>Em andamento</h2><p>Lote completo implementado e validado no branch revisao. Todas as validações passaram com 100% de sucesso (console 0 erros, narrações 384 sem falhas, responsividade mobile 360/390/414 ok, testes de ENOS Alvarez vs Fernandes &amp; Grimm aprovados).</p><h2>Aguardando decisão</h2><p>Autorização para eventual merge do lote do branch revisao no main.</p></div><p><a href="../index.html">Abrir demo local</a> · <a href="STATUS.md">STATUS.md</a> · <a href="PROTOCOLO.md">Protocolo permanente</a></p><h2>Feito (nesta rodada)</h2><ul><li>Opção "Todos os anos" adicionada ao ENOS; casos Alvarez vinculados exclusivamente a "Todos os anos"; casos Fernandes &amp; Grimm vinculados ao ENOS específico; fallback removido.</li><li>TSM equatorial não desenhada sob "Todos os anos"; exibição de rótulo "Composição de todos os anos".</li><li>Eventos do Alvarez selecionam ENOS = "Todos os anos".</li><li>χ200 sobre América do Sul regional: núcleo (core) só com contorno sem preenchimento, mid=0,12, outer=0,10 (opacidade total 0,22 ≤ 0,25).</li><li>Rótulos de eventos padronizados no formato "Fonte · Fase(s) — sinal (região)".</li><li>Desamontoamento: texto do símbolo de chuva deslocado para o oceano Atlântico com linha guia sutil.</li><li>PSA representado por círculos/nós nos 4 centros de ação com sinais alternados.</li><li>Cachebuster atualizado para ?v=20260927d.</li><li>Capturas antes/depois de JJA 4–5 e DJF 8–1 registradas; seis capturas canônicas atualizadas.</li></ul><h2>Capturas Antes / Depois do Lote</h2><section><h3>JJA 4–5 (Regional · Alvarez · Menos chuva ZCAS)</h3><div class="pair"><div><b>Antes</b><a href="capturas/JJA_4_5_antes.png"><img src="capturas/JJA_4_5_antes.png" alt="JJA_4_5_antes"></a></div><div><b>Depois (core vazado, texto no Atlântico)</b><a href="capturas/JJA_4_5_depois.png"><img src="capturas/JJA_4_5_depois.png" alt="JJA_4_5_depois"></a></div></div></section><section><h3>DJF 8–1 (Regional · Alvarez · Mais chuva ZCAS)</h3><div class="pair"><div><b>Antes</b><a href="capturas/DJF_8_1_antes.png"><img src="capturas/DJF_8_1_antes.png" alt="DJF_8_1_antes"></a></div><div><b>Depois (core vazado, texto no Atlântico)</b><a href="capturas/DJF_8_1_depois.png"><img src="capturas/DJF_8_1_depois.png" alt="DJF_8_1_depois"></a></div></div></section><h2>Capturas Canônicas</h2><section><h3>global_DJF_f1</h3><div class="pair"><div><b>Estado atual</b><a href="capturas/global_DJF_f1.png"><img src="capturas/global_DJF_f1.png" alt="global_DJF_f1"></a></div></div></section><section><h3>global_DJF_f8</h3><div class="pair"><div><b>Estado atual</b><a href="capturas/global_DJF_f8.png"><img src="capturas/global_DJF_f8.png" alt="global_DJF_f8"></a></div></div></section><section><h3>global_JJA_f8</h3><div class="pair"><div><b>Estado atual</b><a href="capturas/global_JJA_f8.png"><img src="capturas/global_JJA_f8.png" alt="global_JJA_f8"></a></div></div></section><section><h3>regional_DJF_f8</h3><div class="pair"><div><b>Estado atual</b><a href="capturas/regional_DJF_f8.png"><img src="capturas/regional_DJF_f8.png" alt="regional_DJF_f8"></a></div></div></section><section><h3>boletim</h3><div class="pair"><div><b>Estado atual</b><a href="capturas/boletim.png"><img src="capturas/boletim.png" alt="boletim"></a></div></div></section><section><h3>celular_390</h3><div class="pair"><div><b>Estado atual</b><a href="capturas/celular_390.png"><img src="capturas/celular_390.png" alt="celular_390"></a></div></div></section></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Acompanhamento MJO–ENOS–SESA · Lote Fechado</title>
+  <style>
+    body { margin: 24px auto; padding: 0 16px; max-width: 1200px; font: 16px/1.5 system-ui, sans-serif; background: #0b1727; color: #eef4ff; }
+    a { color: #6ed9f3; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .alert, section { padding: 18px; border: 1px solid #334d68; border-radius: 10px; margin: 16px 0; }
+    .alert { background: #162a3f; border-color: #38bdf8; }
+    h1 { font-size: 26px; color: #f8fafc; }
+    h2 { font-size: 20px; color: #38bdf8; margin-top: 0; }
+    h3 { font-size: 16px; color: #a7f3d0; margin-bottom: 8px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .capture-card { background: #102035; border: 1px solid #1e3a5a; border-radius: 8px; padding: 12px; }
+    .capture-card img { width: 100%; height: auto; max-height: 480px; object-fit: contain; background: #071320; border-radius: 6px; display: block; }
+    .capture-card p { font-size: 13.5px; color: #94a3b8; margin: 8px 0 0 0; }
+    ul { padding-left: 20px; }
+    li { margin-bottom: 6px; }
+    code { font-family: monospace; background: rgba(255,255,255,0.1); padding: 2px 5px; border-radius: 4px; color: #fef08a; }
+    @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>Acompanhamento · MJO–ENOS–SESA (Lote Fechado)</h1>
+  
+  <div class="alert">
+    <h2>Lote Concluído no branch <code>revisao</code></h2>
+    <p>Todos os requisitos do lote fechado foram implementados e validados por 1536 configurações automatizadas e testes funcionais (0 erros de console, 0 ocorrências de <code>metric</code>, SALLJ direcional, toggle dinâmico de ENOS em Alvarez vs Fernandes &amp; Grimm).</p>
+    <p><b>Aguardando decisão:</b> Avaliação do Reinaldo no branch <code>revisao</code> antes de qualquer merge no <code>main</code>.</p>
+  </div>
+
+  <p>
+    <a href="../index.html">Abrir demonstração local</a> · 
+    <a href="STATUS.md">Ver STATUS.md completo</a> · 
+    <a href="PROTOCOLO.md">Protocolo permanente</a>
+  </p>
+
+  <section>
+    <h2>Resumo das Alterações</h2>
+    <ul>
+      <li><b>Base de casos curada:</b> restrita estritamente aos 8 casos autorizados com sinal aumentado ("mais") e mecanismos físicos dos autores (Alvarez et al. 2016 e Fernandes &amp; Grimm 2023).</li>
+      <li><b>Mecanismos no mapa:</b> sinal de &chi;<sub>200</sub> na América do Sul tropical, centros C e A de trem de ondas extratropicais (Alvarez et al.), marcador qualitativo de fonte subtropical (Fernandes &amp; Grimm).</li>
+      <li><b>Eliminação de <code>metric</code>:</b> seletor de métrica removido; texto único e integrado por caso; ZERO ocorrências no código de produção.</li>
+      <li><b>ENOS em Eventos de Interesse:</b> seleção de Alvarez oculta o seletor de ENOS; Fernandes &amp; Grimm fixa estação, ENOS e fase; qualquer interação manual restaura o seletor.</li>
+      <li><b>SALLJ Direcional (DJF; Nogués-Paegle &amp; Mo 1997):</b> seta direcionada à Bacia do Prata nas fases 3–4; seta curvando à ZCAS nas fases 8 e 1; neutro nas demais.</li>
+      <li><b>Trilha RMM 1–8:</b> 9 pontos de referência de Wheeler &amp; Hendon (2004, Fig. 7) com repetição e realce duplo da fase 1 em 165°W.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Capturas de Validação</h2>
+    <div class="grid-2">
+      <div class="capture-card">
+        <h3>1. DJF 3–4 · Bacia do Prata (Alvarez et al. 2016)</h3>
+        <a href="capturas/DJF_3_4_prata.png" target="_blank">
+          <img src="capturas/DJF_3_4_prata.png" alt="DJF 3-4 Bacia do Prata">
+        </a>
+        <p>SALLJ estendido até o Prata, centro ciclônico C (~38°S 62°W), convergência tropical (&chi;<sub>200</sub> &gt; 0), seletor de ENOS oculto.</p>
+      </div>
+
+      <div class="capture-card">
+        <h3>2. DJF La Niña 8 · Pico na ZCAS (Fernandes &amp; Grimm 2023)</h3>
+        <a href="capturas/DJF_lanina_8_zcas.png" target="_blank">
+          <img src="capturas/DJF_lanina_8_zcas.png" alt="DJF La Niña 8 ZCAS">
+        </a>
+        <p>SALLJ curvando para leste/nordeste em direção à ZCAS, marcador qualitativo da fonte convectiva subtropical no Pacífico Sul (25°S 125°W), seletor de ENOS visível.</p>
+      </div>
+
+      <div class="capture-card">
+        <h3>3. SON 1 · Bacia do Prata (Alvarez et al. 2016)</h3>
+        <a href="capturas/SON_1_prata.png" target="_blank">
+          <img src="capturas/SON_1_prata.png" alt="SON 1 Bacia do Prata">
+        </a>
+        <p>Centro ciclônico C (~30°S 60°W) vindo do oeste da Península Antártica, nota observacional de adiantamento de uma fase entre OLR e RMM.</p>
+      </div>
+
+      <div class="capture-card">
+        <h3>4. Trilha RMM 1–8 (Wheeler &amp; Hendon 2004, Fig. 7)</h3>
+        <a href="capturas/trilha_fase1.png" target="_blank">
+          <img src="capturas/trilha_fase1.png" alt="Trilha RMM 1-8 Fase 1">
+        </a>
+        <p>Traçado equatorial com as 9 coordenadas de referência e duplo destaque na fase 1 (50°E e 165°W), rótulo de referência dos autores.</p>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
