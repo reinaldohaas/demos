@@ -249,7 +249,7 @@ assert(pathNeutro && pathNeutro.attributes.d, 'Caminho do SALLJ deve existir par
 assert.notEqual(pathNeutro.attributes.d, pathPrata.attributes.d, 'Traçado neutro deve ser diferente do traçado Prata');
 assert.notEqual(pathNeutro.attributes.d, pathZcas.attributes.d, 'Traçado neutro deve ser diferente do traçado ZCAS');
 
-// 9. Teste de χ200 Único (G. Deemer) e Losangos (Zero Elipses)
+// 9. Teste de χ200 Único (G. Deemer) e Paralelogramos (Zero Elipses)
 const expectedChiCenters = {
   1: { div: [10, 2],    conv: [145, 1] },
   2: { div: [65, -1],   conv: [-170, 0] },
@@ -265,10 +265,38 @@ assert(!docViewCode.includes('MJO_CHI_REF'), 'MJO_CHI_REF não deve mais existir
 assert(docViewCode.includes('MJO_CHI_CENTERS'), 'MJO_CHI_CENTERS deve estar definido');
 assert(docViewCode.includes('G. Deemer'), 'Crédito a G. Deemer deve constar na legenda');
 
-// Testar desenho de χ200 em modo chi: losangos e zero elipses
+// Testar geometria dos paralelogramos em todas as 8 fases:
+// - Externo: latN=30, latS=-30, W=60
+// - Médio: H=20, W=40
+// - Núcleo: H=10, W=22
+// - Nenhum vértice além de ±30°
+for (let p = 1; p <= 8; p++) {
+  const chi = sandbox.getMjoChiSchematic(p);
+  assert(chi && chi.active && chi.suppressed, `χ200 deve estar definido para fase ${p}`);
+  for (const branch of [chi.active, chi.suppressed]) {
+    assert.equal(branch.levels.length, 3, `Deve ter 3 níveis na fase ${p}`);
+    const [outer, mid, core] = branch.levels;
+    assert.equal(outer.W, 60, `Outer W deve ser 60 na fase ${p}`);
+    assert.equal(outer.latN, 30, `Outer latN deve ser 30 na fase ${p}`);
+    assert.equal(outer.latS, -30, `Outer latS deve ser -30 na fase ${p}`);
+
+    assert.equal(mid.W, 40, `Mid W deve ser 40 na fase ${p}`);
+    assert.equal(mid.latN - mid.latS, 20, `Mid H deve ser 20 na fase ${p}`);
+
+    assert.equal(core.W, 22, `Core W deve ser 22 na fase ${p}`);
+    assert.equal(core.latN - core.latS, 10, `Core H deve ser 10 na fase ${p}`);
+
+    for (const lvl of branch.levels) {
+      assert(lvl.latN <= 30 && lvl.latN >= -30, `latN deve estar em [-30, 30] na fase ${p}`);
+      assert(lvl.latS <= 30 && lvl.latS >= -30, `latS deve estar em [-30, 30] na fase ${p}`);
+    }
+  }
+}
+
+// Testar desenho de χ200 em modo chi: paralelogramos e zero elipses
 sandbox.setClimateState({ season: 'DJF', enso: 'neutro', phase: 1, amplitude: 1.5, mjoMode: 'chi', view: 'global' });
 const chiPolygons = createdElements.filter(el => el.tagName === 'polygon');
-assert(chiPolygons.length >= 6, 'Devem ser gerados pelo menos 6 polígonos (losangos: outer, mid, core para div e conv)');
+assert(chiPolygons.length >= 6, 'Devem ser gerados pelo menos 6 polígonos (paralelogramos: outer, mid, core para div e conv)');
 
 // Chamar drawMjoVelocityPotential isoladamente para confirmar que não cria nenhuma elipse
 createdElements.length = 0;

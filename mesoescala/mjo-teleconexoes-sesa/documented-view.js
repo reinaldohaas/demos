@@ -107,28 +107,43 @@ const MJO_CHI_CENTERS = {
   8: { div: [-65, -3],  conv: [135, 0] }
 };
 
-// Esquema didático derivado com losangos (4 vértices): externo ±60°×±20°, médio ±40°×±14°, núcleo ±22°×±8° (núcleo só com contorno)
+// Esquema didático derivado com paralelogramos:
+// Externo: borda norte em 30°N e borda sul em 30°S (fixas, independentemente da latitude do centro); W = 60°.
+// Médio: H = 20° em torno da latitude do centro; W = 40°.
+// Núcleo (só contorno): H = 10° em torno da latitude do centro; W = 22°.
+// Inclinação igual em todos: borda sul deslocada para LESTE em W (metade da largura) em relação à norte:
+//   NW = [lonC − 1,5W, latN]   NE = [lonC + 0,5W, latN]
+//   SE = [lonC + 1,5W, latS]   SW = [lonC − 0,5W, latS]
+// (latN/latS = limites de cada nível; no externo, 30°N e 30°S.)
+// Nenhum vértice além de ±30° de latitude.
 function getMjoChiSchematic(phase) {
   const ref = MJO_CHI_CENTERS[Number(phase)];
   if (!ref) return null;
   const [adLon, adLat] = ref.div;
   const [scLon, scLat] = ref.conv;
+
+  const buildLevels = (lonC, latC) => {
+    // Nenhum vértice além de ±30° de latitude
+    const midLatN = Math.min(30, Math.max(-30, latC + 10));
+    const midLatS = Math.max(-30, Math.min(30, latC - 10));
+    const coreLatN = Math.min(30, Math.max(-30, latC + 5));
+    const coreLatS = Math.max(-30, Math.min(30, latC - 5));
+
+    return [
+      { name: 'outer', W: 60, latN: 30, latS: -30, lon: lonC, lat: latC },
+      { name: 'mid',   W: 40, latN: midLatN, latS: midLatS, lon: lonC, lat: latC },
+      { name: 'core',  W: 22, latN: coreLatN, latS: coreLatS, lon: lonC, lat: latC }
+    ];
+  };
+
   return {
     active: {
       center: [adLon, adLat],
-      levels: [
-        { name: 'outer', lon: adLon, lat: adLat, dlon: 60, dlat: 20 },
-        { name: 'mid',   lon: adLon, lat: adLat, dlon: 40, dlat: 14 },
-        { name: 'core',  lon: adLon, lat: adLat, dlon: 22, dlat: 8 }
-      ]
+      levels: buildLevels(adLon, adLat)
     },
     suppressed: {
       center: [scLon, scLat],
-      levels: [
-        { name: 'outer', lon: scLon, lat: scLat, dlon: 60, dlat: 20 },
-        { name: 'mid',   lon: scLon, lat: scLat, dlon: 40, dlat: 14 },
-        { name: 'core',  lon: scLon, lat: scLat, dlon: 22, dlat: 8 }
-      ]
+      levels: buildLevels(scLon, scLat)
     }
   };
 }
@@ -392,7 +407,11 @@ function drawMjoVelocityPotential() {
     const y30N = (85 - 30) * 560 / 160;
     const y30S = (85 - (-30)) * 560 / 160;
 
-    // 2. Desenhar camadas ativas e suprimidas em formato de LOSANGOS (4 vértices)
+    // 2. Desenhar camadas ativas e suprimidas em formato de PARALELOGRAMOS (4 vértices)
+    // Inclinação: borda sul deslocada para LESTE em W (metade da largura) em relação à norte:
+    //   NW = [lonC − 1,5W, latN]   NE = [lonC + 0,5W, latN]
+    //   SE = [lonC + 1,5W, latS]   SW = [lonC − 0,5W, latS]
+    //   Nenhum vértice além de ±30° de latitude.
     const renderLayers = (data, styleKey) => {
       if (!data || !data.levels) return;
       const styles = {
@@ -401,15 +420,29 @@ function drawMjoVelocityPotential() {
         core:  { fill: 'none', opacity: 0, stroke: styleKey === 'active' ? '#0284c7' : '#ef4444', strokeWidth: 1.8 }
       };
 
+      const scaleX = 1200 / 360;
+      const scaleY = 3.5;
+
       for (const item of data.levels) {
         const st = styles[item.name];
-        const dX = item.dlon * (1200 / 360);
-        const dY = item.dlat * 3.5;
+        const baseCx = ((item.lon - 20) % 360 + 360) % 360 * scaleX;
+        const yNW = (85 - item.latN) * scaleY;
+        const yNE = (85 - item.latN) * scaleY;
+        const ySE = (85 - item.latS) * scaleY;
+        const ySW = (85 - item.latS) * scaleY;
 
-        for (const shift of [-360, 0, 360]) {
-          const [cx, cy] = project(item.lon + shift, item.lat);
-          if (cx + dX >= -50 && cx - dX <= 1250) {
-            const pts = `${cx},${cy - dY} ${cx + dX},${cy} ${cx},${cy + dY} ${cx - dX},${cy}`;
+        for (const shift of [-1200, 0, 1200]) {
+          const cx = baseCx + shift;
+          const xNW = cx - 1.5 * item.W * scaleX;
+          const xNE = cx + 0.5 * item.W * scaleX;
+          const xSE = cx + 1.5 * item.W * scaleX;
+          const xSW = cx - 0.5 * item.W * scaleX;
+
+          const minX = Math.min(xNW, xNE, xSE, xSW);
+          const maxX = Math.max(xNW, xNE, xSE, xSW);
+
+          if (maxX >= -50 && minX <= 1250) {
+            const pts = `${xNW.toFixed(1)},${yNW.toFixed(1)} ${xNE.toFixed(1)},${yNE.toFixed(1)} ${xSE.toFixed(1)},${ySE.toFixed(1)} ${xSW.toFixed(1)},${ySW.toFixed(1)}`;
             const attrs = {
               points: pts,
               stroke: st.stroke,
@@ -460,7 +493,7 @@ function drawMjoVelocityPotential() {
     // 4. Barra de escala didática conceitual
     drawChiColorbar(300, 516, 600, 36);
   } else {
-    // Visão Regional (América do Sul): losangos suaves sobre o continente
+    // Visão Regional (América do Sul): paralelogramos suaves sobre o continente
     // Núcleo (core) só com contorno, sem preenchimento; mid <= 0.12; outer <= 0.10. Opacidade somada no centro <= 0.25.
     const renderRegionalLayers = (data, styleKey) => {
       if (!data || !data.levels) return;
@@ -471,22 +504,34 @@ function drawMjoVelocityPotential() {
       };
       for (const item of data.levels) {
         const st = styles[item.name];
-        const dX = item.dlon * 8;
-        const dY = item.dlat * 6.4;
-        const [cx, cy] = project(item.lon, item.lat);
-        const pts = `${cx},${cy - dY} ${cx + dX},${cy} ${cx},${cy + dY} ${cx - dX},${cy}`;
-        const attrs = {
-          points: pts,
-          stroke: st.stroke,
-          'stroke-width': st.strokeWidth
-        };
-        if (st.fill === 'none') {
-          attrs.fill = 'none';
-        } else {
-          attrs.fill = st.fill;
-          attrs['fill-opacity'] = st.opacity;
+        for (const shift of [-360, 0, 360]) {
+          const cLon = item.lon + shift;
+          const [xNW, yNW] = project(cLon - 1.5 * item.W, item.latN);
+          const [xNE, yNE] = project(cLon + 0.5 * item.W, item.latN);
+          const [xSE, ySE] = project(cLon + 1.5 * item.W, item.latS);
+          const [xSW, ySW] = project(cLon - 0.5 * item.W, item.latS);
+
+          const minX = Math.min(xNW, xNE, xSE, xSW);
+          const maxX = Math.max(xNW, xNE, xSE, xSW);
+          const minY = Math.min(yNW, yNE, ySE, ySW);
+          const maxY = Math.max(yNW, yNE, ySE, ySW);
+
+          if (maxX >= -100 && minX <= 740 && maxY >= -100 && minY <= 620) {
+            const pts = `${xNW.toFixed(1)},${yNW.toFixed(1)} ${xNE.toFixed(1)},${yNE.toFixed(1)} ${xSE.toFixed(1)},${ySE.toFixed(1)} ${xSW.toFixed(1)},${ySW.toFixed(1)}`;
+            const attrs = {
+              points: pts,
+              stroke: st.stroke,
+              'stroke-width': st.strokeWidth
+            };
+            if (st.fill === 'none') {
+              attrs.fill = 'none';
+            } else {
+              attrs.fill = st.fill;
+              attrs['fill-opacity'] = st.opacity;
+            }
+            svg('polygon', attrs);
+          }
         }
-        svg('polygon', attrs);
       }
     };
 
