@@ -28,7 +28,7 @@
   
   <div class="alert">
     <h2>Lote Concluído no branch <code>revisao</code></h2>
-    <p>Todos os requisitos do lote fechado foram implementados e validados por 1536 configurações automatizadas e testes funcionais (0 erros de console, 0 ocorrências de <code>metric</code>, nomenclatura estrita SESA e ZCAS, 10 casos curados, paralelogramos de &chi;<sub>200</sub> conforme especificação com limites fixos de latitude).</p>
+    <p>Todos os requisitos do lote fechado foram implementados e validados por 1536 configurações automatizadas e testes funcionais (0 erros de console, 0 ocorrências de <code>metric</code>, nomenclatura estrita SESA e ZCAS, 10 casos curados, paralelogramos de &chi;<sub>200</sub> estritamente paralelos e concêntricos com limites fixos de latitude).</p>
     <p><b>Aguardando decisão:</b> Avaliação do Reinaldo no branch <code>revisao</code> antes de qualquer merge no <code>main</code>.</p>
   </div>
 
@@ -39,14 +39,14 @@
   </p>
 
   <section>
-    <h2>Resumo das Alterações (v=20260927k)</h2>
+    <h2>Resumo das Alterações (v=20260927l)</h2>
     <ul>
-      <li><b>Geometria dos Paralelogramos (&chi;<sub>200</sub>):</b>
+      <li><b>Geometria dos Paralelogramos (&chi;<sub>200</sub>) Estritamente Paralelos:</b>
         <ul>
+          <li><b>Paralelismo rigoroso:</b> inclinação uniforme de todas as arestas laterais (slope = -1.0 em coordenadas, 0.9524 em tela), tornando todos os paralelogramos perfeitamente paralelos entre si e concêntricos.</li>
           <li><b>Externo:</b> borda norte em 30°N e borda sul em 30°S (fixas, independentemente da latitude do centro); W = 60°.</li>
           <li><b>Médio:</b> H = 20° em torno da latitude do centro; W = 40°.</li>
           <li><b>Núcleo (só contorno):</b> H = 10° em torno da latitude do centro; W = 22°.</li>
-          <li><b>Inclinação igual em todos:</b> borda sul deslocada para LESTE em W (metade da largura) em relação à norte (NW = [lonC − 1,5W, latN], NE = [lonC + 0,5W, latN], SE = [lonC + 1,5W, latS], SW = [lonC − 0,5W, latS]).</li>
           <li><b>Limites de latitude:</b> nenhum vértice além de ±30° de latitude.</li>
         </ul>
       </li>
@@ -57,7 +57,7 @@
   </section>
 
   <section>
-    <h2>Capturas de Validação (v=20260927k)</h2>
+    <h2>Capturas de Validação (v=20260927l)</h2>
     <div class="grid-2">
       <div class="capture-card">
         <h3>1. DJF 3–4 · SESA (Alvarez et al. 2016)</h3>

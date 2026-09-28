@@ -289,6 +289,12 @@ for (let p = 1; p <= 8; p++) {
     for (const lvl of branch.levels) {
       assert(lvl.latN <= 30 && lvl.latN >= -30, `latN deve estar em [-30, 30] na fase ${p}`);
       assert(lvl.latS <= 30 && lvl.latS >= -30, `latS deve estar em [-30, 30] na fase ${p}`);
+
+      // Validação de paralelismo estrito: inclinação dlon/dlat constante em todos os níveis
+      const leftSlope = (lvl.dlonSW - lvl.dlonNW) / (lvl.latS - lvl.latN);
+      const rightSlope = (lvl.dlonSE - lvl.dlonNE) / (lvl.latS - lvl.latN);
+      assert(Math.abs(leftSlope - (-1.0)) < 1e-6, `Aresta esquerda deve ter inclinação -1.0 (nível ${lvl.name}, fase ${p})`);
+      assert(Math.abs(rightSlope - (-1.0)) < 1e-6, `Aresta direita deve ter inclinação -1.0 (nível ${lvl.name}, fase ${p})`);
     }
   }
 }

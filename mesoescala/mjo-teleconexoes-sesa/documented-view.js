@@ -107,15 +107,14 @@ const MJO_CHI_CENTERS = {
   8: { div: [-65, -3],  conv: [135, 0] }
 };
 
-// Esquema didático derivado com paralelogramos:
-// Externo: borda norte em 30°N e borda sul em 30°S (fixas, independentemente da latitude do centro); W = 60°.
-// Médio: H = 20° em torno da latitude do centro; W = 40°.
-// Núcleo (só contorno): H = 10° em torno da latitude do centro; W = 22°.
-// Inclinação igual em todos: borda sul deslocada para LESTE em W (metade da largura) em relação à norte:
-//   NW = [lonC − 1,5W, latN]   NE = [lonC + 0,5W, latN]
-//   SE = [lonC + 1,5W, latS]   SW = [lonC − 0,5W, latS]
-// (latN/latS = limites de cada nível; no externo, 30°N e 30°S.)
-// Nenhum vértice além de ±30° de latitude.
+// Esquema didático derivado com paralelogramos estritamente paralelos:
+// - Externo: borda norte em 30°N e borda sul em 30°S (fixas); W = 60°.
+// - Médio: H = 20° em torno da latitude do centro; W = 40°.
+// - Núcleo (só contorno): H = 10° em torno da latitude do centro; W = 22°.
+// - Inclinação rigorosamente igual e paralela em todos os níveis e centros:
+//   À latitude lat, o centro da fatia horizontal é lonC - (lat - latC).
+//   Arestas laterais com inclinação uniforme (dlon = -(lat - latC)), tornando todos os paralelogramos paralelos.
+// - Nenhum vértice além de ±30° de latitude.
 function getMjoChiSchematic(phase) {
   const ref = MJO_CHI_CENTERS[Number(phase)];
   if (!ref) return null;
@@ -129,10 +128,24 @@ function getMjoChiSchematic(phase) {
     const coreLatN = Math.min(30, Math.max(-30, latC + 5));
     const coreLatS = Math.max(-30, Math.min(30, latC - 5));
 
+    // Inclinação uniforme de 1.0 para todas as arestas laterais:
+    const createLevel = (name, W, latN, latS) => ({
+      name,
+      W,
+      latN,
+      latS,
+      lon: lonC,
+      lat: latC,
+      dlonNW: -(latN - latC) - W,
+      dlonNE: -(latN - latC) + W,
+      dlonSE: -(latS - latC) + W,
+      dlonSW: -(latS - latC) - W
+    });
+
     return [
-      { name: 'outer', W: 60, latN: 30, latS: -30, lon: lonC, lat: latC },
-      { name: 'mid',   W: 40, latN: midLatN, latS: midLatS, lon: lonC, lat: latC },
-      { name: 'core',  W: 22, latN: coreLatN, latS: coreLatS, lon: lonC, lat: latC }
+      createLevel('outer', 60, 30, -30),
+      createLevel('mid', 40, midLatN, midLatS),
+      createLevel('core', 22, coreLatN, coreLatS)
     ];
   };
 
@@ -433,10 +446,10 @@ function drawMjoVelocityPotential() {
 
         for (const shift of [-1200, 0, 1200]) {
           const cx = baseCx + shift;
-          const xNW = cx - 1.5 * item.W * scaleX;
-          const xNE = cx + 0.5 * item.W * scaleX;
-          const xSE = cx + 1.5 * item.W * scaleX;
-          const xSW = cx - 0.5 * item.W * scaleX;
+          const xNW = cx + item.dlonNW * scaleX;
+          const xNE = cx + item.dlonNE * scaleX;
+          const xSE = cx + item.dlonSE * scaleX;
+          const xSW = cx + item.dlonSW * scaleX;
 
           const minX = Math.min(xNW, xNE, xSE, xSW);
           const maxX = Math.max(xNW, xNE, xSE, xSW);
@@ -506,10 +519,10 @@ function drawMjoVelocityPotential() {
         const st = styles[item.name];
         for (const shift of [-360, 0, 360]) {
           const cLon = item.lon + shift;
-          const [xNW, yNW] = project(cLon - 1.5 * item.W, item.latN);
-          const [xNE, yNE] = project(cLon + 0.5 * item.W, item.latN);
-          const [xSE, ySE] = project(cLon + 1.5 * item.W, item.latS);
-          const [xSW, ySW] = project(cLon - 0.5 * item.W, item.latS);
+          const [xNW, yNW] = project(cLon + item.dlonNW, item.latN);
+          const [xNE, yNE] = project(cLon + item.dlonNE, item.latN);
+          const [xSE, ySE] = project(cLon + item.dlonSE, item.latS);
+          const [xSW, ySW] = project(cLon + item.dlonSW, item.latS);
 
           const minX = Math.min(xNW, xNE, xSE, xSW);
           const maxX = Math.max(xNW, xNE, xSE, xSW);
