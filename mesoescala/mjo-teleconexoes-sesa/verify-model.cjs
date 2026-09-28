@@ -241,11 +241,54 @@ assert(pathNeutro && pathNeutro.attributes.d, 'Caminho do SALLJ deve existir par
 assert.notEqual(pathNeutro.attributes.d, pathPrata.attributes.d, 'Traçado neutro deve ser diferente do traçado Prata');
 assert.notEqual(pathNeutro.attributes.d, pathZcas.attributes.d, 'Traçado neutro deve ser diferente do traçado ZCAS');
 
+// 9. Teste de χ200 Único (G. Deemer) e Losangos (Zero Elipses)
+const expectedChiCenters = {
+  1: { div: [10, 2],    conv: [145, 1] },
+  2: { div: [65, -1],   conv: [-170, 0] },
+  3: { div: [75, -1],   conv: [-110, -4] },
+  4: { div: [115, 2],   conv: [-60, 2] },
+  5: { div: [135, 1],   conv: [-70, 0] },
+  6: { div: [-130, -3], conv: [55, -3] },
+  7: { div: [-115, -3], conv: [80, -1] },
+  8: { div: [-65, -3],  conv: [135, 0] }
+};
+const docViewCode = fs.readFileSync(path.join(__dirname, 'documented-view.js'), 'utf8');
+assert(!docViewCode.includes('MJO_CHI_REF'), 'MJO_CHI_REF não deve mais existir no código');
+assert(docViewCode.includes('MJO_CHI_CENTERS'), 'MJO_CHI_CENTERS deve estar definido');
+assert(docViewCode.includes('G. Deemer'), 'Crédito a G. Deemer deve constar na legenda');
+
+// Testar desenho de χ200 em modo chi: losangos e zero elipses
+sandbox.setClimateState({ season: 'DJF', enso: 'neutro', phase: 1, amplitude: 1.5, mjoMode: 'chi', view: 'global' });
+const chiPolygons = createdElements.filter(el => el.tagName === 'polygon');
+assert(chiPolygons.length >= 6, 'Devem ser gerados pelo menos 6 polígonos (losangos: outer, mid, core para div e conv)');
+
+// Chamar drawMjoVelocityPotential isoladamente para confirmar que não cria nenhuma elipse
+createdElements.length = 0;
+sandbox.drawMjoVelocityPotential();
+const chiEllipses = createdElements.filter(el => el.tagName === 'ellipse');
+assert.equal(chiEllipses.length, 0, 'drawMjoVelocityPotential não deve conter nenhuma tag ellipse');
+
+// 10. Teste do Evento Alvarez: TSM ocultada e faixa neutra
+sandbox.selectEvent('DJF-alvarez-3-4');
+const sstEllipseInAlvarez = createdElements.some(el => el.tagName === 'ellipse' && el.attributes && el.attributes.fill && (el.attributes.fill.includes('239') || el.attributes.fill.includes('37')));
+assert(!sstEllipseInAlvarez, 'No evento Alvarez não deve desenhar elipse de TSM');
+assert(elements.sstText.textContent.includes('Composição de todos os anos'), 'Texto da TSM deve indicar composição de todos os anos no evento Alvarez');
+assert(!elements.sstBand.className.includes('warm') && !elements.sstBand.className.includes('cold'), 'sstBand não deve ter classe warm ou cold no evento Alvarez');
+
+// 11. Teste da Narrativa do SALLJ para ZCAS
+sandbox.setClimateState({ season: 'DJF', enso: 'la-nina', phase: 8, amplitude: 1.5 });
+const narZcas = elements.narrationText.textContent;
+assert(narZcas.includes('curva para leste/nordeste, em direção ao setor ZCAS (Nogués-Paegle & Mo 1997).'), 'Narrativa deve usar a frase solicitada para o SALLJ ZCAS');
+assert(!narZcas.includes('reforçando a convergência de umidade sobre o Sudeste'), 'Narrativa NÃO deve conter "reforçando a convergência de umidade sobre o Sudeste"');
+
 console.log('====================================================');
 console.log('TODAS AS VALIDAÇÕES AUTOMATIZADAS PASSARAM COM SUCESSO:');
 console.log('1. 8 casos documentados autorizados (só mais, só mecanismo físico).');
 console.log('2. ZERO ocorrências de "metric" nos arquivos de produção.');
 console.log('3. Seletor de ENOS oculto em eventos Alvarez e restaurado na interação manual.');
-console.log('4. SALLJ direcional validado (Prata vs ZCAS vs neutro).');
-console.log('5. 1536 configurações de sandbox executadas sem erros.');
+console.log('4. SALLJ direcional validado (Prata vs ZCAS vs neutro) e narrativa corrigida.');
+console.log('5. χ200 Deemer com tabela única e losangos (zero elipses).');
+console.log('6. Evento Alvarez sem elipse de TSM e rótulo "composição de todos os anos".');
+console.log('7. 1536 configurações de sandbox executadas sem erros.');
 console.log('====================================================');
+

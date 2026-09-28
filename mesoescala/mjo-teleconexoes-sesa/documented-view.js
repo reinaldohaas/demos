@@ -94,56 +94,41 @@ function getMjoDipoles(phase, season = currentSeason) {
   };
 }
 
-// Esquema didático conceitual: Divergência e Convergência em Altos Níveis (~200 hPa)
-// Relação física fundamental (Helmholtz / Poisson): v_χ = ∇χ e ∇²χ = −δ, onde δ = ∇ · v_χ é a divergência horizontal.
-// Anomalias negativas (roxo/azul): divergência em altos níveis (∇²χ < 0, δ > 0), favorecendo convecção e ascendência ativa da MJO.
-// Anomalias positivas (verde/amarelo/laranja/vermelho): convergência em altos níveis (∇²χ > 0, δ < 0), favorecendo convecção suprimida e subsidência.
-// Representação estritamente qualitativa e esquemática; sem inferência de chuva local no Brasil a partir deste campo.
-// Centros de χ200 — baricentro da área t>2,5 nos compostos CPC (Wheeler & Hendon 2004),
-// plot_chi_tvalue_8pan_{novmar|maysep}.gif, leitura em pixels em 27/09/2026 (1,178 px/grau; 1,45 px/grau)
-const MJO_CHI_REF = {
-  novmar: {
-    1: { div: [-10, -1], conv: [ 164, 2] },
-    2: { div: [ 49, -3], conv: [-166, 4] },
-    3: { div: [ 79, -1], conv: [-111, 1] },
-    4: { div: [ 119, 0], conv: [ -28, 0] },
-    5: { div: [ 159, 0], conv: [ -13, 2] },
-    6: { div: [-167, 0], conv: [  69,-2] },
-    7: { div: [-113,-8], conv: [  87,-2] },
-    8: { div: [ -36,-1], conv: [ 117, 0] }
-  },
-  maysep: {
-    1: { div: [-23,  4], conv: [ 157, 5] },
-    2: { div: [ 45,  0], conv: [-148,10] },
-    3: { div: [ 80, -1], conv: [ -81, 3] },
-    4: { div: [ 114, 0], conv: [ -60, 0] },
-    5: { div: [ 160, 1], conv: [ -41, 2] },
-    6: { div: [-168, 0], conv: [  55,-2] },
-    7: { div: [-126,-1], conv: [  80,-1] },
-    8: { div: [ -59, 3], conv: [ 109, 1] }
-  }
+// Esquema didático de Divergência e Convergência em Altos Níveis (~200 hPa)
+// Tabela única de centros de χ₂₀₀ (G. Deemer, compostos NOAA/ESRL PSD, julho–outubro, padrão didático único):
+const MJO_CHI_CENTERS = {
+  1: { div: [10, 2],    conv: [145, 1] },
+  2: { div: [65, -1],   conv: [-170, 0] },
+  3: { div: [75, -1],   conv: [-110, -4] },
+  4: { div: [115, 2],   conv: [-60, 2] },
+  5: { div: [135, 1],   conv: [-70, 0] },
+  6: { div: [-130, -3], conv: [55, -3] },
+  7: { div: [-115, -3], conv: [80, -1] },
+  8: { div: [-65, -3],  conv: [135, 0] }
 };
-const MJO_CHI_CENTERS = MJO_CHI_REF;
 
-// Esquema didático derivado dinamicamente por estação (DJF/MAM -> novmar; JJA/SON -> maysep)
-function getMjoChiSchematic(phase, season = currentSeason) {
-  const seasonKey = (season === 'JJA' || season === 'SON') ? 'maysep' : 'novmar';
-  const ref = MJO_CHI_REF[seasonKey][Number(phase)];
+// Esquema didático derivado com losangos (4 vértices): externo ±60°×±20°, médio ±40°×±14°, núcleo ±22°×±8° (núcleo só com contorno)
+function getMjoChiSchematic(phase) {
+  const ref = MJO_CHI_CENTERS[Number(phase)];
   if (!ref) return null;
   const [adLon, adLat] = ref.div;
   const [scLon, scLat] = ref.conv;
   return {
     active: {
       center: [adLon, adLat],
-      outer: { lon: adLon, lat: adLat, rx: 80, ry: 26 },
-      mid:   { lon: adLon, lat: adLat, rx: 50, ry: 24 },
-      core:  { lon: adLon, lat: adLat, rx: 28, ry: 20 }
+      levels: [
+        { name: 'outer', lon: adLon, lat: adLat, dlon: 60, dlat: 20 },
+        { name: 'mid',   lon: adLon, lat: adLat, dlon: 40, dlat: 14 },
+        { name: 'core',  lon: adLon, lat: adLat, dlon: 22, dlat: 8 }
+      ]
     },
     suppressed: {
       center: [scLon, scLat],
-      outer: { lon: scLon, lat: scLat, rx: 80, ry: 26 },
-      mid:   { lon: scLon, lat: scLat, rx: 50, ry: 24 },
-      core:  { lon: scLon, lat: scLat, rx: 28, ry: 20 }
+      levels: [
+        { name: 'outer', lon: scLon, lat: scLat, dlon: 60, dlat: 20 },
+        { name: 'mid',   lon: scLon, lat: scLat, dlon: 40, dlat: 14 },
+        { name: 'core',  lon: scLon, lat: scLat, dlon: 22, dlat: 8 }
+      ]
     }
   };
 }
@@ -373,9 +358,9 @@ function drawChiColorbar(x, y, w, h) {
   // Fundo translúcido
   svg('rect', { x, y, width: w, height: h, rx: 6, fill: 'rgba(15, 23, 42, 0.90)', stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-width': 1 });
 
-  // Título didático conceitual
-  svg('text', { x: x + w / 2, y: y + 10, fill: '#bae6fd', 'font-size': 9.5, 'font-weight': '700', 'text-anchor': 'middle' },
-    'Divergência / Convergência em 200 hPa · χ₂₀₀ (Esquema conceitual didático)');
+  // Título e crédito a G. Deemer
+  svg('text', { x: x + w / 2, y: y + 10, fill: '#bae6fd', 'font-size': 9, 'font-weight': '700', 'text-anchor': 'middle' },
+    'χ₂₀₀ · G. Deemer (compostos NOAA/ESRL PSD, julho–outubro, padrão didático único)');
 
   // 6 caixas de cores
   const barW = w - 40;
@@ -397,7 +382,7 @@ function drawChiColorbar(x, y, w, h) {
 
 function drawMjoVelocityPotential() {
   if (currentAmplitude < 1) return;
-  const chi = getMjoChiSchematic(currentPhase, currentSeason);
+  const chi = getMjoChiSchematic(currentPhase);
   if (!chi) return;
 
   const isGlobal = mapView === 'global';
@@ -407,47 +392,36 @@ function drawMjoVelocityPotential() {
     const y30N = (85 - 30) * 560 / 160;
     const y30S = (85 - (-30)) * 560 / 160;
 
-    // 2. Desenhar camadas ativas e suprimidas com envelopamento contínuo
+    // 2. Desenhar camadas ativas e suprimidas em formato de LOSANGOS (4 vértices)
     const renderLayers = (data, styleKey) => {
-      if (!data) return;
+      if (!data || !data.levels) return;
       const styles = {
-        outer: {
-          fill: styleKey === 'active' ? '#38bdf8' : '#facc15',
-          opacity: 0.10,
-          stroke: styleKey === 'active' ? '#7dd3fc' : '#fde047',
-          strokeWidth: 1.1
-        },
-        mid: {
-          fill: styleKey === 'active' ? '#0284c7' : '#f97316',
-          opacity: 0.12,
-          stroke: styleKey === 'active' ? '#38bdf8' : '#fb923c',
-          strokeWidth: 1.3
-        },
-        core: {
-          fill: 'none',
-          opacity: 0,
-          stroke: styleKey === 'active' ? '#0284c7' : '#ef4444',
-          strokeWidth: 1.8
-        }
+        outer: { fill: styleKey === 'active' ? '#38bdf8' : '#facc15', opacity: 0.10, stroke: styleKey === 'active' ? '#7dd3fc' : '#fde047', strokeWidth: 1.1 },
+        mid:   { fill: styleKey === 'active' ? '#0284c7' : '#f97316', opacity: 0.12, stroke: styleKey === 'active' ? '#38bdf8' : '#fb923c', strokeWidth: 1.3 },
+        core:  { fill: 'none', opacity: 0, stroke: styleKey === 'active' ? '#0284c7' : '#ef4444', strokeWidth: 1.8 }
       };
 
-      for (const level of ['outer', 'mid', 'core']) {
-        const item = data[level];
-        if (!item) continue;
-        const st = styles[level];
-        const rx = item.rx * (1200 / 360);
-        const ry = item.ry * (560 / 160);
+      for (const item of data.levels) {
+        const st = styles[item.name];
+        const dX = item.dlon * (1200 / 360);
+        const dY = item.dlat * 3.5;
 
         for (const shift of [-360, 0, 360]) {
           const [cx, cy] = project(item.lon + shift, item.lat);
-          if (cx + rx >= -50 && cx - rx <= 1250) {
-            svg('ellipse', {
-              cx, cy, rx, ry,
-              fill: st.fill,
-              'fill-opacity': st.opacity,
+          if (cx + dX >= -50 && cx - dX <= 1250) {
+            const pts = `${cx},${cy - dY} ${cx + dX},${cy} ${cx},${cy + dY} ${cx - dX},${cy}`;
+            const attrs = {
+              points: pts,
               stroke: st.stroke,
               'stroke-width': st.strokeWidth
-            });
+            };
+            if (st.fill === 'none') {
+              attrs.fill = 'none';
+            } else {
+              attrs.fill = st.fill;
+              attrs['fill-opacity'] = st.opacity;
+            }
+            svg('polygon', attrs);
           }
         }
       }
@@ -459,7 +433,7 @@ function drawMjoVelocityPotential() {
     // Linhas de domínio tropical e título desenhados após os campos para legibilidade garantida
     svg('line', { x1: 0, y1: y30N, x2: 1200, y2: y30N, stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-dasharray': '5 4' });
     svg('line', { x1: 0, y1: y30S, x2: 1200, y2: y30S, stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-dasharray': '5 4' });
-    svg('text', { x: 1190, y: y30N + 14, fill: '#bae6fd', 'font-size': 10.5, 'font-weight': '700', 'text-anchor': 'end', 'letter-spacing': 0.5, stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'χ₂₀₀ · Potencial de velocidade em altitude (esquema conceitual)');
+    svg('text', { x: 1190, y: y30N + 14, fill: '#bae6fd', 'font-size': 10, 'font-weight': '700', 'text-anchor': 'end', 'letter-spacing': 0.5, stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'χ₂₀₀ · G. Deemer (compostos NOAA/ESRL PSD, julho–outubro, padrão didático único)');
 
     // 3. Marcadores em losango e rótulos nos centros de divergência e convergência
     if (chi.active && chi.active.center) {
@@ -484,26 +458,25 @@ function drawMjoVelocityPotential() {
     }
 
     // 4. Barra de escala didática conceitual
-    drawChiColorbar(350, 520, 500, 34);
+    drawChiColorbar(300, 516, 600, 36);
   } else {
-    // Visão Regional (América do Sul): contornos didáticos suaves sobre o continente
+    // Visão Regional (América do Sul): losangos suaves sobre o continente
     // Núcleo (core) só com contorno, sem preenchimento; mid <= 0.12; outer <= 0.10. Opacidade somada no centro <= 0.25.
     const renderRegionalLayers = (data, styleKey) => {
-      if (!data) return;
+      if (!data || !data.levels) return;
       const styles = {
         outer: { fill: styleKey === 'active' ? '#38bdf8' : '#facc15', opacity: 0.10, stroke: styleKey === 'active' ? '#7dd3fc' : '#fde047', strokeWidth: 1.1 },
-        mid: { fill: styleKey === 'active' ? '#0284c7' : '#f97316', opacity: 0.12, stroke: styleKey === 'active' ? '#38bdf8' : '#fb923c', strokeWidth: 1.3 },
-        core: { fill: 'none', opacity: 0, stroke: styleKey === 'active' ? '#0284c7' : '#ef4444', strokeWidth: 1.8 }
+        mid:   { fill: styleKey === 'active' ? '#0284c7' : '#f97316', opacity: 0.12, stroke: styleKey === 'active' ? '#38bdf8' : '#fb923c', strokeWidth: 1.3 },
+        core:  { fill: 'none', opacity: 0, stroke: styleKey === 'active' ? '#0284c7' : '#ef4444', strokeWidth: 1.8 }
       };
-      for (const level of ['outer', 'mid', 'core']) {
-        const item = data[level];
-        if (!item) continue;
-        const st = styles[level];
+      for (const item of data.levels) {
+        const st = styles[item.name];
+        const dX = item.dlon * 8;
+        const dY = item.dlat * 6.4;
         const [cx, cy] = project(item.lon, item.lat);
-        const rx = item.rx * 8;
-        const ry = item.ry * 6.4;
+        const pts = `${cx},${cy - dY} ${cx + dX},${cy} ${cx},${cy + dY} ${cx - dX},${cy}`;
         const attrs = {
-          cx, cy, rx, ry,
+          points: pts,
           stroke: st.stroke,
           'stroke-width': st.strokeWidth
         };
@@ -513,7 +486,7 @@ function drawMjoVelocityPotential() {
           attrs.fill = st.fill;
           attrs['fill-opacity'] = st.opacity;
         }
-        svg('ellipse', attrs);
+        svg('polygon', attrs);
       }
     };
 
@@ -521,7 +494,7 @@ function drawMjoVelocityPotential() {
     renderRegionalLayers(chi.suppressed, 'suppressed');
 
     // Barra de legenda compacta na visão regional
-    drawChiColorbar(100, 480, 440, 30);
+    drawChiColorbar(60, 476, 520, 36);
   }
 }
 
@@ -547,7 +520,15 @@ function drawGlobalContext(evidence) {
   // TSM Equatorial no mapa global: desenhada sobre Chi para legibilidade garantida
   if (visibleLayers.sst) {
     const [sx, sy] = project(-135, 0);
-    if (currentEnso === 'el-nino') {
+    const isAlvarezEvent = isEventMode && activeEventId && activeEventId.includes('alvarez');
+    if (isAlvarezEvent) {
+      // NÃO desenhar a TSM de ENOS; rótulo "composição de todos os anos"
+      svg('text', {
+        x: sx, y: sy + 10,
+        fill: '#cbd5e1', 'font-size': 13, 'font-weight': '700', 'text-anchor': 'middle',
+        stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+      }, 'Composição de todos os anos (sem separação por ENOS)');
+    } else if (currentEnso === 'el-nino') {
       svg('ellipse', { cx: sx, cy: sy, rx: 130, ry: 26, fill: '#ef4444', 'fill-opacity': 0.35, stroke: '#f87171', 'stroke-dasharray': '5 4' });
       svg('text', { x: sx, y: sy + 44, fill: '#fca5a5', 'font-size': 13, 'font-weight': '600', 'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'El Niño · TSM equatorial anômala quente (qualitativo)');
     } else if (currentEnso === 'la-nina') {
@@ -665,11 +646,23 @@ function drawSallj() {
     fill: '#34d399'
   });
 
-  // Rótulo posicionado a oeste do jato para evitar sobreposição com SESA e ícones de chuva
-  const [sx, sy] = project(-64.5, -20.5);
-  svg('text', { x: sx, y: sy, fill: '#6ee7b7', 'font-size': 11.5, 'font-weight': '600', 'text-anchor': 'end' }, 'SALLJ (~850 hPa)');
-  const [subX, subY] = project(-64.5, -22.5);
-  svg('text', { x: subX, y: subY, fill: '#a7f3d0', 'font-size': 9.5, 'font-weight': '500', 'text-anchor': 'end' }, 'alternância ZCAS × Prata (Nogués-Paegle & Mo 1997)');
+  // Rótulos do SALLJ a oeste dos Andes, sobre o Pacífico
+  const isReg = mapView === 'regional';
+  const labelLon = isReg ? -83 : -76;
+  const anchor = isReg ? 'start' : 'end';
+  const [sx, sy] = project(labelLon, -18.5);
+  svg('text', {
+    x: sx, y: sy,
+    fill: '#6ee7b7', 'font-size': 11.5, 'font-weight': '700', 'text-anchor': anchor,
+    stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+  }, 'SALLJ (~850 hPa)');
+
+  const [subX, subY] = project(labelLon, -20.5);
+  svg('text', {
+    x: subX, y: subY,
+    fill: '#a7f3d0', 'font-size': 9.5, 'font-weight': '600', 'text-anchor': anchor,
+    stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+  }, 'alternância ZCAS × Prata (Nogués-Paegle & Mo 1997)');
 }
 
 function drawJets() {
@@ -687,15 +680,15 @@ function drawJets() {
     const projectedPts = pts.map(p => project(...p));
     const d = `M ` + projectedPts.map(p => `${p[0]},${p[1]}`).join(' L ');
     svg('path', { d, fill: 'none', stroke: '#38bdf8', 'stroke-width': width, 'stroke-dasharray': '8 5' });
-    const [jx, jy] = project(-115, lat - 1);
-    svg('text', { x: jx, y: jy - 8, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle' }, 'Jato Subtropical (~200 hPa · referência conceitual)');
+    const [jx, jy] = project(-86, lat - 1.5);
+    svg('text', { x: jx, y: jy - 8, fill: '#7dd3fc', 'font-size': 12, 'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'Jato Subtropical (~200 hPa · referência conceitual)');
   } else {
     const p1 = project(-82, lat);
     const p2 = project(-38, lat + 2.5);
     svg('line', { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: '#38bdf8', 'stroke-width': width, 'stroke-dasharray': '8 5' });
     // Na visão regional, posicionar rótulo sobre o Pacífico/Chile para não sobrepor o continente/SESA
     const [jx, jy] = project(-78, lat - 0.5);
-    svg('text', { x: jx, y: jy - 7, fill: '#7dd3fc', 'font-size': 11, 'font-weight': '600', 'text-anchor': 'start' }, 'Jato Subtropical (~200 hPa · guia)');
+    svg('text', { x: jx, y: jy - 7, fill: '#7dd3fc', 'font-size': 11, 'font-weight': '600', 'text-anchor': 'start', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill' }, 'Jato Subtropical (~200 hPa · guia)');
   }
 
   // SALLJ direcional (só DJF; Nogués-Paegle & Mo 1997)
@@ -773,7 +766,8 @@ function drawMap(evidence) {
     const oceanLat = location[1] !== undefined ? location[1] : (isSesa ? -34 : -23);
     let [tx, ty] = project(oceanLon, oceanLat);
 
-    const maxTx = (mapView === 'regional' ? 640 : 1200) - 210;
+    const isRegional = mapView === 'regional';
+    const maxTx = isRegional ? 395 : 940;
     if (tx > maxTx) tx = maxTx;
 
     svg('line', {
@@ -787,7 +781,7 @@ function drawMap(evidence) {
     svg('text', {
       x: tx, y: ty,
       fill: '#c6f6ef',
-      'font-size': 13,
+      'font-size': isRegional ? 12 : 13,
       'font-weight': '700',
       'text-anchor': 'start',
       stroke: '#081726',
@@ -842,11 +836,40 @@ function drawMap(evidence) {
         'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2, 'paint-order': 'stroke fill'
       }, ext.type);
 
-      // Legenda: "trem de ondas (Alvarez et al. 2016)"
+      // Deslocar o rótulo para não sobrepor a nuvem nem os círculos do PSA
+      let lx = ecx, ly = ecy + 27;
+      let textAnchor = 'middle';
+
+      if (alv.id === 'DJF-alvarez-3-4') {
+        lx = ecx - 20;
+        ly = ecy + 4;
+        textAnchor = 'end';
+      } else if (alv.id === 'DJF-alvarez-8-1') {
+        lx = ecx;
+        ly = ecy - 22;
+        textAnchor = 'middle';
+      } else if (alv.id === 'MAM-alvarez-1') {
+        lx = ecx - 20;
+        ly = ecy + 4;
+        textAnchor = 'end';
+      } else if (alv.id === 'JJA-alvarez-8') {
+        lx = ecx + 22;
+        ly = ecy + 18;
+        textAnchor = 'start';
+      } else if (alv.id === 'SON-alvarez-7-8') {
+        lx = ecx - 20;
+        ly = ecy - 6;
+        textAnchor = 'end';
+      } else if (alv.id === 'SON-alvarez-1') {
+        lx = ecx - 20;
+        ly = ecy + 4;
+        textAnchor = 'end';
+      }
+
       svg('text', {
-        x: ecx, y: ecy + 27,
+        x: lx, y: ly,
         fill: '#cbd5e1', 'font-size': 10, 'font-weight': '600',
-        'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+        'text-anchor': textAnchor, stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
       }, 'trem de ondas (Alvarez et al. 2016)');
     }
 
@@ -859,22 +882,22 @@ function drawMap(evidence) {
           fill: 'rgba(245, 158, 11, 0.25)', stroke: '#f59e0b', 'stroke-width': 1.8, 'stroke-dasharray': '4 3'
         });
         svg('text', {
-          x: scx, y: scy + 4,
+          x: scx, y: scy - 24,
           fill: '#fcd34d', 'font-size': 12, 'font-weight': '800',
           'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2, 'paint-order': 'stroke fill'
         }, 'fonte');
         svg('text', {
-          x: scx, y: scy + 24,
+          x: scx, y: scy + 30,
           fill: '#fef08a', 'font-size': 10, 'font-weight': '600',
           'text-anchor': 'middle', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
         }, 'convecção subtropical');
       } else {
         const edgeY = project(-85, spec.sourceMarker.lat)[1];
         svg('text', {
-          x: 12, y: edgeY,
+          x: 10, y: edgeY,
           fill: '#fcd34d', 'font-size': 11, 'font-weight': '700',
           'text-anchor': 'start', stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
-        }, '← fonte: convecção no Pacífico subtropical');
+        }, '← fonte: convecção subtropical');
       }
     }
   }
@@ -915,9 +938,7 @@ function generateNarrationText(season, enso, phase, evidence) {
     'todos': 'Todos os anos'
   };
   const phaseInfo = getMjoPhaseCoords(phase, season);
-  const seasonKey = (season === 'JJA' || season === 'SON') ? 'maysep' : 'novmar';
-  const chiSeason = MJO_CHI_REF[seasonKey] || MJO_CHI_REF.novmar;
-  const chiRef = chiSeason[Number(phase)];
+  const chiRef = MJO_CHI_CENTERS[Number(phase)];
   const [adLon] = chiRef ? chiRef.div : [0];
   const [scLon] = chiRef ? chiRef.conv : [0];
   const adLonStr = adLon < 0 ? `${Math.abs(adLon)} graus oeste` : `${adLon} graus leste`;
@@ -954,7 +975,7 @@ function generateNarrationText(season, enso, phase, evidence) {
   if (season === 'DJF' && (p === 3 || p === 4)) {
     text += `Em baixos níveis, o SALLJ (~850 hPa) atua direcionado até a Bacia do Prata, intensificando a advecção de umidade amazônica para o sul (Nogués-Paegle & Mo 1997). `;
   } else if (season === 'DJF' && (p === 8 || p === 1)) {
-    text += `Em baixos níveis, o SALLJ (~850 hPa) curva para leste/nordeste em direção ao setor ZCAS, reforçando a convergência de umidade sobre o Sudeste (Nogués-Paegle & Mo 1997). `;
+    text += `Em baixos níveis, o SALLJ (~850 hPa) curva para leste/nordeste, em direção ao setor ZCAS (Nogués-Paegle & Mo 1997). `;
   } else {
     text += `Em baixos níveis, o SALLJ (~850 hPa) atua no traçado neutro ao longo dos Andes. `;
   }
@@ -1352,12 +1373,18 @@ function update() {
   }
 
   // Faixa de TSM do ENOS
-  $('sstBand').className = 'band' + (currentEnso === 'el-nino' ? ' warm' : currentEnso === 'la-nina' ? ' cold' : '');
-  $('sstText').textContent = currentEnso === 'el-nino'
-    ? 'El Niño · anomalias quentes no Pacífico equatorial central/leste'
-    : currentEnso === 'la-nina'
-      ? 'La Niña · anomalias frias no Pacífico equatorial central/leste'
-      : 'ENOS neutro · sem padrão forte de El Niño ou La Niña; não significa anomalia local zero.';
+  const isAlvarezEvent = isEventMode && activeEventId && activeEventId.includes('alvarez');
+  if (isAlvarezEvent) {
+    $('sstBand').className = 'band';
+    $('sstText').textContent = 'Composição de todos os anos (sem separação por ENOS).';
+  } else {
+    $('sstBand').className = 'band' + (currentEnso === 'el-nino' ? ' warm' : currentEnso === 'la-nina' ? ' cold' : '');
+    $('sstText').textContent = currentEnso === 'el-nino'
+      ? 'El Niño · anomalias quentes no Pacífico equatorial central/leste'
+      : currentEnso === 'la-nina'
+        ? 'La Niña · anomalias frias no Pacífico equatorial central/leste'
+        : 'ENOS neutro · sem padrão forte de El Niño ou La Niña; não significa anomalia local zero.';
+  }
 
   // Informações de Fase da MJO
   const phaseInfo = getMjoPhaseCoords(currentPhase);
