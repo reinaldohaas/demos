@@ -104,13 +104,14 @@ function makeMockElement(id) {
 
 const elementIds = [
   'globalView', 'regionalView', 'mjoSelect',
-  'sstLayer', 'jetsLayer', 'psaLayer', 'legendButton', 'legend',
+  'sstLayer', 'jetsLayer', 'psaLayer', 'psaToggle', 'salljToggle', 'legendButton', 'legend',
   'caseTitle', 'caseSummary', 'narrationText', 'btnVoiceNarrate', 'btnVoicePause',
   'btnVoiceStop', 'btnVoiceMute', 'mapTitle', 'mapDesc', 'map', 'mapDrawing',
   'result', 'sstBand', 'sstText', 'phaseInfo', 'panelPsa', 'psaCard', 'psaText',
   'rmmDiagram', 'mjoAmplitude', 'mjoAmplitudeValue', 'rmmStatus', 'rmmStatusTag',
   'ensoGroup', 'seasonSelect', 'ensoSelect', 'phaseSelect', 'eventNotice',
-  'eventsDJF', 'eventsMAM', 'eventsJJA', 'eventsSON',
+  'eventsSelect', 'eventsDJF', 'eventsMAM', 'eventsJJA', 'eventsSON',
+  'salljSelect',
   'btnPanelsMenu', 'btnResetLayout', 'panelsDropdown'
 ];
 
@@ -120,11 +121,13 @@ for (const id of elementIds) {
 }
 
 // Configurar opções nos selects de eventos do mock
-for (const eid of ['eventsDJF', 'eventsMAM', 'eventsJJA', 'eventsSON']) {
-  elements[eid].options = [
-    { value: '' },
-    ...expectedIds.map(id => ({ value: id }))
-  ];
+for (const eid of ['eventsSelect', 'eventsDJF', 'eventsMAM', 'eventsJJA', 'eventsSON']) {
+  if (elements[eid]) {
+    elements[eid].options = [
+      { value: '' },
+      ...expectedIds.map(id => ({ value: id }))
+    ];
+  }
 }
 
 const domMock = {
@@ -146,7 +149,7 @@ const domMock = {
   },
   createElement: (tag) => ({ tagName: tag, dataset: {}, addEventListener: () => {}, setAttribute: () => {}, style: {}, appendChild: () => {}, replaceChildren: () => {} }),
   querySelectorAll: (selector) => {
-    if (selector === '.event-select') return [elements.eventsDJF, elements.eventsMAM, elements.eventsJJA, elements.eventsSON];
+    if (selector === '.event-select') return [elements.eventsSelect, elements.eventsDJF, elements.eventsMAM, elements.eventsJJA, elements.eventsSON].filter(Boolean);
     return [];
   }
 };
@@ -346,6 +349,108 @@ assert.equal(elements.ensoGroup.style.display, '', 'ENOS visível em DJF-el-nino
 sandbox.selectEvent('DJF-neutro-4');
 assert.equal(elements.caseTitle.textContent.includes('Neutro'), true, 'DJF-neutro-4 deve carregar evento Neutro');
 
+// 15. Teste de Pontilhado do χ200
+sandbox.setClimateState({ season: 'DJF', enso: 'neutro', phase: 1, amplitude: 1.5, mjoMode: 'chi', view: 'global' });
+createdElements.length = 0;
+sandbox.drawMjoVelocityPotential();
+const levelPolys = createdElements.filter(el => el.tagName === 'polygon' && el.attributes && el.attributes['stroke-dasharray']);
+assert(levelPolys.length >= 6, 'Devem ser desenhados pelo menos 6 paralelogramos de chi200 pontilhados');
+
+// 16. Teste de Cores Vibrantes da TSM em El Niño e La Niña
+sandbox.setClimateState({ season: 'DJF', enso: 'el-nino', phase: 1, amplitude: 1.5, view: 'global' });
+const elNinoSst = createdElements.find(el => el.tagName === 'ellipse' && el.attributes && el.attributes.fill === '#dc2626');
+assert(elNinoSst, 'El Niño deve possuir elipse de TSM com cor forte (#dc2626)');
+
+sandbox.setClimateState({ season: 'DJF', enso: 'la-nina', phase: 1, amplitude: 1.5, view: 'global' });
+const laNinaSst = createdElements.find(el => el.tagName === 'ellipse' && el.attributes && el.attributes.fill === '#1d4ed8');
+assert(laNinaSst, 'La Niña deve possuir elipse de TSM com cor forte (#1d4ed8)');
+
+// 17. Teste de Controle e Alternância de PSA e SALLJ no Mapa
+assert.equal(elements.psaToggle.checked, true, 'psaToggle deve iniciar marcado');
+assert.equal(elements.salljToggle.checked, true, 'salljToggle deve iniciar marcado');
+
+elements.psaToggle.checked = false;
+elements.psaToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+const hasPsaOff = createdElements.some(el => el.textContent && el.textContent.includes('Padrão PSA'));
+assert.equal(hasPsaOff, false, 'PSA não deve ser desenhada quando psaToggle estiver desmarcado');
+
+elements.psaToggle.checked = true;
+elements.psaToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+const hasPsaOn = createdElements.some(el => el.textContent && el.textContent.includes('Padrão PSA'));
+assert.equal(hasPsaOn, true, 'PSA deve ser restaurada quando psaToggle estiver marcado');
+
+elements.salljToggle.checked = false;
+elements.salljToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+const hasSalljOff = createdElements.some(el => el.textContent && el.textContent.includes('SALLJ'));
+assert.equal(hasSalljOff, false, 'SALLJ não deve ser desenhado quando salljToggle estiver desmarcado');
+
+elements.salljToggle.checked = true;
+elements.salljToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+const hasSalljOn = createdElements.some(el => el.textContent && el.textContent.includes('SALLJ'));
+assert.equal(hasSalljOn, true, 'SALLJ deve ser restaurado quando salljToggle estiver marcado');
+
+// 18. Teste dos 4 Estados do SALLJ x DJF Fases 3 e 8 x A {0.5, 1.5}
+const salljStates = ['auto', 'forte', 'fraco', 'climatologico'];
+const testPhases = [3, 8];
+const testAmps = [0.5, 1.5];
+
+for (const sState of salljStates) {
+  for (const tPhase of testPhases) {
+    for (const tAmp of testAmps) {
+      sandbox.setClimateState({ season: 'DJF', enso: 'neutro', phase: tPhase, amplitude: tAmp, salljState: sState, view: 'global' });
+      assert.equal(elements.salljSelect.value, sState, `Select deve estar sincronizado com estado ${sState}`);
+
+      createdElements.length = 0;
+      sandbox.drawSallj();
+
+      const salljPath = createdElements.find(el => el.tagName === 'path' && el.attributes && el.attributes.stroke === '#34d399');
+      assert(salljPath, `Path do SALLJ deve existir para estado=${sState}, fase=${tPhase}, A=${tAmp}`);
+
+      const strokeW = Number(salljPath.attributes['stroke-width']);
+      const effective = sandbox.getEffectiveSalljState('DJF', tPhase);
+
+      if (sState === 'auto') {
+        const expectedEffective = tPhase === 3 ? 'forte' : 'fraco';
+        assert.equal(effective, expectedEffective, `Em auto, fase ${tPhase} deve resolver para ${expectedEffective}`);
+        const baseW = expectedEffective === 'forte' ? 4.2 : 2.2;
+        const expectedW = baseW * Math.min(tAmp, 1.0);
+        assert(Math.abs(strokeW - expectedW) < 1e-5, `Espessura em auto (${strokeW}) deve ser ${expectedW} para A=${tAmp}`);
+      } else {
+        assert.equal(effective, sState, `Modo manual deve manter estado ${sState}`);
+        const baseW = sState === 'forte' ? 4.2 : sState === 'fraco' ? 2.2 : 3.2;
+        assert(Math.abs(strokeW - baseW) < 1e-5, `Espessura em modo manual (${strokeW}) deve ser constante ${baseW} para A=${tAmp}`);
+      }
+
+      // Validar legenda por estado
+      const dipoloSub = createdElements.find(el => el.tagName === 'text' && el.attributes && el.attributes.fill === '#a7f3d0');
+      assert(dipoloSub && dipoloSub.textContent.includes('dipolo ZCAS × SESA'), `Sub-legenda do dipolo deve estar presente`);
+
+      const stateSub = createdElements.find(el => el.tagName === 'text' && el.attributes && el.attributes.fill === '#fde047');
+      if (effective === 'forte') {
+        assert(stateSub && stateSub.textContent.includes('jato forte — mais chuva e extremos no SESA (Liebmann et al. 2004)'));
+      } else if (effective === 'fraco') {
+        assert(stateSub && stateSub.textContent.includes('jato fraco — umidade desviada para a ZCAS (Liebmann et al. 2004; Muza et al. 2009)'));
+      }
+    }
+  }
+}
+
+// Teste JJA no modo Automático: sempre climatológico
+sandbox.setClimateState({ season: 'JJA', enso: 'neutro', phase: 1, amplitude: 1.5, salljState: 'auto', view: 'global' });
+assert.equal(sandbox.getEffectiveSalljState('JJA', 1), 'climatologico', 'Em JJA modo auto deve ser sempre climatológico');
+createdElements.length = 0;
+sandbox.drawSallj();
+const jjaState = createdElements.find(el => el.tagName === 'text' && el.attributes && el.attributes.fill === '#fde047');
+assert(jjaState && jjaState.textContent.includes('no inverno, altos níveis dominam — Alvarez et al. 2013'), 'Sub-legenda em JJA deve conter nota de inverno');
+
 console.log('====================================================');
 console.log('TODAS AS VALIDAÇÕES AUTOMATIZADAS PASSARAM COM SUCESSO:');
 console.log('1. 10 casos documentados autorizados (só mais, só mecanismo físico).');
@@ -356,5 +461,9 @@ console.log('5. SALLJ direcional citando Liebmann et al. (2004) e Nogués-Paegle
 console.log('6. Notas de La Niña (DJF 2-8), inverno (JJA) e recortes de setores validados.');
 console.log('7. χ200 Deemer com tabela única e losangos (zero elipses).');
 console.log('8. 1536 configurações de sandbox executadas sem erros.');
+console.log('9. χ200 e dipolos MJO com bordas pontilhadas e intensidade proporcional ao RMM.');
+console.log('10. TSM de El Niño e La Niña com cores fortes sobrepostas à MJO.');
+console.log('11. Controles e camadas de PSA e SALLJ funcionais e alternáveis.');
+console.log('12. SALLJ com 4 estados (Auto, Forte, Fraco, Climatológico), escalonamento por A e legendas.');
 console.log('====================================================');
 
