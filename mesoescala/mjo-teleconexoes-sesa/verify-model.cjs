@@ -54,7 +54,8 @@ const prodFiles = [
   'index.html',
   'rmm-diagram.js',
   'map-regions.js',
-  'cpc-mjo-precip-data.js'
+  'cpc-mjo-precip-data.js',
+  'grimm-matrix-data.js'
 ];
 for (const file of prodFiles) {
   const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
@@ -65,12 +66,15 @@ for (const file of prodFiles) {
 const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
 assert(!html.includes('id="metricSelect"'), 'metricSelect deve estar removido do HTML');
 assert(html.includes('id="ensoGroup"'), 'ensoGroup deve existir para controle de visibilidade');
+assert(html.includes('id="sandboxSector"'), 'sandboxSector deve estar presente no HTML');
+assert(html.includes('id="sandboxMatrixContainer"'), 'sandboxMatrixContainer deve estar presente no HTML');
+assert(html.includes('id="sandboxDiagnosticCard"'), 'sandboxDiagnosticCard deve estar presente no HTML');
 for (const id of expectedIds) {
   assert(html.includes(`value="${id}"`), `Opção do evento ${id} deve estar presente no HTML`);
 }
 
 // 4. Teste de Sintaxe dos Scripts
-for (const file of ['documented-cases.js', 'documented-view.js', 'map-regions.js', 'rmm-diagram.js', 'panels-manager.js', 'cpc-mjo-precip-data.js']) {
+for (const file of ['documented-cases.js', 'documented-view.js', 'map-regions.js', 'rmm-diagram.js', 'panels-manager.js', 'cpc-mjo-precip-data.js', 'grimm-matrix-data.js']) {
   new vm.Script(fs.readFileSync(path.join(__dirname, file), 'utf8'));
 }
 
@@ -88,6 +92,14 @@ function makeMockElement(id) {
     value: '1.5',
     hidden: false,
     options: [],
+    classList: {
+      contains: () => false,
+      add: () => {},
+      remove: () => {},
+      toggle: () => {}
+    },
+    querySelectorAll: () => [],
+    scrollIntoView: () => {},
     setAttribute: () => {},
     addEventListener: (event, fn) => {
       listeners[event] = listeners[event] || [];
@@ -114,7 +126,9 @@ const elementIds = [
   'ensoGroup', 'seasonSelect', 'ensoSelect', 'phaseSelect', 'eventNotice',
   'eventsSelect', 'eventsDJF', 'eventsMAM', 'eventsJJA', 'eventsSON',
   'salljSelect',
-  'btnPanelsMenu', 'btnResetLayout', 'panelsDropdown'
+  'btnPanelsMenu', 'btnResetLayout', 'panelsDropdown',
+  'sandboxSector', 'sandboxModeBtn', 'btnOpenSandbox', 'btnToggleSandboxView',
+  'sandboxSeasonTabs', 'sandboxMatrixContainer', 'sandboxDiagnosticCard', 'sandboxSummaryCount'
 ];
 
 const elements = {};
@@ -177,6 +191,7 @@ vm.createContext(sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'world-land.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'map-regions.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'cpc-mjo-precip-data.js'), 'utf8'), sandbox);
+vm.runInContext(fs.readFileSync(path.join(__dirname, 'grimm-matrix-data.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'documented-cases.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'documented-view.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'rmm-diagram.js'), 'utf8'), sandbox);
@@ -550,6 +565,59 @@ sandbox.setClimateState({ season: 'DJF', enso: 'neutro', phase: 4, amplitude: 0.
 const inactiveImg = createdElements.find(el => el.tagName === 'image');
 assert(!inactiveImg, 'Com amplitude < 1 (inativa), imagem CPC/NOAA não deve ser renderizada');
 
+// 15. Base de Conhecimento e Setor Sandbox das 96 Permutações (Alice Grimm)
+console.log('Validando Base Científica das 96 Permutações (Alice Grimm)...');
+const grimmModule = require(path.join(__dirname, 'grimm-matrix-data.js'));
+const matrix = grimmModule.GRIMM_96_MATRIX;
+const matrixKeys = Object.keys(matrix);
+assert.equal(matrixKeys.length, 96, 'A matriz deve conter exatamente 96 permutações físicas (4 estações x 3 ENOS x 8 fases)');
+
+const validSignals = ['muito_acima', 'acima', 'muito_abaixo', 'abaixo', 'neutro_climatologia', '+2', '+1', '0', '-1', '-2'];
+let curatedFoundCount = 0;
+
+for (const season of ['DJF', 'MAM', 'JJA', 'SON']) {
+  const seasonList = grimmModule.getGrimmSeasonMatrix(season);
+  assert.equal(seasonList.length, 24, `Cada estação deve conter exatamente 24 permutações no sandbox (${season})`);
+
+  for (const enso of ['la-nina', 'neutro', 'el-nino']) {
+    for (let p = 1; p <= 8; p++) {
+      const item = grimmModule.getGrimmPermutation(season, enso, p);
+      assert(item, `Permutação ${season}-${enso}-${p} deve existir`);
+      assert.equal(item.season, season);
+      assert.equal(item.enso, enso);
+      assert.equal(Number(item.phase), p);
+      assert(typeof item.phaseName === 'string' && item.phaseName.length > 5, `phaseName presente em ${item.id}`);
+      assert(typeof item.impactLabel === 'string' && item.impactLabel.length > 3, `impactLabel presente em ${item.id}`);
+      assert(validSignals.includes(item.sesaSignal) || validSignals.includes(item.signalCategory), `sesaSignal ou signalCategory válido em ${item.id}`);
+      assert(typeof item.backgroundSummary === 'string' && item.backgroundSummary.length > 20, `backgroundSummary físico em ${item.id}`);
+      assert(typeof item.mjoTrigger === 'string' && item.mjoTrigger.length > 20, `mjoTrigger físico em ${item.id}`);
+      assert(typeof item.synthesis === 'string' && item.synthesis.length > 20, `synthesis física em ${item.id}`);
+      assert(Array.isArray(item.citations) && item.citations.length >= 1, `citations presentes em ${item.id}`);
+
+      if (item.isCurated) {
+        curatedFoundCount++;
+        assert(typeof item.curatedTitle === 'string' && item.curatedTitle.length > 5);
+        assert(typeof item.curatedAuthor === 'string' && item.curatedAuthor.length > 5);
+      }
+    }
+  }
+}
+assert(curatedFoundCount >= 10, 'Os casos curados devem estar mapeados e identificados na matriz de 96');
+
+// Teste de Integração Funcional do Sandbox (Seleção de Célula e Diagnóstico)
+sandbox.selectGrimmSandboxCell('DJF', 'el-nino', 3);
+assert.equal(elements.caseTitle.textContent.includes('DJF'), true, 'Título deve refletir DJF');
+assert.equal(elements.caseTitle.textContent.includes('El Niño'), true, 'Título deve refletir El Niño');
+assert.equal(elements.caseTitle.textContent.includes('Fase 3'), true, 'Título deve refletir Fase 3');
+assert(elements.sandboxDiagnosticCard.innerHTML.includes('Alice Grimm'), 'Cartão de diagnóstico deve exibir Alice Grimm');
+assert(elements.sandboxDiagnosticCard.innerHTML.includes('Pico'), 'Cartão deve diagnosticar pico no SESA');
+
+sandbox.selectGrimmSandboxCell('SON', 'la-nina', 8);
+assert.equal(elements.caseTitle.textContent.includes('SON'), true, 'Título deve refletir SON');
+assert.equal(elements.caseTitle.textContent.includes('La Niña'), true, 'Título deve refletir La Niña');
+assert.equal(elements.caseTitle.textContent.includes('Fase 8'), true, 'Título deve refletir Fase 8');
+assert(elements.sandboxDiagnosticCard.innerHTML.toLowerCase().includes('seca severa'), 'Cartão deve diagnosticar seca severa no SESA em SON La Niña');
+
 console.log('====================================================');
 console.log('TODAS AS VALIDAÇÕES AUTOMATIZADAS PASSARAM COM SUCESSO:');
 console.log('1. 10 casos documentados autorizados (só mais, só mecanismo físico).');
@@ -566,5 +634,6 @@ console.log('11. Controles e camadas de PSA e SALLJ funcionais e alternáveis.')
 console.log('12. SALLJ com 4 estados (Auto, Forte, Fraco, Climatológico), escalonamento por A e legendas.');
 console.log('13. Controles diretos para Jato Subtropical e Caixas SESA e ZCAS funcionais e alternáveis.');
 console.log('14. Opção de compostos de precipitação tropical CPC/NOAA (8 fases, global e regional, escala 11 níveis).');
+console.log('15. Setor Sandbox das 96 permutações físicas e fundamentação de Alice Grimm et al.');
 console.log('====================================================');
 

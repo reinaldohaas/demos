@@ -1852,6 +1852,11 @@ function update() {
 
   // Disparar atualização da narração (fala se ativa e atualiza texto acessível)
   speakCurrentNarration();
+
+  // Atualizar Setor Sandbox das 96 Permutações (Alice Grimm)
+  if (typeof updateGrimmSandboxUI === 'function') {
+    updateGrimmSandboxUI();
+  }
 }
 
 // Event Listeners: Estações (DJF, MAM, JJA, SON)
@@ -2008,8 +2013,353 @@ if ($('btnVoiceMute')) {
   });
 }
 
+// ============================================================================
+// SETOR SANDBOX: As 96 Permutações (ENOS × MJO × Estações · Alice Grimm)
+// ============================================================================
+let sandboxSelectedSeason = 'DJF';
+let isSandboxCollapsed = false;
+
+function initGrimmSandbox() {
+  const container = $('sandboxSector');
+  if (!container) return;
+
+  // Sincronizar estação inicial com o estado do modelo
+  sandboxSelectedSeason = currentSeason || 'DJF';
+
+  // Abas de Estações no Sandbox
+  const tabs = document.querySelectorAll('.sandbox-season-btn');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const s = tab.dataset.sbSeason;
+      if (!s) return;
+      sandboxSelectedSeason = s;
+      tabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbSeason === s));
+      renderGrimmSandboxMatrix();
+    });
+  });
+
+  // Botão no Header Superior
+  const sandboxModeBtn = $('sandboxModeBtn');
+  if (sandboxModeBtn) {
+    sandboxModeBtn.addEventListener('click', () => {
+      if (isSandboxCollapsed) {
+        toggleSandboxCollapse(false);
+      }
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      sandboxModeBtn.setAttribute('aria-pressed', 'true');
+    });
+  }
+
+  // Botão no seletor de Eventos de Interesse
+  const btnOpenSandbox = $('btnOpenSandbox');
+  if (btnOpenSandbox) {
+    btnOpenSandbox.addEventListener('click', () => {
+      if (isSandboxCollapsed) {
+        toggleSandboxCollapse(false);
+      }
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  // Botão Recolher/Expandir
+  const btnToggle = $('btnToggleSandboxView');
+  if (btnToggle) {
+    btnToggle.addEventListener('click', () => {
+      toggleSandboxCollapse(!isSandboxCollapsed);
+    });
+  }
+
+  renderGrimmSandboxMatrix();
+  updateGrimmSandboxDiagnostic();
+}
+
+function toggleSandboxCollapse(collapse) {
+  isSandboxCollapsed = collapse;
+  const matrix = $('sandboxMatrixContainer');
+  const diag = $('sandboxDiagnosticCard');
+  const tabs = $('sandboxSeasonTabs');
+  const btn = $('btnToggleSandboxView');
+  if (matrix) matrix.style.display = collapse ? 'none' : '';
+  if (diag) diag.style.display = collapse ? 'none' : '';
+  if (tabs) tabs.style.display = collapse ? 'none' : 'flex';
+  if (btn) btn.textContent = collapse ? 'Expandir matriz' : 'Ocultar';
+}
+
+function selectGrimmSandboxCell(season, enso, phase) {
+  const pNum = Number(phase);
+  // Se coincidir com um dos 10 casos curados da literatura com ENOS definido, ativa o caso curado
+  if (typeof DOCUMENTED_CASES !== 'undefined' && Array.isArray(DOCUMENTED_CASES)) {
+    const curatedMatch = DOCUMENTED_CASES.find(c => {
+      if (c.season !== season) return false;
+      const phaseMatches = (Number(c.phase) === pNum) || (c.groupedPhases && c.groupedPhases.includes(pNum));
+      if (!phaseMatches) return false;
+      if (c.enso === 'todos') return false;
+      return c.enso === enso;
+    });
+
+    if (curatedMatch) {
+      selectEvent(curatedMatch.id);
+      return;
+    }
+  }
+
+  // Se não for evento curado específico, aplica o estado no sandbox livre
+  setClimateState({
+    season: season,
+    enso: enso,
+    phase: pNum,
+    amplitude: Math.max(currentAmplitude, 1.2)
+  }, true);
+}
+
+function renderGrimmSandboxMatrix() {
+  const container = $('sandboxMatrixContainer');
+  if (!container || typeof getGrimmSeasonMatrix !== 'function') return;
+
+  const countBadge = $('sandboxSummaryCount');
+  if (countBadge) {
+    countBadge.textContent = `24 combinações em ${sandboxSelectedSeason} (Total 96 no ciclo)`;
+  }
+
+  // Estilos visuais por tipo de resposta no SESA
+  const signalStyles = {
+    muito_acima: {
+      bg: 'rgba(5, 150, 105, 0.18)',
+      border: '#059669',
+      color: '#34d399',
+      icon: '🌧️+'
+    },
+    acima: {
+      bg: 'rgba(16, 185, 129, 0.12)',
+      border: '#10b981',
+      color: '#6ee7b7',
+      icon: '🌦️'
+    },
+    muito_abaixo: {
+      bg: 'rgba(220, 38, 38, 0.18)',
+      border: '#dc2626',
+      color: '#f87171',
+      icon: '☀️ Seca'
+    },
+    abaixo: {
+      bg: 'rgba(234, 88, 12, 0.15)',
+      border: '#ea580c',
+      color: '#fb923c',
+      icon: '🌤️-'
+    },
+    neutro_climatologia: {
+      bg: 'rgba(100, 116, 139, 0.10)',
+      border: '#475569',
+      color: '#94a3b8',
+      icon: '⛅ Clima'
+    }
+  };
+  signalStyles['+2'] = signalStyles.muito_acima;
+  signalStyles['+1'] = signalStyles.acima;
+  signalStyles['-2'] = signalStyles.muito_abaixo;
+  signalStyles['-1'] = signalStyles.abaixo;
+  signalStyles['0'] = signalStyles.neutro_climatologia;
+
+  const ENSOS = [
+    { key: 'la-nina', label: 'La Niña', sub: 'Pacífico Equatorial Frio' },
+    { key: 'neutro', label: 'ENOS Neutro', sub: 'Sem Anomalia Remota' },
+    { key: 'el-nino', label: 'El Niño', sub: 'Pacífico Equatorial Quente' }
+  ];
+
+  let html = `
+    <table class="sandbox-table" role="grid" aria-label="Matriz de 24 permutações da estação ${sandboxSelectedSeason}">
+      <thead>
+        <tr>
+          <th style="width:22%; text-align:left;">Fase da MJO (Localização)</th>
+          ${ENSOS.map(e => `
+            <th style="width:26%;">
+              <div>${e.label}</div>
+              <div style="font-size:10px; font-weight:400; color:#94a3b8;">${e.sub}</div>
+            </th>
+          `).join('')}
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  for (let p = 1; p <= 8; p++) {
+    const sample = getGrimmPermutation(sandboxSelectedSeason, 'neutro', p);
+    const phaseName = sample ? sample.phaseName : `Fase ${p}`;
+
+    html += `<tr>`;
+    html += `
+      <td style="padding:8px 10px; background:#0b1929; border:1px solid #1e3a5a; border-radius:6px;">
+        <div style="font-weight:700; color:#e2e8f0;">Fase ${p}</div>
+        <div style="font-size:10.5px; color:#94a3b8; line-height:1.2;">${phaseName}</div>
+      </td>
+    `;
+
+    for (const enso of ENSOS) {
+      const item = getGrimmPermutation(sandboxSelectedSeason, enso.key, p);
+      if (!item) {
+        html += `<td class="sandbox-cell" style="background:#0f172a; border:1px solid #1e293b;">-</td>`;
+        continue;
+      }
+
+      const isActive = (currentSeason === sandboxSelectedSeason && currentEnso === enso.key && Number(currentPhase) === p);
+      const styleInfo = signalStyles[item.signalCategory] || signalStyles[item.sesaSignal] || signalStyles.neutro_climatologia;
+
+      html += `
+        <td class="sandbox-cell ${isActive ? 'is-active-cell' : ''}"
+            data-sb-season="${sandboxSelectedSeason}"
+            data-sb-enso="${enso.key}"
+            data-sb-phase="${p}"
+            data-sb-cell="${sandboxSelectedSeason}-${enso.key}-${p}"
+            style="background:${styleInfo.bg}; border:1px solid ${isActive ? '#38bdf8' : styleInfo.border};"
+            tabindex="0"
+            role="button"
+            aria-pressed="${isActive}"
+            title="Clique para aplicar ${item.season} · ${enso.label} · Fase ${p} ao mapa">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:4px; margin-bottom:4px;">
+            <span style="font-size:11px; font-weight:700; color:${styleInfo.color}; display:inline-flex; align-items:center; gap:3px;">
+              <span>${styleInfo.icon}</span>
+              <span>${item.impactLabel}</span>
+            </span>
+            ${item.isCurated ? `
+              <span style="font-size:9.5px; font-weight:700; color:#facc15; background:rgba(234,179,8,0.18); border:1px solid rgba(234,179,8,0.4); border-radius:4px; padding:1px 4px; white-space:nowrap;" title="Evento de interesse da literatura curada">
+                ⭐ Curado
+              </span>
+            ` : ''}
+          </div>
+          <div style="font-size:10.5px; color:#cbd5e1; line-height:1.25; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+            ${item.synthesis}
+          </div>
+        </td>
+      `;
+    }
+    html += `</tr>`;
+  }
+
+  html += `
+      </tbody>
+    </table>
+  `;
+
+  container.innerHTML = html;
+
+  // Registrar listeners nas células
+  container.querySelectorAll('.sandbox-cell').forEach(cell => {
+    const clickHandler = () => {
+      const s = cell.dataset.sbSeason;
+      const e = cell.dataset.sbEnso;
+      const p = cell.dataset.sbPhase;
+      if (s && e && p) {
+        selectGrimmSandboxCell(s, e, p);
+      }
+    };
+    cell.addEventListener('click', clickHandler);
+    cell.addEventListener('keydown', evt => {
+      if (evt.key === 'Enter' || evt.key === ' ') {
+        evt.preventDefault();
+        clickHandler();
+      }
+    });
+  });
+}
+
+function updateGrimmSandboxUI() {
+  // Sincronizar aba da estação se houver mudança externa
+  if (currentSeason && sandboxSelectedSeason !== currentSeason) {
+    sandboxSelectedSeason = currentSeason;
+    const tabs = document.querySelectorAll('.sandbox-season-btn');
+    tabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbSeason === currentSeason));
+    renderGrimmSandboxMatrix();
+  } else {
+    // Apenas atualizar as classes das células ativas
+    document.querySelectorAll('.sandbox-cell').forEach(cell => {
+      const isMatch = (cell.dataset.sbSeason === currentSeason &&
+                       cell.dataset.sbEnso === currentEnso &&
+                       Number(cell.dataset.sbPhase) === Number(currentPhase));
+      cell.classList.toggle('is-active-cell', isMatch);
+      cell.setAttribute('aria-pressed', String(isMatch));
+      if (isMatch) {
+        cell.style.borderColor = '#38bdf8';
+      }
+    });
+  }
+
+  updateGrimmSandboxDiagnostic();
+}
+
+function updateGrimmSandboxDiagnostic() {
+  const diag = $('sandboxDiagnosticCard');
+  if (!diag || typeof getGrimmPermutation !== 'function') return;
+
+  const item = getGrimmPermutation(currentSeason, currentEnso, currentPhase);
+  if (!item) {
+    diag.innerHTML = `<p class="muted">Selecione uma combinação para visualizar o diagnóstico de Alice Grimm.</p>`;
+    return;
+  }
+
+  const ensoTitle = currentEnso === 'el-nino' ? 'El Niño' : currentEnso === 'la-nina' ? 'La Niña' : 'ENOS Neutro';
+
+  const html = `
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; border-bottom:1px solid #1e3a5a; padding-bottom:8px; margin-bottom:10px;">
+      <div>
+        <span style="font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#38bdf8; font-weight:700;">Diagnóstico Físico de Alice Grimm & Colaboradores</span>
+        <h3 style="font-size:14px; font-weight:800; color:#f8fafc; margin:2px 0 0 0;">
+          ${currentSeason} · ${ensoTitle} · MJO Fase ${currentPhase} (${item.phaseName})
+        </h3>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+        <span style="font-size:11.5px; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(56,189,248,0.15); color:#7dd3fc; border:1px solid rgba(56,189,248,0.35);">
+          ${item.impactLabel}
+        </span>
+        ${item.isCurated ? `
+          <span style="font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(234,179,8,0.2); color:#fde047; border:1px solid rgba(234,179,8,0.4);">
+            ⭐ Caso Curado: ${item.curatedAuthor}
+          </span>
+        ` : ''}
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px; font-size:12px; line-height:1.45;">
+      <div style="background:#0b1929; border:1px solid #1e3a5a; border-radius:6px; padding:10px;">
+        <div style="font-weight:700; color:#38bdf8; margin-bottom:4px; display:flex; align-items:center; gap:5px;">
+          <span>🌊</span> Forçante de Fundo Interanual (ENOS)
+        </div>
+        <div style="color:#cbd5e1;">${item.backgroundSummary}</div>
+      </div>
+
+      <div style="background:#0b1929; border:1px solid #1e3a5a; border-radius:6px; padding:10px;">
+        <div style="font-weight:700; color:#a78bfa; margin-bottom:4px; display:flex; align-items:center; gap:5px;">
+          <span>🌀</span> Gatilho Intra-sazonal da MJO
+        </div>
+        <div style="color:#cbd5e1;">${item.mjoTrigger}</div>
+      </div>
+
+      <div style="background:#0b1929; border:1px solid #1e3a5a; border-radius:6px; padding:10px;">
+        <div style="font-weight:700; color:#34d399; margin-bottom:4px; display:flex; align-items:center; gap:5px;">
+          <span>🌧️</span> Resposta e Acoplamento Físico no SESA
+        </div>
+        <div style="color:#cbd5e1;">${item.synthesis}</div>
+      </div>
+    </div>
+
+    <div style="margin-top:10px; padding-top:8px; border-top:1px solid #1e3a5a; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:11px; color:#94a3b8;">
+      <div>
+        <strong style="color:#cbd5e1;">Fundamentação Científica:</strong> ${Array.isArray(item.citations) ? item.citations.join('; ') : (item.citations || 'Grimm et al. (1998, 2000, 2003, 2004); Fernandes & Grimm (2023)')}
+      </div>
+      <div style="color:#64748b; font-style:italic;">
+        96 permutações = 4 estações × 3 estados de ENOS × 8 fases de MJO
+      </div>
+    </div>
+  `;
+
+  diag.innerHTML = html;
+}
+
 if (typeof window !== 'undefined') {
   window.setClimateState = setClimateState;
+  window.initGrimmSandbox = initGrimmSandbox;
+  window.renderGrimmSandboxMatrix = renderGrimmSandboxMatrix;
+  window.updateGrimmSandboxUI = updateGrimmSandboxUI;
+  window.selectGrimmSandboxCell = selectGrimmSandboxCell;
   if (window.location && window.location.search) {
     const params = new URLSearchParams(window.location.search);
     const opts = {};
@@ -2024,5 +2374,7 @@ if (typeof window !== 'undefined') {
   }
 }
 
-// Inicializar interface
+// Inicializar interface e sandbox
+initGrimmSandbox();
 update();
+

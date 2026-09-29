@@ -54,9 +54,26 @@
 - Muza et al. (2009), Journal of Climate (SEBr e dipolos).
 - Nogués-Paegle & Mo (1997), Journal of the Atmospheric Sciences 54, 966–982.
 - Cavalcanti (2018), Palestra Santa Maria (INPE): slide 12 (EOF1 de v200).
+- Grimm, Ferraz & Gomes (1998), Journal of Climate 11, 2863–2880.
+- Grimm, Barros & Doyle (2000), Journal of Climate 13, 35–58.
+- Grimm (2003), Journal of Climate 16, 263–282.
+- Grimm (2004), Climate Dynamics 22, 123–145.
+- Grimm & Tedeschi (2009), Journal of Climate 22, 1589–1609.
+- Grimm (2011), Interannual Climate Variability in South America.
+
+## Setor Sandbox: As 96 Permutações (Alice Grimm et al.)
+1. **Espaço Físico das 96 Permutações:**
+   - 4 estações $\times$ 3 estados de ENOS $\times$ 8 fases de MJO = 96 permutações físicas catalogadas com rigor em `grimm-matrix-data.js`.
+   - Inserção dos 10 casos curados da literatura ("Eventos de Interesse" de Fernandes & Grimm 2023 e Alvarez et al. 2016) como subconjunto de referência com selo dourado (`⭐ Curado`).
+2. **Interface Interativa do Estudante:**
+   - Abas por estação (`DJF`, `MAM`, `JJA`, `SON`), cada uma contendo uma matriz responsiva de 24 células (8 fases $\times$ 3 colunas de ENOS: La Niña, Neutro, El Niño).
+   - Codificação semântica de cores para impacto no SESA (verde para chuva acima/extremos, vermelho para estiagem/seca severa, ardósia para transição climatológica).
+   - Sincronização bidirecional: clicar em qualquer célula da matriz atualiza instantaneamente o mapa principal, diagrama RMM, jatos, SALLJ e painel de diagnóstico; alternar os seletores manuais do mapa reflete o destaque na célula ativa.
+   - Cartão de Diagnóstico Físico com a forçante de fundo interanual (Alice Grimm), gatilho intra-sazonal da MJO, resposta no SESA e citações bibliográficas completas.
+   - Botões de acesso rápido `#sandboxModeBtn` (no header superior) e `#btnOpenSandbox` (ao lado de "Eventos de interesse:"), com recurso de recolher/expandir (`#btnToggleSandboxView`).
 
 ## Validações
 - **Teste Automatizado de Regressão (`node verify-model.cjs`):**
   - **1920 configurações** testadas no sandbox: **100% aprovadas sem exceções**.
-  - **14 baterias de validação estrita** aprovadas (incluindo compostos CPC/NOAA nas 8 fases global/regional, SALLJ 4 estados $\times$ DJF 3 e 8 $\times$ A {0.5, 1.5}, TSM vibrante, MJO pontilhada, controle PSA/SALLJ/Jato/Caixas).
+  - **15 baterias de validação estrita** aprovadas (incluindo integridade das 96 permutações, mapeamento dos 10 casos curados, diagnósticos de Alice Grimm, compostos CPC/NOAA nas 8 fases global/regional, SALLJ 4 estados, TSM vibrante, MJO pontilhada, controle PSA/SALLJ/Jato/Caixas).
   - **Pureza do código:** 0 ocorrências de `metric` em todos os arquivos de produção.
