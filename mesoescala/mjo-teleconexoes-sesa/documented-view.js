@@ -12,7 +12,7 @@ function displayAllEvidences() {
 let isEventMode = false;
 let activeEventId = null;
 let mapView = 'global';
-let mjoMode = 'none'; // 'none' | 'chi' | 'dipoles' | 'track'
+let mjoMode = 'none'; // 'none' | 'chi' | 'cpc_precip' | 'dipoles' | 'track'
 const visibleLayers = {
   get mjo() { return mjoMode !== 'none'; },
   set mjo(v) { if (!v) mjoMode = 'none'; else if (mjoMode === 'none') mjoMode = 'chi'; },
@@ -648,11 +648,125 @@ function drawMjoVelocityPotential() {
   }
 }
 
+function drawCpcPrecipColorbar(x, y, w, h) {
+  // Fundo translúcido
+  svg('rect', { x, y, width: w, height: h, rx: 6, fill: 'rgba(15, 23, 42, 0.92)', stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-width': 1 });
+
+  // Título e crédito oficial NOAA/CPC (Wheeler & Hendon 2004)
+  svg('text', { x: x + w / 2, y: y + 10, fill: '#bae6fd', 'font-size': 9, 'font-weight': '700', 'text-anchor': 'middle' },
+    `Anomalia de Precipitação Tropical (mm/dia) · Compostos Oficiais CPC/NOAA (Fase ${currentPhase})`);
+
+  // Caixas de cores da escala NOAA/CPC
+  const barW = w - 40;
+  const barH = 7;
+  const barX = x + 20;
+  const barY = y + 14;
+  const cpcLevels = [
+    { color: '#785046', label: '< -3' },
+    { color: '#a0786e', label: '-2' },
+    { color: '#c8a096', label: '-1' },
+    { color: '#f0dcd2', label: '-0.5' },
+    { color: '#1e293b', label: '0' },
+    { color: '#b4faaa', label: '+0.5' },
+    { color: '#50f050', label: '+1' },
+    { color: '#1eb41e', label: '+2' },
+    { color: '#b4f0fa', label: '+3' },
+    { color: '#50a5f5', label: '+4' },
+    { color: '#2882f0', label: '> +5' }
+  ];
+  const segW = barW / cpcLevels.length;
+
+  cpcLevels.forEach((lvl, idx) => {
+    svg('rect', { x: barX + idx * segW, y: barY, width: segW, height: barH, fill: lvl.color, stroke: 'rgba(0,0,0,0.3)', 'stroke-width': 0.5 });
+    svg('text', { x: barX + idx * segW + segW / 2, y: barY + barH + 9, fill: '#cbd5e1', 'font-size': 7.5, 'font-weight': '600', 'text-anchor': 'middle' }, lvl.label);
+  });
+}
+
+function drawMjoCpcPrecipitation() {
+  if (currentAmplitude < 1) return;
+  const phase = currentPhase || 1;
+  const isGlobal = mapView === 'global';
+
+  // Obter imagem base64 pré-carregada ou caminho do arquivo
+  let dataUri = null;
+  if (typeof CPC_MJO_PRECIP_DATA !== 'undefined') {
+    const subset = isGlobal ? CPC_MJO_PRECIP_DATA.global : CPC_MJO_PRECIP_DATA.regional;
+    if (subset) dataUri = subset[phase];
+  }
+  const imgHref = dataUri || (isGlobal
+    ? `data/cpc-precip/cpc_mjo_precip_p${phase}.png`
+    : `data/cpc-precip/cpc_mjo_precip_reg_p${phase}.png`);
+
+  const ampScale = Math.min(2.4, Math.max(0.65, currentAmplitude / 1.5));
+  const opacity = Math.min(1.0, 0.70 + 0.20 * ampScale);
+
+  if (isGlobal) {
+    // Limites do domínio tropical entre 30°S e 30°N (y: 192.5 a 402.5, H = 210)
+    const y30N = (85 - 30) * 560 / 160;
+    const y30S = (85 - (-30)) * 560 / 160;
+
+    // Imagem georreferenciada da faixa tropical (0 a 1200 px, altura 210 px)
+    svg('image', {
+      x: 0,
+      y: y30N,
+      width: 1200,
+      height: y30S - y30N,
+      preserveAspectRatio: 'none',
+      href: imgHref,
+      'xlink:href': imgHref,
+      opacity: opacity.toFixed(2)
+    });
+
+    // Contornos norte e sul da faixa tropical 30°N e 30°S
+    svg('line', { x1: 0, y1: y30N, x2: 1200, y2: y30N, stroke: '#38bdf8', 'stroke-width': 1.0, 'stroke-dasharray': '5 4', opacity: 0.6 });
+    svg('line', { x1: 0, y1: y30S, x2: 1200, y2: y30S, stroke: '#38bdf8', 'stroke-width': 1.0, 'stroke-dasharray': '5 4', opacity: 0.6 });
+
+    // Rótulo de fonte e referência
+    svg('text', {
+      x: 1190, y: y30N + 14,
+      fill: '#bae6fd', 'font-size': 10, 'font-weight': '700', 'text-anchor': 'end', 'letter-spacing': 0.5,
+      stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+    }, `Anomalia de Precipitação CPC/NOAA (Fase ${phase}, Wheeler & Hendon 2004)`);
+
+    // Barra de legenda dos compostos CPC
+    drawCpcPrecipColorbar(300, 516, 600, 36);
+  } else {
+    // Visão Regional América do Sul: domínio 85°W–35°W, 15°N–30°S (x: 60 a 460, y: 35 a 323)
+    svg('image', {
+      x: 60,
+      y: 35,
+      width: 400,
+      height: 288,
+      preserveAspectRatio: 'none',
+      href: imgHref,
+      'xlink:href': imgHref,
+      opacity: opacity.toFixed(2)
+    });
+
+    // Moldura tracejada suave
+    svg('rect', {
+      x: 60, y: 35, width: 400, height: 288,
+      fill: 'none', stroke: '#38bdf8', 'stroke-width': 1.0, 'stroke-dasharray': '4 4', opacity: 0.5
+    });
+
+    svg('text', {
+      x: 450, y: 52,
+      fill: '#bae6fd', 'font-size': 9.5, 'font-weight': '700', 'text-anchor': 'end',
+      stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+    }, `Precipitação CPC/NOAA · Fase ${phase}`);
+
+    // Barra de legenda compacta na visão regional
+    drawCpcPrecipColorbar(60, 476, 520, 36);
+  }
+}
+
 function drawMjoTropicalVisualizations() {
   if (mjoMode === 'dipoles') {
     if (mapView === 'global') drawMjoConvection();
   } else if (mjoMode === 'chi') {
     drawMjoVelocityPotential();
+  } else if (mjoMode === 'cpc_precip') {
+    drawMjoCpcPrecipitation();
   } else if (mjoMode === 'track') {
     if (mapView === 'global') drawMjoTrack();
   }
@@ -949,9 +1063,7 @@ function drawMap(evidence) {
     drawGlobalContext(evidence);
   } else {
     drawLand();
-    if (mjoMode === 'chi') {
-      drawMjoVelocityPotential();
-    }
+    drawMjoTropicalVisualizations();
   }
 
   // Jatos (Subtropical e SALLJ) e Teleconexão PSA
@@ -1379,7 +1491,7 @@ function speakCurrentNarration() {
 }
 
 function setMjoMode(mode) {
-  mjoMode = mode; // 'dipoles' | 'chi' | 'track' | 'none'
+  mjoMode = mode; // 'dipoles' | 'chi' | 'cpc_precip' | 'track' | 'none'
   update();
 }
 
@@ -1898,6 +2010,18 @@ if ($('btnVoiceMute')) {
 
 if (typeof window !== 'undefined') {
   window.setClimateState = setClimateState;
+  if (window.location && window.location.search) {
+    const params = new URLSearchParams(window.location.search);
+    const opts = {};
+    if (params.has('season')) opts.season = params.get('season');
+    if (params.has('enso')) opts.enso = params.get('enso');
+    if (params.has('phase')) opts.phase = Number(params.get('phase'));
+    if (params.has('amplitude')) opts.amplitude = Number(params.get('amplitude'));
+    if (params.has('view')) opts.view = params.get('view');
+    if (params.has('mjoMode')) opts.mjoMode = params.get('mjoMode');
+    if (params.has('salljState')) opts.salljState = params.get('salljState');
+    if (Object.keys(opts).length > 0) setClimateState(opts);
+  }
 }
 
 // Inicializar interface

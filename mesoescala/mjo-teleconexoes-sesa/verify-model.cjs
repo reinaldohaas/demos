@@ -53,7 +53,8 @@ const prodFiles = [
   'documented-view.js',
   'index.html',
   'rmm-diagram.js',
-  'map-regions.js'
+  'map-regions.js',
+  'cpc-mjo-precip-data.js'
 ];
 for (const file of prodFiles) {
   const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
@@ -69,7 +70,7 @@ for (const id of expectedIds) {
 }
 
 // 4. Teste de Sintaxe dos Scripts
-for (const file of ['documented-cases.js', 'documented-view.js', 'map-regions.js', 'rmm-diagram.js', 'panels-manager.js']) {
+for (const file of ['documented-cases.js', 'documented-view.js', 'map-regions.js', 'rmm-diagram.js', 'panels-manager.js', 'cpc-mjo-precip-data.js']) {
   new vm.Script(fs.readFileSync(path.join(__dirname, file), 'utf8'));
 }
 
@@ -141,7 +142,7 @@ const domMock = {
       textContent: '',
       setAttribute: (k, v) => {
         if (typeof v === 'number' && isNaN(v)) throw new Error('NaN attribute in ' + tag + ' ' + k);
-        if (typeof v === 'string' && v.includes('NaN')) throw new Error('NaN in string in ' + tag + ' ' + k + ': ' + v);
+        if (typeof v === 'string' && k !== 'href' && k !== 'xlink:href' && !v.startsWith('data:') && v.includes('NaN')) throw new Error('NaN in string in ' + tag + ' ' + k + ': ' + v);
         el.attributes[k] = v;
       },
       appendChild: () => {}
@@ -175,16 +176,17 @@ vm.createContext(sandbox);
 
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'world-land.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'map-regions.js'), 'utf8'), sandbox);
+vm.runInContext(fs.readFileSync(path.join(__dirname, 'cpc-mjo-precip-data.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'documented-cases.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'documented-view.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'rmm-diagram.js'), 'utf8'), sandbox);
 
 // 6. Teste de Regressão Completo do Sandbox:
-// 96 combinações (4 estações x 3 ENOS x 8 fases) x 4 modos MJO x 2 amplitudes {0.5, 1.5} x 2 visões {global, regional}
+// 96 combinações (4 estações x 3 ENOS x 8 fases) x 5 modos MJO x 2 amplitudes {0.5, 1.5} x 2 visões {global, regional}
 const seasons = ['DJF', 'MAM', 'JJA', 'SON'];
 const ensos = ['neutro', 'el-nino', 'la-nina'];
 const phases = [1, 2, 3, 4, 5, 6, 7, 8];
-const mjoModes = ['none', 'chi', 'dipoles', 'track'];
+const mjoModes = ['none', 'chi', 'cpc_precip', 'dipoles', 'track'];
 const amplitudes = [0.5, 1.5];
 const views = ['global', 'regional'];
 
@@ -208,6 +210,8 @@ for (const season of seasons) {
               assert(!hasWaveTrain, `Com amplitude < 1 não pode desenhar trem de ondas (${season}-${enso}-${phase})`);
               const hasChiBox = createdElements.some(el => el.textContent && el.textContent.includes('χ₂₀₀'));
               assert(!hasChiBox, `Com amplitude < 1 não pode desenhar destaque de χ₂₀₀ (${season}-${enso}-${phase})`);
+              const hasCpcImg = createdElements.some(el => el.tagName === 'image');
+              assert(!hasCpcImg, `Com amplitude < 1 não pode desenhar imagem CPC (${season}-${enso}-${phase})`);
             }
           }
         }
@@ -215,7 +219,7 @@ for (const season of seasons) {
     }
   }
 }
-assert.equal(totalSandboxRuns, 4 * 3 * 8 * 4 * 2 * 2, 'Exatamente 1536 configurações testadas sem exceções');
+assert.equal(totalSandboxRuns, 4 * 3 * 8 * 5 * 2 * 2, 'Exatamente 1920 configurações testadas sem exceções');
 
 // 7. Teste de Modo Evento e Ocultação do ENOS
 // Caso Alvarez (DJF 3-4): ensoGroup deve sumir
@@ -508,6 +512,44 @@ sandbox.drawSallj();
 const jjaState = createdElements.find(el => el.tagName === 'text' && el.attributes && el.attributes.fill === '#fde047');
 assert(jjaState && jjaState.textContent.includes('no inverno, altos níveis dominam — Alvarez et al. 2013'), 'Sub-legenda em JJA deve conter nota de inverno');
 
+// 14. Validação dos Compostos de Precipitação Tropical da MJO (CPC/NOAA)
+console.log('Validando compostos de precipitação tropical CPC/NOAA...');
+for (const p of [1, 2, 3, 4, 5, 6, 7, 8]) {
+  // Visão global com A = 1.5
+  sandbox.setClimateState({ season: 'DJF', enso: 'neutro', phase: p, amplitude: 1.5, view: 'global', mjoMode: 'cpc_precip' });
+  const globalImg = createdElements.find(el => el.tagName === 'image');
+  assert(globalImg, `Imagem CPC/NOAA deve ser renderizada na visão global para fase ${p}`);
+  assert.equal(Number(globalImg.attributes.x), 0, 'Coordenada x global deve ser 0');
+  assert.equal(Number(globalImg.attributes.y), 192.5, 'Coordenada y global deve ser 192.5 (30°N)');
+  assert.equal(Number(globalImg.attributes.width), 1200, 'Largura global deve ser 1200');
+  assert.equal(Number(globalImg.attributes.height), 210, 'Altura global deve ser 210 (30°N a 30°S)');
+  assert(globalImg.attributes.href && globalImg.attributes.href.startsWith('data:image/png;base64,'), `Href global deve conter data URI na fase ${p}`);
+
+  // Colorbar na visão global
+  const colorbarText = createdElements.find(el => el.tagName === 'text' && el.textContent && el.textContent.includes('Compostos Oficiais CPC/NOAA'));
+  assert(colorbarText, `Barra de cores CPC deve estar presente na visão global na fase ${p}`);
+  assert(colorbarText.textContent.includes(`Fase ${p}`), `Título da barra deve indicar Fase ${p}`);
+
+  // Visão regional com A = 1.5
+  sandbox.setClimateState({ season: 'DJF', enso: 'neutro', phase: p, amplitude: 1.5, view: 'regional', mjoMode: 'cpc_precip' });
+  const regImg = createdElements.find(el => el.tagName === 'image');
+  assert(regImg, `Imagem CPC/NOAA deve ser renderizada na visão regional para fase ${p}`);
+  assert.equal(Number(regImg.attributes.x), 60, 'Coordenada x regional deve ser 60 (85°W)');
+  assert.equal(Number(regImg.attributes.y), 35, 'Coordenada y regional deve ser 35 (15°N)');
+  assert.equal(Number(regImg.attributes.width), 400, 'Largura regional deve ser 400 (85°W a 35°W)');
+  assert.equal(Number(regImg.attributes.height), 288, 'Altura regional deve ser 288 (15°N a 30°S)');
+  assert(regImg.attributes.href && regImg.attributes.href.startsWith('data:image/png;base64,'), `Href regional deve conter data URI na fase ${p}`);
+
+  // Colorbar na visão regional
+  const regColorbar = createdElements.find(el => el.tagName === 'text' && el.textContent && el.textContent.includes('Compostos Oficiais CPC/NOAA'));
+  assert(regColorbar, `Barra de cores CPC deve estar presente na visão regional na fase ${p}`);
+}
+
+// Inativo quando amplitude < 1
+sandbox.setClimateState({ season: 'DJF', enso: 'neutro', phase: 4, amplitude: 0.5, view: 'global', mjoMode: 'cpc_precip' });
+const inactiveImg = createdElements.find(el => el.tagName === 'image');
+assert(!inactiveImg, 'Com amplitude < 1 (inativa), imagem CPC/NOAA não deve ser renderizada');
+
 console.log('====================================================');
 console.log('TODAS AS VALIDAÇÕES AUTOMATIZADAS PASSARAM COM SUCESSO:');
 console.log('1. 10 casos documentados autorizados (só mais, só mecanismo físico).');
@@ -517,11 +559,12 @@ console.log('4. Seletor de ENOS oculto em eventos Alvarez e restaurado na intera
 console.log('5. SALLJ direcional citando Liebmann et al. (2004) e Nogués-Paegle & Mo (1997).');
 console.log('6. Notas de La Niña (DJF 2-8), inverno (JJA) e recortes de setores validados.');
 console.log('7. χ200 Deemer com tabela única e losangos (zero elipses).');
-console.log('8. 1536 configurações de sandbox executadas sem erros.');
+console.log('8. 1920 configurações de sandbox executadas sem erros.');
 console.log('9. χ200 e dipolos MJO com bordas pontilhadas e intensidade proporcional ao RMM.');
 console.log('10. TSM de El Niño e La Niña com cores fortes sobrepostas à MJO.');
 console.log('11. Controles e camadas de PSA e SALLJ funcionais e alternáveis.');
 console.log('12. SALLJ com 4 estados (Auto, Forte, Fraco, Climatológico), escalonamento por A e legendas.');
 console.log('13. Controles diretos para Jato Subtropical e Caixas SESA e ZCAS funcionais e alternáveis.');
+console.log('14. Opção de compostos de precipitação tropical CPC/NOAA (8 fases, global e regional, escala 11 níveis).');
 console.log('====================================================');
 
