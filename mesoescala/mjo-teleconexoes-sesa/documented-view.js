@@ -1,16 +1,16 @@
 const $ = id => document.getElementById(id);
 
 let currentSeason = 'DJF';
-let currentEnso = 'neutro';
-let currentPhase = 4;
+let currentEnso = 'el-nino';
+let currentPhase = 3;
 let currentAmplitude = 1.5;
 function displayEvidence() { return currentAmplitude >= 1 ? findDocumentedCase(currentSeason, currentEnso, currentPhase) : null; }
 function displayAllEvidences() {
   if (currentAmplitude < 1) return { specific: null, alvarez: null, primary: null };
   return findDocumentedCases(currentSeason, currentEnso, currentPhase);
 }
-let isEventMode = false;
-let activeEventId = null;
+let isEventMode = true;
+let activeEventId = 'DJF-el-nino-3';
 let mapView = 'global';
 let mjoMode = 'none'; // 'none' | 'chi' | 'cpc_precip' | 'dipoles' | 'track'
 const visibleLayers = {
@@ -2576,5 +2576,9 @@ if (typeof window !== 'undefined') {
 
 // Inicializar interface e sandbox
 initGrimmSandbox();
-update();
+if (typeof window !== 'undefined' && window.location && window.location.search) {
+  update();
+} else {
+  selectEvent('DJF-el-nino-3');
+}
 

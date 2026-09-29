@@ -13,6 +13,7 @@
   6. Diagrama RMM Wheeler & Hendon (2004) permanentemente posicionado no topo e à direita do mapa.
   7. Pureza de código: 0 ocorrências de `metric` em todos os arquivos de produção.
   8. Suíte de testes automatizados (`verify-model.cjs` com 1920 configurações e 15 suites) 100% aprovada.
+  9. Estado padrão do sandbox e simulador configurado para El Niño com atuação máxima da MJO para o SESA (DJF, El Niño, Fase 3, amplitude 1.5 e evento de referência `DJF-el-nino-3` ativo).
 
 ## Arquivos Modificados
 - `grimm-matrix-data.js`:
