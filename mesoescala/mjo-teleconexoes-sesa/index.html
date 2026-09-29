@@ -635,12 +635,18 @@
         <label class="toolbar-group" for="mjoSelect">MJO nos trópicos:
           <select id="mjoSelect"><option value="none" selected>Nenhuma</option><option value="chi">χ200 · potencial de velocidade (esquema didático)</option><option value="dipoles">Dipolos simples</option><option value="track">Trilha 1–8</option></select>
         </label>
-        <div class="toolbar-group" style="display:flex; align-items:center; gap:10px;">
+        <div class="toolbar-group" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
           <label style="display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:700; color:#cbd5e1; cursor:pointer;" title="Alternar teleconexão PSA">
             <input type="checkbox" id="psaToggle" checked style="accent-color:var(--accent-purple); cursor:pointer;"> PSA
           </label>
           <label style="display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:700; color:#cbd5e1; cursor:pointer;" title="Alternar Jato de Baixos Níveis (SALLJ)">
             <input type="checkbox" id="salljToggle" checked style="accent-color:var(--accent-emerald); cursor:pointer;"> SALLJ
+          </label>
+          <label style="display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:700; color:#cbd5e1; cursor:pointer;" title="Alternar Jato Subtropical em altos níveis (~200 hPa)">
+            <input type="checkbox" id="jetsToggle" checked style="accent-color:#38bdf8; cursor:pointer;"> Jato Subtropical
+          </label>
+          <label style="display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:700; color:#cbd5e1; cursor:pointer;" title="Alternar caixas delimitadoras dos setores SESA e ZCAS">
+            <input type="checkbox" id="boxesToggle" checked style="accent-color:#2dd4bf; cursor:pointer;"> Caixas SESA e ZCAS
           </label>
         </div>
         <button id="legendButton" aria-expanded="false" aria-controls="legend">Legenda & Guia</button>
@@ -743,8 +749,12 @@
           <summary style="font-size:12.5px; padding:8px 12px; color:#94a3b8;">Configuração das Camadas da Base (Opcional)</summary>
           <div style="padding:10px 14px; display:flex; gap:16px; flex-wrap:wrap; font-size:12.5px;">
             <label><input id="sstLayer" type="checkbox" checked> TSM · sinal do ENOS</label>
-            <label><input id="jetsLayer" type="checkbox" checked> Jatos · STJ e SALLJ</label>
+            <label><input id="jetsLayer" type="checkbox" checked> Jato Subtropical (~200 hPa)</label>
+            <label><input id="salljLayer" type="checkbox" checked> SALLJ (~850 hPa)</label>
             <label><input id="psaLayer" type="checkbox" checked> PSA · teleconexão</label>
+            <label><input id="boxesLayer" type="checkbox" checked> Caixas · SESA e ZCAS</label>
+            <label><input id="sesaToggle" type="checkbox" checked> Caixa SESA</label>
+            <label><input id="zcasToggle" type="checkbox" checked> Caixa ZCAS</label>
           </div>
         </details>
       </div>
@@ -960,12 +970,12 @@
 </div>
 </main>
 
-<script src="world-land.js?v=20260927n"></script>
-<script src="map-regions.js?v=20260927n"></script>
-<script src="documented-cases.js?v=20260927n"></script>
-<script src="rmm-diagram.js?v=20260927n"></script>
-<script src="documented-view.js?v=20260927n"></script>
-<script src="panels-manager.js?v=20260927n"></script>
-<script src="forecast-sesa.js?v=20260927n"></script>
+<script src="world-land.js?v=20260928a"></script>
+<script src="map-regions.js?v=20260928a"></script>
+<script src="documented-cases.js?v=20260928a"></script>
+<script src="rmm-diagram.js?v=20260928a"></script>
+<script src="documented-view.js?v=20260928a"></script>
+<script src="panels-manager.js?v=20260928a"></script>
+<script src="forecast-sesa.js?v=20260928a"></script>
 </body>
 </html>

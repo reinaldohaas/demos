@@ -104,7 +104,8 @@ function makeMockElement(id) {
 
 const elementIds = [
   'globalView', 'regionalView', 'mjoSelect',
-  'sstLayer', 'jetsLayer', 'psaLayer', 'psaToggle', 'salljToggle', 'legendButton', 'legend',
+  'sstLayer', 'jetsLayer', 'jetsToggle', 'salljLayer', 'salljToggle', 'psaLayer', 'psaToggle',
+  'boxesLayer', 'boxesToggle', 'sesaToggle', 'zcasToggle', 'legendButton', 'legend',
   'caseTitle', 'caseSummary', 'narrationText', 'btnVoiceNarrate', 'btnVoicePause',
   'btnVoiceStop', 'btnVoiceMute', 'mapTitle', 'mapDesc', 'map', 'mapDrawing',
   'result', 'sstBand', 'sstText', 'phaseInfo', 'panelPsa', 'psaCard', 'psaText',
@@ -397,6 +398,62 @@ sandbox.drawMap();
 const hasSalljOn = createdElements.some(el => el.textContent && el.textContent.includes('SALLJ'));
 assert.equal(hasSalljOn, true, 'SALLJ deve ser restaurado quando salljToggle estiver marcado');
 
+// Teste de Controle do Jato Subtropical
+assert.equal(elements.jetsToggle.checked, true, 'jetsToggle deve iniciar marcado');
+elements.jetsToggle.checked = false;
+elements.jetsToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+const hasJetOff = createdElements.some(el => el.textContent && el.textContent.includes('Jato Subtropical'));
+assert.equal(hasJetOff, false, 'Jato Subtropical não deve ser desenhado quando jetsToggle estiver desmarcado');
+
+elements.jetsToggle.checked = true;
+elements.jetsToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+const hasJetOn = createdElements.some(el => el.textContent && el.textContent.includes('Jato Subtropical'));
+assert.equal(hasJetOn, true, 'Jato Subtropical deve ser restaurado quando jetsToggle estiver marcado');
+
+// Teste de Controle das Caixas SESA e ZCAS (boxesToggle)
+assert.equal(elements.boxesToggle.checked, true, 'boxesToggle deve iniciar marcado');
+elements.boxesToggle.checked = false;
+elements.boxesToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+const hasSesaBoxOff = createdElements.some(el => el.textContent === 'SESA');
+const hasZcasBoxOff = createdElements.some(el => el.textContent === 'ZCAS');
+assert.equal(hasSesaBoxOff, false, 'Caixa SESA não deve ser desenhada quando boxesToggle estiver desmarcado');
+assert.equal(hasZcasBoxOff, false, 'Caixa ZCAS não deve ser desenhada quando boxesToggle estiver desmarcado');
+
+elements.boxesToggle.checked = true;
+elements.boxesToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+const hasSesaBoxOn = createdElements.some(el => el.textContent === 'SESA');
+const hasZcasBoxOn = createdElements.some(el => el.textContent === 'ZCAS');
+assert.equal(hasSesaBoxOn, true, 'Caixa SESA deve ser restaurada quando boxesToggle estiver marcado');
+assert.equal(hasZcasBoxOn, true, 'Caixa ZCAS deve ser restaurada quando boxesToggle estiver marcado');
+
+// Teste de controles individuais (sesaToggle e zcasToggle)
+elements.sesaToggle.checked = false;
+elements.sesaToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+assert.equal(createdElements.some(el => el.textContent === 'SESA'), false, 'Caixa SESA deve ser ocultada individualmente');
+assert.equal(createdElements.some(el => el.textContent === 'ZCAS'), true, 'Caixa ZCAS deve permanecer visível quando apenas sesaToggle for desmarcado');
+
+elements.sesaToggle.checked = true;
+elements.sesaToggle.listeners['change'].forEach(fn => fn());
+elements.zcasToggle.checked = false;
+elements.zcasToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+assert.equal(createdElements.some(el => el.textContent === 'SESA'), true, 'Caixa SESA deve permanecer visível quando apenas zcasToggle for desmarcado');
+assert.equal(createdElements.some(el => el.textContent === 'ZCAS'), false, 'Caixa ZCAS deve ser ocultada individualmente');
+
+elements.zcasToggle.checked = true;
+elements.zcasToggle.listeners['change'].forEach(fn => fn());
+
 // 18. Teste dos 4 Estados do SALLJ x DJF Fases 3 e 8 x A {0.5, 1.5}
 const salljStates = ['auto', 'forte', 'fraco', 'climatologico'];
 const testPhases = [3, 8];
@@ -465,5 +522,6 @@ console.log('9. χ200 e dipolos MJO com bordas pontilhadas e intensidade proporc
 console.log('10. TSM de El Niño e La Niña com cores fortes sobrepostas à MJO.');
 console.log('11. Controles e camadas de PSA e SALLJ funcionais e alternáveis.');
 console.log('12. SALLJ com 4 estados (Auto, Forte, Fraco, Climatológico), escalonamento por A e legendas.');
+console.log('13. Controles diretos para Jato Subtropical e Caixas SESA e ZCAS funcionais e alternáveis.');
 console.log('====================================================');
 

@@ -19,7 +19,11 @@ const visibleLayers = {
   sst: true,
   jets: true,
   psa: true,
-  sallj: true
+  sallj: true,
+  sesa: true,
+  zcas: true,
+  get boxes() { return this.sesa && this.zcas; },
+  set boxes(v) { this.sesa = !!v; this.zcas = !!v; }
 };
 let salljState = 'auto'; // 'auto' | 'forte' | 'fraco' | 'climatologico'
 
@@ -955,19 +959,23 @@ function drawMap(evidence) {
   drawSallj();
   drawPsa();
 
-  // Delimitação do SESA: SEMPRE DELIMITADA E IDENTIFICADA
+  // Delimitação do SESA: identificada quando camada ativa
   const cases = displayAllEvidences();
   const primaryEvidence = cases.primary;
-  const isSesaHighlighted = currentAmplitude >= 1 && primaryEvidence && primaryEvidence.region === 'SESA';
-  polygon(REGIONS.SESA_POLY, isSesaHighlighted ? 'rgba(56, 189, 248, 0.12)' : 'rgba(56, 189, 248, 0.03)', isSesaHighlighted ? '#38bdf8' : '#486780', isSesaHighlighted ? 2.2 : 1.5);
-  const [sesaLabelX, sesaLabelY] = project(-50, -25.5);
-  svg('text', { x: sesaLabelX, y: sesaLabelY, fill: isSesaHighlighted ? '#7dd3fc' : '#8ab8d4', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'SESA');
+  if (visibleLayers.sesa) {
+    const isSesaHighlighted = currentAmplitude >= 1 && primaryEvidence && primaryEvidence.region === 'SESA';
+    polygon(REGIONS.SESA_POLY, isSesaHighlighted ? 'rgba(56, 189, 248, 0.12)' : 'rgba(56, 189, 248, 0.03)', isSesaHighlighted ? '#38bdf8' : '#486780', isSesaHighlighted ? 2.2 : 1.5);
+    const [sesaLabelX, sesaLabelY] = project(-50, -25.5);
+    svg('text', { x: sesaLabelX, y: sesaLabelY, fill: isSesaHighlighted ? '#7dd3fc' : '#8ab8d4', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'SESA');
+  }
 
-  // Delimitação da ZCAS: SEMPRE DELIMITADA E IDENTIFICADA
-  const isZcasHighlighted = currentAmplitude >= 1 && primaryEvidence && primaryEvidence.region === 'ZCAS';
-  polygon(REGIONS.ZCAS_POLY, isZcasHighlighted ? 'rgba(45, 212, 191, 0.12)' : 'rgba(45, 212, 191, 0.02)', isZcasHighlighted ? '#2dd4bf' : '#3e5c76', isZcasHighlighted ? 2.2 : 1.4, '4 3');
-  const [zx, zy] = project(-35, -20.5);
-  svg('text', { x: zx, y: zy, fill: isZcasHighlighted ? '#5eead4' : '#6b8ca8', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'ZCAS');
+  // Delimitação da ZCAS: identificada quando camada ativa
+  if (visibleLayers.zcas) {
+    const isZcasHighlighted = currentAmplitude >= 1 && primaryEvidence && primaryEvidence.region === 'ZCAS';
+    polygon(REGIONS.ZCAS_POLY, isZcasHighlighted ? 'rgba(45, 212, 191, 0.12)' : 'rgba(45, 212, 191, 0.02)', isZcasHighlighted ? '#2dd4bf' : '#3e5c76', isZcasHighlighted ? 2.2 : 1.4, '4 3');
+    const [zx, zy] = project(-35, -20.5);
+    svg('text', { x: zx, y: zy, fill: isZcasHighlighted ? '#5eead4' : '#6b8ca8', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'ZCAS');
+  }
 
   // Destaque condicional do caso documentado (somente quando A >= 1)
   if (currentAmplitude >= 1 && primaryEvidence) {
@@ -1438,6 +1446,7 @@ function setClimateState(opts, fromUser = false) {
   if (opts.view !== undefined) mapView = opts.view;
   if (opts.mjoMode !== undefined) mjoMode = opts.mjoMode;
   if (opts.salljState !== undefined) salljState = opts.salljState;
+  if (opts.visibleLayers) Object.assign(visibleLayers, opts.visibleLayers);
   update();
 }
 
@@ -1494,7 +1503,19 @@ function update() {
   $('regionalView').setAttribute('aria-pressed', String(mapView === 'regional'));
   if ($('mjoSelect')) $('mjoSelect').value = mjoMode;
   if ($('salljSelect')) $('salljSelect').value = salljState;
-  for (const [id, layer] of [['sstLayer','sst'],['jetsLayer','jets'],['psaLayer','psa'],['psaToggle','psa'],['salljToggle','sallj']]) if ($(id)) $(id).checked = visibleLayers[layer];
+  for (const [id, layer] of [
+    ['sstLayer','sst'],
+    ['jetsLayer','jets'],
+    ['jetsToggle','jets'],
+    ['salljLayer','sallj'],
+    ['salljToggle','sallj'],
+    ['psaLayer','psa'],
+    ['psaToggle','psa'],
+    ['boxesLayer','boxes'],
+    ['boxesToggle','boxes'],
+    ['sesaToggle','sesa'],
+    ['zcasToggle','zcas']
+  ]) if ($(id)) $(id).checked = visibleLayers[layer];
   if ($('layerCount')) $('layerCount').textContent = `(${['sst','jets','psa'].filter(key => visibleLayers[key]).length}/3)`;
 
   const ensoLabel = currentEnso === 'el-nino' ? 'El Niño' : currentEnso === 'la-nina' ? 'La Niña' : 'ENOS Neutro';
@@ -1784,10 +1805,31 @@ for (const [id, view] of [['globalView', 'global'], ['regionalView', 'regional']
 }
 
 // Alternância de Outras Camadas
-for (const [id, layer] of [['sstLayer', 'sst'], ['jetsLayer', 'jets'], ['psaLayer', 'psa'], ['psaToggle', 'psa'], ['salljToggle', 'sallj']]) {
+for (const [id, layer] of [
+  ['sstLayer', 'sst'],
+  ['jetsLayer', 'jets'],
+  ['jetsToggle', 'jets'],
+  ['salljLayer', 'sallj'],
+  ['salljToggle', 'sallj'],
+  ['psaLayer', 'psa'],
+  ['psaToggle', 'psa'],
+  ['boxesLayer', 'boxes'],
+  ['boxesToggle', 'boxes'],
+  ['sesaToggle', 'sesa'],
+  ['zcasToggle', 'zcas']
+]) {
   if ($(id)) {
     $(id).addEventListener('change', () => {
       visibleLayers[layer] = $(id).checked;
+      if (layer === 'boxes') {
+        if ($('sesaToggle')) $('sesaToggle').checked = visibleLayers.boxes;
+        if ($('zcasToggle')) $('zcasToggle').checked = visibleLayers.boxes;
+        if ($('boxesLayer')) $('boxesLayer').checked = visibleLayers.boxes;
+        if ($('boxesToggle')) $('boxesToggle').checked = visibleLayers.boxes;
+      } else if (layer === 'sesa' || layer === 'zcas') {
+        if ($('boxesToggle')) $('boxesToggle').checked = visibleLayers.boxes;
+        if ($('boxesLayer')) $('boxesLayer').checked = visibleLayers.boxes;
+      }
       update();
     });
   }

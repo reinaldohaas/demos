@@ -2,50 +2,47 @@
 
 ## Estado
 - Branch: `revisao`, criado do `main`.
-- Data e hora: 2026-09-28T01:00:00-03:00.
-- Versão de cache: `?v=20260927n`.
-- Revisão concluída e validada (SALLJ com 4 estados, escalonamento por A e legendas; TSM de El Niño/La Niña vibrantes sobrepostas à MJO; MJO pontilhada com intensidade RMM; eventos de interesse em caixa única com prefixos de estação; PSA e SALLJ com controles dedicados).
+- Data e hora: 2026-09-28T22:20:00-03:00.
+- Versão de cache: `?v=20260928a`.
+- Revisão concluída e validada (ampliação dos controles de alternância direta no mapa para Jato Subtropical e Caixas SESA e ZCAS; sincronização com legendas; 100% de aprovação nos testes automatizados).
 - Arquivos modificados:
   - `index.html`:
     - Adicionado seletor `SALLJ` na linha 2 dos controles com opções: `Automático (padrão)`, `Forte`, `Fraco` e `Climatológico`.
     - Unificados todos os eventos de interesse em uma única caixa de seleção (`eventsSelect`), agrupados por `<optgroup>` com prefixos de estação (`DJF`, `MAM`, `JJA`, `SON`).
-    - Adicionados controles diretos na barra de ferramentas do mapa: checkboxes `[x] PSA` e `[x] SALLJ`.
-    - Cache-buster atualizado para `?v=20260927n`.
+    - Ampliados os controles diretos na barra de ferramentas do mapa: checkboxes `[x] PSA`, `[x] SALLJ`, `[x] Jato Subtropical` e `[x] Caixas SESA e ZCAS`.
+    - Atualizada a seção "Configuração das Camadas da Base" na legenda com controles sincronizados para todas as feições (incluindo controles individuais `Caixa SESA` e `Caixa ZCAS`).
+    - Cache-buster atualizado para `?v=20260928a`.
   - `documented-view.js`:
+    - Implementados `visibleLayers.jets`, `visibleLayers.sesa`, `visibleLayers.zcas` e getter/setter composto `visibleLayers.boxes`.
+    - Jato Subtropical (`drawJets`) e caixas delimitadoras de SESA e ZCAS (`drawMap`) condicionadas estritamente às respectivas camadas ativas.
+    - Sincronização bidirecional entre checkboxes da barra do mapa (`#jetsToggle`, `#boxesToggle`), caixas individuais (`#sesaToggle`, `#zcasToggle`) e opções da legenda.
+    - `setClimateState` atualizado para suportar `opts.visibleLayers`.
     - Implementado `salljState` e função `getEffectiveSalljState`:
       - Modo Automático: DJF fases 3–4 → Forte; DJF fases 8–1 → Fraco; demais → Climatológico (JJA sempre Climatológico com nota de inverno).
       - Forte: seta longa e grossa (base 4.2 px) até o setor SESA.
       - Fraco: seta curta (base 2.2 px) curvando para leste em direção à ZCAS.
       - Climatológico: seta média (3.2 px) ao longo dos Andes.
       - Escalonamento da espessura visual com $f = \min(A, 1)$ no modo Automático; fixo nos modos manuais.
-      - Legenda por estado:
-        - Forte: "jato forte — mais chuva e extremos no SESA (Liebmann et al. 2004)"
-        - Fraco: "jato fraco — umidade desviada para a ZCAS (Liebmann et al. 2004; Muza et al. 2009)"
-        - Climatológico JJA auto: "no inverno, altos níveis dominam — Alvarez et al. 2013"
-      - Camada liga/desliga independente via `visibleLayers.sallj`.
-    - TSM Equatorial de El Niño e La Niña com cores mais fortes, vibrantes e núcleos anômalos, desenhada sobre a MJO tropical.
-    - MJO nos trópicos com bordas pontilhadas (`stroke-dasharray`) nos paralelogramos de $\chi_{200}$ e dipolos convecção, com opacidade e espessura proporcionais à amplitude RMM.
-    - PSA desacoplada em função dedicada `drawPsa()`, renderizada em projeções global e regional, sincronizada com `#psaToggle`.
+      - Legenda por estado (Liebmann et al. 2004; Muza et al. 2009; Alvarez et al. 2013).
   - `verify-model.cjs`:
-    - Adicionada matriz de testes para os 4 estados do SALLJ $\times$ DJF fases 3 e 8 $\times$ $A \in \{0.5, 1.5\}$.
-    - Validação de escalonamento por amplitude, persistência manual, e legendas por estado.
-    - Validação de TSM vibrante, bordas pontilhadas de $\chi_{200}$, e alternância independente de PSA e SALLJ.
-    - Total de 1536 configurações + 18 baterias específicas: 100% de aprovação.
+    - Adicionada validação de controle e alternância direta para Jato Subtropical (`jetsToggle`), Caixas SESA e ZCAS (`boxesToggle`), e controles individuais (`sesaToggle`, `zcasToggle`).
+    - 1536 configurações de sandbox + 13 baterias de validação estrita com 100% de aprovação.
+    - ZERO ocorrências de `metric` em todo o código.
 
 ## Feito (nesta revisão)
-1. **SALLJ com Estados (Automático, Forte, Fraco, Climatológico):**
-   - Seletor posicionado na linha 2 dos controles.
-   - Resolução física por estação e fase em modo Automático.
-   - Traçado longo e espesso até SESA no estado Forte; traçado curto curvando para ZCAS no estado Fraco.
-   - Espessura visual modulada por $f = \min(A, 1)$ em Automático e constante nos manuais.
-   - Legendas autorais específicas por estado (Liebmann et al. 2004; Muza et al. 2009).
-2. **TSM Vibrante de El Niño e La Niña sobreposta à MJO:**
-   - Cores saturadas com camada quente/fria interior, sobrepostas aos campos tropicais.
-3. **MJO Pontilhada Proporcional ao RMM:**
+1. **Controles Expandidos na Barra do Mapa (Item 5):**
+   - Inclusão de `[x] Jato Subtropical` (`#jetsToggle`) e `[x] Caixas SESA e ZCAS` (`#boxesToggle`).
+   - Suporte a alternância individual de `Caixa SESA` (`#sesaToggle`) e `Caixa ZCAS` (`#zcasToggle`).
+   - Sincronização em tempo real com as opções da legenda.
+2. **SALLJ com Estados (Automático, Forte, Fraco, Climatológico):**
+   - Seletor posicionado na linha 2 dos controles com escalonamento por amplitude e legendas por estado.
+3. **TSM Vibrante de El Niño e La Niña sobreposta à MJO:**
+   - Cores saturadas com camada interior, sobrepostas aos campos tropicais.
+4. **MJO Pontilhada Proporcional ao RMM:**
    - Paralelogramos e dipolos com `stroke-dasharray` e saturação dinâmica proporcional a $A$.
-4. **Caixa Única de Eventos de Interesse:**
+5. **Caixa Única de Eventos de Interesse:**
    - Select único com prefixos de estação (`DJF`, `MAM`, `JJA`, `SON`) e `<optgroup>`.
-5. **Restauração e Controle Independente de PSA e SALLJ:**
+6. **Restauração e Controle Independente de PSA e SALLJ:**
    - Toggles diretos `#psaToggle` e `#salljToggle` na barra do mapa.
 
 ## Fontes
