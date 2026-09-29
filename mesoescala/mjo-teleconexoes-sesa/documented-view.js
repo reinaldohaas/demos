@@ -1714,130 +1714,103 @@ function update() {
 
   // Resumo do Caso
   if ($('caseSummary')) {
+    const cell = (typeof getGrimmPermutation === 'function')
+      ? getGrimmPermutation(currentSeason, currentEnso, currentPhase)
+      : null;
+
     if (currentAmplitude < 1) {
       $('caseSummary').textContent = 'MJO fraca (amplitude < 1) — sem padrão associado.';
       $('caseSummary').style.color = 'var(--muted)';
-    } else if (specific && alvarez) {
-      $('caseSummary').textContent = `${specific.text} | Média de todos os anos (Alvarez et al.): ${alvarez.text}`;
+    } else if (cell && cell.mjoXenso && cell.mjoXenso.text && cell.sinalMjo && cell.sinalMjo.text) {
+      $('caseSummary').textContent = `${cell.mjoXenso.text} (${cell.mjoXenso.ref}) | Média de todos os anos (Alvarez et al.): ${cell.sinalMjo.text}`;
       $('caseSummary').style.color = 'var(--accent-teal)';
-    } else if (specific) {
-      $('caseSummary').textContent = `${specific.text} (${specific.source})`;
+    } else if (cell && cell.mjoXenso && cell.mjoXenso.text) {
+      $('caseSummary').textContent = `${cell.mjoXenso.text} (${cell.mjoXenso.ref})`;
       $('caseSummary').style.color = 'var(--accent-teal)';
-    } else if (alvarez) {
-      $('caseSummary').textContent = `Média de todos os anos (Alvarez et al. 2016): ${alvarez.text} (${alvarez.source})`;
+    } else if (cell && cell.sinalMjo && cell.sinalMjo.text) {
+      $('caseSummary').textContent = `Média de todos os anos (Alvarez et al. 2016): ${cell.sinalMjo.text} (${cell.sinalMjo.ref})`;
+      $('caseSummary').style.color = 'var(--accent-teal)';
+    } else if (cell && cell.fundoEnso && cell.fundoEnso.text) {
+      $('caseSummary').textContent = `Fundo ENOS: "${cell.fundoEnso.text}" (${cell.fundoEnso.ref})`;
       $('caseSummary').style.color = 'var(--accent-teal)';
     } else {
-      $('caseSummary').textContent = 'Sem resultado documentado para esta combinação.';
+      $('caseSummary').textContent = 'Sem resultado publicado para esta combinação.';
       $('caseSummary').style.color = 'var(--muted)';
     }
   }
 
-  // Painel de Resultados
+  // Painel de Resultados (3 Camadas Científicas com Referência Visível)
   $('result').replaceChildren();
+  const cell = (typeof getGrimmPermutation === 'function')
+    ? getGrimmPermutation(currentSeason, currentEnso, currentPhase)
+    : null;
+
   if (currentAmplitude < 1) {
     const val = document.createElement('p');
     val.className = 'muted';
     val.textContent = 'MJO fraca (A < 1): destaques de fase ativa ocultos; jatos, TSM, ZCAS, SESA e PSA preservados.';
     $('result').appendChild(val);
-  } else if (specific && alvarez) {
-    // 1. Específico do ENOS (Fernandes & Grimm)
-    const sBlock = document.createElement('div');
-    const sTitle = document.createElement('p');
-    sTitle.className = 'value';
-    sTitle.style.color = 'var(--accent-teal)';
-    sTitle.textContent = `${specific.source.split(',')[0]} (Específico · ${ensoLabel})`;
-    sBlock.appendChild(sTitle);
-    const sDesc = document.createElement('p');
-    sDesc.textContent = specific.text;
-    sBlock.appendChild(sDesc);
-    if (specific.authorSectorDef) {
-      const sDef = document.createElement('p');
-      sDef.className = 'muted';
-      sDef.style.marginTop = '4px';
-      sDef.innerHTML = `<strong>Definição do autor:</strong> ${specific.authorSectorDef}`;
-      sBlock.appendChild(sDef);
-    }
-    $('result').appendChild(sBlock);
-
-    // 2. Média de todos os anos (Alvarez et al.)
-    const aBlock = document.createElement('div');
-    aBlock.style.marginTop = '12px';
-    aBlock.style.paddingTop = '10px';
-    aBlock.style.borderTop = '1px solid rgba(255,255,255,0.12)';
-    const aTitle = document.createElement('p');
-    aTitle.className = 'value';
-    aTitle.style.color = 'var(--accent-teal)';
-    aTitle.textContent = 'Média de todos os anos (Alvarez et al. 2016)';
-    aBlock.appendChild(aTitle);
-    if (isEventMode && activeEventId && activeEventId.includes('alvarez')) {
-      const aSub = document.createElement('p');
-      aSub.className = 'muted';
-      aSub.style.marginBottom = '6px';
-      aSub.textContent = 'composição de todos os anos (sem separação por ENOS)';
-      aBlock.appendChild(aSub);
-    }
-    const aDesc = document.createElement('p');
-    aDesc.textContent = alvarez.text;
-    aBlock.appendChild(aDesc);
-    if (alvarez.authorSectorDef) {
-      const aDef = document.createElement('p');
-      aDef.className = 'muted';
-      aDef.style.marginTop = '4px';
-      aDef.innerHTML = `<strong>Definição do autor:</strong> ${alvarez.authorSectorDef}`;
-      aBlock.appendChild(aDef);
-    }
-    $('result').appendChild(aBlock);
-  } else if (specific) {
-    const sBlock = document.createElement('div');
-    const sTitle = document.createElement('p');
-    sTitle.className = 'value';
-    sTitle.style.color = 'var(--accent-teal)';
-    sTitle.textContent = `${specific.source.split(',')[0]} (Específico · ${ensoLabel})`;
-    sBlock.appendChild(sTitle);
-    const sDesc = document.createElement('p');
-    sDesc.textContent = specific.text;
-    sBlock.appendChild(sDesc);
-    if (specific.authorSectorDef) {
-      const sDef = document.createElement('p');
-      sDef.className = 'muted';
-      sDef.style.marginTop = '4px';
-      sDef.innerHTML = `<strong>Definição do autor:</strong> ${specific.authorSectorDef}`;
-      sBlock.appendChild(sDef);
-    }
-    $('result').appendChild(sBlock);
-  } else if (alvarez) {
-    const aBlock = document.createElement('div');
-    const aTitle = document.createElement('p');
-    aTitle.className = 'value';
-    aTitle.style.color = 'var(--accent-teal)';
-    aTitle.textContent = 'Média de todos os anos (Alvarez et al. 2016)';
-    aBlock.appendChild(aTitle);
-    if (isEventMode && activeEventId && activeEventId.includes('alvarez')) {
-      const aSub = document.createElement('p');
-      aSub.className = 'muted';
-      aSub.style.marginBottom = '6px';
-      aSub.textContent = 'composição de todos os anos (sem separação por ENOS)';
-      aBlock.appendChild(aSub);
-    }
-    const aDesc = document.createElement('p');
-    aDesc.textContent = alvarez.text;
-    aBlock.appendChild(aDesc);
-    if (alvarez.authorSectorDef) {
-      const aDef = document.createElement('p');
-      aDef.className = 'muted';
-      aDef.style.marginTop = '4px';
-      aDef.innerHTML = `<strong>Definição do autor:</strong> ${alvarez.authorSectorDef}`;
-      aBlock.appendChild(aDef);
-    }
-    $('result').appendChild(aBlock);
-  } else {
+  } else if (!cell || !cell.hasAnyLayer) {
     const val = document.createElement('p');
     val.className = 'muted';
-    val.textContent = 'Sem resultado documentado para esta combinação.';
+    val.textContent = 'Sem resultado publicado para esta combinação.';
     $('result').appendChild(val);
-    const desc = document.createElement('p');
-    desc.textContent = `Não há caso específico catalogado para ${currentSeason} · ${ensoLabel} · Fase ${currentPhase} nesta síntese documental. As feições da base continuam disponíveis para análise no sandbox.`;
-    $('result').appendChild(desc);
+    if (cell && cell.mjoXenso && cell.mjoXenso.note) {
+      const noteP = document.createElement('p');
+      noteP.style.fontSize = '12px';
+      noteP.style.color = '#94a3b8';
+      noteP.style.fontStyle = 'italic';
+      noteP.textContent = `MJO × ENOS: ${cell.mjoXenso.note}`;
+      $('result').appendChild(noteP);
+    }
+  } else {
+    // Camada 1: Fundo ENOS (independe da fase)
+    const b1 = document.createElement('div');
+    b1.style.marginBottom = '12px';
+    b1.innerHTML = `
+      <div style="font-weight:700; color:#38bdf8; font-size:13px; margin-bottom:2px;">1. Fundo ENOS (independe da fase)</div>
+      ${cell.fundoEnso && cell.fundoEnso.text ? `
+        <div style="color:#f1f5f9; font-size:13px; line-height:1.45;">"${cell.fundoEnso.text}"</div>
+        <div style="font-size:11.5px; color:#94a3b8; margin-top:2px;">📖 <em>${cell.fundoEnso.ref}</em></div>
+      ` : `
+        <div style="color:#64748b; font-size:12px; font-style:italic;">Sem sinal definido nesta estação (aguarda o Reinaldo)</div>
+      `}
+    `;
+    $('result').appendChild(b1);
+
+    // Camada 2: Sinal MJO — Alvarez et al. (2016), TODOS OS ANOS
+    const b2 = document.createElement('div');
+    b2.style.marginBottom = '12px';
+    b2.style.paddingTop = '10px';
+    b2.style.borderTop = '1px solid rgba(255,255,255,0.08)';
+    b2.innerHTML = `
+      <div style="font-weight:700; color:#c084fc; font-size:13px; margin-bottom:2px;">2. Sinal MJO (${cell.sinalMjo.label})</div>
+      ${cell.sinalMjo && cell.sinalMjo.text ? `
+        <div style="color:#f1f5f9; font-size:13px; line-height:1.45;">${cell.sinalMjo.text}</div>
+        <div style="font-size:11.5px; color:#94a3b8; margin-top:2px;">📖 <em>${cell.sinalMjo.ref}</em></div>
+      ` : `
+        <div style="color:#64748b; font-size:12px; font-style:italic;">Sem resultado publicado para esta fase</div>
+      `}
+    `;
+    $('result').appendChild(b2);
+
+    // Camada 3: MJO × ENOS — Fernandes & Grimm (2023), SOMENTE DJF
+    const b3 = document.createElement('div');
+    b3.style.marginBottom = '12px';
+    b3.style.paddingTop = '10px';
+    b3.style.borderTop = '1px solid rgba(255,255,255,0.08)';
+    b3.innerHTML = `
+      <div style="font-weight:700; color:#34d399; font-size:13px; margin-bottom:2px;">3. MJO × ENOS (Fernandes & Grimm 2023)</div>
+      ${cell.mjoXenso && cell.mjoXenso.text ? `
+        <div style="color:#f1f5f9; font-size:13px; line-height:1.45;">${cell.mjoXenso.text}</div>
+        <div style="font-size:11.5px; color:#94a3b8; margin-top:2px;">📖 <em>${cell.mjoXenso.ref}</em></div>
+      ` : cell.mjoXenso && cell.mjoXenso.note ? `
+        <div style="color:#94a3b8; font-size:12px; font-style:italic;">${cell.mjoXenso.note}</div>
+      ` : `
+        <div style="color:#64748b; font-size:12px; font-style:italic;">Sem resultado publicado para MJO × ENOS nesta fase</div>
+      `}
+    `;
+    $('result').appendChild(b3);
   }
 
   // Nota de La Niña em DJF (fases 2–8)
@@ -2148,18 +2121,15 @@ function initGrimmSandbox() {
   }
 
   renderGrimmSandboxMatrix();
-  updateGrimmSandboxDiagnostic();
 }
 
 function toggleSandboxCollapse(collapse) {
   isSandboxCollapsed = collapse;
   const matrix = $('sandboxMatrixContainer');
-  const diag = $('sandboxDiagnosticCard');
   const tabs = $('sandboxSeasonTabs');
   const ensoTabs = $('sandboxEnsoTabs');
   const btn = $('btnToggleSandboxView');
   if (matrix) matrix.style.display = collapse ? 'none' : '';
-  if (diag) diag.style.display = collapse ? 'none' : '';
   if (tabs) tabs.style.display = collapse ? 'none' : 'flex';
   if (ensoTabs) ensoTabs.style.display = collapse ? 'none' : 'flex';
   if (btn) btn.textContent = collapse ? 'Expandir matriz' : 'Ocultar';
@@ -2297,20 +2267,53 @@ function renderGrimmSandboxMatrix() {
               data-sb-enso="${enso.key}"
               data-sb-phase="${p}"
               data-sb-cell="${sandboxSelectedSeason}-${enso.key}-${p}"
-              style="background:${styleInfo.bg}; border:1px solid ${isActive ? '#38bdf8' : styleInfo.border}; padding:7px 10px; cursor:pointer;"
+              style="background:${styleInfo.bg}; border:1px solid ${isActive ? '#38bdf8' : styleInfo.border}; padding:8px 10px; cursor:pointer;"
               tabindex="0"
               role="button"
               aria-pressed="${isActive}"
               title="Clique para aplicar ${item.season} · ${enso.label} · Fase ${p} ao mapa">
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:4px;">
-              <span style="font-size:11.5px; font-weight:700; color:${styleInfo.color}; display:inline-flex; align-items:center; gap:4px;">
-                <span>${styleInfo.icon}</span>
-                <span>${item.impactLabel}</span>
-              </span>
-              ${item.isCurated ? `
-                <span style="font-size:9.5px; font-weight:700; color:#facc15; background:rgba(234,179,8,0.2); border:1px solid rgba(234,179,8,0.4); border-radius:3px; padding:1px 4px; white-space:nowrap;" title="Caso Curado (${item.curatedAuthor})">
-                  ⭐ Curado
+            <div style="display:flex; flex-direction:column; gap:4px;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:4px;">
+                <span style="font-size:11.5px; font-weight:700; color:${styleInfo.color}; display:inline-flex; align-items:center; gap:4px;">
+                  <span>${styleInfo.icon}</span>
+                  <span>${item.impactLabel}</span>
                 </span>
+                ${item.isCurated ? `
+                  <span style="font-size:9.5px; font-weight:700; color:#facc15; background:rgba(234,179,8,0.2); border:1px solid rgba(234,179,8,0.4); border-radius:3px; padding:1px 4px; white-space:nowrap;" title="Caso Curado (${item.curatedAuthor})">
+                    ⭐ Curado
+                  </span>
+                ` : ''}
+              </div>
+
+              ${item.fundoEnso && item.fundoEnso.text ? `
+                <div style="font-size:10.5px; color:#38bdf8; line-height:1.25;">
+                  <strong>1. Fundo ENOS:</strong> "${item.fundoEnso.text}"
+                  <div style="font-size:9.5px; color:#94a3b8;">📖 <em>${item.fundoEnso.ref}</em></div>
+                </div>
+              ` : ''}
+
+              ${item.sinalMjo && item.sinalMjo.text ? `
+                <div style="font-size:10.5px; color:#c084fc; line-height:1.25;">
+                  <strong>2. MJO (${item.sinalMjo.label}):</strong> ${item.sinalMjo.text}
+                  <div style="font-size:9.5px; color:#94a3b8;">📖 <em>${item.sinalMjo.ref}</em></div>
+                </div>
+              ` : ''}
+
+              ${item.mjoXenso && item.mjoXenso.text ? `
+                <div style="font-size:10.5px; color:#34d399; line-height:1.25;">
+                  <strong>3. MJO × ENOS:</strong> ${item.mjoXenso.text}
+                  <div style="font-size:9.5px; color:#94a3b8;">📖 <em>${item.mjoXenso.ref}</em></div>
+                </div>
+              ` : item.mjoXenso && item.mjoXenso.note ? `
+                <div style="font-size:9.5px; color:#64748b; font-style:italic; line-height:1.2;">
+                  3. MJO × ENOS: ${item.mjoXenso.note}
+                </div>
+              ` : ''}
+
+              ${!item.hasAnyLayer ? `
+                <div style="font-size:10.5px; color:#64748b; font-style:italic; line-height:1.25;">
+                  Sem resultado publicado para esta combinação
+                </div>
               ` : ''}
             </div>
           </td>
@@ -2327,9 +2330,9 @@ function renderGrimmSandboxMatrix() {
     // Modo Foco em Regime ENOS específico (ex.: El Niño, La Niña, Neutro)
     const ensoMeta = {
       'el-nino': {
-        title: '🔥 Regime de El Niño · Foco Operacional no SESA',
-        sub: `Estação ${sandboxSelectedSeason} · 8 Fases da MJO sob Pacífico Equatorial Quente (Alice Grimm et al.)`,
-        summary: 'Em anos de <strong>El Niño</strong>, o Jato Subtropical (~200 hPa) é permanentemente reforçado sobre o cone sul, acelerando a dispersão de ondas de Rossby (PSA). A convecção tropical da MJO atua como chave: fases 2–5 descarregam extremos no SESA com SALLJ forte; na fase 1 o sinal se inverte para a ZCAS.',
+        title: '🔥 Regime de El Niño · Foco no SESA',
+        sub: `Estação ${sandboxSelectedSeason} · 8 Fases da MJO sob Pacífico Equatorial Quente`,
+        summary: 'Em anos de <strong>El Niño</strong>, a resposta no SESA é governada pela sobreposição do fundo ENOS (Grimm, Barros & Doyle 2000 na primavera), do sinal MJO na média de todos os anos (Alvarez et al. 2016) e da combinação MJO × ENOS (Fernandes & Grimm 2023 em DJF).',
         border: 'rgba(239, 68, 68, 0.4)',
         bg: 'rgba(239, 68, 68, 0.08)',
         badgeBg: '#dc2626',
@@ -2337,9 +2340,9 @@ function renderGrimmSandboxMatrix() {
         guideLink: true
       },
       'la-nina': {
-        title: '❄️ Regime de La Niña · Foco Operacional no SESA',
-        sub: `Estação ${sandboxSelectedSeason} · 8 Fases da MJO sob Pacífico Equatorial Frio (Alice Grimm et al.)`,
-        summary: 'Na <strong>La Niña</strong>, o Jato Subtropical fica mais tênue e deslocado, inibindo a propagação de ondas para o sul. Ocorre bloqueio persistente de chuva no SESA e favorecimento da ZCAS (especialmente nas fases 7–8 com seca severa no SESA e pico na ZCAS).',
+        title: '❄️ Regime de La Niña · Foco no SESA',
+        sub: `Estação ${sandboxSelectedSeason} · 8 Fases da MJO sob Pacífico Equatorial Frio`,
+        summary: 'Em anos de <strong>La Niña</strong>, o sinal no SESA é composto pelo fundo ENOS (Grimm, Barros & Doyle 2000 na primavera), sinal MJO em todos os anos (Alvarez et al. 2016) e combinação MJO × ENOS (Fernandes & Grimm 2023 em DJF).',
         border: 'rgba(59, 130, 246, 0.4)',
         bg: 'rgba(59, 130, 246, 0.08)',
         badgeBg: '#2563eb',
@@ -2347,9 +2350,9 @@ function renderGrimmSandboxMatrix() {
         guideLink: false
       },
       'neutro': {
-        title: '⚪ Regime ENOS Neutro · Foco Operacional no SESA',
+        title: '⚪ Regime ENOS Neutro · Foco no SESA',
         sub: `Estação ${sandboxSelectedSeason} · 8 Fases da MJO sem forçante remota de TSM`,
-        summary: 'Em anos <strong>Neutros</strong>, a MJO é a forçante intra-sazonal primária. A resposta no SESA depende diretamente do trem de ondas PSA excitado no Pacífico oeste (fases 3–4 com semana chuvosa e pico de extremos).',
+        summary: 'Em anos <strong>Neutros</strong>, a MJO é a forçante intra-sazonal primária, analisada pela média de todos os anos de Alvarez et al. (2016) e pela composição de Fernandes & Grimm (2023 em DJF).',
         border: 'rgba(148, 163, 184, 0.35)',
         bg: 'rgba(148, 163, 184, 0.08)',
         badgeBg: '#475569',
@@ -2360,7 +2363,7 @@ function renderGrimmSandboxMatrix() {
 
     const meta = ensoMeta[sandboxEnsoMode] || ensoMeta['el-nino'];
     if (countBadge) {
-      countBadge.textContent = `8 fases sob ${meta.badgeText} em ${sandboxSelectedSeason} (Alice Grimm et al.)`;
+      countBadge.textContent = `8 fases sob ${meta.badgeText} em ${sandboxSelectedSeason}`;
     }
 
     html = `
@@ -2376,7 +2379,7 @@ function renderGrimmSandboxMatrix() {
         </div>
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
           ${meta.guideLink ? `
-            <a href="guia-el-nino.html" target="_blank" rel="noopener" class="btn-voice" style="padding:6px 12px; font-size:12px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:#1e293b; border:1px solid #ef4444; color:#fca5a5; border-radius:6px; font-weight:700;" title="Abrir dossiê científico completo em nova guia do navegador">
+            <a href="guia-el-nino.html" target="_blank" rel="noopener" class="btn-voice" style="padding:6px 12px; font-size:12px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:#1e293b; border:1px solid #ef4444; color:#fca5a5; border-radius:6px; font-weight:700;" title="Abrir guia científico em nova guia do navegador">
               <span>↗️ Abrir Guia do El Niño em Nova Guia</span>
             </a>
           ` : ''}
@@ -2397,7 +2400,7 @@ function renderGrimmSandboxMatrix() {
       const styleInfo = signalStyles[item.signalCategory] || signalStyles[item.sesaSignal] || signalStyles.neutro_climatologia;
       const sourceType = getPsaSourceType(sandboxSelectedSeason, sandboxEnsoMode, p);
       const sourceLabel = sourceType === 'ciclone_tropical' ? 'Ciclone Tropical' : 'Eixo da ZCPS';
-      const citation = Array.isArray(item.citations) ? item.citations.join('; ') : (item.citations || 'Alice Grimm et al.');
+      const citation = Array.isArray(item.citations) ? item.citations.join('; ') : (item.citations || 'Sem citação');
 
       html += `
         <div class="sandbox-cell ${isActive ? 'is-active-cell' : ''}"
@@ -2410,7 +2413,7 @@ function renderGrimmSandboxMatrix() {
              role="button"
              aria-pressed="${isActive}"
              title="Clique para aplicar ${item.season} · ${meta.badgeText} · Fase ${p} ao mapa">
-          <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:5px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:8px;">
             <div style="display:flex; align-items:center; gap:8px;">
               <span style="font-weight:800; font-size:12.5px; color:#ffffff; background:#0b1929; border:1px solid #1e3a5a; padding:2px 7px; border-radius:4px;">
                 Fase ${p}
@@ -2430,10 +2433,41 @@ function renderGrimmSandboxMatrix() {
               ` : ''}
             </div>
           </div>
-          <div style="font-size:12px; color:#f1f5f9; line-height:1.4; margin-bottom:6px;">
-            ${item.synthesis}
+
+          <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:8px;">
+            ${item.fundoEnso && item.fundoEnso.text ? `
+              <div style="font-size:12px; color:#38bdf8; line-height:1.35; background:rgba(56,189,248,0.06); padding:4px 8px; border-radius:4px; border-left:2px solid #38bdf8;">
+                <strong>1. Fundo ENOS:</strong> "${item.fundoEnso.text}"
+                <div style="font-size:10.5px; color:#94a3b8; margin-top:2px;">📖 <em>${item.fundoEnso.ref}</em></div>
+              </div>
+            ` : ''}
+
+            ${item.sinalMjo && item.sinalMjo.text ? `
+              <div style="font-size:12px; color:#c084fc; line-height:1.35; background:rgba(192,132,252,0.06); padding:4px 8px; border-radius:4px; border-left:2px solid #c084fc;">
+                <strong>2. Sinal MJO (${item.sinalMjo.label}):</strong> ${item.sinalMjo.text}
+                <div style="font-size:10.5px; color:#94a3b8; margin-top:2px;">📖 <em>${item.sinalMjo.ref}</em></div>
+              </div>
+            ` : ''}
+
+            ${item.mjoXenso && item.mjoXenso.text ? `
+              <div style="font-size:12px; color:#34d399; line-height:1.35; background:rgba(52,211,153,0.06); padding:4px 8px; border-radius:4px; border-left:2px solid #34d399;">
+                <strong>3. MJO × ENOS:</strong> ${item.mjoXenso.text}
+                <div style="font-size:10.5px; color:#94a3b8; margin-top:2px;">📖 <em>${item.mjoXenso.ref}</em></div>
+              </div>
+            ` : item.mjoXenso && item.mjoXenso.note ? `
+              <div style="font-size:11px; color:#94a3b8; font-style:italic; padding:2px 4px;">
+                3. MJO × ENOS: ${item.mjoXenso.note}
+              </div>
+            ` : ''}
+
+            ${!item.hasAnyLayer ? `
+              <div style="font-size:12px; color:#64748b; font-style:italic; padding:4px 8px;">
+                Sem resultado publicado para esta combinação
+              </div>
+            ` : ''}
           </div>
-          <div style="display:flex; align-items:center; justify-content:space-between; font-size:11px; color:#94a3b8; border-top:1px solid rgba(255,255,255,0.08); padding-top:4px;">
+
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:11px; color:#94a3b8; border-top:1px solid rgba(255,255,255,0.08); padding-top:6px;">
             <span>🌀 <strong>Fonte PSA:</strong> ${sourceLabel}</span>
             <span>📚 <em>${citation}</em></span>
           </div>
@@ -2515,96 +2549,6 @@ function updateGrimmSandboxUI() {
   // Sincronizar estado visual das abas de ENOS
   const ensoTabs = document.querySelectorAll('.sandbox-enso-btn');
   ensoTabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbEnsoMode === sandboxEnsoMode));
-
-  updateGrimmSandboxDiagnostic();
-}
-
-function updateGrimmSandboxDiagnostic() {
-  const diag = $('sandboxDiagnosticCard');
-  if (!diag || typeof getGrimmPermutation !== 'function') return;
-
-  const item = getGrimmPermutation(currentSeason, currentEnso, currentPhase);
-  if (!item) {
-    diag.innerHTML = `<p class="muted">Selecione uma combinação no sandbox para visualizar o aviso ao previsor.</p>`;
-    return;
-  }
-
-  const ensoTitle = currentEnso === 'el-nino' ? 'El Niño' : currentEnso === 'la-nina' ? 'La Niña' : 'ENOS Neutro';
-  const sourceType = getPsaSourceType(currentSeason, currentEnso, currentPhase);
-  const sourceName = sourceType === 'ciclone_tropical'
-    ? 'Ciclone Tropical / Aquecimento Equatorial Oeste'
-    : 'ZCPS (Zona de Convergência do Pacífico Sul / SPCZ)';
-
-  const html = `
-    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; border-bottom:1.5px solid #0284c7; padding-bottom:8px; margin-bottom:10px;">
-      <div>
-        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
-          <span style="font-size:11.5px; font-weight:800; text-transform:uppercase; letter-spacing:0.6px; background:#0284c7; color:#ffffff; padding:2px 8px; border-radius:4px;">
-            ⚠️ AVISO AO PREVISOR · SESA & ZCAS
-          </span>
-          <span style="font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#38bdf8; font-weight:700;">
-            Diagnóstico Físico de Alice Grimm & Colaboradores
-          </span>
-        </div>
-        <h3 style="font-size:14.5px; font-weight:800; color:#f8fafc; margin:0;">
-          ${currentSeason} · ${ensoTitle} · MJO Fase ${currentPhase} (${item.phaseName})
-        </h3>
-      </div>
-      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-        <span style="font-size:12px; font-weight:700; padding:3px 9px; border-radius:6px; background:rgba(56,189,248,0.18); color:#7dd3fc; border:1px solid rgba(56,189,248,0.4);">
-          ${item.impactLabel}
-        </span>
-        ${item.isCurated ? `
-          <span style="font-size:11.5px; font-weight:700; padding:3px 9px; border-radius:6px; background:rgba(234,179,8,0.22); color:#fde047; border:1px solid rgba(234,179,8,0.45);">
-            ⭐ Caso Curado: ${item.curatedAuthor}
-          </span>
-        ` : ''}
-      </div>
-    </div>
-
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px; font-size:12.5px; line-height:1.45;">
-      <div style="background:#0b1929; border:1px solid #1e3a5a; border-radius:6px; padding:10px 12px;">
-        <div style="font-weight:700; color:#38bdf8; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
-          <span>🌧️</span> Impacto no SESA & Extremos
-        </div>
-        <div style="color:#e2e8f0;">${item.synthesis}</div>
-      </div>
-
-      <div style="background:#0b1929; border:1px solid #1e3a5a; border-radius:6px; padding:10px 12px;">
-        <div style="font-weight:700; color:#c084fc; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
-          <span>🌀</span> Onda de Rossby PSA & Fonte Convectiva
-        </div>
-        <div style="color:#e2e8f0;">
-          <strong>Fonte da onda:</strong> <span style="color:#fde047;">${sourceName}</span>. O trem de ondas equivalente-barotrópico no Pacífico Sul propaga-se de acordo com Alvarez et al. e Grimm, determinando cavados e cristas sobre o cone sul.
-        </div>
-      </div>
-
-      <div style="background:#0b1929; border:1px solid #1e3a5a; border-radius:6px; padding:10px 12px;">
-        <div style="font-weight:700; color:#34d399; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
-          <span>🌪️</span> Acoplamento: Jatos, SALLJ & ENOS
-        </div>
-        <div style="color:#e2e8f0;">${item.backgroundSummary}</div>
-      </div>
-    </div>
-
-    <div style="margin-top:10px; padding-top:8px; border-top:1px solid #1e3a5a; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:11.5px; color:#94a3b8;">
-      <div>
-        <strong style="color:#cbd5e1;">Pesquisa Científica Validada:</strong> ${Array.isArray(item.citations) ? item.citations.join('; ') : (item.citations || 'Alice Grimm et al.; Alvarez et al.')}
-      </div>
-      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-        ${currentEnso === 'el-nino' ? `
-          <a href="guia-el-nino.html" target="_blank" rel="noopener" style="color:#fca5a5; font-size:11.5px; font-weight:700; text-decoration:underline; display:inline-flex; align-items:center; gap:4px;">
-            <span>🔥 Dossiê do El Niño (Nova Guia)</span>
-          </a>
-        ` : ''}
-        <span style="color:#38bdf8; font-weight:600;">
-          💡 Dica: Clique em qualquer célula da matriz abaixo para simular no mapa.
-        </span>
-      </div>
-    </div>
-  `;
-
-  diag.innerHTML = html;
 }
 
 if (typeof window !== 'undefined') {

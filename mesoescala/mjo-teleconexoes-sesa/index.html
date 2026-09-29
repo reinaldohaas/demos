@@ -268,14 +268,22 @@
     /* Layout Superior: Mapa e Diagrama RMM Juntos na Parte de Cima */
     .top-main-stage {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 280px;
+      grid-template-columns: minmax(0, 1fr) 290px;
       gap: 16px;
       margin-bottom: 20px;
       align-items: start;
     }
+    #panelRMM:not(.is-floating) {
+      position: sticky;
+      top: 12px;
+    }
     @media (max-width: 960px) {
       .top-main-stage {
         grid-template-columns: 1fr;
+      }
+      #panelRMM:not(.is-floating) {
+        position: relative;
+        top: 0;
       }
     }
 
@@ -543,7 +551,7 @@
     <button id="sandboxModeBtn" style="display:none;" aria-pressed="true"></button>
     <button id="forecastMode" aria-pressed="false">SESA · boletim e horizonte de 45 dias</button>
   </div>
-  <span id="modeNotice" class="muted" style="font-size:12px;">Foco operacional: clique nas fases da matriz abaixo para simular o mapa e gerar o alerta ao previsor.</span>
+  <span id="modeNotice" class="muted" style="font-size:12px;">Foco didático: clique nas fases da matriz abaixo para simular no mapa e explorar os resultados documentados.</span>
 </section>
 <section id="forecastPanel" class="card" hidden style="padding:20px;margin-bottom:20px"></section>
 <div id="explorationContent">
@@ -609,9 +617,40 @@
           <g id="mapDrawing"></g>
         </svg>
       </div>
+    </section>
 
-      <!-- Aviso Operacional ao Previsor (Grimm / Alvarez) -->
-      <div id="sandboxDiagnosticCard" style="margin-top:12px; padding:12px 14px; background:rgba(8,23,38,0.85); border:1.5px solid #0284c7; border-radius:8px;"></div>
+    <!-- Diagrama RMM: Topo e à Direita Sempre (Wheeler & Hendon 2004) -->
+    <section class="panel-card movable-panel rmm-card-compact" id="panelRMM" data-panel-id="panelRMM">
+      <div class="panel-header" data-drag-handle="true">
+        <div class="panel-title">
+          <span>Diagrama RMM · MJO</span>
+        </div>
+        <div class="panel-actions">
+          <span id="rmmStatusTag" style="font-size:10.5px; font-weight:700; color:var(--accent-teal); font-family:var(--font-mono); margin-right:4px;">A ≥ 1 (Ativa)</span>
+          <button class="btn-panel-action btn-collapse" data-action="collapse" title="Recolher/Expandir painel" aria-label="Recolher painel RMM">_</button>
+          <button class="btn-panel-action btn-close" data-action="close" title="Ocultar painel" aria-label="Ocultar painel RMM">×</button>
+        </div>
+      </div>
+
+      <div class="panel-body" style="align-items:center; gap:8px;">
+        <div style="width:190px; height:190px; position:relative;">
+          <svg id="rmmDiagram" viewBox="0 0 220 220" style="width:100%; height:100%; display:block; cursor:crosshair;" role="img" aria-label="Diagrama RMM Wheeler-Hendon com oito fases e círculo unitário"></svg>
+        </div>
+
+        <!-- Intensidade/Amplitude JUNTO com o diagrama (sem barra separada avulsa) -->
+        <div style="width:100%; background:rgba(15, 23, 42, 0.5); padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); box-sizing:border-box;">
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom:2px;">
+            <label for="mjoAmplitude" style="font-weight:600; color:#cbd5e1;">Intensidade (A):</label>
+            <span style="font-family:var(--font-mono); font-weight:700; color:var(--accent-gold);"><output id="mjoAmplitudeValue">1,5</output></span>
+          </div>
+          <input id="mjoAmplitude" type="range" min="0" max="3" step="0.1" value="1.5" style="width:100%; margin:2px 0 4px 0; accent-color:var(--accent-teal);" aria-label="Intensidade da MJO">
+          <p id="rmmStatus" style="font-size:11px; color:var(--muted); margin:0; line-height:1.3;" aria-live="polite"></p>
+        </div>
+
+        <div style="width:100%; text-align:right;">
+          <a href="https://www.bom.gov.au/climate/mjo/about/WH04.pdf" target="_blank" rel="noopener" style="font-size:11px;">Wheeler & Hendon (2004)</a>
+        </div>
+      </div>
     </section>
   </div>
 
@@ -624,7 +663,7 @@
           <span style="font-size:11px; font-weight:600; background:rgba(56,189,248,0.18); color:#7dd3fc; border:1px solid rgba(56,189,248,0.35); padding:2px 8px; border-radius:12px;">Alice Grimm & Alvarez</span>
         </h2>
         <p style="font-size:11.5px; color:#94a3b8; margin:3px 0 0 0;">
-          Clique em qualquer célula para simular no mapa e emitir o aviso ao previsor. Casos curados de referência estão destacados com estrela dourada (⭐).
+          Clique em qualquer célula para simular no mapa e visualizar as camadas científicas documentadas. Casos curados de referência estão destacados com estrela dourada (⭐).
         </p>
       </div>
       <div style="display:flex; align-items:center; gap:8px;">
@@ -822,42 +861,6 @@
       <p class="muted" style="margin-top:10px;">
         Base cartográfica: Natural Earth. ZCAS e SESA permanecem visíveis como referências espaciais permanentes. Ausência de destaque gráfico indica resultado não representado nesta síntese documental, não efeito zero.
       </p>
-    </section>
-
-    <!-- Diagrama RMM: JUNTO COM O MAPA NA PARTE DE CIMA (Móvel, Redimensionável e Recolhível) -->
-    <section class="panel-card movable-panel rmm-card-compact" id="panelRMM" data-panel-id="panelRMM">
-      <div class="panel-header" data-drag-handle="true">
-        <div class="panel-title">
-          <span>Diagrama RMM · MJO</span>
-        </div>
-        <div class="panel-actions">
-          <span id="rmmStatusTag" style="font-size:10.5px; font-weight:700; color:var(--accent-teal); font-family:var(--font-mono); margin-right:4px;">A ≥ 1 (Ativa)</span>
-          <button class="btn-panel-action btn-collapse" data-action="collapse" title="Recolher/Expandir painel" aria-label="Recolher painel RMM">_</button>
-          <button class="btn-panel-action btn-close" data-action="close" title="Ocultar painel" aria-label="Ocultar painel RMM">×</button>
-        </div>
-      </div>
-
-      <div class="panel-body" style="align-items:center; gap:8px;">
-        <div style="width:190px; height:190px; position:relative;">
-          <svg id="rmmDiagram" viewBox="0 0 220 220" style="width:100%; height:100%; display:block; cursor:crosshair;" role="img" aria-label="Diagrama RMM Wheeler-Hendon com oito fases e círculo unitário"></svg>
-        </div>
-
-        <!-- Intensidade/Amplitude JUNTO com o diagrama (sem barra separada avulsa) -->
-        <div style="width:100%; background:rgba(15, 23, 42, 0.5); padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); box-sizing:border-box;">
-          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom:2px;">
-            <label for="mjoAmplitude" style="font-weight:600; color:#cbd5e1;">Intensidade (A):</label>
-            <span style="font-family:var(--font-mono); font-weight:700; color:var(--accent-gold);"><output id="mjoAmplitudeValue">1,5</output></span>
-          </div>
-          <input id="mjoAmplitude" type="range" min="0" max="3" step="0.1" value="1.5" style="width:100%; margin:2px 0 4px 0; accent-color:var(--accent-teal);" aria-label="Intensidade da MJO">
-          <p id="rmmStatus" style="font-size:11px; color:var(--muted); margin:0; line-height:1.3;" aria-live="polite"></p>
-        </div>
-
-        <div style="width:100%; text-align:right;">
-          <a href="https://www.bom.gov.au/climate/mjo/about/WH04.pdf" target="_blank" rel="noopener" style="font-size:11px;">Wheeler & Hendon (2004)</a>
-        </div>
-      </div>
-    </section>
-  </div>
 
   <!-- Painel de Narração Explicativa Completa (Móvel, Redimensionável e Recolhível) -->
   <section class="panel-card movable-panel" id="panelNarration" data-panel-id="panelNarration" style="margin-bottom:20px;">
@@ -1030,14 +1033,14 @@
 </div>
 </main>
 
-<script src="world-land.js?v=20260929b"></script>
-<script src="map-regions.js?v=20260929b"></script>
-<script src="documented-cases.js?v=20260929b"></script>
-<script src="grimm-matrix-data.js?v=20260929b"></script>
-<script src="rmm-diagram.js?v=20260929b"></script>
-<script src="cpc-mjo-precip-data.js?v=20260929b"></script>
-<script src="documented-view.js?v=20260929b"></script>
-<script src="panels-manager.js?v=20260929b"></script>
-<script src="forecast-sesa.js?v=20260929b"></script>
+<script src="world-land.js?v=20260929c"></script>
+<script src="map-regions.js?v=20260929c"></script>
+<script src="documented-cases.js?v=20260929c"></script>
+<script src="grimm-matrix-data.js?v=20260929c"></script>
+<script src="rmm-diagram.js?v=20260929c"></script>
+<script src="cpc-mjo-precip-data.js?v=20260929c"></script>
+<script src="documented-view.js?v=20260929c"></script>
+<script src="panels-manager.js?v=20260929c"></script>
+<script src="forecast-sesa.js?v=20260929c"></script>
 </body>
 </html>

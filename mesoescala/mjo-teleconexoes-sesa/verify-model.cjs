@@ -68,7 +68,7 @@ assert(!html.includes('id="metricSelect"'), 'metricSelect deve estar removido do
 assert(html.includes('id="ensoGroup"'), 'ensoGroup deve existir para controle de visibilidade');
 assert(html.includes('id="sandboxSector"'), 'sandboxSector deve estar presente no HTML');
 assert(html.includes('id="sandboxMatrixContainer"'), 'sandboxMatrixContainer deve estar presente no HTML');
-assert(html.includes('id="sandboxDiagnosticCard"'), 'sandboxDiagnosticCard deve estar presente no HTML');
+assert(!html.includes('id="sandboxDiagnosticCard"'), 'sandboxDiagnosticCard deve estar removido do HTML (a demo é didática)');
 for (const id of expectedIds) {
   assert(html.includes(`value="${id}"`), `Opção do evento ${id} deve estar presente no HTML`);
 }
@@ -128,7 +128,7 @@ const elementIds = [
   'salljSelect',
   'btnPanelsMenu', 'btnResetLayout', 'panelsDropdown',
   'sandboxSector', 'sandboxModeBtn', 'btnOpenSandbox', 'btnToggleSandboxView',
-  'sandboxSeasonTabs', 'sandboxMatrixContainer', 'sandboxDiagnosticCard', 'sandboxSummaryCount'
+  'sandboxSeasonTabs', 'sandboxMatrixContainer', 'sandboxSummaryCount'
 ];
 
 const elements = {};
@@ -565,8 +565,8 @@ sandbox.setClimateState({ season: 'DJF', enso: 'neutro', phase: 4, amplitude: 0.
 const inactiveImg = createdElements.find(el => el.tagName === 'image');
 assert(!inactiveImg, 'Com amplitude < 1 (inativa), imagem CPC/NOAA não deve ser renderizada');
 
-// 15. Base de Conhecimento e Setor Sandbox das 96 Permutações (Alice Grimm)
-console.log('Validando Base Científica das 96 Permutações (Alice Grimm)...');
+// 15. Base de Conhecimento e Setor Sandbox das 96 Permutações (3 Camadas Científicas)
+console.log('Validando Base Científica das 96 Permutações em 3 Camadas...');
 const grimmModule = require(path.join(__dirname, 'grimm-matrix-data.js'));
 const matrix = grimmModule.GRIMM_96_MATRIX;
 const matrixKeys = Object.keys(matrix);
@@ -589,10 +589,81 @@ for (const season of ['DJF', 'MAM', 'JJA', 'SON']) {
       assert(typeof item.phaseName === 'string' && item.phaseName.length > 5, `phaseName presente em ${item.id}`);
       assert(typeof item.impactLabel === 'string' && item.impactLabel.length > 3, `impactLabel presente em ${item.id}`);
       assert(validSignals.includes(item.sesaSignal) || validSignals.includes(item.signalCategory), `sesaSignal ou signalCategory válido em ${item.id}`);
-      assert(typeof item.backgroundSummary === 'string' && item.backgroundSummary.length > 20, `backgroundSummary físico em ${item.id}`);
-      assert(typeof item.mjoTrigger === 'string' && item.mjoTrigger.length > 20, `mjoTrigger físico em ${item.id}`);
-      assert(typeof item.synthesis === 'string' && item.synthesis.length > 20, `synthesis física em ${item.id}`);
-      assert(Array.isArray(item.citations) && item.citations.length >= 1, `citations presentes em ${item.id}`);
+
+      // Validação das 3 camadas obrigatórias:
+      assert(typeof item.fundoEnso === 'object' && item.fundoEnso !== null, `fundoEnso deve ser objeto em ${item.id}`);
+      assert(typeof item.sinalMjo === 'object' && item.sinalMjo !== null, `sinalMjo deve ser objeto em ${item.id}`);
+      assert(typeof item.mjoXenso === 'object' && item.mjoXenso !== null, `mjoXenso deve ser objeto em ${item.id}`);
+
+      // Camada 1: Fundo ENOS (Grimm, Barros & Doyle 2000, J. Climate 13, resumo)
+      if (season === 'SON' && enso === 'el-nino') {
+        assert.equal(item.fundoEnso.text, 'mais chuva no SESA na primavera');
+        assert(item.fundoEnso.ref.includes('Grimm, Barros & Doyle'));
+      } else if (season === 'SON' && enso === 'la-nina') {
+        assert.equal(item.fundoEnso.text, 'menos chuva no SESA na primavera');
+        assert(item.fundoEnso.ref.includes('Grimm, Barros & Doyle'));
+      } else {
+        assert.equal(item.fundoEnso.text, null, `fundoEnso.text deve ser null fora de SON El Niño/La Niña em ${item.id}`);
+      }
+
+      // Camada 2: Sinal MJO Alvarez et al. (2016), TODOS OS ANOS
+      assert.equal(item.sinalMjo.label, 'média de todos os anos, sem separar ENOS');
+      if (season === 'DJF' && (p === 3 || p === 4)) {
+        assert.equal(item.sinalMjo.text, 'Mais chance de semana chuvosa no SESA (1,5×)');
+        assert(item.sinalMjo.ref.includes('Alvarez et al. (2016)'));
+      } else if (season === 'DJF' && (p === 8 || p === 1)) {
+        assert.equal(item.sinalMjo.text, 'Mais chance de semana chuvosa na ZCAS (1,6×)');
+        assert(item.sinalMjo.ref.includes('Alvarez et al. (2016)'));
+      } else if (season === 'MAM' && p === 1) {
+        assert.equal(item.sinalMjo.text, 'Mais chance de semana chuvosa na ZCAS (1,5×)');
+        assert(item.sinalMjo.ref.includes('Alvarez et al. (2016)'));
+      } else if (season === 'JJA' && p === 8) {
+        assert.equal(item.sinalMjo.text, 'Mais chance de semana chuvosa na ZCAS (1,7×)');
+        assert(item.sinalMjo.ref.includes('Alvarez et al. (2016)'));
+      } else if (season === 'SON' && (p === 7 || p === 8)) {
+        assert.equal(item.sinalMjo.text, 'Mais chance de semana chuvosa na ZCAS (1,7×)');
+        assert(item.sinalMjo.ref.includes('Alvarez et al. (2016)'));
+      } else if (season === 'SON' && p === 1) {
+        assert.equal(item.sinalMjo.text, 'Mais chance de semana chuvosa no SESA (1,5×)');
+        assert(item.sinalMjo.ref.includes('Alvarez et al. (2016)'));
+      } else {
+        assert.equal(item.sinalMjo.text, null, `sinalMjo.text deve ser null em fases não mapeadas de Alvarez em ${item.id}`);
+      }
+
+      // Camada 3: MJO × ENOS Fernandes & Grimm (2023), SOMENTE DJF
+      if (season === 'DJF') {
+        if (enso === 'la-nina' && p === 8) {
+          assert.equal(item.mjoXenso.text, 'Pico de aumento de extremos na ZCAS (fase 8)');
+          assert(item.mjoXenso.ref.includes('Fernandes & Grimm (2023)'));
+        } else if (enso === 'el-nino' && p === 1) {
+          assert.equal(item.mjoXenso.text, 'Pico de aumento de extremos na ZCAS (fase 1)');
+          assert(item.mjoXenso.ref.includes('Fernandes & Grimm (2023)'));
+        } else if (enso === 'el-nino' && p === 3) {
+          assert.equal(item.mjoXenso.text, 'Pico de aumento de extremos no SESA (fase 3)');
+          assert(item.mjoXenso.ref.includes('Fernandes & Grimm (2023)'));
+        } else if (enso === 'neutro' && p === 4) {
+          assert.equal(item.mjoXenso.text, 'Maior aumento de extremos no SESA (fase 4)');
+          assert(item.mjoXenso.ref.includes('Fernandes & Grimm (2023)'));
+        } else {
+          assert.equal(item.mjoXenso.text, null);
+        }
+      } else {
+        assert.equal(item.mjoXenso.text, null);
+        assert.equal(item.mjoXenso.note, 'Combinação MJO × ENOS não estudada nesta estação');
+      }
+
+      // Proibição estrita de frases inventadas e citações não lidas
+      const fullText = JSON.stringify(item).toLowerCase();
+      assert(!fullText.includes('estiagem severa'), `Frase proibida "estiagem severa" em ${item.id}`);
+      assert(!fullText.includes('enchentes'), `Frase proibida "enchentes" em ${item.id}`);
+      assert(!fullText.includes('zcas precoce'), `Frase proibida "ZCAS precoce" em ${item.id}`);
+      assert(!fullText.includes('chuva persistente'), `Frase proibida "chuva persistente" em ${item.id}`);
+      assert(!fullText.includes('clima climatologia de primavera'), `Frase proibida "Clima climatologia de primavera" em ${item.id}`);
+      assert(!fullText.includes('grimm 1998') && !fullText.includes('grimm (1998)'), `Citação não lida Grimm 1998 em ${item.id}`);
+      assert(!fullText.includes('grimm 2003') && !fullText.includes('grimm (2003)'), `Citação não lida Grimm 2003 em ${item.id}`);
+      assert(!fullText.includes('grimm 2004') && !fullText.includes('grimm (2004)'), `Citação não lida Grimm 2004 em ${item.id}`);
+      assert(!fullText.includes('grimm 2011') && !fullText.includes('grimm (2011)'), `Citação não lida Grimm 2011 em ${item.id}`);
+      assert(!fullText.includes('tedeschi'), `Citação não lida Grimm & Tedeschi em ${item.id}`);
 
       if (item.isCurated) {
         curatedFoundCount++;
@@ -604,19 +675,19 @@ for (const season of ['DJF', 'MAM', 'JJA', 'SON']) {
 }
 assert(curatedFoundCount >= 10, 'Os casos curados devem estar mapeados e identificados na matriz de 96');
 
-// Teste de Integração Funcional do Sandbox (Seleção de Célula e Diagnóstico)
+// Teste de Integração Funcional do Sandbox (Seleção de Célula e Painéis)
 sandbox.selectGrimmSandboxCell('DJF', 'el-nino', 3);
 assert.equal(elements.caseTitle.textContent.includes('DJF'), true, 'Título deve refletir DJF');
 assert.equal(elements.caseTitle.textContent.includes('El Niño'), true, 'Título deve refletir El Niño');
 assert.equal(elements.caseTitle.textContent.includes('Fase 3'), true, 'Título deve refletir Fase 3');
-assert(elements.sandboxDiagnosticCard.innerHTML.includes('Alice Grimm'), 'Cartão de diagnóstico deve exibir Alice Grimm');
-assert(elements.sandboxDiagnosticCard.innerHTML.includes('Pico'), 'Cartão deve diagnosticar pico no SESA');
+assert(elements.caseSummary.textContent.includes('Fernandes & Grimm (2023)'), 'caseSummary deve citar Fernandes & Grimm (2023)');
+assert(elements.caseSummary.textContent.includes('Pico de aumento de extremos no SESA'), 'caseSummary deve indicar extremos no SESA');
 
 sandbox.selectGrimmSandboxCell('SON', 'la-nina', 8);
 assert.equal(elements.caseTitle.textContent.includes('SON'), true, 'Título deve refletir SON');
 assert.equal(elements.caseTitle.textContent.includes('La Niña'), true, 'Título deve refletir La Niña');
 assert.equal(elements.caseTitle.textContent.includes('Fase 8'), true, 'Título deve refletir Fase 8');
-assert(elements.sandboxDiagnosticCard.innerHTML.toLowerCase().includes('seca severa'), 'Cartão deve diagnosticar seca severa no SESA em SON La Niña');
+assert(elements.caseSummary.textContent.includes('Alvarez et al.'), 'caseSummary deve citar Alvarez et al.');
 
 console.log('====================================================');
 console.log('TODAS AS VALIDAÇÕES AUTOMATIZADAS PASSARAM COM SUCESSO:');

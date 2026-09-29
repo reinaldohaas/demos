@@ -5,7 +5,7 @@
 // Compatível com GitHub Pages (sem build server ou dependências externas).
 
 (function() {
-  const STORAGE_KEY = 'mjo_panels_layout_v2';
+  const STORAGE_KEY = 'mjo_panels_layout_v3';
   const MIN_PANEL_WIDTH = 240;
   const MIN_PANEL_HEIGHT = 100;
 

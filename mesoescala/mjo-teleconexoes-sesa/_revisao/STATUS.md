@@ -2,49 +2,57 @@
 
 ## Estado
 - Branch: `revisao`, criado do `main`.
-- Data e hora: 2026-09-29T14:10:00-03:00.
-- Versão de cache: `?v=20260929b`.
-- Revisão concluída e validada (apresentação ergonômica da questão do El Niño totalmente amarrada no sandbox: abas de regime ENOS [Matriz Geral 3x8, Guia Foco El Niño, Guia Foco La Niña, Guia Foco Neutro], cabeçalhos interativos na matriz, cartões operacionais detalhados das 8 fases sob El Niño, dossiê científico independente `guia-el-nino.html` acessível em nova guia para consulta aprofundada, e 100% de aprovação na suíte de testes automatizados com zero ocorrências de `metric`).
-- Arquivos modificados:
-  - `index.html`:
-    - Adicionado seletor de regime ENOS no sandbox (`#sandboxEnsoTabs`) com botões táteis para `Matriz Geral (3×8)`, `Guia Foco: El Niño`, `Guia Foco: La Niña` e `Neutro`.
-    - Estilos CSS dedicados para botões de regime ENOS e estados ativos com realce temático.
-    - Bump de versão de cache para `?v=20260929b`.
-  - `documented-view.js`:
-    - Adicionada variável de estado `sandboxEnsoMode` com sincronização bidirecional (URL, abas e cabeçalhos de coluna).
-    - `renderGrimmSandboxMatrix()` com suporte dual: modo matricial comparativo 3×8 e modo focado ergonômico (cards amplos das 8 fases sob o regime selecionado, síntese física de Alice Grimm et al., fonte PSA e citação bibliográfica).
-    - Links rápidos para abrir o dossiê do El Niño em nova guia tanto no card executivo quanto no aviso ao previsor (`#sandboxDiagnosticCard`).
-    - Parâmetro `sbEnsoMode` suportado na URL para deep-linking direto.
-  - `guia-el-nino.html` (novo):
-    - Dossiê científico e operacional completo em página dedicada sobre a física do El Niño no SESA e América do Sul (Alice Grimm 1998, 2000, 2003, 2004, 2011; Fernandes & Grimm 2023; Alvarez et al. 2016).
-  - `verify-model.cjs`:
-    - 15 suítes de testes 100% aprovadas.
-    - 0 ocorrências de `metric` mantidas em todos os arquivos de produção.
+- Data e hora: 2026-09-29T15:10:00-03:00.
+- Versão de cache: `?v=20260929c`.
+- Revisão concluída e validada:
+  1. Matriz de 96 células reestruturada estritamente em **3 camadas documentadas**, sem texto livre ou inventado.
+  2. Referência visível em cada célula e nos painéis (autor, ano, figura/página).
+  3. Remoção do cartão operacional "Aviso ao previsor" (`#sandboxDiagnosticCard`), alinhando o simulador ao foco didático.
+  4. Eliminação estrita de frases proibidas (`"estiagem severa"`, `"enchentes"`, `"ZCAS precoce"`, `"chuva persistente"`, `"Clima climatologia de primavera"`).
+  5. Remoção de citações não lidas (`Grimm 1998`, `2003`, `2004`, `2011` e `Grimm & Tedeschi 2009`), mantendo exclusivamente fontes validadas: `Grimm, Barros & Doyle (2000)` e `Fernandes & Grimm (2023)`.
+  6. Diagrama RMM Wheeler & Hendon (2004) permanentemente posicionado no topo e à direita do mapa.
+  7. Pureza de código: 0 ocorrências de `metric` em todos os arquivos de produção.
+  8. Suíte de testes automatizados (`verify-model.cjs` com 1920 configurações e 15 suites) 100% aprovada.
 
-## Feito (nesta revisão)
-1. **Compostos Oficiais de Precipitação Tropical CPC/NOAA (8 Fases):**
-   - Disponível como opção direta junto ao χ200 no seletor `MJO nos trópicos:`.
-   - Projeção e alinhamento georreferenciado perfeitos com os contornos continentais em escala global e regional.
-   - Escala oficial de 11 níveis (tons marrons para seca e verdes/azuis para chuva intensa) com atribuição a Wheeler & Hendon (2004).
-   - Disponível offline sem dependência externa via dados base64 embutidos em `cpc-mjo-precip-data.js`.
-2. **Controles Expandidos na Barra do Mapa (Item 5):**
-   - Inclusão de `[x] Jato Subtropical` (`#jetsToggle`) e `[x] Caixas SESA e ZCAS` (`#boxesToggle`).
-   - Suporte a alternância individual de `Caixa SESA` (`#sesaToggle`) e `Caixa ZCAS` (`#zcasToggle`).
-   - Sincronização em tempo real com as opções da legenda.
-3. **SALLJ com Estados (Automático, Forte, Fraco, Climatológico):**
-   - Seletor posicionado na linha 2 dos controles com escalonamento por amplitude e legendas por estado.
-4. **TSM Vibrante de El Niño e La Niña sobreposta à MJO:**
-   - Cores saturadas com camada interior, sobrepostas aos campos tropicais.
-5. **MJO Pontilhada Proporcional ao RMM:**
-   - Paralelogramos e dipolos com `stroke-dasharray` e saturação dinâmica proporcional a $A$.
-6. **Caixa Única de Eventos de Interesse:**
-   - Select único com prefixos de estação (`DJF`, `MAM`, `JJA`, `SON`) e `<optgroup>`.
-7. **Restauração e Controle Independente de PSA e SALLJ:**
-   - Toggles diretos `#psaToggle` e `#salljToggle` na barra do mapa.
+## Arquivos Modificados
+- `grimm-matrix-data.js`:
+  - Reconstrução completa da função geradora `buildGrimmCell(season, enso, phase)` com as 3 camadas científicas:
+    - **Camada 1 (Fundo ENOS):** Independe da fase. Ativa apenas em `SON`: El Niño *"mais chuva no SESA na primavera"* / La Niña *"menos chuva no SESA na primavera"* (Grimm, Barros & Doyle 2000, J. Climate 13, resumo). Demais estações nulas (aguarda Reinaldo).
+    - **Camada 2 (Sinal MJO):** Alvarez et al. (2016), composição de todos os anos sem separar ENOS (rótulo `"média de todos os anos, sem separar ENOS"`), idêntico nas 3 colunas de ENOS para os casos aprovados:
+      - DJF 3-4 (SESA: `Alvarez et al. 2016, Figs. 4c, 5b, 7b e 10c`), DJF 8-1 (ZCAS: `Alvarez et al. 2016, Figs. 4a,b e 10a`).
+      - MAM 1 (ZCAS: `Alvarez et al. 2016, Figs. 4d e 11b`).
+      - JJA 8 (ZCAS: `Alvarez et al. 2016, Figs. 4k e 12a`).
+      - SON 7-8 (ZCAS: `Alvarez et al. 2016, Figs. 4i e 13a`), SON 1 (SESA: `Alvarez et al. 2016, Figs. 4j e 13b`).
+    - **Camada 3 (MJO × ENOS):** Fernandes & Grimm (2023), exclusivamente para `DJF`:
+      - La Niña 8 (ZCAS: `Fernandes & Grimm 2023, Figs. 5 e 8`).
+      - El Niño 1 (ZCAS: `Fernandes & Grimm 2023, Figs. 5 e 8`).
+      - El Niño 3 (SESA: `Fernandes & Grimm 2023, Figs. 5 e 8`).
+      - Neutro 4 (SESA: `Fernandes & Grimm 2023, Figs. 5 e 8`).
+      - Em MAM, JJA e SON: nota explícita *"Combinação MJO × ENOS não estudada nesta estação"*.
+    - **Células sem camadas:** Rótulo explícito *"Sem resultado publicado para esta combinação"*.
+- `index.html`:
+  - Removido o `#sandboxDiagnosticCard` ("Aviso ao previsor").
+  - Atualizados textos de descrição para enfatizar a abordagem didática e as 3 camadas científicas.
+  - Diagrama RMM posicionado permanentemente no topo à direita dentro de `.top-main-stage`.
+- `documented-view.js`:
+  - Atualização do painel `#result` e `#caseSummary` para renderizar as 3 camadas com citações completas visíveis.
+  - Atualização de `renderGrimmSandboxMatrix()`: renderização das 3 camadas e suas citações tanto na tabela geral (3×8) quanto nos cards de foco por regime.
+  - Limpeza de textos em `ensoMeta` removendo expressões informais e citações não lidas.
+  - Remoção completa da função legada `updateGrimmSandboxDiagnostic()`.
+- `guia-el-nino.html`:
+  - Removidas citações a Grimm 1998, 2003 e 2004.
+  - Substituição da expressão proibida "Chuva persistente" por "Mais chuva no SESA".
+  - Substituição do cabeçalho "Dossiê do Previsor" por "Guia Didático".
+- `verify-model.cjs`:
+  - Atualização da Suíte 15 validando estritamente a arquitetura de 3 camadas nas 96 permutações.
+  - Testes de integridade garantindo ausência de `#sandboxDiagnosticCard`.
+  - Verificação automatizada de ausência de frases proibidas e citações não lidas em todas as células.
+  - 100% de aprovação nas 15 suítes e 1920 configurações.
 
-## Fontes
+## Fontes Validadas
 - Alvarez, Vera, Kiladis & Liebmann (2016), Climate Dynamics 46, 245–262 (texto completo, NOAA).
 - Fernandes & Grimm (2023), Journal of Climate 36, 7715–7738.
+- Grimm, Barros & Doyle (2000), Climate variability in southern South America associated with El Niño and La Niña events. Journal of Climate 13, 35–58.
 - Wheeler & Hendon (2004), Monthly Weather Review 132, 1917–1932 (Figs. 7 e 8).
 - Deemer, G., NOAA/ESRL PSD (compostos de potencial de velocidade 200 hPa).
 - NOAA/CPC (Wheeler & Hendon 2004 composites, Climate Prediction Center).
@@ -52,26 +60,9 @@
 - Muza et al. (2009), Journal of Climate (SEBr e dipolos).
 - Nogués-Paegle & Mo (1997), Journal of the Atmospheric Sciences 54, 966–982.
 - Cavalcanti (2018), Palestra Santa Maria (INPE): slide 12 (EOF1 de v200).
-- Grimm, Ferraz & Gomes (1998), Journal of Climate 11, 2863–2880.
-- Grimm, Barros & Doyle (2000), Journal of Climate 13, 35–58.
-- Grimm (2003), Journal of Climate 16, 263–282.
-- Grimm (2004), Climate Dynamics 22, 123–145.
-- Grimm & Tedeschi (2009), Journal of Climate 22, 1589–1609.
-- Grimm (2011), Interannual Climate Variability in South America.
-
-## Setor Sandbox: As 96 Permutações (Alice Grimm et al.)
-1. **Espaço Físico das 96 Permutações:**
-   - 4 estações $\times$ 3 estados de ENOS $\times$ 8 fases de MJO = 96 permutações físicas catalogadas com rigor em `grimm-matrix-data.js`.
-   - Inserção dos 10 casos curados da literatura ("Eventos de Interesse" de Fernandes & Grimm 2023 e Alvarez et al. 2016) como subconjunto de referência com selo dourado (`⭐ Curado`).
-2. **Interface Interativa do Estudante:**
-   - Abas por estação (`DJF`, `MAM`, `JJA`, `SON`), cada uma contendo uma matriz responsiva de 24 células (8 fases $\times$ 3 colunas de ENOS: La Niña, Neutro, El Niño).
-   - Codificação semântica de cores para impacto no SESA (verde para chuva acima/extremos, vermelho para estiagem/seca severa, ardósia para transição climatológica).
-   - Sincronização bidirecional: clicar em qualquer célula da matriz atualiza instantaneamente o mapa principal, diagrama RMM, jatos, SALLJ e painel de diagnóstico; alternar os seletores manuais do mapa reflete o destaque na célula ativa.
-   - Cartão de Diagnóstico Físico com a forçante de fundo interanual (Alice Grimm), gatilho intra-sazonal da MJO, resposta no SESA e citações bibliográficas completas.
-   - Botões de acesso rápido `#sandboxModeBtn` (no header superior) e `#btnOpenSandbox` (ao lado de "Eventos de interesse:"), com recurso de recolher/expandir (`#btnToggleSandboxView`).
 
 ## Validações
 - **Teste Automatizado de Regressão (`node verify-model.cjs`):**
   - **1920 configurações** testadas no sandbox: **100% aprovadas sem exceções**.
-  - **15 baterias de validação estrita** aprovadas (incluindo integridade das 96 permutações, mapeamento dos 10 casos curados, diagnósticos de Alice Grimm, compostos CPC/NOAA nas 8 fases global/regional, SALLJ 4 estados, TSM vibrante, MJO pontilhada, controle PSA/SALLJ/Jato/Caixas).
+  - **15 baterias de validação estrita** aprovadas (incluindo integridade das 96 permutações em 3 camadas, mapeamento dos 10 casos curados, ausência de frases proibidas e citações não lidas, compostos CPC/NOAA nas 8 fases global/regional, SALLJ 4 estados, TSM vibrante, MJO pontilhada, controles PSA/SALLJ/Jato/Caixas).
   - **Pureza do código:** 0 ocorrências de `metric` em todos os arquivos de produção.
