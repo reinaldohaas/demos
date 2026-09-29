@@ -2082,6 +2082,7 @@ if ($('btnVoiceMute')) {
 // SETOR SANDBOX: As 96 Permutações (ENOS × MJO × Estações · Alice Grimm)
 // ============================================================================
 let sandboxSelectedSeason = 'DJF';
+let sandboxEnsoMode = 'all'; // 'all', 'el-nino', 'la-nina', 'neutro'
 let isSandboxCollapsed = false;
 
 function initGrimmSandbox() {
@@ -2099,6 +2100,18 @@ function initGrimmSandbox() {
       if (!s) return;
       sandboxSelectedSeason = s;
       tabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbSeason === s));
+      renderGrimmSandboxMatrix();
+    });
+  });
+
+  // Guias de Regime ENOS no Sandbox
+  const ensoTabs = document.querySelectorAll('.sandbox-enso-btn');
+  ensoTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const mode = tab.dataset.sbEnsoMode;
+      if (!mode) return;
+      sandboxEnsoMode = mode;
+      ensoTabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbEnsoMode === mode));
       renderGrimmSandboxMatrix();
     });
   });
@@ -2143,10 +2156,12 @@ function toggleSandboxCollapse(collapse) {
   const matrix = $('sandboxMatrixContainer');
   const diag = $('sandboxDiagnosticCard');
   const tabs = $('sandboxSeasonTabs');
+  const ensoTabs = $('sandboxEnsoTabs');
   const btn = $('btnToggleSandboxView');
   if (matrix) matrix.style.display = collapse ? 'none' : '';
   if (diag) diag.style.display = collapse ? 'none' : '';
   if (tabs) tabs.style.display = collapse ? 'none' : 'flex';
+  if (ensoTabs) ensoTabs.style.display = collapse ? 'none' : 'flex';
   if (btn) btn.textContent = collapse ? 'Expandir matriz' : 'Ocultar';
 }
 
@@ -2182,9 +2197,6 @@ function renderGrimmSandboxMatrix() {
   if (!container || typeof getGrimmSeasonMatrix !== 'function') return;
 
   const countBadge = $('sandboxSummaryCount');
-  if (countBadge) {
-    countBadge.textContent = `24 combinações em ${sandboxSelectedSeason} (Total 96 no ciclo)`;
-  }
 
   // Estilos visuais por tipo de resposta no SESA
   const signalStyles = {
@@ -2231,76 +2243,206 @@ function renderGrimmSandboxMatrix() {
     { key: 'el-nino', label: 'El Niño', sub: 'Pacífico Equatorial Quente' }
   ];
 
-  let html = `
-    <table class="sandbox-table" role="grid" aria-label="Matriz de 24 permutações da estação ${sandboxSelectedSeason}">
-      <thead>
-        <tr>
-          <th style="width:22%; text-align:left;">Fase da MJO (Localização)</th>
-          ${ENSOS.map(e => `
-            <th style="width:26%;">
-              <div>${e.label}</div>
-              <div style="font-size:10px; font-weight:400; color:#94a3b8;">${e.sub}</div>
-            </th>
-          `).join('')}
-        </tr>
-      </thead>
-      <tbody>
-  `;
+  let html = '';
 
-  for (let p = 1; p <= 8; p++) {
-    const sample = getGrimmPermutation(sandboxSelectedSeason, 'neutro', p);
-    const phaseName = sample ? sample.phaseName : `Fase ${p}`;
+  if (sandboxEnsoMode === 'all') {
+    if (countBadge) {
+      countBadge.textContent = `24 combinações em ${sandboxSelectedSeason} (Total 96 no ciclo)`;
+    }
 
-    html += `<tr>`;
-    html += `
-      <td style="padding:8px 10px; background:#0b1929; border:1px solid #1e3a5a; border-radius:6px;">
-        <div style="font-weight:700; color:#e2e8f0;">Fase ${p}</div>
-        <div style="font-size:10.5px; color:#94a3b8; line-height:1.2;">${phaseName}</div>
-      </td>
+    html = `
+      <table class="sandbox-table" role="grid" aria-label="Matriz de 24 permutações da estação ${sandboxSelectedSeason}">
+        <thead>
+          <tr>
+            <th style="width:22%; text-align:left;">Fase da MJO (Localização)</th>
+            ${ENSOS.map(e => `
+              <th style="width:26%; cursor:pointer;" title="Clique para focar exclusivamente nas 8 fases de ${e.label}" data-focus-enso="${e.key}">
+                <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+                  <span>${e.label}</span>
+                  <span style="font-size:10px; background:rgba(255,255,255,0.08); padding:1px 5px; border-radius:4px; font-weight:600;">Foco</span>
+                </div>
+                <div style="font-size:10px; font-weight:400; color:#94a3b8;">${e.sub}</div>
+              </th>
+            `).join('')}
+          </tr>
+        </thead>
+        <tbody>
     `;
 
-    for (const enso of ENSOS) {
-      const item = getGrimmPermutation(sandboxSelectedSeason, enso.key, p);
-      if (!item) {
-        html += `<td class="sandbox-cell" style="background:#0f172a; border:1px solid #1e293b;">-</td>`;
-        continue;
-      }
+    for (let p = 1; p <= 8; p++) {
+      const sample = getGrimmPermutation(sandboxSelectedSeason, 'neutro', p);
+      const phaseName = sample ? sample.phaseName : `Fase ${p}`;
 
-      const isActive = (currentSeason === sandboxSelectedSeason && currentEnso === enso.key && Number(currentPhase) === p);
-      const styleInfo = signalStyles[item.signalCategory] || signalStyles[item.sesaSignal] || signalStyles.neutro_climatologia;
-
+      html += `<tr>`;
       html += `
-        <td class="sandbox-cell ${isActive ? 'is-active-cell' : ''}"
-            data-sb-season="${sandboxSelectedSeason}"
-            data-sb-enso="${enso.key}"
-            data-sb-phase="${p}"
-            data-sb-cell="${sandboxSelectedSeason}-${enso.key}-${p}"
-            style="background:${styleInfo.bg}; border:1px solid ${isActive ? '#38bdf8' : styleInfo.border}; padding:7px 10px; cursor:pointer;"
-            tabindex="0"
-            role="button"
-            aria-pressed="${isActive}"
-            title="Clique para aplicar ${item.season} · ${enso.label} · Fase ${p} ao mapa">
-          <div style="display:flex; align-items:center; justify-content:space-between; gap:4px;">
-            <span style="font-size:11.5px; font-weight:700; color:${styleInfo.color}; display:inline-flex; align-items:center; gap:4px;">
-              <span>${styleInfo.icon}</span>
-              <span>${item.impactLabel}</span>
-            </span>
-            ${item.isCurated ? `
-              <span style="font-size:9.5px; font-weight:700; color:#facc15; background:rgba(234,179,8,0.2); border:1px solid rgba(234,179,8,0.4); border-radius:3px; padding:1px 4px; white-space:nowrap;" title="Caso Curado (${item.curatedAuthor})">
-                ⭐ Curado
-              </span>
-            ` : ''}
-          </div>
+        <td style="padding:8px 10px; background:#0b1929; border:1px solid #1e3a5a; border-radius:6px;">
+          <div style="font-weight:700; color:#e2e8f0;">Fase ${p}</div>
+          <div style="font-size:10.5px; color:#94a3b8; line-height:1.2;">${phaseName}</div>
         </td>
       `;
-    }
-    html += `</tr>`;
-  }
 
-  html += `
-      </tbody>
-    </table>
-  `;
+      for (const enso of ENSOS) {
+        const item = getGrimmPermutation(sandboxSelectedSeason, enso.key, p);
+        if (!item) {
+          html += `<td class="sandbox-cell" style="background:#0f172a; border:1px solid #1e293b;">-</td>`;
+          continue;
+        }
+
+        const isActive = (currentSeason === sandboxSelectedSeason && currentEnso === enso.key && Number(currentPhase) === p);
+        const styleInfo = signalStyles[item.signalCategory] || signalStyles[item.sesaSignal] || signalStyles.neutro_climatologia;
+
+        html += `
+          <td class="sandbox-cell ${isActive ? 'is-active-cell' : ''}"
+              data-sb-season="${sandboxSelectedSeason}"
+              data-sb-enso="${enso.key}"
+              data-sb-phase="${p}"
+              data-sb-cell="${sandboxSelectedSeason}-${enso.key}-${p}"
+              style="background:${styleInfo.bg}; border:1px solid ${isActive ? '#38bdf8' : styleInfo.border}; padding:7px 10px; cursor:pointer;"
+              tabindex="0"
+              role="button"
+              aria-pressed="${isActive}"
+              title="Clique para aplicar ${item.season} · ${enso.label} · Fase ${p} ao mapa">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:4px;">
+              <span style="font-size:11.5px; font-weight:700; color:${styleInfo.color}; display:inline-flex; align-items:center; gap:4px;">
+                <span>${styleInfo.icon}</span>
+                <span>${item.impactLabel}</span>
+              </span>
+              ${item.isCurated ? `
+                <span style="font-size:9.5px; font-weight:700; color:#facc15; background:rgba(234,179,8,0.2); border:1px solid rgba(234,179,8,0.4); border-radius:3px; padding:1px 4px; white-space:nowrap;" title="Caso Curado (${item.curatedAuthor})">
+                  ⭐ Curado
+                </span>
+              ` : ''}
+            </div>
+          </td>
+        `;
+      }
+      html += `</tr>`;
+    }
+
+    html += `
+        </tbody>
+      </table>
+    `;
+  } else {
+    // Modo Foco em Regime ENOS específico (ex.: El Niño, La Niña, Neutro)
+    const ensoMeta = {
+      'el-nino': {
+        title: '🔥 Regime de El Niño · Foco Operacional no SESA',
+        sub: `Estação ${sandboxSelectedSeason} · 8 Fases da MJO sob Pacífico Equatorial Quente (Alice Grimm et al.)`,
+        summary: 'Em anos de <strong>El Niño</strong>, o Jato Subtropical (~200 hPa) é permanentemente reforçado sobre o cone sul, acelerando a dispersão de ondas de Rossby (PSA). A convecção tropical da MJO atua como chave: fases 2–5 descarregam extremos no SESA com SALLJ forte; na fase 1 o sinal se inverte para a ZCAS.',
+        border: 'rgba(239, 68, 68, 0.4)',
+        bg: 'rgba(239, 68, 68, 0.08)',
+        badgeBg: '#dc2626',
+        badgeText: '🔥 El Niño',
+        guideLink: true
+      },
+      'la-nina': {
+        title: '❄️ Regime de La Niña · Foco Operacional no SESA',
+        sub: `Estação ${sandboxSelectedSeason} · 8 Fases da MJO sob Pacífico Equatorial Frio (Alice Grimm et al.)`,
+        summary: 'Na <strong>La Niña</strong>, o Jato Subtropical fica mais tênue e deslocado, inibindo a propagação de ondas para o sul. Ocorre bloqueio persistente de chuva no SESA e favorecimento da ZCAS (especialmente nas fases 7–8 com seca severa no SESA e pico na ZCAS).',
+        border: 'rgba(59, 130, 246, 0.4)',
+        bg: 'rgba(59, 130, 246, 0.08)',
+        badgeBg: '#2563eb',
+        badgeText: '❄️ La Niña',
+        guideLink: false
+      },
+      'neutro': {
+        title: '⚪ Regime ENOS Neutro · Foco Operacional no SESA',
+        sub: `Estação ${sandboxSelectedSeason} · 8 Fases da MJO sem forçante remota de TSM`,
+        summary: 'Em anos <strong>Neutros</strong>, a MJO é a forçante intra-sazonal primária. A resposta no SESA depende diretamente do trem de ondas PSA excitado no Pacífico oeste (fases 3–4 com semana chuvosa e pico de extremos).',
+        border: 'rgba(148, 163, 184, 0.35)',
+        bg: 'rgba(148, 163, 184, 0.08)',
+        badgeBg: '#475569',
+        badgeText: '⚪ ENOS Neutro',
+        guideLink: false
+      }
+    };
+
+    const meta = ensoMeta[sandboxEnsoMode] || ensoMeta['el-nino'];
+    if (countBadge) {
+      countBadge.textContent = `8 fases sob ${meta.badgeText} em ${sandboxSelectedSeason} (Alice Grimm et al.)`;
+    }
+
+    html = `
+      <div style="background:${meta.bg}; border:1.5px solid ${meta.border}; border-radius:8px; padding:12px 16px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+        <div style="flex:1; min-width:280px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
+            <span style="background:${meta.badgeBg}; color:#ffffff; font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px; text-transform:uppercase;">${meta.badgeText}</span>
+            <span style="color:#e2e8f0; font-size:13px; font-weight:700;">${meta.sub}</span>
+          </div>
+          <p style="margin:0; font-size:12.5px; line-height:1.45; color:#f1f5f9;">
+            ${meta.summary}
+          </p>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          ${meta.guideLink ? `
+            <a href="guia-el-nino.html" target="_blank" rel="noopener" class="btn-voice" style="padding:6px 12px; font-size:12px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:#1e293b; border:1px solid #ef4444; color:#fca5a5; border-radius:6px; font-weight:700;" title="Abrir dossiê científico completo em nova guia do navegador">
+              <span>↗️ Abrir Guia do El Niño em Nova Guia</span>
+            </a>
+          ` : ''}
+          <button type="button" class="btn-voice btn-return-all" style="padding:6px 12px; font-size:12px; display:inline-flex; align-items:center; gap:6px; background:#1e293b; border:1px solid #38bdf8; color:#7dd3fc; border-radius:6px; font-weight:700;">
+            <span>🌐 Ver Matriz Geral (3×8)</span>
+          </button>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:10px;">
+    `;
+
+    for (let p = 1; p <= 8; p++) {
+      const item = getGrimmPermutation(sandboxSelectedSeason, sandboxEnsoMode, p);
+      if (!item) continue;
+
+      const isActive = (currentSeason === sandboxSelectedSeason && currentEnso === sandboxEnsoMode && Number(currentPhase) === p);
+      const styleInfo = signalStyles[item.signalCategory] || signalStyles[item.sesaSignal] || signalStyles.neutro_climatologia;
+      const sourceType = getPsaSourceType(sandboxSelectedSeason, sandboxEnsoMode, p);
+      const sourceLabel = sourceType === 'ciclone_tropical' ? 'Ciclone Tropical' : 'Eixo da ZCPS';
+      const citation = Array.isArray(item.citations) ? item.citations.join('; ') : (item.citations || 'Alice Grimm et al.');
+
+      html += `
+        <div class="sandbox-cell ${isActive ? 'is-active-cell' : ''}"
+             data-sb-season="${sandboxSelectedSeason}"
+             data-sb-enso="${sandboxEnsoMode}"
+             data-sb-phase="${p}"
+             data-sb-cell="${sandboxSelectedSeason}-${sandboxEnsoMode}-${p}"
+             style="background:${styleInfo.bg}; border:1.5px solid ${isActive ? '#38bdf8' : styleInfo.border}; border-radius:8px; padding:10px 14px; cursor:pointer;"
+             tabindex="0"
+             role="button"
+             aria-pressed="${isActive}"
+             title="Clique para aplicar ${item.season} · ${meta.badgeText} · Fase ${p} ao mapa">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:5px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-weight:800; font-size:12.5px; color:#ffffff; background:#0b1929; border:1px solid #1e3a5a; padding:2px 7px; border-radius:4px;">
+                Fase ${p}
+              </span>
+              <span style="font-size:12px; font-weight:700; color:#e2e8f0;">
+                ${item.phaseName}
+              </span>
+            </div>
+            <div style="display:flex; align-items:center; gap:5px;">
+              <span style="font-size:11.5px; font-weight:700; color:${styleInfo.color}; background:rgba(0,0,0,0.3); padding:2px 7px; border-radius:4px; border:1px solid ${styleInfo.border};">
+                ${styleInfo.icon} ${item.impactLabel}
+              </span>
+              ${item.isCurated ? `
+                <span style="font-size:10px; font-weight:700; color:#facc15; background:rgba(234,179,8,0.22); border:1px solid rgba(234,179,8,0.45); border-radius:3px; padding:2px 6px; white-space:nowrap;">
+                  ⭐ Caso Curado
+                </span>
+              ` : ''}
+            </div>
+          </div>
+          <div style="font-size:12px; color:#f1f5f9; line-height:1.4; margin-bottom:6px;">
+            ${item.synthesis}
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:11px; color:#94a3b8; border-top:1px solid rgba(255,255,255,0.08); padding-top:4px;">
+            <span>🌀 <strong>Fonte PSA:</strong> ${sourceLabel}</span>
+            <span>📚 <em>${citation}</em></span>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+  }
 
   container.innerHTML = html;
 
@@ -2322,6 +2464,31 @@ function renderGrimmSandboxMatrix() {
       }
     });
   });
+
+  // Listener para cabeçalhos de coluna na matriz (focar regime com 1 clique)
+  container.querySelectorAll('[data-focus-enso]').forEach(th => {
+    th.addEventListener('click', () => {
+      const ensoKey = th.dataset.focusEnso;
+      if (ensoKey) {
+        sandboxEnsoMode = ensoKey;
+        const ensoTabs = document.querySelectorAll('.sandbox-enso-btn');
+        ensoTabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbEnsoMode === ensoKey));
+        renderGrimmSandboxMatrix();
+      }
+    });
+  });
+
+  // Listener para botão de retorno à matriz completa
+  if (typeof container.querySelectorAll === 'function') {
+    container.querySelectorAll('.btn-return-all').forEach(btnReturnAll => {
+      btnReturnAll.addEventListener('click', () => {
+        sandboxEnsoMode = 'all';
+        const ensoTabs = document.querySelectorAll('.sandbox-enso-btn');
+        ensoTabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbEnsoMode === 'all'));
+        renderGrimmSandboxMatrix();
+      });
+    });
+  }
 }
 
 function updateGrimmSandboxUI() {
@@ -2344,6 +2511,10 @@ function updateGrimmSandboxUI() {
       }
     });
   }
+
+  // Sincronizar estado visual das abas de ENOS
+  const ensoTabs = document.querySelectorAll('.sandbox-enso-btn');
+  ensoTabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbEnsoMode === sandboxEnsoMode));
 
   updateGrimmSandboxDiagnostic();
 }
@@ -2420,8 +2591,15 @@ function updateGrimmSandboxDiagnostic() {
       <div>
         <strong style="color:#cbd5e1;">Pesquisa Científica Validada:</strong> ${Array.isArray(item.citations) ? item.citations.join('; ') : (item.citations || 'Alice Grimm et al.; Alvarez et al.')}
       </div>
-      <div style="color:#38bdf8; font-weight:600;">
-        💡 Dica: Clique em qualquer célula da matriz abaixo para simular no mapa.
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        ${currentEnso === 'el-nino' ? `
+          <a href="guia-el-nino.html" target="_blank" rel="noopener" style="color:#fca5a5; font-size:11.5px; font-weight:700; text-decoration:underline; display:inline-flex; align-items:center; gap:4px;">
+            <span>🔥 Dossiê do El Niño (Nova Guia)</span>
+          </a>
+        ` : ''}
+        <span style="color:#38bdf8; font-weight:600;">
+          💡 Dica: Clique em qualquer célula da matriz abaixo para simular no mapa.
+        </span>
       </div>
     </div>
   `;
@@ -2445,6 +2623,9 @@ if (typeof window !== 'undefined') {
     if (params.has('view')) opts.view = params.get('view');
     if (params.has('mjoMode')) opts.mjoMode = params.get('mjoMode');
     if (params.has('salljState')) opts.salljState = params.get('salljState');
+    if (params.has('sbEnsoMode')) {
+      sandboxEnsoMode = params.get('sbEnsoMode');
+    }
     if (Object.keys(opts).length > 0) setClimateState(opts);
   }
 }

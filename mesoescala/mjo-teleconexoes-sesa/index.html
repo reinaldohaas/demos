@@ -526,6 +526,12 @@
     .sandbox-cell {padding:8px 10px;border-radius:6px;cursor:pointer;transition:transform 0.15s ease,box-shadow 0.15s ease,border-color 0.15s ease;position:relative;user-select:none;}
     .sandbox-cell:hover {transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.4);}
     .sandbox-cell.is-active-cell {outline:2.5px solid #38bdf8 !important;box-shadow:0 0 12px rgba(56,189,248,0.7) !important;transform:translateY(-2px);}
+    .sandbox-enso-btn {padding:5px 12px;font-size:11.5px;font-weight:700;border-radius:6px;cursor:pointer;background:#0f172a;border:1px solid #334155;color:#94a3b8;transition:all 0.2s ease;display:inline-flex;align-items:center;gap:4px;}
+    .sandbox-enso-btn:hover {background:#1e293b;color:#ffffff;border-color:#64748b;}
+    .sandbox-enso-btn.is-active {background:rgba(30,58,138,0.4)!important;border-color:#38bdf8!important;color:#ffffff!important;box-shadow:0 0 10px rgba(56,189,248,0.3);}
+    .sandbox-enso-btn[data-sb-enso-mode="el-nino"].is-active {background:rgba(220,38,38,0.28)!important;border-color:#ef4444!important;color:#fecaca!important;box-shadow:0 0 10px rgba(239,68,68,0.35);}
+    .sandbox-enso-btn[data-sb-enso-mode="la-nina"].is-active {background:rgba(37,99,235,0.28)!important;border-color:#3b82f6!important;color:#bfdbfe!important;box-shadow:0 0 10px rgba(59,130,246,0.35);}
+    .sandbox-enso-btn[data-sb-enso-mode="neutro"].is-active {background:rgba(100,116,139,0.28)!important;border-color:#94a3b8!important;color:#f1f5f9!important;box-shadow:0 0 10px rgba(148,163,184,0.3);}
     @media(max-width:600px){.toolbar-group select{width:100%;}.layer-choices>div{left:auto;right:0;}}
 </style>
 </head>
@@ -627,12 +633,32 @@
       </div>
     </div>
 
-    <!-- Abas de Estações no Sandbox -->
-    <div id="sandboxSeasonTabs" style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
-      <button class="sandbox-season-btn is-active" data-sb-season="DJF">☀️ DJF (Verão · 24)</button>
-      <button class="sandbox-season-btn" data-sb-season="MAM">🍂 MAM (Outono · 24)</button>
-      <button class="sandbox-season-btn" data-sb-season="JJA">❄️ JJA (Inverno · 24)</button>
-      <button class="sandbox-season-btn" data-sb-season="SON">🌸 SON (Primavera · 24)</button>
+    <!-- Abas de Estações e Guias de Regime ENOS no Sandbox -->
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:10px;">
+      <!-- Abas de Estações no Sandbox -->
+      <div id="sandboxSeasonTabs" style="display:flex; gap:6px; flex-wrap:wrap;">
+        <button class="sandbox-season-btn is-active" data-sb-season="DJF">☀️ DJF (Verão · 24)</button>
+        <button class="sandbox-season-btn" data-sb-season="MAM">🍂 MAM (Outono · 24)</button>
+        <button class="sandbox-season-btn" data-sb-season="JJA">❄️ JJA (Inverno · 24)</button>
+        <button class="sandbox-season-btn" data-sb-season="SON">🌸 SON (Primavera · 24)</button>
+      </div>
+
+      <!-- Guias de Foco Operacional por Regime ENOS -->
+      <div id="sandboxEnsoTabs" style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+        <span style="font-size:11px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px;">Regime ENOS:</span>
+        <button class="sandbox-enso-btn is-active" data-sb-enso-mode="all" title="Ver matriz comparativa completa de 3 colunas de ENOS">
+          🌐 Matriz Geral (3×8)
+        </button>
+        <button class="sandbox-enso-btn" data-sb-enso-mode="el-nino" title="Foco operacional nas 8 fases sob regime de El Niño">
+          🔥 Guia Foco: El Niño
+        </button>
+        <button class="sandbox-enso-btn" data-sb-enso-mode="la-nina" title="Foco operacional nas 8 fases sob regime de La Niña">
+          ❄️ Guia Foco: La Niña
+        </button>
+        <button class="sandbox-enso-btn" data-sb-enso-mode="neutro" title="Foco operacional nas 8 fases sob regime Neutro">
+          ⚪ Neutro
+        </button>
+      </div>
     </div>
 
     <!-- Container da Matriz de 24 Células Compactas -->
@@ -1004,14 +1030,14 @@
 </div>
 </main>
 
-<script src="world-land.js?v=20260929a"></script>
-<script src="map-regions.js?v=20260929a"></script>
-<script src="documented-cases.js?v=20260929a"></script>
-<script src="grimm-matrix-data.js?v=20260929a"></script>
-<script src="rmm-diagram.js?v=20260929a"></script>
-<script src="cpc-mjo-precip-data.js?v=20260929a"></script>
-<script src="documented-view.js?v=20260929a"></script>
-<script src="panels-manager.js?v=20260929a"></script>
-<script src="forecast-sesa.js?v=20260929a"></script>
+<script src="world-land.js?v=20260929b"></script>
+<script src="map-regions.js?v=20260929b"></script>
+<script src="documented-cases.js?v=20260929b"></script>
+<script src="grimm-matrix-data.js?v=20260929b"></script>
+<script src="rmm-diagram.js?v=20260929b"></script>
+<script src="cpc-mjo-precip-data.js?v=20260929b"></script>
+<script src="documented-view.js?v=20260929b"></script>
+<script src="panels-manager.js?v=20260929b"></script>
+<script src="forecast-sesa.js?v=20260929b"></script>
 </body>
 </html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia Operacional e Científico do El Niño no SESA · Alice Grimm & Alvarez</title>
+  <style>
+    :root {
+      --bg: #081726;
+      --card-bg: #0f1d2e;
+      --card-border: #1e3a5a;
+      --accent-cyan: #38bdf8;
+      --accent-emerald: #34d399;
+      --accent-purple: #c084fc;
+      --accent-amber: #fde047;
+      --accent-coral: #ef4444;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+    header {
+      border-bottom: 2px solid var(--accent-coral);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    .badge-el-nino {
+      display: inline-block;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 3px 10px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 4px 0 8px 0;
+      color: #f8fafc;
+    }
+    .subtitle {
+      font-size: 15px;
+      color: var(--accent-cyan);
+      margin: 0 0 12px 0;
+    }
+    .actions-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .btn-action {
+      background: #1e293b;
+      color: #ffffff;
+      border: 1px solid #334155;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-action:hover {
+      background: #334155;
+      border-color: var(--accent-cyan);
+    }
+    .btn-primary {
+      background: #0284c7;
+      border-color: var(--accent-cyan);
+    }
+    .btn-primary:hover {
+      background: #0369a1;
+    }
+    .grid-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+    .card h2, .card h3 {
+      margin-top: 0;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+    }
+    .alert-box {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 20px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #1e3a5a;
+      padding: 10px 12px;
+      text-align: left;
+    }
+    th {
+      background: #0b1929;
+      color: #f1f5f9;
+      font-weight: 700;
+    }
+    tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .pill {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .pill-extreme { background: rgba(5, 150, 105, 0.25); color: #34d399; border: 1px solid #059669; }
+    .pill-suppressed { background: rgba(234, 88, 12, 0.25); color: #fb923c; border: 1px solid #ea580c; }
+    .pill-curated { background: rgba(234, 179, 8, 0.25); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.4); }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="badge-el-nino">🔥 Dossiê do Previsor · Regime ENOS Quente</span>
+    <h1>O El Niño e as Teleconexões no SESA e ZCAS</h1>
+    <p class="subtitle">Fundamentação Científica das Pesquisas de Alice M. Grimm & Alvarez et al. integradas à MJO</p>
+    <div class="actions-bar">
+      <a href="index.html" class="btn-action btn-primary">⬅️ Retornar ao Simulador Interativo (Sandbox 96)</a>
+      <button onclick="window.print()" class="btn-action">🖨️ Imprimir / Salvar PDF</button>
+    </div>
+  </header>
+
+  <div class="alert-box">
+    <h3 style="margin:0 0 6px 0; color:#fca5a5;">⚠️ Princípio Operacional Fundamental para o Previsor</h3>
+    <p style="margin:0; font-size:13.5px;">
+      O <strong>El Niño</strong> não provoca chuva contínua e uniforme no SESA durante todo o verão ou primavera. Ele estabelece uma <strong>forçante de fundo interanual</strong> que acelera o Jato Subtropical em altitude (~200 hPa) e sensibiliza o guia de ondas extratropical. Quem dita os pulsos com semanas de chuva extrema ou pausas é a <strong>Oscilação Madden–Julian (MJO)</strong>.
+    </p>
+  </div>
+
+  <div class="grid-cards">
+    <div class="card">
+      <h3 style="color:var(--accent-cyan);">🌊 1. Forçante de Fundo Interanual (ENOS)</h3>
+      <p style="font-size:13px; color:#cbd5e1; margin:0;">
+        Conforme demonstrado por Alice Grimm (1998, 2003, 2004), o aquecimento das águas do Pacífico equatorial central e leste induz anomalias de divergência e subsidência anômala nos trópicos, intensificando o gradiente meridional de temperatura e acelerando o Jato Subtropical sobre o centro-sul da América do Sul.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 style="color:var(--accent-purple);">🌀 2. Trem de Ondas PSA e Convecção</h3>
+      <p style="font-size:13px; color:#cbd5e1; margin:0;">
+        O trem de ondas Pacífico–América do Sul (PSA) é um trem de ondas de Rossby equivalente-barotrópico no Pacífico Sul. Em Alvarez et al. (2016) e Fernandes & Grimm (2023), o trem é excitado por desbalanço de divergência em altos níveis decorrente da convecção tropical (Pacífico Oeste/Central) ou da ZCPS.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 style="color:var(--accent-emerald);">🌪️ 3. O Jato de Baixos Níveis (SALLJ)</h3>
+      <p style="font-size:13px; color:#cbd5e1; margin:0;">
+        O Jato de Baixos Níveis da América do Sul (~850 hPa) canaliza vapor de água da Amazônia. O dipolo ZCAS × SESA (Liebmann et al. 2004; Nogués-Paegle & Mo 1997) é controlado pela curvatura dos ventos e pela passagem de cavados induzidos pela onda de Rossby sobre os Andes.
+      </p>
+    </div>
+  </div>
+
+  <section class="card" style="margin-top:20px;">
+    <h2>📋 Tabela de Resposta Operacional: As 8 Fases da MJO sob El Niño (Verão · DJF)</h2>
+    <p style="font-size:13px; color:var(--muted); margin-bottom:12px;">
+      Síntese das 8 fases do ciclo de Wheeler & Hendon durante eventos de El Niño no verão austral (Grimm 2003; Fernandes & Grimm 2023):
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Fase MJO</th>
+          <th>Posição Tropical</th>
+          <th>Sinal no SESA</th>
+          <th>Mecanismo Físico e Acoplamento</th>
+          <th>Fonte PSA</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Fase 1</strong></td>
+          <td>Hemisfério Ocidental/África</td>
+          <td><span class="pill pill-suppressed">Chuva na ZCAS / Pausa no SESA</span> <span class="pill pill-curated">⭐ Curado</span></td>
+          <td>Convecção deslocada para o Atlântico; cavado desloca o SALLJ para a ZCAS, aliviando o excesso hídrico no SESA temporariamente (Fernandes & Grimm 2023).</td>
+          <td>Eixo da ZCPS</td>
+        </tr>
+        <tr>
+          <td><strong>Fase 2</strong></td>
+          <td>Oceano Índico Ocidental</td>
+          <td><span class="pill pill-extreme">Chuva acima da média</span></td>
+          <td>Início da reorganização da convecção tropical profunda no Índico; retomada da convergência de umidade para o sul.</td>
+          <td>Ciclone Tropical</td>
+        </tr>
+        <tr>
+          <td><strong>Fase 3</strong></td>
+          <td>Oceano Índico Central/Leste</td>
+          <td><span class="pill pill-extreme">🔥 Pico de Extremos no SESA</span> <span class="pill pill-curated">⭐ Curado</span></td>
+          <td><strong>Máximo de chuva e extremos no SESA.</strong> A divergência em altitude sobre o Índico dispara onda PSA com cavado profundo sobre a Argentina/SESA, combinando-se com SALLJ forte (Grimm 2003; Fernandes & Grimm 2023).</td>
+          <td>Ciclone Tropical</td>
+        </tr>
+        <tr>
+          <td><strong>Fase 4</strong></td>
+          <td>Continente Marítimo</td>
+          <td><span class="pill pill-extreme">Chuva persistente no SESA</span></td>
+          <td>Convecção no Continente Marítimo mantém o trem de ondas ativo e o transporte de umidade sustentado em direção ao sul do Brasil.</td>
+          <td>Ciclone Tropical</td>
+        </tr>
+        <tr>
+          <td><strong>Fase 5</strong></td>
+          <td>Continente Marítimo Oriental</td>
+          <td><span class="pill pill-extreme">Chuva moderada a forte</span></td>
+          <td>Transição para o Pacífico Ocidental; onda de Rossby continua a apoiar instabilidade frontal e complexos convectivos no SESA.</td>
+          <td>Ciclone Tropical</td>
+        </tr>
+        <tr>
+          <td><strong>Fase 6</strong></td>
+          <td>Pacífico Ocidental</td>
+          <td><span class="pill" style="background:#334155; color:#cbd5e1;">Transição para Climatologia</span></td>
+          <td>Convecção aproxima-se da Linha de Data; início do enfraquecimento do suporte extratropical para o SESA.</td>
+          <td>Eixo da ZCPS</td>
+        </tr>
+        <tr>
+          <td><strong>Fase 7</strong></td>
+          <td>Linha de Data</td>
+          <td><span class="pill" style="background:#334155; color:#cbd5e1;">Transição para ZCAS</span></td>
+          <td>Convecção tropical desloca-se para o Pacífico central; início da curvatura do jato de baixos níveis em direção ao Sudeste.</td>
+          <td>Eixo da ZCPS</td>
+        </tr>
+        <tr>
+          <td><strong>Fase 8</strong></td>
+          <td>Pacífico Leste</td>
+          <td><span class="pill pill-suppressed">Favorecimento gradual da ZCAS</span></td>
+          <td>Fase precursora do pico de chuva na ZCAS, preparando a transição de umidade para o Brasil Central.</td>
+          <td>Eixo da ZCPS</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card" style="margin-top:20px;">
+    <h2>📚 Referências Bibliográficas Fundamentais</h2>
+    <ul style="font-size:13px; color:#cbd5e1; line-height:1.7; padding-left:20px;">
+      <li><strong>Grimm, A. M., Ferraz, S. E. T., & Gomes, J. (1998):</strong> Precipitation anomalies in Southern Brazil associated with El Niño and La Niña events. <em>Journal of Climate</em>, 11(11), 2863–2880.</li>
+      <li><strong>Grimm, A. M., Barros, V. R., & Doyle, M. E. (2000):</strong> Climate variability in southern South America associated with El Niño and La Niña events. <em>Journal of Climate</em>, 13(1), 35–58.</li>
+      <li><strong>Grimm, A. M. (2003):</strong> The El Niño impact on the summer monsoon in South America: Regional processes and scenarios. <em>Journal of Climate</em>, 16(2), 263–282.</li>
+      <li><strong>Grimm, A. M. (2004):</strong> How do La Niña events disturb the South American monsoon system? <em>Climate Dynamics</em>, 22(2), 123–145.</li>
+      <li><strong>Liebmann, B., Kiladis, G. N., Vera, C. S., et al. (2004):</strong> Subseasonal variations of rainfall in South America in the vicinity of the low-level jet stream. <em>Journal of Climate</em>, 17(19), 3829–3842.</li>
+      <li><strong>Alvarez, M. S., Vera, C. S., Kiladis, G. N., & Liebmann, B. (2016):</strong> Influence of the Madden Julian Oscillation on precipitation and surface air temperature in South America. <em>Climate Dynamics</em>, 46(1), 245–262.</li>
+      <li><strong>Fernandes, P. O., & Grimm, A. M. (2023):</strong> Combined influences of MJO and ENSO on the South American Monsoon System and extreme precipitation. <em>Journal of Climate</em>, 36(22), 7715–7738.</li>
+    </ul>
+  </section>
+
+  <footer style="margin-top:28px; padding-top:16px; border-top:1px solid #1e3a5a; text-align:center; font-size:12px; color:var(--muted);">
+    Demonstração Interativa MJO & Teleconexões no SESA · R. Haas & Colaboradores · Documento de Apoio Operacional.
+  </footer>
+</div>
+</body>
+</html>

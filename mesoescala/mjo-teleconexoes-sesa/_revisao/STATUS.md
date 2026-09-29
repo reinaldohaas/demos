@@ -2,23 +2,23 @@
 
 ## Estado
 - Branch: `revisao`, criado do `main`.
-- Data e hora: 2026-09-29T10:45:00-03:00.
-- Versão de cache: `?v=20260929a`.
-- Revisão concluída e validada (layout despoluído com mapa no topo em destaque absoluto, remoção dos controles manuais redundantes, sandbox direto das 96 permutações de Alice Grimm, aviso operacional ao previsor, e unificação do trem de ondas PSA de Alvarez e Grimm com diferenciação da fonte convectiva: Ciclone Tropical/Pacífico Oeste vs. Eixo da ZCPS/SPCZ).
+- Data e hora: 2026-09-29T14:10:00-03:00.
+- Versão de cache: `?v=20260929b`.
+- Revisão concluída e validada (apresentação ergonômica da questão do El Niño totalmente amarrada no sandbox: abas de regime ENOS [Matriz Geral 3x8, Guia Foco El Niño, Guia Foco La Niña, Guia Foco Neutro], cabeçalhos interativos na matriz, cartões operacionais detalhados das 8 fases sob El Niño, dossiê científico independente `guia-el-nino.html` acessível em nova guia para consulta aprofundada, e 100% de aprovação na suíte de testes automatizados com zero ocorrências de `metric`).
 - Arquivos modificados:
   - `index.html`:
-    - Reestruturação do layout com mapa (#panelMap) no topo absoluto logo abaixo do cabeçalho.
-    - Cartão de diagnóstico "⚠️ AVISO AO PREVISOR · SESA & ZCAS" posicionado diretamente sob o mapa.
-    - Matriz Sandbox das 96 permutações (8 fases × 3 ENOS × 4 abas de estação) compacta e tátil logo abaixo do aviso ao previsor.
-    - Ocultação dos controles legados manuais redundantes (`#legacyControlsContainer` com `display:none`) para manter compatibilidade e acessibilidade sem poluição visual.
-    - Bump de versão de cache para `?v=20260929a`.
+    - Adicionado seletor de regime ENOS no sandbox (`#sandboxEnsoTabs`) com botões táteis para `Matriz Geral (3×8)`, `Guia Foco: El Niño`, `Guia Foco: La Niña` e `Neutro`.
+    - Estilos CSS dedicados para botões de regime ENOS e estados ativos com realce temático.
+    - Bump de versão de cache para `?v=20260929b`.
   - `documented-view.js`:
-    - Implementação de `getPsaSourceType(season, enso, phase)` diferenciando a forçante convectiva entre Ciclone Tropical (Pacífico Oeste/Central) e Eixo da ZCPS (SPCZ).
-    - Unificação do trem de ondas PSA de Alvarez e Grimm com indicação clara da fonte física no traçado global e regional.
-    - Matriz do sandbox reformatada para células compactas táteis de clique rápido.
-    - Painel de diagnóstico reestruturado como "⚠️ AVISO AO PREVISOR · SESA & ZCAS" com síntese física de impacto, extremos, teleconexão PSA e fundamentação de Alice Grimm.
+    - Adicionada variável de estado `sandboxEnsoMode` com sincronização bidirecional (URL, abas e cabeçalhos de coluna).
+    - `renderGrimmSandboxMatrix()` com suporte dual: modo matricial comparativo 3×8 e modo focado ergonômico (cards amplos das 8 fases sob o regime selecionado, síntese física de Alice Grimm et al., fonte PSA e citação bibliográfica).
+    - Links rápidos para abrir o dossiê do El Niño em nova guia tanto no card executivo quanto no aviso ao previsor (`#sandboxDiagnosticCard`).
+    - Parâmetro `sbEnsoMode` suportado na URL para deep-linking direto.
+  - `guia-el-nino.html` (novo):
+    - Dossiê científico e operacional completo em página dedicada sobre a física do El Niño no SESA e América do Sul (Alice Grimm 1998, 2000, 2003, 2004, 2011; Fernandes & Grimm 2023; Alvarez et al. 2016).
   - `verify-model.cjs`:
-    - Suíte de 15 testes automatizados aprovada com 100% de sucesso.
+    - 15 suítes de testes 100% aprovadas.
     - 0 ocorrências de `metric` mantidas em todos os arquivos de produção.
 
 ## Feito (nesta revisão)
