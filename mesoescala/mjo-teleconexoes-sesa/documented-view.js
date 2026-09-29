@@ -815,11 +815,74 @@ function drawGlobalContext(evidence) {
   }
 }
 
+function getPsaSourceType(season = currentSeason, enso = currentEnso, phase = currentPhase) {
+  const p = Number(phase);
+  // Fases 2 a 5 da MJO e El Niño: convecção tropical / ciclone tropical no Pacífico Oeste/Central
+  if (enso === 'el-nino' && (p >= 2 && p <= 5)) return 'ciclone_tropical';
+  if (p >= 2 && p <= 5) return 'ciclone_tropical';
+  // Fases 6, 7, 8, 1 ou La Niña: convecção e divergência ancoradas na ZCPS (Zona de Convergência do Pacífico Sul)
+  return 'zcps';
+}
+
 function drawPsa() {
   if (!visibleLayers.psa) return;
   const psaStroke = '#c084fc';
+  const sourceType = getPsaSourceType(currentSeason, currentEnso, currentPhase);
 
   if (mapView === 'global') {
+    // 1. Destaque da Fonte Convectiva: Ciclone Tropical vs. ZCPS (Alvarez & Grimm)
+    if (sourceType === 'ciclone_tropical') {
+      const [srcX, srcY] = project(155, -12);
+      svg('circle', {
+        cx: srcX, cy: srcY, r: 16,
+        fill: 'rgba(56, 189, 248, 0.18)',
+        stroke: '#38bdf8', 'stroke-width': 1.6, 'stroke-dasharray': '3 3'
+      });
+      svg('circle', {
+        cx: srcX, cy: srcY, r: 24,
+        fill: 'none',
+        stroke: 'rgba(56, 189, 248, 0.45)', 'stroke-width': 1.2, 'stroke-dasharray': '4 4'
+      });
+      svg('text', {
+        x: srcX, y: srcY + 5,
+        fill: '#38bdf8', 'font-size': 14, 'font-weight': '800', 'text-anchor': 'middle'
+      }, '🌀');
+
+      // Traçado conectando a fonte tropical ao guia do PSA
+      const [destX, destY] = project(175, -45);
+      svg('path', {
+        d: `M ${srcX} ${srcY + 16} Q ${srcX + 20} ${srcY + 65} ${destX} ${destY}`,
+        fill: 'none', stroke: '#38bdf8', 'stroke-width': 2, 'stroke-dasharray': '5 4'
+      });
+      svg('text', {
+        x: srcX + 22, y: srcY - 10,
+        fill: '#7dd3fc', 'font-size': 11, 'font-weight': '700',
+        stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+      }, 'Fonte: Ciclone Tropical / Pacífico Oeste (Alvarez & Grimm)');
+    } else {
+      // Eixo da ZCPS (Zona de Convergência do Pacífico Sul / SPCZ)
+      const p1 = project(165, -10);
+      const p2 = project(185, -20);
+      const p3 = project(215, -30);
+      svg('path', {
+        d: `M ${p1[0]} ${p1[1]} Q ${p2[0]} ${p2[1]} ${p3[0]} ${p3[1]}`,
+        fill: 'none', stroke: '#f59e0b', 'stroke-width': 4.5, opacity: 0.8, 'stroke-dasharray': '8 4'
+      });
+      svg('text', {
+        x: p2[0] - 10, y: p2[1] - 12,
+        fill: '#fde047', 'font-size': 11, 'font-weight': '700',
+        stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+      }, 'Fonte: Eixo da ZCPS (SPCZ) · Alvarez & Grimm');
+
+      // Traçado conectando o eixo da ZCPS ao trem PSA
+      const [psaTargetX, psaTargetY] = project(-145, -50);
+      svg('path', {
+        d: `M ${p3[0]} ${p3[1]} Q ${p3[0] + 15} ${p3[1] + 45} ${psaTargetX} ${psaTargetY}`,
+        fill: 'none', stroke: '#f59e0b', 'stroke-width': 2, 'stroke-dasharray': '5 4'
+      });
+    }
+
+    // 2. Centros do Trem de Ondas PSA (mesmos de Alvarez e Grimm)
     const centers = [
       { lon: 135, lat: -40, sign: '−', r: 10 },
       { lon: 175, lat: -45, sign: '+', r: 16 },
@@ -858,11 +921,12 @@ function drawPsa() {
     }
 
     const labelPos = project(-115, -60);
+    const sourceLabel = sourceType === 'ciclone_tropical' ? 'Ciclone Tropical' : 'ZCPS';
     svg('text', {
       x: labelPos[0], y: labelPos[1],
       fill: '#f3e8ff', 'font-size': 11.5, 'font-weight': '700', 'text-anchor': 'middle',
       stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
-    }, 'Padrão PSA · EOF1 de v em 200 hPa, NDJFMA (Cavalcanti 2018, INPE)');
+    }, `Padrão PSA · Trem de Ondas · Fonte: ${sourceLabel} (Alvarez & Grimm)`);
   } else {
     // Visão Regional: trem de onda entrando pelo Pacífico SE, cruzando o extremo sul e saindo no Atlântico
     const pts = [
@@ -887,11 +951,12 @@ function drawPsa() {
     svg('text', { x: cx2, y: cy2 + 4.5, fill: '#f3e8ff', 'font-size': 13, 'font-weight': '800', 'text-anchor': 'middle' }, '+');
 
     const [lblX, lblY] = project(-68, -48);
+    const sourceLabel = sourceType === 'ciclone_tropical' ? 'Ciclone Tropical' : 'ZCPS';
     svg('text', {
       x: lblX, y: lblY,
       fill: '#f3e8ff', 'font-size': 11, 'font-weight': '700', 'text-anchor': 'middle',
       stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
-    }, 'Padrão PSA · EOF1 v200 (Cavalcanti 2018, INPE)');
+    }, `Padrão PSA · Trem de Ondas · Fonte: ${sourceLabel} (Alvarez & Grimm)`);
   }
 }
 
@@ -2210,24 +2275,21 @@ function renderGrimmSandboxMatrix() {
             data-sb-enso="${enso.key}"
             data-sb-phase="${p}"
             data-sb-cell="${sandboxSelectedSeason}-${enso.key}-${p}"
-            style="background:${styleInfo.bg}; border:1px solid ${isActive ? '#38bdf8' : styleInfo.border};"
+            style="background:${styleInfo.bg}; border:1px solid ${isActive ? '#38bdf8' : styleInfo.border}; padding:7px 10px; cursor:pointer;"
             tabindex="0"
             role="button"
             aria-pressed="${isActive}"
             title="Clique para aplicar ${item.season} · ${enso.label} · Fase ${p} ao mapa">
-          <div style="display:flex; align-items:center; justify-content:space-between; gap:4px; margin-bottom:4px;">
-            <span style="font-size:11px; font-weight:700; color:${styleInfo.color}; display:inline-flex; align-items:center; gap:3px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:4px;">
+            <span style="font-size:11.5px; font-weight:700; color:${styleInfo.color}; display:inline-flex; align-items:center; gap:4px;">
               <span>${styleInfo.icon}</span>
               <span>${item.impactLabel}</span>
             </span>
             ${item.isCurated ? `
-              <span style="font-size:9.5px; font-weight:700; color:#facc15; background:rgba(234,179,8,0.18); border:1px solid rgba(234,179,8,0.4); border-radius:4px; padding:1px 4px; white-space:nowrap;" title="Evento de interesse da literatura curada">
+              <span style="font-size:9.5px; font-weight:700; color:#facc15; background:rgba(234,179,8,0.2); border:1px solid rgba(234,179,8,0.4); border-radius:3px; padding:1px 4px; white-space:nowrap;" title="Caso Curado (${item.curatedAuthor})">
                 ⭐ Curado
               </span>
             ` : ''}
-          </div>
-          <div style="font-size:10.5px; color:#cbd5e1; line-height:1.25; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
-            ${item.synthesis}
           </div>
         </td>
       `;
@@ -2292,61 +2354,74 @@ function updateGrimmSandboxDiagnostic() {
 
   const item = getGrimmPermutation(currentSeason, currentEnso, currentPhase);
   if (!item) {
-    diag.innerHTML = `<p class="muted">Selecione uma combinação para visualizar o diagnóstico de Alice Grimm.</p>`;
+    diag.innerHTML = `<p class="muted">Selecione uma combinação no sandbox para visualizar o aviso ao previsor.</p>`;
     return;
   }
 
   const ensoTitle = currentEnso === 'el-nino' ? 'El Niño' : currentEnso === 'la-nina' ? 'La Niña' : 'ENOS Neutro';
+  const sourceType = getPsaSourceType(currentSeason, currentEnso, currentPhase);
+  const sourceName = sourceType === 'ciclone_tropical'
+    ? 'Ciclone Tropical / Aquecimento Equatorial Oeste'
+    : 'ZCPS (Zona de Convergência do Pacífico Sul / SPCZ)';
 
   const html = `
-    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; border-bottom:1px solid #1e3a5a; padding-bottom:8px; margin-bottom:10px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; border-bottom:1.5px solid #0284c7; padding-bottom:8px; margin-bottom:10px;">
       <div>
-        <span style="font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#38bdf8; font-weight:700;">Diagnóstico Físico de Alice Grimm & Colaboradores</span>
-        <h3 style="font-size:14px; font-weight:800; color:#f8fafc; margin:2px 0 0 0;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
+          <span style="font-size:11.5px; font-weight:800; text-transform:uppercase; letter-spacing:0.6px; background:#0284c7; color:#ffffff; padding:2px 8px; border-radius:4px;">
+            ⚠️ AVISO AO PREVISOR · SESA & ZCAS
+          </span>
+          <span style="font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:#38bdf8; font-weight:700;">
+            Diagnóstico Físico de Alice Grimm & Colaboradores
+          </span>
+        </div>
+        <h3 style="font-size:14.5px; font-weight:800; color:#f8fafc; margin:0;">
           ${currentSeason} · ${ensoTitle} · MJO Fase ${currentPhase} (${item.phaseName})
         </h3>
       </div>
       <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-        <span style="font-size:11.5px; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(56,189,248,0.15); color:#7dd3fc; border:1px solid rgba(56,189,248,0.35);">
+        <span style="font-size:12px; font-weight:700; padding:3px 9px; border-radius:6px; background:rgba(56,189,248,0.18); color:#7dd3fc; border:1px solid rgba(56,189,248,0.4);">
           ${item.impactLabel}
         </span>
         ${item.isCurated ? `
-          <span style="font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; background:rgba(234,179,8,0.2); color:#fde047; border:1px solid rgba(234,179,8,0.4);">
+          <span style="font-size:11.5px; font-weight:700; padding:3px 9px; border-radius:6px; background:rgba(234,179,8,0.22); color:#fde047; border:1px solid rgba(234,179,8,0.45);">
             ⭐ Caso Curado: ${item.curatedAuthor}
           </span>
         ` : ''}
       </div>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px; font-size:12px; line-height:1.45;">
-      <div style="background:#0b1929; border:1px solid #1e3a5a; border-radius:6px; padding:10px;">
-        <div style="font-weight:700; color:#38bdf8; margin-bottom:4px; display:flex; align-items:center; gap:5px;">
-          <span>🌊</span> Forçante de Fundo Interanual (ENOS)
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px; font-size:12.5px; line-height:1.45;">
+      <div style="background:#0b1929; border:1px solid #1e3a5a; border-radius:6px; padding:10px 12px;">
+        <div style="font-weight:700; color:#38bdf8; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+          <span>🌧️</span> Impacto no SESA & Extremos
         </div>
-        <div style="color:#cbd5e1;">${item.backgroundSummary}</div>
+        <div style="color:#e2e8f0;">${item.synthesis}</div>
       </div>
 
-      <div style="background:#0b1929; border:1px solid #1e3a5a; border-radius:6px; padding:10px;">
-        <div style="font-weight:700; color:#a78bfa; margin-bottom:4px; display:flex; align-items:center; gap:5px;">
-          <span>🌀</span> Gatilho Intra-sazonal da MJO
+      <div style="background:#0b1929; border:1px solid #1e3a5a; border-radius:6px; padding:10px 12px;">
+        <div style="font-weight:700; color:#c084fc; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+          <span>🌀</span> Onda de Rossby PSA & Fonte Convectiva
         </div>
-        <div style="color:#cbd5e1;">${item.mjoTrigger}</div>
+        <div style="color:#e2e8f0;">
+          <strong>Fonte da onda:</strong> <span style="color:#fde047;">${sourceName}</span>. O trem de ondas equivalente-barotrópico no Pacífico Sul propaga-se de acordo com Alvarez et al. e Grimm, determinando cavados e cristas sobre o cone sul.
+        </div>
       </div>
 
-      <div style="background:#0b1929; border:1px solid #1e3a5a; border-radius:6px; padding:10px;">
-        <div style="font-weight:700; color:#34d399; margin-bottom:4px; display:flex; align-items:center; gap:5px;">
-          <span>🌧️</span> Resposta e Acoplamento Físico no SESA
+      <div style="background:#0b1929; border:1px solid #1e3a5a; border-radius:6px; padding:10px 12px;">
+        <div style="font-weight:700; color:#34d399; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+          <span>🌪️</span> Acoplamento: Jatos, SALLJ & ENOS
         </div>
-        <div style="color:#cbd5e1;">${item.synthesis}</div>
+        <div style="color:#e2e8f0;">${item.backgroundSummary}</div>
       </div>
     </div>
 
-    <div style="margin-top:10px; padding-top:8px; border-top:1px solid #1e3a5a; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:11px; color:#94a3b8;">
+    <div style="margin-top:10px; padding-top:8px; border-top:1px solid #1e3a5a; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:11.5px; color:#94a3b8;">
       <div>
-        <strong style="color:#cbd5e1;">Fundamentação Científica:</strong> ${Array.isArray(item.citations) ? item.citations.join('; ') : (item.citations || 'Grimm et al. (1998, 2000, 2003, 2004); Fernandes & Grimm (2023)')}
+        <strong style="color:#cbd5e1;">Pesquisa Científica Validada:</strong> ${Array.isArray(item.citations) ? item.citations.join('; ') : (item.citations || 'Alice Grimm et al.; Alvarez et al.')}
       </div>
-      <div style="color:#64748b; font-style:italic;">
-        96 permutações = 4 estações × 3 estados de ENOS × 8 fases de MJO
+      <div style="color:#38bdf8; font-weight:600;">
+        💡 Dica: Clique em qualquer célula da matriz abaixo para simular no mapa.
       </div>
     </div>
   `;

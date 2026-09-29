@@ -533,146 +533,16 @@
 <main>
 <section class="card" style="margin-bottom:12px; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
   <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-    <button id="exploreMode" aria-pressed="true">Explorar combinações</button>
-    <button id="sandboxModeBtn" aria-pressed="false" class="btn-layout" style="border-color:#38bdf8; color:#7dd3fc; background:rgba(56,189,248,0.12); font-weight:700;" title="Abrir matriz interativa das 96 permutações de Alice Grimm">🧪 Sandbox 96 (Grimm)</button>
+    <button id="exploreMode" aria-pressed="true">Explorar combinações (Sandbox 96)</button>
+    <button id="sandboxModeBtn" style="display:none;" aria-pressed="true"></button>
     <button id="forecastMode" aria-pressed="false">SESA · boletim e horizonte de 45 dias</button>
   </div>
-  <span id="modeNotice" class="muted" style="font-size:12.5px;">Modo didático: seleções manuais, não observações.</span>
+  <span id="modeNotice" class="muted" style="font-size:12px;">Foco operacional: clique nas fases da matriz abaixo para simular o mapa e gerar o alerta ao previsor.</span>
 </section>
 <section id="forecastPanel" class="card" hidden style="padding:20px;margin-bottom:20px"></section>
 <div id="explorationContent">
 
-  <!-- Painel de Controles: Estações, ENOS, Fases da MJO, Narração e Destaques Documentados -->
-  <section class="controls-panel">
-    <div class="controls-row">
-      <!-- Seletor de Estação do Ano -->
-      <div class="control-group-pill">
-        <label for="seasonSelect" class="pill-label">Estação:</label>
-        <select id="seasonSelect" class="control-select" aria-label="Selecione a estação do ano">
-          <option value="DJF" data-season="DJF">☀️ DJF (Verão)</option>
-          <option value="MAM" data-season="MAM">🍂 MAM (Outono)</option>
-          <option value="JJA" data-season="JJA">❄️ JJA (Inverno)</option>
-          <option value="SON" data-season="SON">🌸 SON (Primavera)</option>
-        </select>
-      </div>
-
-      <!-- Seletor de ENOS -->
-      <div class="control-group-pill" id="ensoGroup">
-        <label for="ensoSelect" class="pill-label">ENOS:</label>
-        <select id="ensoSelect" class="control-select" aria-label="Selecione o estado do ENOS">
-          <option value="el-nino" data-enso="el-nino">🔥 El Niño</option>
-          <option value="neutro" data-enso="neutro" selected>⚖️ Neutro</option>
-          <option value="la-nina" data-enso="la-nina">🧊 La Niña</option>
-        </select>
-      </div>
-
-      <!-- Seletor de Fases da MJO (1 a 8) -->
-      <div class="control-group-pill">
-        <label for="phaseSelect" class="pill-label">MJO (Fase):</label>
-        <select id="phaseSelect" class="control-select" aria-label="Selecione a fase da MJO de 1 a 8">
-          <option value="1" data-phase="1">Fase 1 · Hemisfério Ocidental/África</option>
-          <option value="2" data-phase="2">Fase 2 · Oceano Índico Ocidental</option>
-          <option value="3" data-phase="3">Fase 3 · Oceano Índico Central/Leste</option>
-          <option value="4" data-phase="4">Fase 4 · Continente Marítimo</option>
-          <option value="5" data-phase="5">Fase 5 · Continente Marítimo Oriental</option>
-          <option value="6" data-phase="6">Fase 6 · Pacífico Ocidental</option>
-          <option value="7" data-phase="7">Fase 7 · Linha de Data</option>
-          <option value="8" data-phase="8">Fase 8 · Pacífico Leste/Hemisfério Ocidental</option>
-        </select>
-      </div>
-
-      <!-- Controles de Narração por Voz -->
-      <div class="control-group-pill" style="border-color: rgba(192, 132, 252, 0.4);">
-        <span class="pill-label" style="color:var(--accent-purple);">Voz:</span>
-        <button class="btn-voice" id="btnVoiceNarrate">Ouvir narração</button>
-        <button class="btn-voice" id="btnVoicePause">Pausar</button>
-        <button class="btn-voice" id="btnVoiceStop">Parar</button>
-        <button class="btn-voice" id="btnVoiceMute">Silenciar</button>
-      </div>
-    </div>
-
-    <div class="controls-row" style="border-top:1px solid #1a344e; padding-top:10px; display:flex; align-items:center; flex-wrap:wrap; gap:10px;">
-      <!-- Seletor de Estado do SALLJ -->
-      <div class="control-group-pill" id="salljStateGroup">
-        <label for="salljSelect" class="pill-label">SALLJ:</label>
-        <select id="salljSelect" class="control-select" aria-label="Selecione o estado do SALLJ">
-          <option value="auto" selected>Automático (padrão)</option>
-          <option value="forte">Forte</option>
-          <option value="fraco">Fraco</option>
-          <option value="climatologico">Climatológico</option>
-        </select>
-      </div>
-
-      <!-- Seletor de Eventos de Interesse -->
-      <div class="control-group-pill" style="flex:1 1 340px; min-width:0; display:flex; align-items:center; gap:8px;">
-        <label for="eventsSelect" class="pill-label" style="white-space:nowrap; margin:0; cursor:pointer;">Eventos de interesse:</label>
-        <select id="eventsSelect" class="event-select control-select" style="flex:1; min-width:0;" aria-label="Eventos de interesse documentados">
-          <option value="">Escolher caso documentado…</option>
-          <optgroup label="DJF · Verão">
-            <option value="DJF-la-nina-8">DJF · Fernandes & Grimm · La Niña 8 — pico na ZCAS</option>
-            <option value="DJF-el-nino-1">DJF · Fernandes & Grimm · El Niño 1 — pico na ZCAS</option>
-            <option value="DJF-el-nino-3">DJF · Fernandes & Grimm · El Niño 3 — pico no SESA</option>
-            <option value="DJF-neutro-4">DJF · Fernandes & Grimm · Neutro 4 — maior aumento no SESA</option>
-            <option value="DJF-alvarez-3-4">DJF · Alvarez · 3–4 — mais chance de semana chuvosa (SESA)</option>
-            <option value="DJF-alvarez-8-1">DJF · Alvarez · 8–1 — mais chance de semana chuvosa (ZCAS)</option>
-          </optgroup>
-          <optgroup label="MAM · Outono">
-            <option value="MAM-alvarez-1">MAM · Alvarez · 1 — mais chance de semana chuvosa (ZCAS)</option>
-          </optgroup>
-          <optgroup label="JJA · Inverno">
-            <option value="JJA-alvarez-8">JJA · Alvarez · 8 — mais chance de semana chuvosa (ZCAS)</option>
-          </optgroup>
-          <optgroup label="SON · Primavera">
-            <option value="SON-alvarez-7-8">SON · Alvarez · 7–8 — mais chance de semana chuvosa (ZCAS)</option>
-            <option value="SON-alvarez-1">SON · Alvarez · 1 — mais chance de semana chuvosa (SESA)</option>
-          </optgroup>
-        </select>
-        <button id="btnOpenSandbox" type="button" class="btn-voice" style="border-color:rgba(56,189,248,0.5); color:#38bdf8; font-weight:700; font-size:11.5px; padding:4px 10px; cursor:pointer; white-space:nowrap;" title="Ver como os eventos documentados se inserem nas 96 permutações">
-          🧪 Matriz 96
-        </button>
-        <span id="eventNotice" style="font-size:11.5px; color:#5eead4; font-weight:600; font-family:var(--font-mono, monospace); white-space:nowrap;" role="status"></span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Setor Sandbox: As 96 Permutações (ENOS × MJO × Estações · Alice Grimm) -->
-  <section class="card sandbox-sector" id="sandboxSector" style="margin-bottom:14px; background:rgba(15,23,42,0.94); border:1px solid #1a3854; border-radius:8px; padding:14px 16px;">
-    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; border-bottom:1px solid #1e3a5a; padding-bottom:10px;">
-      <div>
-        <h2 style="font-size:15px; font-weight:800; color:#e0f2fe; margin:0; display:flex; align-items:center; gap:8px;">
-          <span>🧪 Setor Sandbox: As 96 Permutações (ENOS × MJO × Estações)</span>
-          <span style="font-size:11px; font-weight:600; background:rgba(56,189,248,0.18); color:#7dd3fc; border:1px solid rgba(56,189,248,0.35); padding:2px 8px; border-radius:12px;">Alice Grimm et al.</span>
-        </h2>
-        <p style="font-size:12px; color:#94a3b8; margin:4px 0 0 0; line-height:1.4;">
-          Os 10 <em>"Eventos de Interesse"</em> ocupam parte das 96 permutações físicas (4 estações × 3 ENOS × 8 fases). Use este setor sandbox para explorar qualquer combinação do ciclo interanual e intra-sazonal. Clique em qualquer célula para aplicá-la ao mapa.
-        </p>
-      </div>
-      <div style="display:flex; align-items:center; gap:8px;">
-        <span style="font-size:11.5px; color:#64748b; font-weight:600;" id="sandboxSummaryCount">24 combinações na estação</span>
-        <button id="btnToggleSandboxView" type="button" class="btn-voice" style="padding:4px 8px; font-size:11px;">Ocultar</button>
-      </div>
-    </div>
-
-    <!-- Abas de Estações no Sandbox -->
-    <div id="sandboxSeasonTabs" style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
-      <button class="sandbox-season-btn is-active" data-sb-season="DJF">☀️ DJF (Verão · 24)</button>
-      <button class="sandbox-season-btn" data-sb-season="MAM">🍂 MAM (Outono · 24)</button>
-      <button class="sandbox-season-btn" data-sb-season="JJA">❄️ JJA (Inverno · 24)</button>
-      <button class="sandbox-season-btn" data-sb-season="SON">🌸 SON (Primavera · 24)</button>
-    </div>
-
-    <!-- Container da Matriz de 24 Células -->
-    <div id="sandboxMatrixContainer" style="margin-top:12px; overflow-x:auto;">
-      <!-- Preenchido dinamicamente via JS com a matriz de 8 fases x 3 ENOS -->
-    </div>
-
-    <!-- Cartão de Diagnóstico do Estudante -->
-    <div id="sandboxDiagnosticCard" style="margin-top:12px; padding:12px 14px; background:rgba(8,23,38,0.75); border:1px solid #1e3a5a; border-radius:6px;">
-      <!-- Preenchido dinamicamente ao selecionar qualquer célula -->
-    </div>
-  </section>
-
-  <!-- Topo Principal: Mapa e Diagrama RMM Juntos na Parte de Cima -->
+  <!-- Topo Principal: Mapa e Diagrama RMM Juntos no Topo com Prioridade Visual -->
   <div class="top-main-stage" id="topMainStage">
     <!-- Card Principal com Prioridade Visual ao Mapa -->
     <section class="map-card" id="panelMap" data-panel-id="panelMap">
@@ -733,6 +603,110 @@
           <g id="mapDrawing"></g>
         </svg>
       </div>
+
+      <!-- Aviso Operacional ao Previsor (Grimm / Alvarez) -->
+      <div id="sandboxDiagnosticCard" style="margin-top:12px; padding:12px 14px; background:rgba(8,23,38,0.85); border:1.5px solid #0284c7; border-radius:8px;"></div>
+    </section>
+  </div>
+
+  <!-- Setor Sandbox: As 96 Permutações (ENOS × MJO × Estações · Alice Grimm & Alvarez) -->
+  <section class="card sandbox-sector" id="sandboxSector" style="margin-bottom:14px; background:rgba(15,23,42,0.94); border:1px solid #1a3854; border-radius:8px; padding:12px 16px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; border-bottom:1px solid #1e3a5a; padding-bottom:8px;">
+      <div>
+        <h2 style="font-size:14px; font-weight:800; color:#e0f2fe; margin:0; display:flex; align-items:center; gap:8px;">
+          <span>🧪 Sandbox das 96 Fases (ENOS × MJO × Estações)</span>
+          <span style="font-size:11px; font-weight:600; background:rgba(56,189,248,0.18); color:#7dd3fc; border:1px solid rgba(56,189,248,0.35); padding:2px 8px; border-radius:12px;">Alice Grimm & Alvarez</span>
+        </h2>
+        <p style="font-size:11.5px; color:#94a3b8; margin:3px 0 0 0;">
+          Clique em qualquer célula para simular no mapa e emitir o aviso ao previsor. Casos curados de referência estão destacados com estrela dourada (⭐).
+        </p>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:11px; color:#64748b; font-weight:600;" id="sandboxSummaryCount">24 combinações na estação</span>
+        <button id="btnToggleSandboxView" type="button" class="btn-voice" style="padding:3px 8px; font-size:11px;">Ocultar</button>
+      </div>
+    </div>
+
+    <!-- Abas de Estações no Sandbox -->
+    <div id="sandboxSeasonTabs" style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+      <button class="sandbox-season-btn is-active" data-sb-season="DJF">☀️ DJF (Verão · 24)</button>
+      <button class="sandbox-season-btn" data-sb-season="MAM">🍂 MAM (Outono · 24)</button>
+      <button class="sandbox-season-btn" data-sb-season="JJA">❄️ JJA (Inverno · 24)</button>
+      <button class="sandbox-season-btn" data-sb-season="SON">🌸 SON (Primavera · 24)</button>
+    </div>
+
+    <!-- Container da Matriz de 24 Células Compactas -->
+    <div id="sandboxMatrixContainer" style="margin-top:10px; overflow-x:auto;">
+      <!-- Preenchido dinamicamente via JS com a matriz de 8 fases x 3 ENOS -->
+    </div>
+  </section>
+
+  <!-- Controles Legados Preservados em Segundo Plano para Compatibilidade -->
+  <section class="controls-panel" id="legacyControlsContainer" style="display:none;" aria-hidden="true">
+    <div class="controls-row">
+      <div class="control-group-pill">
+        <label for="seasonSelect" class="pill-label">Estação:</label>
+        <select id="seasonSelect" class="control-select">
+          <option value="DJF" data-season="DJF">☀️ DJF</option>
+          <option value="MAM" data-season="MAM">🍂 MAM</option>
+          <option value="JJA" data-season="JJA">❄️ JJA</option>
+          <option value="SON" data-season="SON">🌸 SON</option>
+        </select>
+      </div>
+      <div class="control-group-pill" id="ensoGroup">
+        <label for="ensoSelect" class="pill-label">ENOS:</label>
+        <select id="ensoSelect" class="control-select">
+          <option value="el-nino" data-enso="el-nino">🔥 El Niño</option>
+          <option value="neutro" data-enso="neutro" selected>⚖️ Neutro</option>
+          <option value="la-nina" data-enso="la-nina">🧊 La Niña</option>
+        </select>
+      </div>
+      <div class="control-group-pill">
+        <label for="phaseSelect" class="pill-label">MJO (Fase):</label>
+        <select id="phaseSelect" class="control-select">
+          <option value="1" data-phase="1">Fase 1</option>
+          <option value="2" data-phase="2">Fase 2</option>
+          <option value="3" data-phase="3">Fase 3</option>
+          <option value="4" data-phase="4">Fase 4</option>
+          <option value="5" data-phase="5">Fase 5</option>
+          <option value="6" data-phase="6">Fase 6</option>
+          <option value="7" data-phase="7">Fase 7</option>
+          <option value="8" data-phase="8">Fase 8</option>
+        </select>
+      </div>
+      <div class="control-group-pill">
+        <button id="btnVoiceNarrate">Ouvir</button>
+        <button id="btnVoicePause">Pausar</button>
+        <button id="btnVoiceStop">Parar</button>
+        <button id="btnVoiceMute">Mudo</button>
+      </div>
+      <div class="control-group-pill" id="salljStateGroup">
+        <select id="salljSelect">
+          <option value="auto" selected>Auto</option>
+          <option value="forte">Forte</option>
+          <option value="fraco">Fraco</option>
+          <option value="climatologico">Climatológico</option>
+        </select>
+      </div>
+      <div class="control-group-pill">
+        <select id="eventsSelect" class="event-select">
+          <option value="">Escolher...</option>
+          <option value="DJF-la-nina-8">DJF-la-nina-8</option>
+          <option value="DJF-el-nino-1">DJF-el-nino-1</option>
+          <option value="DJF-el-nino-3">DJF-el-nino-3</option>
+          <option value="DJF-neutro-4">DJF-neutro-4</option>
+          <option value="DJF-alvarez-3-4">DJF-alvarez-3-4</option>
+          <option value="DJF-alvarez-8-1">DJF-alvarez-8-1</option>
+          <option value="MAM-alvarez-1">MAM-alvarez-1</option>
+          <option value="JJA-alvarez-8">JJA-alvarez-8</option>
+          <option value="SON-alvarez-7-8">SON-alvarez-7-8</option>
+          <option value="SON-alvarez-1">SON-alvarez-1</option>
+        </select>
+        <button id="btnOpenSandbox"></button>
+        <span id="eventNotice"></span>
+      </div>
+    </div>
+  </section>
 
       <!-- Legenda e Guia Inicialmente Ocultos -->
       <div id="legend" hidden>
@@ -1030,14 +1004,14 @@
 </div>
 </main>
 
-<script src="world-land.js?v=20260928a"></script>
-<script src="map-regions.js?v=20260928a"></script>
-<script src="documented-cases.js?v=20260928a"></script>
-<script src="grimm-matrix-data.js?v=20260928c"></script>
-<script src="rmm-diagram.js?v=20260928a"></script>
-<script src="cpc-mjo-precip-data.js?v=20260928b"></script>
-<script src="documented-view.js?v=20260928c"></script>
-<script src="panels-manager.js?v=20260928a"></script>
-<script src="forecast-sesa.js?v=20260928a"></script>
+<script src="world-land.js?v=20260929a"></script>
+<script src="map-regions.js?v=20260929a"></script>
+<script src="documented-cases.js?v=20260929a"></script>
+<script src="grimm-matrix-data.js?v=20260929a"></script>
+<script src="rmm-diagram.js?v=20260929a"></script>
+<script src="cpc-mjo-precip-data.js?v=20260929a"></script>
+<script src="documented-view.js?v=20260929a"></script>
+<script src="panels-manager.js?v=20260929a"></script>
+<script src="forecast-sesa.js?v=20260929a"></script>
 </body>
 </html>

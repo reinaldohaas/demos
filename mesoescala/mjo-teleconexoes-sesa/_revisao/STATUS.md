@@ -2,26 +2,24 @@
 
 ## Estado
 - Branch: `revisao`, criado do `main`.
-- Data e hora: 2026-09-28T23:05:00-03:00.
-- Versão de cache: `?v=20260928b`.
-- Revisão concluída e validada (inclusão dos compostos oficiais de anomalia de precipitação tropical do CPC/NOAA como opção nos trópicos para as 8 fases, visões global e regional, escala de 11 níveis, ativos base64 embutidos para operação offline e 100% de aprovação nos testes automatizados).
+- Data e hora: 2026-09-29T10:45:00-03:00.
+- Versão de cache: `?v=20260929a`.
+- Revisão concluída e validada (layout despoluído com mapa no topo em destaque absoluto, remoção dos controles manuais redundantes, sandbox direto das 96 permutações de Alice Grimm, aviso operacional ao previsor, e unificação do trem de ondas PSA de Alvarez e Grimm com diferenciação da fonte convectiva: Ciclone Tropical/Pacífico Oeste vs. Eixo da ZCPS/SPCZ).
 - Arquivos modificados:
   - `index.html`:
-    - Adicionada opção `Precipitação tropical · compostos CPC/NOAA (mm/dia)` (`value="cpc_precip"`) no seletor `MJO nos trópicos:`.
-    - Adicionado painel expansível na seção "Legenda & Guia" exibindo o mapa de referência oficial de 8 painéis do CPC/NOAA com texto explicativo e critérios estatísticos de 95%.
-    - Incluído script `cpc-mjo-precip-data.js` e bump de cache-buster para `?v=20260928b`.
-  - `cpc-mjo-precip-data.js` (novo):
-    - Dados embutidos em base64 com georreferenciamento exato para projeção global (faixa 30°N–30°S, 20°E–380°E, 1200x210) e recorte regional América do Sul (15°N–30°S, 85°W–35°W, 400x288) para as 8 fases.
+    - Reestruturação do layout com mapa (#panelMap) no topo absoluto logo abaixo do cabeçalho.
+    - Cartão de diagnóstico "⚠️ AVISO AO PREVISOR · SESA & ZCAS" posicionado diretamente sob o mapa.
+    - Matriz Sandbox das 96 permutações (8 fases × 3 ENOS × 4 abas de estação) compacta e tátil logo abaixo do aviso ao previsor.
+    - Ocultação dos controles legados manuais redundantes (`#legacyControlsContainer` com `display:none`) para manter compatibilidade e acessibilidade sem poluição visual.
+    - Bump de versão de cache para `?v=20260929a`.
   - `documented-view.js`:
-    - `mjoMode` atualizado para suportar `'cpc_precip'`.
-    - Implementadas funções `drawMjoCpcPrecipitation()` e `drawCpcPrecipColorbar(x, y, w, h)`.
-    - Renderização na visão global com contornos 30°N/30°S, opacidade proporcional ao RMM, identificação de fase e barra de escala de 11 níveis.
-    - Renderização na visão regional sobreposta à América do Sul com moldura e barra de escala compacta.
-    - `drawMap` unificado para despachar `drawMjoTropicalVisualizations()` tanto na visão global quanto na regional.
+    - Implementação de `getPsaSourceType(season, enso, phase)` diferenciando a forçante convectiva entre Ciclone Tropical (Pacífico Oeste/Central) e Eixo da ZCPS (SPCZ).
+    - Unificação do trem de ondas PSA de Alvarez e Grimm com indicação clara da fonte física no traçado global e regional.
+    - Matriz do sandbox reformatada para células compactas táteis de clique rápido.
+    - Painel de diagnóstico reestruturado como "⚠️ AVISO AO PREVISOR · SESA & ZCAS" com síntese física de impacto, extremos, teleconexão PSA e fundamentação de Alice Grimm.
   - `verify-model.cjs`:
-    - Adicionado Teste 14 validando os compostos CPC/NOAA em todas as 8 fases, global e regional, presença de colorbar e inatividade para $A < 1$.
-    - Expandido o teste de regressão do sandbox para 1920 configurações (4 estações $\times$ 3 ENOS $\times$ 8 fases $\times$ 5 modos MJO $\times$ 2 amplitudes $\times$ 2 visões).
-    - Validação de 0 ocorrências de `metric` estendida para incluir `cpc-mjo-precip-data.js`.
+    - Suíte de 15 testes automatizados aprovada com 100% de sucesso.
+    - 0 ocorrências de `metric` mantidas em todos os arquivos de produção.
 
 ## Feito (nesta revisão)
 1. **Compostos Oficiais de Precipitação Tropical CPC/NOAA (8 Fases):**
