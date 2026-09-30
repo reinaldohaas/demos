@@ -1,25 +1,29 @@
 const $ = id => document.getElementById(id);
 
 let currentSeason = 'DJF';
-let currentEnso = 'neutro';
-let currentPhase = 4;
+let currentEnso = 'el-nino';
+let currentPhase = 3;
 let currentAmplitude = 1.5;
 function displayEvidence() { return currentAmplitude >= 1 ? findDocumentedCase(currentSeason, currentEnso, currentPhase) : null; }
 function displayAllEvidences() {
   if (currentAmplitude < 1) return { specific: null, alvarez: null, primary: null };
   return findDocumentedCases(currentSeason, currentEnso, currentPhase);
 }
-let isEventMode = false;
-let activeEventId = null;
+let isEventMode = true;
+let activeEventId = 'DJF-el-nino-3';
 let mapView = 'global';
-let mjoMode = 'none'; // 'none' | 'chi' | 'dipoles' | 'track'
+let mjoMode = 'none'; // 'none' | 'chi' | 'cpc_precip' | 'dipoles' | 'track'
 const visibleLayers = {
   get mjo() { return mjoMode !== 'none'; },
   set mjo(v) { if (!v) mjoMode = 'none'; else if (mjoMode === 'none') mjoMode = 'chi'; },
   sst: true,
   jets: true,
   psa: true,
-  sallj: true
+  sallj: true,
+  sesa: true,
+  zcas: true,
+  get boxes() { return this.sesa && this.zcas; },
+  set boxes(v) { this.sesa = !!v; this.zcas = !!v; }
 };
 let salljState = 'auto'; // 'auto' | 'forte' | 'fraco' | 'climatologico'
 
@@ -644,11 +648,125 @@ function drawMjoVelocityPotential() {
   }
 }
 
+function drawCpcPrecipColorbar(x, y, w, h) {
+  // Fundo translúcido
+  svg('rect', { x, y, width: w, height: h, rx: 6, fill: 'rgba(15, 23, 42, 0.92)', stroke: 'rgba(56, 189, 248, 0.35)', 'stroke-width': 1 });
+
+  // Título e crédito oficial NOAA/CPC (Wheeler & Hendon 2004)
+  svg('text', { x: x + w / 2, y: y + 10, fill: '#bae6fd', 'font-size': 9, 'font-weight': '700', 'text-anchor': 'middle' },
+    `Anomalia de Precipitação Tropical (mm/dia) · Compostos Oficiais CPC/NOAA (Fase ${currentPhase})`);
+
+  // Caixas de cores da escala NOAA/CPC
+  const barW = w - 40;
+  const barH = 7;
+  const barX = x + 20;
+  const barY = y + 14;
+  const cpcLevels = [
+    { color: '#785046', label: '< -3' },
+    { color: '#a0786e', label: '-2' },
+    { color: '#c8a096', label: '-1' },
+    { color: '#f0dcd2', label: '-0.5' },
+    { color: '#1e293b', label: '0' },
+    { color: '#b4faaa', label: '+0.5' },
+    { color: '#50f050', label: '+1' },
+    { color: '#1eb41e', label: '+2' },
+    { color: '#b4f0fa', label: '+3' },
+    { color: '#50a5f5', label: '+4' },
+    { color: '#2882f0', label: '> +5' }
+  ];
+  const segW = barW / cpcLevels.length;
+
+  cpcLevels.forEach((lvl, idx) => {
+    svg('rect', { x: barX + idx * segW, y: barY, width: segW, height: barH, fill: lvl.color, stroke: 'rgba(0,0,0,0.3)', 'stroke-width': 0.5 });
+    svg('text', { x: barX + idx * segW + segW / 2, y: barY + barH + 9, fill: '#cbd5e1', 'font-size': 7.5, 'font-weight': '600', 'text-anchor': 'middle' }, lvl.label);
+  });
+}
+
+function drawMjoCpcPrecipitation() {
+  if (currentAmplitude < 1) return;
+  const phase = currentPhase || 1;
+  const isGlobal = mapView === 'global';
+
+  // Obter imagem base64 pré-carregada ou caminho do arquivo
+  let dataUri = null;
+  if (typeof CPC_MJO_PRECIP_DATA !== 'undefined') {
+    const subset = isGlobal ? CPC_MJO_PRECIP_DATA.global : CPC_MJO_PRECIP_DATA.regional;
+    if (subset) dataUri = subset[phase];
+  }
+  const imgHref = dataUri || (isGlobal
+    ? `data/cpc-precip/cpc_mjo_precip_p${phase}.png`
+    : `data/cpc-precip/cpc_mjo_precip_reg_p${phase}.png`);
+
+  const ampScale = Math.min(2.4, Math.max(0.65, currentAmplitude / 1.5));
+  const opacity = Math.min(1.0, 0.70 + 0.20 * ampScale);
+
+  if (isGlobal) {
+    // Limites do domínio tropical entre 30°S e 30°N (y: 192.5 a 402.5, H = 210)
+    const y30N = (85 - 30) * 560 / 160;
+    const y30S = (85 - (-30)) * 560 / 160;
+
+    // Imagem georreferenciada da faixa tropical (0 a 1200 px, altura 210 px)
+    svg('image', {
+      x: 0,
+      y: y30N,
+      width: 1200,
+      height: y30S - y30N,
+      preserveAspectRatio: 'none',
+      href: imgHref,
+      'xlink:href': imgHref,
+      opacity: opacity.toFixed(2)
+    });
+
+    // Contornos norte e sul da faixa tropical 30°N e 30°S
+    svg('line', { x1: 0, y1: y30N, x2: 1200, y2: y30N, stroke: '#38bdf8', 'stroke-width': 1.0, 'stroke-dasharray': '5 4', opacity: 0.6 });
+    svg('line', { x1: 0, y1: y30S, x2: 1200, y2: y30S, stroke: '#38bdf8', 'stroke-width': 1.0, 'stroke-dasharray': '5 4', opacity: 0.6 });
+
+    // Rótulo de fonte e referência
+    svg('text', {
+      x: 1190, y: y30N + 14,
+      fill: '#bae6fd', 'font-size': 10, 'font-weight': '700', 'text-anchor': 'end', 'letter-spacing': 0.5,
+      stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+    }, `Anomalia de Precipitação CPC/NOAA (Fase ${phase}, Wheeler & Hendon 2004)`);
+
+    // Barra de legenda dos compostos CPC
+    drawCpcPrecipColorbar(300, 516, 600, 36);
+  } else {
+    // Visão Regional América do Sul: domínio 85°W–35°W, 15°N–30°S (x: 60 a 460, y: 35 a 323)
+    svg('image', {
+      x: 60,
+      y: 35,
+      width: 400,
+      height: 288,
+      preserveAspectRatio: 'none',
+      href: imgHref,
+      'xlink:href': imgHref,
+      opacity: opacity.toFixed(2)
+    });
+
+    // Moldura tracejada suave
+    svg('rect', {
+      x: 60, y: 35, width: 400, height: 288,
+      fill: 'none', stroke: '#38bdf8', 'stroke-width': 1.0, 'stroke-dasharray': '4 4', opacity: 0.5
+    });
+
+    svg('text', {
+      x: 450, y: 52,
+      fill: '#bae6fd', 'font-size': 9.5, 'font-weight': '700', 'text-anchor': 'end',
+      stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+    }, `Precipitação CPC/NOAA · Fase ${phase}`);
+
+    // Barra de legenda compacta na visão regional
+    drawCpcPrecipColorbar(60, 476, 520, 36);
+  }
+}
+
 function drawMjoTropicalVisualizations() {
   if (mjoMode === 'dipoles') {
     if (mapView === 'global') drawMjoConvection();
   } else if (mjoMode === 'chi') {
     drawMjoVelocityPotential();
+  } else if (mjoMode === 'cpc_precip') {
+    drawMjoCpcPrecipitation();
   } else if (mjoMode === 'track') {
     if (mapView === 'global') drawMjoTrack();
   }
@@ -697,11 +815,74 @@ function drawGlobalContext(evidence) {
   }
 }
 
+function getPsaSourceType(season = currentSeason, enso = currentEnso, phase = currentPhase) {
+  const p = Number(phase);
+  // Fases 2 a 5 da MJO e El Niño: convecção tropical / ciclone tropical no Pacífico Oeste/Central
+  if (enso === 'el-nino' && (p >= 2 && p <= 5)) return 'ciclone_tropical';
+  if (p >= 2 && p <= 5) return 'ciclone_tropical';
+  // Fases 6, 7, 8, 1 ou La Niña: convecção e divergência ancoradas na ZCPS (Zona de Convergência do Pacífico Sul)
+  return 'zcps';
+}
+
 function drawPsa() {
   if (!visibleLayers.psa) return;
   const psaStroke = '#c084fc';
+  const sourceType = getPsaSourceType(currentSeason, currentEnso, currentPhase);
 
   if (mapView === 'global') {
+    // 1. Destaque da Fonte Convectiva: Ciclone Tropical vs. ZCPS (Alvarez & Grimm)
+    if (sourceType === 'ciclone_tropical') {
+      const [srcX, srcY] = project(155, -12);
+      svg('circle', {
+        cx: srcX, cy: srcY, r: 16,
+        fill: 'rgba(56, 189, 248, 0.18)',
+        stroke: '#38bdf8', 'stroke-width': 1.6, 'stroke-dasharray': '3 3'
+      });
+      svg('circle', {
+        cx: srcX, cy: srcY, r: 24,
+        fill: 'none',
+        stroke: 'rgba(56, 189, 248, 0.45)', 'stroke-width': 1.2, 'stroke-dasharray': '4 4'
+      });
+      svg('text', {
+        x: srcX, y: srcY + 5,
+        fill: '#38bdf8', 'font-size': 14, 'font-weight': '800', 'text-anchor': 'middle'
+      }, '🌀');
+
+      // Traçado conectando a fonte tropical ao guia do PSA
+      const [destX, destY] = project(175, -45);
+      svg('path', {
+        d: `M ${srcX} ${srcY + 16} Q ${srcX + 20} ${srcY + 65} ${destX} ${destY}`,
+        fill: 'none', stroke: '#38bdf8', 'stroke-width': 2, 'stroke-dasharray': '5 4'
+      });
+      svg('text', {
+        x: srcX + 22, y: srcY - 10,
+        fill: '#7dd3fc', 'font-size': 11, 'font-weight': '700',
+        stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+      }, 'Fonte: Ciclone Tropical / Pacífico Oeste (Alvarez & Grimm)');
+    } else {
+      // Eixo da ZCPS (Zona de Convergência do Pacífico Sul / SPCZ)
+      const p1 = project(165, -10);
+      const p2 = project(185, -20);
+      const p3 = project(215, -30);
+      svg('path', {
+        d: `M ${p1[0]} ${p1[1]} Q ${p2[0]} ${p2[1]} ${p3[0]} ${p3[1]}`,
+        fill: 'none', stroke: '#f59e0b', 'stroke-width': 4.5, opacity: 0.8, 'stroke-dasharray': '8 4'
+      });
+      svg('text', {
+        x: p2[0] - 10, y: p2[1] - 12,
+        fill: '#fde047', 'font-size': 11, 'font-weight': '700',
+        stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
+      }, 'Fonte: Eixo da ZCPS (SPCZ) · Alvarez & Grimm');
+
+      // Traçado conectando o eixo da ZCPS ao trem PSA
+      const [psaTargetX, psaTargetY] = project(-145, -50);
+      svg('path', {
+        d: `M ${p3[0]} ${p3[1]} Q ${p3[0] + 15} ${p3[1] + 45} ${psaTargetX} ${psaTargetY}`,
+        fill: 'none', stroke: '#f59e0b', 'stroke-width': 2, 'stroke-dasharray': '5 4'
+      });
+    }
+
+    // 2. Centros do Trem de Ondas PSA (mesmos de Alvarez e Grimm)
     const centers = [
       { lon: 135, lat: -40, sign: '−', r: 10 },
       { lon: 175, lat: -45, sign: '+', r: 16 },
@@ -740,11 +921,12 @@ function drawPsa() {
     }
 
     const labelPos = project(-115, -60);
+    const sourceLabel = sourceType === 'ciclone_tropical' ? 'Ciclone Tropical' : 'ZCPS';
     svg('text', {
       x: labelPos[0], y: labelPos[1],
       fill: '#f3e8ff', 'font-size': 11.5, 'font-weight': '700', 'text-anchor': 'middle',
       stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
-    }, 'Padrão PSA · EOF1 de v em 200 hPa, NDJFMA (Cavalcanti 2018, INPE)');
+    }, `Padrão PSA · Trem de Ondas · Fonte: ${sourceLabel} (Alvarez & Grimm)`);
   } else {
     // Visão Regional: trem de onda entrando pelo Pacífico SE, cruzando o extremo sul e saindo no Atlântico
     const pts = [
@@ -769,11 +951,12 @@ function drawPsa() {
     svg('text', { x: cx2, y: cy2 + 4.5, fill: '#f3e8ff', 'font-size': 13, 'font-weight': '800', 'text-anchor': 'middle' }, '+');
 
     const [lblX, lblY] = project(-68, -48);
+    const sourceLabel = sourceType === 'ciclone_tropical' ? 'Ciclone Tropical' : 'ZCPS';
     svg('text', {
       x: lblX, y: lblY,
       fill: '#f3e8ff', 'font-size': 11, 'font-weight': '700', 'text-anchor': 'middle',
       stroke: '#081726', 'stroke-width': 2.5, 'paint-order': 'stroke fill'
-    }, 'Padrão PSA · EOF1 v200 (Cavalcanti 2018, INPE)');
+    }, `Padrão PSA · Trem de Ondas · Fonte: ${sourceLabel} (Alvarez & Grimm)`);
   }
 }
 
@@ -945,9 +1128,7 @@ function drawMap(evidence) {
     drawGlobalContext(evidence);
   } else {
     drawLand();
-    if (mjoMode === 'chi') {
-      drawMjoVelocityPotential();
-    }
+    drawMjoTropicalVisualizations();
   }
 
   // Jatos (Subtropical e SALLJ) e Teleconexão PSA
@@ -955,19 +1136,23 @@ function drawMap(evidence) {
   drawSallj();
   drawPsa();
 
-  // Delimitação do SESA: SEMPRE DELIMITADA E IDENTIFICADA
+  // Delimitação do SESA: identificada quando camada ativa
   const cases = displayAllEvidences();
   const primaryEvidence = cases.primary;
-  const isSesaHighlighted = currentAmplitude >= 1 && primaryEvidence && primaryEvidence.region === 'SESA';
-  polygon(REGIONS.SESA_POLY, isSesaHighlighted ? 'rgba(56, 189, 248, 0.12)' : 'rgba(56, 189, 248, 0.03)', isSesaHighlighted ? '#38bdf8' : '#486780', isSesaHighlighted ? 2.2 : 1.5);
-  const [sesaLabelX, sesaLabelY] = project(-50, -25.5);
-  svg('text', { x: sesaLabelX, y: sesaLabelY, fill: isSesaHighlighted ? '#7dd3fc' : '#8ab8d4', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'SESA');
+  if (visibleLayers.sesa) {
+    const isSesaHighlighted = currentAmplitude >= 1 && primaryEvidence && primaryEvidence.region === 'SESA';
+    polygon(REGIONS.SESA_POLY, isSesaHighlighted ? 'rgba(56, 189, 248, 0.12)' : 'rgba(56, 189, 248, 0.03)', isSesaHighlighted ? '#38bdf8' : '#486780', isSesaHighlighted ? 2.2 : 1.5);
+    const [sesaLabelX, sesaLabelY] = project(-50, -25.5);
+    svg('text', { x: sesaLabelX, y: sesaLabelY, fill: isSesaHighlighted ? '#7dd3fc' : '#8ab8d4', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'SESA');
+  }
 
-  // Delimitação da ZCAS: SEMPRE DELIMITADA E IDENTIFICADA
-  const isZcasHighlighted = currentAmplitude >= 1 && primaryEvidence && primaryEvidence.region === 'ZCAS';
-  polygon(REGIONS.ZCAS_POLY, isZcasHighlighted ? 'rgba(45, 212, 191, 0.12)' : 'rgba(45, 212, 191, 0.02)', isZcasHighlighted ? '#2dd4bf' : '#3e5c76', isZcasHighlighted ? 2.2 : 1.4, '4 3');
-  const [zx, zy] = project(-35, -20.5);
-  svg('text', { x: zx, y: zy, fill: isZcasHighlighted ? '#5eead4' : '#6b8ca8', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'ZCAS');
+  // Delimitação da ZCAS: identificada quando camada ativa
+  if (visibleLayers.zcas) {
+    const isZcasHighlighted = currentAmplitude >= 1 && primaryEvidence && primaryEvidence.region === 'ZCAS';
+    polygon(REGIONS.ZCAS_POLY, isZcasHighlighted ? 'rgba(45, 212, 191, 0.12)' : 'rgba(45, 212, 191, 0.02)', isZcasHighlighted ? '#2dd4bf' : '#3e5c76', isZcasHighlighted ? 2.2 : 1.4, '4 3');
+    const [zx, zy] = project(-35, -20.5);
+    svg('text', { x: zx, y: zy, fill: isZcasHighlighted ? '#5eead4' : '#6b8ca8', 'font-size': 16, 'font-weight': '700', 'text-anchor': 'middle' }, 'ZCAS');
+  }
 
   // Destaque condicional do caso documentado (somente quando A >= 1)
   if (currentAmplitude >= 1 && primaryEvidence) {
@@ -1371,7 +1556,7 @@ function speakCurrentNarration() {
 }
 
 function setMjoMode(mode) {
-  mjoMode = mode; // 'dipoles' | 'chi' | 'track' | 'none'
+  mjoMode = mode; // 'dipoles' | 'chi' | 'cpc_precip' | 'track' | 'none'
   update();
 }
 
@@ -1438,6 +1623,7 @@ function setClimateState(opts, fromUser = false) {
   if (opts.view !== undefined) mapView = opts.view;
   if (opts.mjoMode !== undefined) mjoMode = opts.mjoMode;
   if (opts.salljState !== undefined) salljState = opts.salljState;
+  if (opts.visibleLayers) Object.assign(visibleLayers, opts.visibleLayers);
   update();
 }
 
@@ -1494,7 +1680,19 @@ function update() {
   $('regionalView').setAttribute('aria-pressed', String(mapView === 'regional'));
   if ($('mjoSelect')) $('mjoSelect').value = mjoMode;
   if ($('salljSelect')) $('salljSelect').value = salljState;
-  for (const [id, layer] of [['sstLayer','sst'],['jetsLayer','jets'],['psaLayer','psa'],['psaToggle','psa'],['salljToggle','sallj']]) if ($(id)) $(id).checked = visibleLayers[layer];
+  for (const [id, layer] of [
+    ['sstLayer','sst'],
+    ['jetsLayer','jets'],
+    ['jetsToggle','jets'],
+    ['salljLayer','sallj'],
+    ['salljToggle','sallj'],
+    ['psaLayer','psa'],
+    ['psaToggle','psa'],
+    ['boxesLayer','boxes'],
+    ['boxesToggle','boxes'],
+    ['sesaToggle','sesa'],
+    ['zcasToggle','zcas']
+  ]) if ($(id)) $(id).checked = visibleLayers[layer];
   if ($('layerCount')) $('layerCount').textContent = `(${['sst','jets','psa'].filter(key => visibleLayers[key]).length}/3)`;
 
   const ensoLabel = currentEnso === 'el-nino' ? 'El Niño' : currentEnso === 'la-nina' ? 'La Niña' : 'ENOS Neutro';
@@ -1516,130 +1714,103 @@ function update() {
 
   // Resumo do Caso
   if ($('caseSummary')) {
+    const cell = (typeof getGrimmPermutation === 'function')
+      ? getGrimmPermutation(currentSeason, currentEnso, currentPhase)
+      : null;
+
     if (currentAmplitude < 1) {
       $('caseSummary').textContent = 'MJO fraca (amplitude < 1) — sem padrão associado.';
       $('caseSummary').style.color = 'var(--muted)';
-    } else if (specific && alvarez) {
-      $('caseSummary').textContent = `${specific.text} | Média de todos os anos (Alvarez et al.): ${alvarez.text}`;
+    } else if (cell && cell.mjoXenso && cell.mjoXenso.text && cell.sinalMjo && cell.sinalMjo.text) {
+      $('caseSummary').textContent = `${cell.mjoXenso.text} (${cell.mjoXenso.ref}) | Média de todos os anos (Alvarez et al.): ${cell.sinalMjo.text}`;
       $('caseSummary').style.color = 'var(--accent-teal)';
-    } else if (specific) {
-      $('caseSummary').textContent = `${specific.text} (${specific.source})`;
+    } else if (cell && cell.mjoXenso && cell.mjoXenso.text) {
+      $('caseSummary').textContent = `${cell.mjoXenso.text} (${cell.mjoXenso.ref})`;
       $('caseSummary').style.color = 'var(--accent-teal)';
-    } else if (alvarez) {
-      $('caseSummary').textContent = `Média de todos os anos (Alvarez et al. 2016): ${alvarez.text} (${alvarez.source})`;
+    } else if (cell && cell.sinalMjo && cell.sinalMjo.text) {
+      $('caseSummary').textContent = `Média de todos os anos (Alvarez et al. 2016): ${cell.sinalMjo.text} (${cell.sinalMjo.ref})`;
+      $('caseSummary').style.color = 'var(--accent-teal)';
+    } else if (cell && cell.fundoEnso && cell.fundoEnso.text) {
+      $('caseSummary').textContent = `Fundo ENOS: "${cell.fundoEnso.text}" (${cell.fundoEnso.ref})`;
       $('caseSummary').style.color = 'var(--accent-teal)';
     } else {
-      $('caseSummary').textContent = 'Sem resultado documentado para esta combinação.';
+      $('caseSummary').textContent = 'Sem resultado publicado para esta combinação.';
       $('caseSummary').style.color = 'var(--muted)';
     }
   }
 
-  // Painel de Resultados
+  // Painel de Resultados (3 Camadas Científicas com Referência Visível)
   $('result').replaceChildren();
+  const cell = (typeof getGrimmPermutation === 'function')
+    ? getGrimmPermutation(currentSeason, currentEnso, currentPhase)
+    : null;
+
   if (currentAmplitude < 1) {
     const val = document.createElement('p');
     val.className = 'muted';
     val.textContent = 'MJO fraca (A < 1): destaques de fase ativa ocultos; jatos, TSM, ZCAS, SESA e PSA preservados.';
     $('result').appendChild(val);
-  } else if (specific && alvarez) {
-    // 1. Específico do ENOS (Fernandes & Grimm)
-    const sBlock = document.createElement('div');
-    const sTitle = document.createElement('p');
-    sTitle.className = 'value';
-    sTitle.style.color = 'var(--accent-teal)';
-    sTitle.textContent = `${specific.source.split(',')[0]} (Específico · ${ensoLabel})`;
-    sBlock.appendChild(sTitle);
-    const sDesc = document.createElement('p');
-    sDesc.textContent = specific.text;
-    sBlock.appendChild(sDesc);
-    if (specific.authorSectorDef) {
-      const sDef = document.createElement('p');
-      sDef.className = 'muted';
-      sDef.style.marginTop = '4px';
-      sDef.innerHTML = `<strong>Definição do autor:</strong> ${specific.authorSectorDef}`;
-      sBlock.appendChild(sDef);
-    }
-    $('result').appendChild(sBlock);
-
-    // 2. Média de todos os anos (Alvarez et al.)
-    const aBlock = document.createElement('div');
-    aBlock.style.marginTop = '12px';
-    aBlock.style.paddingTop = '10px';
-    aBlock.style.borderTop = '1px solid rgba(255,255,255,0.12)';
-    const aTitle = document.createElement('p');
-    aTitle.className = 'value';
-    aTitle.style.color = 'var(--accent-teal)';
-    aTitle.textContent = 'Média de todos os anos (Alvarez et al. 2016)';
-    aBlock.appendChild(aTitle);
-    if (isEventMode && activeEventId && activeEventId.includes('alvarez')) {
-      const aSub = document.createElement('p');
-      aSub.className = 'muted';
-      aSub.style.marginBottom = '6px';
-      aSub.textContent = 'composição de todos os anos (sem separação por ENOS)';
-      aBlock.appendChild(aSub);
-    }
-    const aDesc = document.createElement('p');
-    aDesc.textContent = alvarez.text;
-    aBlock.appendChild(aDesc);
-    if (alvarez.authorSectorDef) {
-      const aDef = document.createElement('p');
-      aDef.className = 'muted';
-      aDef.style.marginTop = '4px';
-      aDef.innerHTML = `<strong>Definição do autor:</strong> ${alvarez.authorSectorDef}`;
-      aBlock.appendChild(aDef);
-    }
-    $('result').appendChild(aBlock);
-  } else if (specific) {
-    const sBlock = document.createElement('div');
-    const sTitle = document.createElement('p');
-    sTitle.className = 'value';
-    sTitle.style.color = 'var(--accent-teal)';
-    sTitle.textContent = `${specific.source.split(',')[0]} (Específico · ${ensoLabel})`;
-    sBlock.appendChild(sTitle);
-    const sDesc = document.createElement('p');
-    sDesc.textContent = specific.text;
-    sBlock.appendChild(sDesc);
-    if (specific.authorSectorDef) {
-      const sDef = document.createElement('p');
-      sDef.className = 'muted';
-      sDef.style.marginTop = '4px';
-      sDef.innerHTML = `<strong>Definição do autor:</strong> ${specific.authorSectorDef}`;
-      sBlock.appendChild(sDef);
-    }
-    $('result').appendChild(sBlock);
-  } else if (alvarez) {
-    const aBlock = document.createElement('div');
-    const aTitle = document.createElement('p');
-    aTitle.className = 'value';
-    aTitle.style.color = 'var(--accent-teal)';
-    aTitle.textContent = 'Média de todos os anos (Alvarez et al. 2016)';
-    aBlock.appendChild(aTitle);
-    if (isEventMode && activeEventId && activeEventId.includes('alvarez')) {
-      const aSub = document.createElement('p');
-      aSub.className = 'muted';
-      aSub.style.marginBottom = '6px';
-      aSub.textContent = 'composição de todos os anos (sem separação por ENOS)';
-      aBlock.appendChild(aSub);
-    }
-    const aDesc = document.createElement('p');
-    aDesc.textContent = alvarez.text;
-    aBlock.appendChild(aDesc);
-    if (alvarez.authorSectorDef) {
-      const aDef = document.createElement('p');
-      aDef.className = 'muted';
-      aDef.style.marginTop = '4px';
-      aDef.innerHTML = `<strong>Definição do autor:</strong> ${alvarez.authorSectorDef}`;
-      aBlock.appendChild(aDef);
-    }
-    $('result').appendChild(aBlock);
-  } else {
+  } else if (!cell || !cell.hasAnyLayer) {
     const val = document.createElement('p');
     val.className = 'muted';
-    val.textContent = 'Sem resultado documentado para esta combinação.';
+    val.textContent = 'Sem resultado publicado para esta combinação.';
     $('result').appendChild(val);
-    const desc = document.createElement('p');
-    desc.textContent = `Não há caso específico catalogado para ${currentSeason} · ${ensoLabel} · Fase ${currentPhase} nesta síntese documental. As feições da base continuam disponíveis para análise no sandbox.`;
-    $('result').appendChild(desc);
+    if (cell && cell.mjoXenso && cell.mjoXenso.note) {
+      const noteP = document.createElement('p');
+      noteP.style.fontSize = '12px';
+      noteP.style.color = '#94a3b8';
+      noteP.style.fontStyle = 'italic';
+      noteP.textContent = `MJO × ENOS: ${cell.mjoXenso.note}`;
+      $('result').appendChild(noteP);
+    }
+  } else {
+    // Camada 1: Fundo ENOS (independe da fase)
+    const b1 = document.createElement('div');
+    b1.style.marginBottom = '12px';
+    b1.innerHTML = `
+      <div style="font-weight:700; color:#38bdf8; font-size:13px; margin-bottom:2px;">1. Fundo ENOS (independe da fase)</div>
+      ${cell.fundoEnso && cell.fundoEnso.text ? `
+        <div style="color:#f1f5f9; font-size:13px; line-height:1.45;">"${cell.fundoEnso.text}"</div>
+        <div style="font-size:11.5px; color:#94a3b8; margin-top:2px;">📖 <em>${cell.fundoEnso.ref}</em></div>
+      ` : `
+        <div style="color:#64748b; font-size:12px; font-style:italic;">Sem sinal definido nesta estação (aguarda o Reinaldo)</div>
+      `}
+    `;
+    $('result').appendChild(b1);
+
+    // Camada 2: Sinal MJO — Alvarez et al. (2016), TODOS OS ANOS
+    const b2 = document.createElement('div');
+    b2.style.marginBottom = '12px';
+    b2.style.paddingTop = '10px';
+    b2.style.borderTop = '1px solid rgba(255,255,255,0.08)';
+    b2.innerHTML = `
+      <div style="font-weight:700; color:#c084fc; font-size:13px; margin-bottom:2px;">2. Sinal MJO (${cell.sinalMjo.label})</div>
+      ${cell.sinalMjo && cell.sinalMjo.text ? `
+        <div style="color:#f1f5f9; font-size:13px; line-height:1.45;">${cell.sinalMjo.text}</div>
+        <div style="font-size:11.5px; color:#94a3b8; margin-top:2px;">📖 <em>${cell.sinalMjo.ref}</em></div>
+      ` : `
+        <div style="color:#64748b; font-size:12px; font-style:italic;">Sem resultado publicado para esta fase</div>
+      `}
+    `;
+    $('result').appendChild(b2);
+
+    // Camada 3: MJO × ENOS — Fernandes & Grimm (2023), SOMENTE DJF
+    const b3 = document.createElement('div');
+    b3.style.marginBottom = '12px';
+    b3.style.paddingTop = '10px';
+    b3.style.borderTop = '1px solid rgba(255,255,255,0.08)';
+    b3.innerHTML = `
+      <div style="font-weight:700; color:#34d399; font-size:13px; margin-bottom:2px;">3. MJO × ENOS (Fernandes & Grimm 2023)</div>
+      ${cell.mjoXenso && cell.mjoXenso.text ? `
+        <div style="color:#f1f5f9; font-size:13px; line-height:1.45;">${cell.mjoXenso.text}</div>
+        <div style="font-size:11.5px; color:#94a3b8; margin-top:2px;">📖 <em>${cell.mjoXenso.ref}</em></div>
+      ` : cell.mjoXenso && cell.mjoXenso.note ? `
+        <div style="color:#94a3b8; font-size:12px; font-style:italic;">${cell.mjoXenso.note}</div>
+      ` : `
+        <div style="color:#64748b; font-size:12px; font-style:italic;">Sem resultado publicado para MJO × ENOS nesta fase</div>
+      `}
+    `;
+    $('result').appendChild(b3);
   }
 
   // Nota de La Niña em DJF (fases 2–8)
@@ -1719,6 +1890,11 @@ function update() {
 
   // Disparar atualização da narração (fala se ativa e atualiza texto acessível)
   speakCurrentNarration();
+
+  // Atualizar Setor Sandbox das 96 Permutações (Alice Grimm)
+  if (typeof updateGrimmSandboxUI === 'function') {
+    updateGrimmSandboxUI();
+  }
 }
 
 // Event Listeners: Estações (DJF, MAM, JJA, SON)
@@ -1784,10 +1960,31 @@ for (const [id, view] of [['globalView', 'global'], ['regionalView', 'regional']
 }
 
 // Alternância de Outras Camadas
-for (const [id, layer] of [['sstLayer', 'sst'], ['jetsLayer', 'jets'], ['psaLayer', 'psa'], ['psaToggle', 'psa'], ['salljToggle', 'sallj']]) {
+for (const [id, layer] of [
+  ['sstLayer', 'sst'],
+  ['jetsLayer', 'jets'],
+  ['jetsToggle', 'jets'],
+  ['salljLayer', 'sallj'],
+  ['salljToggle', 'sallj'],
+  ['psaLayer', 'psa'],
+  ['psaToggle', 'psa'],
+  ['boxesLayer', 'boxes'],
+  ['boxesToggle', 'boxes'],
+  ['sesaToggle', 'sesa'],
+  ['zcasToggle', 'zcas']
+]) {
   if ($(id)) {
     $(id).addEventListener('change', () => {
       visibleLayers[layer] = $(id).checked;
+      if (layer === 'boxes') {
+        if ($('sesaToggle')) $('sesaToggle').checked = visibleLayers.boxes;
+        if ($('zcasToggle')) $('zcasToggle').checked = visibleLayers.boxes;
+        if ($('boxesLayer')) $('boxesLayer').checked = visibleLayers.boxes;
+        if ($('boxesToggle')) $('boxesToggle').checked = visibleLayers.boxes;
+      } else if (layer === 'sesa' || layer === 'zcas') {
+        if ($('boxesToggle')) $('boxesToggle').checked = visibleLayers.boxes;
+        if ($('boxesLayer')) $('boxesLayer').checked = visibleLayers.boxes;
+      }
       update();
     });
   }
@@ -1854,9 +2051,534 @@ if ($('btnVoiceMute')) {
   });
 }
 
-if (typeof window !== 'undefined') {
-  window.setClimateState = setClimateState;
+// ============================================================================
+// SETOR SANDBOX: As 96 Permutações (ENOS × MJO × Estações · Alice Grimm)
+// ============================================================================
+let sandboxSelectedSeason = 'DJF';
+let sandboxEnsoMode = 'all'; // 'all', 'el-nino', 'la-nina', 'neutro'
+let isSandboxCollapsed = false;
+
+function initGrimmSandbox() {
+  const container = $('sandboxSector');
+  if (!container) return;
+
+  // Sincronizar estação inicial com o estado do modelo
+  sandboxSelectedSeason = currentSeason || 'DJF';
+
+  // Abas de Estações no Sandbox
+  const tabs = document.querySelectorAll('.sandbox-season-btn');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const s = tab.dataset.sbSeason;
+      if (!s) return;
+      sandboxSelectedSeason = s;
+      tabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbSeason === s));
+      renderGrimmSandboxMatrix();
+    });
+  });
+
+  // Guias de Regime ENOS no Sandbox
+  const ensoTabs = document.querySelectorAll('.sandbox-enso-btn');
+  ensoTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const mode = tab.dataset.sbEnsoMode;
+      if (!mode) return;
+      sandboxEnsoMode = mode;
+      ensoTabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbEnsoMode === mode));
+      renderGrimmSandboxMatrix();
+    });
+  });
+
+  // Botão no Header Superior
+  const sandboxModeBtn = $('sandboxModeBtn');
+  if (sandboxModeBtn) {
+    sandboxModeBtn.addEventListener('click', () => {
+      if (isSandboxCollapsed) {
+        toggleSandboxCollapse(false);
+      }
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      sandboxModeBtn.setAttribute('aria-pressed', 'true');
+    });
+  }
+
+  // Botão no seletor de Eventos de Interesse
+  const btnOpenSandbox = $('btnOpenSandbox');
+  if (btnOpenSandbox) {
+    btnOpenSandbox.addEventListener('click', () => {
+      if (isSandboxCollapsed) {
+        toggleSandboxCollapse(false);
+      }
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  // Botão Recolher/Expandir
+  const btnToggle = $('btnToggleSandboxView');
+  if (btnToggle) {
+    btnToggle.addEventListener('click', () => {
+      toggleSandboxCollapse(!isSandboxCollapsed);
+    });
+  }
+
+  renderGrimmSandboxMatrix();
 }
 
-// Inicializar interface
-update();
+function toggleSandboxCollapse(collapse) {
+  isSandboxCollapsed = collapse;
+  const matrix = $('sandboxMatrixContainer');
+  const tabs = $('sandboxSeasonTabs');
+  const ensoTabs = $('sandboxEnsoTabs');
+  const btn = $('btnToggleSandboxView');
+  if (matrix) matrix.style.display = collapse ? 'none' : '';
+  if (tabs) tabs.style.display = collapse ? 'none' : 'flex';
+  if (ensoTabs) ensoTabs.style.display = collapse ? 'none' : 'flex';
+  if (btn) btn.textContent = collapse ? 'Expandir matriz' : 'Ocultar';
+}
+
+function selectGrimmSandboxCell(season, enso, phase) {
+  const pNum = Number(phase);
+  // Se coincidir com um dos 10 casos curados da literatura com ENOS definido, ativa o caso curado
+  if (typeof DOCUMENTED_CASES !== 'undefined' && Array.isArray(DOCUMENTED_CASES)) {
+    const curatedMatch = DOCUMENTED_CASES.find(c => {
+      if (c.season !== season) return false;
+      const phaseMatches = (Number(c.phase) === pNum) || (c.groupedPhases && c.groupedPhases.includes(pNum));
+      if (!phaseMatches) return false;
+      if (c.enso === 'todos') return false;
+      return c.enso === enso;
+    });
+
+    if (curatedMatch) {
+      selectEvent(curatedMatch.id);
+      return;
+    }
+  }
+
+  // Se não for evento curado específico, aplica o estado no sandbox livre
+  setClimateState({
+    season: season,
+    enso: enso,
+    phase: pNum,
+    amplitude: Math.max(currentAmplitude, 1.2)
+  }, true);
+}
+
+function renderGrimmSandboxMatrix() {
+  const container = $('sandboxMatrixContainer');
+  if (!container || typeof getGrimmSeasonMatrix !== 'function') return;
+
+  const countBadge = $('sandboxSummaryCount');
+
+  // Estilos visuais por tipo de resposta no SESA
+  const signalStyles = {
+    muito_acima: {
+      bg: 'rgba(5, 150, 105, 0.18)',
+      border: '#059669',
+      color: '#34d399',
+      icon: '🌧️+'
+    },
+    acima: {
+      bg: 'rgba(16, 185, 129, 0.12)',
+      border: '#10b981',
+      color: '#6ee7b7',
+      icon: '🌦️'
+    },
+    muito_abaixo: {
+      bg: 'rgba(220, 38, 38, 0.18)',
+      border: '#dc2626',
+      color: '#f87171',
+      icon: '☀️ Seca'
+    },
+    abaixo: {
+      bg: 'rgba(234, 88, 12, 0.15)',
+      border: '#ea580c',
+      color: '#fb923c',
+      icon: '🌤️-'
+    },
+    neutro_climatologia: {
+      bg: 'rgba(100, 116, 139, 0.10)',
+      border: '#475569',
+      color: '#94a3b8',
+      icon: '⛅ Clima'
+    }
+  };
+  signalStyles['+2'] = signalStyles.muito_acima;
+  signalStyles['+1'] = signalStyles.acima;
+  signalStyles['-2'] = signalStyles.muito_abaixo;
+  signalStyles['-1'] = signalStyles.abaixo;
+  signalStyles['0'] = signalStyles.neutro_climatologia;
+
+  const ENSOS = [
+    { key: 'la-nina', label: 'La Niña', sub: 'Pacífico Equatorial Frio' },
+    { key: 'neutro', label: 'ENOS Neutro', sub: 'Sem Anomalia Remota' },
+    { key: 'el-nino', label: 'El Niño', sub: 'Pacífico Equatorial Quente' }
+  ];
+
+  let html = '';
+
+  if (sandboxEnsoMode === 'all') {
+    if (countBadge) {
+      countBadge.textContent = `24 combinações em ${sandboxSelectedSeason} (Total 96 no ciclo)`;
+    }
+
+    html = `
+      <table class="sandbox-table" role="grid" aria-label="Matriz de 24 permutações da estação ${sandboxSelectedSeason}">
+        <thead>
+          <tr>
+            <th style="width:22%; text-align:left;">Fase da MJO (Localização)</th>
+            ${ENSOS.map(e => `
+              <th style="width:26%; cursor:pointer;" title="Clique para focar exclusivamente nas 8 fases de ${e.label}" data-focus-enso="${e.key}">
+                <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+                  <span>${e.label}</span>
+                  <span style="font-size:10px; background:rgba(255,255,255,0.08); padding:1px 5px; border-radius:4px; font-weight:600;">Foco</span>
+                </div>
+                <div style="font-size:10px; font-weight:400; color:#94a3b8;">${e.sub}</div>
+              </th>
+            `).join('')}
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    for (let p = 1; p <= 8; p++) {
+      const sample = getGrimmPermutation(sandboxSelectedSeason, 'neutro', p);
+      const phaseName = sample ? sample.phaseName : `Fase ${p}`;
+
+      html += `<tr>`;
+      html += `
+        <td style="padding:8px 10px; background:#0b1929; border:1px solid #1e3a5a; border-radius:6px;">
+          <div style="font-weight:700; color:#e2e8f0;">Fase ${p}</div>
+          <div style="font-size:10.5px; color:#94a3b8; line-height:1.2;">${phaseName}</div>
+        </td>
+      `;
+
+      for (const enso of ENSOS) {
+        const item = getGrimmPermutation(sandboxSelectedSeason, enso.key, p);
+        if (!item) {
+          html += `<td class="sandbox-cell" style="background:#0f172a; border:1px solid #1e293b;">-</td>`;
+          continue;
+        }
+
+        const isActive = (currentSeason === sandboxSelectedSeason && currentEnso === enso.key && Number(currentPhase) === p);
+        const styleInfo = signalStyles[item.signalCategory] || signalStyles[item.sesaSignal] || signalStyles.neutro_climatologia;
+
+        html += `
+          <td class="sandbox-cell ${isActive ? 'is-active-cell' : ''}"
+              data-sb-season="${sandboxSelectedSeason}"
+              data-sb-enso="${enso.key}"
+              data-sb-phase="${p}"
+              data-sb-cell="${sandboxSelectedSeason}-${enso.key}-${p}"
+              style="background:${styleInfo.bg}; border:1px solid ${isActive ? '#38bdf8' : styleInfo.border}; padding:8px 10px; cursor:pointer;"
+              tabindex="0"
+              role="button"
+              aria-pressed="${isActive}"
+              title="Clique para aplicar ${item.season} · ${enso.label} · Fase ${p} ao mapa">
+            <div style="display:flex; flex-direction:column; gap:4px;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:4px;">
+                <span style="font-size:11.5px; font-weight:700; color:${styleInfo.color}; display:inline-flex; align-items:center; gap:4px;">
+                  <span>${styleInfo.icon}</span>
+                  <span>${item.impactLabel}</span>
+                </span>
+                ${item.isCurated ? `
+                  <span style="font-size:9.5px; font-weight:700; color:#facc15; background:rgba(234,179,8,0.2); border:1px solid rgba(234,179,8,0.4); border-radius:3px; padding:1px 4px; white-space:nowrap;" title="Caso Curado (${item.curatedAuthor})">
+                    ⭐ Curado
+                  </span>
+                ` : ''}
+              </div>
+
+              ${item.fundoEnso && item.fundoEnso.text ? `
+                <div style="font-size:10.5px; color:#38bdf8; line-height:1.25;">
+                  <strong>1. Fundo ENOS:</strong> "${item.fundoEnso.text}"
+                  <div style="font-size:9.5px; color:#94a3b8;">📖 <em>${item.fundoEnso.ref}</em></div>
+                </div>
+              ` : ''}
+
+              ${item.sinalMjo && item.sinalMjo.text ? `
+                <div style="font-size:10.5px; color:#c084fc; line-height:1.25;">
+                  <strong>2. MJO (${item.sinalMjo.label}):</strong> ${item.sinalMjo.text}
+                  <div style="font-size:9.5px; color:#94a3b8;">📖 <em>${item.sinalMjo.ref}</em></div>
+                </div>
+              ` : ''}
+
+              ${item.mjoXenso && item.mjoXenso.text ? `
+                <div style="font-size:10.5px; color:#34d399; line-height:1.25;">
+                  <strong>3. MJO × ENOS:</strong> ${item.mjoXenso.text}
+                  <div style="font-size:9.5px; color:#94a3b8;">📖 <em>${item.mjoXenso.ref}</em></div>
+                </div>
+              ` : item.mjoXenso && item.mjoXenso.note ? `
+                <div style="font-size:9.5px; color:#64748b; font-style:italic; line-height:1.2;">
+                  3. MJO × ENOS: ${item.mjoXenso.note}
+                </div>
+              ` : ''}
+
+              ${!item.hasAnyLayer ? `
+                <div style="font-size:10.5px; color:#64748b; font-style:italic; line-height:1.25;">
+                  Sem resultado publicado para esta combinação
+                </div>
+              ` : ''}
+            </div>
+          </td>
+        `;
+      }
+      html += `</tr>`;
+    }
+
+    html += `
+        </tbody>
+      </table>
+    `;
+  } else {
+    // Modo Foco em Regime ENOS específico (ex.: El Niño, La Niña, Neutro)
+    const ensoMeta = {
+      'el-nino': {
+        title: '🔥 Regime de El Niño · Foco no SESA',
+        sub: `Estação ${sandboxSelectedSeason} · 8 Fases da MJO sob Pacífico Equatorial Quente`,
+        summary: 'Em anos de <strong>El Niño</strong>, a resposta no SESA é governada pela sobreposição do fundo ENOS (Grimm, Barros & Doyle 2000 na primavera), do sinal MJO na média de todos os anos (Alvarez et al. 2016) e da combinação MJO × ENOS (Fernandes & Grimm 2023 em DJF).',
+        border: 'rgba(239, 68, 68, 0.4)',
+        bg: 'rgba(239, 68, 68, 0.08)',
+        badgeBg: '#dc2626',
+        badgeText: '🔥 El Niño',
+        guideLink: true
+      },
+      'la-nina': {
+        title: '❄️ Regime de La Niña · Foco no SESA',
+        sub: `Estação ${sandboxSelectedSeason} · 8 Fases da MJO sob Pacífico Equatorial Frio`,
+        summary: 'Em anos de <strong>La Niña</strong>, o sinal no SESA é composto pelo fundo ENOS (Grimm, Barros & Doyle 2000 na primavera), sinal MJO em todos os anos (Alvarez et al. 2016) e combinação MJO × ENOS (Fernandes & Grimm 2023 em DJF).',
+        border: 'rgba(59, 130, 246, 0.4)',
+        bg: 'rgba(59, 130, 246, 0.08)',
+        badgeBg: '#2563eb',
+        badgeText: '❄️ La Niña',
+        guideLink: false
+      },
+      'neutro': {
+        title: '⚪ Regime ENOS Neutro · Foco no SESA',
+        sub: `Estação ${sandboxSelectedSeason} · 8 Fases da MJO sem forçante remota de TSM`,
+        summary: 'Em anos <strong>Neutros</strong>, a MJO é a forçante intra-sazonal primária, analisada pela média de todos os anos de Alvarez et al. (2016) e pela composição de Fernandes & Grimm (2023 em DJF).',
+        border: 'rgba(148, 163, 184, 0.35)',
+        bg: 'rgba(148, 163, 184, 0.08)',
+        badgeBg: '#475569',
+        badgeText: '⚪ ENOS Neutro',
+        guideLink: false
+      }
+    };
+
+    const meta = ensoMeta[sandboxEnsoMode] || ensoMeta['el-nino'];
+    if (countBadge) {
+      countBadge.textContent = `8 fases sob ${meta.badgeText} em ${sandboxSelectedSeason}`;
+    }
+
+    html = `
+      <div style="background:${meta.bg}; border:1.5px solid ${meta.border}; border-radius:8px; padding:12px 16px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+        <div style="flex:1; min-width:280px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px; flex-wrap:wrap;">
+            <span style="background:${meta.badgeBg}; color:#ffffff; font-size:11px; font-weight:800; padding:2px 8px; border-radius:4px; text-transform:uppercase;">${meta.badgeText}</span>
+            <span style="color:#e2e8f0; font-size:13px; font-weight:700;">${meta.sub}</span>
+          </div>
+          <p style="margin:0; font-size:12.5px; line-height:1.45; color:#f1f5f9;">
+            ${meta.summary}
+          </p>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          ${meta.guideLink ? `
+            <a href="guia-el-nino.html" target="_blank" rel="noopener" class="btn-voice" style="padding:6px 12px; font-size:12px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; background:#1e293b; border:1px solid #ef4444; color:#fca5a5; border-radius:6px; font-weight:700;" title="Abrir guia científico em nova guia do navegador">
+              <span>↗️ Abrir Guia do El Niño em Nova Guia</span>
+            </a>
+          ` : ''}
+          <button type="button" class="btn-voice btn-return-all" style="padding:6px 12px; font-size:12px; display:inline-flex; align-items:center; gap:6px; background:#1e293b; border:1px solid #38bdf8; color:#7dd3fc; border-radius:6px; font-weight:700;">
+            <span>🌐 Ver Matriz Geral (3×8)</span>
+          </button>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:10px;">
+    `;
+
+    for (let p = 1; p <= 8; p++) {
+      const item = getGrimmPermutation(sandboxSelectedSeason, sandboxEnsoMode, p);
+      if (!item) continue;
+
+      const isActive = (currentSeason === sandboxSelectedSeason && currentEnso === sandboxEnsoMode && Number(currentPhase) === p);
+      const styleInfo = signalStyles[item.signalCategory] || signalStyles[item.sesaSignal] || signalStyles.neutro_climatologia;
+      const sourceType = getPsaSourceType(sandboxSelectedSeason, sandboxEnsoMode, p);
+      const sourceLabel = sourceType === 'ciclone_tropical' ? 'Ciclone Tropical' : 'Eixo da ZCPS';
+      const citation = Array.isArray(item.citations) ? item.citations.join('; ') : (item.citations || 'Sem citação');
+
+      html += `
+        <div class="sandbox-cell ${isActive ? 'is-active-cell' : ''}"
+             data-sb-season="${sandboxSelectedSeason}"
+             data-sb-enso="${sandboxEnsoMode}"
+             data-sb-phase="${p}"
+             data-sb-cell="${sandboxSelectedSeason}-${sandboxEnsoMode}-${p}"
+             style="background:${styleInfo.bg}; border:1.5px solid ${isActive ? '#38bdf8' : styleInfo.border}; border-radius:8px; padding:10px 14px; cursor:pointer;"
+             tabindex="0"
+             role="button"
+             aria-pressed="${isActive}"
+             title="Clique para aplicar ${item.season} · ${meta.badgeText} · Fase ${p} ao mapa">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-weight:800; font-size:12.5px; color:#ffffff; background:#0b1929; border:1px solid #1e3a5a; padding:2px 7px; border-radius:4px;">
+                Fase ${p}
+              </span>
+              <span style="font-size:12px; font-weight:700; color:#e2e8f0;">
+                ${item.phaseName}
+              </span>
+            </div>
+            <div style="display:flex; align-items:center; gap:5px;">
+              <span style="font-size:11.5px; font-weight:700; color:${styleInfo.color}; background:rgba(0,0,0,0.3); padding:2px 7px; border-radius:4px; border:1px solid ${styleInfo.border};">
+                ${styleInfo.icon} ${item.impactLabel}
+              </span>
+              ${item.isCurated ? `
+                <span style="font-size:10px; font-weight:700; color:#facc15; background:rgba(234,179,8,0.22); border:1px solid rgba(234,179,8,0.45); border-radius:3px; padding:2px 6px; white-space:nowrap;">
+                  ⭐ Caso Curado
+                </span>
+              ` : ''}
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:8px;">
+            ${item.fundoEnso && item.fundoEnso.text ? `
+              <div style="font-size:12px; color:#38bdf8; line-height:1.35; background:rgba(56,189,248,0.06); padding:4px 8px; border-radius:4px; border-left:2px solid #38bdf8;">
+                <strong>1. Fundo ENOS:</strong> "${item.fundoEnso.text}"
+                <div style="font-size:10.5px; color:#94a3b8; margin-top:2px;">📖 <em>${item.fundoEnso.ref}</em></div>
+              </div>
+            ` : ''}
+
+            ${item.sinalMjo && item.sinalMjo.text ? `
+              <div style="font-size:12px; color:#c084fc; line-height:1.35; background:rgba(192,132,252,0.06); padding:4px 8px; border-radius:4px; border-left:2px solid #c084fc;">
+                <strong>2. Sinal MJO (${item.sinalMjo.label}):</strong> ${item.sinalMjo.text}
+                <div style="font-size:10.5px; color:#94a3b8; margin-top:2px;">📖 <em>${item.sinalMjo.ref}</em></div>
+              </div>
+            ` : ''}
+
+            ${item.mjoXenso && item.mjoXenso.text ? `
+              <div style="font-size:12px; color:#34d399; line-height:1.35; background:rgba(52,211,153,0.06); padding:4px 8px; border-radius:4px; border-left:2px solid #34d399;">
+                <strong>3. MJO × ENOS:</strong> ${item.mjoXenso.text}
+                <div style="font-size:10.5px; color:#94a3b8; margin-top:2px;">📖 <em>${item.mjoXenso.ref}</em></div>
+              </div>
+            ` : item.mjoXenso && item.mjoXenso.note ? `
+              <div style="font-size:11px; color:#94a3b8; font-style:italic; padding:2px 4px;">
+                3. MJO × ENOS: ${item.mjoXenso.note}
+              </div>
+            ` : ''}
+
+            ${!item.hasAnyLayer ? `
+              <div style="font-size:12px; color:#64748b; font-style:italic; padding:4px 8px;">
+                Sem resultado publicado para esta combinação
+              </div>
+            ` : ''}
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:11px; color:#94a3b8; border-top:1px solid rgba(255,255,255,0.08); padding-top:6px;">
+            <span>🌀 <strong>Fonte PSA:</strong> ${sourceLabel}</span>
+            <span>📚 <em>${citation}</em></span>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+  }
+
+  container.innerHTML = html;
+
+  // Registrar listeners nas células
+  container.querySelectorAll('.sandbox-cell').forEach(cell => {
+    const clickHandler = () => {
+      const s = cell.dataset.sbSeason;
+      const e = cell.dataset.sbEnso;
+      const p = cell.dataset.sbPhase;
+      if (s && e && p) {
+        selectGrimmSandboxCell(s, e, p);
+      }
+    };
+    cell.addEventListener('click', clickHandler);
+    cell.addEventListener('keydown', evt => {
+      if (evt.key === 'Enter' || evt.key === ' ') {
+        evt.preventDefault();
+        clickHandler();
+      }
+    });
+  });
+
+  // Listener para cabeçalhos de coluna na matriz (focar regime com 1 clique)
+  container.querySelectorAll('[data-focus-enso]').forEach(th => {
+    th.addEventListener('click', () => {
+      const ensoKey = th.dataset.focusEnso;
+      if (ensoKey) {
+        sandboxEnsoMode = ensoKey;
+        const ensoTabs = document.querySelectorAll('.sandbox-enso-btn');
+        ensoTabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbEnsoMode === ensoKey));
+        renderGrimmSandboxMatrix();
+      }
+    });
+  });
+
+  // Listener para botão de retorno à matriz completa
+  if (typeof container.querySelectorAll === 'function') {
+    container.querySelectorAll('.btn-return-all').forEach(btnReturnAll => {
+      btnReturnAll.addEventListener('click', () => {
+        sandboxEnsoMode = 'all';
+        const ensoTabs = document.querySelectorAll('.sandbox-enso-btn');
+        ensoTabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbEnsoMode === 'all'));
+        renderGrimmSandboxMatrix();
+      });
+    });
+  }
+}
+
+function updateGrimmSandboxUI() {
+  // Sincronizar aba da estação se houver mudança externa
+  if (currentSeason && sandboxSelectedSeason !== currentSeason) {
+    sandboxSelectedSeason = currentSeason;
+    const tabs = document.querySelectorAll('.sandbox-season-btn');
+    tabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbSeason === currentSeason));
+    renderGrimmSandboxMatrix();
+  } else {
+    // Apenas atualizar as classes das células ativas
+    document.querySelectorAll('.sandbox-cell').forEach(cell => {
+      const isMatch = (cell.dataset.sbSeason === currentSeason &&
+                       cell.dataset.sbEnso === currentEnso &&
+                       Number(cell.dataset.sbPhase) === Number(currentPhase));
+      cell.classList.toggle('is-active-cell', isMatch);
+      cell.setAttribute('aria-pressed', String(isMatch));
+      if (isMatch) {
+        cell.style.borderColor = '#38bdf8';
+      }
+    });
+  }
+
+  // Sincronizar estado visual das abas de ENOS
+  const ensoTabs = document.querySelectorAll('.sandbox-enso-btn');
+  ensoTabs.forEach(t => t.classList.toggle('is-active', t.dataset.sbEnsoMode === sandboxEnsoMode));
+}
+
+if (typeof window !== 'undefined') {
+  window.setClimateState = setClimateState;
+  window.initGrimmSandbox = initGrimmSandbox;
+  window.renderGrimmSandboxMatrix = renderGrimmSandboxMatrix;
+  window.updateGrimmSandboxUI = updateGrimmSandboxUI;
+  window.selectGrimmSandboxCell = selectGrimmSandboxCell;
+  if (window.location && window.location.search) {
+    const params = new URLSearchParams(window.location.search);
+    const opts = {};
+    if (params.has('season')) opts.season = params.get('season');
+    if (params.has('enso')) opts.enso = params.get('enso');
+    if (params.has('phase')) opts.phase = Number(params.get('phase'));
+    if (params.has('amplitude')) opts.amplitude = Number(params.get('amplitude'));
+    if (params.has('view')) opts.view = params.get('view');
+    if (params.has('mjoMode')) opts.mjoMode = params.get('mjoMode');
+    if (params.has('salljState')) opts.salljState = params.get('salljState');
+    if (params.has('sbEnsoMode')) {
+      sandboxEnsoMode = params.get('sbEnsoMode');
+    }
+    if (Object.keys(opts).length > 0) setClimateState(opts);
+  }
+}
+
+// Inicializar interface e sandbox
+initGrimmSandbox();
+if (typeof window !== 'undefined' && window.location && window.location.search) {
+  update();
+} else {
+  selectEvent('DJF-el-nino-3');
+}
+

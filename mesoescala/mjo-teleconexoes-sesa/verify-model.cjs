@@ -53,7 +53,9 @@ const prodFiles = [
   'documented-view.js',
   'index.html',
   'rmm-diagram.js',
-  'map-regions.js'
+  'map-regions.js',
+  'cpc-mjo-precip-data.js',
+  'grimm-matrix-data.js'
 ];
 for (const file of prodFiles) {
   const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
@@ -64,12 +66,15 @@ for (const file of prodFiles) {
 const html = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
 assert(!html.includes('id="metricSelect"'), 'metricSelect deve estar removido do HTML');
 assert(html.includes('id="ensoGroup"'), 'ensoGroup deve existir para controle de visibilidade');
+assert(html.includes('id="sandboxSector"'), 'sandboxSector deve estar presente no HTML');
+assert(html.includes('id="sandboxMatrixContainer"'), 'sandboxMatrixContainer deve estar presente no HTML');
+assert(!html.includes('id="sandboxDiagnosticCard"'), 'sandboxDiagnosticCard deve estar removido do HTML (a demo é didática)');
 for (const id of expectedIds) {
   assert(html.includes(`value="${id}"`), `Opção do evento ${id} deve estar presente no HTML`);
 }
 
 // 4. Teste de Sintaxe dos Scripts
-for (const file of ['documented-cases.js', 'documented-view.js', 'map-regions.js', 'rmm-diagram.js', 'panels-manager.js']) {
+for (const file of ['documented-cases.js', 'documented-view.js', 'map-regions.js', 'rmm-diagram.js', 'panels-manager.js', 'cpc-mjo-precip-data.js', 'grimm-matrix-data.js']) {
   new vm.Script(fs.readFileSync(path.join(__dirname, file), 'utf8'));
 }
 
@@ -87,6 +92,14 @@ function makeMockElement(id) {
     value: '1.5',
     hidden: false,
     options: [],
+    classList: {
+      contains: () => false,
+      add: () => {},
+      remove: () => {},
+      toggle: () => {}
+    },
+    querySelectorAll: () => [],
+    scrollIntoView: () => {},
     setAttribute: () => {},
     addEventListener: (event, fn) => {
       listeners[event] = listeners[event] || [];
@@ -104,7 +117,8 @@ function makeMockElement(id) {
 
 const elementIds = [
   'globalView', 'regionalView', 'mjoSelect',
-  'sstLayer', 'jetsLayer', 'psaLayer', 'psaToggle', 'salljToggle', 'legendButton', 'legend',
+  'sstLayer', 'jetsLayer', 'jetsToggle', 'salljLayer', 'salljToggle', 'psaLayer', 'psaToggle',
+  'boxesLayer', 'boxesToggle', 'sesaToggle', 'zcasToggle', 'legendButton', 'legend',
   'caseTitle', 'caseSummary', 'narrationText', 'btnVoiceNarrate', 'btnVoicePause',
   'btnVoiceStop', 'btnVoiceMute', 'mapTitle', 'mapDesc', 'map', 'mapDrawing',
   'result', 'sstBand', 'sstText', 'phaseInfo', 'panelPsa', 'psaCard', 'psaText',
@@ -112,7 +126,9 @@ const elementIds = [
   'ensoGroup', 'seasonSelect', 'ensoSelect', 'phaseSelect', 'eventNotice',
   'eventsSelect', 'eventsDJF', 'eventsMAM', 'eventsJJA', 'eventsSON',
   'salljSelect',
-  'btnPanelsMenu', 'btnResetLayout', 'panelsDropdown'
+  'btnPanelsMenu', 'btnResetLayout', 'panelsDropdown',
+  'sandboxSector', 'sandboxModeBtn', 'btnOpenSandbox', 'btnToggleSandboxView',
+  'sandboxSeasonTabs', 'sandboxMatrixContainer', 'sandboxSummaryCount'
 ];
 
 const elements = {};
@@ -140,7 +156,7 @@ const domMock = {
       textContent: '',
       setAttribute: (k, v) => {
         if (typeof v === 'number' && isNaN(v)) throw new Error('NaN attribute in ' + tag + ' ' + k);
-        if (typeof v === 'string' && v.includes('NaN')) throw new Error('NaN in string in ' + tag + ' ' + k + ': ' + v);
+        if (typeof v === 'string' && k !== 'href' && k !== 'xlink:href' && !v.startsWith('data:') && v.includes('NaN')) throw new Error('NaN in string in ' + tag + ' ' + k + ': ' + v);
         el.attributes[k] = v;
       },
       appendChild: () => {}
@@ -174,16 +190,18 @@ vm.createContext(sandbox);
 
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'world-land.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'map-regions.js'), 'utf8'), sandbox);
+vm.runInContext(fs.readFileSync(path.join(__dirname, 'cpc-mjo-precip-data.js'), 'utf8'), sandbox);
+vm.runInContext(fs.readFileSync(path.join(__dirname, 'grimm-matrix-data.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'documented-cases.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'documented-view.js'), 'utf8'), sandbox);
 vm.runInContext(fs.readFileSync(path.join(__dirname, 'rmm-diagram.js'), 'utf8'), sandbox);
 
 // 6. Teste de Regressão Completo do Sandbox:
-// 96 combinações (4 estações x 3 ENOS x 8 fases) x 4 modos MJO x 2 amplitudes {0.5, 1.5} x 2 visões {global, regional}
+// 96 combinações (4 estações x 3 ENOS x 8 fases) x 5 modos MJO x 2 amplitudes {0.5, 1.5} x 2 visões {global, regional}
 const seasons = ['DJF', 'MAM', 'JJA', 'SON'];
 const ensos = ['neutro', 'el-nino', 'la-nina'];
 const phases = [1, 2, 3, 4, 5, 6, 7, 8];
-const mjoModes = ['none', 'chi', 'dipoles', 'track'];
+const mjoModes = ['none', 'chi', 'cpc_precip', 'dipoles', 'track'];
 const amplitudes = [0.5, 1.5];
 const views = ['global', 'regional'];
 
@@ -207,6 +225,8 @@ for (const season of seasons) {
               assert(!hasWaveTrain, `Com amplitude < 1 não pode desenhar trem de ondas (${season}-${enso}-${phase})`);
               const hasChiBox = createdElements.some(el => el.textContent && el.textContent.includes('χ₂₀₀'));
               assert(!hasChiBox, `Com amplitude < 1 não pode desenhar destaque de χ₂₀₀ (${season}-${enso}-${phase})`);
+              const hasCpcImg = createdElements.some(el => el.tagName === 'image');
+              assert(!hasCpcImg, `Com amplitude < 1 não pode desenhar imagem CPC (${season}-${enso}-${phase})`);
             }
           }
         }
@@ -214,7 +234,7 @@ for (const season of seasons) {
     }
   }
 }
-assert.equal(totalSandboxRuns, 4 * 3 * 8 * 4 * 2 * 2, 'Exatamente 1536 configurações testadas sem exceções');
+assert.equal(totalSandboxRuns, 4 * 3 * 8 * 5 * 2 * 2, 'Exatamente 1920 configurações testadas sem exceções');
 
 // 7. Teste de Modo Evento e Ocultação do ENOS
 // Caso Alvarez (DJF 3-4): ensoGroup deve sumir
@@ -397,6 +417,62 @@ sandbox.drawMap();
 const hasSalljOn = createdElements.some(el => el.textContent && el.textContent.includes('SALLJ'));
 assert.equal(hasSalljOn, true, 'SALLJ deve ser restaurado quando salljToggle estiver marcado');
 
+// Teste de Controle do Jato Subtropical
+assert.equal(elements.jetsToggle.checked, true, 'jetsToggle deve iniciar marcado');
+elements.jetsToggle.checked = false;
+elements.jetsToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+const hasJetOff = createdElements.some(el => el.textContent && el.textContent.includes('Jato Subtropical'));
+assert.equal(hasJetOff, false, 'Jato Subtropical não deve ser desenhado quando jetsToggle estiver desmarcado');
+
+elements.jetsToggle.checked = true;
+elements.jetsToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+const hasJetOn = createdElements.some(el => el.textContent && el.textContent.includes('Jato Subtropical'));
+assert.equal(hasJetOn, true, 'Jato Subtropical deve ser restaurado quando jetsToggle estiver marcado');
+
+// Teste de Controle das Caixas SESA e ZCAS (boxesToggle)
+assert.equal(elements.boxesToggle.checked, true, 'boxesToggle deve iniciar marcado');
+elements.boxesToggle.checked = false;
+elements.boxesToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+const hasSesaBoxOff = createdElements.some(el => el.textContent === 'SESA');
+const hasZcasBoxOff = createdElements.some(el => el.textContent === 'ZCAS');
+assert.equal(hasSesaBoxOff, false, 'Caixa SESA não deve ser desenhada quando boxesToggle estiver desmarcado');
+assert.equal(hasZcasBoxOff, false, 'Caixa ZCAS não deve ser desenhada quando boxesToggle estiver desmarcado');
+
+elements.boxesToggle.checked = true;
+elements.boxesToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+const hasSesaBoxOn = createdElements.some(el => el.textContent === 'SESA');
+const hasZcasBoxOn = createdElements.some(el => el.textContent === 'ZCAS');
+assert.equal(hasSesaBoxOn, true, 'Caixa SESA deve ser restaurada quando boxesToggle estiver marcado');
+assert.equal(hasZcasBoxOn, true, 'Caixa ZCAS deve ser restaurada quando boxesToggle estiver marcado');
+
+// Teste de controles individuais (sesaToggle e zcasToggle)
+elements.sesaToggle.checked = false;
+elements.sesaToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+assert.equal(createdElements.some(el => el.textContent === 'SESA'), false, 'Caixa SESA deve ser ocultada individualmente');
+assert.equal(createdElements.some(el => el.textContent === 'ZCAS'), true, 'Caixa ZCAS deve permanecer visível quando apenas sesaToggle for desmarcado');
+
+elements.sesaToggle.checked = true;
+elements.sesaToggle.listeners['change'].forEach(fn => fn());
+elements.zcasToggle.checked = false;
+elements.zcasToggle.listeners['change'].forEach(fn => fn());
+createdElements.length = 0;
+sandbox.drawMap();
+assert.equal(createdElements.some(el => el.textContent === 'SESA'), true, 'Caixa SESA deve permanecer visível quando apenas zcasToggle for desmarcado');
+assert.equal(createdElements.some(el => el.textContent === 'ZCAS'), false, 'Caixa ZCAS deve ser ocultada individualmente');
+
+elements.zcasToggle.checked = true;
+elements.zcasToggle.listeners['change'].forEach(fn => fn());
+
 // 18. Teste dos 4 Estados do SALLJ x DJF Fases 3 e 8 x A {0.5, 1.5}
 const salljStates = ['auto', 'forte', 'fraco', 'climatologico'];
 const testPhases = [3, 8];
@@ -451,6 +527,168 @@ sandbox.drawSallj();
 const jjaState = createdElements.find(el => el.tagName === 'text' && el.attributes && el.attributes.fill === '#fde047');
 assert(jjaState && jjaState.textContent.includes('no inverno, altos níveis dominam — Alvarez et al. 2013'), 'Sub-legenda em JJA deve conter nota de inverno');
 
+// 14. Validação dos Compostos de Precipitação Tropical da MJO (CPC/NOAA)
+console.log('Validando compostos de precipitação tropical CPC/NOAA...');
+for (const p of [1, 2, 3, 4, 5, 6, 7, 8]) {
+  // Visão global com A = 1.5
+  sandbox.setClimateState({ season: 'DJF', enso: 'neutro', phase: p, amplitude: 1.5, view: 'global', mjoMode: 'cpc_precip' });
+  const globalImg = createdElements.find(el => el.tagName === 'image');
+  assert(globalImg, `Imagem CPC/NOAA deve ser renderizada na visão global para fase ${p}`);
+  assert.equal(Number(globalImg.attributes.x), 0, 'Coordenada x global deve ser 0');
+  assert.equal(Number(globalImg.attributes.y), 192.5, 'Coordenada y global deve ser 192.5 (30°N)');
+  assert.equal(Number(globalImg.attributes.width), 1200, 'Largura global deve ser 1200');
+  assert.equal(Number(globalImg.attributes.height), 210, 'Altura global deve ser 210 (30°N a 30°S)');
+  assert(globalImg.attributes.href && globalImg.attributes.href.startsWith('data:image/png;base64,'), `Href global deve conter data URI na fase ${p}`);
+
+  // Colorbar na visão global
+  const colorbarText = createdElements.find(el => el.tagName === 'text' && el.textContent && el.textContent.includes('Compostos Oficiais CPC/NOAA'));
+  assert(colorbarText, `Barra de cores CPC deve estar presente na visão global na fase ${p}`);
+  assert(colorbarText.textContent.includes(`Fase ${p}`), `Título da barra deve indicar Fase ${p}`);
+
+  // Visão regional com A = 1.5
+  sandbox.setClimateState({ season: 'DJF', enso: 'neutro', phase: p, amplitude: 1.5, view: 'regional', mjoMode: 'cpc_precip' });
+  const regImg = createdElements.find(el => el.tagName === 'image');
+  assert(regImg, `Imagem CPC/NOAA deve ser renderizada na visão regional para fase ${p}`);
+  assert.equal(Number(regImg.attributes.x), 60, 'Coordenada x regional deve ser 60 (85°W)');
+  assert.equal(Number(regImg.attributes.y), 35, 'Coordenada y regional deve ser 35 (15°N)');
+  assert.equal(Number(regImg.attributes.width), 400, 'Largura regional deve ser 400 (85°W a 35°W)');
+  assert.equal(Number(regImg.attributes.height), 288, 'Altura regional deve ser 288 (15°N a 30°S)');
+  assert(regImg.attributes.href && regImg.attributes.href.startsWith('data:image/png;base64,'), `Href regional deve conter data URI na fase ${p}`);
+
+  // Colorbar na visão regional
+  const regColorbar = createdElements.find(el => el.tagName === 'text' && el.textContent && el.textContent.includes('Compostos Oficiais CPC/NOAA'));
+  assert(regColorbar, `Barra de cores CPC deve estar presente na visão regional na fase ${p}`);
+}
+
+// Inativo quando amplitude < 1
+sandbox.setClimateState({ season: 'DJF', enso: 'neutro', phase: 4, amplitude: 0.5, view: 'global', mjoMode: 'cpc_precip' });
+const inactiveImg = createdElements.find(el => el.tagName === 'image');
+assert(!inactiveImg, 'Com amplitude < 1 (inativa), imagem CPC/NOAA não deve ser renderizada');
+
+// 15. Base de Conhecimento e Setor Sandbox das 96 Permutações (3 Camadas Científicas)
+console.log('Validando Base Científica das 96 Permutações em 3 Camadas...');
+const grimmModule = require(path.join(__dirname, 'grimm-matrix-data.js'));
+const matrix = grimmModule.GRIMM_96_MATRIX;
+const matrixKeys = Object.keys(matrix);
+assert.equal(matrixKeys.length, 96, 'A matriz deve conter exatamente 96 permutações físicas (4 estações x 3 ENOS x 8 fases)');
+
+const validSignals = ['muito_acima', 'acima', 'muito_abaixo', 'abaixo', 'neutro_climatologia', '+2', '+1', '0', '-1', '-2'];
+let curatedFoundCount = 0;
+
+for (const season of ['DJF', 'MAM', 'JJA', 'SON']) {
+  const seasonList = grimmModule.getGrimmSeasonMatrix(season);
+  assert.equal(seasonList.length, 24, `Cada estação deve conter exatamente 24 permutações no sandbox (${season})`);
+
+  for (const enso of ['la-nina', 'neutro', 'el-nino']) {
+    for (let p = 1; p <= 8; p++) {
+      const item = grimmModule.getGrimmPermutation(season, enso, p);
+      assert(item, `Permutação ${season}-${enso}-${p} deve existir`);
+      assert.equal(item.season, season);
+      assert.equal(item.enso, enso);
+      assert.equal(Number(item.phase), p);
+      assert(typeof item.phaseName === 'string' && item.phaseName.length > 5, `phaseName presente em ${item.id}`);
+      assert(typeof item.impactLabel === 'string' && item.impactLabel.length > 3, `impactLabel presente em ${item.id}`);
+      assert(validSignals.includes(item.sesaSignal) || validSignals.includes(item.signalCategory), `sesaSignal ou signalCategory válido em ${item.id}`);
+
+      // Validação das 3 camadas obrigatórias:
+      assert(typeof item.fundoEnso === 'object' && item.fundoEnso !== null, `fundoEnso deve ser objeto em ${item.id}`);
+      assert(typeof item.sinalMjo === 'object' && item.sinalMjo !== null, `sinalMjo deve ser objeto em ${item.id}`);
+      assert(typeof item.mjoXenso === 'object' && item.mjoXenso !== null, `mjoXenso deve ser objeto em ${item.id}`);
+
+      // Camada 1: Fundo ENOS (Grimm, Barros & Doyle 2000, J. Climate 13, resumo)
+      if (season === 'SON' && enso === 'el-nino') {
+        assert.equal(item.fundoEnso.text, 'mais chuva no SESA na primavera');
+        assert(item.fundoEnso.ref.includes('Grimm, Barros & Doyle'));
+      } else if (season === 'SON' && enso === 'la-nina') {
+        assert.equal(item.fundoEnso.text, 'menos chuva no SESA na primavera');
+        assert(item.fundoEnso.ref.includes('Grimm, Barros & Doyle'));
+      } else {
+        assert.equal(item.fundoEnso.text, null, `fundoEnso.text deve ser null fora de SON El Niño/La Niña em ${item.id}`);
+      }
+
+      // Camada 2: Sinal MJO Alvarez et al. (2016), TODOS OS ANOS
+      assert.equal(item.sinalMjo.label, 'média de todos os anos, sem separar ENOS');
+      if (season === 'DJF' && (p === 3 || p === 4)) {
+        assert.equal(item.sinalMjo.text, 'Mais chance de semana chuvosa no SESA (1,5×)');
+        assert(item.sinalMjo.ref.includes('Alvarez et al. (2016)'));
+      } else if (season === 'DJF' && (p === 8 || p === 1)) {
+        assert.equal(item.sinalMjo.text, 'Mais chance de semana chuvosa na ZCAS (1,6×)');
+        assert(item.sinalMjo.ref.includes('Alvarez et al. (2016)'));
+      } else if (season === 'MAM' && p === 1) {
+        assert.equal(item.sinalMjo.text, 'Mais chance de semana chuvosa na ZCAS (1,5×)');
+        assert(item.sinalMjo.ref.includes('Alvarez et al. (2016)'));
+      } else if (season === 'JJA' && p === 8) {
+        assert.equal(item.sinalMjo.text, 'Mais chance de semana chuvosa na ZCAS (1,7×)');
+        assert(item.sinalMjo.ref.includes('Alvarez et al. (2016)'));
+      } else if (season === 'SON' && (p === 7 || p === 8)) {
+        assert.equal(item.sinalMjo.text, 'Mais chance de semana chuvosa na ZCAS (1,7×)');
+        assert(item.sinalMjo.ref.includes('Alvarez et al. (2016)'));
+      } else if (season === 'SON' && p === 1) {
+        assert.equal(item.sinalMjo.text, 'Mais chance de semana chuvosa no SESA (1,5×)');
+        assert(item.sinalMjo.ref.includes('Alvarez et al. (2016)'));
+      } else {
+        assert.equal(item.sinalMjo.text, null, `sinalMjo.text deve ser null em fases não mapeadas de Alvarez em ${item.id}`);
+      }
+
+      // Camada 3: MJO × ENOS Fernandes & Grimm (2023), SOMENTE DJF
+      if (season === 'DJF') {
+        if (enso === 'la-nina' && p === 8) {
+          assert.equal(item.mjoXenso.text, 'Pico de aumento de extremos na ZCAS (fase 8)');
+          assert(item.mjoXenso.ref.includes('Fernandes & Grimm (2023)'));
+        } else if (enso === 'el-nino' && p === 1) {
+          assert.equal(item.mjoXenso.text, 'Pico de aumento de extremos na ZCAS (fase 1)');
+          assert(item.mjoXenso.ref.includes('Fernandes & Grimm (2023)'));
+        } else if (enso === 'el-nino' && p === 3) {
+          assert.equal(item.mjoXenso.text, 'Pico de aumento de extremos no SESA (fase 3)');
+          assert(item.mjoXenso.ref.includes('Fernandes & Grimm (2023)'));
+        } else if (enso === 'neutro' && p === 4) {
+          assert.equal(item.mjoXenso.text, 'Maior aumento de extremos no SESA (fase 4)');
+          assert(item.mjoXenso.ref.includes('Fernandes & Grimm (2023)'));
+        } else {
+          assert.equal(item.mjoXenso.text, null);
+        }
+      } else {
+        assert.equal(item.mjoXenso.text, null);
+        assert.equal(item.mjoXenso.note, 'Combinação MJO × ENOS não estudada nesta estação');
+      }
+
+      // Proibição estrita de frases inventadas e citações não lidas
+      const fullText = JSON.stringify(item).toLowerCase();
+      assert(!fullText.includes('estiagem severa'), `Frase proibida "estiagem severa" em ${item.id}`);
+      assert(!fullText.includes('enchentes'), `Frase proibida "enchentes" em ${item.id}`);
+      assert(!fullText.includes('zcas precoce'), `Frase proibida "ZCAS precoce" em ${item.id}`);
+      assert(!fullText.includes('chuva persistente'), `Frase proibida "chuva persistente" em ${item.id}`);
+      assert(!fullText.includes('clima climatologia de primavera'), `Frase proibida "Clima climatologia de primavera" em ${item.id}`);
+      assert(!fullText.includes('grimm 1998') && !fullText.includes('grimm (1998)'), `Citação não lida Grimm 1998 em ${item.id}`);
+      assert(!fullText.includes('grimm 2003') && !fullText.includes('grimm (2003)'), `Citação não lida Grimm 2003 em ${item.id}`);
+      assert(!fullText.includes('grimm 2004') && !fullText.includes('grimm (2004)'), `Citação não lida Grimm 2004 em ${item.id}`);
+      assert(!fullText.includes('grimm 2011') && !fullText.includes('grimm (2011)'), `Citação não lida Grimm 2011 em ${item.id}`);
+      assert(!fullText.includes('tedeschi'), `Citação não lida Grimm & Tedeschi em ${item.id}`);
+
+      if (item.isCurated) {
+        curatedFoundCount++;
+        assert(typeof item.curatedTitle === 'string' && item.curatedTitle.length > 5);
+        assert(typeof item.curatedAuthor === 'string' && item.curatedAuthor.length > 5);
+      }
+    }
+  }
+}
+assert(curatedFoundCount >= 10, 'Os casos curados devem estar mapeados e identificados na matriz de 96');
+
+// Teste de Integração Funcional do Sandbox (Seleção de Célula e Painéis)
+sandbox.selectGrimmSandboxCell('DJF', 'el-nino', 3);
+assert.equal(elements.caseTitle.textContent.includes('DJF'), true, 'Título deve refletir DJF');
+assert.equal(elements.caseTitle.textContent.includes('El Niño'), true, 'Título deve refletir El Niño');
+assert.equal(elements.caseTitle.textContent.includes('Fase 3'), true, 'Título deve refletir Fase 3');
+assert(elements.caseSummary.textContent.includes('Fernandes & Grimm (2023)'), 'caseSummary deve citar Fernandes & Grimm (2023)');
+assert(elements.caseSummary.textContent.includes('Pico de aumento de extremos no SESA'), 'caseSummary deve indicar extremos no SESA');
+
+sandbox.selectGrimmSandboxCell('SON', 'la-nina', 8);
+assert.equal(elements.caseTitle.textContent.includes('SON'), true, 'Título deve refletir SON');
+assert.equal(elements.caseTitle.textContent.includes('La Niña'), true, 'Título deve refletir La Niña');
+assert.equal(elements.caseTitle.textContent.includes('Fase 8'), true, 'Título deve refletir Fase 8');
+assert(elements.caseSummary.textContent.includes('Alvarez et al.'), 'caseSummary deve citar Alvarez et al.');
+
 console.log('====================================================');
 console.log('TODAS AS VALIDAÇÕES AUTOMATIZADAS PASSARAM COM SUCESSO:');
 console.log('1. 10 casos documentados autorizados (só mais, só mecanismo físico).');
@@ -460,10 +698,13 @@ console.log('4. Seletor de ENOS oculto em eventos Alvarez e restaurado na intera
 console.log('5. SALLJ direcional citando Liebmann et al. (2004) e Nogués-Paegle & Mo (1997).');
 console.log('6. Notas de La Niña (DJF 2-8), inverno (JJA) e recortes de setores validados.');
 console.log('7. χ200 Deemer com tabela única e losangos (zero elipses).');
-console.log('8. 1536 configurações de sandbox executadas sem erros.');
+console.log('8. 1920 configurações de sandbox executadas sem erros.');
 console.log('9. χ200 e dipolos MJO com bordas pontilhadas e intensidade proporcional ao RMM.');
 console.log('10. TSM de El Niño e La Niña com cores fortes sobrepostas à MJO.');
 console.log('11. Controles e camadas de PSA e SALLJ funcionais e alternáveis.');
 console.log('12. SALLJ com 4 estados (Auto, Forte, Fraco, Climatológico), escalonamento por A e legendas.');
+console.log('13. Controles diretos para Jato Subtropical e Caixas SESA e ZCAS funcionais e alternáveis.');
+console.log('14. Opção de compostos de precipitação tropical CPC/NOAA (8 fases, global e regional, escala 11 níveis).');
+console.log('15. Setor Sandbox das 96 permutações físicas e fundamentação de Alice Grimm et al.');
 console.log('====================================================');
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capítulo 4: Leis de Newton do Movimento | FSC5101</title>
+    <title>Capítulo 4: Leis de Newton do Movimento | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
@@ -11,105 +11,196 @@
     <style>
         :root {
             --bg-dark: #070a12;
-            --bg-card: rgba(15, 23, 42, 0.9);
+            --bg-card: rgba(15, 23, 42, 0.92);
             --bg-card-border: rgba(56, 189, 248, 0.25);
             --accent-cyan: #38bdf8;
+            --accent-purple: #a855f7;
             --accent-gold: #fbbf24;
+            --accent-emerald: #10b981;
             --text-main: #f8fafc;
             --text-sub: #cbd5e1;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); padding: 40px 20px; }
-        .container { max-width: 1000px; margin: 0 auto; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-dark); 
+            color: var(--text-main); 
+            padding: 40px 20px;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
+            background-attachment: fixed;
+        }
+        .container { max-width: 1050px; margin: 0 auto; }
         .back-nav { margin-bottom: 24px; }
-        .back-btn { background: rgba(255,255,255,0.08); border: 1px solid var(--bg-card-border); color: var(--accent-cyan); padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 700; }
+        .back-btn { 
+            background: rgba(255,255,255,0.08); 
+            border: 1px solid var(--bg-card-border); 
+            color: var(--accent-cyan); 
+            padding: 10px 18px; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            font-weight: 700; 
+            transition: all 0.2s;
+        }
+        .back-btn:hover { background: rgba(56, 189, 248, 0.2); }
         .header { text-align: center; margin-bottom: 35px; }
         .header h1 { font-family: 'Outfit', sans-serif; font-size: 2.4rem; color: var(--accent-cyan); margin-bottom: 8px; }
-        
+        .header p { color: var(--text-sub); font-size: 1.05rem; }
+
         .hero-banner {
             background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
             border: 1px solid var(--accent-cyan);
             border-radius: 16px;
             padding: 25px;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             text-align: center;
         }
         .hero-banner h2 { font-family: 'Outfit', sans-serif; color: var(--accent-gold); font-size: 1.6rem; margin-bottom: 10px; }
-        .hero-btn { background: var(--accent-cyan); color: #020617; padding: 12px 24px; border-radius: 10px; font-weight: 800; text-decoration: none; display: inline-block; margin-top: 10px; }
+        .hero-btn { 
+            background: var(--accent-cyan); 
+            color: #020617; 
+            padding: 12px 24px; 
+            border-radius: 10px; 
+            font-weight: 800; 
+            text-decoration: none; 
+            display: inline-block; 
+            margin-top: 10px; 
+            transition: all 0.2s;
+        }
+        .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(56,189,248,0.4); }
 
-        .card { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 14px; padding: 22px; margin-bottom: 16px; text-decoration: none; color: inherit; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
-        .card:hover { border-color: var(--accent-cyan); transform: translateY(-2px); }
-        .card-btn { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 8px 16px; border-radius: 8px; font-weight: 700; }
+        .section-title {
+            color: var(--accent-cyan);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            margin: 30px 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card { 
+            background: var(--bg-card); 
+            border: 1px solid var(--bg-card-border); 
+            border-radius: 14px; 
+            padding: 20px 24px; 
+            margin-bottom: 16px; 
+            text-decoration: none; 
+            color: inherit; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            transition: all 0.2s; 
+        }
+        .card:hover { border-color: var(--accent-cyan); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
+        .card-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .tag-dcl { background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+        .tag-conceito { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
+        .tag-aplicacao { background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); border: 1px solid var(--accent-emerald); }
+        
+        .card-btn { 
+            background: rgba(56, 189, 248, 0.15); 
+            color: var(--accent-cyan); 
+            border: 1px solid var(--accent-cyan); 
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="back-nav"><a href="../index.html" class="back-btn">← Voltar ao Índice Geral</a></div>
+        
         <div class="header">
             <h1>⚖️ Capítulo 4: Leis de Newton do Movimento</h1>
-            <p>Exercícios, Demonstrações Interativas e Apresentação de Slidedeck Completa</p>
+            <p>Visualizações Interativas, Testes Conceituais e Diagramas de Corpo Livre (DCL)</p>
         </div>
 
         <div class="hero-banner">
-            <h2><i class="fa-solid fa-desktop"></i> Apresentação do Capítulo 4</h2>
-            <p style="color:var(--text-sub); font-size:1.05rem;">Acesse os slides didáticos com diagramas vetoriais e visualizações interativas das 3 Leis de Newton.</p>
+            <h2><i class="fa-solid fa-desktop"></i> Apresentação de Slidedeck do Capítulo 4</h2>
+            <p style="color:var(--text-sub); font-size:1.05rem;">Acesse a apresentação de slides didáticos com diagramas vetoriais e simulações em tempo real.</p>
             <a href="apresentacao.html" class="hero-btn"><i class="fa-solid fa-play"></i> Abrir Apresentação de Slides →</a>
         </div>
 
-        <h3 style="color:var(--accent-cyan); margin-bottom:16px; font-family:'Outfit', sans-serif; font-size:1.4rem;">Exemplos e Exercícios Resolvidos (PDF 4.1 a 4.57)</h3>
+        <h3 class="section-title"><i class="fa-solid fa-atom"></i> Módulos Didáticos e Demonstradores de DCL</h3>
 
+        <!-- MÓDULO 1 -->
         <a href="exemplo-4-1.html" class="card">
             <div>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.1: Leis de Newton em Plano Inclinado com Atrito</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Superposição de forças, plano inclinado com atrito e força resultante.</div>
+                <span class="card-tag tag-dcl">Demonstrador DCL Interativo</span>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.1: Diagrama de Corpo Livre no Plano Inclinado com Atrito</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Simulador visual com vetores ampliados, decomposição da força Peso (Px, Py), força Normal, Atrito e Aceleração resultante.</div>
             </div>
-            <div class="card-btn">Abrir →</div>
+            <div class="card-btn">Abrir Interativo →</div>
         </a>
 
+        <!-- MÓDULO 2 -->
         <a href="exemplo-4-2.html" class="card">
             <div>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.2: Superposição de Forças e Rotação de Eixos (4.1 a 4.6)</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Forças perpendiculares, decomposição cartesiana e invariância por rotação de eixos.</div>
+                <span class="card-tag tag-conceito">Exemplo Conceitual</span>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo Conceitual 4.2: Primeira Lei de Newton, Inércia e Superposição de Forças</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Análise conceitual sobre a resultante nula ($\sum \vec{F} = \vec{0}$), referenciais inerciais e equilíbrio de forças num plano.</div>
             </div>
             <div class="card-btn">Abrir →</div>
         </a>
 
+        <!-- MÓDULO 3 -->
         <a href="exemplo-4-3.html" class="card">
             <div>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.3: Segunda Lei de Newton (F = ma) e Movimento (4.7 a 4.14)</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Aceleração de blocos, desaceleração com atrito e campo elétrico em elétrons.</div>
+                <span class="card-tag tag-conceito">Exemplo Conceitual</span>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo Conceitual 4.3: Segunda Lei de Newton — Relação entre Força Resultante e Aceleração</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Discussão conceitual da relação $\sum \vec{F} = m\vec{a}$: direção do vetor aceleração vs. direção da velocidade.</div>
             </div>
             <div class="card-btn">Abrir →</div>
         </a>
 
+        <!-- MÓDULO 4 -->
         <a href="exemplo-4-4.html" class="card">
             <div>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.4: Terceira Lei de Newton e DCL (4.15 a 4.26)</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Ação e reação, blocos encostados e forças de atrito na carroceria de caminhões.</div>
+                <span class="card-tag tag-conceito">Exemplo Conceitual</span>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo Conceitual 4.4: Terceira Lei de Newton — Pares de Ação e Reação e DCL</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Análise conceitual dos pares de forças de contato entre corpos distintos e por que forças de ação e reação nunca se cancelam no mesmo DCL.</div>
             </div>
             <div class="card-btn">Abrir →</div>
         </a>
 
+        <!-- MÓDULO 5 -->
         <a href="exemplo-4-5.html" class="card">
             <div>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.5: Aplicações Práticas de DCL (4.27 a 4.36)</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Rampas, cadeiras puxadas sob ângulo, martelo com prego e salto de atletas.</div>
+                <span class="card-tag tag-aplicacao">Aplicação Prática</span>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.5: Decomposição Vetorial de Forças e Variação da Força Normal</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Análise da alteração no módulo da força Normal sob forças de puxão ou empurrão inclinadas em relação à superfície.</div>
             </div>
             <div class="card-btn">Abrir →</div>
         </a>
 
+        <!-- MÓDULO 6 -->
         <a href="exemplo-4-6.html" class="card">
             <div>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.6: Sistemas Conectados e Elevadores (4.37 a 4.52)</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Tração em cabos, elevação de halterofilistas e correntes com múltiplos elos.</div>
+                <span class="card-tag tag-aplicacao">Aplicação Prática</span>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.6: Sistemas Conectados e Medição de Peso Aparente em Elevadores</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Estudo de sistemas de blocos acoplados por cordas e polias ideais e balança em referencial acelerado.</div>
             </div>
             <div class="card-btn">Abrir →</div>
         </a>
 
+        <!-- MÓDULO 7 -->
         <a href="exemplo-4-7.html" class="card">
             <div>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.7: Forças Variáveis e Equações Diferenciais (4.53 a 4.57)</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Forças dependentes do tempo F(t), resistência quadrática do ar e cálculo integral.</div>
+                <span class="card-tag tag-aplicacao">Análise Avançada</span>
+                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.7: Forças Variáveis com o Tempo e Velocidade Terminal</div>
+                <div style="color:var(--text-sub); font-size:0.92rem;">Estudo conceitual de forças dependentes do tempo e forças de arrasto proporcional à velocidade.</div>
             </div>
             <div class="card-btn">Abrir →</div>
         </a>
