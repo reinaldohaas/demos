@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 4.5: Decomposição de Forças e Força Normal | FSC5101 Física I</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <title>Exemplo 4.5: Determinação da Força a partir da Aceleração | FSC5101 Física I</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #070a12;
             --bg-card: rgba(15, 23, 42, 0.88);
             --bg-card-border: rgba(56, 189, 248, 0.25);
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
             --accent-cyan: #38bdf8;
-            --accent-purple: #a855f7;
             --accent-gold: #fbbf24;
             --accent-emerald: #10b981;
-            --accent-red: #ef4444;
             --text-main: #f8fafc;
-            --text-sub: #cbd5e1;
+            --text-sub: #94a3b8;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,22 +28,18 @@
             color: var(--text-main);
             min-height: 100vh;
             background-image: 
-                radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
-                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
+                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 45%);
             background-attachment: fixed;
             padding: 20px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
         .top-nav {
+            max-width: 1300px;
+            margin: 0 auto 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
         }
 
         .back-btn {
@@ -60,216 +54,409 @@
             transition: all 0.2s;
         }
 
-        .back-btn:hover { background: rgba(56, 189, 248, 0.2); }
+        .back-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); }
 
         .statement-box {
             background: rgba(10, 16, 30, 0.92);
-            border-left: 5px solid var(--accent-emerald);
+            border-left: 5px solid var(--accent-cyan);
             border-radius: 12px;
-            padding: 20px;
+            padding: 20px 24px;
             margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
-        .statement-box h2 {
+        .statement-title h2 {
             font-family: 'Outfit', sans-serif;
-            color: var(--accent-emerald);
             font-size: 1.5rem;
-            margin-bottom: 8px;
+            color: var(--accent-cyan);
+            margin-bottom: 6px;
         }
 
-        .statement-box p {
-            line-height: 1.6;
-            color: var(--text-sub);
+        .statement-title p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; max-width: 900px; }
+
+        .formula-badge {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-family: 'Outfit', monospace;
+            font-size: 1.1rem;
+            color: var(--accent-gold);
+            font-weight: 700;
         }
 
-        .content-grid {
+        .presentation-container {
+            max-width: 1300px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: 420px 1fr;
             gap: 20px;
         }
 
-        .card {
+        @media (max-width: 960px) {
+            .presentation-container { grid-template-columns: 1fr; }
+        }
+
+        .slide-deck {
             background: var(--bg-card);
             border: 1px solid var(--bg-card-border);
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        }
-
-        .card h3 {
-            font-family: 'Outfit', sans-serif;
-            color: var(--accent-cyan);
-            margin-bottom: 12px;
-            font-size: 1.2rem;
             display: flex;
-            align-items: center;
-            gap: 8px;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 380px;
         }
 
-        .controls-group {
-            margin-bottom: 15px;
+        .slide-stepper {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
         }
 
-        .controls-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
+        .slide-step-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             color: var(--text-sub);
-            margin-bottom: 5px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .controls-group input[type="range"] {
-            width: 100%;
-            accent-color: var(--accent-cyan);
+        .slide-step-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
         }
 
-        .value-disp {
-            font-weight: bold;
+        .presentation-slide { display: none; flex-direction: column; gap: 10px; }
+        .presentation-slide.active { display: flex; }
+
+        .slide-badge {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+            letter-spacing: 0.05em;
+        }
+
+        .slide-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .slide-formula code {
+            font-family: monospace;
+            font-size: 0.9rem;
             color: var(--accent-gold);
-            float: right;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 6px 12px;
+            border-radius: 6px;
+            display: inline-block;
         }
 
-        canvas {
-            width: 100%;
-            background: #0f172a;
-            border-radius: 10px;
+        .slide-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--accent-emerald);
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 12px 14px;
+            border-radius: 8px;
+        }
+
+        .slide-nav-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: #1e293b;
+            color: var(--text-main);
+        }
+
+        .nav-btn:hover { background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan); }
+
+        .interactive-stage {
+            background: var(--bg-card);
             border: 1px solid var(--bg-card-border);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        .solution-step {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255,255,255,0.05);
+        .canvas-holder {
+            width: 100%;
+            height: 480px;
+            background: #050811;
             border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 12px;
+            overflow: hidden;
+            position: relative;
         }
 
-        .solution-step h4 {
-            color: var(--accent-gold);
-            font-size: 1rem;
-            margin-bottom: 6px;
-        }
-
-        @media (max-width: 900px) {
-            .content-grid { grid-template-columns: 1fr; }
-        }
+        canvas { width: 100%; height: 100%; display: block; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="top-nav">
-            <a href="index.html" class="back-btn">← Voltar ao Capítulo 4</a>
-            <a href="apresentacao.html" class="back-btn" style="color:var(--accent-gold);">🖥️ Ver Apresentação</a>
-        </div>
 
-        <div class="statement-box">
-            <h2><i class="fa-solid fa-square-root-variable"></i> Exemplo 4.5: Decomposição Vetorial e Variação da Força Normal</h2>
-            <p>Este módulo ilustra como forças externas aplicadas sob um ângulo $\theta$ alteram o módulo da **Força Normal ($N$)** de apoio. Observe a diferença no DCL quando a força é de **puxão** ($N = mg - F\sin\theta$) versus quando é de **empurrão** ($N = mg + F\sin\theta$).</p>
-        </div>
+    <div class="top-nav">
+        <a href="index.html" class="back-btn">← Voltar ao Catálogo dos 11 Exemplos</a>
+        <span style="font-size:0.85rem; color:var(--text-sub);">Capítulo 4 • Leis de Newton do Movimento</span>
+    </div>
 
-        <div class="content-grid">
-            <div class="card">
-                <h3><i class="fa-solid fa-sliders"></i> Simulador de Força Inclinada</h3>
+    <div class="statement-box">
+        <div class="statement-title">
+            <h2>Exemplo 4.5: Determinação da Força a partir da Aceleração</h2>
+            <p><strong>Enunciado Oficial (Young & Freedman 12ª ed.):</strong> Uma garçonete empurra uma garrafa de ketchup de massa m = 0,45 kg ao longo de um balcão liso e horizontal. Quando a garrafa deixa sua mão, ela possui velocidade v₀ = 2,8 m/s, que diminui devido ao atrito constante. A garrafa percorre x = 1,0 m até parar. Determine a força de atrito f_k.</p>
+        
+            <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
+                        🔊 Ouvir Voz
+                    </button>
+                    <button id="btn-voice-pause" onclick="pauseVoiceNarration()" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
+                        ⏸️ Pausar
+                    </button>
+                    <button id="btn-voice-stop" onclick="stopVoiceNarration()" style="background: #ef4444; color: white; border: none; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
+                        ⏹️ Parar
+                    </button>
+                </div>
                 
-                <div class="controls-group">
-                    <label>Massa do Bloco m (kg): <span id="mDisp" class="value-disp">10.0</span></label>
-                    <input type="range" id="mVal" min="2" max="30" value="10" oninput="updateSimulation()">
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <label style="font-size: 0.82rem; font-weight: 700; color: #d8b4fe;">⏩ Vel:</label>
+                    <select id="voice-rate-select" onchange="changeVoiceRate()" style="background: #0f172a; color: #38bdf8; border: 1px solid #38bdf8; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
+                        <option value="0.75">0.75x</option>
+                        <option value="1.0" selected>1.0x (Normal)</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                    </select>
                 </div>
-                <div class="controls-group">
-                    <label>Força Aplicada F (N): <span id="fDisp" class="value-disp">50</span></label>
-                    <input type="range" id="fVal" min="0" max="150" value="50" oninput="updateSimulation()">
+                
+                <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
+            </div>
+        </div>
+        <div class="formula-badge">v^2 = v_0^2 + 2 a_x (x - x_0) \implies f_k = -m a_x</div>
+    </div>
+
+    <div class="presentation-container">
+        <!-- Didactic Presentation Deck -->
+        <div class="slide-deck">
+            <div>
+                <div style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); margin-bottom:10px;">
+                    📺 APRESENTAÇÃO DIDÁTICA PASSO A PASSO
                 </div>
-                <div class="controls-group">
-                    <label>Ângulo de Incliñação (°): <span id="angDisp" class="value-disp">37</span></label>
-                    <input type="range" id="angVal" min="0" max="75" value="37" oninput="updateSimulation()">
+                <div class="slide-stepper">
+                    <button class="slide-step-btn active" onclick="goToSlide(1)">Slide 1</button>
+<button class="slide-step-btn " onclick="goToSlide(2)">Slide 2</button>
+
                 </div>
 
-                <div style="margin-top:15px;">
-                    <canvas id="simCanvas" width="380" height="260"></canvas>
-                </div>
+                
+        <div class="presentation-slide active" id="slide-1">
+            <div class="slide-badge">SLIDE 1 DE 2 • CINEMÁTICA DA DESACELERAÇÃO</div>
+            <div class="slide-title">Cálculo da Aceleração a_x</div>
+            <div class="slide-formula"><code>a_x = \frac{v^2 - v_0^2}{2(x - x_0)} = \frac{0 - (2,8)^2}{2(1,0)} = -3,9 \text{ m/s}^2</code></div>
+            <div class="slide-desc">A aceleração a_x = -3,9 m/s² aponta no sentido oposto ao movimento (para a esquerda).</div>
+        </div>
+        
+        <div class="presentation-slide " id="slide-2">
+            <div class="slide-badge">SLIDE 2 DE 2 • SEGUNDA LEI DE NEWTON</div>
+            <div class="slide-title">Cálculo da Força de Atrito</div>
+            <div class="slide-formula"><code>-f_k = m a_x \implies f_k = -(0,45)(-3,9) = 1,8 \text{ N}</code></div>
+            <div class="slide-desc">O módulo da força de atrito é f_k = 1,8 N, orientada para a esquerda.</div>
+        </div>
+        
             </div>
 
-            <div class="card">
-                <h3><i class="fa-solid fa-graduation-cap"></i> Análise de DCL e Equações de Newton</h3>
-                
-                <div class="solution-step">
-                    <h4>1. Decomposição da Força Inclinada</h4>
-                    <p>A força aplicada $\vec{F}$ possui duas componentes cartesianas ortogonais:</p>
-                    \[ F_x = F \cos\theta, \quad F_y = F \sin\theta \]
-                </div>
-                <div class="solution-step">
-                    <h4>2. Força Normal sob Puxão Inclinado</h4>
-                    <p>Como a componente vertical $F_y$ aponta para cima, ela reduz o esforço exigido da superfície de apoio:</p>
-                    \[ \sum F_y = 0 \implies N + F \sin\theta - m g = 0 \implies N = m g - F \sin\theta \]
-                </div>
-                <div class="solution-step">
-                    <h4>3. Influência no Atrito e na Aceleração</h4>
-                    <p>A força de atrito cinético é proporcional à Normal ($f_k = \mu_k N$). Logo, puxar um objeto inclinando o cabo para cima reduz a força Normal e a força de atrito, facilitando a aceleração $a_x = \frac{F_x - f_k}{m}$.</p>
-                </div>
+            <div class="slide-nav-controls">
+                <button class="nav-btn" onclick="prevSlide()">◄ Anterior</button>
+                <button class="nav-btn" onclick="nextSlide()">Próximo ►</button>
+            </div>
+        </div>
 
+        <!-- Interactive Canvas Stage (Vectors Doubled) -->
+        <div class="interactive-stage">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:700; font-size:0.9rem; color:var(--text-sub);">📊 Diagrama de Corpo Livre & Vetores (Tamanho Ampliado 2x)</span>
+                <button class="nav-btn" style="padding:4px 12px; font-size:0.75rem;" onclick="resetDemo()">↺ Resetar</button>
+            </div>
+
+            <div class="canvas-holder">
+                <canvas id="stage-canvas"></canvas>
+            </div>
+        
+            <!-- SIMULAÇÕES PÚBLICAS RECOMENDADAS -->
+            <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 14px; margin-top: 14px;">
+                <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; margin-bottom:8px;">🌐 SIMULAÇÕES PÚBLICAS RECOMENDADAS:</div>
+                <ul style="font-size:0.85rem; color:#cbd5e1; padding-left:18px; line-height:1.8;">
+                    <li><a href="https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_all.html" target="_blank" rel="noopener noreferrer" style="color:#fbbf24; font-weight:700; text-decoration:underline;">🔗 PhET Colorado - Forças e Movimento: Fundamentos</a></li>
+                    <li><a href="https://phet.colorado.edu/en/simulations/forces-and-motion-basics" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">🔗 PhET Colorado - Página Oficial de Forças e Movimento</a></li>
+                    <li><a href="https://www.geogebra.org/search/leis%20de%20newton" target="_blank" rel="noopener noreferrer" style="color:#a855f7; font-weight:700; text-decoration:underline;">🔗 GeoGebra - Simulações Interativas de Leis de Newton</a></li>
+                </ul>
             </div>
         </div>
     </div>
 
     <script>
-        function drawArrow(ctx, fromx, fromy, tox, toy, color, label="") {
-            const headlen = 10;
-            const dx = tox - fromx;
-            const dy = toy - fromy;
-            const angle = Math.atan2(dy, dx);
-            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 3;
-            ctx.beginPath(); ctx.moveTo(fromx, fromy); ctx.lineTo(tox, toy); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(tox, toy);
-            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
-            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
-            ctx.closePath(); ctx.fill();
-            if(label) {
-                ctx.font = "bold 12px Inter";
-                ctx.fillText(label, (fromx + tox)/2 + 5, (fromy + toy)/2 - 5);
+        // Web Speech API
+        let isSpeaking = false, isPaused = false, currentUtterance = null, voiceSpeedRate = 1.0;
+
+        function playVoiceNarration() {
+            if (!('speechSynthesis' in window)) return alert('Navegador sem suporte a voz.');
+            const statusLabel = document.getElementById('voice-status-text');
+            if (isPaused) {
+                window.speechSynthesis.resume();
+                isPaused = false; isSpeaking = true;
+                if (statusLabel) statusLabel.innerText = '🔊 Reproduzindo...';
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const stmt = document.querySelector('.statement-title p')?.innerText || '';
+            const items = Array.from(document.querySelectorAll('.slide-desc')).map(el => el.innerText).join('. ');
+            currentUtterance = new SpeechSynthesisUtterance(stmt + '. ' + items);
+            currentUtterance.lang = 'pt-BR';
+            const speedSelect = document.getElementById('voice-rate-select');
+            if (speedSelect) currentUtterance.rate = parseFloat(speedSelect.value) || 1.0;
+            
+            currentUtterance.onstart = () => { isSpeaking = true; isPaused = false; if (statusLabel) statusLabel.innerText = '🔊 Lendo...'; };
+            currentUtterance.onend = () => { isSpeaking = false; isPaused = false; if (statusLabel) statusLabel.innerText = '✅ Concluído.'; };
+            window.speechSynthesis.speak(currentUtterance);
+        }
+
+        function pauseVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window && isSpeaking && !isPaused) {
+                window.speechSynthesis.pause(); isPaused = true;
+                if (statusLabel) statusLabel.innerText = '⏸️ Pausado.';
             }
         }
 
-        function updateSimulation() {
-            const m = parseFloat(document.getElementById('mVal').value);
-            const F = parseFloat(document.getElementById('fVal').value);
-            const angDeg = parseFloat(document.getElementById('angVal').value);
-            const angRad = angDeg * Math.PI / 180;
-            const g = 9.80;
-
-            const P = m * g;
-            const Fy = F * Math.sin(angRad);
-            const Fx = F * Math.cos(angRad);
-            const N = Math.max(0, P - Fy);
-
-            document.getElementById('mDisp').innerText = m.toFixed(1);
-            document.getElementById('fDisp').innerText = F;
-            document.getElementById('angDisp').innerText = angDeg;
-
-            const canvas = document.getElementById('simCanvas');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            const bx = 140, by = 140, bw = 80, bh = 50;
-
-            // Piso
-            ctx.strokeStyle = '#475569'; ctx.lineWidth = 3;
-            ctx.beginPath(); ctx.moveTo(20, by + bh); ctx.lineTo(360, by + bh); ctx.stroke();
-
-            // Bloco
-            ctx.fillStyle = '#38bdf8'; ctx.strokeStyle = '#0284c7'; ctx.lineWidth = 2;
-            ctx.fillRect(bx, by, bw, bh); ctx.strokeRect(bx, by, bw, bh);
-            ctx.fillStyle = '#0f172a'; ctx.font = 'bold 12px Inter'; ctx.textAlign = 'center';
-            ctx.fillText('m = ' + m + 'kg', bx + bw/2, by + bh/2 + 4);
-
-            // Normal N (Verde)
-            if (N > 0) drawArrow(ctx, bx + bw/2, by, bx + bw/2, by - N*0.8, '#10b981', 'N=' + N.toFixed(1) + 'N');
-            // Peso P (Vermelho)
-            drawArrow(ctx, bx + bw/2, by + bh, bx + bw/2, by + bh + Math.min(75, P*0.6), '#ef4444', 'P=' + P.toFixed(1) + 'N');
-            // Força F (Dourado)
-            drawArrow(ctx, bx + bw, by + bh/2, bx + bw + Fx*0.8, by + bh/2 - Fy*0.8, '#fbbf24', 'F=' + F + 'N');
+        function stopVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); isSpeaking = false; isPaused = false;
+                if (statusLabel) statusLabel.innerText = '⏹️ Parado.';
+            }
         }
 
-        window.onload = updateSimulation;
+        function changeVoiceRate() {
+            if (isSpeaking && !isPaused) { stopVoiceNarration(); playVoiceNarration(); }
+        }
+
+        // Helper for doubled length vector arrows
+        function drawVectorArrow(ctx, x, y, dx, dy, color, label) {
+            const len = Math.hypot(dx, dy);
+            if (len < 2) return;
+            const angle = Math.atan2(dy, dx);
+            const headLen = Math.min(18, Math.max(12, len * 0.3));
+
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); ctx.stroke();
+
+            ctx.beginPath(); ctx.moveTo(x + dx, y + dy);
+            ctx.lineTo(x + dx - headLen * Math.cos(angle - Math.PI / 6), y + dy - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(x + dx - headLen * Math.cos(angle + Math.PI / 6), y + dy - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath(); ctx.fill();
+
+            if (label) {
+                const labelX = x + dx * 0.5;
+                const labelY = y + dy + (dy < 0 ? -16 : 22);
+                ctx.font = 'bold 13px Inter';
+                const textWidth = ctx.measureText(label).width;
+                ctx.fillStyle = 'rgba(5, 8, 17, 0.92)';
+                ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 14, textWidth + 12, 18);
+                ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+                ctx.strokeRect(labelX - textWidth / 2 - 6, labelY - 14, textWidth + 12, 18);
+
+                ctx.fillStyle = color; ctx.textAlign = 'center';
+                ctx.fillText(label, labelX, labelY);
+            }
+        }
+
+        let currentSlide = 1;
+        const totalSlides = 2;
+
+        function goToSlide(idx) {
+            currentSlide = idx;
+            document.querySelectorAll('.presentation-slide').forEach((s, i) => s.classList.toggle('active', i === (idx - 1)));
+            document.querySelectorAll('.slide-step-btn').forEach((b, i) => b.classList.toggle('active', i === (idx - 1)));
+            drawStage();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) goToSlide(currentSlide + 1);
+            else goToSlide(1);
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) goToSlide(currentSlide - 1);
+            else goToSlide(totalSlides);
+        }
+
+        function getCanvasCtx(id) {
+            const canvas = document.getElementById(id);
+            if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
+            const rect = canvas.getBoundingClientRect();
+            const w = rect.width > 0 ? rect.width : 600;
+            const h = rect.height > 0 ? rect.height : 480;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = Math.floor(w * dpr);
+            canvas.height = Math.floor(h * dpr);
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return { canvas, ctx, w, h };
+        }
+
+        function resetDemo() { goToSlide(1); }
+
+        function drawStage() {
+            const { ctx, w, h } = getCanvasCtx('stage-canvas');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            
+            const bx = w / 2, by = h / 2 + 20;
+            // Countertop
+            ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(40, by + 30); ctx.lineTo(w - 40, by + 30); ctx.stroke();
+
+            // Ketchup Bottle
+            ctx.fillStyle = '#ef4444'; ctx.fillRect(bx - 25, by - 50, 50, 80);
+            ctx.fillStyle = '#ffffff'; ctx.font = 'bold 12px Inter'; ctx.textAlign = 'center';
+            ctx.fillText('Ketchup', bx, by - 10);
+
+            // Vectors doubled
+            drawVectorArrow(ctx, bx + 25, by - 10, 160, 0, '#10b981', 'v0 = 2,8 m/s');
+            drawVectorArrow(ctx, bx - 25, by - 10, -150, 0, '#fbbf24', 'f_k = 1,8 N');
+            drawVectorArrow(ctx, bx, by - 50, 0, -120, '#38bdf8', 'N');
+            drawVectorArrow(ctx, bx, by + 30, 0, 120, '#f43f5e', 'p');
+        
+        }
+
+        window.addEventListener('load', () => { drawStage(); });
+        window.addEventListener('resize', () => { drawStage(); });
     </script>
 </body>
 </html>

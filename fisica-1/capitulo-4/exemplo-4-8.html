@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 4.7: Massa e Peso de um Carro Freando | FSC5101 Física I</title>
+    <title>Exemplo Conceitual 4.8: Terceira Lei de Newton — Qual Força é Maior? | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -228,8 +228,8 @@
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 4.7: Massa e Peso de um Carro Freando</h2>
-            <p><strong>Enunciado Oficial (Young & Freedman 12ª ed.):</strong> Um carro de peso w = 2,49 × 10⁴ N em movimento ao longo do eixo +Ox pára repentinamente; o componente x da força resultante que atua sobre o carro é ∑F_x = -1,83 × 10⁴ N. Qual é a sua aceleração?</p>
+            <h2>Exemplo Conceitual 4.8: Terceira Lei de Newton — Qual Força é Maior?</h2>
+            <p><strong>Enunciado Oficial (Young & Freedman 12ª ed.):</strong> Seu carro esportivo enguiça, e você o empurra até a oficina mais próxima. Quando o carro está começando a se mover, como a força que você exerce sobre o carro se compara com a força que o carro exerce sobre você? Como essas forças se comparam quando você empurra o carro com velocidade constante?</p>
         
             <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
                 <div style="display: flex; gap: 6px; align-items: center;">
@@ -257,7 +257,7 @@
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
         </div>
-        <div class="formula-badge">m = \frac{w}{g}, \quad a_x = \frac{\sum F_x}{m}</div>
+        <div class="formula-badge">\vec{F}_{Pessoa/Carro} = -\vec{F}_{Carro/Pessoa}</div>
     </div>
 
     <div class="presentation-container">
@@ -275,17 +275,17 @@
 
                 
         <div class="presentation-slide active" id="slide-1">
-            <div class="slide-badge">SLIDE 1 DE 2 • CÁLCULO DA MASSA</div>
-            <div class="slide-title">Massa a partir do Peso</div>
-            <div class="slide-formula"><code>m = \frac{w}{g} = \frac{2,49 \times 10^4 \text{ N}}{9,80 \text{ m/s}^2} = 2540 \text{ kg}</code></div>
-            <div class="slide-desc">Convertendo o peso em newtons para a massa inercial m = 2540 kg.</div>
+            <div class="slide-badge">SLIDE 1 DE 2 • TERCEIRA LEI DE NEWTON</div>
+            <div class="slide-title">Pares de Ação e Reação</div>
+            <div class="slide-formula"><code>|\vec{F}_{P/C}| = |\vec{F}_{C/P}|</code></div>
+            <div class="slide-desc">Em TODOS os momentos (tanto no início do movimento quanto em velocidade constante), a força que você exerce sobre o carro é IGUAL EM MÓDULO e oposta em sentido à força que o carro exerce sobre você!</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
-            <div class="slide-badge">SLIDE 2 DE 2 • CÁLCULO DA ACELERAÇÃO</div>
-            <div class="slide-title">Aceleração de Frenagem</div>
-            <div class="slide-formula"><code>a_x = \frac{\sum F_x}{m} = \frac{-1,83 \times 10^4 \text{ N}}{2540 \text{ kg}} = -7,20 \text{ m/s}^2</code></div>
-            <div class="slide-desc">A aceleração a_x = -7,20 m/s² (ou -0,735 g) indica frenagem intensa na direção -x.</div>
+            <div class="slide-badge">SLIDE 2 DE 2 • POR QUE O CARRO ACELERA?</div>
+            <div class="slide-title">Atrito dos Sapatos no Solo</div>
+            <div class="slide-formula"><code>\sum F_{carro} = F_{P/C} - f_{atrito,carro} > 0</code></div>
+            <div class="slide-desc">O carro acelera porque a força que você faz nele é maior do que o atrito dos pneus do carro com o solo. Você não escorrega porque o atrito dos seus sapatos no solo é suficiente!</div>
         </div>
         
             </div>
@@ -438,21 +438,18 @@
 
             
             const cx = w / 2, cy = h / 2 + 20;
-            // Road
-            ctx.strokeStyle = '#475569'; ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.moveTo(40, cy + 30); ctx.lineTo(w - 40, cy + 30); ctx.stroke();
+            // Person
+            ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.arc(cx - 90, cy - 40, 16, 0, 2*Math.PI); ctx.fill();
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 5;
+            ctx.beginPath(); ctx.moveTo(cx - 90, cy - 24); ctx.lineTo(cx - 90, cy + 20); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(cx - 90, cy - 10); ctx.lineTo(cx - 40, cy - 10); ctx.stroke(); // arms pushing
 
-            // Car body
-            ctx.fillStyle = '#a855f7'; ctx.fillRect(cx - 80, cy - 40, 160, 60);
-            ctx.fillStyle = '#0f172a'; ctx.beginPath(); ctx.arc(cx - 50, cy + 20, 16, 0, 2*Math.PI); ctx.arc(cx + 50, cy + 20, 16, 0, 2*Math.PI); ctx.fill();
+            // Car
+            ctx.fillStyle = '#ef4444'; ctx.fillRect(cx - 40, cy - 40, 130, 60);
 
-            // Double length vectors
-            drawVectorArrow(ctx, cx - 80, cy - 10, -180, 0, '#f43f5e', 'ΣFx = -1,83×10⁴ N');
-            drawVectorArrow(ctx, cx, cy - 40, 0, -150, '#38bdf8', 'N = 2,49×10⁴ N');
-            drawVectorArrow(ctx, cx, cy + 20, 0, 150, '#fbbf24', 'w = 2,49×10⁴ N');
-            if (currentSlide === 2) {
-                drawVectorArrow(ctx, cx, cy - 70, -160, 0, '#10b981', 'ax = -7,20 m/s²');
-            }
+            // Equal and opposite forces doubled length
+            drawVectorArrow(ctx, cx - 40, cy - 10, 160, 0, '#10b981', 'F_(Pessoa sobre Carro)');
+            drawVectorArrow(ctx, cx - 40, cy - 10, -160, 0, '#fbbf24', 'F_(Carro sobre Pessoa)');
         
         }
 

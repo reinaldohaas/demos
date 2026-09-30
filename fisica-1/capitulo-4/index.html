@@ -3,208 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capítulo 4: Leis de Newton do Movimento | FSC5101 Física I</title>
+    <title>Capítulo 4: Leis de Newton do Movimento | Young & Freedman 12ª ed.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #070a12;
-            --bg-card: rgba(15, 23, 42, 0.92);
+            --bg-card: rgba(15, 23, 42, 0.88);
             --bg-card-border: rgba(56, 189, 248, 0.25);
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
             --accent-cyan: #38bdf8;
-            --accent-purple: #a855f7;
             --accent-gold: #fbbf24;
             --accent-emerald: #10b981;
             --text-main: #f8fafc;
-            --text-sub: #cbd5e1;
+            --text-sub: #94a3b8;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg-dark); 
-            color: var(--text-main); 
-            padding: 40px 20px;
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
-                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
-            background-attachment: fixed;
-        }
-        .container { max-width: 1050px; margin: 0 auto; }
-        .back-nav { margin-bottom: 24px; }
-        .back-btn { 
-            background: rgba(255,255,255,0.08); 
-            border: 1px solid var(--bg-card-border); 
-            color: var(--accent-cyan); 
-            padding: 10px 18px; 
-            border-radius: 8px; 
-            text-decoration: none; 
-            font-weight: 700; 
-            transition: all 0.2s;
-        }
-        .back-btn:hover { background: rgba(56, 189, 248, 0.2); }
-        .header { text-align: center; margin-bottom: 35px; }
-        .header h1 { font-family: 'Outfit', sans-serif; font-size: 2.4rem; color: var(--accent-cyan); margin-bottom: 8px; }
-        .header p { color: var(--text-sub); font-size: 1.05rem; }
 
-        .hero-banner {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
-            border: 1px solid var(--accent-cyan);
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 35px;
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 45%);
+            background-attachment: fixed;
+            padding: 30px 20px;
+        }
+
+        .header {
+            max-width: 1200px;
+            margin: 0 auto 30px;
             text-align: center;
         }
-        .hero-banner h2 { font-family: 'Outfit', sans-serif; color: var(--accent-gold); font-size: 1.6rem; margin-bottom: 10px; }
-        .hero-btn { 
-            background: var(--accent-cyan); 
-            color: #020617; 
-            padding: 12px 24px; 
-            border-radius: 10px; 
-            font-weight: 800; 
-            text-decoration: none; 
-            display: inline-block; 
-            margin-top: 10px; 
-            transition: all 0.2s;
-        }
-        .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(56,189,248,0.4); }
 
-        .section-title {
-            color: var(--accent-cyan);
+        .header h1 {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
-            margin: 30px 0 16px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 2.4rem;
+            background: linear-gradient(135deg, #38bdf8 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
         }
 
-        .card { 
-            background: var(--bg-card); 
-            border: 1px solid var(--bg-card-border); 
-            border-radius: 14px; 
-            padding: 20px 24px; 
-            margin-bottom: 16px; 
-            text-decoration: none; 
-            color: inherit; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            transition: all 0.2s; 
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-sub);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
         }
-        .card:hover { border-color: var(--accent-cyan); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
-        .card-tag {
-            display: inline-block;
+
+        .catalog-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .example-card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 14px;
+            padding: 22px;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.25s ease;
+        }
+
+        .example-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.15);
+        }
+
+        .card-badge {
             font-size: 0.75rem;
             font-weight: 800;
-            padding: 3px 8px;
-            border-radius: 6px;
-            margin-bottom: 6px;
-            text-transform: uppercase;
+            color: var(--accent-cyan);
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
         }
-        .tag-dcl { background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
-        .tag-conceito { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
-        .tag-aplicacao { background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); border: 1px solid var(--accent-emerald); }
-        
-        .card-btn { 
-            background: rgba(56, 189, 248, 0.15); 
-            color: var(--accent-cyan); 
-            border: 1px solid var(--accent-cyan); 
-            padding: 8px 16px; 
-            border-radius: 8px; 
-            font-weight: 700; 
-            white-space: nowrap;
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            color: #f8fafc;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .card-desc {
+            font-size: 0.88rem;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 12px;
+        }
+
+        .formula {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+        }
+
+        .view-btn {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="back-nav"><a href="../index.html" class="back-btn">← Voltar ao Índice Geral</a></div>
-        
-        <div class="header">
-            <h1>⚖️ Capítulo 4: Leis de Newton do Movimento</h1>
-            <p>Visualizações Interativas, Testes Conceituais e Diagramas de Corpo Livre (DCL)</p>
-        </div>
 
-        <div class="hero-banner">
-            <h2><i class="fa-solid fa-desktop"></i> Apresentação de Slidedeck do Capítulo 4</h2>
-            <p style="color:var(--text-sub); font-size:1.05rem;">Acesse a apresentação de slides didáticos com diagramas vetoriais e simulações em tempo real.</p>
-            <a href="apresentacao.html" class="hero-btn"><i class="fa-solid fa-play"></i> Abrir Apresentação de Slides →</a>
-        </div>
-
-        <h3 class="section-title"><i class="fa-solid fa-atom"></i> Módulos Didáticos e Demonstradores de DCL</h3>
-
-        <!-- MÓDULO 1 -->
-        <a href="exemplo-4-1.html" class="card">
-            <div>
-                <span class="card-tag tag-dcl">Demonstrador DCL Interativo</span>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.1: Diagrama de Corpo Livre no Plano Inclinado com Atrito</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Simulador visual com vetores ampliados, decomposição da força Peso (Px, Py), força Normal, Atrito e Aceleração resultante.</div>
-            </div>
-            <div class="card-btn">Abrir Interativo →</div>
-        </a>
-
-        <!-- MÓDULO 2 -->
-        <a href="exemplo-4-2.html" class="card">
-            <div>
-                <span class="card-tag tag-conceito">Exemplo Conceitual</span>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo Conceitual 4.2: Primeira Lei de Newton, Inércia e Superposição de Forças</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Análise conceitual sobre a resultante nula ($\sum \vec{F} = \vec{0}$), referenciais inerciais e equilíbrio de forças num plano.</div>
-            </div>
-            <div class="card-btn">Abrir →</div>
-        </a>
-
-        <!-- MÓDULO 3 -->
-        <a href="exemplo-4-3.html" class="card">
-            <div>
-                <span class="card-tag tag-conceito">Exemplo Conceitual</span>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo Conceitual 4.3: Segunda Lei de Newton — Relação entre Força Resultante e Aceleração</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Discussão conceitual da relação $\sum \vec{F} = m\vec{a}$: direção do vetor aceleração vs. direção da velocidade.</div>
-            </div>
-            <div class="card-btn">Abrir →</div>
-        </a>
-
-        <!-- MÓDULO 4 -->
-        <a href="exemplo-4-4.html" class="card">
-            <div>
-                <span class="card-tag tag-conceito">Exemplo Conceitual</span>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo Conceitual 4.4: Terceira Lei de Newton — Pares de Ação e Reação e DCL</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Análise conceitual dos pares de forças de contato entre corpos distintos e por que forças de ação e reação nunca se cancelam no mesmo DCL.</div>
-            </div>
-            <div class="card-btn">Abrir →</div>
-        </a>
-
-        <!-- MÓDULO 5 -->
-        <a href="exemplo-4-5.html" class="card">
-            <div>
-                <span class="card-tag tag-aplicacao">Aplicação Prática</span>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.5: Decomposição Vetorial de Forças e Variação da Força Normal</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Análise da alteração no módulo da força Normal sob forças de puxão ou empurrão inclinadas em relação à superfície.</div>
-            </div>
-            <div class="card-btn">Abrir →</div>
-        </a>
-
-        <!-- MÓDULO 6 -->
-        <a href="exemplo-4-6.html" class="card">
-            <div>
-                <span class="card-tag tag-aplicacao">Aplicação Prática</span>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.6: Sistemas Conectados e Medição de Peso Aparente em Elevadores</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Estudo de sistemas de blocos acoplados por cordas e polias ideais e balança em referencial acelerado.</div>
-            </div>
-            <div class="card-btn">Abrir →</div>
-        </a>
-
-        <!-- MÓDULO 7 -->
-        <a href="exemplo-4-7.html" class="card">
-            <div>
-                <span class="card-tag tag-aplicacao">Análise Avançada</span>
-                <div style="font-weight:700; font-size:1.2rem; margin-bottom:6px;">Exemplo 4.7: Forças Variáveis com o Tempo e Velocidade Terminal</div>
-                <div style="color:var(--text-sub); font-size:0.92rem;">Estudo conceitual de forças dependentes do tempo e forças de arrasto proporcional à velocidade.</div>
-            </div>
-            <div class="card-btn">Abrir →</div>
-        </a>
-
+    <div class="header">
+        <h1>Capítulo 4: Leis de Newton do Movimento</h1>
+        <p>Catálogo Oficial dos 11 Exemplos do livro <strong>Física I — Young & Freedman (12ª Edição)</strong>. Todos os exemplos incluem enunciados autênticos, diagramas de corpo livre interativos com vetores em dobro do tamanho, simulações interativas e narração por voz.</p>
     </div>
+
+    <div class="catalog-grid">
+        
+        <a href="exemplo-4-1.html" class="example-card">
+            <div class="card-badge">EXEMPLO 4.1</div>
+            <h3 class="card-title">Exemplo 4.1: Superposição de Forças</h3>
+            <p class="card-desc">Três lutadores profissionais estão lutando pelo mesmo cinturão de campeão. Olhando de cima, eles aplicam três forças hor...</p>
+            <div class="card-footer">
+                <span class="formula">\vec{R} = \sum \vec{F} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+        
+        <a href="exemplo-4-2.html" class="example-card">
+            <div class="card-badge">EXEMPLO 4.2</div>
+            <h3 class="card-title">Exemplo Conceitual 4.2: Força Resultante Nula Significa Velocidade Constante</h3>
+            <p class="card-desc">Em um filme de ficção científica da década de 1950, uma espaçonave se move no vácuo do espaço sideral, longe de qualquer...</p>
+            <div class="card-footer">
+                <span class="formula">\sum \vec{F} = 0 \implies \vec{v} = \text{constante}</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+        
+        <a href="exemplo-4-3.html" class="example-card">
+            <div class="card-badge">EXEMPLO 4.3</div>
+            <h3 class="card-title">Exemplo Conceitual 4.3: Velocidade Constante Significa Força Resultante Nula</h3>
+            <p class="card-desc">Você está dirigindo um Porsche ao longo de um trecho retilíneo de teste com velocidade escalar constante igual a 150 km/...</p>
+            <div class="card-footer">
+                <span class="formula">\vec{v} = \text{constante} \implies \sum \vec{F} = 0</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+        
+        <a href="exemplo-4-4.html" class="example-card">
+            <div class="card-badge">EXEMPLO 4.4</div>
+            <h3 class="card-title">Exemplo 4.4: Determinação da Aceleração a partir da Força</h3>
+            <p class="card-desc">Um trabalhador aplica uma força horizontal constante de módulo igual a 20 N sobre uma caixa de massa igual a 40 kg que e...</p>
+            <div class="card-footer">
+                <span class="formula">a_x = \frac{\sum F_x}{m}</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+        
+        <a href="exemplo-4-5.html" class="example-card">
+            <div class="card-badge">EXEMPLO 4.5</div>
+            <h3 class="card-title">Exemplo 4.5: Determinação da Força a partir da Aceleração</h3>
+            <p class="card-desc">Uma garçonete empurra uma garrafa de ketchup de massa m = 0,45 kg ao longo de um balcão liso e horizontal. Quando a garr...</p>
+            <div class="card-footer">
+                <span class="formula">v^2 = v_0^2 + 2 a_x (x - x_0) \implies f_k = -m a_x</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+        
+        <a href="exemplo-4-6.html" class="example-card">
+            <div class="card-badge">EXEMPLO 4.6</div>
+            <h3 class="card-title">Exemplo Conceitual 4.6: Força Resultante e Aceleração em Queda Livre</h3>
+            <p class="card-desc">Uma moeda é largada do repouso do alto da Torre Inclinada de Pisa. Se a moeda cai em queda livre, de modo que os efeitos...</p>
+            <div class="card-footer">
+                <span class="formula">\sum \vec{F} = \vec{p} = m \vec{g}</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+        
+        <a href="exemplo-4-7.html" class="example-card">
+            <div class="card-badge">EXEMPLO 4.7</div>
+            <h3 class="card-title">Exemplo 4.7: Massa e Peso de um Carro Freando</h3>
+            <p class="card-desc">Um carro de peso w = 2,49 × 10⁴ N em movimento ao longo do eixo +Ox pára repentinamente; o componente x da força resulta...</p>
+            <div class="card-footer">
+                <span class="formula">m = \frac{w}{g}, \quad a_x = \frac{\sum F_x}{m}</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+        
+        <a href="exemplo-4-8.html" class="example-card">
+            <div class="card-badge">EXEMPLO 4.8</div>
+            <h3 class="card-title">Exemplo Conceitual 4.8: Terceira Lei de Newton — Qual Força é Maior?</h3>
+            <p class="card-desc">Seu carro esportivo enguiça, e você o empurra até a oficina mais próxima. Quando o carro está começando a se mover, como...</p>
+            <div class="card-footer">
+                <span class="formula">\vec{F}_{Pessoa/Carro} = -\vec{F}_{Carro/Pessoa}</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+        
+        <a href="exemplo-4-9.html" class="example-card">
+            <div class="card-badge">EXEMPLO 4.9</div>
+            <h3 class="card-title">Exemplo Conceitual 4.9: Aplicação da Terceira Lei de Newton: Objetos em Repouso</h3>
+            <p class="card-desc">Uma maçã está em repouso sobre uma mesa. Quais são as forças que atuam sobre ela? Quais são as forças de reação a cada u...</p>
+            <div class="card-footer">
+                <span class="formula">\vec{F}_{Mesa/Maçã} = -\vec{F}_{Maçã/Mesa}, \quad \vec{F}_{Terra/Maçã} = -\vec{F}_{Maçã/Terra}</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+        
+        <a href="exemplo-4-10.html" class="example-card">
+            <div class="card-badge">EXEMPLO 4.10</div>
+            <h3 class="card-title">Exemplo Conceitual 4.10: Aplicação da Terceira Lei de Newton: Objetos em Movimento</h3>
+            <p class="card-desc">Um pedreiro arrasta um bloco de mármore em um piso, puxando-o por meio de uma corda amarrada ao bloco. O bloco pode ou n...</p>
+            <div class="card-footer">
+                <span class="formula">\vec{F}_{Pedreiro/Corda} = -\vec{F}_{Corda/Pedreiro}, \quad \vec{F}_{Corda/Bloco} = -\vec{F}_{Bloco/Corda}</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+        
+        <a href="exemplo-4-11.html" class="example-card">
+            <div class="card-badge">EXEMPLO 4.11</div>
+            <h3 class="card-title">Exemplo Conceitual 4.11: Um Paradoxo da Terceira Lei de Newton?</h3>
+            <p class="card-desc">No Exemplo 4.10, observamos que o pedreiro puxa a combinação corda-bloco com toda força, que o puxa de volta com força i...</p>
+            <div class="card-footer">
+                <span class="formula">\sum F_{bloco} = T - f_{bloco} > 0, \quad \sum F_{pedreiro} = f_{pedreiro} - T = 0</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+        
+    </div>
+
 </body>
 </html>

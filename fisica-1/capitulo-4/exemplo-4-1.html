@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 4.1: Leis de Newton em Plano Inclinado com Atrito | FSC5101 Física I</title>
+    <title>Exemplo 4.1: Superposição de Forças | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -76,7 +76,7 @@
             margin-bottom: 6px;
         }
 
-        .statement-title p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; }
+        .statement-title p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; max-width: 900px; }
 
         .formula-badge {
             background: rgba(56, 189, 248, 0.1);
@@ -209,7 +209,7 @@
 
         .canvas-holder {
             width: 100%;
-            height: 540px;
+            height: 480px;
             background: #050811;
             border-radius: 10px;
             overflow: hidden;
@@ -217,76 +217,20 @@
         }
 
         canvas { width: 100%; height: 100%; display: block; }
-    
-        .scene-card canvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-        }
-
-    
-        .controls-panel-inline {
-            background: rgba(10, 16, 30, 0.85);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 12px;
-            padding: 16px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .controls-row {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .control-group-inline {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            min-width: 200px;
-        }
-        .control-group-inline label {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text-sub);
-            display: flex;
-            justify-content: space-between;
-        }
-        .control-group-inline label span {
-            color: var(--accent-cyan);
-            font-family: monospace;
-            font-weight: 800;
-            font-size: 1.15rem;
-            line-height: 1.7;
-        }
-        .btn-group-inline {
-            display: flex;
-            gap: 10px;
-        }
-        
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
     <div class="top-nav">
-        <a href="index.html" class="back-btn">← Voltar ao Catálogo dos 7 Exemplos</a>
+        <a href="index.html" class="back-btn">← Voltar ao Catálogo dos 11 Exemplos</a>
         <span style="font-size:0.85rem; color:var(--text-sub);">Capítulo 4 • Leis de Newton do Movimento</span>
     </div>
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 4.1: Leis de Newton em Plano Inclinado com Atrito</h2>
-            <p>Um bloco de massa m = 2,0 kg desliza sobre um plano inclinado de θ = 30,0° com coeficiente de atrito cinético μ_k = 0,20 (g = 9,80 m/s²).</p>
+            <h2>Exemplo 4.1: Superposição de Forças</h2>
+            <p><strong>Enunciado Oficial (Young & Freedman 12ª ed.):</strong> Três lutadores profissionais estão lutando pelo mesmo cinturão de campeão. Olhando de cima, eles aplicam três forças horizontais sobre o cinturão. Os módulos das três forças são F₁ = 250 N (a 127°), F₂ = 50 N (a 0°) e F₃ = 120 N (a 270°). Ache os componentes x e y da força resultante. Determine o módulo, a direção e o sentido da força resultante.</p>
         
-        <div style="margin-top: 14px; display: flex; gap: 10px; align-items: center;">
-            <button id="btn-voice" class="btn btn-secondary" onclick="toggleVoiceNarration()" style="background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.4); color: #d8b4fe; font-weight: 700; padding: 10px 18px; border-radius: 8px; cursor: pointer;">
-                🔊 Ouvir Explicação e Enunciado por Voz
-            </button>
-        </div>
-
             <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
                 <div style="display: flex; gap: 6px; align-items: center;">
                     <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
@@ -312,8 +256,8 @@
                 
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
-</div>
-        <div class="formula-badge">a = g (sinθ - μ_k cosθ)</div>
+        </div>
+        <div class="formula-badge">\vec{R} = \sum \vec{F} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3</div>
     </div>
 
     <div class="presentation-container">
@@ -324,44 +268,32 @@
                     📺 APRESENTAÇÃO DIDÁTICA PASSO A PASSO
                 </div>
                 <div class="slide-stepper">
-                    
-        <button class="slide-step-btn active" onclick="goToSlide(1)">Item (a)</button>
-        
-        <button class="slide-step-btn " onclick="goToSlide(2)">Item (b)</button>
-        
-        <button class="slide-step-btn " onclick="goToSlide(3)">Item (c)</button>
-        
-        <button class="slide-step-btn " onclick="goToSlide(4)">Item (d)</button>
-        
+                    <button class="slide-step-btn active" onclick="goToSlide(1)">Slide 1</button>
+<button class="slide-step-btn " onclick="goToSlide(2)">Slide 2</button>
+<button class="slide-step-btn " onclick="goToSlide(3)">Slide 3</button>
+
                 </div>
 
                 
         <div class="presentation-slide active" id="slide-1">
-            <div class="slide-badge">SLIDE 1 DE 4 • ITEM (A)</div>
-            <div class="slide-title">Força Normal N</div>
-            <div class="slide-formula"><code>N = m g cosθ</code></div>
-            <div class="slide-desc">N = 2,0 × 9,80 × cos(30°) = 19,6 × 0,866 = 16,97 N.</div>
+            <div class="slide-badge">SLIDE 1 DE 3 • COMPONENTES DAS FORÇAS</div>
+            <div class="slide-title">Cálculo dos Componentes x e y</div>
+            <div class="slide-formula"><code>F_x = F \cos\theta, \quad F_y = F \operatorname{sen}\theta</code></div>
+            <div class="slide-desc">F1: F1x = 250 cos(127°) = -150 N, F1y = 250 sen(127°) = 200 N.<br>F2: F2x = 50 cos(0°) = 50 N, F2y = 0 N.<br>F3: F3x = 0 N, F3y = 120 sen(270°) = -120 N.</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
-            <div class="slide-badge">SLIDE 2 DE 4 • ITEM (B)</div>
-            <div class="slide-title">Força de Atrito Cinético f_k</div>
-            <div class="slide-formula"><code>f_k = μ_k N</code></div>
-            <div class="slide-desc">f_k = 0,20 × 16,97 N = 3,39 N.</div>
+            <div class="slide-badge">SLIDE 2 DE 3 • FORÇA RESULTANTE</div>
+            <div class="slide-title">Soma Vetorial dos Componentes</div>
+            <div class="slide-formula"><code>R_x = \sum F_x, \quad R_y = \sum F_y</code></div>
+            <div class="slide-desc">Rx = -150 + 50 + 0 = -100 N.<br>Ry = 200 + 0 - 120 = +80 N.<br>A força resultante aponta para o segundo quadrante (esquerda e para cima).</div>
         </div>
         
         <div class="presentation-slide " id="slide-3">
-            <div class="slide-badge">SLIDE 3 DE 4 • ITEM (C)</div>
-            <div class="slide-title">Componente do Peso Paralela à Rampa</div>
-            <div class="slide-formula"><code>P_x = m g sinθ</code></div>
-            <div class="slide-desc">P_x = 2,0 × 9,80 × sin(30°) = 19,6 × 0,5 = 9,80 N.</div>
-        </div>
-        
-        <div class="presentation-slide " id="slide-4">
-            <div class="slide-badge">SLIDE 4 DE 4 • ITEM (D)</div>
-            <div class="slide-title">Aceleração Resultante a</div>
-            <div class="slide-formula"><code>a = (P_x - f_k) / m</code></div>
-            <div class="slide-desc">a = (9,80 - 3,39) / 2,0 = 6,41 / 2,0 = 3,21 m/s².</div>
+            <div class="slide-badge">SLIDE 3 DE 3 • MÓDULO E ÂNGULO</div>
+            <div class="slide-title">Módulo e Direção de R</div>
+            <div class="slide-formula"><code>R = \sqrt{R_x^2 + R_y^2} = 128 \text{ N}, \quad \theta = 141^\circ</code></div>
+            <div class="slide-desc">R = √((-100)² + 80²) = √(16400) = 128 N.<br>θ = arctg(80 / -100) = 141° (segundo quadrante).</div>
         </div>
         
             </div>
@@ -372,117 +304,59 @@
             </div>
         </div>
 
-        <!-- Interactive Plot & Visual Stage -->
+        <!-- Interactive Canvas Stage (Vectors Doubled) -->
         <div class="interactive-stage">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-weight:700; font-size:0.9rem; color:var(--text-sub);">📊 Gráficos & Simulação em Tempo Real</span>
-                <button class="nav-btn" style="padding:4px 12px; font-size:0.75rem;" onclick="resetDemo()">↺ Resetar (t = 0 s)</button>
+                <span style="font-weight:700; font-size:0.9rem; color:var(--text-sub);">📊 Diagrama de Corpo Livre & Vetores (Tamanho Ampliado 2x)</span>
+                <button class="nav-btn" style="padding:4px 12px; font-size:0.75rem;" onclick="resetDemo()">↺ Resetar</button>
             </div>
 
             <div class="canvas-holder">
                 <canvas id="stage-canvas"></canvas>
             </div>
         
-            <!-- SIMULAÇÕES PÚBLICAS RECOMENDADAS (PhET Colorado & GeoGebra) -->
+            <!-- SIMULAÇÕES PÚBLICAS RECOMENDADAS -->
             <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 14px; margin-top: 14px;">
                 <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; margin-bottom:8px;">🌐 SIMULAÇÕES PÚBLICAS RECOMENDADAS:</div>
                 <ul style="font-size:0.85rem; color:#cbd5e1; padding-left:18px; line-height:1.8;">
-                    <li><a href="https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_all.html" target="_blank" rel="noopener noreferrer" style="color:#fbbf24; font-weight:700; text-decoration:underline;">🔗 PhET Colorado - Forças e Movimento: Fundamentos (Simulador Direto)</a></li>
+                    <li><a href="https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_all.html" target="_blank" rel="noopener noreferrer" style="color:#fbbf24; font-weight:700; text-decoration:underline;">🔗 PhET Colorado - Forças e Movimento: Fundamentos</a></li>
                     <li><a href="https://phet.colorado.edu/en/simulations/forces-and-motion-basics" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">🔗 PhET Colorado - Página Oficial de Forças e Movimento</a></li>
-                    <li><a href="https://www.geogebra.org/search/plano%20inclinado" target="_blank" rel="noopener noreferrer" style="color:#a855f7; font-weight:700; text-decoration:underline;">🔗 GeoGebra - Simulações Interativas de Plano Inclinado e Vetores</a></li>
+                    <li><a href="https://www.geogebra.org/search/leis%20de%20newton" target="_blank" rel="noopener noreferrer" style="color:#a855f7; font-weight:700; text-decoration:underline;">🔗 GeoGebra - Simulações Interativas de Leis de Newton</a></li>
                 </ul>
             </div>
-</div>
+        </div>
     </div>
 
     <script>
-
-        // Web Speech API - Complete Voice Controls Engine
-        let isSpeaking = false;
-        let isPaused = false;
-        let currentUtterance = null;
-        let voiceSpeedRate = 1.0;
-        let browserVoices = [];
-
-        function loadBrowserVoices() {
-            if ('speechSynthesis' in window) {
-                browserVoices = window.speechSynthesis.getVoices();
-            }
-        }
-        if ('speechSynthesis' in window) {
-            loadBrowserVoices();
-            window.speechSynthesis.onvoiceschanged = loadBrowserVoices;
-        }
+        // Web Speech API
+        let isSpeaking = false, isPaused = false, currentUtterance = null, voiceSpeedRate = 1.0;
 
         function playVoiceNarration() {
-            if (!('speechSynthesis' in window)) {
-                alert('Seu navegador não suporta a API de narração por voz.');
-                return;
-            }
-
+            if (!('speechSynthesis' in window)) return alert('Navegador sem suporte a voz.');
             const statusLabel = document.getElementById('voice-status-text');
-
             if (isPaused) {
                 window.speechSynthesis.resume();
-                isPaused = false;
-                isSpeaking = true;
+                isPaused = false; isSpeaking = true;
                 if (statusLabel) statusLabel.innerText = '🔊 Reproduzindo...';
                 return;
             }
-
             window.speechSynthesis.cancel();
-
             const stmt = document.querySelector('.statement-title p')?.innerText || '';
-            const items = Array.from(document.querySelectorAll('.item-content, .item-calc, .step-desc'))
-                .map(el => el.innerText.replace(/[\n\r]+/g, ' '))
-                .join('. ');
-            const fullText = (stmt + '. Resolução Didática: ' + items).trim();
-
-            currentUtterance = new SpeechSynthesisUtterance(fullText);
+            const items = Array.from(document.querySelectorAll('.slide-desc')).map(el => el.innerText).join('. ');
+            currentUtterance = new SpeechSynthesisUtterance(stmt + '. ' + items);
             currentUtterance.lang = 'pt-BR';
-
             const speedSelect = document.getElementById('voice-rate-select');
-            if (speedSelect) {
-                voiceSpeedRate = parseFloat(speedSelect.value) || 1.0;
-            }
-            currentUtterance.rate = voiceSpeedRate;
-            currentUtterance.pitch = 1.0;
-            currentUtterance.volume = 1.0;
-
-            const ptVoice = browserVoices.find(v => v.lang && (v.lang.includes('pt-BR') || v.lang.includes('pt')));
-            if (ptVoice) {
-                currentUtterance.voice = ptVoice;
-            }
-
-            currentUtterance.onstart = function() {
-                isSpeaking = true;
-                isPaused = false;
-                if (statusLabel) statusLabel.innerText = '🔊 Lendo...';
-            };
-
-            currentUtterance.onend = function() {
-                isSpeaking = false;
-                isPaused = false;
-                if (statusLabel) statusLabel.innerText = '✅ Concluído.';
-            };
-
-            currentUtterance.onerror = function() {
-                isSpeaking = false;
-                isPaused = false;
-                if (statusLabel) statusLabel.innerText = 'Status: Pronto';
-            };
-
-            if (window.speechSynthesis.paused) {
-                window.speechSynthesis.resume();
-            }
+            if (speedSelect) currentUtterance.rate = parseFloat(speedSelect.value) || 1.0;
+            
+            currentUtterance.onstart = () => { isSpeaking = true; isPaused = false; if (statusLabel) statusLabel.innerText = '🔊 Lendo...'; };
+            currentUtterance.onend = () => { isSpeaking = false; isPaused = false; if (statusLabel) statusLabel.innerText = '✅ Concluído.'; };
             window.speechSynthesis.speak(currentUtterance);
         }
 
         function pauseVoiceNarration() {
             const statusLabel = document.getElementById('voice-status-text');
             if ('speechSynthesis' in window && isSpeaking && !isPaused) {
-                window.speechSynthesis.pause();
-                isPaused = true;
+                window.speechSynthesis.pause(); isPaused = true;
                 if (statusLabel) statusLabel.innerText = '⏸️ Pausado.';
             }
         }
@@ -490,30 +364,21 @@
         function stopVoiceNarration() {
             const statusLabel = document.getElementById('voice-status-text');
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                isSpeaking = false;
-                isPaused = false;
+                window.speechSynthesis.cancel(); isSpeaking = false; isPaused = false;
                 if (statusLabel) statusLabel.innerText = '⏹️ Parado.';
             }
         }
 
         function changeVoiceRate() {
-            const speedSelect = document.getElementById('voice-rate-select');
-            if (speedSelect) {
-                voiceSpeedRate = parseFloat(speedSelect.value) || 1.0;
-            }
-            if (isSpeaking && !isPaused) {
-                stopVoiceNarration();
-                playVoiceNarration();
-            }
+            if (isSpeaking && !isPaused) { stopVoiceNarration(); playVoiceNarration(); }
         }
 
-
-        function drawVectorArrow(ctx, x, y, dx, dy, color, label, labelBelow = false) {
+        // Helper for doubled length vector arrows
+        function drawVectorArrow(ctx, x, y, dx, dy, color, label) {
             const len = Math.hypot(dx, dy);
             if (len < 2) return;
             const angle = Math.atan2(dy, dx);
-            const headLen = Math.min(18, Math.max(12, len * 0.35));
+            const headLen = Math.min(18, Math.max(12, len * 0.3));
 
             ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 4;
             ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); ctx.stroke();
@@ -525,14 +390,13 @@
 
             if (label) {
                 const labelX = x + dx * 0.5;
-                const labelY = labelBelow ? (y + dy + 24) : (y + dy - 14);
-                
+                const labelY = y + dy + (dy < 0 ? -16 : 22);
                 ctx.font = 'bold 13px Inter';
                 const textWidth = ctx.measureText(label).width;
-                ctx.fillStyle = 'rgba(5, 8, 17, 0.94)';
-                ctx.fillRect(labelX - textWidth / 2 - 8, labelY - 14, textWidth + 16, 20);
-                ctx.strokeStyle = color; ctx.lineWidth = 1.8;
-                ctx.strokeRect(labelX - textWidth / 2 - 8, labelY - 14, textWidth + 16, 20);
+                ctx.fillStyle = 'rgba(5, 8, 17, 0.92)';
+                ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 14, textWidth + 12, 18);
+                ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+                ctx.strokeRect(labelX - textWidth / 2 - 6, labelY - 14, textWidth + 12, 18);
 
                 ctx.fillStyle = color; ctx.textAlign = 'center';
                 ctx.fillText(label, labelX, labelY);
@@ -540,7 +404,7 @@
         }
 
         let currentSlide = 1;
-        const totalSlides = 4;
+        const totalSlides = 3;
 
         function goToSlide(idx) {
             currentSlide = idx;
@@ -559,12 +423,12 @@
             else goToSlide(totalSlides);
         }
 
-                function getCanvasCtx(id) {
+        function getCanvasCtx(id) {
             const canvas = document.getElementById(id);
             if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
             const rect = canvas.getBoundingClientRect();
-            const w = rect.width > 0 ? rect.width : (canvas.clientWidth || 600);
-            const h = rect.height > 0 ? rect.height : (canvas.clientHeight || 400);
+            const w = rect.width > 0 ? rect.width : 600;
+            const h = rect.height > 0 ? rect.height : 480;
             const dpr = window.devicePixelRatio || 1;
             canvas.width = Math.floor(w * dpr);
             canvas.height = Math.floor(h * dpr);
@@ -573,246 +437,41 @@
             return { canvas, ctx, w, h };
         }
 
-        function resetDemo() {
-            goToSlide(1);
-        }
-
-        
-        // --- HELPER FUNCTIONS FOR BACKGROUND GRID AND GRADUATED AXES WITH NUMBERS ---
-        function drawCartesianGrid2D(ctx, w, h, options = {}) {
-            const minX = options.minX !== undefined ? options.minX : -10;
-            const maxX = options.maxX !== undefined ? options.maxX : 10;
-            const minY = options.minY !== undefined ? options.minY : -10;
-            const maxY = options.maxY !== undefined ? options.maxY : 10;
-            const stepX = options.stepX || 2;
-            const stepY = options.stepY || 2;
-            const padL = options.padL || 60;
-            const padR = options.padR || 40;
-            const padT = options.padT || 40;
-            const padB = options.padB || 50;
-            const labelX = options.labelX || 'Eixo X';
-            const labelY = options.labelY || 'Eixo Y';
-            const unitX = options.unitX || 'm';
-            const unitY = options.unitY || 'm';
-
-            const gW = w - padL - padR;
-            const gH = h - padT - padB;
-
-            const toPxX = x => padL + ((x - minX) / (maxX - minX)) * gW;
-            const toPxY = y => (h - padB) - ((y - minY) / (maxY - minY)) * gH;
-
-            const originX = toPxX(0);
-            const originY = toPxY(0);
-
-            // 1. Grid Lines (Horizontal & Vertical)
-            ctx.strokeStyle = 'rgba(51, 65, 85, 0.35)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
-            for (let x = minX; x <= maxX + 1e-5; x += stepX) {
-                const px = toPxX(x);
-                ctx.beginPath(); ctx.moveTo(px, padT); ctx.lineTo(px, h - padB); ctx.stroke();
-            }
-            for (let y = minY; y <= maxY + 1e-5; y += stepY) {
-                const py = toPxY(y);
-                ctx.beginPath(); ctx.moveTo(padL, py); ctx.lineTo(w - padR, py); ctx.stroke();
-            }
-            ctx.setLineDash([]);
-
-            // 2. Axes Lines
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2;
-            ctx.beginPath(); ctx.moveTo(padL - 10, originY); ctx.lineTo(w - padR + 10, originY); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(originX, h - padB + 10); ctx.lineTo(originX, padT - 10); ctx.stroke();
-
-            // 3. Axis Titles
-            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
-            ctx.fillText(`${labelX} (${unitX})`, w - padR + 14, originY + 4);
-            ctx.textAlign = 'center'; ctx.fillStyle = '#10b981';
-            ctx.fillText(`${labelY} (${unitY})`, originX, padT - 16);
-
-            // 4. Numbered Ticks on X Axis
-            for (let x = minX; x <= maxX + 1e-5; x += stepX) {
-                const px = toPxX(x);
-                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
-                ctx.beginPath(); ctx.moveTo(px, originY - 4); ctx.lineTo(px, originY + 4); ctx.stroke();
-                ctx.font = '11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
-                let txt = Number.isInteger(x) ? `${x}` : `${x.toFixed(1)}`;
-                ctx.fillText(txt, px, originY + 18);
-            }
-
-            // 5. Numbered Ticks on Y Axis
-            for (let y = minY; y <= maxY + 1e-5; y += stepY) {
-                if (Math.abs(y) < 1e-5 && minX <= 0 && maxX >= 0) continue; // avoid overlapping origin
-                const py = toPxY(y);
-                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
-                ctx.beginPath(); ctx.moveTo(originX - 4, py); ctx.lineTo(originX + 4, py); ctx.stroke();
-                ctx.font = '11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'right';
-                let txt = Number.isInteger(y) ? `${y}` : `${y.toFixed(1)}`;
-                ctx.fillText(txt, originX - 8, py + 4);
-            }
-
-            return { toPxX, toPxY, originX, originY };
-        }
-
-        function drawCartesianGrid3D(ctx, w, h, options = {}) {
-            const maxX = options.maxX || 10;
-            const maxY = options.maxY || 10;
-            const maxZ = options.maxZ || 10;
-            const stepX = options.stepX || 2;
-            const stepY = options.stepY || 2;
-            const stepZ = options.stepZ || 2;
-            const ox = options.ox || (w / 2 - 40);
-            const oy = options.oy || (h / 2 + 50);
-
-            const angleZ = Math.PI / 6;
-            const scaleX = options.scaleX || 20;
-            const scaleY = options.scaleY || 20;
-            const scaleZ = options.scaleZ || 15;
-
-            const project3D = (x, y, z) => {
-                const px = ox + x * scaleX + z * scaleZ * Math.cos(angleZ);
-                const py = oy - y * scaleY - z * scaleZ * Math.sin(angleZ);
-                return { x: px, y: py };
-            };
-
-            // Grid floor (XZ plane)
-            ctx.strokeStyle = 'rgba(51, 65, 85, 0.35)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
-            for (let x = 0; x <= maxX + 1e-5; x += stepX) {
-                const p1 = project3D(x, 0, 0);
-                const p2 = project3D(x, 0, maxZ);
-                ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-            }
-            for (let z = 0; z <= maxZ + 1e-5; z += stepZ) {
-                const p1 = project3D(0, 0, z);
-                const p2 = project3D(maxX, 0, z);
-                ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
-            }
-            ctx.setLineDash([]);
-
-            // Axes lines
-            const pO = project3D(0,0,0);
-            const pX = project3D(maxX, 0, 0);
-            const pY = project3D(0, maxY, 0);
-            const pZ = project3D(0, 0, maxZ);
-
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2.5;
-            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pX.x, pX.y); ctx.stroke();
-            ctx.font = 'bold 12px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
-            ctx.fillText('Eixo X (+m)', pX.x + 8, pX.y + 4);
-
-            ctx.strokeStyle = '#10b981'; ctx.lineWidth = 2.5;
-            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pY.x, pY.y); ctx.stroke();
-            ctx.fillStyle = '#10b981'; ctx.textAlign = 'center';
-            ctx.fillText('Eixo Y (+m)', pY.x, pY.y - 10);
-
-            ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 2.5;
-            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pZ.x, pZ.y); ctx.stroke();
-            ctx.fillStyle = '#a855f7'; ctx.textAlign = 'right';
-            ctx.fillText('Eixo Z (profundidade)', pZ.x - 8, pZ.y - 4);
-
-            // Numbered ticks X
-            for (let x = 0; x <= maxX + 1e-5; x += stepX) {
-                const p = project3D(x, 0, 0);
-                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
-                ctx.beginPath(); ctx.moveTo(p.x, p.y - 4); ctx.lineTo(p.x, p.y + 4); ctx.stroke();
-                ctx.font = '11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
-                ctx.fillText(`${x}`, p.x, p.y + 16);
-            }
-            // Numbered ticks Y
-            for (let y = stepY; y <= maxY + 1e-5; y += stepY) {
-                const p = project3D(0, y, 0);
-                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
-                ctx.beginPath(); ctx.moveTo(p.x - 4, p.y); ctx.lineTo(p.x + 4, p.y); ctx.stroke();
-                ctx.font = '11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'right';
-                ctx.fillText(`${y}`, p.x - 8, p.y + 4);
-            }
-            // Numbered ticks Z
-            for (let z = stepZ; z <= maxZ + 1e-5; z += stepZ) {
-                const p = project3D(0, 0, z);
-                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
-                ctx.beginPath(); ctx.moveTo(p.x - 4, p.y - 2); ctx.lineTo(p.x + 4, p.y + 2); ctx.stroke();
-                ctx.font = '11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'left';
-                ctx.fillText(`${z}`, p.x + 8, p.y + 4);
-            }
-
-            return { project3D, pO, pX, pY, pZ };
-        }
+        function resetDemo() { goToSlide(1); }
 
         function drawStage() {
             const { ctx, w, h } = getCanvasCtx('stage-canvas');
             if (!ctx) return;
             ctx.clearRect(0, 0, w, h);
 
-            // Background incline plane diagram
-            const angleDeg = 30;
-            const angleRad = (angleDeg * Math.PI) / 180;
-            const startX = 40;
-            const startY = h - 60;
-            const inclineLen = w - 90;
-            const endX = startX + inclineLen * Math.cos(angleRad);
-            const endY = startY - inclineLen * Math.sin(angleRad);
+            
+            const cx = w / 2, cy = h / 2;
+            // Draw coordinate axes
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(40, cy); ctx.lineTo(w - 40, cy); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(cx, 40); ctx.lineTo(cx, h - 40); ctx.stroke();
+            
+            // Belt at center
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(cx, cy, 18, 0, 2*Math.PI); ctx.fill();
+            ctx.fillStyle = '#0f172a'; ctx.font = 'bold 11px Inter'; ctx.textAlign = 'center'; ctx.fillText('Cinturão', cx, cy + 4);
 
-            // Draw Incline
-            ctx.strokeStyle = '#475569'; ctx.lineWidth = 3;
-            ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(endX, endY); ctx.lineTo(endX, startY); ctx.closePath();
-            ctx.fillStyle = 'rgba(30, 41, 59, 0.7)'; ctx.fill(); ctx.stroke();
+            // Double length vectors
+            // F1: 250N at 127 deg => dx = -150*0.7 = -105, dy = -200*0.7 = -140
+            drawVectorArrow(ctx, cx, cy, -160, -210, '#38bdf8', 'F1 = 250 N (127°)');
+            // F2: 50N at 0 deg => dx = +100
+            drawVectorArrow(ctx, cx, cy, 110, 0, '#10b981', 'F2 = 50 N (0°)');
+            // F3: 120N at 270 deg => dy = +170
+            drawVectorArrow(ctx, cx, cy, 0, 170, '#f43f5e', 'F3 = 120 N (270°)');
 
-            // Draw Angle arc
-            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2;
-            ctx.beginPath(); ctx.arc(startX, startY, 40, -angleRad, 0); ctx.stroke();
-            ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 13px Inter';
-            ctx.fillText('θ = 30°', startX + 50, startY - 10);
-
-            // Block Position on incline
-            const bx = startX + inclineLen * 0.45 * Math.cos(angleRad);
-            const by = startY - inclineLen * 0.45 * Math.sin(angleRad);
-            const blockW = 110, blockH = 65;
-
-            ctx.save();
-            ctx.translate(bx, by);
-            ctx.rotate(-angleRad);
-
-            // Draw Block
-            ctx.fillStyle = '#38bdf8'; ctx.strokeStyle = '#0284c7'; ctx.lineWidth = 3.5;
-            ctx.fillRect(-blockW/2, -blockH, blockW, blockH);
-            ctx.strokeRect(-blockW/2, -blockH, blockW, blockH);
-            ctx.fillStyle = '#0f172a'; ctx.font = 'bold 15px Inter'; ctx.textAlign = 'center';
-            ctx.fillText('m = 2,0 kg', 0, -blockH/2 + 6);
-
-            // Normal Force Vector (doubled length: 210px)
-            if (currentSlide === 1 || currentSlide === 4) {
-                drawVectorArrow(ctx, 0, -blockH/2, 0, -210, '#10b981', 'N = 16,97 N');
-            } else {
-                drawVectorArrow(ctx, 0, -blockH/2, 0, -120, 'rgba(16, 185, 129, 0.4)', 'N');
+            if (currentSlide === 2 || currentSlide === 3) {
+                // Resultant R: (-100, +80) => canvas dx = -140, dy = -112
+                drawVectorArrow(ctx, cx, cy, -140, -112, '#a855f7', 'R = 128 N (141°)');
             }
-
-            // Friction Force Vector (doubled length: 160px)
-            if (currentSlide === 2 || currentSlide === 4) {
-                drawVectorArrow(ctx, 0, -blockH/2, 160, 0, '#eab308', 'f_k = 3,39 N');
-            } else {
-                drawVectorArrow(ctx, 0, -blockH/2, 100, 0, 'rgba(234, 179, 8, 0.4)', 'f_k');
-            }
-
-            // Acceleration Vector (doubled length: -180px)
-            if (currentSlide === 4) {
-                drawVectorArrow(ctx, 0, -blockH - 28, -180, 0, '#a855f7', 'a = 3,21 m/s²');
-            }
-
-            ctx.restore();
-
-            // Weight Force Vector (doubled length: 210px, straight down)
-            if (currentSlide === 3 || currentSlide === 4) {
-                drawVectorArrow(ctx, bx, by - blockH/2, 0, 210, '#ef4444', 'P = mg = 19,6 N');
-            } else {
-                drawVectorArrow(ctx, bx, by - blockH/2, 0, 120, 'rgba(239, 68, 68, 0.4)', 'P');
-            }
-
-            // Title telemetry
-            ctx.font = 'bold 15px Inter'; ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'left';
-            ctx.fillText('Exemplo 4.1 — Diagrama de Corpo Livre (Item ' + currentSlide + ')', 20, 30);
+        
         }
 
-        window.onload = function() {
-            drawStage();
-        };
-        window.onresize = function() { drawStage(); };
+        window.addEventListener('load', () => { drawStage(); });
+        window.addEventListener('resize', () => { drawStage(); });
     </script>
 </body>
 </html>

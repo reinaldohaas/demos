@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo Conceitual 4.2: Primeira Lei de Newton e Superposição | FSC5101 Física I</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <title>Exemplo Conceitual 4.2: Força Resultante Nula Significa Velocidade Constante | FSC5101 Física I</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #070a12;
             --bg-card: rgba(15, 23, 42, 0.88);
             --bg-card-border: rgba(56, 189, 248, 0.25);
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
             --accent-cyan: #38bdf8;
-            --accent-purple: #a855f7;
             --accent-gold: #fbbf24;
             --accent-emerald: #10b981;
-            --accent-red: #ef4444;
             --text-main: #f8fafc;
-            --text-sub: #cbd5e1;
+            --text-sub: #94a3b8;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,22 +28,18 @@
             color: var(--text-main);
             min-height: 100vh;
             background-image: 
-                radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
-                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
+                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 45%);
             background-attachment: fixed;
             padding: 20px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
         .top-nav {
+            max-width: 1300px;
+            margin: 0 auto 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
         }
 
         .back-btn {
@@ -60,213 +54,416 @@
             transition: all 0.2s;
         }
 
-        .back-btn:hover { background: rgba(56, 189, 248, 0.2); }
+        .back-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); }
 
         .statement-box {
             background: rgba(10, 16, 30, 0.92);
-            border-left: 5px solid var(--accent-purple);
+            border-left: 5px solid var(--accent-cyan);
             border-radius: 12px;
-            padding: 20px;
+            padding: 20px 24px;
             margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
-        .statement-box h2 {
+        .statement-title h2 {
             font-family: 'Outfit', sans-serif;
-            color: var(--accent-purple);
             font-size: 1.5rem;
-            margin-bottom: 8px;
+            color: var(--accent-cyan);
+            margin-bottom: 6px;
         }
 
-        .statement-box p {
-            line-height: 1.6;
-            color: var(--text-sub);
+        .statement-title p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; max-width: 900px; }
+
+        .formula-badge {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-family: 'Outfit', monospace;
+            font-size: 1.1rem;
+            color: var(--accent-gold);
+            font-weight: 700;
         }
 
-        .content-grid {
+        .presentation-container {
+            max-width: 1300px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: 420px 1fr;
             gap: 20px;
         }
 
-        .card {
+        @media (max-width: 960px) {
+            .presentation-container { grid-template-columns: 1fr; }
+        }
+
+        .slide-deck {
             background: var(--bg-card);
             border: 1px solid var(--bg-card-border);
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        }
-
-        .card h3 {
-            font-family: 'Outfit', sans-serif;
-            color: var(--accent-cyan);
-            margin-bottom: 12px;
-            font-size: 1.2rem;
             display: flex;
-            align-items: center;
-            gap: 8px;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 380px;
         }
 
-        .controls-group {
-            margin-bottom: 15px;
+        .slide-stepper {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
         }
 
-        .controls-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
+        .slide-step-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             color: var(--text-sub);
-            margin-bottom: 5px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .controls-group input[type="range"] {
-            width: 100%;
-            accent-color: var(--accent-cyan);
+        .slide-step-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
         }
 
-        .value-disp {
-            font-weight: bold;
+        .presentation-slide { display: none; flex-direction: column; gap: 10px; }
+        .presentation-slide.active { display: flex; }
+
+        .slide-badge {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+            letter-spacing: 0.05em;
+        }
+
+        .slide-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .slide-formula code {
+            font-family: monospace;
+            font-size: 0.9rem;
             color: var(--accent-gold);
-            float: right;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 6px 12px;
+            border-radius: 6px;
+            display: inline-block;
         }
 
-        canvas {
-            width: 100%;
-            background: #0f172a;
-            border-radius: 10px;
+        .slide-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--accent-emerald);
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 12px 14px;
+            border-radius: 8px;
+        }
+
+        .slide-nav-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: #1e293b;
+            color: var(--text-main);
+        }
+
+        .nav-btn:hover { background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan); }
+
+        .interactive-stage {
+            background: var(--bg-card);
             border: 1px solid var(--bg-card-border);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        .solution-step {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255,255,255,0.05);
+        .canvas-holder {
+            width: 100%;
+            height: 480px;
+            background: #050811;
             border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 12px;
+            overflow: hidden;
+            position: relative;
         }
 
-        .solution-step h4 {
-            color: var(--accent-gold);
-            font-size: 1rem;
-            margin-bottom: 6px;
-        }
-
-        @media (max-width: 900px) {
-            .content-grid { grid-template-columns: 1fr; }
-        }
+        canvas { width: 100%; height: 100%; display: block; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="top-nav">
-            <a href="index.html" class="back-btn">← Voltar ao Capítulo 4</a>
-            <a href="apresentacao.html" class="back-btn" style="color:var(--accent-gold);">🖥️ Ver Apresentação</a>
-        </div>
 
-        <div class="statement-box">
-            <h2><i class="fa-solid fa-lightbulb"></i> Exemplo Conceitual 4.2: Primeira Lei de Newton e Superposição de Forças</h2>
-            <p>Este módulo explora o **Princípio da Superposição de Forças** e o **Equilíbrio Estático ($\sum \vec{F} = \vec{0}$)**. Observe como a adição vetorial de duas forças concorrentes $\vec{F}_1$ e $\vec{F}_2$ determina o vetor resultante $\vec{R}$ e como a escolha do sistema de coordenadas altera as componentes sem modificar a física do sistema.</p>
-        </div>
+    <div class="top-nav">
+        <a href="index.html" class="back-btn">← Voltar ao Catálogo dos 11 Exemplos</a>
+        <span style="font-size:0.85rem; color:var(--text-sub);">Capítulo 4 • Leis de Newton do Movimento</span>
+    </div>
 
-        <div class="content-grid">
-            <div class="card">
-                <h3><i class="fa-solid fa-sliders"></i> Simulador de Adição Vetorial</h3>
+    <div class="statement-box">
+        <div class="statement-title">
+            <h2>Exemplo Conceitual 4.2: Força Resultante Nula Significa Velocidade Constante</h2>
+            <p><strong>Enunciado Oficial (Young & Freedman 12ª ed.):</strong> Em um filme de ficção científica da década de 1950, uma espaçonave se move no vácuo do espaço sideral, longe de qualquer planeta, quando seu motor pára de funcionar. Em virtude disso, a espaçonave diminui de velocidade e fica em repouso. Como você aplica a primeira lei de Newton nesse evento?</p>
+        
+            <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
+                        🔊 Ouvir Voz
+                    </button>
+                    <button id="btn-voice-pause" onclick="pauseVoiceNarration()" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
+                        ⏸️ Pausar
+                    </button>
+                    <button id="btn-voice-stop" onclick="stopVoiceNarration()" style="background: #ef4444; color: white; border: none; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
+                        ⏹️ Parar
+                    </button>
+                </div>
                 
-                <div class="controls-group">
-                    <label>Módulo Força F1 (N): <span id="f1Disp" class="value-disp">120</span></label>
-                    <input type="range" id="f1Val" min="50" max="250" value="120" oninput="updateSimulation()">
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <label style="font-size: 0.82rem; font-weight: 700; color: #d8b4fe;">⏩ Vel:</label>
+                    <select id="voice-rate-select" onchange="changeVoiceRate()" style="background: #0f172a; color: #38bdf8; border: 1px solid #38bdf8; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
+                        <option value="0.75">0.75x</option>
+                        <option value="1.0" selected>1.0x (Normal)</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                    </select>
                 </div>
-                <div class="controls-group">
-                    <label>Módulo Força F2 (N): <span id="f2Disp" class="value-disp">50</span></label>
-                    <input type="range" id="f2Val" min="20" max="150" value="50" oninput="updateSimulation()">
+                
+                <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
+            </div>
+        </div>
+        <div class="formula-badge">\sum \vec{F} = 0 \implies \vec{v} = \text{constante}</div>
+    </div>
+
+    <div class="presentation-container">
+        <!-- Didactic Presentation Deck -->
+        <div class="slide-deck">
+            <div>
+                <div style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); margin-bottom:10px;">
+                    📺 APRESENTAÇÃO DIDÁTICA PASSO A PASSO
                 </div>
-                <div class="controls-group">
-                    <label>Ângulo entre Forças (°): <span id="angDisp" class="value-disp">90</span></label>
-                    <input type="range" id="angVal" min="0" max="180" value="90" oninput="updateSimulation()">
+                <div class="slide-stepper">
+                    <button class="slide-step-btn active" onclick="goToSlide(1)">Slide 1</button>
+<button class="slide-step-btn " onclick="goToSlide(2)">Slide 2</button>
+
                 </div>
 
-                <div style="margin-top:15px;">
-                    <canvas id="simCanvas" width="380" height="260"></canvas>
-                </div>
+                
+        <div class="presentation-slide active" id="slide-1">
+            <div class="slide-badge">SLIDE 1 DE 2 • PRIMEIRA LEI DE NEWTON</div>
+            <div class="slide-title">Ausência de Força Resultante</div>
+            <div class="slide-formula"><code>\sum \vec{F} = 0</code></div>
+            <div class="slide-desc">No vácuo distante de planetas e sem motores ligados, não há forças externas atuando sobre a espaçonave. Pela Primeira Lei de Newton, na ausência de força resultante, a aceleração é nula.</div>
+        </div>
+        
+        <div class="presentation-slide " id="slide-2">
+            <div class="slide-badge">SLIDE 2 DE 2 • ANÁLISE CRÍTICA</div>
+            <div class="slide-title">Inércia no Espaço Sideral</div>
+            <div class="slide-formula"><code>\vec{v} = \text{constante} \neq 0</code></div>
+            <div class="slide-desc">A espaçonave NÃO deve parar! Ela continuará se movendo indefinidamente em linha reta com velocidade constante. O filme errou ao mostrar a nave parando.</div>
+        </div>
+        
             </div>
 
-            <div class="card">
-                <h3><i class="fa-solid fa-graduation-cap"></i> Análise Conceitual e Fundamentos</h3>
-                
-                <div class="solution-step">
-                    <h4>1. Princípio da Superposição de Forças</h4>
-                    <p>Quando duas ou mais forças atuam simultaneamente sobre um mesmo ponto de uma partícula, o efeito combinado é exatamente idêntico ao de uma única força chamada **Força Resultante** ($\vec{R}$):</p>
-                    \[ \vec{R} = \sum \vec{F} = \vec{F}_1 + \vec{F}_2 + \dots + \vec{F}_n \]
-                </div>
-                <div class="solution-step">
-                    <h4>2. Condição de Equilíbrio da Primeira Lei de Newton</h4>
-                    <p>Se a força resultante for nula ($\vec{R} = \vec{0}$), a aceleração da partícula é zero. Isso significa que o corpo está em **Equilíbrio Translacional**: ou em repouso estático, ou em Movimento Retilíneo Uniforme (MRU).</p>
-                    \[ \sum F_x = 0, \quad \sum F_y = 0 \]
-                </div>
-                <div class="solution-step">
-                    <h4>3. Invariância por Rotação do Sistema de Coordenadas</h4>
-                    <p>Ao rotacionar os eixos cartesianos $(x,y) \to (x',y')$, o módulo $R = \sqrt{R_x^2 + R_y^2}$ e a direção física do vetor Resultante **permanecem inalterados**, pois grandezas vetoriais são independentes da escolha do sistema de referência.</p>
-                </div>
+            <div class="slide-nav-controls">
+                <button class="nav-btn" onclick="prevSlide()">◄ Anterior</button>
+                <button class="nav-btn" onclick="nextSlide()">Próximo ►</button>
+            </div>
+        </div>
 
+        <!-- Interactive Canvas Stage (Vectors Doubled) -->
+        <div class="interactive-stage">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:700; font-size:0.9rem; color:var(--text-sub);">📊 Diagrama de Corpo Livre & Vetores (Tamanho Ampliado 2x)</span>
+                <button class="nav-btn" style="padding:4px 12px; font-size:0.75rem;" onclick="resetDemo()">↺ Resetar</button>
+            </div>
+
+            <div class="canvas-holder">
+                <canvas id="stage-canvas"></canvas>
+            </div>
+        
+            <!-- SIMULAÇÕES PÚBLICAS RECOMENDADAS -->
+            <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 14px; margin-top: 14px;">
+                <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; margin-bottom:8px;">🌐 SIMULAÇÕES PÚBLICAS RECOMENDADAS:</div>
+                <ul style="font-size:0.85rem; color:#cbd5e1; padding-left:18px; line-height:1.8;">
+                    <li><a href="https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_all.html" target="_blank" rel="noopener noreferrer" style="color:#fbbf24; font-weight:700; text-decoration:underline;">🔗 PhET Colorado - Forças e Movimento: Fundamentos</a></li>
+                    <li><a href="https://phet.colorado.edu/en/simulations/forces-and-motion-basics" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">🔗 PhET Colorado - Página Oficial de Forças e Movimento</a></li>
+                    <li><a href="https://www.geogebra.org/search/leis%20de%20newton" target="_blank" rel="noopener noreferrer" style="color:#a855f7; font-weight:700; text-decoration:underline;">🔗 GeoGebra - Simulações Interativas de Leis de Newton</a></li>
+                </ul>
             </div>
         </div>
     </div>
 
     <script>
-        function drawArrow(ctx, fromx, fromy, tox, toy, color, label="") {
-            const headlen = 10;
-            const dx = tox - fromx;
-            const dy = toy - fromy;
-            const angle = Math.atan2(dy, dx);
-            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 3;
-            ctx.beginPath(); ctx.moveTo(fromx, fromy); ctx.lineTo(tox, toy); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(tox, toy);
-            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
-            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
-            ctx.closePath(); ctx.fill();
-            if(label) {
-                ctx.font = "bold 12px Inter";
-                ctx.fillText(label, (fromx + tox)/2 + 5, (fromy + toy)/2 - 5);
+        // Web Speech API
+        let isSpeaking = false, isPaused = false, currentUtterance = null, voiceSpeedRate = 1.0;
+
+        function playVoiceNarration() {
+            if (!('speechSynthesis' in window)) return alert('Navegador sem suporte a voz.');
+            const statusLabel = document.getElementById('voice-status-text');
+            if (isPaused) {
+                window.speechSynthesis.resume();
+                isPaused = false; isSpeaking = true;
+                if (statusLabel) statusLabel.innerText = '🔊 Reproduzindo...';
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const stmt = document.querySelector('.statement-title p')?.innerText || '';
+            const items = Array.from(document.querySelectorAll('.slide-desc')).map(el => el.innerText).join('. ');
+            currentUtterance = new SpeechSynthesisUtterance(stmt + '. ' + items);
+            currentUtterance.lang = 'pt-BR';
+            const speedSelect = document.getElementById('voice-rate-select');
+            if (speedSelect) currentUtterance.rate = parseFloat(speedSelect.value) || 1.0;
+            
+            currentUtterance.onstart = () => { isSpeaking = true; isPaused = false; if (statusLabel) statusLabel.innerText = '🔊 Lendo...'; };
+            currentUtterance.onend = () => { isSpeaking = false; isPaused = false; if (statusLabel) statusLabel.innerText = '✅ Concluído.'; };
+            window.speechSynthesis.speak(currentUtterance);
+        }
+
+        function pauseVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window && isSpeaking && !isPaused) {
+                window.speechSynthesis.pause(); isPaused = true;
+                if (statusLabel) statusLabel.innerText = '⏸️ Pausado.';
             }
         }
 
-        function updateSimulation() {
-            const f1 = parseFloat(document.getElementById('f1Val').value);
-            const f2 = parseFloat(document.getElementById('f2Val').value);
-            const angDeg = parseFloat(document.getElementById('angVal').value);
-            const angRad = angDeg * Math.PI / 180;
-
-            document.getElementById('f1Disp').innerText = f1;
-            document.getElementById('f2Disp').innerText = f2;
-            document.getElementById('angDisp').innerText = angDeg;
-
-            const rx = f1 + f2 * Math.cos(angRad);
-            const ry = f2 * Math.sin(angRad);
-
-            const canvas = document.getElementById('simCanvas');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            const ox = 50, oy = 200;
-            const scale = 0.8;
-
-            // F1 (Eixo X)
-            drawArrow(ctx, ox, oy, ox + f1*scale, oy, '#38bdf8', 'F1');
-            // F2 (Inclinada)
-            drawArrow(ctx, ox, oy, ox + f2*Math.cos(angRad)*scale, oy - f2*Math.sin(angRad)*scale, '#fbbf24', 'F2');
-            // Resultante R
-            drawArrow(ctx, ox, oy, ox + rx*scale, oy - ry*scale, '#a855f7', 'R (Resultante)');
-
-            // Linhas pontilhadas do paralelogramo
-            ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.lineWidth = 1; ctx.setLineDash([4,4]);
-            ctx.beginPath();
-            ctx.moveTo(ox + f1*scale, oy);
-            ctx.lineTo(ox + rx*scale, oy - ry*scale);
-            ctx.lineTo(ox + f2*Math.cos(angRad)*scale, oy - f2*Math.sin(angRad)*scale);
-            ctx.stroke();
-            ctx.setLineDash([]);
+        function stopVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); isSpeaking = false; isPaused = false;
+                if (statusLabel) statusLabel.innerText = '⏹️ Parado.';
+            }
         }
 
-        window.onload = updateSimulation;
+        function changeVoiceRate() {
+            if (isSpeaking && !isPaused) { stopVoiceNarration(); playVoiceNarration(); }
+        }
+
+        // Helper for doubled length vector arrows
+        function drawVectorArrow(ctx, x, y, dx, dy, color, label) {
+            const len = Math.hypot(dx, dy);
+            if (len < 2) return;
+            const angle = Math.atan2(dy, dx);
+            const headLen = Math.min(18, Math.max(12, len * 0.3));
+
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); ctx.stroke();
+
+            ctx.beginPath(); ctx.moveTo(x + dx, y + dy);
+            ctx.lineTo(x + dx - headLen * Math.cos(angle - Math.PI / 6), y + dy - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(x + dx - headLen * Math.cos(angle + Math.PI / 6), y + dy - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath(); ctx.fill();
+
+            if (label) {
+                const labelX = x + dx * 0.5;
+                const labelY = y + dy + (dy < 0 ? -16 : 22);
+                ctx.font = 'bold 13px Inter';
+                const textWidth = ctx.measureText(label).width;
+                ctx.fillStyle = 'rgba(5, 8, 17, 0.92)';
+                ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 14, textWidth + 12, 18);
+                ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+                ctx.strokeRect(labelX - textWidth / 2 - 6, labelY - 14, textWidth + 12, 18);
+
+                ctx.fillStyle = color; ctx.textAlign = 'center';
+                ctx.fillText(label, labelX, labelY);
+            }
+        }
+
+        let currentSlide = 1;
+        const totalSlides = 2;
+
+        function goToSlide(idx) {
+            currentSlide = idx;
+            document.querySelectorAll('.presentation-slide').forEach((s, i) => s.classList.toggle('active', i === (idx - 1)));
+            document.querySelectorAll('.slide-step-btn').forEach((b, i) => b.classList.toggle('active', i === (idx - 1)));
+            drawStage();
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) goToSlide(currentSlide + 1);
+            else goToSlide(1);
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) goToSlide(currentSlide - 1);
+            else goToSlide(totalSlides);
+        }
+
+        function getCanvasCtx(id) {
+            const canvas = document.getElementById(id);
+            if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
+            const rect = canvas.getBoundingClientRect();
+            const w = rect.width > 0 ? rect.width : 600;
+            const h = rect.height > 0 ? rect.height : 480;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = Math.floor(w * dpr);
+            canvas.height = Math.floor(h * dpr);
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return { canvas, ctx, w, h };
+        }
+
+        function resetDemo() { goToSlide(1); }
+
+        function drawStage() {
+            const { ctx, w, h } = getCanvasCtx('stage-canvas');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            
+            const cx = w / 2, cy = h / 2;
+            // Draw space stars background
+            ctx.fillStyle = '#090d16'; ctx.fillRect(0,0,w,h);
+            ctx.fillStyle = '#ffffff';
+            for(let i=0; i<40; i++) {
+                let sx = (i * 37) % w, sy = (i * 73) % h;
+                ctx.beginPath(); ctx.arc(sx, sy, (i%3)+1, 0, 2*Math.PI); ctx.fill();
+            }
+
+            // Ship drawing
+            ctx.save();
+            ctx.translate(cx - 50, cy);
+            ctx.fillStyle = '#cbd5e1'; ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.ellipse(0, 0, 60, 25, 0, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.arc(20, -5, 10, 0, 2*Math.PI); ctx.fill();
+            ctx.restore();
+
+            // Velocity Vector doubled length
+            drawVectorArrow(ctx, cx + 20, cy, 220, 0, '#10b981', 'v = constante (a = 0)');
+            // Zero force text badge
+            ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 15px Inter'; ctx.textAlign = 'center';
+            ctx.fillText('∑F = 0 (Motores desligados • Sem atrito)', cx, cy + 70);
+        
+        }
+
+        window.addEventListener('load', () => { drawStage(); });
+        window.addEventListener('resize', () => { drawStage(); });
     </script>
 </body>
 </html>

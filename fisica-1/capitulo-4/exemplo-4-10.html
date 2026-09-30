@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 4.7: Massa e Peso de um Carro Freando | FSC5101 Física I</title>
+    <title>Exemplo Conceitual 4.10: Aplicação da Terceira Lei de Newton: Objetos em Movimento | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -228,8 +228,8 @@
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 4.7: Massa e Peso de um Carro Freando</h2>
-            <p><strong>Enunciado Oficial (Young & Freedman 12ª ed.):</strong> Um carro de peso w = 2,49 × 10⁴ N em movimento ao longo do eixo +Ox pára repentinamente; o componente x da força resultante que atua sobre o carro é ∑F_x = -1,83 × 10⁴ N. Qual é a sua aceleração?</p>
+            <h2>Exemplo Conceitual 4.10: Aplicação da Terceira Lei de Newton: Objetos em Movimento</h2>
+            <p><strong>Enunciado Oficial (Young & Freedman 12ª ed.):</strong> Um pedreiro arrasta um bloco de mármore em um piso, puxando-o por meio de uma corda amarrada ao bloco. O bloco pode ou não estar em equilíbrio. Como as diversas forças estão relacionadas? Quais são os pares de ação e reação?</p>
         
             <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
                 <div style="display: flex; gap: 6px; align-items: center;">
@@ -257,7 +257,7 @@
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
         </div>
-        <div class="formula-badge">m = \frac{w}{g}, \quad a_x = \frac{\sum F_x}{m}</div>
+        <div class="formula-badge">\vec{F}_{Pedreiro/Corda} = -\vec{F}_{Corda/Pedreiro}, \quad \vec{F}_{Corda/Bloco} = -\vec{F}_{Bloco/Corda}</div>
     </div>
 
     <div class="presentation-container">
@@ -275,17 +275,17 @@
 
                 
         <div class="presentation-slide active" id="slide-1">
-            <div class="slide-badge">SLIDE 1 DE 2 • CÁLCULO DA MASSA</div>
-            <div class="slide-title">Massa a partir do Peso</div>
-            <div class="slide-formula"><code>m = \frac{w}{g} = \frac{2,49 \times 10^4 \text{ N}}{9,80 \text{ m/s}^2} = 2540 \text{ kg}</code></div>
-            <div class="slide-desc">Convertendo o peso em newtons para a massa inercial m = 2540 kg.</div>
+            <div class="slide-badge">SLIDE 1 DE 2 • PARES DE INTERAÇÃO</div>
+            <div class="slide-title">Identificação dos Pares de Força</div>
+            <div class="slide-formula"><code>\vec{F}_{P/C} = -\vec{F}_{C/P}, \quad \vec{F}_{C/B} = -\vec{F}_{B/C}</code></div>
+            <div class="slide-desc">Par 1: Força do pedreiro na corda e da corda no pedreiro.<br>Par 2: Força da corda no bloco e do bloco na corda.</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
-            <div class="slide-badge">SLIDE 2 DE 2 • CÁLCULO DA ACELERAÇÃO</div>
-            <div class="slide-title">Aceleração de Frenagem</div>
-            <div class="slide-formula"><code>a_x = \frac{\sum F_x}{m} = \frac{-1,83 \times 10^4 \text{ N}}{2540 \text{ kg}} = -7,20 \text{ m/s}^2</code></div>
-            <div class="slide-desc">A aceleração a_x = -7,20 m/s² (ou -0,735 g) indica frenagem intensa na direção -x.</div>
+            <div class="slide-badge">SLIDE 2 DE 2 • TRANSMISSÃO DA TENSÃO</div>
+            <div class="slide-title">Corda de Massa Desprezível</div>
+            <div class="slide-formula"><code>m_{corda} \approx 0 \implies F_{P/C} = F_{C/B} = T</code></div>
+            <div class="slide-desc">Se a corda tem massa desprezível, a tensão T é igual em ambas as extremidades e a corda transmite a força do pedreiro diretamente ao bloco.</div>
         </div>
         
             </div>
@@ -437,22 +437,23 @@
             ctx.clearRect(0, 0, w, h);
 
             
-            const cx = w / 2, cy = h / 2 + 20;
-            // Road
-            ctx.strokeStyle = '#475569'; ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.moveTo(40, cy + 30); ctx.lineTo(w - 40, cy + 30); ctx.stroke();
+            const cy = h / 2 + 20;
+            // Block (left)
+            ctx.fillStyle = '#cbd5e1'; ctx.fillRect(80, cy - 35, 90, 70);
+            ctx.fillStyle = '#0f172a'; ctx.font = 'bold 13px Inter'; ctx.fillText('Bloco', 105, cy + 5);
 
-            // Car body
-            ctx.fillStyle = '#a855f7'; ctx.fillRect(cx - 80, cy - 40, 160, 60);
-            ctx.fillStyle = '#0f172a'; ctx.beginPath(); ctx.arc(cx - 50, cy + 20, 16, 0, 2*Math.PI); ctx.arc(cx + 50, cy + 20, 16, 0, 2*Math.PI); ctx.fill();
+            // Rope (middle)
+            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 6;
+            ctx.beginPath(); ctx.moveTo(170, cy); ctx.lineTo(340, cy); ctx.stroke();
 
-            // Double length vectors
-            drawVectorArrow(ctx, cx - 80, cy - 10, -180, 0, '#f43f5e', 'ΣFx = -1,83×10⁴ N');
-            drawVectorArrow(ctx, cx, cy - 40, 0, -150, '#38bdf8', 'N = 2,49×10⁴ N');
-            drawVectorArrow(ctx, cx, cy + 20, 0, 150, '#fbbf24', 'w = 2,49×10⁴ N');
-            if (currentSlide === 2) {
-                drawVectorArrow(ctx, cx, cy - 70, -160, 0, '#10b981', 'ax = -7,20 m/s²');
-            }
+            // Mason (right)
+            ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.arc(380, cy - 40, 18, 0, 2*Math.PI); ctx.fill();
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 5;
+            ctx.beginPath(); ctx.moveTo(380, cy - 22); ctx.lineTo(380, cy + 30); ctx.stroke();
+
+            // Vectors doubled length
+            drawVectorArrow(ctx, 170, cy, 140, 0, '#10b981', 'F_(Corda sobre Bloco)');
+            drawVectorArrow(ctx, 340, cy, -140, 0, '#f43f5e', 'F_(Corda sobre Pedreiro)');
         
         }
 
