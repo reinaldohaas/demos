@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo 8.2: Impulso e Momento Linear em um Chute - Física I</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- MathJax 3 -->
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header Navigation */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .chapter-badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-nav {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover:not(.disabled) {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-nav.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Title Area */
+        .example-header {
+            margin-bottom: 25px;
+        }
+
+        .example-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .example-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Voice Panel */
+        .voice-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .voice-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .voice-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-voice {
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-voice:hover {
+            background: var(--accent-color);
+        }
+
+        .voice-rate {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Content Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        @media (min-width: 900px) {
+            .grid-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .card-header {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 10px;
+        }
+
+        .enunciado-text {
+            font-size: 1rem;
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        /* Interactive Canvas */
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            background: #090d16;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Presentation Deck Steps */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .step-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .step-number {
+            background-color: var(--accent-color);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* External Interactive Links */
+        .links-panel {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .ext-link {
+            background: #1e293b;
+            border: 1px solid var(--card-border);
+            padding: 12px 18px;
+            border-radius: 8px;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .ext-link:hover {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--card-border);
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Nav -->
+        <header class="nav-header">
+            <a href="index.html" class="chapter-badge">← Capítulo 8: Momento Linear e Colisões</a>
+            <div class="nav-buttons">
+                <a href="exemplo-8-1.html" class="btn-nav">← Anterior</a>
+                <a href="index.html" class="btn-nav">Todos os Exemplos</a>
+                <a href="exemplo-8-3.html" class="btn-nav">Próximo →</a>
+            </div>
+        </header>
+
+        <!-- Title -->
+        <div class="example-header">
+            <h1 class="example-title">Exemplo 8.2: Impulso e Momento Linear em um Chute</h1>
+            <p class="example-subtitle">Variação de Momento \(\Delta \vec{p}\) e Força Média \(\vec{F}_{\text{méd}}\)</p>
+        </div>
+
+        <!-- Voice Control Panel -->
+        <div class="voice-panel">
+            <div class="voice-title">🔊 Controle de Voz</div>
+            <div class="voice-controls">
+                <button class="btn-voice" onclick="playVoice()">▶️ Ouvir Exemplo</button>
+                <button class="btn-voice" onclick="pauseVoice()">⏸️ Pausar</button>
+                <button class="btn-voice" onclick="stopVoice()">⏹️ Parar</button>
+            </div>
+            <div class="voice-rate">
+                <label for="rate">Velocidade:</label>
+                <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="1.0" onchange="updateRate()">
+                <span id="rate-val">1.0x</span>
+            </div>
+            <span id="voice-status" style="font-size: 0.85rem; color: var(--text-secondary);">Pronto</span>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="grid-container">
+            <!-- Left: Enunciado -->
+            <div class="card">
+                <div class="card-header">📖 Enunciado Oficial (Young & Freedman)</div>
+                <div class="enunciado-text">
+                    Uma bola de futebol de massa $m = 0,40\text{ kg}$ aproxima-se horizontalmente de um jogador com velocidade inicial $v_{1x} = -20,0\text{ m/s}$ (para a esquerda). O jogador chuta a bola, fazendo com que ela saia com velocidade $v_2 = 30,0\text{ m/s}$ formando um ângulo de $45,0^\circ$ acima da horizontal e para a direita.<br><br>
+(a) Determine as componentes do impulso $\vec{J}$ exercido pela força do chute sobre a bola.<br>
+(b) Supondo que o tempo de contato entre o pé e a bola seja de $\Delta t = 0,010\text{ s}$, determine a magnitude e a direção da força média $\vec{F}_{\text{méd}}$ exercida sobre a bola.
+                </div>
+            </div>
+
+            <!-- Right: Interactive Canvas Stage -->
+            <div class="card">
+                <div class="card-header">🎨 Diagrama Interativo e Vetores (2x Tamanho)</div>
+                <div class="canvas-container">
+                    <canvas id="stageCanvas" width="700" height="380"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step-by-Step Presentation Deck -->
+        <h2 style="margin-top: 30px; font-size: 1.3rem; color: var(--text-primary);">📝 Resolução Passo a Passo</h2>
+        <div class="steps-container">
+            
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3 class="step-title">Componentes dos Momentos Inicial e Final</h3>
+                <div class="step-desc">Massa $m = 0,40\text{ kg}$.<br>
+Momento inicial $\vec{p}_1$ (para a esquerda):<br>
+$$p_{1x} = m v_{1x} = (0,40\text{ kg})(-20,0\text{ m/s}) = -8,0\text{ kg}\cdot\text{m/s}, \quad p_{1y} = 0$$
+Momento final $\vec{p}_2$ ($v_2 = 30,0\text{ m/s}$ a $45^\circ$):<br>
+$$p_{2x} = m v_2 \cos 45^\circ = (0,40\text{ kg})(30,0\text{ m/s})(0,7071) = +8,49\text{ kg}\cdot\text{m/s}$$
+$$p_{2y} = m v_2 \operatorname{sen} 45^\circ = (0,40\text{ kg})(30,0\text{ m/s})(0,7071) = +8,49\text{ kg}\cdot\text{m/s}$$</div>
+            </div>
+        </div>
+        
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3 class="step-title">Componentes do Impulso $\vec{J} = \Delta \vec{p}$</h3>
+                <div class="step-desc">Pelo Teorema do Impulso e Momento Linear $\vec{J} = \vec{p}_2 - \vec{p}_1$:<br>
+$$J_x = p_{2x} - p_{1x} = 8,49 - (-8,0) = +16,49\text{ kg}\cdot\text{m/s} = +16,5\text{ N}\cdot\text{s}$$
+$$J_y = p_{2y} - p_{1y} = 8,49 - 0 = +8,49\text{ kg}\cdot\text{m/s} = +8,5\text{ N}\cdot\text{s}$$</div>
+            </div>
+        </div>
+        
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3 class="step-title">Força Média Exercida sobre a Bola</h3>
+                <div class="step-desc">Com $\Delta t = 0,010\text{ s}$:<br>
+$$F_{\text{méd}, x} = \frac{J_x}{\Delta t} = \frac{16,49\text{ N}\cdot\text{s}}{0,010\text{ s}} = 1649\text{ N}$$
+$$F_{\text{méd}, y} = \frac{J_y}{\Delta t} = \frac{8,49\text{ N}\cdot\text{s}}{0,010\text{ s}} = 849\text{ N}$$
+Magnitude da Força Média:<br>
+$$F_{\text{méd}} = \sqrt{(1649)^2 + (849)^2} \approx 1850\text{ N} = 1,85\text{ kN}$$
+Direção: $\theta = \arctan\left(\frac{849}{1649}\right) \approx 27,2^\circ$ acima da horizontal.</div>
+            </div>
+        </div>
+        
+        </div>
+
+        <!-- External Interactive Links -->
+        <div class="links-panel">
+            <a href="https://phet.colorado.edu/sims/html/collision-lab/latest/collision-lab_pt_BR.html" target="_blank" class="ext-link">🧪 Laboratório de Colisões (PhET)</a>
+            <a href="https://www.geogebra.org/m/j5e8w2zm" target="_blank" class="ext-link">📐 Teorema do Impulso (GeoGebra)</a>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Física I - Young & Freedman (12ª Edição) | Departamento de Física - UFSC</p>
+        </footer>
+    </div>
+
+    <!-- Canvas Drawing Script & Helper -->
+    <script>
+        const canvas = document.getElementById('stageCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+
+        // Helper vector drawer (2x size arrow head and thick lines)
+        function drawVector(ctx, fromx, fromy, tox, toy, color, label) {
+            const headlen = 14; // doubled arrow head length
+            const dx = tox - fromx;
+            const dy = toy - fromy;
+            const angle = Math.atan2(dy, dx);
+
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 4; // doubled line width
+
+            ctx.beginPath();
+            ctx.moveTo(fromx, fromy);
+            ctx.lineTo(tox, toy);
+            ctx.stroke();
+
+            // Arrow head
+            ctx.beginPath();
+            ctx.moveTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+
+            // Label
+            if (label) {
+                ctx.font = 'bold 13px Inter, sans-serif';
+                ctx.fillText(label, tox + 10, toy - 8);
+            }
+        }
+
+        function drawStage() {
+            
+            ctx.clearRect(0, 0, width, height);
+
+            // Ball at center (250, 180)
+            const cx = 250, cy = 180;
+            ctx.fillStyle = '#e2e8f0';
+            ctx.beginPath();
+            ctx.arc(cx, cy, 18, 0, Math.PI*2);
+            ctx.fill();
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Initial momentum p1 = m*v1 = 0.40 * (-20) = -8 kg m/s (left arrow, length 120px 2x)
+            drawVector(ctx, cx, cy, cx - 120, cy, '#ef4444', 'p₁ = -8,0 kg·m/s (2x)');
+
+            // Final momentum p2 = m*v2 = 0.40 * 30 = 12 kg m/s at 45 deg (2x length 180px)
+            const p2x = cx + 180 * Math.cos(-Math.PI/4);
+            const p2y = cy + 180 * Math.sin(-Math.PI/4);
+            drawVector(ctx, cx, cy, p2x, p2y, '#3b82f6', 'p₂ = 12,0 kg·m/s (45°, 2x)');
+
+            // Impulse vector J = p2 - p1 (2x length)
+            drawVector(ctx, cx - 120, cy, p2x, p2y, '#10b981', 'Impulso J = Δp (2x)');
+        
+        }
+
+        window.onload = function() {
+            drawStage();
+        };
+
+        // Web Speech API Voice Implementation
+        let synth = window.speechSynthesis;
+        let utterance = null;
+
+        function playVoice() {
+            if (!synth) return;
+            synth.cancel();
+
+            const textToSpeak = "Neste exemplo, analisamos o teorema do impulso e momento linear em 2D. O impulso J é igual à variação do momento linear delta p = p2 - p1. Calculamos as componentes Jx e Jy para encontrar a força média F_méd = J / delta t exercida durante o tempo de contato de dez milissegundos.";
+            utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'pt-BR';
+            utterance.rate = parseFloat(document.getElementById('rate').value);
+
+            utterance.onstart = () => {
+                document.getElementById('voice-status').innerText = '🔊 Reproduzindo...';
+                document.getElementById('voice-status').style.color = '#10b981';
+            };
+
+            utterance.onend = () => {
+                document.getElementById('voice-status').innerText = 'Concluído';
+                document.getElementById('voice-status').style.color = 'var(--text-secondary)';
+            };
+
+            synth.speak(utterance);
+        }
+
+        function pauseVoice() {
+            if (synth && synth.speaking) {
+                if (synth.paused) {
+                    synth.resume();
+                    document.getElementById('voice-status').innerText = '🔊 Reproduzindo...';
+                } else {
+                    synth.pause();
+                    document.getElementById('voice-status').innerText = '⏸️ Pausado';
+                    document.getElementById('voice-status').style.color = '#f59e0b';
+                }
+            }
+        }
+
+        function stopVoice() {
+            if (synth) {
+                synth.cancel();
+                document.getElementById('voice-status').innerText = 'Parado';
+                document.getElementById('voice-status').style.color = 'var(--text-secondary)';
+            }
+        }
+
+        function updateRate() {
+            const val = document.getElementById('rate').value;
+            document.getElementById('rate-val').innerText = val + 'x';
+            if (synth && synth.speaking) {
+                playVoice();
+            }
+        }
+    </script>
+</body>
+</html>

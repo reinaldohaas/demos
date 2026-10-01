@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo 8.7: Colisão em Duas Dimensões em um Cruzamento - Física I</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- MathJax 3 -->
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header Navigation */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .chapter-badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-nav {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover:not(.disabled) {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-nav.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Title Area */
+        .example-header {
+            margin-bottom: 25px;
+        }
+
+        .example-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .example-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Voice Panel */
+        .voice-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .voice-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .voice-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-voice {
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-voice:hover {
+            background: var(--accent-color);
+        }
+
+        .voice-rate {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Content Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        @media (min-width: 900px) {
+            .grid-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .card-header {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 10px;
+        }
+
+        .enunciado-text {
+            font-size: 1rem;
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        /* Interactive Canvas */
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            background: #090d16;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Presentation Deck Steps */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .step-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .step-number {
+            background-color: var(--accent-color);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* External Interactive Links */
+        .links-panel {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .ext-link {
+            background: #1e293b;
+            border: 1px solid var(--card-border);
+            padding: 12px 18px;
+            border-radius: 8px;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .ext-link:hover {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--card-border);
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Nav -->
+        <header class="nav-header">
+            <a href="index.html" class="chapter-badge">← Capítulo 8: Momento Linear e Colisões</a>
+            <div class="nav-buttons">
+                <a href="exemplo-8-6.html" class="btn-nav">← Anterior</a>
+                <a href="index.html" class="btn-nav">Todos os Exemplos</a>
+                <a href="exemplo-8-8.html" class="btn-nav">Próximo →</a>
+            </div>
+        </header>
+
+        <!-- Title -->
+        <div class="example-header">
+            <h1 class="example-title">Exemplo 8.7: Colisão em Duas Dimensões em um Cruzamento</h1>
+            <p class="example-subtitle">Colisão Inelástica 2D com Ângulo de Deslocamento \(\theta\)</p>
+        </div>
+
+        <!-- Voice Control Panel -->
+        <div class="voice-panel">
+            <div class="voice-title">🔊 Controle de Voz</div>
+            <div class="voice-controls">
+                <button class="btn-voice" onclick="playVoice()">▶️ Ouvir Exemplo</button>
+                <button class="btn-voice" onclick="pauseVoice()">⏸️ Pausar</button>
+                <button class="btn-voice" onclick="stopVoice()">⏹️ Parar</button>
+            </div>
+            <div class="voice-rate">
+                <label for="rate">Velocidade:</label>
+                <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="1.0" onchange="updateRate()">
+                <span id="rate-val">1.0x</span>
+            </div>
+            <span id="voice-status" style="font-size: 0.85rem; color: var(--text-secondary);">Pronto</span>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="grid-container">
+            <!-- Left: Enunciado -->
+            <div class="card">
+                <div class="card-header">📖 Enunciado Oficial (Young & Freedman)</div>
+                <div class="enunciado-text">
+                    Um automóvel A de massa $m_A = 1000\text{ kg}$ viaja para o leste (sentido $+x$) a $v_{A1} = 15,0\text{ m/s}$. Um utilitário B de massa $m_B = 2000\text{ kg}$ viaja para o norte (sentido $+y$) a $v_{B1} = 10,0\text{ m/s}$. Eles colidem no cruzamento e os destroços engancham-se, movendo-se juntos como um único corpo com velocidade $V_2$ a um ângulo $\theta$ em relação ao leste.<br><br>
+(a) Determine a magnitude e a direção da velocidade final $V_2$ do conjunto imediatamente após a colisão.<br>
+(b) Quanta energia cinética é perdida durante a colisão?
+                </div>
+            </div>
+
+            <!-- Right: Interactive Canvas Stage -->
+            <div class="card">
+                <div class="card-header">🎨 Diagrama Interativo e Vetores (2x Tamanho)</div>
+                <div class="canvas-container">
+                    <canvas id="stageCanvas" width="700" height="380"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step-by-Step Presentation Deck -->
+        <h2 style="margin-top: 30px; font-size: 1.3rem; color: var(--text-primary);">📝 Resolução Passo a Passo</h2>
+        <div class="steps-container">
+            
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3 class="step-title">Conservação do Momento Linear nos Eixos X e Y</h3>
+                <div class="step-desc">Eixo $x$ (Leste):<br>
+$$P_{1x} = m_A v_{A1} = (1000\text{ kg})(15,0\text{ m/s}) = 15.000\text{ kg}\cdot\text{m/s}$$
+$$P_{2x} = (m_A + m_B) V_2 \cos\theta = 3000 V_2 \cos\theta = 15.000$$
+Eixo $y$ (Norte):<br>
+$$P_{1y} = m_B v_{B1} = (2000\text{ kg})(10,0\text{ m/s}) = 20.000\text{ kg}\cdot\text{m/s}$$
+$$P_{2y} = (m_A + m_B) V_2 \operatorname{sen}\theta = 3000 V_2 \operatorname{sen}\theta = 20.000$$</div>
+            </div>
+        </div>
+        
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3 class="step-title">Magnitude e Ângulo da Velocidade Final $V_2$</h3>
+                <div class="step-desc">Dividindo a equação de $y$ por $x$:<br>
+$$\tan\theta = \frac{20.000}{15.000} = 1,3333 \implies \theta = \arctan(1,3333) = 53,1^\circ \text{ (ao norte do leste)}$$
+Magnitude $V_2$:<br>
+$$V_2 = \frac{\sqrt{(15.000)^2 + (20.000)^2}}{3000} = \frac{25.000}{3000} = 8,33\text{ m/s}$$</div>
+            </div>
+        </div>
+        
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3 class="step-title">Perda de Energia Cinética</h3>
+                <div class="step-desc">$$K_1 = \frac{1}{2}(1000)(15,0)^2 + \frac{1}{2}(2000)(10,0)^2 = 112.500 + 100.000 = 212.500\text{ J} = 212,5\text{ kJ}$$
+$$K_2 = \frac{1}{2}(3000\text{ kg})(8,333\text{ m/s})^2 = 104.167\text{ J} = 104,2\text{ kJ}$$
+Perda de energia: $\Delta K = 104,2 - 212,5 = -108,3\text{ kJ}$ ($51\%$ perdida em amassamento de chapas).</div>
+            </div>
+        </div>
+        
+        </div>
+
+        <!-- External Interactive Links -->
+        <div class="links-panel">
+            <a href="https://phet.colorado.edu/sims/html/collision-lab/latest/collision-lab_pt_BR.html" target="_blank" class="ext-link">🧪 Laboratório de Colisões (PhET)</a>
+            <a href="https://www.geogebra.org/m/u4b2w4zm" target="_blank" class="ext-link">📐 Colisão Bidimensional 2D (GeoGebra)</a>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Física I - Young & Freedman (12ª Edição) | Departamento de Física - UFSC</p>
+        </footer>
+    </div>
+
+    <!-- Canvas Drawing Script & Helper -->
+    <script>
+        const canvas = document.getElementById('stageCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+
+        // Helper vector drawer (2x size arrow head and thick lines)
+        function drawVector(ctx, fromx, fromy, tox, toy, color, label) {
+            const headlen = 14; // doubled arrow head length
+            const dx = tox - fromx;
+            const dy = toy - fromy;
+            const angle = Math.atan2(dy, dx);
+
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 4; // doubled line width
+
+            ctx.beginPath();
+            ctx.moveTo(fromx, fromy);
+            ctx.lineTo(tox, toy);
+            ctx.stroke();
+
+            // Arrow head
+            ctx.beginPath();
+            ctx.moveTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+
+            // Label
+            if (label) {
+                ctx.font = 'bold 13px Inter, sans-serif';
+                ctx.fillText(label, tox + 10, toy - 8);
+            }
+        }
+
+        function drawStage() {
+            
+            ctx.clearRect(0, 0, width, height);
+
+            // Axes
+            const ox = 250, oy = 250;
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(50, oy); ctx.lineTo(650, oy); // x axis (East)
+            ctx.moveTo(ox, 50); ctx.lineTo(ox, 350); // y axis (North)
+            ctx.stroke();
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '12px Inter, sans-serif';
+            ctx.fillText('Leste (+x)', 600, oy + 20);
+            ctx.fillText('Norte (+y)', ox + 10, 70);
+
+            // Double size momentum pA1 = 15000 (East, length 150px 2x)
+            drawVector(ctx, ox - 150, oy, ox, oy, '#ef4444', 'p_A1 = 15.000 kg·m/s (2x)');
+
+            // Double size momentum pB1 = 20000 (North, length 200px 2x)
+            drawVector(ctx, ox, oy + 200, ox, oy, '#3b82f6', 'p_B1 = 20.000 kg·m/s (2x)');
+
+            // Double size resultant V2 = 8.33 m/s at 53.1 deg (length 250px 2x)
+            const v2x = ox + 250 * Math.cos(-53.1 * Math.PI / 180);
+            const v2y = oy + 250 * Math.sin(-53.1 * Math.PI / 180);
+            drawVector(ctx, ox, oy, v2x, v2y, '#10b981', 'V₂ = 8,33 m/s (θ = 53,1°, 2x)');
+        
+        }
+
+        window.onload = function() {
+            drawStage();
+        };
+
+        // Web Speech API Voice Implementation
+        let synth = window.speechSynthesis;
+        let utterance = null;
+
+        function playVoice() {
+            if (!synth) return;
+            synth.cancel();
+
+            const textToSpeak = "Em colisões bidimensionais aplicamos a conservação do momento linear separadamente nos eixos x e y. A componente de momento para o leste provém do carro A e para o norte do utilitário B. O conjunto final de três mil quilos desloca-se a oito vírgula trinta e três metros por segundo em um ângulo de cinquenta e três vírgula um graus ao norte do leste.";
+            utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'pt-BR';
+            utterance.rate = parseFloat(document.getElementById('rate').value);
+
+            utterance.onstart = () => {
+                document.getElementById('voice-status').innerText = '🔊 Reproduzindo...';
+                document.getElementById('voice-status').style.color = '#10b981';
+            };
+
+            utterance.onend = () => {
+                document.getElementById('voice-status').innerText = 'Concluído';
+                document.getElementById('voice-status').style.color = 'var(--text-secondary)';
+            };
+
+            synth.speak(utterance);
+        }
+
+        function pauseVoice() {
+            if (synth && synth.speaking) {
+                if (synth.paused) {
+                    synth.resume();
+                    document.getElementById('voice-status').innerText = '🔊 Reproduzindo...';
+                } else {
+                    synth.pause();
+                    document.getElementById('voice-status').innerText = '⏸️ Pausado';
+                    document.getElementById('voice-status').style.color = '#f59e0b';
+                }
+            }
+        }
+
+        function stopVoice() {
+            if (synth) {
+                synth.cancel();
+                document.getElementById('voice-status').innerText = 'Parado';
+                document.getElementById('voice-status').style.color = 'var(--text-secondary)';
+            }
+        }
+
+        function updateRate() {
+            const val = document.getElementById('rate').value;
+            document.getElementById('rate-val').innerText = val + 'x';
+            if (synth && synth.speaking) {
+                playVoice();
+            }
+        }
+    </script>
+</body>
+</html>

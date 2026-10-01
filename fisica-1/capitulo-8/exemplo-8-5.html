@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo 8.5: O Pêndulo Balístico - Física I</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- MathJax 3 -->
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header Navigation */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .chapter-badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-nav {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover:not(.disabled) {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-nav.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Title Area */
+        .example-header {
+            margin-bottom: 25px;
+        }
+
+        .example-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .example-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Voice Panel */
+        .voice-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .voice-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .voice-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-voice {
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-voice:hover {
+            background: var(--accent-color);
+        }
+
+        .voice-rate {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Content Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        @media (min-width: 900px) {
+            .grid-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .card-header {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 10px;
+        }
+
+        .enunciado-text {
+            font-size: 1rem;
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        /* Interactive Canvas */
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            background: #090d16;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Presentation Deck Steps */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .step-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .step-number {
+            background-color: var(--accent-color);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* External Interactive Links */
+        .links-panel {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .ext-link {
+            background: #1e293b;
+            border: 1px solid var(--card-border);
+            padding: 12px 18px;
+            border-radius: 8px;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .ext-link:hover {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--card-border);
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Nav -->
+        <header class="nav-header">
+            <a href="index.html" class="chapter-badge">← Capítulo 8: Momento Linear e Colisões</a>
+            <div class="nav-buttons">
+                <a href="exemplo-8-4.html" class="btn-nav">← Anterior</a>
+                <a href="index.html" class="btn-nav">Todos os Exemplos</a>
+                <a href="exemplo-8-6.html" class="btn-nav">Próximo →</a>
+            </div>
+        </header>
+
+        <!-- Title -->
+        <div class="example-header">
+            <h1 class="example-title">Exemplo 8.5: O Pêndulo Balístico</h1>
+            <p class="example-subtitle">Medida da Velocidade de um Projétil via Colisão Inelástica + Conservação de Energia</p>
+        </div>
+
+        <!-- Voice Control Panel -->
+        <div class="voice-panel">
+            <div class="voice-title">🔊 Controle de Voz</div>
+            <div class="voice-controls">
+                <button class="btn-voice" onclick="playVoice()">▶️ Ouvir Exemplo</button>
+                <button class="btn-voice" onclick="pauseVoice()">⏸️ Pausar</button>
+                <button class="btn-voice" onclick="stopVoice()">⏹️ Parar</button>
+            </div>
+            <div class="voice-rate">
+                <label for="rate">Velocidade:</label>
+                <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="1.0" onchange="updateRate()">
+                <span id="rate-val">1.0x</span>
+            </div>
+            <span id="voice-status" style="font-size: 0.85rem; color: var(--text-secondary);">Pronto</span>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="grid-container">
+            <!-- Left: Enunciado -->
+            <div class="card">
+                <div class="card-header">📖 Enunciado Oficial (Young & Freedman)</div>
+                <div class="enunciado-text">
+                    Um projétil de massa $m = 5,00\text{ g} = 0,00500\text{ kg}$ é disparado horizontalmente contra um bloco de madeira de massa $M = 2,00\text{ kg}$ suspenso por fios leves. O projétil penetra e fica encravado no bloco. O conjunto bloco + projétil oscila subindo até atingir uma altura máxima vertical $h = 0,100\text{ m}$ em relação à posição inicial.<br><br>
+(a) Determine a velocidade inicial $v_1$ do projétil antes do impacto.<br>
+(b) Qual porcentagem da energia cinética inicial foi perdida durante a colisão?
+                </div>
+            </div>
+
+            <!-- Right: Interactive Canvas Stage -->
+            <div class="card">
+                <div class="card-header">🎨 Diagrama Interativo e Vetores (2x Tamanho)</div>
+                <div class="canvas-container">
+                    <canvas id="stageCanvas" width="700" height="380"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step-by-Step Presentation Deck -->
+        <h2 style="margin-top: 30px; font-size: 1.3rem; color: var(--text-primary);">📝 Resolução Passo a Passo</h2>
+        <div class="steps-container">
+            
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3 class="step-title">Subida Mecânica (Conservação de Energia após o Impacto)</h3>
+                <div class="step-desc">Logo após o impacto, o conjunto $(m+M)$ tem velocidade inicial $V_2$ e sobe até a altura $h = 0,100\text{ m}$:<br>
+$$\frac{1}{2}(m+M)V_2^2 = (m+M)gh \implies V_2 = \sqrt{2gh}$$
+$$V_2 = \sqrt{2(9,80\text{ m/s}^2)(0,100\text{ m})} = \sqrt{1,96} = 1,40\text{ m/s}$$</div>
+            </div>
+        </div>
+        
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3 class="step-title">Velocidade Inicial do Projétil (Conservação de Momento na Colisão)</h3>
+                <div class="step-desc">Durante a colisão inelástica horizontal:<br>
+$$m v_1 = (m + M) V_2 \implies v_1 = \left(\frac{m + M}{m}\right) V_2$$
+$$v_1 = \left(\frac{0,00500 + 2,00}{0,00500}\right) (1,40\text{ m/s}) = (401)(1,40\text{ m/s}) = 561,4\text{ m/s}$$</div>
+            </div>
+        </div>
+        
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3 class="step-title">Perda de Energia Cinética na Colisão</h3>
+                <div class="step-desc">Energia cinética inicial $K_1 = \frac{1}{2} m v_1^2 = \frac{1}{2}(0,00500)(561,4)^2 \approx 788\text{ J}$.<br>
+Energia cinética após colisão $K_2 = \frac{1}{2}(m+M) V_2^2 = \frac{1}{2}(2,005)(1,40)^2 \approx 1,965\text{ J}$.<br>
+Fração de energia preservada: $\frac{K_2}{K_1} = \frac{m}{m+M} = \frac{1}{401} \approx 0,25\%$.<br>
+Portanto, **$99,75\%$** da energia cinética original é transformada em calor e deformação!</div>
+            </div>
+        </div>
+        
+        </div>
+
+        <!-- External Interactive Links -->
+        <div class="links-panel">
+            <a href="https://phet.colorado.edu/sims/html/collision-lab/latest/collision-lab_pt_BR.html" target="_blank" class="ext-link">🧪 Laboratório de Colisões (PhET)</a>
+            <a href="https://www.geogebra.org/m/e9rwtvkg" target="_blank" class="ext-link">📐 Pêndulo Balístico (GeoGebra)</a>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Física I - Young & Freedman (12ª Edição) | Departamento de Física - UFSC</p>
+        </footer>
+    </div>
+
+    <!-- Canvas Drawing Script & Helper -->
+    <script>
+        const canvas = document.getElementById('stageCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+
+        // Helper vector drawer (2x size arrow head and thick lines)
+        function drawVector(ctx, fromx, fromy, tox, toy, color, label) {
+            const headlen = 14; // doubled arrow head length
+            const dx = tox - fromx;
+            const dy = toy - fromy;
+            const angle = Math.atan2(dy, dx);
+
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 4; // doubled line width
+
+            ctx.beginPath();
+            ctx.moveTo(fromx, fromy);
+            ctx.lineTo(tox, toy);
+            ctx.stroke();
+
+            // Arrow head
+            ctx.beginPath();
+            ctx.moveTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+
+            // Label
+            if (label) {
+                ctx.font = 'bold 13px Inter, sans-serif';
+                ctx.fillText(label, tox + 10, toy - 8);
+            }
+        }
+
+        function drawStage() {
+            
+            ctx.clearRect(0, 0, width, height);
+
+            // Ceiling support
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(150, 40); ctx.lineTo(350, 40);
+            ctx.stroke();
+
+            // Initial position (strings & block)
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(200, 40); ctx.lineTo(200, 180);
+            ctx.moveTo(300, 40); ctx.lineTo(300, 180);
+            ctx.stroke();
+
+            // Block M = 2.0 kg
+            ctx.fillStyle = '#78350f';
+            ctx.fillRect(180, 180, 140, 60);
+            ctx.fillStyle = '#fef3c7';
+            ctx.font = 'bold 13px Inter, sans-serif';
+            ctx.fillText('Bloco M = 2,0 kg', 195, 215);
+
+            // Bullet approaching (m = 5 g)
+            ctx.fillStyle = '#ef4444';
+            ctx.fillRect(60, 202, 20, 12);
+            // Double size velocity vector v1 (length 180px 2x)
+            drawVector(ctx, 80, 208, 260, 208, '#ef4444', 'v₁ = 561 m/s (2x)');
+
+            // Arc showing swing to height h = 0.10 m
+            ctx.setLineDash([5, 5]);
+            ctx.strokeStyle = '#3b82f6';
+            ctx.beginPath();
+            ctx.arc(250, 40, 200, Math.PI/2, Math.PI/3, true);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Height indicator h
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(420, 240); ctx.lineTo(420, 160);
+            ctx.stroke();
+            ctx.fillStyle = '#10b981';
+            ctx.fillText('h = 0,100 m', 430, 200);
+        
+        }
+
+        window.onload = function() {
+            drawStage();
+        };
+
+        // Web Speech API Voice Implementation
+        let synth = window.speechSynthesis;
+        let utterance = null;
+
+        function playVoice() {
+            if (!synth) return;
+            synth.cancel();
+
+            const textToSpeak = "O pêndulo balístico combina a conservação do momento linear durante a colisão inelástica instantânea com a conservação da energia mecânica na subida do conjunto. Sabendo que a altura atingida é de dez centímetros, calculamos a velocidade do conjunto V2 como um vírgula quarenta metros por segundo e a velocidade inicial do projétil v1 como quinhentos e sessenta e um metros por segundo.";
+            utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'pt-BR';
+            utterance.rate = parseFloat(document.getElementById('rate').value);
+
+            utterance.onstart = () => {
+                document.getElementById('voice-status').innerText = '🔊 Reproduzindo...';
+                document.getElementById('voice-status').style.color = '#10b981';
+            };
+
+            utterance.onend = () => {
+                document.getElementById('voice-status').innerText = 'Concluído';
+                document.getElementById('voice-status').style.color = 'var(--text-secondary)';
+            };
+
+            synth.speak(utterance);
+        }
+
+        function pauseVoice() {
+            if (synth && synth.speaking) {
+                if (synth.paused) {
+                    synth.resume();
+                    document.getElementById('voice-status').innerText = '🔊 Reproduzindo...';
+                } else {
+                    synth.pause();
+                    document.getElementById('voice-status').innerText = '⏸️ Pausado';
+                    document.getElementById('voice-status').style.color = '#f59e0b';
+                }
+            }
+        }
+
+        function stopVoice() {
+            if (synth) {
+                synth.cancel();
+                document.getElementById('voice-status').innerText = 'Parado';
+                document.getElementById('voice-status').style.color = 'var(--text-secondary)';
+            }
+        }
+
+        function updateRate() {
+            const val = document.getElementById('rate').value;
+            document.getElementById('rate-val').innerText = val + 'x';
+            if (synth && synth.speaking) {
+                playVoice();
+            }
+        }
+    </script>
+</body>
+</html>

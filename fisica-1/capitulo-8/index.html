@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capítulo 8: Momento Linear, Impulso e Colisões - Física I</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-color: #3b82f6;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 30px 20px;
+        }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header {
+            margin-bottom: 35px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 20px;
+        }
+        .back-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .title { font-size: 2.2rem; font-weight: 700; margin-bottom: 8px; }
+        .subtitle { color: var(--text-secondary); font-size: 1.1rem; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        .card-ex {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .card-ex:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-color);
+        }
+        .card-tag {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-color);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-bottom: 12px;
+            width: fit-content;
+        }
+        .card-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
+        .card-sub { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; flex-grow: 1; }
+        .card-btn {
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .card-btn:hover { background-color: #2563eb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="../index.html" class="back-link">← Voltar ao Hub Principal (Física I)</a>
+            <h1 class="title">Capítulo 8: Momento Linear, Impulso e Colisões</h1>
+            <p class="subtitle">Exemplos oficiais resolvidos de Young & Freedman (12ª Edição) com Diagramas Interativos, Vetores Ampliados (2x), Voz e MathJax 3</p>
+        </div>
+
+        <div class="grid">
+            
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 8-1</div>
+            <h3 class="card-title">Comparando Momento Linear e Energia Cinética</h3>
+            <p class="card-sub">Carro vs. Caminhão (Definição de \(\vec{p}\) e \(K\))</p>
+            <a href="exemplo-8-1.html" class="card-btn">Ver Exemplo & Diagrama →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 8-2</div>
+            <h3 class="card-title">Impulso e Momento Linear em um Chute</h3>
+            <p class="card-sub">Variação de Momento \(\Delta \vec{p}\) e Força Média \(\vec{F}_{\text{méd}}\)</p>
+            <a href="exemplo-8-2.html" class="card-btn">Ver Exemplo & Diagrama →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 8-3</div>
+            <h3 class="card-title">Recuo de um Rifle ao Disparar uma Bala</h3>
+            <p class="card-sub">Conservação do Momento Linear em 1D (\(\sum P_x = \text{constante}\))</p>
+            <a href="exemplo-8-3.html" class="card-btn">Ver Exemplo & Diagrama →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 8-4</div>
+            <h3 class="card-title">Colisão Perfeitamente Inelástica em 1D</h3>
+            <p class="card-sub">Dois Carros Colidindo e Enganchando os Para-choques</p>
+            <a href="exemplo-8-4.html" class="card-btn">Ver Exemplo & Diagrama →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 8-5</div>
+            <h3 class="card-title">O Pêndulo Balístico</h3>
+            <p class="card-sub">Medida da Velocidade de um Projétil via Colisão Inelástica + Conservação de Energia</p>
+            <a href="exemplo-8-5.html" class="card-btn">Ver Exemplo & Diagrama →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 8-6</div>
+            <h3 class="card-title">Colisão Elástica em 1D</h3>
+            <p class="card-sub">Duas Esferas em Superfície sem Atrito (Conservação de \(\vec{P}\) e \(K\))</p>
+            <a href="exemplo-8-6.html" class="card-btn">Ver Exemplo & Diagrama →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 8-7</div>
+            <h3 class="card-title">Colisão em Duas Dimensões em um Cruzamento</h3>
+            <p class="card-sub">Colisão Inelástica 2D com Ângulo de Deslocamento \(\theta\)</p>
+            <a href="exemplo-8-7.html" class="card-btn">Ver Exemplo & Diagrama →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 8-8</div>
+            <h3 class="card-title">Centro de Massa de um Sistema de Partículas</h3>
+            <p class="card-sub">Posição \(\vec{r}_{\text{cm}}\) e Velocidade \(\vec{v}_{\text{cm}}\) de Carro e Picape</p>
+            <a href="exemplo-8-8.html" class="card-btn">Ver Exemplo & Diagrama →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 8-9</div>
+            <h3 class="card-title">Propulsão de Foguete no Espaço Sideral</h3>
+            <p class="card-sub">Empuxo \(F\), Aceleração \(a\) e Equação do Foguete</p>
+            <a href="exemplo-8-9.html" class="card-btn">Ver Exemplo & Diagrama →</a>
+        </div>
+        
+        </div>
+    </div>
+</body>
+</html>
