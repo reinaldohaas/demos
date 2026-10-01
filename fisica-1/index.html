@@ -29,19 +29,7 @@
             background-attachment: fixed;
             padding: 40px 20px;
         }
-        .container { max-width: 1100px; margin: 0 auto; }
-        .back-nav { margin-bottom: 24px; }
-        .back-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--bg-card-border);
-            color: var(--accent-cyan);
-            padding: 10px 18px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.92rem;
-        }
-
+        .container { max-width: 1200px; margin: 0 auto; }
         .header { text-align: center; margin-bottom: 40px; }
         .header h1 {
             font-family: 'Outfit', sans-serif;
@@ -53,10 +41,9 @@
             margin-bottom: 10px;
         }
         .header p { color: var(--text-sub); font-size: 1.1rem; }
-
         .chapter-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 22px;
         }
         .chapter-card {
@@ -94,76 +81,73 @@
 </head>
 <body>
     <div class="container">
-        <div class="back-nav">
-            <a href="../index.html" class="back-btn">← Voltar às Disciplinas</a>
-        </div>
-
         <div class="header">
             <h1>📘 FSC5101 — FÍSICA I (MECÂNICA)</h1>
-            <p>Selecione um dos capítulos abaixo para abrir a lista de exercícios e demonstrações interativas</p>
+            <p>Demonstrações e Exemplos do livro <strong>Young & Freedman (12ª Edição)</strong> com DCL interativo, vetores ampliados (2x), fórmulas em MathJax e narração por voz</p>
         </div>
 
         <div class="chapter-grid">
-
-
-            <!-- CAPÍTULO 1 -->
             <a href="capitulo-1/index.html" class="chapter-card">
                 <div>
                     <div class="card-num">Capítulo 1</div>
                     <div class="card-title">Unidades, Grandezas Físicas e Vetores</div>
-                    <div class="card-desc">Exemplos 1.1 ao 1.12. Conversão de unidades, produto escalar, produto vetorial e vetores unitários em 2D/3D.</div>
+                    <div class="card-desc">Exemplos 1.1 ao 1.12. Conversão de unidades, produto escalar, produto vetorial e vetores unitários 2D/3D.</div>
                 </div>
-                <div class="card-btn">Abrir Exercícios do Capítulo 1 →</div>
+                <div class="card-btn">Abrir Capítulo 1 →</div>
             </a>
 
-            <!-- CAPÍTULO 2 -->
             <a href="capitulo-2/index.html" class="chapter-card">
                 <div>
                     <div class="card-num">Capítulo 2</div>
                     <div class="card-title">Movimento Retilíneo</div>
-                    <div class="card-desc">Exemplos 2.1 ao 2.7. O Leopardo, A Astronauta, Frenagem de Veículos, Queda Livre e Integração de Aceleração.</div>
+                    <div class="card-desc">Exemplos 2.1 ao 2.7. O Leopardo, A Astronauta, Frenagem de Veículos e Queda Livre.</div>
                 </div>
-                <div class="card-btn">Abrir Exercícios do Capítulo 2 →</div>
+                <div class="card-btn">Abrir Capítulo 2 →</div>
             </a>
 
-            <!-- CAPÍTULO 3 -->
             <a href="capitulo-3/index.html" class="chapter-card">
                 <div>
                     <div class="card-num">Capítulo 3</div>
                     <div class="card-title">Movimento em Duas e Três Dimensões</div>
-                    <div class="card-desc">Exemplos 3.1 ao 3.8. Veículo em Marte, Lançamento de Projéteis, Movimento Circular Uniforme e Velocidade Relativa.</div>
+                    <div class="card-desc">Exemplos 3.1 ao 3.8. Lançamento de Projéteis, Movimento Circular Uniforme e Velocidade Relativa.</div>
                 </div>
-                <div class="card-btn">Abrir Exercícios do Capítulo 3 →</div>
+                <div class="card-btn">Abrir Capítulo 3 →</div>
             </a>
 
-            <!-- CAPÍTULO 4 -->
             <a href="capitulo-4/index.html" class="chapter-card">
                 <div>
                     <div class="card-num">Capítulo 4</div>
                     <div class="card-title">Leis de Newton do Movimento</div>
-                    <div class="card-desc">Apresentação de Slides Slidedeck e Exemplos 4.1 ao 4.7 (PDF 4.1 a 4.57). Leis de Newton, DCL, atrito, sistemas conectados e forças variáveis.</div>
+                    <div class="card-desc">Exemplos 4.1 ao 4.11. Superposição de forças, 1ª, 2ª e 3ª Leis de Newton, DCLs e Pares de Ação e Reação.</div>
                 </div>
-                <div class="card-btn">Abrir Capítulo 4 e Apresentação →</div>
+                <div class="card-btn">Abrir Capítulo 4 →</div>
             </a>
 
-            <!-- CAPÍTULO 5 -->
             <a href="capitulo-5/index.html" class="chapter-card">
                 <div>
                     <div class="card-num">Capítulo 5</div>
-                    <div class="card-title">Aplicações das Leis de Newton e Energia</div>
-                    <div class="card-desc">Exemplo 5.1. Trabalho, conservação da energia mecânica e dinâmicas avançadas.</div>
+                    <div class="card-title">Aplicações das Leis de Newton</div>
+                    <div class="card-desc">Exemplos 5.1 ao 5.7. Equilíbrio de forças, plano inclinado, atrito estático/cinético, roldanas e curva sobre-elevada.</div>
                 </div>
-                <div class="card-btn">Abrir Exercícios do Capítulo 5 →</div>
+                <div class="card-btn">Abrir Capítulo 5 →</div>
             </a>
 
-            <!-- QUIZ DE REVISÃO -->
-            <a href="revisao_123.html" class="chapter-card" style="border-color: rgba(168, 85, 247, 0.4);">
+            <a href="capitulo-6/index.html" class="chapter-card">
                 <div>
-                    <div class="card-num" style="color: var(--accent-purple);">Revisão Interativa</div>
-                    <div class="card-title">Quiz de Revisão (Cap. 1, 2 e 3)</div>
-                    <div class="card-desc">30 Questões interativas com voz, diagramas canvas, dicas e gabarito imediato sobre os Capítulos 1, 2 e 3.</div>
+                    <div class="card-num">Capítulo 6</div>
+                    <div class="card-title">Trabalho e Energia Cinética</div>
+                    <div class="card-desc">Exemplos 6.1 ao 6.5. Trabalho de forças constantes e variáveis (mola), Teorema W = ΔK e Potência de motores.</div>
                 </div>
-                <div class="card-btn" style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border-color: rgba(168, 85, 247, 0.4);">Abrir Quiz de Revisão →</div>
+                <div class="card-btn">Abrir Capítulo 6 →</div>
+            </a>
+
+            <a href="capitulo-7/index.html" class="chapter-card">
+                <div>
+                    <div class="card-num">Capítulo 7</div>
+                    <div class="card-title">Energia Potencial e Conservação da Energia</div>
+                    <div class="card-desc">Exemplos 7.1 ao 7.4. Conservação da energia mecânica, energia gravitacional/elástica, atrito e diagramas U(x).</div>
+                </div>
+                <div class="card-btn">Abrir Capítulo 7 →</div>
             </a>
         </div>
     </div>

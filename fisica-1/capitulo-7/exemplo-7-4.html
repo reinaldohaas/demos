@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 5.1: Equilíbrio Unidimensional — Tensão numa Corda Suspensa | FSC5101 Física I</title>
+    <title>Exemplo 7.4: Diagramas de Energia Potencial U(x) e Pontos de Equilíbrio | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -233,13 +233,13 @@
 
     <div class="top-nav">
         <a href="index.html" class="back-btn">← Voltar ao Catálogo do Capítulo</a>
-        <span style="font-size:0.85rem; color:var(--text-sub);">Capítulo 5 • Aplicações das Leis de Newton</span>
+        <span style="font-size:0.85rem; color:var(--text-sub);">Capítulo 7 • Energia Potencial e Conservação da Energia</span>
     </div>
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 5.1: Equilíbrio Unidimensional — Tensão numa Corda Suspensa</h2>
-            <p><strong>Enunciado Oficial (Young & Freedman 12ª ed.):</strong> Um sinaleiro de semáforo com peso w = 122 N está suspenso por um cabo vertical conectado no ponto O a outros dois cabos. O cabo superior 3 sustenta o semáforo verticalmente. Determine a tensão nas três cordas.</p>
+            <h2>Exemplo 7.4: Diagramas de Energia Potencial U(x) e Pontos de Equilíbrio</h2>
+            <p><strong>Enunciado Oficial (Young & Freedman 12ª ed.):</strong> Uma partícula move-se ao longo do eixo x sob a ação de uma força conservativa com energia potencial U(x) = a/x² - b/x. Determine a posição de equilíbrio estático x_eq e analise sua estabilidade.</p>
         
             <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
                 <div style="display: flex; gap: 6px; align-items: center;">
@@ -267,7 +267,7 @@
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
         </div>
-        <div class="formula-badge">$$\sum F_y = T_3 - w = 0 \implies T_3 = w$$</div>
+        <div class="formula-badge">$$F_x = -\frac{dU}{dx}, \quad \frac{dU}{dx} = 0 \implies \text{Equilíbrio}$$</div>
     </div>
 
     <div class="presentation-container">
@@ -284,17 +284,17 @@
 
                 
         <div class="presentation-slide active" id="slide-1">
-            <div class="slide-badge">SLIDE 1 DE 2 • EQUILÍBRIO VERTICAL</div>
-            <div class="slide-title">Força no Cabo Vertical T3</div>
-            <div class="slide-formula">$$\displaystyle \sum F_y = T_3 - w = 0 \implies T_3 = 122 \text{ N}$$</div>
-            <div class="slide-desc">O semáforo está em repouso (a = 0). A tensão T3 no cabo vertical equilibra exatamente o peso w do semáforo.</div>
+            <div class="slide-badge">SLIDE 1 DE 2 • CONDIÇÃO DE EQUILÍBRIO</div>
+            <div class="slide-title">Derivada da Energia Potencial</div>
+            <div class="slide-formula">$$\displaystyle \frac{dU}{dx} = -\frac{2a}{x^3} + \frac{b}{x^2} = 0 \implies x_{\text{eq}} = \frac{2a}{b}$$</div>
+            <div class="slide-desc">A força é nula no ponto onde a inclinação dU/dx do gráfico de energia potencial é zero.</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
-            <div class="slide-badge">SLIDE 2 DE 2 • TENSÃO NAS CORDAS</div>
-            <div class="slide-title">Balanço das Forças no Ponto O</div>
-            <div class="slide-formula">$$\displaystyle T_3 = w = 122 \text{ N}$$</div>
-            <div class="slide-desc">Como não há aceleração horizontal nem vertical, as forças de tração nas cordas mantêm o sistema em equilíbrio estático perfeito.</div>
+            <div class="slide-badge">SLIDE 2 DE 2 • ESTABILIDADE DO POÇO DE POTENCIAL</div>
+            <div class="slide-title">Mínimo de Energia Potencial</div>
+            <div class="slide-formula">$$\displaystyle \frac{d^2 U}{dx^2} > 0 \implies \text{Equilíbrio Estável}$$</div>
+            <div class="slide-desc">Como d²U/dx² > 0 no ponto x_eq = 2a/b, o ponto corresponde a um MÍNIMO local de energia (poço de potencial estável).</div>
         </div>
         
             </div>
@@ -429,24 +429,25 @@
             if (!ctx) return;
             ctx.clearRect(0, 0, w, h);
             
-            const cx = w / 2, cy = h / 2;
-            // Ceiling
-            ctx.strokeStyle = '#475569'; ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.moveTo(cx - 100, 40); ctx.lineTo(cx + 100, 40); ctx.stroke();
-            
-            // Cable 3
-            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.moveTo(cx, 40); ctx.lineTo(cx, cy + 30); ctx.stroke();
+            const padL = 50, padB = 40;
+            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(padL, h - padB); ctx.lineTo(w - 40, h - padB); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(padL, h - padB); ctx.lineTo(padL, 40); ctx.stroke();
 
-            // Traffic light
-            ctx.fillStyle = '#1e293b'; ctx.fillRect(cx - 30, cy + 30, 60, 100);
-            ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.arc(cx, cy + 50, 12, 0, 2*Math.PI); ctx.fill();
-            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(cx, cy + 80, 12, 0, 2*Math.PI); ctx.fill();
-            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(cx, cy + 110, 12, 0, 2*Math.PI); ctx.fill();
+            // Draw potential curve U(x)
+            ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 3;
+            ctx.beginPath();
+            for(let px = 60; px < w - 60; px += 2) {
+                let x = (px - 50) / 40;
+                let u = 8 / (x*x) - 12 / x;
+                let py = (h - 140) + u * 25;
+                if(px === 60) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
 
-            // Vectors 2x
-            drawVectorArrow(ctx, cx, cy + 30, 0, -150, '#38bdf8', 'T3 = 122 N');
-            drawVectorArrow(ctx, cx, cy + 80, 0, 150, '#f43f5e', 'w = 122 N');
+            // Equilibrium point minimum
+            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(185, h - 140 - 110, 10, 0, 2*Math.PI); ctx.fill();
+            ctx.fillStyle = '#10b981'; ctx.font = 'bold 12px Inter'; ctx.fillText('x_eq = 2a/b (Estável)', 200, h - 140 - 110);
         
         }
 

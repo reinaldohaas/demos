@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 5.1: Equilíbrio Unidimensional — Tensão numa Corda Suspensa | FSC5101 Física I</title>
+    <title>Exemplo 7.3: Conservação da Energia Elástica de uma Mola | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -233,13 +233,13 @@
 
     <div class="top-nav">
         <a href="index.html" class="back-btn">← Voltar ao Catálogo do Capítulo</a>
-        <span style="font-size:0.85rem; color:var(--text-sub);">Capítulo 5 • Aplicações das Leis de Newton</span>
+        <span style="font-size:0.85rem; color:var(--text-sub);">Capítulo 7 • Energia Potencial e Conservação da Energia</span>
     </div>
 
     <div class="statement-box">
         <div class="statement-title">
-            <h2>Exemplo 5.1: Equilíbrio Unidimensional — Tensão numa Corda Suspensa</h2>
-            <p><strong>Enunciado Oficial (Young & Freedman 12ª ed.):</strong> Um sinaleiro de semáforo com peso w = 122 N está suspenso por um cabo vertical conectado no ponto O a outros dois cabos. O cabo superior 3 sustenta o semáforo verticalmente. Determine a tensão nas três cordas.</p>
+            <h2>Exemplo 7.3: Conservação da Energia Elástica de uma Mola</h2>
+            <p><strong>Enunciado Oficial (Young & Freedman 12ª ed.):</strong> Um bloco de m = 0,20 kg é pressionado contra uma mola de k = 500 N/m, comprimindo-a de x = 0,10 m. Quando solto, o bloco desliza num trilho sem atrito. Qual é a velocidade do bloco ao abandonar a mola?</p>
         
             <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
                 <div style="display: flex; gap: 6px; align-items: center;">
@@ -267,7 +267,7 @@
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
         </div>
-        <div class="formula-badge">$$\sum F_y = T_3 - w = 0 \implies T_3 = w$$</div>
+        <div class="formula-badge">$$\frac{1}{2} k x^2 = \frac{1}{2} m v^2 \implies v = x \sqrt{\frac{k}{m}}$$</div>
     </div>
 
     <div class="presentation-container">
@@ -284,17 +284,17 @@
 
                 
         <div class="presentation-slide active" id="slide-1">
-            <div class="slide-badge">SLIDE 1 DE 2 • EQUILÍBRIO VERTICAL</div>
-            <div class="slide-title">Força no Cabo Vertical T3</div>
-            <div class="slide-formula">$$\displaystyle \sum F_y = T_3 - w = 0 \implies T_3 = 122 \text{ N}$$</div>
-            <div class="slide-desc">O semáforo está em repouso (a = 0). A tensão T3 no cabo vertical equilibra exatamente o peso w do semáforo.</div>
+            <div class="slide-badge">SLIDE 1 DE 2 • ENERGIA POTENCIAL ELÁSTICA</div>
+            <div class="slide-title">Energia Armazenada na Mola</div>
+            <div class="slide-formula">$$\displaystyle U_{\text{el}} = \frac{1}{2} k x^2 = \frac{1}{2} (500) (0,10)^2 = 2,5 \text{ J}$$</div>
+            <div class="slide-desc">A mola comprimida armazena 2,5 J de energia potencial elástica.</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
-            <div class="slide-badge">SLIDE 2 DE 2 • TENSÃO NAS CORDAS</div>
-            <div class="slide-title">Balanço das Forças no Ponto O</div>
-            <div class="slide-formula">$$\displaystyle T_3 = w = 122 \text{ N}$$</div>
-            <div class="slide-desc">Como não há aceleração horizontal nem vertical, as forças de tração nas cordas mantêm o sistema em equilíbrio estático perfeito.</div>
+            <div class="slide-badge">SLIDE 2 DE 2 • CONVERSÃO EM ENERGIA CINÉTICA</div>
+            <div class="slide-title">Velocidade de Saída</div>
+            <div class="slide-formula">$$\displaystyle v = \sqrt{\frac{2 U_{\text{el}}}{m}} = \sqrt{\frac{2 \times 2,5}{0,20}} = 5,0 \text{ m/s}$$</div>
+            <div class="slide-desc">Toda a energia elástica se transforma em energia cinética. O bloco sai a 5,0 m/s.</div>
         </div>
         
             </div>
@@ -429,24 +429,20 @@
             if (!ctx) return;
             ctx.clearRect(0, 0, w, h);
             
-            const cx = w / 2, cy = h / 2;
-            // Ceiling
-            ctx.strokeStyle = '#475569'; ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.moveTo(cx - 100, 40); ctx.lineTo(cx + 100, 40); ctx.stroke();
-            
-            // Cable 3
+            const sx = 60, sy = h / 2 + 20;
             ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.moveTo(cx, 40); ctx.lineTo(cx, cy + 30); ctx.stroke();
+            ctx.beginPath();
+            for(let i=0; i<12; i++) {
+                let px = sx + i * 12;
+                let py = sy + (i % 2 === 0 ? -15 : 15);
+                if(i===0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
 
-            // Traffic light
-            ctx.fillStyle = '#1e293b'; ctx.fillRect(cx - 30, cy + 30, 60, 100);
-            ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.arc(cx, cy + 50, 12, 0, 2*Math.PI); ctx.fill();
-            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(cx, cy + 80, 12, 0, 2*Math.PI); ctx.fill();
-            ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(cx, cy + 110, 12, 0, 2*Math.PI); ctx.fill();
+            ctx.fillStyle = '#a855f7'; ctx.fillRect(sx + 140, sy - 30, 60, 60);
 
-            // Vectors 2x
-            drawVectorArrow(ctx, cx, cy + 30, 0, -150, '#38bdf8', 'T3 = 122 N');
-            drawVectorArrow(ctx, cx, cy + 80, 0, 150, '#f43f5e', 'w = 122 N');
+            drawVectorArrow(ctx, sx + 200, sy, 160, 0, '#10b981', 'v = 5,0 m/s');
+            drawVectorArrow(ctx, sx + 140, sy, -120, 0, '#fbbf24', 'Uel = 2,5 J');
         
         }
 
