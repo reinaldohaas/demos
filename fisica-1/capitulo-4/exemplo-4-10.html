@@ -7,6 +7,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- MathJax 3 Configuration for Beautiful LaTeX Rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <style>
         :root {
             --bg-dark: #070a12;
@@ -84,7 +95,7 @@
             padding: 10px 18px;
             border-radius: 10px;
             font-family: 'Outfit', monospace;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--accent-gold);
             font-weight: 700;
         }
@@ -156,14 +167,14 @@
             color: var(--text-main);
         }
 
-        .slide-formula code {
-            font-family: monospace;
-            font-size: 0.9rem;
+        .slide-formula {
+            font-size: 1.05rem;
             color: var(--accent-gold);
             background: rgba(0, 0, 0, 0.4);
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
             display: inline-block;
+            margin: 4px 0;
         }
 
         .slide-desc {
@@ -257,7 +268,7 @@
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
         </div>
-        <div class="formula-badge">\vec{F}_{Pedreiro/Corda} = -\vec{F}_{Corda/Pedreiro}, \quad \vec{F}_{Corda/Bloco} = -\vec{F}_{Bloco/Corda}</div>
+        <div class="formula-badge">$$\vec{F}_{\text{Pedreiro/Corda}} = -\vec{F}_{\text{Corda/Pedreiro}}, \quad \vec{F}_{\text{Corda/Bloco}} = -\vec{F}_{\text{Bloco/Corda}}$$</div>
     </div>
 
     <div class="presentation-container">
@@ -277,14 +288,14 @@
         <div class="presentation-slide active" id="slide-1">
             <div class="slide-badge">SLIDE 1 DE 2 • PARES DE INTERAÇÃO</div>
             <div class="slide-title">Identificação dos Pares de Força</div>
-            <div class="slide-formula"><code>\vec{F}_{P/C} = -\vec{F}_{C/P}, \quad \vec{F}_{C/B} = -\vec{F}_{B/C}</code></div>
+            <div class="slide-formula">$$\displaystyle \vec{F}_{P/C} = -\vec{F}_{C/P}, \quad \vec{F}_{C/B} = -\vec{F}_{B/C}$$</div>
             <div class="slide-desc">Par 1: Força do pedreiro na corda e da corda no pedreiro.<br>Par 2: Força da corda no bloco e do bloco na corda.</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
             <div class="slide-badge">SLIDE 2 DE 2 • TRANSMISSÃO DA TENSÃO</div>
             <div class="slide-title">Corda de Massa Desprezível</div>
-            <div class="slide-formula"><code>m_{corda} \approx 0 \implies F_{P/C} = F_{C/B} = T</code></div>
+            <div class="slide-formula">$$\displaystyle m_{\text{corda}} \approx 0 \implies F_{P/C} = F_{C/B} = T$$</div>
             <div class="slide-desc">Se a corda tem massa desprezível, a tensão T é igual em ambas as extremidades e a corda transmite a força do pedreiro diretamente ao bloco.</div>
         </div>
         
@@ -438,20 +449,16 @@
 
             
             const cy = h / 2 + 20;
-            // Block (left)
             ctx.fillStyle = '#cbd5e1'; ctx.fillRect(80, cy - 35, 90, 70);
             ctx.fillStyle = '#0f172a'; ctx.font = 'bold 13px Inter'; ctx.fillText('Bloco', 105, cy + 5);
 
-            // Rope (middle)
             ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 6;
             ctx.beginPath(); ctx.moveTo(170, cy); ctx.lineTo(340, cy); ctx.stroke();
 
-            // Mason (right)
             ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.arc(380, cy - 40, 18, 0, 2*Math.PI); ctx.fill();
             ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 5;
             ctx.beginPath(); ctx.moveTo(380, cy - 22); ctx.lineTo(380, cy + 30); ctx.stroke();
 
-            // Vectors doubled length
             drawVectorArrow(ctx, 170, cy, 140, 0, '#10b981', 'F_(Corda sobre Bloco)');
             drawVectorArrow(ctx, 340, cy, -140, 0, '#f43f5e', 'F_(Corda sobre Pedreiro)');
         

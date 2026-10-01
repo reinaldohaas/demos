@@ -7,6 +7,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- MathJax 3 Configuration for Beautiful LaTeX Rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <style>
         :root {
             --bg-dark: #070a12;
@@ -84,7 +95,7 @@
             padding: 10px 18px;
             border-radius: 10px;
             font-family: 'Outfit', monospace;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--accent-gold);
             font-weight: 700;
         }
@@ -156,14 +167,14 @@
             color: var(--text-main);
         }
 
-        .slide-formula code {
-            font-family: monospace;
-            font-size: 0.9rem;
+        .slide-formula {
+            font-size: 1.05rem;
             color: var(--accent-gold);
             background: rgba(0, 0, 0, 0.4);
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
             display: inline-block;
+            margin: 4px 0;
         }
 
         .slide-desc {
@@ -257,7 +268,7 @@
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
         </div>
-        <div class="formula-badge">\vec{F}_{Mesa/Maçã} = -\vec{F}_{Maçã/Mesa}, \quad \vec{F}_{Terra/Maçã} = -\vec{F}_{Maçã/Terra}</div>
+        <div class="formula-badge">$$\vec{F}_{\text{Mesa/Maçã}} = -\vec{F}_{\text{Maçã/Mesa}}, \quad \vec{F}_{\text{Terra/Maçã}} = -\vec{F}_{\text{Maçã/Terra}}$$</div>
     </div>
 
     <div class="presentation-container">
@@ -277,14 +288,14 @@
         <div class="presentation-slide active" id="slide-1">
             <div class="slide-badge">SLIDE 1 DE 2 • FORÇAS NA MAÇÃ</div>
             <div class="slide-title">Equilíbrio na Maçã</div>
-            <div class="slide-formula"><code>\sum \vec{F}_{Maçã} = \vec{N}_{Mesa/Maçã} + \vec{p}_{Terra/Maçã} = 0</code></div>
+            <div class="slide-formula">$$\displaystyle \sum \vec{F}_{\text{Maçã}} = \vec{N}_{\text{Mesa/Maçã}} + \vec{p}_{\text{Terra/Maçã}} = 0$$</div>
             <div class="slide-desc">Atuam na maçã: (1) Peso p para baixo exercido pela Terra; (2) Normal N para cima exercida pela mesa.</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
             <div class="slide-badge">SLIDE 2 DE 2 • PARES DE AÇÃO E REAÇÃO</div>
             <div class="slide-title">Identificação dos Pares</div>
-            <div class="slide-formula"><code>Par 1: \vec{N}_{Mesa/Maçã} \leftrightarrow \vec{N}_{Maçã/Mesa}, \quad Par 2: \vec{p}_{Terra/Maçã} \leftrightarrow \vec{p}_{Maçã/Terra}</code></div>
+            <div class="slide-formula">$$\displaystyle \text{Par 1: } \vec{N}_{M/m} \leftrightarrow \vec{N}_{m/M}, \quad \text{Par 2: } \vec{p}_{T/m} \leftrightarrow \vec{p}_{m/T}$$</div>
             <div class="slide-desc">As duas forças sobre a maçã NÃO formam um par de ação e reação (pois atuam no mesmo corpo). Os pares atuam em corpos diferentes!</div>
         </div>
         
@@ -438,14 +449,11 @@
 
             
             const cx = w / 2, cy = h / 2;
-            // Table
             ctx.fillStyle = '#475569'; ctx.fillRect(cx - 120, cy + 20, 240, 15);
 
-            // Apple
             ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.arc(cx, cy, 22, 0, 2*Math.PI); ctx.fill();
-            ctx.fillStyle = '#10b981'; ctx.fillRect(cx - 2, cy - 28, 4, 8); // stem
+            ctx.fillStyle = '#10b981'; ctx.fillRect(cx - 2, cy - 28, 4, 8);
 
-            // Doubled length vectors on Apple
             drawVectorArrow(ctx, cx, cy, 0, -160, '#38bdf8', 'N (Mesa sobre Maçã)');
             drawVectorArrow(ctx, cx, cy, 0, 160, '#f43f5e', 'p (Terra sobre Maçã)');
         

@@ -7,6 +7,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- MathJax 3 Configuration for Beautiful LaTeX Rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <style>
         :root {
             --bg-dark: #070a12;
@@ -84,7 +95,7 @@
             padding: 10px 18px;
             border-radius: 10px;
             font-family: 'Outfit', monospace;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--accent-gold);
             font-weight: 700;
         }
@@ -156,14 +167,14 @@
             color: var(--text-main);
         }
 
-        .slide-formula code {
-            font-family: monospace;
-            font-size: 0.9rem;
+        .slide-formula {
+            font-size: 1.05rem;
             color: var(--accent-gold);
             background: rgba(0, 0, 0, 0.4);
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
             display: inline-block;
+            margin: 4px 0;
         }
 
         .slide-desc {
@@ -257,7 +268,7 @@
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
         </div>
-        <div class="formula-badge">\vec{v} = \text{constante} \implies \sum \vec{F} = 0</div>
+        <div class="formula-badge">$$\vec{v} = \text{constante} \implies \sum \vec{F} = 0$$</div>
     </div>
 
     <div class="presentation-container">
@@ -277,14 +288,14 @@
         <div class="presentation-slide active" id="slide-1">
             <div class="slide-badge">SLIDE 1 DE 2 • EQUILÍBRIO DINÂMICO</div>
             <div class="slide-title">Força Resultante em Ambos os Carros</div>
-            <div class="slide-formula"><code>\sum \vec{F}_{Porsche} = 0, \quad \sum \vec{F}_{VW} = 0</code></div>
+            <div class="slide-formula">$$\displaystyle \sum \vec{F}_{Porsche} = 0, \quad \sum \vec{F}_{VW} = 0$$</div>
             <div class="slide-desc">Ambos os carros estão com velocidade constante (aceleração a = 0). Portanto, pela Primeira Lei de Newton, a força resultante sobre AMBOS os carros é EXATAMENTE ZERO!</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
             <div class="slide-badge">SLIDE 2 DE 2 • FORÇA MOTRIZ VS RESISTÊNCIA</div>
             <div class="slide-title">Balanço de Forças</div>
-            <div class="slide-formula"><code>F_{motriz} = F_{resistencia}</code></div>
+            <div class="slide-formula">$$\displaystyle F_{\text{motriz}} = F_{\text{resistência}}$$</div>
             <div class="slide-desc">O Porsche necessita de uma força motriz maior que o VW apenas porque a resistência do ar a 150 km/h é maior. No entanto, a força motriz cancela exatamente a resistência do ar!</div>
         </div>
         
@@ -438,19 +449,16 @@
 
             
             const py = h / 3, vy = (2 * h) / 3;
-            // Road background
             ctx.fillStyle = '#1e293b'; ctx.fillRect(20, 30, w-40, h-60);
             ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2; ctx.setLineDash([15, 15]);
             ctx.beginPath(); ctx.moveTo(20, h/2); ctx.lineTo(w-40, h/2); ctx.stroke(); ctx.setLineDash([]);
 
-            // Porsche (150 km/h)
             ctx.fillStyle = '#ef4444'; ctx.fillRect(100, py - 20, 110, 40);
             ctx.fillStyle = '#ffffff'; ctx.font = 'bold 13px Inter'; ctx.fillText('Porsche (150 km/h)', 105, py + 5);
             drawVectorArrow(ctx, 210, py, 140, 0, '#38bdf8', 'F_motriz = +F');
             drawVectorArrow(ctx, 100, py, -140, 0, '#f43f5e', 'F_resistencia = -F');
             ctx.fillStyle = '#10b981'; ctx.font = 'bold 13px Inter'; ctx.fillText('∑F = 0', 220, py - 30);
 
-            // VW (75 km/h)
             ctx.fillStyle = '#3b82f6'; ctx.fillRect(100, vy - 20, 110, 40);
             ctx.fillStyle = '#ffffff'; ctx.font = 'bold 13px Inter'; ctx.fillText('VW (75 km/h)', 105, vy + 5);
             drawVectorArrow(ctx, 210, vy, 80, 0, '#38bdf8', 'F_motriz = +f');

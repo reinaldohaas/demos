@@ -7,6 +7,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- MathJax 3 Configuration for Beautiful LaTeX Rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <style>
         :root {
             --bg-dark: #070a12;
@@ -84,7 +95,7 @@
             padding: 10px 18px;
             border-radius: 10px;
             font-family: 'Outfit', monospace;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--accent-gold);
             font-weight: 700;
         }
@@ -156,14 +167,14 @@
             color: var(--text-main);
         }
 
-        .slide-formula code {
-            font-family: monospace;
-            font-size: 0.9rem;
+        .slide-formula {
+            font-size: 1.05rem;
             color: var(--accent-gold);
             background: rgba(0, 0, 0, 0.4);
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
             display: inline-block;
+            margin: 4px 0;
         }
 
         .slide-desc {
@@ -257,7 +268,7 @@
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
         </div>
-        <div class="formula-badge">\sum \vec{F} = \vec{p} = m \vec{g}</div>
+        <div class="formula-badge">$$\sum \vec{F} = \vec{p} = m \vec{g}$$</div>
     </div>
 
     <div class="presentation-container">
@@ -277,14 +288,14 @@
         <div class="presentation-slide active" id="slide-1">
             <div class="slide-badge">SLIDE 1 DE 2 • CONSTÂNCIA DA FORÇA</div>
             <div class="slide-title">Força Resultante em Queda Livre</div>
-            <div class="slide-formula"><code>\sum \vec{F} = m \vec{g} = \text{constante}</code></div>
+            <div class="slide-formula">$$\displaystyle \sum \vec{F} = m \vec{g} = \text{constante}$$</div>
             <div class="slide-desc">A aceleração em queda livre é constante (g = 9,80 m/s²). Pela 2ª Lei de Newton, a força resultante ΣF = mg também é CONSTANTE durante toda a queda.</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
             <div class="slide-badge">SLIDE 2 DE 2 • ERRO DO SENSO COMUM</div>
             <div class="slide-title">Velocidade Crescente ≠ Força Crescente</div>
-            <div class="slide-formula"><code>v(t) = g t, \quad \sum F = m g = \text{constante}</code></div>
+            <div class="slide-formula">$$\displaystyle v(t) = g t, \quad \sum F = m g = \text{constante}$$</div>
             <div class="slide-desc">Embora a velocidade da moeda aumente à medida que ela cai, a FORÇA RESULTANTE permanece constante e igual ao peso da moeda!</div>
         </div>
         
@@ -438,14 +449,11 @@
 
             
             const cx = w / 2;
-            // Draw coin at three positions
             [100, 220, 340].forEach((cy, idx) => {
                 ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(cx, cy, 16, 0, 2*Math.PI); ctx.fill();
                 ctx.fillStyle = '#0f172a'; ctx.font = 'bold 12px Inter'; ctx.textAlign = 'center'; ctx.fillText('€', cx, cy + 4);
 
-                // Constant Weight Vector doubled length (130px)
                 drawVectorArrow(ctx, cx, cy + 16, 0, 130, '#f43f5e', 'p = mg (Constante)');
-                // Increasing velocity vector
                 drawVectorArrow(ctx, cx + 40, cy, 0, 40 * (idx + 1), '#10b981', `v${idx+1}`);
             });
         

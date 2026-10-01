@@ -7,6 +7,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- MathJax 3 Configuration for Beautiful LaTeX Rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <style>
         :root {
             --bg-dark: #070a12;
@@ -132,7 +143,7 @@
 
     <div class="header">
         <h1>Capítulo 4: Leis de Newton do Movimento</h1>
-        <p>Catálogo Oficial dos 11 Exemplos do livro <strong>Física I — Young & Freedman (12ª Edição)</strong>. Todos os exemplos incluem enunciados autênticos, diagramas de corpo livre interativos com vetores em dobro do tamanho, simulações interativas e narração por voz.</p>
+        <p>Catálogo Oficial dos 11 Exemplos do livro <strong>Física I — Young & Freedman (12ª Edição)</strong>. Todos os exemplos incluem enunciados autênticos, diagramas de corpo livre interativos com vetores em dobro do tamanho, renderização perfeita de equações MathJax/LaTeX, simulações interativas e narração por voz.</p>
     </div>
 
     <div class="catalog-grid">
@@ -142,7 +153,7 @@
             <h3 class="card-title">Exemplo 4.1: Superposição de Forças</h3>
             <p class="card-desc">Três lutadores profissionais estão lutando pelo mesmo cinturão de campeão. Olhando de cima, eles aplicam três forças hor...</p>
             <div class="card-footer">
-                <span class="formula">\vec{R} = \sum \vec{F} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3</span>
+                <span class="formula">$$\vec{R} = \sum \vec{F} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
@@ -152,7 +163,7 @@
             <h3 class="card-title">Exemplo Conceitual 4.2: Força Resultante Nula Significa Velocidade Constante</h3>
             <p class="card-desc">Em um filme de ficção científica da década de 1950, uma espaçonave se move no vácuo do espaço sideral, longe de qualquer...</p>
             <div class="card-footer">
-                <span class="formula">\sum \vec{F} = 0 \implies \vec{v} = \text{constante}</span>
+                <span class="formula">$$\sum \vec{F} = 0 \implies \vec{v} = \text{constante}$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
@@ -162,7 +173,7 @@
             <h3 class="card-title">Exemplo Conceitual 4.3: Velocidade Constante Significa Força Resultante Nula</h3>
             <p class="card-desc">Você está dirigindo um Porsche ao longo de um trecho retilíneo de teste com velocidade escalar constante igual a 150 km/...</p>
             <div class="card-footer">
-                <span class="formula">\vec{v} = \text{constante} \implies \sum \vec{F} = 0</span>
+                <span class="formula">$$\vec{v} = \text{constante} \implies \sum \vec{F} = 0$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
@@ -172,7 +183,7 @@
             <h3 class="card-title">Exemplo 4.4: Determinação da Aceleração a partir da Força</h3>
             <p class="card-desc">Um trabalhador aplica uma força horizontal constante de módulo igual a 20 N sobre uma caixa de massa igual a 40 kg que e...</p>
             <div class="card-footer">
-                <span class="formula">a_x = \frac{\sum F_x}{m}</span>
+                <span class="formula">$$a_x = \frac{\sum F_x}{m}$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
@@ -182,7 +193,7 @@
             <h3 class="card-title">Exemplo 4.5: Determinação da Força a partir da Aceleração</h3>
             <p class="card-desc">Uma garçonete empurra uma garrafa de ketchup de massa m = 0,45 kg ao longo de um balcão liso e horizontal. Quando a garr...</p>
             <div class="card-footer">
-                <span class="formula">v^2 = v_0^2 + 2 a_x (x - x_0) \implies f_k = -m a_x</span>
+                <span class="formula">$$v^2 = v_0^2 + 2 a_x (x - x_0) \implies f_k = -m a_x$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
@@ -192,7 +203,7 @@
             <h3 class="card-title">Exemplo Conceitual 4.6: Força Resultante e Aceleração em Queda Livre</h3>
             <p class="card-desc">Uma moeda é largada do repouso do alto da Torre Inclinada de Pisa. Se a moeda cai em queda livre, de modo que os efeitos...</p>
             <div class="card-footer">
-                <span class="formula">\sum \vec{F} = \vec{p} = m \vec{g}</span>
+                <span class="formula">$$\sum \vec{F} = \vec{p} = m \vec{g}$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
@@ -202,7 +213,7 @@
             <h3 class="card-title">Exemplo 4.7: Massa e Peso de um Carro Freando</h3>
             <p class="card-desc">Um carro de peso w = 2,49 × 10⁴ N em movimento ao longo do eixo +Ox pára repentinamente; o componente x da força resulta...</p>
             <div class="card-footer">
-                <span class="formula">m = \frac{w}{g}, \quad a_x = \frac{\sum F_x}{m}</span>
+                <span class="formula">$$m = \frac{w}{g}, \quad a_x = \frac{\sum F_x}{m}$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
@@ -212,7 +223,7 @@
             <h3 class="card-title">Exemplo Conceitual 4.8: Terceira Lei de Newton — Qual Força é Maior?</h3>
             <p class="card-desc">Seu carro esportivo enguiça, e você o empurra até a oficina mais próxima. Quando o carro está começando a se mover, como...</p>
             <div class="card-footer">
-                <span class="formula">\vec{F}_{Pessoa/Carro} = -\vec{F}_{Carro/Pessoa}</span>
+                <span class="formula">$$\vec{F}_{\text{Pessoa/Carro}} = -\vec{F}_{\text{Carro/Pessoa}}$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
@@ -222,7 +233,7 @@
             <h3 class="card-title">Exemplo Conceitual 4.9: Aplicação da Terceira Lei de Newton: Objetos em Repouso</h3>
             <p class="card-desc">Uma maçã está em repouso sobre uma mesa. Quais são as forças que atuam sobre ela? Quais são as forças de reação a cada u...</p>
             <div class="card-footer">
-                <span class="formula">\vec{F}_{Mesa/Maçã} = -\vec{F}_{Maçã/Mesa}, \quad \vec{F}_{Terra/Maçã} = -\vec{F}_{Maçã/Terra}</span>
+                <span class="formula">$$\vec{F}_{\text{Mesa/Maçã}} = -\vec{F}_{\text{Maçã/Mesa}}, \quad \vec{F}_{\text{Terra/Maçã}} = -\vec{F}_{\text{Maçã/Terra}}$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
@@ -232,7 +243,7 @@
             <h3 class="card-title">Exemplo Conceitual 4.10: Aplicação da Terceira Lei de Newton: Objetos em Movimento</h3>
             <p class="card-desc">Um pedreiro arrasta um bloco de mármore em um piso, puxando-o por meio de uma corda amarrada ao bloco. O bloco pode ou n...</p>
             <div class="card-footer">
-                <span class="formula">\vec{F}_{Pedreiro/Corda} = -\vec{F}_{Corda/Pedreiro}, \quad \vec{F}_{Corda/Bloco} = -\vec{F}_{Bloco/Corda}</span>
+                <span class="formula">$$\vec{F}_{\text{Pedreiro/Corda}} = -\vec{F}_{\text{Corda/Pedreiro}}, \quad \vec{F}_{\text{Corda/Bloco}} = -\vec{F}_{\text{Bloco/Corda}}$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
@@ -242,7 +253,7 @@
             <h3 class="card-title">Exemplo Conceitual 4.11: Um Paradoxo da Terceira Lei de Newton?</h3>
             <p class="card-desc">No Exemplo 4.10, observamos que o pedreiro puxa a combinação corda-bloco com toda força, que o puxa de volta com força i...</p>
             <div class="card-footer">
-                <span class="formula">\sum F_{bloco} = T - f_{bloco} > 0, \quad \sum F_{pedreiro} = f_{pedreiro} - T = 0</span>
+                <span class="formula">$$\sum F_{\text{bloco}} = T - f_{\text{bloco}} > 0, \quad \sum F_{\text{pedreiro}} = f_{\text{pedreiro}} - T = 0$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>

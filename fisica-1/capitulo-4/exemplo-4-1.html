@@ -7,6 +7,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- MathJax 3 Configuration for Beautiful LaTeX Rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <style>
         :root {
             --bg-dark: #070a12;
@@ -84,7 +95,7 @@
             padding: 10px 18px;
             border-radius: 10px;
             font-family: 'Outfit', monospace;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--accent-gold);
             font-weight: 700;
         }
@@ -156,14 +167,14 @@
             color: var(--text-main);
         }
 
-        .slide-formula code {
-            font-family: monospace;
-            font-size: 0.9rem;
+        .slide-formula {
+            font-size: 1.05rem;
             color: var(--accent-gold);
             background: rgba(0, 0, 0, 0.4);
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
             display: inline-block;
+            margin: 4px 0;
         }
 
         .slide-desc {
@@ -257,7 +268,7 @@
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
         </div>
-        <div class="formula-badge">\vec{R} = \sum \vec{F} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3</div>
+        <div class="formula-badge">$$\vec{R} = \sum \vec{F} = \vec{F}_1 + \vec{F}_2 + \vec{F}_3$$</div>
     </div>
 
     <div class="presentation-container">
@@ -278,21 +289,21 @@
         <div class="presentation-slide active" id="slide-1">
             <div class="slide-badge">SLIDE 1 DE 3 • COMPONENTES DAS FORÇAS</div>
             <div class="slide-title">Cálculo dos Componentes x e y</div>
-            <div class="slide-formula"><code>F_x = F \cos\theta, \quad F_y = F \operatorname{sen}\theta</code></div>
+            <div class="slide-formula">$$\displaystyle F_x = F \cos\theta, \quad F_y = F \text{sen}\theta$$</div>
             <div class="slide-desc">F1: F1x = 250 cos(127°) = -150 N, F1y = 250 sen(127°) = 200 N.<br>F2: F2x = 50 cos(0°) = 50 N, F2y = 0 N.<br>F3: F3x = 0 N, F3y = 120 sen(270°) = -120 N.</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
             <div class="slide-badge">SLIDE 2 DE 3 • FORÇA RESULTANTE</div>
             <div class="slide-title">Soma Vetorial dos Componentes</div>
-            <div class="slide-formula"><code>R_x = \sum F_x, \quad R_y = \sum F_y</code></div>
+            <div class="slide-formula">$$\displaystyle R_x = \sum F_x, \quad R_y = \sum F_y$$</div>
             <div class="slide-desc">Rx = -150 + 50 + 0 = -100 N.<br>Ry = 200 + 0 - 120 = +80 N.<br>A força resultante aponta para o segundo quadrante (esquerda e para cima).</div>
         </div>
         
         <div class="presentation-slide " id="slide-3">
             <div class="slide-badge">SLIDE 3 DE 3 • MÓDULO E ÂNGULO</div>
             <div class="slide-title">Módulo e Direção de R</div>
-            <div class="slide-formula"><code>R = \sqrt{R_x^2 + R_y^2} = 128 \text{ N}, \quad \theta = 141^\circ</code></div>
+            <div class="slide-formula">$$\displaystyle R = \sqrt{R_x^2 + R_y^2} = 128 \text{ N}, \quad \theta = 141^\circ$$</div>
             <div class="slide-desc">R = √((-100)² + 80²) = √(16400) = 128 N.<br>θ = arctg(80 / -100) = 141° (segundo quadrante).</div>
         </div>
         
@@ -446,25 +457,18 @@
 
             
             const cx = w / 2, cy = h / 2;
-            // Draw coordinate axes
             ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth = 1.5;
             ctx.beginPath(); ctx.moveTo(40, cy); ctx.lineTo(w - 40, cy); ctx.stroke();
             ctx.beginPath(); ctx.moveTo(cx, 40); ctx.lineTo(cx, h - 40); ctx.stroke();
             
-            // Belt at center
             ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(cx, cy, 18, 0, 2*Math.PI); ctx.fill();
             ctx.fillStyle = '#0f172a'; ctx.font = 'bold 11px Inter'; ctx.textAlign = 'center'; ctx.fillText('Cinturão', cx, cy + 4);
 
-            // Double length vectors
-            // F1: 250N at 127 deg => dx = -150*0.7 = -105, dy = -200*0.7 = -140
             drawVectorArrow(ctx, cx, cy, -160, -210, '#38bdf8', 'F1 = 250 N (127°)');
-            // F2: 50N at 0 deg => dx = +100
             drawVectorArrow(ctx, cx, cy, 110, 0, '#10b981', 'F2 = 50 N (0°)');
-            // F3: 120N at 270 deg => dy = +170
             drawVectorArrow(ctx, cx, cy, 0, 170, '#f43f5e', 'F3 = 120 N (270°)');
 
             if (currentSlide === 2 || currentSlide === 3) {
-                // Resultant R: (-100, +80) => canvas dx = -140, dy = -112
                 drawVectorArrow(ctx, cx, cy, -140, -112, '#a855f7', 'R = 128 N (141°)');
             }
         

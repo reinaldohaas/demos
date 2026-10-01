@@ -7,6 +7,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- MathJax 3 Configuration for Beautiful LaTeX Rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <style>
         :root {
             --bg-dark: #070a12;
@@ -84,7 +95,7 @@
             padding: 10px 18px;
             border-radius: 10px;
             font-family: 'Outfit', monospace;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--accent-gold);
             font-weight: 700;
         }
@@ -156,14 +167,14 @@
             color: var(--text-main);
         }
 
-        .slide-formula code {
-            font-family: monospace;
-            font-size: 0.9rem;
+        .slide-formula {
+            font-size: 1.05rem;
             color: var(--accent-gold);
             background: rgba(0, 0, 0, 0.4);
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
             display: inline-block;
+            margin: 4px 0;
         }
 
         .slide-desc {
@@ -257,7 +268,7 @@
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
         </div>
-        <div class="formula-badge">v^2 = v_0^2 + 2 a_x (x - x_0) \implies f_k = -m a_x</div>
+        <div class="formula-badge">$$v^2 = v_0^2 + 2 a_x (x - x_0) \implies f_k = -m a_x$$</div>
     </div>
 
     <div class="presentation-container">
@@ -277,14 +288,14 @@
         <div class="presentation-slide active" id="slide-1">
             <div class="slide-badge">SLIDE 1 DE 2 • CINEMÁTICA DA DESACELERAÇÃO</div>
             <div class="slide-title">Cálculo da Aceleração a_x</div>
-            <div class="slide-formula"><code>a_x = \frac{v^2 - v_0^2}{2(x - x_0)} = \frac{0 - (2,8)^2}{2(1,0)} = -3,9 \text{ m/s}^2</code></div>
+            <div class="slide-formula">$$\displaystyle a_x = \frac{v^2 - v_0^2}{2(x - x_0)} = \frac{0 - (2,8)^2}{2(1,0)} = -3,9 \text{ m/s}^2$$</div>
             <div class="slide-desc">A aceleração a_x = -3,9 m/s² aponta no sentido oposto ao movimento (para a esquerda).</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
             <div class="slide-badge">SLIDE 2 DE 2 • SEGUNDA LEI DE NEWTON</div>
             <div class="slide-title">Cálculo da Força de Atrito</div>
-            <div class="slide-formula"><code>-f_k = m a_x \implies f_k = -(0,45)(-3,9) = 1,8 \text{ N}</code></div>
+            <div class="slide-formula">$$\displaystyle -f_k = m a_x \implies f_k = -(0,45)(-3,9) = 1,8 \text{ N}$$</div>
             <div class="slide-desc">O módulo da força de atrito é f_k = 1,8 N, orientada para a esquerda.</div>
         </div>
         
@@ -438,16 +449,13 @@
 
             
             const bx = w / 2, by = h / 2 + 20;
-            // Countertop
             ctx.strokeStyle = '#a855f7'; ctx.lineWidth = 4;
             ctx.beginPath(); ctx.moveTo(40, by + 30); ctx.lineTo(w - 40, by + 30); ctx.stroke();
 
-            // Ketchup Bottle
             ctx.fillStyle = '#ef4444'; ctx.fillRect(bx - 25, by - 50, 50, 80);
             ctx.fillStyle = '#ffffff'; ctx.font = 'bold 12px Inter'; ctx.textAlign = 'center';
             ctx.fillText('Ketchup', bx, by - 10);
 
-            // Vectors doubled
             drawVectorArrow(ctx, bx + 25, by - 10, 160, 0, '#10b981', 'v0 = 2,8 m/s');
             drawVectorArrow(ctx, bx - 25, by - 10, -150, 0, '#fbbf24', 'f_k = 1,8 N');
             drawVectorArrow(ctx, bx, by - 50, 0, -120, '#38bdf8', 'N');

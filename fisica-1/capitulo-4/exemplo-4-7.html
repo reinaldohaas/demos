@@ -7,6 +7,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- MathJax 3 Configuration for Beautiful LaTeX Rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <style>
         :root {
             --bg-dark: #070a12;
@@ -84,7 +95,7 @@
             padding: 10px 18px;
             border-radius: 10px;
             font-family: 'Outfit', monospace;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--accent-gold);
             font-weight: 700;
         }
@@ -156,14 +167,14 @@
             color: var(--text-main);
         }
 
-        .slide-formula code {
-            font-family: monospace;
-            font-size: 0.9rem;
+        .slide-formula {
+            font-size: 1.05rem;
             color: var(--accent-gold);
             background: rgba(0, 0, 0, 0.4);
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
             display: inline-block;
+            margin: 4px 0;
         }
 
         .slide-desc {
@@ -257,7 +268,7 @@
                 <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
             </div>
         </div>
-        <div class="formula-badge">m = \frac{w}{g}, \quad a_x = \frac{\sum F_x}{m}</div>
+        <div class="formula-badge">$$m = \frac{w}{g}, \quad a_x = \frac{\sum F_x}{m}$$</div>
     </div>
 
     <div class="presentation-container">
@@ -277,14 +288,14 @@
         <div class="presentation-slide active" id="slide-1">
             <div class="slide-badge">SLIDE 1 DE 2 • CÁLCULO DA MASSA</div>
             <div class="slide-title">Massa a partir do Peso</div>
-            <div class="slide-formula"><code>m = \frac{w}{g} = \frac{2,49 \times 10^4 \text{ N}}{9,80 \text{ m/s}^2} = 2540 \text{ kg}</code></div>
+            <div class="slide-formula">$$\displaystyle m = \frac{w}{g} = \frac{2,49 \times 10^4 \text{ N}}{9,80 \text{ m/s}^2} = 2540 \text{ kg}$$</div>
             <div class="slide-desc">Convertendo o peso em newtons para a massa inercial m = 2540 kg.</div>
         </div>
         
         <div class="presentation-slide " id="slide-2">
             <div class="slide-badge">SLIDE 2 DE 2 • CÁLCULO DA ACELERAÇÃO</div>
             <div class="slide-title">Aceleração de Frenagem</div>
-            <div class="slide-formula"><code>a_x = \frac{\sum F_x}{m} = \frac{-1,83 \times 10^4 \text{ N}}{2540 \text{ kg}} = -7,20 \text{ m/s}^2</code></div>
+            <div class="slide-formula">$$\displaystyle a_x = \frac{\sum F_x}{m} = \frac{-1,83 \times 10^4 \text{ N}}{2540 \text{ kg}} = -7,20 \text{ m/s}^2$$</div>
             <div class="slide-desc">A aceleração a_x = -7,20 m/s² (ou -0,735 g) indica frenagem intensa na direção -x.</div>
         </div>
         
@@ -438,15 +449,12 @@
 
             
             const cx = w / 2, cy = h / 2 + 20;
-            // Road
             ctx.strokeStyle = '#475569'; ctx.lineWidth = 4;
             ctx.beginPath(); ctx.moveTo(40, cy + 30); ctx.lineTo(w - 40, cy + 30); ctx.stroke();
 
-            // Car body
             ctx.fillStyle = '#a855f7'; ctx.fillRect(cx - 80, cy - 40, 160, 60);
             ctx.fillStyle = '#0f172a'; ctx.beginPath(); ctx.arc(cx - 50, cy + 20, 16, 0, 2*Math.PI); ctx.arc(cx + 50, cy + 20, 16, 0, 2*Math.PI); ctx.fill();
 
-            // Double length vectors
             drawVectorArrow(ctx, cx - 80, cy - 10, -180, 0, '#f43f5e', 'ΣFx = -1,83×10⁴ N');
             drawVectorArrow(ctx, cx, cy - 40, 0, -150, '#38bdf8', 'N = 2,49×10⁴ N');
             drawVectorArrow(ctx, cx, cy + 20, 0, 150, '#fbbf24', 'w = 2,49×10⁴ N');
