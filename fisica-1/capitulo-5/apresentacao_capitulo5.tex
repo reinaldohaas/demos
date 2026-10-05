@@ -1,0 +1,534 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+
+% --- PACOTES E CONFIGURAÇÕES ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[portuguese]{babel}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,shapes.geometric,calc,decorations.pathmorphing,patterns}
+
+% --- TEMA E CORES DIDÁTICAS ---
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+\definecolor{navyblue}{RGB}{15, 23, 42}
+\definecolor{cyandark}{RGB}{3, 105, 161}
+\definecolor{golddark}{RGB}{180, 83, 9}
+\definecolor{redaccent}{RGB}{185, 28, 28}
+\definecolor{emeraldgreen}{RGB}{16, 185, 129}
+
+\setbeamercolor{palette primary}{bg=navyblue,fg=white}
+\setbeamercolor{palette secondary}{bg=cyandark,fg=white}
+\setbeamercolor{palette tertiary}{bg=navyblue,fg=white}
+\setbeamercolor{titlelike}{bg=navyblue,fg=white}
+\setbeamercolor{structure}{fg=cyandark}
+\setbeamercolor{block title}{bg=cyandark,fg=white}
+\setbeamercolor{block body}{bg=gray!10,fg=black}
+\setbeamercolor{block title alert}{bg=redaccent,fg=white}
+\setbeamercolor{block body alert}{bg=redaccent!10,fg=black}
+\setbeamercolor{block title example}{bg=emeraldgreen,fg=white}
+\setbeamercolor{block body example}{bg=emeraldgreen!10,fg=black}
+
+\title[Capítulo 5: Aplicações das Leis de Newton]{Capítulo 5: Aplicações das Leis de Newton}
+\subtitle{FSC5101 --- Física I (Mecânica Clássica)}
+\author[Prof. Reinaldo Haas]{Prof. Reinaldo Haas}
+\institute[UFSC]{Universidade Federal de Santa Catarina --- UFSC\\Departamento de Física}
+\date{2026}
+
+\begin{document}
+
+% --- SLIDE 1: TÍTULO ---
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% --- SLIDE 2: OBJETIVOS E VISÃO GERAL ---
+\begin{frame}{Objetivos de Aprendizagem}
+    \begin{columns}
+        \column{0.55\textwidth}
+        \begin{block}{O que veremos neste capítulo?}
+            \begin{itemize}
+                \item \textbf{5.1 Equilíbrio da Partícula ($\sum \vec{F} = 0$)}: Uso da $1^{\text{a}}$ Lei de Newton e construção correta de DCLs.
+                \item \textbf{5.2 Dinâmica da Partícula ($\sum \vec{F} = m\vec{a}$)}: Uso da $2^{\text{a}}$ Lei de Newton, peso aparente e sistemas acoplados.
+                \item \textbf{5.3 Forças de Atrito e Arraste}: Atrito estático ($\mu_s$), cinético ($\mu_c$), rolamento e velocidade terminal.
+                \item \textbf{5.4 Movimento Circular Uniforme}: Aceleração centrípeta ($a_{\text{rad}} = \frac{v^2}{R}$) e forças em curvas/círculos.
+                \item \textbf{5.5 As 4 Forças Fundamentais}: Gravitacional, Eletromagnética, Forte e Fraca.
+            \end{itemize}
+        \end{block}
+
+        \column{0.45\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.85]
+            % Ilustração central: Plano Inclinado
+            \draw[thick] (0,0) -- (4,0) -- (4,2.3) -- cycle;
+            \draw[thick,fill=cyan!20,rotate around={30:(2,1.15)}] (1.5,1.15) rectangle (2.5,1.85);
+            % Vetores no plano
+            \draw[ultra thick,-{Latex},redaccent] (2.2,1.6) -- (3.2,2.18) node[right] {\small $\vec{T}$};
+            \draw[ultra thick,-{Latex},emeraldgreen] (2.2,1.6) -- (1.4,3.0) node[above] {\small $\vec{n}$};
+            \draw[ultra thick,-{Latex},golddark] (2.2,1.6) -- (2.2,0.1) node[below] {\small $\vec{p} = m\vec{g}$};
+            \node at (0.8,0.25) {\small $\alpha$};
+        \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 3: SEÇÃO 5.1 - PRIMEIRA LEI (EQUILÍBRIO) ---
+\begin{frame}{5.1 Uso da Primeira Lei de Newton: Partículas em Equilíbrio}
+    \begin{columns}
+        \column{0.55\textwidth}
+        \begin{block}{Condição de Equilíbrio Translational}
+            Um corpo está em \textbf{equilíbrio} em um referencial inercial se está em repouso ou em movimento retilíneo uniforme (MRU).
+            $$\sum \vec{F} = 0 \iff \begin{cases} \sum F_x = 0 \\ \sum F_y = 0 \end{cases}$$
+        \end{block}
+
+        \begin{alertblock}{Princípio Chave do DCL}
+            Desenhe \textbf{apenas} as forças externas exercidas \textbf{SOBRE} o corpo isolado. Nunca inclua forças que o corpo exerce sobre outros corpos!
+        \end{alertblock}
+
+        \column{0.45\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.9]
+            % Ginasta na corda (Exemplo 5.1)
+            \fill[pattern=north east lines] (0,3.5) rectangle (2,3.7);
+            \draw[thick] (0,3.5) -- (2,3.5);
+            \draw[ultra thick,brown] (1,3.5) -- (1,1.5);
+            \fill[navyblue] (1,1.5) circle (0.15);
+            % Vetores na ginasta
+            \draw[ultra thick,-{Latex},cyandark] (1,1.5) -- (1,3.0) node[right] {\small $\vec{T}_{\text{corda}}$};
+            \draw[ultra thick,-{Latex},redaccent] (1,1.5) -- (1,0.0) node[right] {\small $\vec{p}_G = m_G \vec{g}$};
+            \node[draw,fill=white,inner sep=2pt] at (1,-0.5) {\small $\sum F_y = T - p_G = 0$};
+        \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 4: ESTRATÉGIA DE SOLUÇÃO DE PROBLEMAS 5.1 ---
+\begin{frame}{Estratégia Didática 5.1: Resolução de Problemas de Equilíbrio}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{Passo 1: Identificar e Preparar}
+            \begin{enumerate}
+                \item Identifique o corpo (ou corpos) em equilíbrio ($\vec{a}=0$).
+                \item Escolha o sistema de eixos ($x, y$) conveniente (alinhado com o plano ou movimento).
+                \item Desenhe o \textbf{Diagrama do Corpo Livre (DCL)} separado para cada objeto.
+            \end{enumerate}
+        \end{block}
+
+        \column{0.5\textwidth}
+        \begin{block}{Passo 2: Executar e Avaliar}
+            \begin{enumerate}
+                \setcounter{enumii}{3}
+                \item Decomponha cada força em componentes $x$ e $y$.
+                \item Monte o sistema: $\sum F_x = 0$ e $\sum F_y = 0$.
+                \item Relacione forças em corpos diferentes via $3^{\text{a}}$ Lei ($\vec{F}_{A/B} = -\vec{F}_{B/A}$).
+                \item Resolva o sistema e \textbf{AVALIE} se os sinais e ordens de grandeza fazem sentido!
+            \end{enumerate}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 5: EXEMPLO 5.3 - EQUILÍBRIO EM 2D (MOTOR SUSPENSO) ---
+\begin{frame}{Exemplo 5.3: Equilíbrio em 2D (Motor Suspenso por Correntes)}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.85]
+            % Teto e Parede
+            \fill[pattern=north east lines] (0,0) rectangle (0.3,3);
+            \draw[thick] (0.3,0) -- (0.3,3) -- (3,3);
+            \fill[pattern=north east lines] (0.3,3) rectangle (3,3.3);
+            % Anel O
+            \fill[navyblue] (1.5,1.5) circle (0.1) node[below left] {$O$};
+            % Correntes
+            \draw[thick] (0.3,1.5) -- (1.5,1.5) node[midway,above] {$T_2$};
+            \draw[thick] (1.5,1.5) -- (2.5,3.0) node[midway,right] {$T_3$};
+            \draw[thick] (1.5,1.5) -- (1.5,0.3) node[midway,right] {$T_1$};
+            \fill[cyan!40,draw=black] (1.0,-0.4) rectangle (2.0,0.3) node[pos=0.5] {\small Motor ($p$)};
+            \node at (2.1,2.7) {\small $60^\circ$};
+        \end{tikzpicture}
+        \end{center}
+
+        \column{0.5\textwidth}
+        \begin{block}{Resolução no Anel $O$}
+            Equações de forças:
+            \begin{itemize}
+                \item $\sum F_x = T_3 \cos 60^\circ - T_2 = 0 \implies T_2 = T_3 \cos 60^\circ$
+                \item $\sum F_y = T_3 \sin 60^\circ - T_1 = 0 \implies T_3 = \frac{p}{\sin 60^\circ}$
+            \end{itemize}
+            Como $T_1 = p$ (equilíbrio do motor):
+            $$T_3 = 1{,}155 \, p \quad \text{e} \quad T_2 = 0{,}577 \, p$$
+            \textbf{Avaliação}: $T_3 > p$ porque precisa sustentar o peso $p$ e vencer a puxada horizontal $T_2$!
+        \end{block}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 6: EXEMPLO 5.4 - PLANO INCLINADO EM EQUILÍBRIO ---
+\begin{frame}{Exemplo 5.4: Plano Inclinado sem Atrito}
+    \begin{columns}
+        \column{0.55\textwidth}
+        \begin{block}{Decomposição do Peso $\vec{p}$}
+            Escolhendo o eixo $x$ paralelo à rampa (subindo) e o eixo $y$ perpendicular à rampa (saindo):
+            \begin{itemize}
+                \item $p_x = -p \sin\alpha \quad (\text{para baixo da rampa})$
+                \item $p_y = -p \cos\alpha \quad (\text{pressionando a rampa})$
+            \end{itemize}
+        \end{block}
+
+        \begin{block}{Equações de Equilíbrio}
+            $$\sum F_x = T - p \sin\alpha = 0 \implies T = p \sin\alpha$$
+            $$\sum F_y = n - p \cos\alpha = 0 \implies n = p \cos\alpha$$
+        \end{block}
+
+        \column{0.45\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.9]
+            \draw[thick] (0,0) -- (3.5,0) -- (3.5,2) -- cycle;
+            \node at (0.8,0.2) {\small $\alpha$};
+            % Eixos inclinados
+            \draw[gray,dashed,-{Latex}] (1.75,1) -- (3.25,1.86) node[above] {$x$};
+            \draw[gray,dashed,-{Latex}] (1.75,1) -- (0.89,2.5) node[left] {$y$};
+            % Bloco
+            \draw[thick,fill=cyan!30,rotate around={30:(1.75,1)}] (1.25,0.7) rectangle (2.25,1.3);
+            % Forças
+            \draw[ultra thick,-{Latex},redaccent] (1.75,1) -- (2.61,1.5) node[above] {$\vec{T}$};
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {$\vec{n}$};
+            \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {$\vec{p}$};
+        \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 7: SEÇÃO 5.2 - SEGUNDA LEI (DINÂMICA) ---
+\begin{frame}{5.2 Uso da Segunda Lei de Newton: Dinâmica das Partículas}
+    \begin{columns}
+        \column{0.55\textwidth}
+        \begin{block}{Segunda Lei de Newton ($\vec{a} \neq 0$)}
+            Quando a força resultante sobre a partícula não é nula, ela adquire aceleração $\vec{a}$:
+            $$\sum \vec{F} = m \vec{a} \iff \begin{cases} \sum F_x = m a_x \\ \sum F_y = m a_y \end{cases}$$
+        \end{block}
+
+        \begin{alertblock}{ALERTA DIDÁTICO CRUCIAL!}
+            \begin{itemize}
+                \item O produto $m\vec{a}$ \textbf{NÃO É UMA FORÇA}!
+                \item Nunca desenhe o vetor $m\vec{a}$ dentro do Diagrama do Corpo Livre (DCL).
+                \item O vetor aceleração $\vec{a}$ deve ser desenhado \textbf{AO LADO} do corpo.
+            \end{itemize}
+        \end{alertblock}
+
+        \column{0.45\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.9]
+            % Errado vs Certo
+            \node[draw=redaccent,thick,fill=redaccent!10,inner sep=4pt] at (0,1.5) {
+                \shortstack{\textbf{ERRADO!}\\[2pt] Incluir $m\vec{a}$ no DCL}
+            };
+            \node[draw=emeraldgreen,thick,fill=emeraldgreen!10,inner sep=4pt] at (0,-1.0) {
+                \shortstack{\textbf{CERTO!}\\[2pt] Desenhar $\vec{a}$ ao lado}
+            };
+            \draw[thick,-{Latex},blue] (1.5,-1.0) -- (2.5,-1.0) node[right] {$\vec{a}$};
+        \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 8: ELEVADOR, PESO APARENTE E SENSAÇÃO DE PESO ---
+\begin{frame}{Exemplo 5.8 e 5.9: Elevador, Peso Aparente e Imponderabilidade}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{Balança dentro do Elevador}
+            A balança mede a força normal $n$ exercida sobre a pessoa:
+            $$\sum F_y = n - m g = m a_y \implies n = m(g + a_y)$$
+        \end{block}
+
+        \begin{itemize}
+            \item \textbf{Acelerando para cima ($a_y > 0$)}: $n > mg$ (sensação de "mais pesado", \textbf{peso aparente maior}).
+            \item \textbf{Acelerando para baixo ($a_y < 0$)}: $n < mg$ (sensação de "mais leve", \textbf{peso aparente menor}).
+            \item \textbf{Queda Livre ($a_y = -g$)}: $n = 0$ (\textbf{Imponderabilidade Aparente}).
+        \end{itemize}
+
+        \column{0.5\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.85]
+            % Cabine do elevador
+            \draw[thick] (0,0) rectangle (2.5,3.2);
+            \draw[ultra thick,brown] (1.25,3.2) -- (1.25,4.0) node[above] {Cabo ($T$)};
+            % Balança e pessoa
+            \draw[fill=gray!40] (0.5,0.2) rectangle (2.0,0.4);
+            \fill[navyblue] (1.25,1.5) circle (0.2);
+            \draw[thick] (1.25,1.3) -- (1.25,0.4);
+            % Vetores de forças
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.25,0.4) -- (1.25,1.8) node[right] {$\vec{n}$};
+            \draw[ultra thick,-{Latex},redaccent] (1.25,1.5) -- (1.25,0.0) node[right] {$\vec{p}$};
+            \draw[ultra thick,-{Latex},blue] (2.8,1.5) -- (2.8,2.5) node[above] {$\vec{a}_y$};
+        \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 9: SISTEMAS ACOPLADOS (MÁQUINA DE ATWOOD) ---
+\begin{frame}{Exemplo 5.12: Dois Corpos Acoplados (Máquina de Atwood Horizontal)}
+    \begin{columns}
+        \column{0.55\textwidth}
+        \begin{block}{Equações de Movimento ($a_{1x} = a_{2y} = a$)}
+            $$\text{Cavaleiro 1 (mesa): } \sum F_x = T = m_1 a$$
+            $$\text{Bloco 2 (suspenso): } \sum F_y = m_2 g - T = m_2 a$$
+        \end{block}
+
+        \begin{exampleblock}{Resultado Geral}
+            Somando as duas equações:
+            $$a = \left(\frac{m_2}{m_1 + m_2}\right) g < g$$
+            $$T = \left(\frac{m_1 m_2}{m_1 + m_2}\right) g < m_2 g$$
+        \end{exampleblock}
+
+        \column{0.45\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.8]
+            % Mesa e Polia
+            \draw[thick] (0,2) -- (2.5,2) -- (2.5,0);
+            \draw[thick] (2.5,2) circle (0.2);
+            % Bloco 1 na mesa
+            \draw[thick,fill=cyan!30] (0.5,2) rectangle (1.5,2.6) node[pos=0.5] {$m_1$};
+            \draw[thick] (1.5,2.3) -- (2.5,2.2);
+            % Bloco 2 suspenso
+            \draw[thick] (2.7,2.0) -- (2.7,0.8);
+            \draw[thick,fill=orange!30] (2.4,0.2) rectangle (3.0,0.8) node[pos=0.5] {$m_2$};
+            % Acelerações
+            \draw[thick,-{Stealth},blue] (1.0,2.9) -- (1.8,2.9) node[above] {$\vec{a}$};
+            \draw[thick,-{Stealth},blue] (3.3,0.8) -- (3.3,0.2) node[right] {$\vec{a}$};
+        \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 10: SEÇÃO 5.3 - FORÇAS DE ATRITO ---
+\begin{frame}{5.3 Forças de Atrito: Estático vs Cinético}
+    \begin{columns}
+        \column{0.55\textwidth}
+        \begin{block}{Modelagem das Forças de Atrito}
+            \begin{itemize}
+                \item \textbf{Atrito Estático ($f_s$)}: Atua sem deslizamento relativo. Ajusta seu valor até o limite máximo:
+                $$f_s \le \mu_s n \implies (f_s)_{\text{máx}} = \mu_s n$$
+                \item \textbf{Atrito Cinético ($f_c$)}: Atua durante o deslizamento relativo:
+                $$f_c = \mu_c n \quad (\text{geralmente } \mu_c < \mu_s)$$
+            \end{itemize}
+        \end{block}
+
+        \begin{alertblock}{Propriedades Fundamentais}
+            As forças de atrito são \textbf{paralelas à superfície} e sempre se opõem ao movimento relativo de deslizamento.
+        \end{alertblock}
+
+        \column{0.45\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.75]
+            % Gráfico f vs F
+            \draw[-{Latex}] (0,0) -- (4.5,0) node[below] {$T$ (Força Aplicada)};
+            \draw[-{Latex}] (0,0) -- (0,3.5) node[left] {$f$ (Atrito)};
+            % Rampa estática
+            \draw[ultra thick,cyandark] (0,0) -- (2.5,2.5) node[midway,above,sloped] {\small Estático ($f_s=T$)};
+            % Queda e platô cinético
+            \draw[dashed] (2.5,0) -- (2.5,2.5) node[above] {\small $(f_s)_{\text{máx}}$};
+            \draw[ultra thick,redaccent] (2.5,1.8) -- (4.2,1.8) node[right] {\small Cinético ($f_c = \mu_c n$)};
+            \draw[dotted] (2.5,2.5) -- (2.5,1.8);
+        \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 11: TOBOGÃ COM ATRITO NO PLANO INCLINADO ---
+\begin{frame}{Exemplo 5.16 e 5.17: Tobogã em Plano Inclinado com Atrito}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{Caso 1: Velocidade Constante ($\vec{a}=0$)}
+            $$\sum F_x = mg \sin\alpha - f_c = 0$$
+            $$\sum F_y = n - mg \cos\alpha = 0 \implies n = mg \cos\alpha$$
+            Como $f_c = \mu_c n = \mu_c mg \cos\alpha$:
+            $$mg \sin\alpha = \mu_c mg \cos\alpha \implies \tan\alpha = \mu_c$$
+        \end{block}
+
+        \column{0.5\textwidth}
+        \begin{block}{Caso 2: Movimento Acelerado ($\vec{a} \neq 0$)}
+            $$\sum F_x = mg \sin\alpha - \mu_c mg \cos\alpha = m a_x$$
+            Isolando a aceleração $a_x$:
+            $$a_x = g (\sin\alpha - \mu_c \cos\alpha)$$
+            \begin{itemize}
+                \item Se $\tan\alpha > \mu_c \implies a_x > 0$ (acelera rampa abaixo).
+                \item Se $\tan\alpha < \mu_c \implies a_x < 0$ (desacelera até parar).
+            \end{itemize}
+        \end{block}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 12: RESISTÊNCIA DE FLUIDOS E VELOCIDADE TERMINAL ---
+\begin{frame}{Resistência de Fluidos e Velocidade Terminal}
+    \begin{columns}
+        \column{0.55\textwidth}
+        \begin{block}{Modelos de Arraste em Fluidos}
+            \begin{itemize}
+                \item \textbf{Baixas velocidades (fluxo laminar)}:
+                $$f = k \cdot v$$
+                \item \textbf{Altas velocidades (fluxo turbulento no ar)}:
+                $$f = D \cdot v^2$$
+            \end{itemize}
+        \end{block}
+
+        \begin{exampleblock}{Velocidade Terminal ($v_t$)}
+            Ocorre quando a força de arraste se iguala ao peso ($f = mg \implies a_y = 0$):
+            $$v_t = \frac{mg}{k} \quad (\text{para } f=kv) \qquad \text{ou} \qquad v_t = \sqrt{\frac{mg}{D}} \quad (\text{para } f=Dv^2)$$
+        \end{exampleblock}
+
+        \column{0.45\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.85]
+            % Paraquedista caindo
+            \fill[navyblue] (1,2.5) circle (0.15);
+            \draw[thick] (1,2.5) -- (1,1.5);
+            \draw[ultra thick,-{Latex},emeraldgreen] (1,2.5) -- (1,3.8) node[above] {$\vec{f}_{\text{arraste}} = D v^2$};
+            \draw[ultra thick,-{Latex},redaccent] (1,1.5) -- (1,0.0) node[below] {$\vec{p} = m\vec{g}$};
+            \node at (2.5,2.0) {\small Na velocidade terminal:};
+            \node at (2.5,1.4) {\small $Dv_t^2 = mg \implies a_y=0$};
+        \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 13: SEÇÃO 5.4 - DINÂMICA DO MOVIMENTO CIRCULAR UNIFORME ---
+\begin{frame}{5.4 Dinâmica do Movimento Circular Uniforme (MCU)}
+    \begin{columns}
+        \column{0.55\textwidth}
+        \begin{block}{Aceleração Centrípeta / Radial}
+            No MCU, a velocidade escalar $v$ é constante, mas a \textbf{direção do vetor velocidade muda continuamente}:
+            $$a_{\text{rad}} = \frac{v^2}{R} = \frac{4\pi^2 R}{T^2}$$
+            apontando sempre para o \textbf{centro da trajetória}.
+        \end{block}
+
+        \begin{block}{Segunda Lei no MCU}
+            $$F_{\text{rad, resultante}} = m a_{\text{rad}} = m \frac{v^2}{R}$$
+        \end{block}
+
+        \column{0.45\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.9]
+            % Trajetória circular
+            \draw[dashed,thick] (0,0) circle (1.5);
+            \fill[black] (0,0) circle (0.05) node[below] {$O$};
+            \fill[navyblue] (1.06,1.06) circle (0.12);
+            % Vetor velocidade v
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.06,1.06) -- (0.35,1.77) node[above left] {$\vec{v}$};
+            % Vetor aceleração a_rad
+            \draw[ultra thick,-{Latex},redaccent] (1.06,1.06) -- (0.2,0.2) node[below right] {$\vec{a}_{\text{rad}}$};
+            % Vetor força resultante
+            \draw[thick,-{Latex},cyandark] (1.06,1.06) -- (0.4,0.4) node[above right] {$\sum \vec{F}$};
+        \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 14: A FALÁCIA DA FORÇA CENTRÍFUGA ---
+\begin{frame}{ALERTA DIDÁTICO: A Falácia da "Força Centrífuga"}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{alertblock}{Por que NÃO existe força centrífuga?}
+            \begin{itemize}
+                \item Em um \textbf{referencial inercial}, não existe nenhuma força puxando o corpo para fora do círculo!
+                \item A tendência do corpo de sair pela tangente é consequência da sua \textbf{inércia} ($1^{\text{a}}$ Lei de Newton).
+                \item A quantidade $m \frac{v^2}{R}$ é o produto $m a_{\text{rad}}$, \textbf{NÃO uma força aplicada}!
+            \end{itemize}
+        \end{alertblock}
+
+        \column{0.5\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.85]
+            % Rompimento da corda (Figura 5.29)
+            \draw[dashed] (0,0) arc (180:90:2);
+            \fill (0,0) circle (0.05);
+            \draw[thick,dotted] (0,0) -- (0,2);
+            \node at (0.2,1.0) {\small Fio rompe!};
+            \fill[redaccent] (0,2) circle (0.12);
+            \draw[ultra thick,-{Latex},emeraldgreen] (0,2) -- (2.2,2) node[right] {$\vec{v}$ (Movimento Retilíneo)};
+        \end{tikzpicture}
+        \end{center}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 15: EXEMPLO 5.22 E 5.23 - CURVA PLANA E CURVA INCLINADA ---
+\begin{frame}{Exemplo 5.22 \& 5.23: Curva Plana com Atrito vs Curva Inclinada}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{Curva Plana com Atrito ($\mu_s$)}
+            O atrito estático fornece a força centrípeta:
+            $$f_s = m \frac{v^2}{R} \le \mu_s n = \mu_s mg$$
+            $$v_{\text{máx}} = \sqrt{\mu_s g R}$$
+        \end{block}
+
+        \column{0.5\textwidth}
+        \begin{block}{Curva Inclinada sem Atrito ($\beta$)}
+            A componente horizontal da Força Normal $n \sin\beta$ fornece a força centrípeta:
+            $$n \sin\beta = m \frac{v^2}{R} \quad \text{e} \quad n \cos\beta = mg$$
+            $$\tan\beta = \frac{v^2}{gR}$$
+        \end{block}
+    \end{columns}
+    \vspace{0.4cm}
+    \begin{center}
+    \small \textbf{Aplicação}: Engenharia de rodovias e aerodinâmica de aviões usam a inclinação $\beta$ para evitar derrapagens sem depender exclusivamente do atrito!
+    \end{center}
+\end{frame}
+
+% --- SLIDE 16: MOVIMENTO CIRCULAR EM PLANO VERTICAL ---
+\begin{frame}{Exemplo 5.24: Movimento Circular em Plano Vertical (Roda-Gigante)}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{Topo da Trajetória}
+            Aceleração aponta para baixo ($a_y = -v^2/R$):
+            $$n_T - mg = -m \frac{v^2}{R} \implies n_T = m\left(g - \frac{v^2}{R}\right)$$
+            Sensação de peso menor no topo! Se $v = \sqrt{gR}$, $n_T = 0$ (sensação de "flutuar").
+        \end{block}
+
+        \column{0.5\textwidth}
+        \begin{block}{Base da Trajetória}
+            Aceleração aponta para cima ($a_y = +v^2/R$):
+            $$n_B - mg = +m \frac{v^2}{R} \implies n_B = m\left(g + \frac{v^2}{R}\right)$$
+            Sensação de peso maior na base ($n_B > mg$)!
+        \end{block}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 17: SEÇÃO 5.5 - AS 4 FORÇAS FUNDAMENTAIS ---
+\begin{frame}{5.5 As Quatro Forças Fundamentais da Natureza}
+    \begin{center}
+    \begin{tabular}{|p{2.8cm}|p{3.0cm}|p{2.5cm}|p{4.2cm}|}
+        \hline
+        \textbf{Interação} & \textbf{Alcance} & \textbf{Intensidade Relativa} & \textbf{Papel na Natureza} \\ \hline
+        \textbf{Gravitacional} & Infinito & $10^{-38}$ & Órbitas de planetas, peso, marés, estrutura do universo. \\ \hline
+        \textbf{Eletromagnética} & Infinito & $10^{-2}$ & Forças de contato (normal, atrito, tensão), ligações químicas, luz. \\ \hline
+        \textbf{Fraca} & $< 10^{-18}\text{ m}$ & $10^{-13}$ & Decaimento beta radioativo, reações no interior de supernovas. \\ \hline
+        \textbf{Forte (Nuclear)} & $< 10^{-15}\text{ m}$ & $1$ & Coesão dos prótons e nêutrons no núcleo atômico; fusão solar. \\ \hline
+    \end{tabular}
+    \end{center}
+\end{frame}
+
+% --- SLIDE 18: RESUMO DIDÁTICO E RECOMENDAÇÕES ---
+\begin{frame}{Resumo Didático do Capítulo 5}
+    \begin{columns}
+        \column{0.5\textwidth}
+        \begin{block}{Checklist para a Prova}
+            \begin{enumerate}
+                \item Identificou se o problema é de \textbf{Equilíbrio} ($\sum\vec{F}=0$) ou \textbf{Dinâmica} ($\sum\vec{F}=m\vec{a}$)?
+                \item Isolou o corpo e fez o \textbf{Diagrama de Corpo Livre} sem incluir forças falsas ou $m\vec{a}$?
+                \item Decompôs as forças nos eixos corretos?
+                \item Distinguiu entre atrito estático ($f_s \le \mu_s n$) e cinético ($f_c = \mu_c n$)?
+                \item No MCU, direcionou a resultante para o centro ($m v^2/R$)?
+            \end{enumerate}
+        \end{block}
+
+        \column{0.5\textwidth}
+        \begin{center}
+        \Large \textbf{Bons Estudos!}\\[10pt]
+        \normalsize Prof. Reinaldo Haas\\
+        \small Departamento de Física --- UFSC
+        \end{center}
+    \end{columns}
+\end{frame}
+
+\end{document}
