@@ -3,155 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capítulo 5: Aplicações das Leis de Newton | Young & Freedman 12ª ed.</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
-            },
-            svg: { fontCache: 'global' }
-        };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <title>Capítulo 5: Aplicações das Leis de Newton - Física I</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #070a12;
-            --bg-card: rgba(15, 23, 42, 0.88);
-            --bg-card-border: rgba(56, 189, 248, 0.25);
-            --accent-cyan: #38bdf8;
-            --accent-gold: #fbbf24;
-            --text-main: #f8fafc;
-            --text-sub: #94a3b8;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-color: #3b82f6;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
-                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 45%);
-            background-attachment: fixed;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
             padding: 30px 20px;
         }
-        .header { max-width: 1200px; margin: 0 auto 30px; text-align: center; }
-        .header h1 {
-            font-family: 'Outfit', sans-serif; font-size: 2.4rem;
-            background: linear-gradient(135deg, #38bdf8 0%, #a855f7 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header {
+            margin-bottom: 35px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 20px;
         }
-        .header p { font-size: 1.1rem; color: var(--text-sub); max-width: 800px; margin: 0 auto; line-height: 1.6; }
-        .back-nav { max-width: 1200px; margin: 0 auto 20px; }
-        .back-btn {
-            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--bg-card-border);
-            color: var(--accent-cyan); padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.85rem;
+        .back-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: inline-block;
+            margin-bottom: 12px;
         }
-        .catalog-grid {
-            max-width: 1200px; margin: 0 auto;
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;
+        .title { font-size: 2.2rem; font-weight: 700; margin-bottom: 8px; }
+        .subtitle { color: var(--text-secondary); font-size: 1.1rem; }
+        
+        .presentation-banner {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(16, 185, 129, 0.2) 100%);
+            border: 1px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .example-card {
-            background: var(--bg-card); border: 1px solid var(--bg-card-border);
-            border-radius: 14px; padding: 22px; text-decoration: none; color: var(--text-main);
-            display: flex; flex-direction: column; justify-content: space-between; transition: all 0.25s ease;
+        .banner-text h2 { font-size: 1.3rem; margin-bottom: 6px; color: var(--text-primary); }
+        .banner-text p { color: var(--text-secondary); font-size: 0.95rem; }
+        .banner-btn {
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            white-space: nowrap;
         }
-        .example-card:hover { transform: translateY(-4px); border-color: var(--accent-cyan); box-shadow: 0 10px 25px rgba(56, 189, 248, 0.15); }
-        .card-badge { font-size: 0.75rem; font-weight: 800; color: var(--accent-cyan); letter-spacing: 0.05em; margin-bottom: 8px; }
-        .card-title { font-family: 'Outfit', sans-serif; font-size: 1.2rem; color: #f8fafc; margin-bottom: 10px; line-height: 1.4; }
-        .card-desc { font-size: 0.88rem; color: #94a3b8; line-height: 1.5; margin-bottom: 16px; }
-        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 12px; }
-        .formula { font-family: monospace; font-size: 0.85rem; color: var(--accent-gold); }
-        .view-btn { font-size: 0.82rem; font-weight: 700; color: var(--accent-cyan); }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        .card-ex {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .card-ex:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-color);
+        }
+        .card-tag {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-color);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-bottom: 12px;
+            width: fit-content;
+        }
+        .card-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
+        .card-sub { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; flex-grow: 1; }
+        .card-btn {
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .card-btn:hover { background-color: #2563eb; }
     </style>
 </head>
 <body>
-    <div class="back-nav">
-        <a href="../index.html" class="back-btn">← Voltar ao Índice Geral de Física I</a>
-    </div>
+    <div class="container">
+        <div class="header">
+            <a href="../index.html" class="back-link">← Voltar ao Hub Principal (Física I)</a>
+            <h1 class="title">Capítulo 5: Aplicações das Leis de Newton</h1>
+            <p class="subtitle">24 Exemplos oficiais resolvidos de Young & Freedman (12ª Edição) com Diagramas de Corpo Livre (DCL), Vetores Ampliados (2x), Voz e MathJax 3</p>
+        </div>
 
-    <div class="header">
-        <h1>Capítulo 5: Aplicações das Leis de Newton</h1>
-        <p>Catálogo dos Exemplos Oficiais do Livro Young & Freedman 12ª ed., com DCLs, vetores 2x, áudios e MathJax.</p>
-    </div>
+        <div class="presentation-banner">
+            <div class="banner-text">
+                <h2>📺 Apresentação Didática Interativa do Capítulo 5</h2>
+                <p>Slides interativos completos com diagramas de corpo livre, teoria e áudio em português.</p>
+            </div>
+            <a href="apresentacao.html" class="banner-btn">Abrir Apresentação →</a>
+        </div>
 
-    <div class="catalog-grid">
+        <div class="grid">
+            
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-1</div>
+            <h3 class="card-title">Tensão em uma Corda sem Massa</h3>
+            <p class="card-sub">Equilíbrio em Uma Dimensão (Ginasta de 50 kg)</p>
+            <a href="exemplo-5-1.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
         
-        <a href="exemplo-5-1.html" class="example-card">
-            <div class="card-badge">EXEMPLO 5.1</div>
-            <h3 class="card-title">Exemplo 5.1: Equilíbrio Unidimensional — Tensão numa Corda Suspensa</h3>
-            <p class="card-desc">Um sinaleiro de semáforo com peso w = 122 N está suspenso por um cabo vertical conectado no ponto O a outros dois cabos....</p>
-            <div class="card-footer">
-                <span class="formula">$$\sum F_y = T_3 - w = 0 \implies T_3 = w$$</span>
-                <span class="view-btn">Ver Exemplo →</span>
-            </div>
-        </a>
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-2</div>
+            <h3 class="card-title">Tensão em uma Corda com Massa</h3>
+            <p class="card-sub">Corpo Composto e Variação de Tensão</p>
+            <a href="exemplo-5-2.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
         
-        <a href="exemplo-5-2.html" class="example-card">
-            <div class="card-badge">EXEMPLO 5.2</div>
-            <h3 class="card-title">Exemplo 5.2: Equilíbrio Bidimensional — Motor Suspenso por Cabos</h3>
-            <p class="card-desc">Um motor de carro de peso w = 2200 N está suspenso por uma corrente conectada no ponto O a duas outras correntes presas ...</p>
-            <div class="card-footer">
-                <span class="formula">$$\sum F_x = T_2 \cos 60^\circ - T_1 \cos 30^\circ = 0, \quad \sum F_y = T_1 \operatorname{sen} 30^\circ + T_2 \operatorname{sen} 60^\circ - w = 0$$</span>
-                <span class="view-btn">Ver Exemplo →</span>
-            </div>
-        </a>
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-3</div>
+            <h3 class="card-title">Equilíbrio em Duas Dimensões</h3>
+            <p class="card-sub">Motor Suspenso por Três Correntes</p>
+            <a href="exemplo-5-3.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
         
-        <a href="exemplo-5-3.html" class="example-card">
-            <div class="card-badge">EXEMPLO 5.3</div>
-            <h3 class="card-title">Exemplo 5.3: Plano Inclinado sem Atrito — Carro na Rampa</h3>
-            <p class="card-desc">Um carro de peso w repousa sobre uma rampa sem atrito inclinada de um ângulo α com a horizontal. Um cabo prende o carro ...</p>
-            <div class="card-footer">
-                <span class="formula">$$T = w \operatorname{sen}\alpha, \quad N = w \cos\alpha$$</span>
-                <span class="view-btn">Ver Exemplo →</span>
-            </div>
-        </a>
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-4</div>
+            <h3 class="card-title">Plano Inclinado sem Atrito</h3>
+            <p class="card-sub">Carro Mantido por Cabo em Rampa de Ângulo \(\alpha\)</p>
+            <a href="exemplo-5-4.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
         
-        <a href="exemplo-5-4.html" class="example-card">
-            <div class="card-badge">EXEMPLO 5.4</div>
-            <h3 class="card-title">Exemplo 5.4: Corpos Conectados — Caixote e Bloco Suspenso</h3>
-            <p class="card-desc">Um caixote de massa mA = 20 kg sobre uma mesa horizontal sem atrito está conectado por uma corda leve sobre uma roldana ...</p>
-            <div class="card-footer">
-                <span class="formula">$$a_x = \frac{m_B g}{m_A + m_B}, \quad T = \frac{m_A m_B g}{m_A + m_B}$$</span>
-                <span class="view-btn">Ver Exemplo →</span>
-            </div>
-        </a>
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-5</div>
+            <h3 class="card-title">Polia sem Atrito e Dois Corpos</h3>
+            <p class="card-sub">Carrinho no Plano Inclinado Puxado por Balde</p>
+            <a href="exemplo-5-5.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
         
-        <a href="exemplo-5-5.html" class="example-card">
-            <div class="card-badge">EXEMPLO 5.5</div>
-            <h3 class="card-title">Exemplo 5.5: Atrito Estático e Cinético — Empurrando um Caixote</h3>
-            <p class="card-desc">Um caixote de peso w = 500 N repousa em um piso horizontal. Os coeficientes de atrito são μs = 0,40 e μk = 0,30. Calcule...</p>
-            <div class="card-footer">
-                <span class="formula">$$f_{s,\max} = \mu_s N, \quad f_k = \mu_k N$$</span>
-                <span class="view-btn">Ver Exemplo →</span>
-            </div>
-        </a>
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-6</div>
+            <h3 class="card-title">Movimento Retilíneo com Força Constante</h3>
+            <p class="card-sub">Barco no Gelo Acelerado pelo Vento (Sem Atrito)</p>
+            <a href="exemplo-5-6.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
         
-        <a href="exemplo-5-6.html" class="example-card">
-            <div class="card-badge">EXEMPLO 5.6</div>
-            <h3 class="card-title">Exemplo 5.6: Atrito em Plano Inclinado — Tobogã na Neve</h3>
-            <p class="card-desc">Um tobogã com peso w = 200 N é puxado para cima em uma rampa de α = 15° com velocidade constante. Se o coeficiente de at...</p>
-            <div class="card-footer">
-                <span class="formula">$$T = w \operatorname{sen}\alpha + \mu_k w \cos\alpha$$</span>
-                <span class="view-btn">Ver Exemplo →</span>
-            </div>
-        </a>
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-7</div>
+            <h3 class="card-title">Movimento Retilíneo com Atrito Constante</h3>
+            <p class="card-sub">Barco no Gelo Enfrentando Atrito de 100 N</p>
+            <a href="exemplo-5-7.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
         
-        <a href="exemplo-5-7.html" class="example-card">
-            <div class="card-badge">EXEMPLO 5.7</div>
-            <h3 class="card-title">Exemplo 5.7: Movimento Circular Uniforme — Curva Plana e Curva Sobre-elevada</h3>
-            <p class="card-desc">Um carro faz uma curva de raio R = 230 m a v = 25 m/s (90 km/h). (a) Numa pista plana, qual o coeficiente de atrito míni...</p>
-            <div class="card-footer">
-                <span class="formula">$$\mu_s = \frac{v^2}{g R}, \quad \tan\beta = \frac{v^2}{g R}$$</span>
-                <span class="view-btn">Ver Exemplo →</span>
-            </div>
-        </a>
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-8</div>
+            <h3 class="card-title">Tensão no Cabo de um Elevador</h3>
+            <p class="card-sub">Elevador Descendo com Velocidade Decrescente</p>
+            <a href="exemplo-5-8.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
         
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-9</div>
+            <h3 class="card-title">Peso Aparente Dentro de um Elevador</h3>
+            <p class="card-sub">Leitura da Balança para Passageira de 50 kg</p>
+            <a href="exemplo-5-9.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-10</div>
+            <h3 class="card-title">Tobogã Descendo a Montanha sem Atrito</h3>
+            <p class="card-sub">Aceleração em Plano Inclinado de Ângulo \(\alpha\)</p>
+            <a href="exemplo-5-10.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-11</div>
+            <h3 class="card-title">Dois Corpos com a Mesma Aceleração</h3>
+            <p class="card-sub">Bandeja Empurrando Frasco de Leite</p>
+            <a href="exemplo-5-11.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-12</div>
+            <h3 class="card-title">Máquina de Atwood Horizontal</h3>
+            <p class="card-sub">Cavaleiro no Trilho Conectado a Peso Suspenso</p>
+            <a href="exemplo-5-12.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-13</div>
+            <h3 class="card-title">Coeficientes de Atrito Estático e Cinético</h3>
+            <p class="card-sub">Engradado de 500 N em Piso Horizontal</p>
+            <a href="exemplo-5-13.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-14</div>
+            <h3 class="card-title">Atrito Estático Menor que o Máximo</h3>
+            <p class="card-sub">Força Aplicada Menor que o Limite de Deslize</p>
+            <a href="exemplo-5-14.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-15</div>
+            <h3 class="card-title">Puxando uma Carga com Ângulo de 30°</h3>
+            <p class="card-sub">Minimização da Força de Puxar Aliviando a Normal</p>
+            <a href="exemplo-5-15.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-16</div>
+            <h3 class="card-title">Tobogã com Atrito em Velocidade Constante</h3>
+            <p class="card-sub">Relação entre Ângulo de Inclinação e Coeficiente de Atrito</p>
+            <a href="exemplo-5-16.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-17</div>
+            <h3 class="card-title">Tobogã Acelerando em Encosta Íngreme</h3>
+            <p class="card-sub">Expressão Geral para Aceleração com Atrito</p>
+            <a href="exemplo-5-17.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-18</div>
+            <h3 class="card-title">Atrito de Rolamento em Automóvel</h3>
+            <p class="card-sub">Força Motriz para Manter Velocidade Constante</p>
+            <a href="exemplo-5-18.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-19</div>
+            <h3 class="card-title">Velocidade Terminal de um Pára-Quedista</h3>
+            <p class="card-sub">Queda no Ar com Arraste Proporcional a \(v^2\)</p>
+            <a href="exemplo-5-19.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-20</div>
+            <h3 class="card-title">Força no Movimento Circular Uniforme</h3>
+            <p class="card-sub">Trenó Girando Amarrado a um Poste no Gelo</p>
+            <a href="exemplo-5-20.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-21</div>
+            <h3 class="card-title">O Pêndulo Cônico</h3>
+            <p class="card-sub">Movimento Circular Horizontal Sustentado por Fio</p>
+            <a href="exemplo-5-21.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-22</div>
+            <h3 class="card-title">Contornando uma Curva Plana</h3>
+            <p class="card-sub">Velocidade Máxima Garantida pelo Atrito Estático</p>
+            <a href="exemplo-5-22.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-23</div>
+            <h3 class="card-title">Contornando uma Curva Inclinada sem Atrito</h3>
+            <p class="card-sub">Inclinação Lateral $\beta$ para Segurança em Pistas</p>
+            <a href="exemplo-5-23.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        <div class="card-ex">
+            <div class="card-tag">Exemplo 5-24</div>
+            <h3 class="card-title">Movimento Circular em um Círculo Vertical</h3>
+            <p class="card-sub">Variação da Força Normal na Roda-Gigante</p>
+            <a href="exemplo-5-24.html" class="card-btn">Ver Exemplo & DCL →</a>
+        </div>
+        
+        </div>
     </div>
 </body>
 </html>

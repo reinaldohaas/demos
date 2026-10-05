@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apresentação Didática - Capítulo 5: Aplicações das Leis de Newton</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- MathJax 3 -->
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-blue: #3b82f6;
+            --accent-blue-hover: #2563eb;
+            --accent-cyan: #0284c7;
+            --accent-green: #10b981;
+            --accent-gold: #d97706;
+            --accent-red: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Top Header */
+        header {
+            background-color: #0b1120;
+            border-bottom: 1px solid var(--card-border);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-chap {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-blue);
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            text-decoration: none;
+        }
+
+        .title-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-action {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+
+        /* Slide Container */
+        .presentation-stage {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            max-height: 650px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Slide Content Typography */
+        .slide-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slide-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            height: calc(100% - 60px);
+        }
+
+        .grid-1col {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        /* Boxes & Cards */
+        .concept-box {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--card-border);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 15px;
+        }
+
+        .concept-box.alert {
+            border-left-color: var(--accent-red);
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        .concept-box.success {
+            border-left-color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .concept-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .concept-title.alert { color: var(--accent-red); }
+        .concept-title.success { color: var(--accent-green); }
+        .concept-title.blue { color: var(--accent-blue); }
+
+        ul.styled-list {
+            list-style: none;
+            padding-left: 5px;
+        }
+
+        ul.styled-list li {
+            position: relative;
+            padding-left: 22px;
+            margin-bottom: 10px;
+            line-height: 1.6;
+            font-size: 0.98rem;
+        }
+
+        ul.styled-list li::before {
+            content: "•";
+            color: var(--accent-blue);
+            font-size: 1.4rem;
+            position: absolute;
+            left: 5px;
+            top: -4px;
+        }
+
+        /* Interactive Canvas */
+        .canvas-box {
+            background: #090d16;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            width: 100%;
+            height: 320px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Table Styling */
+        table.styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        table.styled-table th, table.styled-table td {
+            padding: 10px 14px;
+            border: 1px solid var(--card-border);
+            text-align: left;
+        }
+
+        table.styled-table th {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: var(--accent-blue);
+            font-weight: 700;
+        }
+
+        table.styled-table tr:nth-child(even) {
+            background-color: rgba(255,255,255,0.02);
+        }
+
+        /* Bottom Controls Bar */
+        footer {
+            background-color: #0b1120;
+            border-top: 1px solid var(--card-border);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-nav {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-nav:hover:not(:disabled) {
+            background: var(--accent-blue-hover);
+        }
+
+        .btn-nav:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Voice Panel */
+        .voice-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+        }
+
+        .btn-voice-mini {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-voice-mini:hover { color: var(--accent-blue); }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="brand">
+            <a href="index.html" class="badge-chap">← Capítulo 5</a>
+            <span class="title-text">Aplicações das Leis de Newton | Física I</span>
+        </div>
+        <div class="header-controls">
+            <div class="voice-bar">
+                <button class="btn-voice-mini" onclick="playVoice()" title="Ouvir Slide">🔊 Ouvir</button>
+                <button class="btn-voice-mini" onclick="stopVoice()" title="Parar Áudio">⏹️</button>
+            </div>
+            <a href="../apresentacao_capitulo5.pdf" target="_blank" class="btn-action">📄 Baixar PDF (Beamer)</a>
+            <a href="index.html" class="btn-action">🌐 Ver Exemplos Interativos</a>
+        </div>
+    </header>
+
+    <!-- Presentation Stage -->
+    <main class="presentation-stage">
+
+        <!-- SLIDE 1: Capa -->
+        <div class="slide active" id="slide-1">
+            <div style="text-align: center; margin-top: 50px;">
+                <span class="badge-chap" style="font-size: 1rem; padding: 6px 16px;">FSC5101 --- Física I (Mecânica Clássica)</span>
+                <h1 style="font-size: 2.8rem; font-weight: 800; margin: 25px 0 10px 0; color: var(--accent-blue);">Capítulo 5: Aplicações das Leis de Newton</h1>
+                <p style="font-size: 1.3rem; color: var(--text-muted); margin-bottom: 30px;">Prof. Reinaldo Haas --- Departamento de Física (UFSC)</p>
+                
+                <div style="display: flex; justify-content: center; gap: 20px; margin-top: 40px;">
+                    <div class="concept-box" style="text-align: left; max-width: 320px;">
+                        <div class="concept-title blue">⚖️ 5.1 & 5.2 Leis de Newton</div>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Equilíbrio ($\sum ec{F}=0$) e Dinâmica ($\sum ec{F}=mec{a}$) com Diagramas do Corpo Livre (DCL).</p>
+                    </div>
+                    <div class="concept-box" style="text-align: left; max-width: 320px;">
+                        <div class="concept-title alert">🧱 5.3 Atrito e Fluidos</div>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Atrito estático ($\mu_s$), cinético ($\mu_c$), rolamento e velocidade terminal de queda.</p>
+                    </div>
+                    <div class="concept-box" style="text-align: left; max-width: 320px;">
+                        <div class="concept-title success">🔄 5.4 Movimento Circular</div>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Aceleração centrípeta ($a_{	ext{rad}} = v^2/R$), curvas de rodovias e círculos verticais.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: Objetivos -->
+        <div class="slide" id="slide-2">
+            <div class="slide-title">
+                <span>🎯 Objetivos de Aprendizagem</span>
+                <span class="slide-subtitle">Visão Geral do Capítulo 5</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box">
+                        <div class="concept-title blue">1. Equilíbrio da Partícula ($\sum ec{F}=0$)</div>
+                        <p>Como usar a Primeira Lei de Newton para resolver problemas onde o corpo está em repouso ou em movimento retilíneo uniforme (MRU).</p>
+                    </div>
+                    <div class="concept-box">
+                        <div class="concept-title alert">2. Dinâmica da Partícula ($\sum ec{F}=mec{a}$)</div>
+                        <p>Como aplicar a Segunda Lei em corpos com aceleração, analisando o peso aparente em elevadores e sistemas de corpos acoplados.</p>
+                    </div>
+                    <div class="concept-box">
+                        <div class="concept-title success">3. Forças de Atrito e Arraste</div>
+                        <p>Compreender a natureza do atrito estático ($\mu_s$), cinético ($\mu_c$), rolamento e a resistência de fluidos (velocidade terminal).</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="concept-box">
+                        <div class="concept-title blue">4. Dinâmica no Movimento Circular Uniforme</div>
+                        <p>Analisar forças que produzem aceleração centrípeta ($a_{	ext{rad}} = v^2/R$) em curvas planas, inclinadas e círculos verticais.</p>
+                    </div>
+                    <div class="concept-box">
+                        <div class="concept-title success">5. As Quatro Forças Fundamentais</div>
+                        <p>Conhecer as interações gravitacional, eletromagnética, forte e fraca que regem todo o universo conhecido.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: 5.1 Primeira Lei (Equilíbrio) -->
+        <div class="slide" id="slide-3">
+            <div class="slide-title">
+                <span>5.1 Primeira Lei de Newton: Partículas em Equilíbrio</span>
+                <span class="slide-subtitle">Condição de Equilíbrio Translational</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box blue">
+                        <div class="concept-title blue">⚖️ Condição Matemática de Equilíbrio</div>
+                        <p>Um corpo é modelado como partícula em equilíbrio em um referencial inercial se a força resultante sobre ele é nula:</p>
+                        $$\sum ec{F} = 0 \iff egin{cases} \sum F_x = 0 \ \sum F_y = 0 \end{cases}$$
+                    </div>
+                    <div class="concept-box alert">
+                        <div class="concept-title alert">⚠️ Princípio Chave do DCL</div>
+                        <p>Desenhe <strong>apenas</strong> as forças externas exercidas <strong>SOBRE</strong> o corpo isolado. Nunca inclua forças que o corpo exerce sobre outros corpos!</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="canvas-box">
+                        <canvas id="canvas-slide3" width="500" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Estratégia 5.1 -->
+        <div class="slide" id="slide-4">
+            <div class="slide-title">
+                <span>Estratégia Didática 5.1: Passo a Passo</span>
+                <span class="slide-subtitle">Como Resolver Problemas de Equilíbrio</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box">
+                        <div class="concept-title blue">1. IDENTIFICAR & PREPARAR</div>
+                        <ul class="styled-list">
+                            <li>Identifique se o corpo está em equilíbrio ($ec{a}=0$).</li>
+                            <li>Escolha o sistema de eixos ortogonais ($x, y$) mais conveniente (ex: alinhado ao plano inclinado).</li>
+                            <li>Desenhe um <strong>Diagrama do Corpo Livre (DCL)</strong> separado para cada objeto do sistema.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="concept-box success">
+                        <div class="concept-title success">2. EXECUTAR & AVALIAR</div>
+                        <ul class="styled-list">
+                            <li>Decomponha cada vetor força nas componentes $x$ e $y$.</li>
+                            <li>Escreva as equações de equilíbrio: $\sum F_x = 0$ e $\sum F_y = 0$.</li>
+                            <li>Relacione pares de ação e reação entre corpos conectados.</li>
+                            <li><strong>AVALIE</strong> se as unidades, sinais e resultados limites fazem sentido físico!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Exemplo 5.4 - Plano Inclinado -->
+        <div class="slide" id="slide-5">
+            <div class="slide-title">
+                <span>Exemplo 5.4: Plano Inclinado em Equilíbrio</span>
+                <span class="slide-subtitle">Decomposição Vetorial do Peso</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box">
+                        <div class="concept-title blue">Decomposição do Peso ($ec{p}$)</div>
+                        <p>Eixo $x$ paralelo à rampa (subindo) e eixo $y$ perpendicular à rampa (saindo):</p>
+                        $$p_x = -p \sinlpha \quad 	ext{(empurra a rampa abaixo)}$$
+                        $$p_y = -p \coslpha \quad 	ext{(pressiona a rampa)}$$
+                    </div>
+                    <div class="concept-box success">
+                        <div class="concept-title success">Equações de Equilíbrio</div>
+                        $$\sum F_x = T - p \sinlpha = 0 \implies T = p \sinlpha$$
+                        $$\sum F_y = n - p \coslpha = 0 \implies n = p \coslpha$$
+                    </div>
+                </div>
+                <div>
+                    <div class="canvas-box">
+                        <canvas id="canvas-slide5" width="500" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: 5.2 Segunda Lei (Dinâmica) -->
+        <div class="slide" id="slide-6">
+            <div class="slide-title">
+                <span>5.2 Uso da Segunda Lei de Newton: Dinâmica das Partículas</span>
+                <span class="slide-subtitle">Corpos Acelerados ($ec{a} 
+eq 0$)</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box blue">
+                        <div class="concept-title blue">🚀 Segunda Lei de Newton em Componentes</div>
+                        $$\sum ec{F} = m ec{a} \iff egin{cases} \sum F_x = m a_x \ \sum F_y = m a_y \end{cases}$$
+                    </div>
+                    <div class="concept-box alert">
+                        <div class="concept-title alert">🚨 ALERTA DIDÁTICO CRUCIAL!</div>
+                        <ul class="styled-list">
+                            <li>O produto $mec{a}$ <strong>NÃO É UMA FORÇA</strong>!</li>
+                            <li>Nunca desenhe o vetor $mec{a}$ dentro do Diagrama do Corpo Livre (DCL).</li>
+                            <li>O vetor aceleração $ec{a}$ deve ser desenhado <strong>AO LADO</strong> do corpo.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="canvas-box">
+                        <canvas id="canvas-slide6" width="500" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Peso Aparente em Elevador -->
+        <div class="slide" id="slide-7">
+            <div class="slide-title">
+                <span>Exemplo 5.8 & 5.9: Peso Aparente em Elevadores</span>
+                <span class="slide-subtitle">Sensação de Peso e Imponderabilidade</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box">
+                        <div class="concept-title blue">Leitura da Balança ($n$)</div>
+                        <p>A força normal $n$ exercida pela balança sobre a pessoa é o seu <strong>peso aparente</strong>:</p>
+                        $$\sum F_y = n - mg = m a_y \implies n = m(g + a_y)$$
+                    </div>
+                    <ul class="styled-list">
+                        <li><strong>Acelerando para cima ($a_y > 0$)</strong>: $n > mg$ (sensação de maior peso).</li>
+                        <li><strong>Acelerando para baixo ($a_y < 0$)</strong>: $n < mg$ (sensação de menor peso).</li>
+                        <li><strong>Queda Livre ($a_y = -g$)</strong>: $n = 0$ (<strong>Imponderabilidade Aparente</strong>).</li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="canvas-box">
+                        <canvas id="canvas-slide7" width="500" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: 5.3 Forças de Atrito -->
+        <div class="slide" id="slide-8">
+            <div class="slide-title">
+                <span>5.3 Forças de Atrito: Estático vs Cinético</span>
+                <span class="slide-subtitle">Modelagem do Atrito entre Superfícies Sólidas</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box">
+                        <div class="concept-title blue">Atrito Estático ($f_s$)</div>
+                        <p>Atua quando não há deslizamento relativo. Ajusta-se de zero até o valor máximo limite:</p>
+                        $$f_s \le \mu_s n \implies (f_s)_{	ext{máx}} = \mu_s n$$
+                    </div>
+                    <div class="concept-box alert">
+                        <div class="concept-title alert">Atrito Cinético ($f_c$)</div>
+                        <p>Atua durante o deslizamento relativo entre as superfícies:</p>
+                        $$f_c = \mu_c n \quad (	ext{em geral, } \mu_c < \mu_s)$$
+                    </div>
+                </div>
+                <div>
+                    <div class="canvas-box">
+                        <canvas id="canvas-slide8" width="500" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: Tobogã com Atrito -->
+        <div class="slide" id="slide-9">
+            <div class="slide-title">
+                <span>Exemplo 5.16 & 5.17: Tobogã com Atrito em Plano Inclinado</span>
+                <span class="slide-subtitle">Análise de Ângulo Limite e Aceleração</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box success">
+                        <div class="concept-title success">Velocidade Constante ($ec{a}=0$)</div>
+                        $$\sum F_x = mg \sinlpha - f_c = 0$$
+                        $$mg \sinlpha = \mu_c mg \coslpha \implies 	anlpha = \mu_c$$
+                        O coeficiente de atrito cinético é a tangente do ângulo de velocidade constante!
+                    </div>
+                </div>
+                <div>
+                    <div class="concept-box alert">
+                        <div class="concept-title alert">Movimento Acelerado ($ec{a} 
+eq 0$)</div>
+                        $$\sum F_x = mg \sinlpha - \mu_c mg \coslpha = m a_x$$
+                        $$a_x = g (\sinlpha - \mu_c \coslpha)$$
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: Resistência em Fluidos -->
+        <div class="slide" id="slide-10">
+            <div class="slide-title">
+                <span>Resistência de Fluidos e Velocidade Terminal</span>
+                <span class="slide-subtitle">Queda em Meios Viscosos (Água e Ar)</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box">
+                        <div class="concept-title blue">Modelos de Arraste</div>
+                        <ul class="styled-list">
+                            <li><strong>Baixas Velocidades (Laminar)</strong>: $f = k \cdot v$</li>
+                            <li><strong>Altas Velocidades (Turbulento no Ar)</strong>: $f = D \cdot v^2$</li>
+                        </ul>
+                    </div>
+                    <div class="concept-box success">
+                        <div class="concept-title success">Velocidade Terminal ($v_t$)</div>
+                        <p>Ocorre quando a força de arraste iguala o peso ($a_y=0$):</p>
+                        $$v_t = \sqrt{rac{mg}{D}}$$
+                    </div>
+                </div>
+                <div>
+                    <div class="canvas-box">
+                        <canvas id="canvas-slide10" width="500" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: 5.4 Movimento Circular Uniforme -->
+        <div class="slide" id="slide-11">
+            <div class="slide-title">
+                <span>5.4 Dinâmica do Movimento Circular Uniforme</span>
+                <span class="slide-subtitle">Aceleração Centrípeta e Segunda Lei</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box blue">
+                        <div class="concept-title blue">🔄 Aceleração Centrípeta ($a_{	ext{rad}}$)</div>
+                        <p>O vetor velocidade muda de direção continuamente, gerando uma aceleração dirigida para o centro do círculo:</p>
+                        $$a_{	ext{rad}} = rac{v^2}{R} = rac{4\pi^2 R}{T^2}$$
+                    </div>
+                    <div class="concept-box success">
+                        <div class="concept-title success">Segunda Lei no MCU</div>
+                        $$F_{	ext{rad, resultante}} = m a_{	ext{rad}} = m rac{v^2}{R}$$
+                    </div>
+                </div>
+                <div>
+                    <div class="canvas-box">
+                        <canvas id="canvas-slide11" width="500" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: A Falácia da Força Centrífuga -->
+        <div class="slide" id="slide-12">
+            <div class="slide-title">
+                <span>🚨 ALERTA DIDÁTICO: A Falácia da "Força Centrífuga"</span>
+                <span class="slide-subtitle">Entendendo a Inércia em Referenciais Inerciais</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box alert">
+                        <div class="concept-title alert">Por que NÃO existe força centrífuga?</div>
+                        <ul class="styled-list">
+                            <li>Em um referencial inercial, <strong>não existe nenhuma força física</strong> puxando o corpo para fora do círculo!</li>
+                            <li>A tendência do corpo de escapar é resultado da sua <strong>Inércia</strong> ($1^{	ext{a}}$ Lei de Newton), tentando manter a velocidade vetorial constante em linha reta.</li>
+                            <li>O termo $m rac{v^2}{R}$ é o produto $m a_{	ext{rad}}$, e <strong>NUNCA uma força aplicada</strong> no DCL.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="canvas-box">
+                        <canvas id="canvas-slide12" width="500" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 13: Curva Plana vs Inclinada -->
+        <div class="slide" id="slide-13">
+            <div class="slide-title">
+                <span>Exemplo 5.22 & 5.23: Curva Plana vs Curva Inclinada</span>
+                <span class="slide-subtitle">Engenharia de Rodovias e Aerodinâmica</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box">
+                        <div class="concept-title blue">Curva Plana com Atrito ($\mu_s$)</div>
+                        <p>O atrito estático fornece a força centrípeta:</p>
+                        $$f_s = m rac{v^2}{R} \le \mu_s mg \implies v_{	ext{máx}} = \sqrt{\mu_s g R}$$
+                    </div>
+                </div>
+                <div>
+                    <div class="concept-box success">
+                        <div class="concept-title success">Curva Inclinada sem Atrito ($eta$)</div>
+                        <p>A componente horizontal da Normal $n \sineta$ fornece a força centrípeta:</p>
+                        $$n \sineta = m rac{v^2}{R} \quad 	ext{e} \quad n \coseta = mg$$
+                        $$	aneta = rac{v^2}{gR}$$
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 14: Círculo Vertical -->
+        <div class="slide" id="slide-14">
+            <div class="slide-title">
+                <span>Exemplo 5.24: Movimento Circular em Plano Vertical</span>
+                <span class="slide-subtitle">Variação do Peso Aparente (Roda-Gigante)</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box blue">
+                        <div class="concept-title blue">Topo da Trajetória ($a_y = -v^2/R$)</div>
+                        $$n_T - mg = -m rac{v^2}{R} \implies n_T = m\left(g - rac{v^2}{R}ight)$$
+                        Sensação de maior leveza no topo!
+                    </div>
+                </div>
+                <div>
+                    <div class="concept-box alert">
+                        <div class="concept-title alert">Base da Trajetória ($a_y = +v^2/R$)</div>
+                        $$n_B - mg = +m rac{v^2}{R} \implies n_B = m\left(g + rac{v^2}{R}ight)$$
+                        Sensação de maior peso na base ($n_B > mg$)!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 15: 5.5 As 4 Forças Fundamentais -->
+        <div class="slide" id="slide-15">
+            <div class="slide-title">
+                <span>5.5 As Quatro Forças Fundamentais da Natureza</span>
+                <span class="slide-subtitle">Classificação das Interações Universais</span>
+            </div>
+            <div class="grid-1col">
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>Interação</th>
+                            <th>Alcance</th>
+                            <th>Intensidade Relativa</th>
+                            <th>Papel na Natureza</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Gravitacional</strong></td>
+                            <td>Infinito</td>
+                            <td>$10^{-38}$</td>
+                            <td>Órbitas planetárias, força peso, marés, estrutura de galáxias.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Eletromagnética</strong></td>
+                            <td>Infinito</td>
+                            <td>$10^{-2}$</td>
+                            <td>Forças de contato (normal, atrito, tensão), ligações químicas, atração de elétrons.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fraca</strong></td>
+                            <td>$< 10^{-18}	ext{ m}$</td>
+                            <td>$10^{-13}$</td>
+                            <td>Decaimento beta radioativo, processos no interior de supernovas.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Forte (Nuclear)</strong></td>
+                            <td>$< 10^{-15}	ext{ m}$</td>
+                            <td>$1$</td>
+                            <td>Coesão de prótons e nêutrons no núcleo atômico; reações de fusão no Sol.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SLIDE 16: Resumo e Checklist -->
+        <div class="slide" id="slide-16">
+            <div class="slide-title">
+                <span>Resumo Didático e Checklist do Estudante</span>
+                <span class="slide-subtitle">Como Garantir Sucesso na Resolução de Problemas</span>
+            </div>
+            <div class="grid-2col">
+                <div>
+                    <div class="concept-box success">
+                        <div class="concept-title success">✅ Checklist para a Prova</div>
+                        <ol style="padding-left: 20px; line-height: 1.8; font-size: 0.95rem;">
+                            <li>Identificou se é Equilíbrio ($\sumec{F}=0$) ou Dinâmica ($\sumec{F}=mec{a}$)?</li>
+                            <li>Fez o DCL desenhando APENAS forças externas que atuam SOBRE o corpo?</li>
+                            <li>Escolheu o eixo de coordenadas alinhado à aceleração ou ao plano?</li>
+                            <li>Usou atrito estático ($f_s \le \mu_s n$) ou cinético ($f_c = \mu_c n$)?</li>
+                            <li>No MCU, apontou a resultante para o centro ($m v^2/R$)?</li>
+                        </ol>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                    <div style="background: rgba(59, 130, 246, 0.1); border: 2px solid var(--accent-blue); padding: 30px; border-radius: 16px;">
+                        <h2 style="color: var(--accent-blue); margin-bottom: 10px;">Bons Estudos!</h2>
+                        <p style="font-size: 1.1rem; font-weight: 600;">Prof. Reinaldo Haas</p>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Departamento de Física --- UFSC</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Controls -->
+    <footer>
+        <div class="slide-counter">
+            Slide <span id="current-slide">1</span> de <span id="total-slides">16</span>
+        </div>
+        <div class="nav-controls">
+            <button class="btn-nav" id="btn-prev" onclick="changeSlide(-1)">← Anterior</button>
+            <button class="btn-nav" id="btn-next" onclick="changeSlide(1)">Próximo →</button>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 16;
+
+        function updateSlideUI() {
+            document.querySelectorAll('.slide').forEach((s, idx) => {
+                s.classList.toggle('active', idx + 1 === currentSlide);
+            });
+            document.getElementById('current-slide').innerText = currentSlide;
+            document.getElementById('btn-prev').disabled = currentSlide === 1;
+            document.getElementById('btn-next').disabled = currentSlide === totalSlides;
+            
+            // Draw specific canvas diagrams on active slide
+            drawSlideCanvas(currentSlide);
+        }
+
+        function changeSlide(dir) {
+            currentSlide += dir;
+            if (currentSlide < 1) currentSlide = 1;
+            if (currentSlide > totalSlides) currentSlide = totalSlides;
+            updateSlideUI();
+            stopVoice();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+
+        // Helper vector drawer
+        function drawVector(ctx, fromx, fromy, tox, toy, color, label) {
+            const headlen = 10;
+            const dx = tox - fromx;
+            const dy = toy - fromy;
+            const angle = Math.atan2(dy, dx);
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(fromx, fromy);
+            ctx.lineTo(tox, toy);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+            if (label) {
+                ctx.font = 'bold 13px Inter, sans-serif';
+                ctx.fillText(label, tox + 8, toy - 5);
+            }
+        }
+
+        function drawSlideCanvas(slideNum) {
+            if (slideNum === 3) {
+                const c = document.getElementById('canvas-slide3');
+                if (!c) return;
+                const ctx = c.getContext('2d');
+                ctx.clearRect(0,0,c.width,c.height);
+                // Ceiling & Rope
+                ctx.fillStyle = '#475569'; ctx.fillRect(150,20,200,8);
+                ctx.strokeStyle = '#78350f'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(250,28); ctx.lineTo(250,150); ctx.stroke();
+                // Gymnast
+                ctx.fillStyle = '#3b82f6'; ctx.beginPath(); ctx.arc(250,150,15,0,Math.PI*2); ctx.fill();
+                drawVector(ctx, 250, 150, 250, 50, '#10b981', 'T (Tensão)');
+                drawVector(ctx, 250, 150, 250, 250, '#ef4444', 'p = mg (Peso)');
+            } else if (slideNum === 5) {
+                const c = document.getElementById('canvas-slide5');
+                if (!c) return;
+                const ctx = c.getContext('2d');
+                ctx.clearRect(0,0,c.width,c.height);
+                // Incline
+                ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(50,250); ctx.lineTo(400,250); ctx.lineTo(400,100); ctx.closePath(); ctx.stroke();
+                // Block
+                ctx.fillStyle = '#0284c7'; ctx.fillRect(200,140,70,40);
+                drawVector(ctx, 235, 140, 130, 80, '#ef4444', 'T (Cabo)');
+                drawVector(ctx, 235, 140, 180, 50, '#10b981', 'n (Normal)');
+                drawVector(ctx, 235, 140, 235, 270, '#d97706', 'p = mg');
+            } else if (slideNum === 6) {
+                const c = document.getElementById('canvas-slide6');
+                if (!c) return;
+                const ctx = c.getContext('2d');
+                ctx.clearRect(0,0,c.width,c.height);
+                ctx.font = 'bold 16px Inter, sans-serif';
+                ctx.fillStyle = '#ef4444'; ctx.fillText('❌ ERRADO:', 40, 50);
+                ctx.fillStyle = '#94a3b8'; ctx.fillText('Incluir m·a como força no DCL', 40, 80);
+                
+                ctx.fillStyle = '#10b981'; ctx.fillText('✅ CERTO:', 40, 170);
+                ctx.fillStyle = '#94a3b8'; ctx.fillText('Desenhar a aceleração à parte ao lado!', 40, 200);
+                drawVector(ctx, 280, 200, 380, 200, '#3b82f6', 'a (Aceleração)');
+            } else if (slideNum === 7) {
+                const c = document.getElementById('canvas-slide7');
+                if (!c) return;
+                const ctx = c.getContext('2d');
+                ctx.clearRect(0,0,c.width,c.height);
+                // Elevator box
+                ctx.strokeStyle = '#64748b'; ctx.lineWidth = 3; ctx.strokeRect(180,30,140,240);
+                drawVector(ctx, 250, 150, 250, 50, '#10b981', 'n (Balança)');
+                drawVector(ctx, 250, 150, 250, 250, '#ef4444', 'p = mg');
+                drawVector(ctx, 350, 150, 350, 80, '#3b82f6', 'a_y');
+            } else if (slideNum === 10) {
+                const c = document.getElementById('canvas-slide10');
+                if (!c) return;
+                const ctx = c.getContext('2d');
+                ctx.clearRect(0,0,c.width,c.height);
+                fillCircle(ctx, 250, 150, 14, '#0284c7');
+                drawVector(ctx, 250, 150, 250, 30, '#10b981', 'f_arraste = D v²');
+                drawVector(ctx, 250, 150, 250, 270, '#ef4444', 'p = mg');
+            } else if (slideNum === 11) {
+                const c = document.getElementById('canvas-slide11');
+                if (!c) return;
+                const ctx = c.getContext('2d');
+                ctx.clearRect(0,0,c.width,c.height);
+                ctx.strokeStyle = '#64748b'; ctx.lineWidth = 2; ctx.setLineDash([5,5]);
+                ctx.beginPath(); ctx.arc(250,150,90,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+                fillCircle(ctx, 313, 87, 10, '#3b82f6');
+                drawVector(ctx, 313, 87, 250, 150, '#ef4444', 'a_rad = v²/R');
+                drawVector(ctx, 313, 87, 380, 20, '#10b981', 'v');
+            } else if (slideNum === 12) {
+                const c = document.getElementById('canvas-slide12');
+                if (!c) return;
+                const ctx = c.getContext('2d');
+                ctx.clearRect(0,0,c.width,c.height);
+                ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2; ctx.setLineDash([4,4]);
+                ctx.beginPath(); ctx.arc(200,150,80,Math.PI/2, Math.PI*1.5); ctx.stroke(); ctx.setLineDash([]);
+                fillCircle(ctx, 200, 70, 10, '#ef4444');
+                drawVector(ctx, 200, 70, 380, 70, '#10b981', 'v (Sai pela tangente!)');
+                ctx.font = '13px Inter, sans-serif'; ctx.fillStyle = '#94a3b8';
+                ctx.fillText('Nenhuma força puxa para fora; é puramente a Inércia!', 40, 240);
+            }
+        }
+
+        function fillCircle(ctx, x, y, r, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+        }
+
+        // Voice Narration Web Speech API
+        let synth = window.speechSynthesis;
+        let utterance = null;
+
+        function playVoice() {
+            if (!synth) return;
+            synth.cancel();
+            const slideEl = document.getElementById(`slide-${currentSlide}`);
+            const textToSpeak = slideEl ? slideEl.innerText.replace(/\n/g, ' ') : '';
+            utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'pt-BR';
+            utterance.rate = 1.0;
+            synth.speak(utterance);
+        }
+
+        function stopVoice() {
+            if (synth) synth.cancel();
+        }
+
+        window.onload = function() {
+            updateSlideUI();
+        };
+    </script>
+</body>
+</html>

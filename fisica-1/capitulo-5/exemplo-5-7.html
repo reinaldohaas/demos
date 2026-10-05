@@ -3,451 +3,533 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 5.7: Movimento Circular Uniforme — Curva Plana e Curva Sobre-elevada | FSC5101 Física I</title>
+    <title>Exemplo 5.7: Movimento Retilíneo com Atrito Constante - Física I</title>
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- MathJax 3 -->
     <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
-            },
-            svg: { fontCache: 'global' }
-        };
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
     </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     <style>
         :root {
-            --bg-dark: #070a12;
-            --bg-card: rgba(15, 23, 42, 0.88);
-            --bg-card-border: rgba(56, 189, 248, 0.25);
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-            --accent-cyan: #38bdf8;
-            --accent-gold: #fbbf24;
-            --accent-emerald: #10b981;
-            --text-main: #f8fafc;
-            --text-sub: #94a3b8;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
-                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 45%);
-            background-attachment: fixed;
-            padding: 20px;
-        }
-
-        .top-nav {
-            max-width: 1300px;
-            margin: 0 auto 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .back-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--bg-card-border);
-            color: var(--accent-cyan);
-            padding: 8px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
-
-        .back-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); }
-
-        .statement-box {
-            background: rgba(10, 16, 30, 0.92);
-            border-left: 5px solid var(--accent-cyan);
-            border-radius: 12px;
-            padding: 20px 24px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .statement-title h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
-            color: var(--accent-cyan);
-            margin-bottom: 6px;
-        }
-
-        .statement-title p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; max-width: 900px; }
-
-        .formula-badge {
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-family: 'Outfit', monospace;
-            font-size: 1.15rem;
-            color: var(--accent-gold);
-            font-weight: 700;
-        }
-
-        .presentation-container {
-            max-width: 1300px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 420px 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 960px) {
-            .presentation-container { grid-template-columns: 1fr; }
-        }
-
-        .slide-deck {
-            background: var(--bg-card);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 16px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 380px;
-        }
-
-        .slide-stepper {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .slide-step-btn {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: var(--text-sub);
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .slide-step-btn.active {
-            background: var(--primary-gradient);
-            color: white;
-            border-color: transparent;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-        }
-
-        .presentation-slide { display: none; flex-direction: column; gap: 10px; }
-        .presentation-slide.active { display: flex; }
-
-        .slide-badge {
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: var(--accent-cyan);
-            letter-spacing: 0.05em;
-        }
-
-        .slide-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .slide-formula {
-            font-size: 1.05rem;
-            color: var(--accent-gold);
-            background: rgba(0, 0, 0, 0.4);
-            padding: 8px 14px;
-            border-radius: 8px;
-            display: inline-block;
-            margin: 4px 0;
-        }
-
-        .slide-desc {
-            font-size: 0.9rem;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
             line-height: 1.6;
-            color: var(--accent-emerald);
-            font-weight: 600;
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 12px 14px;
-            border-radius: 8px;
+            padding: 20px;
         }
 
-        .slide-nav-controls {
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header Navigation */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .chapter-badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-color);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-buttons {
             display: flex;
             gap: 10px;
-            margin-top: 16px;
         }
 
-        .nav-btn {
-            flex: 1;
-            padding: 10px;
+        .btn-nav {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
+            padding: 8px 16px;
             border-radius: 8px;
-            border: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover:not(.disabled) {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-nav.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Title Area */
+        .example-header {
+            margin-bottom: 25px;
+        }
+
+        .example-title {
+            font-size: 1.8rem;
             font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .example-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Voice Panel */
+        .voice-panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .voice-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .voice-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-voice {
+            background: #334155;
+            color: white;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 6px;
             font-size: 0.85rem;
             cursor: pointer;
-            background: #1e293b;
-            color: var(--text-main);
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .nav-btn:hover { background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan); }
+        .btn-voice:hover {
+            background: var(--accent-color);
+        }
 
-        .interactive-stage {
-            background: var(--bg-card);
-            border: 1px solid var(--bg-card-border);
-            border-radius: 16px;
+        .voice-rate {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Content Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        @media (min-width: 900px) {
+            .grid-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
             padding: 20px;
+        }
+
+        .card-header {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 10px;
+        }
+
+        .enunciado-text {
+            font-size: 1rem;
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        /* Interactive Canvas */
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            background: #090d16;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Presentation Deck Steps */
+        .steps-container {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 15px;
+            margin-top: 25px;
         }
 
-        .canvas-holder {
-            width: 100%;
-            height: 480px;
-            background: #050811;
+        .step-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 10px;
-            overflow: hidden;
-            position: relative;
+            padding: 18px;
+            display: flex;
+            gap: 15px;
         }
 
-        canvas { width: 100%; height: 100%; display: block; }
+        .step-number {
+            background-color: var(--accent-color);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* External Interactive Links */
+        .links-panel {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .ext-link {
+            background: #1e293b;
+            border: 1px solid var(--card-border);
+            padding: 12px 18px;
+            border-radius: 8px;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .ext-link:hover {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--card-border);
+            padding-top: 20px;
+        }
     </style>
 </head>
 <body>
+    <div class="container">
+        <!-- Header Nav -->
+        <header class="nav-header">
+            <a href="index.html" class="chapter-badge">← Capítulo 5: Aplicações das Leis de Newton</a>
+            <div class="nav-buttons">
+                <a href="exemplo-5-6.html" class="btn-nav">← Anterior</a>
+                <a href="index.html" class="btn-nav">Todos os Exemplos</a>
+                <a href="exemplo-5-8.html" class="btn-nav">Próximo →</a>
+            </div>
+        </header>
 
-    <div class="top-nav">
-        <a href="index.html" class="back-btn">← Voltar ao Catálogo do Capítulo</a>
-        <span style="font-size:0.85rem; color:var(--text-sub);">Capítulo 5 • Aplicações das Leis de Newton</span>
+        <!-- Title -->
+        <div class="example-header">
+            <h1 class="example-title">Exemplo 5.7: Movimento Retilíneo com Atrito Constante</h1>
+            <p class="example-subtitle">Barco no Gelo Enfrentando Atrito de 100 N</p>
+        </div>
+
+        <!-- Voice Control Panel -->
+        <div class="voice-panel">
+            <div class="voice-title">🔊 Controle de Voz</div>
+            <div class="voice-controls">
+                <button class="btn-voice" onclick="playVoice()">▶️ Ouvir Exemplo</button>
+                <button class="btn-voice" onclick="pauseVoice()">⏸️ Pausar</button>
+                <button class="btn-voice" onclick="stopVoice()">⏹️ Parar</button>
+            </div>
+            <div class="voice-rate">
+                <label for="rate">Velocidade:</label>
+                <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="1.0" onchange="updateRate()">
+                <span id="rate-val">1.0x</span>
+            </div>
+            <span id="voice-status" style="font-size: 0.85rem; color: var(--text-secondary);">Pronto</span>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="grid-container">
+            <!-- Left: Enunciado (Cleaned label) -->
+            <div class="card">
+                <div class="card-header">📖 Enunciado do Problema</div>
+                <div class="enunciado-text">
+                    Suponha que uma força de atrito horizontal constante $f = 100\text{ N}$ se oponha ao movimento do barco do Exemplo 5.6. Qual força constante $F_V$ o vento deve aplicar para provocar a mesma aceleração $a_x = 1,5\text{ m/s}^2$?
+                </div>
+            </div>
+
+            <!-- Right: Interactive Canvas Stage (DCL Always Drawn) -->
+            <div class="card">
+                <div class="card-header">🎨 Diagrama do Corpo Livre (DCL) e Vetores (2x)</div>
+                <div class="canvas-container">
+                    <canvas id="stageCanvas" width="700" height="380"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step-by-Step Presentation Deck -->
+        <h2 style="margin-top: 30px; font-size: 1.3rem; color: var(--text-primary);">📝 Resolução Passo a Passo</h2>
+        <div class="steps-container">
+            
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3 class="step-title">Segunda Lei no Eixo $x$</h3>
+                <div class="step-desc">$$\sum F_x = F_V - f = m a_x$$</div>
+            </div>
+        </div>
+        
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3 class="step-title">Cálculo da Força do Vento $F_V$</h3>
+                <div class="step-desc">$$F_V = m a_x + f = (200\text{ kg})(1,5\text{ m/s}^2) + 100\text{ N} = 300\text{ N} + 100\text{ N} = 400\text{ N}$$</div>
+            </div>
+        </div>
+        
+        </div>
+
+        <!-- External Interactive Links -->
+        <div class="links-panel">
+            <a href="https://phet.colorado.edu/sims/html/friction/latest/friction_pt_BR.html" target="_blank" class="ext-link">🧪 Atrito (PhET)</a>
+            <a href="https://www.geogebra.org/m/v7t3n6w4" target="_blank" class="ext-link">📐 Atrito em Bloco (GeoGebra)</a>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Física I - Young & Freedman (12ª Edição) | Departamento de Física - UFSC</p>
+        </footer>
     </div>
 
-    <div class="statement-box">
-        <div class="statement-title">
-            <h2>Exemplo 5.7: Movimento Circular Uniforme — Curva Plana e Curva Sobre-elevada</h2>
-            <p><strong>Enunciado Oficial (Young & Freedman 12ª ed.):</strong> Um carro faz uma curva de raio R = 230 m a v = 25 m/s (90 km/h). (a) Numa pista plana, qual o coeficiente de atrito mínimo μs? (b) Numa curva sobre-elevada, qual o ângulo de inclinação β ideal sem atrito?</p>
-        
-            <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
-                <div style="display: flex; gap: 6px; align-items: center;">
-                    <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
-                        🔊 Ouvir Voz
-                    </button>
-                    <button id="btn-voice-pause" onclick="pauseVoiceNarration()" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
-                        ⏸️ Pausar
-                    </button>
-                    <button id="btn-voice-stop" onclick="stopVoiceNarration()" style="background: #ef4444; color: white; border: none; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
-                        ⏹️ Parar
-                    </button>
-                </div>
-                
-                <div style="display: flex; gap: 6px; align-items: center;">
-                    <label style="font-size: 0.82rem; font-weight: 700; color: #d8b4fe;">⏩ Vel:</label>
-                    <select id="voice-rate-select" onchange="changeVoiceRate()" style="background: #0f172a; color: #38bdf8; border: 1px solid #38bdf8; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
-                        <option value="0.75">0.75x</option>
-                        <option value="1.0" selected>1.0x (Normal)</option>
-                        <option value="1.25">1.25x</option>
-                        <option value="1.5">1.5x</option>
-                    </select>
-                </div>
-                
-                <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
-            </div>
-        </div>
-        <div class="formula-badge">$$\mu_s = \frac{v^2}{g R}, \quad \tan\beta = \frac{v^2}{g R}$$</div>
-    </div>
-
-    <div class="presentation-container">
-        <div class="slide-deck">
-            <div>
-                <div style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); margin-bottom:10px;">
-                    📺 APRESENTAÇÃO DIDÁTICA PASSO A PASSO
-                </div>
-                <div class="slide-stepper">
-                    <button class="slide-step-btn active" onclick="goToSlide(1)">Slide 1</button>
-<button class="slide-step-btn " onclick="goToSlide(2)">Slide 2</button>
-
-                </div>
-
-                
-        <div class="presentation-slide active" id="slide-1">
-            <div class="slide-badge">SLIDE 1 DE 2 • CURVA PLANA COM ATRITO</div>
-            <div class="slide-title">Item (a): Atrito Centrípeto</div>
-            <div class="slide-formula">$$\displaystyle \mu_s = \frac{v^2}{g R} = \frac{25^2}{9,80 \times 230} = 0,28$$</div>
-            <div class="slide-desc">A força de atrito estático fornece a aceleração centrípeta necessária v²/R.</div>
-        </div>
-        
-        <div class="presentation-slide " id="slide-2">
-            <div class="slide-badge">SLIDE 2 DE 2 • CURVA SOBRE-ELEVADA</div>
-            <div class="slide-title">Item (b): Inclinação Sem Atrito</div>
-            <div class="slide-formula">$$\displaystyle \tan\beta = \frac{v^2}{g R} = 0,28 \implies \beta = 15,5^\circ$$</div>
-            <div class="slide-desc">A componente horizontal da força normal fornece a força centrípeta sem necessitar de atrito.</div>
-        </div>
-        
-            </div>
-
-            <div class="slide-nav-controls">
-                <button class="nav-btn" onclick="prevSlide()">◄ Anterior</button>
-                <button class="nav-btn" onclick="nextSlide()">Próximo ►</button>
-            </div>
-        </div>
-
-        <div class="interactive-stage">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-weight:700; font-size:0.9rem; color:var(--text-sub);">📊 Diagrama & Vetores (Tamanho Ampliado 2x)</span>
-                <button class="nav-btn" style="padding:4px 12px; font-size:0.75rem;" onclick="resetDemo()">↺ Resetar</button>
-            </div>
-
-            <div class="canvas-holder">
-                <canvas id="stage-canvas"></canvas>
-            </div>
-        
-            <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 14px; margin-top: 14px;">
-                <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; margin-bottom:8px;">🌐 SIMULAÇÕES PÚBLICAS RECOMENDADAS:</div>
-                <ul style="font-size:0.85rem; color:#cbd5e1; padding-left:18px; line-height:1.8;">
-                    <li><a href="https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_all.html" target="_blank" rel="noopener noreferrer" style="color:#fbbf24; font-weight:700; text-decoration:underline;">🔗 PhET Colorado - Forças e Movimento</a></li>
-                    <li><a href="https://phet.colorado.edu/sims/html/energy-skate-park-basics/latest/energy-skate-park-basics_all.html" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">🔗 PhET Colorado - Conservação de Energia (Skate Park)</a></li>
-                    <li><a href="https://www.geogebra.org/search/fisica" target="_blank" rel="noopener noreferrer" style="color:#a855f7; font-weight:700; text-decoration:underline;">🔗 GeoGebra - Simulações Interativas de Física</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
+    <!-- Canvas Drawing Script & Helper -->
     <script>
-        let isSpeaking = false, isPaused = false, currentUtterance = null;
+        const canvas = document.getElementById('stageCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
 
-        function playVoiceNarration() {
-            if (!('speechSynthesis' in window)) return alert('Navegador sem suporte a voz.');
-            const statusLabel = document.getElementById('voice-status-text');
-            if (isPaused) {
-                window.speechSynthesis.resume(); isPaused = false; isSpeaking = true;
-                if (statusLabel) statusLabel.innerText = '🔊 Reproduzindo...'; return;
-            }
-            window.speechSynthesis.cancel();
-            const stmt = document.querySelector('.statement-title p')?.innerText || '';
-            const items = Array.from(document.querySelectorAll('.slide-desc')).map(el => el.innerText).join('. ');
-            currentUtterance = new SpeechSynthesisUtterance(stmt + '. ' + items);
-            currentUtterance.lang = 'pt-BR';
-            const speedSelect = document.getElementById('voice-rate-select');
-            if (speedSelect) currentUtterance.rate = parseFloat(speedSelect.value) || 1.0;
-            currentUtterance.onstart = () => { isSpeaking = true; isPaused = false; if (statusLabel) statusLabel.innerText = '🔊 Lendo...'; };
-            currentUtterance.onend = () => { isSpeaking = false; isPaused = false; if (statusLabel) statusLabel.innerText = '✅ Concluído.'; };
-            window.speechSynthesis.speak(currentUtterance);
-        }
-
-        function pauseVoiceNarration() {
-            const statusLabel = document.getElementById('voice-status-text');
-            if ('speechSynthesis' in window && isSpeaking && !isPaused) {
-                window.speechSynthesis.pause(); isPaused = true;
-                if (statusLabel) statusLabel.innerText = '⏸️ Pausado.';
-            }
-        }
-
-        function stopVoiceNarration() {
-            const statusLabel = document.getElementById('voice-status-text');
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); isSpeaking = false; isPaused = false;
-                if (statusLabel) statusLabel.innerText = '⏹️ Parado.';
-            }
-        }
-
-        function changeVoiceRate() { if (isSpeaking && !isPaused) { stopVoiceNarration(); playVoiceNarration(); } }
-
-        function drawVectorArrow(ctx, x, y, dx, dy, color, label) {
-            const len = Math.hypot(dx, dy);
-            if (len < 2) return;
+        // Helper vector drawer (2x size arrow head and thick lines)
+        function drawVector(ctx, fromx, fromy, tox, toy, color, label) {
+            const headlen = 14;
+            const dx = tox - fromx;
+            const dy = toy - fromy;
             const angle = Math.atan2(dy, dx);
-            const headLen = Math.min(18, Math.max(12, len * 0.3));
 
-            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); ctx.stroke();
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 4;
 
-            ctx.beginPath(); ctx.moveTo(x + dx, y + dy);
-            ctx.lineTo(x + dx - headLen * Math.cos(angle - Math.PI / 6), y + dy - headLen * Math.sin(angle - Math.PI / 6));
-            ctx.lineTo(x + dx - headLen * Math.cos(angle + Math.PI / 6), y + dy - headLen * Math.sin(angle + Math.PI / 6));
-            ctx.closePath(); ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(fromx, fromy);
+            ctx.lineTo(tox, toy);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
 
             if (label) {
-                const labelX = x + dx * 0.5;
-                const labelY = y + dy + (dy < 0 ? -16 : 22);
-                ctx.font = 'bold 13px Inter';
-                const textWidth = ctx.measureText(label).width;
-                ctx.fillStyle = 'rgba(5, 8, 17, 0.92)';
-                ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 14, textWidth + 12, 18);
-                ctx.strokeStyle = color; ctx.lineWidth = 1.5;
-                ctx.strokeRect(labelX - textWidth / 2 - 6, labelY - 14, textWidth + 12, 18);
-
-                ctx.fillStyle = color; ctx.textAlign = 'center';
-                ctx.fillText(label, labelX, labelY);
+                ctx.font = 'bold 13px Inter, sans-serif';
+                ctx.fillText(label, tox + 10, toy - 8);
             }
         }
 
-        let currentSlide = 1;
-        const totalSlides = 2;
-
-        function goToSlide(idx) {
-            currentSlide = idx;
-            document.querySelectorAll('.presentation-slide').forEach((s, i) => s.classList.toggle('active', i === (idx - 1)));
-            document.querySelectorAll('.slide-step-btn').forEach((b, i) => b.classList.toggle('active', i === (idx - 1)));
-            drawStage();
+        function fillCircle(ctx, x, y, r, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
         }
-
-        function nextSlide() { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); else goToSlide(1); }
-        function prevSlide() { if (currentSlide > 1) goToSlide(currentSlide - 1); else goToSlide(totalSlides); }
-
-        function getCanvasCtx(id) {
-            const canvas = document.getElementById(id);
-            if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
-            const rect = canvas.getBoundingClientRect();
-            const w = rect.width > 0 ? rect.width : 600;
-            const h = rect.height > 0 ? rect.height : 480;
-            const dpr = window.devicePixelRatio || 1;
-            canvas.width = Math.floor(w * dpr);
-            canvas.height = Math.floor(h * dpr);
-            const ctx = canvas.getContext('2d');
-            ctx.scale(dpr, dpr);
-            return { canvas, ctx, w, h };
-        }
-
-        function resetDemo() { goToSlide(1); }
 
         function drawStage() {
-            const { ctx, w, h } = getCanvasCtx('stage-canvas');
-            if (!ctx) return;
-            ctx.clearRect(0, 0, w, h);
             
-            const cx = w / 2, cy = h / 2 + 30;
-            // Banked curve
-            ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 4;
-            ctx.beginPath(); ctx.moveTo(cx - 160, cy + 40); ctx.lineTo(cx + 160, cy - 40); ctx.stroke();
+            ctx.clearRect(0, 0, width, height);
 
-            // Car on banked road
-            ctx.save(); ctx.translate(cx, cy); ctx.rotate(-Math.atan(80/320));
-            ctx.fillStyle = '#a855f7'; ctx.fillRect(-40, -30, 80, 30);
+            const ox = 300, oy = 180;
+            fillCircle(ctx, ox, oy, 14, '#0284c7');
+            ctx.fillStyle = '#e2e8f0'; ctx.font = 'bold 13px Inter, sans-serif';
+            ctx.fillText('DCL do Barco com Atrito', ox - 60, oy - 25);
 
-            drawVectorArrow(ctx, 0, -30, 0, -160, '#38bdf8', 'N (Normal)');
-            ctx.restore();
+            // Double size vector F_V (right 240px 2x)
+            drawVector(ctx, ox, oy, ox + 240, oy, '#10b981', 'F_V = 400 N (2x)');
 
-            drawVectorArrow(ctx, cx, cy, -150, 0, '#10b981', 'F_centrípeta = m v²/R');
-            drawVectorArrow(ctx, cx, cy, 0, 150, '#f43f5e', 'w = mg');
+            // Double size vector f (left 100px 2x)
+            drawVector(ctx, ox, oy, ox - 100, oy, '#ef4444', 'f = 100 N (2x)');
+
+            // Normal and Weight
+            drawVector(ctx, ox, oy, ox, oy - 150, '#3b82f6', 'n (2x)');
+            drawVector(ctx, ox, oy, ox, oy + 150, '#d97706', 'p (2x)');
         
         }
 
-        window.addEventListener('load', () => { drawStage(); });
-        window.addEventListener('resize', () => { drawStage(); });
+        window.onload = function() {
+            drawStage();
+        };
+
+        // Web Speech API Voice Implementation
+        let synth = window.speechSynthesis;
+        let utterance = null;
+
+        function playVoice() {
+            if (!synth) return;
+            synth.cancel();
+
+            const textToSpeak = "Quando o atrito está presente, a força do vento precisa vencer a resistência de 100 Newtons e ainda fornecer os 300 N necessários para a aceleração de 1,5 m/s². Portanto, a força total do vento deve ser de 400 Newtons.";
+            utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'pt-BR';
+            utterance.rate = parseFloat(document.getElementById('rate').value);
+
+            utterance.onstart = () => {
+                document.getElementById('voice-status').innerText = '🔊 Reproduzindo...';
+                document.getElementById('voice-status').style.color = '#10b981';
+            };
+
+            utterance.onend = () => {
+                document.getElementById('voice-status').innerText = 'Concluído';
+                document.getElementById('voice-status').style.color = 'var(--text-secondary)';
+            };
+
+            synth.speak(utterance);
+        }
+
+        function pauseVoice() {
+            if (synth && synth.speaking) {
+                if (synth.paused) {
+                    synth.resume();
+                    document.getElementById('voice-status').innerText = '🔊 Reproduzindo...';
+                } else {
+                    synth.pause();
+                    document.getElementById('voice-status').innerText = '⏸️ Pausado';
+                    document.getElementById('voice-status').style.color = '#f59e0b';
+                }
+            }
+        }
+
+        function stopVoice() {
+            if (synth) {
+                synth.cancel();
+                document.getElementById('voice-status').innerText = 'Parado';
+                document.getElementById('voice-status').style.color = 'var(--text-secondary)';
+            }
+        }
+
+        function updateRate() {
+            const val = document.getElementById('rate').value;
+            document.getElementById('rate-val').innerText = val + 'x';
+            if (synth && synth.speaking) {
+                playVoice();
+            }
+        }
     </script>
 </body>
 </html>

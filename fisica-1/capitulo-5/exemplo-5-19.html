@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 5.3: Equilíbrio em Duas Dimensões - Física I</title>
+    <title>Exemplo 5.19: Velocidade Terminal de um Pára-Quedista - Física I</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -329,16 +329,16 @@
         <header class="nav-header">
             <a href="index.html" class="chapter-badge">← Capítulo 5: Aplicações das Leis de Newton</a>
             <div class="nav-buttons">
-                <a href="exemplo-5-2.html" class="btn-nav">← Anterior</a>
+                <a href="exemplo-5-18.html" class="btn-nav">← Anterior</a>
                 <a href="index.html" class="btn-nav">Todos os Exemplos</a>
-                <a href="exemplo-5-4.html" class="btn-nav">Próximo →</a>
+                <a href="exemplo-5-20.html" class="btn-nav">Próximo →</a>
             </div>
         </header>
 
         <!-- Title -->
         <div class="example-header">
-            <h1 class="example-title">Exemplo 5.3: Equilíbrio em Duas Dimensões</h1>
-            <p class="example-subtitle">Motor Suspenso por Três Correntes</p>
+            <h1 class="example-title">Exemplo 5.19: Velocidade Terminal de um Pára-Quedista</h1>
+            <p class="example-subtitle">Queda no Ar com Arraste Proporcional a \(v^2\)</p>
         </div>
 
         <!-- Voice Control Panel -->
@@ -363,7 +363,7 @@
             <div class="card">
                 <div class="card-header">📖 Enunciado do Problema</div>
                 <div class="enunciado-text">
-                    Um motor de automóvel de peso $p$ está suspenso por uma corrente ligada por um anel $O$ a duas outras correntes, uma amarrada ao teto formando um ângulo de $60^\circ$ com a horizontal e outra presa à parede horizontalmente. Ache a tensão nas três correntes em função de $p$.
+                    Para um corpo humano de $m = 50,0\text{ kg}$ caindo no ar em posição horizontal, a constante de arraste é $D pprox 0,25\text{ kg/m}$. Ache a sua velocidade terminal $v_t$ em $\text{m/s}$ e em $\text{km/h}$.
                 </div>
             </div>
 
@@ -383,26 +383,16 @@
         <div class="step-card">
             <div class="step-number">1</div>
             <div class="step-content">
-                <h3 class="step-title">Equilíbrio do Motor</h3>
-                <div class="step-desc">$$\sum F_y = T_1 - p = 0 \implies T_1 = p$$</div>
+                <h3 class="step-title">Condição de Velocidade Terminal</h3>
+                <div class="step-desc">$$\sum F_y = mg - D v_t^2 = 0 \implies D v_t^2 = mg$$</div>
             </div>
         </div>
         
         <div class="step-card">
             <div class="step-number">2</div>
             <div class="step-content">
-                <h3 class="step-title">Decomposição das Forças no Anel $O$</h3>
-                <div class="step-desc">Componentes de $T_3$ (ângulo de $60^\circ$ com a horizontal):<br>
-$$T_{3x} = T_3 \cos 60^\circ, \quad T_{3y} = T_3 \sin 60^\circ$$</div>
-            </div>
-        </div>
-        
-        <div class="step-card">
-            <div class="step-number">3</div>
-            <div class="step-content">
-                <h3 class="step-title">Equações de Equilíbrio no Anel $O$</h3>
-                <div class="step-desc">Eixo $y$: $\sum F_y = T_3 \sin 60^\circ - T_1 = 0 \implies T_3 = rac{p}{\sin 60^\circ} pprox 1,155 \, p$<br>
-Eixo $x$: $\sum F_x = T_3 \cos 60^\circ - T_2 = 0 \implies T_2 = T_3 \cos 60^\circ pprox 0,577 \, p$</div>
+                <h3 class="step-title">Cálculo da Velocidade $v_t$</h3>
+                <div class="step-desc">$$v_t = \sqrt{rac{mg}{D}} = \sqrt{rac{(50,0\text{ kg})(9,80\text{ m/s}^2)}{0,25\text{ kg/m}}} = \sqrt{1960} = 44,3\text{ m/s} pprox 160\text{ km/h}$$</div>
             </div>
         </div>
         
@@ -410,8 +400,8 @@ Eixo $x$: $\sum F_x = T_3 \cos 60^\circ - T_2 = 0 \implies T_2 = T_3 \cos 60^\ci
 
         <!-- External Interactive Links -->
         <div class="links-panel">
-            <a href="https://phet.colorado.edu/sims/html/forces-and-motion-basics/latest/forces-and-motion-basics_pt_BR.html" target="_blank" class="ext-link">🧪 Forças e Movimento (PhET)</a>
-            <a href="https://www.geogebra.org/m/m3yxeghv" target="_blank" class="ext-link">📐 Equilíbrio 2D com Anel (GeoGebra)</a>
+            <a href="https://phet.colorado.edu/sims/html/projectile-motion/latest/projectile-motion_pt_BR.html" target="_blank" class="ext-link">🧪 Movimento de Projétil e Arraste (PhET)</a>
+            <a href="https://www.geogebra.org/m/e9rwtvkg" target="_blank" class="ext-link">📐 Velocidade Terminal (GeoGebra)</a>
         </div>
 
         <!-- Footer -->
@@ -466,22 +456,12 @@ Eixo $x$: $\sum F_x = T_3 \cos 60^\circ - T_2 = 0 \implies T_2 = T_3 \cos 60^\ci
             ctx.clearRect(0, 0, width, height);
 
             const ox = 300, oy = 180;
-            // Ring O
-            ctx.fillStyle = '#0284c7';
-            ctx.beginPath(); ctx.arc(ox, oy, 8, 0, Math.PI*2); ctx.fill();
+            fillCircle(ctx, ox, oy, 14, '#3b82f6');
             ctx.fillStyle = '#e2e8f0'; ctx.font = 'bold 13px Inter, sans-serif';
-            ctx.fillText('Anel O (DCL)', ox - 20, oy + 25);
+            ctx.fillText('DCL na Velocidade Terminal (a_y = 0)', ox - 100, oy - 25);
 
-            // Double size vector T1 (downwards 160px 2x)
-            drawVector(ctx, ox, oy, ox, oy + 150, '#ef4444', 'T₁ = p (2x)');
-
-            // Double size vector T2 (left 160px 2x)
-            drawVector(ctx, ox, oy, ox - 160, oy, '#f59e0b', 'T₂ = 0,577 p (2x)');
-
-            // Double size vector T3 (60 deg, length 220px 2x)
-            const t3x = ox + 220 * Math.cos(-Math.PI/3);
-            const t3y = oy + 220 * Math.sin(-Math.PI/3);
-            drawVector(ctx, ox, oy, t3x, t3y, '#10b981', 'T₃ = 1,155 p (60°, 2x)');
+            drawVector(ctx, ox, oy, ox, oy - 180, '#10b981', 'f_arraste = D v_t² = 490 N (2x)');
+            drawVector(ctx, ox, oy, ox, oy + 180, '#ef4444', 'p = mg = 490 N (2x)');
         
         }
 
@@ -497,7 +477,7 @@ Eixo $x$: $\sum F_x = T_3 \cos 60^\circ - T_2 = 0 \implies T_2 = T_3 \cos 60^\ci
             if (!synth) return;
             synth.cancel();
 
-            const textToSpeak = "Neste exemplo bidimensional, analisamos o equilíbrio do motor e do anel O separadamente. O motor fornece T1 igual a p. No anel O, decompondo a corrente inclinada T3 nos eixos x e y, encontramos que T3 é igual a um vírgula cento e cinquenta e cinco vezes o peso p, e a corrente horizontal T2 é igual a zero vírgula quinhentos e setenta e sete vezes o peso p.";
+            const textToSpeak = "A velocidade terminal ocorre quando a força de arraste aerodinâmico D v ao quadrado iguala o peso m g. Para o pára-quedista de 50 kg, a velocidade terminal atinge 44 metros por segundo, correspondendo a aproximadamente 160 km/h.";
             utterance = new SpeechSynthesisUtterance(textToSpeak);
             utterance.lang = 'pt-BR';
             utterance.rate = parseFloat(document.getElementById('rate').value);
