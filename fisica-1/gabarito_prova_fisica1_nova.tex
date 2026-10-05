@@ -19,54 +19,52 @@
     {\small Capítulos 1, 2 e 3: Vetores 3D, Cinemática 1D com Tempo de Reação, Queda Livre, Movimento Relativo e Lançamento Oblíquo}
 \end{center}
 
-\vspace{2mm}
+\vspace{3mm}
 \hrule
-\vspace{4mm}
+\vspace{6mm}
 
 % --- QUESTÃO 1 ---
-\noindent\textbf{\large Questão 1} \hfill \textbf{[2,0 pontos] --- Capítulo 1 (Vetores / Média)}\\[1mm]
+\noindent\textbf{\large Questão 1} \hfill \textbf{[2,0 pontos] --- Capítulo 1 (Vetores / Média)}\\[1.5mm]
 \textbf{Enunciado:} Dados os vetores $\vec{A} = 6,0\,\hat{i} - 2,0\,\hat{j} + 3,0\,\hat{k}\text{ (m)}$ e $\vec{B} = 4,0\,\hat{i} + 4,0\,\hat{j} - 2,0\,\hat{k}\text{ (m)}$, determine: (a) $|\vec{A}|$, $|\vec{B}|$ e $\vec{A} \cdot \vec{B}$; (b) o ângulo $\theta$ entre eles; (c) o produto vetorial $\vec{C} = \vec{A} \times \vec{B}$.\\[2mm]
 \textbf{Resolução Passo a Passo:}
-\begin{enumerate}[label=\alph*)]
+\begin{enumerate}[label=\alph*),itemsep=3pt,topsep=2pt]
     \item \textbf{Módulos e produto escalar}:
     $$|\vec{A}| = \sqrt{6,0^2 + (-2,0)^2 + 3,0^2} = \sqrt{36 + 4 + 9} = \sqrt{49} = \mathbf{7,0\text{ m}}$$
     $$|\vec{B}| = \sqrt{4,0^2 + 4,0^2 + (-2,0)^2} = \sqrt{16 + 16 + 4} = \sqrt{36} = \mathbf{6,0\text{ m}}$$
     $$\vec{A} \cdot \vec{B} = (6,0)(4,0) + (-2,0)(4,0) + (3,0)(-2,0) = 24,0 - 8,0 - 6,0 = \mathbf{10,0\text{ m}^2}$$
 
     \item \textbf{Ângulo $\theta$ entre os vetores}:
-    $$\cos\theta = \frac{\vec{A} \cdot \vec{B}}{|\vec{A}| |\vec{B}|} = \frac{10,0}{(7,0)(6,0)} = \frac{10,0}{42,0} \approx 0,2381$$
-    $$\theta = \arccos(0,2381) \approx \mathbf{76,2^\circ}$$
+    $$\cos\theta = \frac{\vec{A} \cdot \vec{B}}{|\vec{A}| |\vec{B}|} = \frac{10,0}{(7,0)(6,0)} = \frac{10,0}{42,0} \approx 0,2381 \implies \mathbf{\theta = \arccos(0,2381) \approx 76,2^\circ}$$
 
     \item \textbf{Produto vetorial $\vec{C} = \vec{A} \times \vec{B}$}:
     $$\vec{C} = \begin{vmatrix} \hat{i} & \hat{j} & \hat{k} \\ 6,0 & -2,0 & 3,0 \\ 4,0 & 4,0 & -2,0 \end{vmatrix} = \hat{i}[(-2,0)(-2,0) - (3,0)(4,0)] - \hat{j}[(6,0)(-2,0) - (3,0)(4,0)] + \hat{k}[(6,0)(4,0) - (-2,0)(4,0)]$$
     $$\vec{C} = \hat{i}(4 - 12) - \hat{j}(-12 - 12) + \hat{k}(24 + 8) = \mathbf{-8,0\,\hat{i} + 24,0\,\hat{j} + 32,0\,\hat{k}\text{ (m}^2\text{)}}$$
 \end{enumerate}
 
-\vspace{4mm}
+\vspace{6mm}
 \hrule
-\vspace{4mm}
+\vspace{6mm}
 
 % --- QUESTÃO 2 ---
-\noindent\textbf{\large Questão 2} \hfill \textbf{[2,0 pontos] --- Capítulo 2 (Cinemática 1D / Média)}\\[1mm]
+\noindent\textbf{\large Questão 2} \hfill \textbf{[2,0 pontos] --- Capítulo 2 (Cinemática 1D / Média)}\\[1.5mm]
 \textbf{Enunciado:} Um trem trafega a $v_0 = 108\text{ km/h}$ ($30,0\text{ m/s}$). O maquinista avista uma manutenção a $D = 180,0\text{ m}$ e tem tempo de reação de $t_{\text{reac}} = 0,60\text{ s}$. Determine: (a) a distância percorrida na reação e a distância de frenagem disponível; (b) a desaceleração mínima $a$ necessária para parar $12,0\text{ m}$ antes da manutenção.\\[2mm]
 \textbf{Resolução Passo a Passo:}
-\begin{enumerate}[label=\alph*)]
+\begin{enumerate}[label=\alph*),itemsep=3pt,topsep=2pt]
     \item \textbf{Distância em MRU e distância de frenagem}:
     $$d_{\text{reac}} = v_0 \cdot t_{\text{reac}} = (30,0\text{ m/s})(0,60\text{ s}) = \mathbf{18,0\text{ m}}$$
     $$d_{\text{fren}} = (180,0\text{ m} - 12,0\text{ m}) - 18,0\text{ m} = 168,0\text{ m} - 18,0\text{ m} = \mathbf{150,0\text{ m}}$$
 
     \item \textbf{Módulo da desaceleração mínima $a$ (Equação de Torricelli com $v_f = 0$)}:
-    $$v_f^2 = v_0^2 - 2 a d_{\text{fren}} \implies 0 = (30,0)^2 - 2 a (150,0) \implies 300,0 \, a = 900,0$$
-    $$\mathbf{a = 3,00\text{ m/s}^2}$$
+    $$v_f^2 = v_0^2 - 2 a d_{\text{fren}} \implies 0 = (30,0)^2 - 2 a (150,0) \implies 300,0 \, a = 900,0 \implies \mathbf{a = 3,00\text{ m/s}^2}$$
 \end{enumerate}
 
 \newpage
 
 % --- QUESTÃO 3 ---
-\noindent\textbf{\large Questão 3} \hfill \textbf{[2,0 pontos] --- Capítulo 2 (Queda Livre / Difícil)}\\[1mm]
+\noindent\textbf{\large Questão 3} \hfill \textbf{[2,0 pontos] --- Capítulo 2 (Queda Livre / Difícil)}\\[1.5mm]
 \textbf{Enunciado:} Do topo de um edifício de altura $H = 122,5\text{ m}$, uma pedra A é solta do repouso no instante $t = 0$. Exatamente $\Delta t = 1,00\text{ s}$ depois, a pedra B é lançada para baixo do mesmo ponto. Adotando $g = 9,80\text{ m/s}^2$, determine: (a) $t_A$; (b) $v_{0B}$ para que cheguem juntas ao solo.\\[2mm]
 \textbf{Resolução Passo a Passo:}
-\begin{enumerate}[label=\alph*)]
+\begin{enumerate}[label=\alph*),itemsep=3pt,topsep=2pt]
     \item \textbf{Tempo de queda da pedra A (solta do repouso, $v_{0A} = 0$)}:
     $$H = \frac{1}{2} g t_A^2 \implies 122,5 = 4,90 t_A^2 \implies t_A^2 = \frac{122,5}{4,90} = 25,0 \implies \mathbf{t_A = 5,00\text{ s}}$$
 
@@ -76,15 +74,15 @@
     $$122,5 = 4,00 \, v_{0B} + 78,4 \implies 4,00 \, v_{0B} = 44,1 \implies \mathbf{v_{0B} = 11,025\text{ m/s} \approx 11,0\text{ m/s}}$$
 \end{enumerate}
 
-\vspace{4mm}
+\vspace{6mm}
 \hrule
-\vspace{4mm}
+\vspace{6mm}
 
 % --- QUESTÃO 4 ---
-\noindent\textbf{\large Questão 4} \hfill \textbf{[2,0 pontos] --- Capítulo 3 (Movimento Relativo / Fácil)}\\[1mm]
+\noindent\textbf{\large Questão 4} \hfill \textbf{[2,0 pontos] --- Capítulo 3 (Movimento Relativo / Fácil)}\\[1.5mm]
 \textbf{Enunciado:} Um avião voa para Leste a $v_{A/R} = 120,0\text{ km/h}$ em relação ao ar. Um vento sopra de Sul para Norte a $v_{R/T} = 50,0\text{ km/h}$ em relação à Terra. Determine: (a) $v_{A/T}$; (b) o ângulo de desvio $\theta$ em relação ao Leste.\\[2mm]
 \textbf{Resolução Passo a Passo:}
-\begin{enumerate}[label=\alph*)]
+\begin{enumerate}[label=\alph*),itemsep=3pt,topsep=2pt]
     \item \textbf{Velocidade vetorial em relação à Terra e módulo}:
     $$\vec{v}_{A/T} = \vec{v}_{A/R} + \vec{v}_{R/T} = 120,0\,\hat{i} + 50,0\,\hat{j} \quad (\text{km/h})$$
     $$v_{A/T} = \sqrt{(120,0)^2 + (50,0)^2} = \sqrt{14400 + 2500} = \sqrt{16900} = \mathbf{130,0\text{ km/h}}$$
@@ -93,15 +91,15 @@
     $$\tan\theta = \frac{v_{R/T}}{v_{A/R}} = \frac{50,0}{120,0} \approx 0,4167 \implies \mathbf{\theta \approx 22,6^\circ\text{ ao Norte do Leste}}$$
 \end{enumerate}
 
-\vspace{4mm}
+\vspace{6mm}
 \hrule
-\vspace{4mm}
+\vspace{6mm}
 
 % --- QUESTÃO 5 ---
-\noindent\textbf{\large Questão 5} \hfill \textbf{[2,0 pontos] --- Capítulo 3 (Lançamento Oblíquo / Difícil)}\\[1mm]
+\noindent\textbf{\large Questão 5} \hfill \textbf{[2,0 pontos] --- Capítulo 3 (Lançamento Oblíquo / Difícil)}\\[1.5mm]
 \textbf{Enunciado:} Um projétil é disparado do solo com $v_0 = 50,0\text{ m/s}$ a $\theta_0 = 36,9^\circ$ ($\sin 36,9^\circ = 0,60$; $\cos 36,9^\circ = 0,80$). O projétil atinge o topo de uma torre no instante $t = 5,00\text{ s}$. Adotando $g = 9,80\text{ m/s}^2$, determine: (a) a altura $H$ da torre e a distância horizontal $D$; (b) o módulo $v$ e a direção da velocidade no impacto.\\[2mm]
 \textbf{Resolução Passo a Passo:}
-\begin{enumerate}[label=\alph*)]
+\begin{enumerate}[label=\alph*),itemsep=3pt,topsep=2pt]
     \item \textbf{Componentes iniciais, alcance $D$ e altura $H$}:
     $v_{0x} = 50,0 \cos(36,9^\circ) = 40,0\text{ m/s}$; \quad $v_{0y} = 50,0 \sin(36,9^\circ) = 30,0\text{ m/s}$.
     $$\mathbf{D = v_{0x} \cdot t = (40,0\text{ m/s})(5,00\text{ s}) = 200,0\text{ m}}$$
