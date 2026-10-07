@@ -47,18 +47,18 @@
     \titlepage
 \end{frame}
 
-% --- SLIDE 2: ESTRUTURA DO CAPÍTULO ---
-\begin{frame}{Visão Geral e Estrutura dos 24 Exemplos}
+% --- SLIDE 2: ESTRUTURA DOS 24 EXEMPLOS ---
+\begin{frame}{Visão Geral dos 24 Exemplos Oficiais (Young \& Freedman 12ª ed.)}
     \begin{columns}[T]
         \column{0.52\textwidth}
-        \begin{block}{Divisão das Seções Didáticas}
+        \begin{block}{Divisão Didática do Capítulo 5}
             \small
             \begin{itemize}\setlength{\itemsep}{2pt}
                 \item \textbf{5.1 Partículas em Equilíbrio ($\sum \vec{F} = 0$)}: Exemplos 5.1 a 5.5.
                 \item \textbf{5.2 Dinâmica das Partículas ($\sum \vec{F} = m\vec{a}$)}: Exemplos 5.6 a 5.12.
                 \item \textbf{5.3 Forças de Atrito e Arraste}: Exemplos 5.13 a 5.19.
                 \item \textbf{5.4 Movimento Circular Uniforme}: Exemplos 5.20 a 5.24.
-                \item \textbf{5.5 As 4 Forças Fundamentais}.
+                \item \textbf{5.5 As 4 Forças Fundamentais da Natureza}.
             \end{itemize}
         \end{block}
 
@@ -76,7 +76,7 @@
     \end{columns}
 \end{frame}
 
-% --- SLIDE 3: 5.1 TEORIA DE EQUILÍBRIO ---
+% --- SLIDE 3: 5.1 EQUILÍBRIO ---
 \begin{frame}{5.1 Uso da Primeira Lei de Newton: Partículas em Equilíbrio}
     \begin{columns}[T]
         \column{0.50\textwidth}
@@ -84,7 +84,7 @@
             \small
             $$\sum \vec{F} = 0 \iff \begin{cases} \sum F_x = 0 \\ \sum F_y = 0 \end{cases}$$
         \end{block}
-        \begin{alertblock}{Regra do DCL}
+        \begin{alertblock}{Regra Fundamental do DCL}
             \small
             Desenhe \textbf{apenas} forças externas exercidas \textbf{SOBRE} o corpo isolado!
         \end{alertblock}
@@ -95,7 +95,7 @@
             \begin{enumerate}\setlength{\itemsep}{2pt}
                 \item Isolamento do corpo e eixos ($x,y$).
                 \item Diagrama do Corpo Livre (DCL).
-                \item Decomposição das forças.
+                \item Decomposição vectorial das forças.
                 \item Resolução do sistema linear.
             \end{enumerate}
         \end{block}
@@ -103,7 +103,7 @@
 \end{frame}
 
 % --- SLIDE 4: EXEMPLO 5.1 ---
-\begin{frame}{Exemplo 5.1: Equilíbrio 1D --- Ginasta na Corda sem Massa}
+\begin{frame}{Exemplo 5.1: Equilíbrio 1D --- Ginasta em Corda sem Massa}
     \begin{block}{Enunciado do Problema}
         \small
         Uma ginasta de massa $m_G = 50{,}0\text{ kg}$ está subindo em uma corda leve sem massa presa ao teto. Qual o seu peso? Qual força a corda exerce nela? Qual a tensão no teto?
@@ -143,10 +143,14 @@
         \column{0.40\textwidth}
         \begin{center}
         \begin{tikzpicture}[scale=0.62]
+            \fill[pattern=north east lines] (0,3) rectangle (2,3.2);
+            \draw[thick] (0,3) -- (2,3);
+            \draw[line width=4pt,brown] (1,3) -- (1,1.5);
             \fill[navyblue] (1,1.5) circle (0.15);
-            \draw[ultra thick,-{Latex},emeraldgreen] (1,1.5) -- (1,2.8) node[right] {\small $\vec{T}_{\text{topo}}$};
-            \draw[ultra thick,-{Latex},redaccent] (1,1.5) -- (1,0.2) node[right] {\small $\vec{p}_{\text{total}}$};
-            \node at (1,-0.3) {\small DCL Sistema};
+            \draw[ultra thick,-{Latex},emeraldgreen] (1,3) -- (1,3.9) node[right] {\small $\vec{T}_{\text{topo}}$};
+            \draw[ultra thick,-{Latex},blue] (1,1.5) -- (1,2.5) node[right] {\small $\vec{T}_{\text{base}}$};
+            \draw[ultra thick,-{Latex},redaccent] (1,1.5) -- (1,0.3) node[right] {\small $\vec{p}_G$};
+            \node at (1,-0.2) {\small DCLs Separados};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
@@ -154,7 +158,7 @@
             \small
             \begin{itemize}\setlength{\itemsep}{3pt}
                 \item \textbf{Tensão na Base}: Suporta apenas a ginasta $\implies T_{\text{base}} = m_G g = 490\text{ N}$.
-                \item \textbf{Tensão no Topo}: Suporta a ginasta e a corda $\implies T_{\text{topo}} = (m_G + m_C)g = (52{,}0)(9{,}80) = 509{,}6\text{ N}$.
+                \item \textbf{Tensão no Topo}: Suporta ginasta e corda $\implies T_{\text{topo}} = (m_G + m_C)g = (52{,}0)(9{,}80) = 509{,}6\text{ N}$.
             \end{itemize}
         \end{exampleblock}
     \end{columns}
@@ -164,18 +168,21 @@
 \begin{frame}{Exemplo 5.3: Equilíbrio 2D --- Motor Suspenso por Correntes}
     \begin{block}{Enunciado do Problema}
         \small
-        Um motor de peso $p$ está suspenso por um anel $O$ ligado a três correntes. Uma vai ao teto ($60^\circ$) e outra à parede. Ache as tensões $T_1$, $T_2$ e $T_3$.
+        Um motor de peso $p$ está suspenso por um anel $O$ ligado a três correntes ($60^\circ$ no teto). Ache as tensões $T_1$, $T_2$ e $T_3$.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
         \begin{center}
         \begin{tikzpicture}[scale=0.65]
-            \fill[navyblue] (2,1.5) circle (0.1) node[below left] {$O$};
-            \draw[ultra thick,-{Latex},redaccent] (2,1.5) -- (2,0.2) node[right] {\small $T_1 = p$};
-            \draw[ultra thick,-{Latex},golddark] (2,1.5) -- (0.5,1.5) node[above] {\small $T_2$};
-            \draw[ultra thick,-{Latex},emeraldgreen] (2,1.5) -- (3.3,2.8) node[right] {\small $T_3$};
-            \draw[dashed,gray] (2,1.5) -- (3.3,1.5);
-            \node at (2.7,1.8) {\small $60^\circ$};
+            \fill[pattern=north east lines] (0,3) -- (3,3) -- (3,3.2) -- (0,3.2) -- cycle;
+            \fill[pattern=north east lines] (0,0) -- (0,3) -- (-0.2,3) -- (-0.2,0) -- cycle;
+            \draw[thick] (0,3) -- (3,3); \draw[thick] (0,0) -- (0,3);
+            \fill[navyblue] (1.5,1.5) circle (0.1) node[below left] {$O$};
+            \draw[ultra thick,-{Latex},redaccent] (1.5,1.5) -- (1.5,0.2) node[right] {\small $T_1 = p$};
+            \draw[ultra thick,-{Latex},golddark] (1.5,1.5) -- (0.2,1.5) node[above] {\small $T_2$};
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1.5) -- (2.8,2.8) node[right] {\small $T_3$};
+            \draw[dashed,gray] (1.5,1.5) -- (2.8,1.5);
+            \node at (2.2,1.8) {\small $60^\circ$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
@@ -191,7 +198,7 @@
 \end{frame}
 
 % --- SLIDE 7: EXEMPLO 5.4 ---
-\begin{frame}{Exemplo 5.4: Plano Inclinado sem Atrito em Equilíbrio}
+\begin{frame}{Exemplo 5.4: Plano Inclinado sem Atrito em Equilíbrio (Carro na Rampa)}
     \begin{block}{Enunciado do Problema}
         \small
         Um carro de peso $p$ repousa em uma rampa inclinada de $\alpha$. Um cabo impede o deslize. Ache a tensão $T$ no cabo e a força normal $n$.
@@ -201,16 +208,19 @@
         \begin{center}
         \begin{tikzpicture}[scale=0.68]
             \draw[thick] (0,0) -- (3.5,0) -- (3.5,2) -- cycle;
+            \node at (0.8,0.2) {\small $\alpha$};
             \fill[cyandark] (1.75,1) circle (0.12);
+            \draw[gray,dashed,-{Latex}] (1.75,1) -- (3.0,1.7) node[above] {$x$};
+            \draw[gray,dashed,-{Latex}] (1.75,1) -- (1.05,2.2) node[left] {$y$};
             \draw[ultra thick,-{Latex},redaccent] (1.75,1) -- (2.61,1.5) node[above] {\small $\vec{T}$};
             \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {\small $\vec{p}$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
-        \begin{exampleblock}{Resolução}
+        \begin{exampleblock}{Resolução com Eixos Rotacionados}
             \small
-            Rotacionando os eixos para o plano inclinado:
+            Rotacionando os eixos paralelamente ao plano inclinado:
             \begin{align*}
                 \sum F_x &= T - p \sin\alpha = 0 \implies T = p \sin\alpha \\
                 \sum F_y &= n - p \cos\alpha = 0 \implies n = p \cos\alpha
@@ -230,9 +240,11 @@
         \begin{center}
         \begin{tikzpicture}[scale=0.65]
             \draw[thick] (0,0) -- (3,0) -- (3,1.8) -- cycle;
-            \draw[thick,fill=cyan!30] (1.5,0.9) circle (0.15) node[above] {$w_1$};
+            \draw[thick] (3,1.8) circle (0.15);
+            \draw[thick,fill=cyan!30] (1.5,0.9) circle (0.15) node[above left] {$w_1$};
             \draw[thick] (1.5,0.9) -- (3,1.8);
-            \draw[thick,fill=orange!30] (3.3,0.5) circle (0.15) node[right] {$w_2$};
+            \draw[thick] (3.15,1.8) -- (3.15,0.6);
+            \draw[thick,fill=orange!30] (3.15,0.4) circle (0.12) node[right] {$w_2$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
@@ -241,13 +253,13 @@
             \begin{itemize}\setlength{\itemsep}{3pt}
                 \item \textbf{Corpo Suspenso 2}: $T - w_2 = 0 \implies T = w_2$
                 \item \textbf{Bloco na Rampa 1}: $T - w_1 \sin\alpha = 0 \implies w_2 = w_1 \sin\alpha$
-                \item \textbf{Normal}: $n_1 = w_1 \cos\alpha$
+                \item \textbf{Normal na Rampa}: $n_1 = w_1 \cos\alpha$
             \end{itemize}
         \end{exampleblock}
     \end{columns}
 \end{frame}
 
-% --- SLIDE 9: 5.2 SEGUNDA LEI (DINÂMICA) ---
+% --- SLIDE 9: 5.2 SEGUNDA LEI ---
 \begin{frame}{5.2 Uso da Segunda Lei de Newton: Dinâmica das Partículas}
     \begin{columns}[T]
         \column{0.50\textwidth}
@@ -286,8 +298,10 @@
         \begin{center}
         \begin{tikzpicture}[scale=0.65]
             \fill[navyblue] (1.5,1) circle (0.15);
-            \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1) -- (3.0,1) node[above] {\small $\sum \vec{F}_x$};
-            \draw[thick,-{Latex},blue] (1.5,1.8) -- (2.8,1.8) node[above] {\small $\vec{a}_x$};
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1) -- (3.0,1) node[above] {\small $\vec{F}_x$};
+            \draw[ultra thick,-{Latex},cyandark] (1.5,1) -- (1.5,2.2) node[right] {\small $\vec{n}$};
+            \draw[ultra thick,-{Latex},golddark] (1.5,1) -- (1.5,-0.2) node[right] {\small $\vec{p}$};
+            \draw[thick,-{Latex},blue] (1.5,2.6) -- (2.8,2.6) node[above] {\small $\vec{a}_x$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
@@ -308,14 +322,19 @@
         Um foguete de massa $m$ parte do repouso em $t=0$ sob ação de força horizontal $F_x(t) = A t^2$. Ache a velocidade $v_x(t)$ e a posição $x(t)$.
     \end{block}
     \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Aceleração em Função do Tempo}
-            \small
-            $$a_x(t) = \frac{F_x(t)}{m} = \frac{A}{m} t^2$$
-        \end{block}
-        \column{0.48\textwidth}
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.65]
+            \draw[-{Latex}] (0,0) -- (3,0) node[below] {\small $t$};
+            \draw[-{Latex}] (0,0) -- (0,2.5) node[left] {\small $F_x$};
+            \draw[ultra thick,cyandark,domain=0:2.2,samples=30] plot (\x, {0.4*\x*\x});
+            \node at (1.8,2.0) {\small $A t^2$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
         \begin{exampleblock}{Integração}
             \small
+            $$a_x(t) = \frac{F_x(t)}{m} = \frac{A}{m} t^2$$
             $$v_x(t) = \int_0^t a_x(t') dt' = \frac{A}{3m} t^3$$
             $$x(t) = \int_0^t v_x(t') dt' = \frac{A}{12m} t^4$$
         \end{exampleblock}
@@ -333,9 +352,10 @@
         \begin{center}
         \begin{tikzpicture}[scale=0.68]
             \fill[navyblue] (1.5,1.5) circle (0.15);
-            \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1.5) -- (1.5,2.8) node[left] {\small $\vec{T}$};
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1.5) -- (1.5,2.9) node[left] {\small $\vec{T}$};
             \draw[ultra thick,-{Latex},redaccent] (1.5,1.5) -- (1.5,0.2) node[left] {\small $\vec{p}$};
             \draw[ultra thick,-{Latex},blue] (2.3,1.5) -- (2.3,2.5) node[right] {\small $\vec{a}_y$};
+            \draw[thick,-{Latex},gray] (0.7,1.5) -- (0.7,0.5) node[left] {\small $\vec{v}_y$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
@@ -361,7 +381,7 @@
         \begin{center}
         \begin{tikzpicture}[scale=0.68]
             \fill[navyblue] (1.5,1.5) circle (0.15);
-            \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1.5) -- (1.5,2.8) node[left] {\small $\vec{n}$};
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1.5) -- (1.5,2.9) node[left] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},redaccent] (1.5,1.5) -- (1.5,0.2) node[left] {\small $\vec{p}$};
             \draw[ultra thick,-{Latex},blue] (2.3,1.5) -- (2.3,2.5) node[right] {\small $\vec{a}_y$};
         \end{tikzpicture}
@@ -412,17 +432,22 @@
         O mesmo tobogã é lançado para cima na encosta sem atrito com velocidade inicial $v_0$. Qual a aceleração e até onde ele sobe antes de parar?
     \end{block}
     \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Aceleração no Eixo $x$}
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.68]
+            \draw[thick] (0,0) -- (3.5,0) -- (3.5,2) -- cycle;
+            \fill[cyandark] (1.75,1) circle (0.12);
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {\small $\vec{n}$};
+            \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {\small $\vec{p}$};
+            \draw[thick,-{Latex},gray] (1.75,1) -- (2.61,1.5) node[above] {\small $\vec{v}_0$};
+            \draw[thick,-{Latex},blue] (2.2,1.26) -- (1.34,0.76) node[below] {\small $\vec{a}_x$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
             \small
             $$\sum F_x = -mg \sin\alpha = m a_x \implies a_x = -g \sin\alpha$$
-            A aceleração aponta para baixo na rampa!
-        \end{block}
-        \column{0.48\textwidth}
-        \begin{exampleblock}{Distância Percorrida $d$}
-            \small
-            $$v_x^2 = v_0^2 + 2 a_x d = 0$$
-            $$d = \frac{v_0^2}{2g \sin\alpha}$$
+            $$v_x^2 = v_0^2 + 2 a_x d = 0 \implies d = \frac{v_0^2}{2g \sin\alpha}$$
         \end{exampleblock}
     \end{columns}
 \end{frame}
@@ -455,7 +480,7 @@
     \end{columns}
 \end{frame}
 
-% --- SLIDE 17: 5.3 FORÇAS DE ATRITO ---
+% --- SLIDE 17: 5.3 ATRITO TEORIA ---
 \begin{frame}{5.3 Forças de Atrito: Estático, Cinético e Rolamento}
     \begin{columns}[T]
         \column{0.50\textwidth}
@@ -492,6 +517,8 @@
             \fill[navyblue] (2,1.5) circle (0.15);
             \draw[ultra thick,-{Latex},emeraldgreen] (2,1.5) -- (3.5,1.5) node[above] {\small $T = 230\text{ N}$};
             \draw[ultra thick,-{Latex},redaccent] (2,1.5) -- (0.5,1.5) node[above] {\small $(f_s)_{\text{máx}}$};
+            \draw[ultra thick,-{Latex},cyandark] (2,1.5) -- (2,2.8) node[right] {\small $\vec{n}$};
+            \draw[ultra thick,-{Latex},golddark] (2,1.5) -- (2,0.2) node[right] {\small $\vec{p}$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
@@ -511,14 +538,18 @@
         Para manter o engradado de $500\text{ N}$ em velocidade constante após iniciar o movimento, é necessária força de $200\text{ N}$. Ache $\mu_c$.
     \end{block}
     \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Condição de Velocidade Constante}
-            \small
-            $$\sum F_x = T - f_c = 0 \implies f_c = 200\text{ N}$$
-            $$\sum F_y = n - p = 0 \implies n = 500\text{ N}$$
-        \end{block}
-        \column{0.48\textwidth}
-        \begin{exampleblock}{Cálculo de $\mu_c$}
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.60]
+            \fill[navyblue] (2,1.5) circle (0.15);
+            \draw[ultra thick,-{Latex},emeraldgreen] (2,1.5) -- (3.5,1.5) node[above] {\small $T = 200\text{ N}$};
+            \draw[ultra thick,-{Latex},redaccent] (2,1.5) -- (0.5,1.5) node[above] {\small $f_c$};
+            \draw[ultra thick,-{Latex},cyandark] (2,1.5) -- (2,2.8) node[right] {\small $\vec{n}$};
+            \draw[ultra thick,-{Latex},golddark] (2,1.5) -- (2,0.2) node[right] {\small $\vec{p}$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
             \small
             $$\mu_c = \frac{f_c}{n} = \frac{200\text{ N}}{500\text{ N}} = 0{,}40$$
             Note que $\mu_c < \mu_s$ ($0{,}40 < 0{,}46$).
@@ -527,23 +558,29 @@
 \end{frame}
 
 % --- SLIDE 20: EXEMPLO 5.15 ---
-\begin{frame}{Exemplo 5.15: Puxando Engradado com Ângulo em Relação à Horizontal}
+\begin{frame}{Exemplo 5.15: Puxando Engradado sob Ângulo em Relação à Horizontal}
     \begin{block}{Enunciado do Problema}
         \small
         Puxa-se o engradado com força $\vec{T}$ a um ângulo $\theta$ acima da horizontal. Ache a força $T$ para mover com velocidade constante.
     \end{block}
     \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Equações de Forças}
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.60]
+            \fill[navyblue] (2,1.5) circle (0.15);
+            \draw[ultra thick,-{Latex},emeraldgreen] (2,1.5) -- (3.5,2.3) node[above] {\small $\vec{T}$};
+            \draw[dashed,gray] (2,1.5) -- (3.5,1.5);
+            \node at (2.7,1.7) {\small $\theta$};
+            \draw[ultra thick,-{Latex},redaccent] (2,1.5) -- (0.5,1.5) node[above] {\small $f_c$};
+            \draw[ultra thick,-{Latex},cyandark] (2,1.5) -- (2,2.6) node[right] {\small $\vec{n}$};
+            \draw[ultra thick,-{Latex},golddark] (2,1.5) -- (2,0.2) node[right] {\small $\vec{w}$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
             \small
-            $$\sum F_y = n + T \sin\theta - w = 0 \implies n = w - T \sin\theta$$
-            $$\sum F_x = T \cos\theta - f_c = 0$$
-        \end{block}
-        \column{0.48\textwidth}
-        \begin{exampleblock}{Resultado}
-            \small
-            Como $f_c = \mu_c n = \mu_c(w - T \sin\theta)$:
-            $$T = \frac{\mu_c w}{\cos\theta + \mu_c \sin\theta}$$
+            $$n = w - T \sin\theta, \quad f_c = \mu_c(w - T \sin\theta)$$
+            $$T \cos\theta = \mu_c(w - T \sin\theta) \implies T = \frac{\mu_c w}{\cos\theta + \mu_c \sin\theta}$$
         \end{exampleblock}
     \end{columns}
 \end{frame}
@@ -555,18 +592,21 @@
         Deduza o ângulo $\alpha$ da encosta para um tobogã deslizar com velocidade constante sob atrito cinético $\mu_c$.
     \end{block}
     \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Equações}
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.68]
+            \draw[thick] (0,0) -- (3.5,0) -- (3.5,2) -- cycle;
+            \fill[cyandark] (1.75,1) circle (0.12);
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {\small $\vec{n}$};
+            \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {\small $\vec{p}$};
+            \draw[ultra thick,-{Latex},redaccent] (1.75,1) -- (0.89,0.5) node[below left] {\small $f_c$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
             \small
-            $$\sum F_x = mg \sin\alpha - f_c = 0$$
-            $$\sum F_y = n - mg \cos\alpha = 0$$
-        \end{block}
-        \column{0.48\textwidth}
-        \begin{exampleblock}{Resultado Didático}
-            \small
-            Como $f_c = \mu_c mg \cos\alpha$:
-            $$mg \sin\alpha = \mu_c mg \cos\alpha \implies \tan\alpha = \mu_c$$
-            $$\alpha = \arctan\mu_c$$
+            $$\sum F_x = mg \sin\alpha - f_c = 0 \implies mg \sin\alpha = \mu_c mg \cos\alpha$$
+            $$\tan\alpha = \mu_c \implies \alpha = \arctan\mu_c$$
         \end{exampleblock}
     \end{columns}
 \end{frame}
@@ -578,15 +618,21 @@
         Em uma encosta de ângulo $\alpha$ maior do que $\arctan\mu_c$, qual é a aceleração $a_x$ do tobogã?
     \end{block}
     \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Segunda Lei no Eixo $x$}
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.68]
+            \draw[thick] (0,0) -- (3.5,0) -- (3.5,2) -- cycle;
+            \fill[cyandark] (1.75,1) circle (0.12);
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {\small $\vec{n}$};
+            \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {\small $\vec{p}$};
+            \draw[ultra thick,-{Latex},redaccent] (1.75,1) -- (0.89,0.5) node[below left] {\small $f_c$};
+            \draw[ultra thick,-{Latex},blue] (2.2,1.26) -- (3.06,1.76) node[above] {\small $\vec{a}_x$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
             \small
-            $$\sum F_x = mg \sin\alpha - f_c = m a_x$$
-            $$mg \sin\alpha - \mu_c mg \cos\alpha = m a_x$$
-        \end{block}
-        \column{0.48\textwidth}
-        \begin{exampleblock}{Aceleração Resultante}
-            \small
+            $$\sum F_x = mg \sin\alpha - \mu_c mg \cos\alpha = m a_x$$
             $$a_x = g (\sin\alpha - \mu_c \cos\alpha)$$
         \end{exampleblock}
     \end{columns}
@@ -599,17 +645,21 @@
         Um carro de $1000\text{ kg}$ rola em pista plana com coeficiente de rolamento $\mu_r = 0{,}003$. Qual a força de resistência e a desaceleração?
     \end{block}
     \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Força de Rolamento}
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.68]
+            \draw[thick] (1.5,1.5) circle (0.8);
+            \fill[navyblue] (1.5,1.5) circle (0.1);
+            \draw[ultra thick,-{Latex},redaccent] (1.5,0.7) -- (0.3,0.7) node[above] {\small $f_r$};
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1.5) -- (1.5,2.7) node[right] {\small $\vec{n}$};
+            \draw[ultra thick,-{Latex},golddark] (1.5,1.5) -- (1.5,0.3) node[right] {\small $\vec{p}$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
             \small
-            $$f_r = \mu_r n = \mu_r mg$$
-            $$f_r = (0{,}003)(1000)(9{,}80) = 29{,}4\text{ N}$$
-        \end{block}
-        \column{0.48\textwidth}
-        \begin{exampleblock}{Desaceleração}
-            \small
+            $$f_r = \mu_r n = \mu_r mg = (0{,}003)(1000)(9{,}80) = 29{,}4\text{ N}$$
             $$a_x = -\mu_r g = -(0{,}003)(9{,}80) = -0{,}0294\text{ m/s}^2$$
-            O rolamento é ordens de grandeza menor que o atrito cinético!
         \end{exampleblock}
     \end{columns}
 \end{frame}
@@ -641,7 +691,7 @@
     \end{columns}
 \end{frame}
 
-% --- SLIDE 25: 5.4 MOVIMENTO CIRCULAR UNIFORME ---
+% --- SLIDE 25: 5.4 MOVIMENTO CIRCULAR ---
 \begin{frame}{5.4 Dinâmica do Movimento Circular Uniforme}
     \begin{columns}[T]
         \column{0.50\textwidth}
@@ -673,14 +723,21 @@
         Um trenó de $m = 200\text{ kg}$ amarrado a um posto por uma corda de $R = 5{,}0\text{ m}$ gira a $v = 10\text{ m/s}$ sem atrito. Ache a tensão na corda.
     \end{block}
     \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Segunda Lei Radial}
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.68]
+            \draw[dashed] (0,0) circle (1.2);
+            \fill[black] (0,0) circle (0.08) node[below] {$O$};
+            \draw[thick,brown] (0,0) -- (1.2,0);
+            \fill[navyblue] (1.2,0) circle (0.12);
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.2,0) -- (0.3,0) node[above] {\small $\vec{T}$};
+            \draw[thick,-{Latex},blue] (1.2,0) -- (1.2,1.0) node[right] {\small $\vec{v}$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
             \small
             $$\sum F_{\text{rad}} = T = m a_{\text{rad}} = m \frac{v^2}{R}$$
-        \end{block}
-        \column{0.48\textwidth}
-        \begin{exampleblock}{Cálculo}
-            \small
             $$T = (200\text{ kg}) \frac{(10\text{ m/s})^2}{5{,}0\text{ m}} = 4000\text{ N}$$
         \end{exampleblock}
     \end{columns}
@@ -693,17 +750,25 @@
         Uma massa $m$ gira em círculo horizontal de raio $R$ presa a um fio de comprimento $L$ formando ângulo $\beta$ com a vertical. Ache $T$ e $v$.
     \end{block}
     \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Componentes de Força}
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.68]
+            \fill[pattern=north east lines] (-0.8,3) -- (0.8,3) -- (0.8,3.2) -- (-0.8,3.2) -- cycle;
+            \draw[thick] (-0.8,3) -- (0.8,3);
+            \draw[dashed] (0,3) -- (0,0.8);
+            \draw[thick] (0,3) -- (1.2,1.0);
+            \node at (0.3,2.4) {\small $\beta$};
+            \fill[navyblue] (1.2,1.0) circle (0.12);
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.2,1.0) -- (0.6,2.0) node[above right] {\small $\vec{T}$};
+            \draw[ultra thick,-{Latex},redaccent] (1.2,1.0) -- (1.2,-0.2) node[right] {\small $\vec{p}$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
             \small
             $$T \cos\beta = mg \implies T = \frac{mg}{\cos\beta}$$
-            $$T \sin\beta = m \frac{v^2}{R}$$
-        \end{block}
-        \column{0.48\textwidth}
-        \begin{exampleblock}{Velocidade e Período}
-            \small
-            $$\tan\beta = \frac{v^2}{gR} \implies v = \sqrt{g R \tan\beta}$$
-            $$P = 2\pi \sqrt{\frac{L \cos\beta}{g}}$$
+            $$T \sin\beta = m \frac{v^2}{R} \implies \tan\beta = \frac{v^2}{gR}$$
+            $$v = \sqrt{g R \tan\beta}, \quad P = 2\pi \sqrt{\frac{L \cos\beta}{g}}$$
         \end{exampleblock}
     \end{columns}
 \end{frame}
@@ -715,16 +780,20 @@
         Ache a velocidade máxima $v_{\text{máx}}$ para um carro não derrapar em curva plana de raio $R$ sob atrito estático $\mu_s$.
     \end{block}
     \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Condição de Atrito Estático}
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.68]
+            \fill[navyblue] (1.5,1) circle (0.15);
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1) -- (0.3,1) node[above] {\small $(f_s)_{\text{máx}}$};
+            \draw[ultra thick,-{Latex},cyandark] (1.5,1) -- (1.5,2.3) node[right] {\small $\vec{n}$};
+            \draw[ultra thick,-{Latex},golddark] (1.5,1) -- (1.5,-0.2) node[right] {\small $\vec{p}$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
             \small
             $$f_s = m \frac{v^2}{R} \le (f_s)_{\text{máx}} = \mu_s mg$$
-        \end{block}
-        \column{0.48\textwidth}
-        \begin{exampleblock}{Velocidade Máxima}
-            \small
             $$m \frac{v_{\text{máx}}^2}{R} = \mu_s mg \implies v_{\text{máx}} = \sqrt{\mu_s g R}$$
-            A massa do veículo se cancela!
         \end{exampleblock}
     \end{columns}
 \end{frame}
@@ -736,16 +805,20 @@
         Qual o ângulo de inclinação $\beta$ da pista para fazer curva de raio $R$ a velocidade $v$ sem depender de atrito?
     \end{block}
     \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Decomposição da Normal}
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.68]
+            \draw[thick] (0,0) -- (3,0) -- (3,1.5) -- cycle;
+            \node at (0.8,0.2) {\small $\beta$};
+            \fill[cyandark] (1.5,0.75) circle (0.12);
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.5,0.75) -- (0.9,1.95) node[above] {\small $\vec{n}$};
+            \draw[ultra thick,-{Latex},golddark] (1.5,0.75) -- (1.5,-0.35) node[below] {\small $\vec{p}$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
             \small
-            $$n \sin\beta = m \frac{v^2}{R} \quad (\text{componente radial})$$
-            $$n \cos\beta = mg \quad (\text{componente vertical})$$
-        \end{block}
-        \column{0.48\textwidth}
-        \begin{exampleblock}{Ângulo de Sobre-elevação}
-            \small
-            Dividindo as duas equações:
+            $$n \sin\beta = m \frac{v^2}{R} \quad \text{e} \quad n \cos\beta = mg$$
             $$\tan\beta = \frac{v^2}{gR} \implies \beta = \arctan\left(\frac{v^2}{gR}\right)$$
         \end{exampleblock}
     \end{columns}
@@ -758,20 +831,28 @@
         Um passageiro na roda-gigante de raio $R$ move-se em círculo vertical com velocidade $v$. Ache a normal $n$ no topo e na base.
     \end{block}
     \begin{columns}[T]
-        \column{0.48\textwidth}
-        \begin{block}{Topo ($a_y = -v^2/R$)}
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.65]
+            \draw[dashed] (1.5,1.5) circle (1.2);
+            % Topo
+            \fill[navyblue] (1.5,2.7) circle (0.1);
+            \draw[thick,-{Latex},emeraldgreen] (1.5,2.7) -- (1.5,3.3) node[above] {\tiny $n_T$};
+            \draw[thick,-{Latex},redaccent] (1.5,2.7) -- (1.5,2.0) node[right] {\tiny $p$};
+            % Base
+            \fill[navyblue] (1.5,0.3) circle (0.1);
+            \draw[thick,-{Latex},emeraldgreen] (1.5,0.3) -- (1.5,1.1) node[above] {\tiny $n_B$};
+            \draw[thick,-{Latex},redaccent] (1.5,0.3) -- (1.5,-0.3) node[below] {\tiny $p$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
             \small
-            $$n_T - mg = -m \frac{v^2}{R}$$
-            $$n_T = m\left(g - \frac{v^2}{R}\right)$$
-            Sensação de peso menor!
-        \end{block}
-        \column{0.48\textwidth}
-        \begin{block}{Base ($a_y = +v^2/R$)}
-            \small
-            $$n_B - mg = +m \frac{v^2}{R}$$
-            $$n_B = m\left(g + \frac{v^2}{R}\right)$$
-            Sensação de peso maior!
-        \end{block}
+            \begin{itemize}\setlength{\itemsep}{3pt}
+                \item \textbf{Topo}: $n_T - mg = -m \frac{v^2}{R} \implies n_T = m\left(g - \frac{v^2}{R}\right)$
+                \item \textbf{Base}: $n_B - mg = +m \frac{v^2}{R} \implies n_B = m\left(g + \frac{v^2}{R}\right)$
+            \end{itemize}
+        \end{exampleblock}
     \end{columns}
 \end{frame}
 
