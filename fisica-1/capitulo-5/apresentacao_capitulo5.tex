@@ -1,9 +1,12 @@
 \documentclass[10pt,aspectratio=169]{beamer}
 
-% --- PACOTES E CONFIGURAÇÕES ---
+% --- PACOTES E CONFIGURAÇÕES DE FONTE ---
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{textcomp}
 \usepackage[portuguese]{babel}
+\usepackage{microtype}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
 \usepackage{tikz}
@@ -104,9 +107,9 @@
 
 % --- SLIDE 4: EXEMPLO 5.1 ---
 \begin{frame}{Exemplo 5.1: Equilíbrio 1D --- Ginasta em Corda sem Massa}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Uma ginasta de massa $m_G = 50{,}0\text{ kg}$ está subindo em uma corda leve sem massa presa ao teto. Qual o seu peso? Qual força a corda exerce nela? Qual a tensão no teto?
+        Uma ginasta de massa $m_G = 50{,}0\text{ kg}$ está subindo em uma corda leve, de massa desprezível, pendurada no teto de um ginásio. (a) Qual é o peso da ginasta? (b) Qual é a força exercida pela corda sobre a ginasta? (c) Qual é a tensão na extremidade superior da corda, onde ela está presa ao teto?
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -135,9 +138,9 @@
 
 % --- SLIDE 5: EXEMPLO 5.2 ---
 \begin{frame}{Exemplo 5.2: Equilíbrio 1D --- Ginasta em Corda com Massa}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        A mesma ginasta ($50{,}0\text{ kg}$) está suspensa em uma corda uniforme de massa $m_C = 2{,}00\text{ kg}$. Ache a tensão no topo e na base da corda.
+        Suponha agora que a ginasta de massa $m_G = 50{,}0\text{ kg}$ esteja suspensa em uma corda de massa não desprezível $m_C = 2{,}00\text{ kg}$. (a) Ache a tensão na extremidade superior da corda (onde ela se prende ao teto). (b) Ache a tensão na extremidade inferior da corda (onde a ginasta a segura).
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -166,9 +169,9 @@
 
 % --- SLIDE 6: EXEMPLO 5.3 ---
 \begin{frame}{Exemplo 5.3: Equilíbrio 2D --- Motor Suspenso por Correntes}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Um motor de peso $p$ está suspenso por um anel $O$ ligado a três correntes ($60^\circ$ no teto). Ache as tensões $T_1$, $T_2$ e $T_3$.
+        Um motor de automóvel de peso $p$ está suspenso por uma corrente unida a um anel sem massa $O$. O anel por sua vez é sustentado por outras duas correntes, uma fixa ao teto formando um ângulo de $60^\circ$ com a horizontal e a outra fixa a uma parede vertical. Ache as tensões em cada uma das três correntes em termos de $p$.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -199,9 +202,9 @@
 
 % --- SLIDE 7: EXEMPLO 5.4 ---
 \begin{frame}{Exemplo 5.4: Plano Inclinado sem Atrito em Equilíbrio (Carro na Rampa)}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Um carro de peso $p$ repousa em uma rampa inclinada de $\alpha$. Um cabo impede o deslize. Ache a tensão $T$ no cabo e a força normal $n$.
+        Um carro de peso $p$ repousa sobre uma rampa de aterrissagem inclinada de um ângulo $\alpha$ em relação à horizontal. O carro é mantido em repouso por meio de um cabo de aço preso à rampa. Ache a tensão $T$ no cabo e a força normal $n$ exercida pela rampa sobre o carro.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -231,9 +234,9 @@
 
 % --- SLIDE 8: EXEMPLO 5.5 ---
 \begin{frame}{Exemplo 5.5: Corpos Acoplados em Equilíbrio (Rampa e Peso Suspenso)}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Um bloco de peso $w_1$ sobre rampa sem atrito ($\alpha$) é mantido em equilíbrio por um peso $w_2$ suspenso ligado por um fio sobre polia. Ache $w_2$ e $n_1$.
+        Um bloco de peso $w_1$ repousa sobre uma rampa sem atrito inclinada de um ângulo $\alpha$. Esse bloco está ligado a um peso suspenso $w_2$ por meio de um fio leve e inextensível que passa por uma roldana sem atrito. (a) Ache o valor do peso $w_2$ necessário para que o sistema permaneça em equilíbrio. (b) Ache a força normal $n_1$ exercida pela rampa sobre o bloco 1.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -289,9 +292,9 @@
 
 % --- SLIDE 10: EXEMPLO 5.6 ---
 \begin{frame}{Exemplo 5.6: Aceleração em Linha Reta --- Carro de Corridas}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Um carro de corrida de $m = 1000\text{ kg}$ acelera em linha reta de $0$ a $30\text{ m/s}$ em $6{,}0\text{ s}$. Qual a força resultante horizontal exercida sobre ele?
+        Um carro de corrida de massa $m = 1000\text{ kg}$ é acelerado a partir do repouso sobre uma pista retilínea e horizontal, atingindo a velocidade $v = 30{,}0\text{ m/s}$ ($108\text{ km/h}$) em um intervalo de tempo $t = 6{,}00\text{ s}$. Supondo aceleração constante, calcule a força horizontal resultante exercida sobre o veículo.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -317,9 +320,9 @@
 
 % --- SLIDE 11: EXEMPLO 5.7 ---
 \begin{frame}{Exemplo 5.7: Força Variável com o Tempo em Foguete de Teste}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Um foguete de massa $m$ parte do repouso em $t=0$ sob ação de força horizontal $F_x(t) = A t^2$. Ache a velocidade $v_x(t)$ e a posição $x(t)$.
+        Um foguete de testes com massa $m$ parte do repouso em $t=0$ sobre uma pista horizontal e sem atrito. O motor do foguete fornece uma força de empuxo horizontal que varia com o tempo segundo a relação $F_x(t) = A t^2$, onde $A$ é uma constante positiva. Determine: (a) a velocidade $v_x(t)$ do foguete em função do tempo; (b) a posição $x(t)$ em função do tempo.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -343,9 +346,9 @@
 
 % --- SLIDE 12: EXEMPLO 5.8 ---
 \begin{frame}{Exemplo 5.8: Elevador em Frenagem --- Tensão no Cabo}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Um elevador de $m = 800\text{ kg}$ descendo a $10{,}0\text{ m/s}$ para em $25{,}0\text{ m}$. Ache a tensão $T$ no cabo durante a frenagem.
+        Um elevador e seus passageiros possuem massa total $m = 800\text{ kg}$. O elevador está descendo com velocidade escalar inicial de $10{,}0\text{ m/s}$ e é trazido ao repouso com aceleração constante em uma distância de $25{,}0\text{ m}$. Determine a tensão $T$ no cabo de sustentação do elevador durante o processo de frenagem.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -372,9 +375,9 @@
 
 % --- SLIDE 13: EXEMPLO 5.9 ---
 \begin{frame}{Exemplo 5.9: Peso Aparente de Passageira na Balança no Elevador}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        A mesma aceleração para cima ($a_y = +2{,}0\text{ m/s}^2$) atua em uma passageira de $50{,}0\text{ kg}$ sobre uma balança no elevador. Qual a leitura da balança?
+        Uma passageira de massa $m = 50{,}0\text{ kg}$ está sobre uma balança de mola instalada no piso do elevador do Exemplo 5.8, que acelera para cima com $a_y = +2{,}00\text{ m/s}^2$. (a) Qual é a leitura fornecida pela balança (o peso aparente da passageira)? (b) Qual seria a leitura se o elevador estivesse acelerando para baixo com $a_y = -2{,}00\text{ m/s}^2$?
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -400,9 +403,9 @@
 
 % --- SLIDE 14: EXEMPLO 5.10 ---
 \begin{frame}{Exemplo 5.10: Tobogã Descendo Encosta sem Atrito}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Um tobogã cheio de estudantes (peso $p$) escorrega para baixo em encosta sem atrito com inclinação constante $\alpha$. Qual é a sua aceleração?
+        Um tobogã cheio de estudantes (com massa total $m$ e peso $p$) escorrega encosta abaixo em um morro coberto de neve sem atrito, com inclinação constante de ângulo $\alpha$. Calcule a aceleração do tobogã e a força normal exercida pela encosta sobre ele.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -412,7 +415,6 @@
             \fill[cyandark] (1.75,1) circle (0.12);
             \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {\small $\vec{p}$};
-            % Aceleração aponta RAMPA ABAIXO (para baixo e para a esquerda, rumo à base)
             \draw[ultra thick,-{Latex},blue] (1.3,0.74) -- (0.44,0.24) node[below left] {\small $\vec{a}_x$};
         \end{tikzpicture}
         \end{center}
@@ -428,9 +430,9 @@
 
 % --- SLIDE 15: EXEMPLO 5.11 ---
 \begin{frame}{Exemplo 5.11: Tobogã Subindo Encosta sem Atrito}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        O mesmo tobogã é lançado para cima na encosta sem atrito com velocidade inicial $v_0$. Qual a aceleração e até onde ele sobe antes de parar?
+        O mesmo tobogã do Exemplo 5.10 é lançado para cima na encosta sem atrito com uma velocidade inicial $v_0$. (a) Qual é a aceleração do tobogã enquanto ele sobe a rampa? (b) Que distância $d$ o tobogã percorre rampa acima antes de parar momentaneamente?
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -455,9 +457,9 @@
 
 % --- SLIDE 16: EXEMPLO 5.12 ---
 \begin{frame}{Exemplo 5.12: Dois Corpos Acoplados (Máquina de Atwood Horizontal)}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Cavaleiro $m_1$ no trilho sem atrito ligado a peso $m_2$ suspenso. Calcule a aceleração $a$ do sistema e a tensão $T$ no fio.
+        Um cavaleiro de laboratório de massa $m_1$ move-se sobre um trilho de ar horizontal sem atrito. Ele está conectado por meio de um fio leve e inextensível sobre uma roldana sem atrito a um bloco suspenso de massa $m_2$. Encontre: (a) a aceleração $a$ do sistema de dois corpos; (b) a tensão $T$ no fio.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -469,7 +471,6 @@
             \draw[thick] (1.5,2.3) -- (2.5,2.2);
             \draw[thick] (2.7,2.0) -- (2.7,0.8);
             \draw[thick,fill=orange!30] (2.4,0.2) rectangle (3.0,0.8) node[pos=0.5] {$m_2$};
-            % Acelerações indicadas
             \draw[thick,-{Latex},blue] (1.0,2.9) -- (1.8,2.9) node[above] {\small $\vec{a}$};
             \draw[thick,-{Latex},blue] (3.3,0.5) -- (3.3,-0.2) node[right] {\small $\vec{a}$};
         \end{tikzpicture}
@@ -510,9 +511,9 @@
 
 % --- SLIDE 18: EXEMPLO 5.13 ---
 \begin{frame}{Exemplo 5.13: Coeficiente de Atrito Estático em Engradado}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Um engradado de peso $p = 500\text{ N}$ exige força horizontal de $230\text{ N}$ para iniciar o movimento. Ache o coeficiente de atrito estático $\mu_s$.
+        ATRITO EM UM MOVIMENTO HORIZONTAL: Você está tentando mover um engradado de 500 N sobre um piso plano. Para iniciar o movimento, você precisa aplicar uma força horizontal de módulo igual a 230 N. Depois da 'quebra do vínculo' e de iniciado o movimento, você necessita apenas de 200 N para manter o movimento com velocidade constante. Qual é o coeficiente de atrito estático e o coeficiente de atrito cinético?
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -537,9 +538,9 @@
 
 % --- SLIDE 19: EXEMPLO 5.14 ---
 \begin{frame}{Exemplo 5.14: Coeficiente de Atrito Cinético em Engradado}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Para manter o engradado de $500\text{ N}$ em velocidade constante após iniciar o movimento, é necessária força de $200\text{ N}$. Ache $\mu_c$.
+        No Exemplo 5.13, assim que o engradado de $500\text{ N}$ entra em movimento, você descobre que é necessária apenas uma força horizontal de $200\text{ N}$ para mantê-lo se movendo com velocidade constante. Qual é o coeficiente de atrito cinético $\mu_c$ entre o engradado e o piso?
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -563,9 +564,9 @@
 
 % --- SLIDE 20: EXEMPLO 5.15 ---
 \begin{frame}{Exemplo 5.15: Puxando Engradado sob Ângulo em Relação à Horizontal}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Puxa-se o engradado com força $\vec{T}$ a um ângulo $\theta$ acima da horizontal. Ache a força $T$ para mover com velocidade constante.
+        Você puxa o engradado de peso $w = 500\text{ N}$ do Exemplo 5.14 com uma corda inclinada a um ângulo $\theta = 30{,}0^\circ$ acima da horizontal. O coeficiente de atrito cinético é $\mu_c = 0{,}40$. Qual é a tensão $T$ na corda necessária para mover o engradado com velocidade constante?
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -591,9 +592,9 @@
 
 % --- SLIDE 21: EXEMPLO 5.16 ---
 \begin{frame}{Exemplo 5.16: Tobogã em MRU em Plano Inclinado com Atrito}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Deduza o ângulo $\alpha$ da encosta para um tobogã deslizar com velocidade constante sob atrito cinético $\mu_c$.
+        Um tobogã escorrega para baixo em uma encosta coberta de neve com atrito. Deduza a expressão para o ângulo de inclinação $\alpha$ da encosta para o qual o tobogã desliza com velocidade constante em função do coeficiente de atrito cinético $\mu_c$.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -603,7 +604,6 @@
             \fill[cyandark] (1.75,1) circle (0.12);
             \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {\small $\vec{p}$};
-            % Atrito aponta RAMPA ACIMA opondo-se ao movimento descendente
             \draw[ultra thick,-{Latex},redaccent] (1.75,1) -- (2.61,1.5) node[above] {\small $f_c$};
         \end{tikzpicture}
         \end{center}
@@ -618,9 +618,9 @@
 
 % --- SLIDE 22: EXEMPLO 5.17 ---
 \begin{frame}{Exemplo 5.17: Tobogã Acelerando em Plano Inclinado com Atrito}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Em uma encosta de ângulo $\alpha$ maior do que $\arctan\mu_c$, qual é a aceleração $a_x$ do tobogã?
+        Se a encosta do Exemplo 5.16 tiver uma inclinação de ângulo $\alpha$ maior do que $\arctan\mu_c$, o tobogã acelera rampa abaixo. Determine a expressão para a aceleração $a_x$ do tobogã em função de $g$, $\alpha$ e $\mu_c$.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -630,9 +630,7 @@
             \fill[cyandark] (1.75,1) circle (0.12);
             \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {\small $\vec{p}$};
-            % Atrito aponta RAMPA ACIMA
             \draw[ultra thick,-{Latex},redaccent] (1.75,1) -- (2.61,1.5) node[above] {\small $f_c$};
-            % Aceleração aponta RAMPA ABAIXO
             \draw[ultra thick,-{Latex},blue] (1.3,0.74) -- (0.44,0.24) node[below left] {\small $\vec{a}_x$};
         \end{tikzpicture}
         \end{center}
@@ -647,9 +645,9 @@
 
 % --- SLIDE 23: EXEMPLO 5.18 ---
 \begin{frame}{Exemplo 5.18: Força de Atrito de Rolamento em Automóvel}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Um carro de $1000\text{ kg}$ rola em pista plana com coeficiente de rolamento $\mu_r = 0{,}003$. Qual a força de resistência e a desaceleração?
+        Um automóvel de massa $m = 1000\text{ kg}$ rola em piso plano com coeficiente de atrito de rolamento $\mu_r = 0{,}0030$. Calcule a força de resistência de rolamento $f_r$ exercida sobre o veículo e a desaceleração resultante quando ele rola em ponto morto.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -674,9 +672,9 @@
 
 % --- SLIDE 24: EXEMPLO 5.19 ---
 \begin{frame}{Exemplo 5.19: Velocidade Terminal de Pára-Quedista}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Um skydiver de $m = 50{,}0\text{ kg}$ cai sob arraste $f = D v^2$ com $D = 0{,}25\text{ kg/m}$. Ache a velocidade terminal $v_t$.
+        Um paraquedista de massa $m = 50{,}0\text{ kg}$ salta de um avião e cai verticalmente sob a ação da gravidade e do arraste do ar $f = D v^2$, onde $D = 0{,}250\text{ kg/m}$. Calcule a velocidade terminal $v_t$ atingida pelo paraquedista quando a aceleração se anula.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -726,9 +724,9 @@
 
 % --- SLIDE 26: EXEMPLO 5.20 ---
 \begin{frame}{Exemplo 5.20: Trenó em Movimento Circular em Pista Horizontal}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Um trenó de $m = 200\text{ kg}$ amarrado a um posto por uma corda de $R = 5{,}0\text{ m}$ gira a $v = 10\text{ m/s}$ sem atrito. Ache a tensão na corda.
+        Um trenó de massa $m = 200\text{ kg}$ está preso por uma corda de comprimento $R = 5{,}00\text{ m}$ a um estaca fixa no centro de um lago congelado e sem atrito. O trenó gira em um círculo horizontal com velocidade constante $v = 10{,}0\text{ m/s}$. Calcule a força de tensão $T$ exercida pela corda.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -754,9 +752,9 @@
 
 % --- SLIDE 27: EXEMPLO 5.21 ---
 \begin{frame}{Exemplo 5.21: Pêndulo Cônico}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Uma massa $m$ gira em círculo horizontal de raio $R$ presa a um fio de comprimento $L$ formando ângulo $\beta$ com a vertical. Ache $T$ e $v$.
+        Uma pequena esfera de massa $m$ está suspensa por um fio leve de comprimento $L$ e gira em um círculo horizontal de raio $R$ com velocidade constante $v$. O fio forma um ângulo constante $\beta$ com a vertical. Determine: (a) a tensão $T$ no fio; (b) o período $P$ do movimento em termos de $L$, $\beta$ e $g$.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -785,9 +783,9 @@
 
 % --- SLIDE 28: EXEMPLO 5.22 ---
 \begin{frame}{Exemplo 5.22: Curva Plana com Atrito em Rodovia}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Ache a velocidade máxima $v_{\text{máx}}$ para um carro não derrapar em curva plana de raio $R$ sob atrito estático $\mu_s$.
+        Um automóvel de massa $m$ percorre uma curva plana horizontal não sobreelevada de raio $R = 50{,}0\text{ m}$. O coeficiente de atrito estático entre os pneus e o asfalto seco é $\mu_s = 0{,}90$. Calcule a velocidade máxima $v_{\text{máx}}$ com que o carro pode fazer a curva sem derrapar.
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -811,9 +809,9 @@
 
 % --- SLIDE 29: EXEMPLO 5.23 ---
 \begin{frame}{Exemplo 5.23: Curva Inclinada sem Atrito em Rodovia}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Qual o ângulo de inclinação $\beta$ da pista para fazer curva de raio $R$ a velocidade $v$ sem depender de atrito?
+        Engenheiros projetam uma curva de raio $R = 50{,}0\text{ m}$ em uma rodovia expressa para uma velocidade de projeto $v = 25{,}0\text{ m/s}$ ($90\text{ km/h}$). Qual deve ser o ângulo de inclinação $\beta$ da pista para que os carros possam fazer a curva com segurança sem depender do atrito?
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
@@ -824,7 +822,6 @@
             \fill[cyandark] (1.5,0.75) circle (0.12);
             \draw[ultra thick,-{Latex},emeraldgreen] (1.5,0.75) -- (0.9,1.95) node[above] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.5,0.75) -- (1.5,-0.35) node[below] {\small $\vec{p}$};
-            % Aceleração centrípeta estritamente horizontal
             \draw[thick,-{Latex},blue] (1.2,0.75) -- (0.2,0.75) node[above] {\small $\vec{a}_{\text{rad}}$};
         \end{tikzpicture}
         \end{center}
@@ -839,9 +836,9 @@
 
 % --- SLIDE 30: EXEMPLO 5.24 ---
 \begin{frame}{Exemplo 5.24: Movimento Circular em Círculo Vertical (Roda-Gigante)}
-    \begin{block}{Enunciado do Problema}
+    \begin{block}{Enunciado Oficial do Problema (Young \& Freedman 12ª ed.)}
         \small
-        Um passageiro na roda-gigante de raio $R$ move-se em círculo vertical com velocidade $v$. Ache a normal $n$ no topo e na base.
+        Um passageiro de massa $m$ anda em uma roda-gigante de raio $R$ que gira em um círculo vertical com velocidade angular e linear constantes $v$. Calcule a força normal $n$ exercida pelo assento sobre o passageiro: (a) no ponto mais alto da trajetória (topo); (b) no ponto mais baixo da trajetória (base).
     \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
