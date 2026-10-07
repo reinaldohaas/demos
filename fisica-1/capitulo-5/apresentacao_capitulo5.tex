@@ -9,8 +9,8 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,shapes.geometric,calc,decorations.pathmorphing,patterns}
 
-% --- AJUSTE DE MARGENS E LAYOUT ---
-\setbeamersize{text margin left=10mm, text margin right=10mm}
+% --- AJUSTE DE MARGENS ---
+\setbeamersize{text margin left=8mm, text margin right=8mm}
 
 % --- TEMA E CORES DIDÁTICAS ---
 \usetheme{Madrid}
@@ -47,13 +47,13 @@
     \titlepage
 \end{frame}
 
-% --- SLIDE 2: OBJETIVOS E ESTRUTURA ---
-\begin{frame}{Visão Geral do Capítulo 5}
+% --- SLIDE 2: ESTRUTURA DO CAPÍTULO ---
+\begin{frame}{Visão Geral e Estrutura dos 24 Exemplos}
     \begin{columns}[T]
-        \column{0.50\textwidth}
-        \begin{block}{Estrutura dos Conteúdos e Exemplos}
+        \column{0.52\textwidth}
+        \begin{block}{Divisão das Seções Didáticas}
             \small
-            \begin{itemize}\setlength{\itemsep}{3pt}
+            \begin{itemize}\setlength{\itemsep}{2pt}
                 \item \textbf{5.1 Partículas em Equilíbrio ($\sum \vec{F} = 0$)}: Exemplos 5.1 a 5.5.
                 \item \textbf{5.2 Dinâmica das Partículas ($\sum \vec{F} = m\vec{a}$)}: Exemplos 5.6 a 5.12.
                 \item \textbf{5.3 Forças de Atrito e Arraste}: Exemplos 5.13 a 5.19.
@@ -65,7 +65,6 @@
         \column{0.44\textwidth}
         \begin{center}
         \begin{tikzpicture}[scale=0.65]
-            % Ilustração central: Plano Inclinado com DCL
             \draw[thick] (0,0) -- (4,0) -- (4,2.3) -- cycle;
             \draw[thick,fill=cyan!20,rotate around={30:(2,1.15)}] (1.5,1.15) rectangle (2.5,1.85);
             \draw[ultra thick,-{Latex},redaccent] (2.2,1.6) -- (3.2,2.18) node[right] {\small $\vec{T}$};
@@ -77,41 +76,38 @@
     \end{columns}
 \end{frame}
 
-% --- SLIDE 3: 5.1 CONCEITO DE EQUILÍBRIO E DCL ---
+% --- SLIDE 3: 5.1 TEORIA DE EQUILÍBRIO ---
 \begin{frame}{5.1 Uso da Primeira Lei de Newton: Partículas em Equilíbrio}
     \begin{columns}[T]
-        \column{0.48\textwidth}
+        \column{0.50\textwidth}
         \begin{block}{Condição de Equilíbrio ($\vec{a}=0$)}
             \small
-            Um corpo está em equilíbrio se permanece em repouso ou em movimento retilíneo uniforme (MRU):
             $$\sum \vec{F} = 0 \iff \begin{cases} \sum F_x = 0 \\ \sum F_y = 0 \end{cases}$$
         \end{block}
-
-        \begin{alertblock}{Regra Fundamental para o DCL}
+        \begin{alertblock}{Regra do DCL}
             \small
-            Desenhe \textbf{apenas} as forças externas exercidas \textbf{SOBRE} o corpo isolado. Nunca inclua forças que o corpo exerce sobre outros objetos!
+            Desenhe \textbf{apenas} forças externas exercidas \textbf{SOBRE} o corpo isolado!
         \end{alertblock}
 
-        \column{0.44\textwidth}
-        \begin{block}{Estratégia para Resolver Problemas}
+        \column{0.46\textwidth}
+        \begin{block}{Passos Estratégicos}
             \small
-            \begin{enumerate}\setlength{\itemsep}{3pt}
+            \begin{enumerate}\setlength{\itemsep}{2pt}
                 \item Isolamento do corpo e eixos ($x,y$).
                 \item Diagrama do Corpo Livre (DCL).
-                \item Decomposição vectorial das forças.
-                \item Resolução de $\sum F_x = 0$ e $\sum F_y = 0$.
+                \item Decomposição das forças.
+                \item Resolução do sistema linear.
             \end{enumerate}
         \end{block}
     \end{columns}
 \end{frame}
 
-% --- SLIDE 4: EXEMPLO 5.1 - GINASTA NA CORDA ---
-\begin{frame}{Exemplo 5.1: Equilíbrio 1D --- Tensão em Corda sem Massa}
+% --- SLIDE 4: EXEMPLO 5.1 ---
+\begin{frame}{Exemplo 5.1: Equilíbrio 1D --- Ginasta na Corda sem Massa}
     \begin{block}{Enunciado do Problema}
         \small
-        Uma ginasta com massa $m_G = 50{,}0\text{ kg}$ está subindo em uma corda presa ao teto de um ginásio. A massa da corda em si é desprezível. Qual é o peso da ginasta? Qual força a corda exerce sobre ela? Qual a tensão na extremidade superior da corda?
+        Uma ginasta de massa $m_G = 50{,}0\text{ kg}$ está subindo em uma corda leve sem massa presa ao teto. Qual o seu peso? Qual força a corda exerce nela? Qual a tensão no teto?
     \end{block}
-
     \begin{columns}[T]
         \column{0.40\textwidth}
         \begin{center}
@@ -120,96 +116,101 @@
             \draw[thick] (0,3) -- (2,3);
             \draw[ultra thick,brown] (1,3) -- (1,1.5);
             \fill[navyblue] (1,1.5) circle (0.15);
-            % DCL
             \draw[ultra thick,-{Latex},emeraldgreen] (1,1.5) -- (1,2.8) node[right] {\small $\vec{T}_{\text{corda}}$};
-            \draw[ultra thick,-{Latex},redaccent] (1,1.5) -- (1,0.2) node[right] {\small $\vec{p}_G = m_G \vec{g}$};
+            \draw[ultra thick,-{Latex},redaccent] (1,1.5) -- (1,0.2) node[right] {\small $\vec{p}_G$};
             \node at (1,-0.3) {\small DCL da Ginasta};
         \end{tikzpicture}
         \end{center}
-
         \column{0.54\textwidth}
         \begin{exampleblock}{Resolução}
             \small
-            \begin{itemize}\setlength{\itemsep}{4pt}
-                \item \textbf{Peso da Ginasta}:\\
-                $p_G = m_G g = (50{,}0)(9{,}80) = 490\text{ N}$
-                \item \textbf{Força da Corda}:\\
-                $\sum F_y = T_{\text{corda}} - p_G = 0 \implies T_{\text{corda}} = 490\text{ N}$
-                \item \textbf{Tensão no Teto}:\\
-                $\sum F_y = T_{\text{teto}} - T_{\text{corda}} = 0 \implies T_{\text{teto}} = 490\text{ N}$
+            \begin{itemize}\setlength{\itemsep}{3pt}
+                \item \textbf{Peso}: $p_G = m_G g = (50{,}0)(9{,}80) = 490\text{ N}$
+                \item \textbf{Força da Corda}: $T_{\text{corda}} - p_G = 0 \implies T_{\text{corda}} = 490\text{ N}$
+                \item \textbf{Tensão no Teto}: $T_{\text{teto}} - T_{\text{corda}} = 0 \implies T_{\text{teto}} = 490\text{ N}$
             \end{itemize}
         \end{exampleblock}
     \end{columns}
 \end{frame}
 
-% --- SLIDE 5: EXEMPLO 5.3 - MOTOR SUSPENSO EM 2D ---
+% --- SLIDE 5: EXEMPLO 5.2 ---
+\begin{frame}{Exemplo 5.2: Equilíbrio 1D --- Ginasta em Corda com Massa}
+    \begin{block}{Enunciado do Problema}
+        \small
+        A mesma ginasta ($50{,}0\text{ kg}$) está suspensa em uma corda uniforme de massa $m_C = 2{,}00\text{ kg}$. Ache a tensão no topo e na base da corda.
+    \end{block}
+    \begin{columns}[T]
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.62]
+            \fill[navyblue] (1,1.5) circle (0.15);
+            \draw[ultra thick,-{Latex},emeraldgreen] (1,1.5) -- (1,2.8) node[right] {\small $\vec{T}_{\text{topo}}$};
+            \draw[ultra thick,-{Latex},redaccent] (1,1.5) -- (1,0.2) node[right] {\small $\vec{p}_{\text{total}}$};
+            \node at (1,-0.3) {\small DCL Sistema};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
+            \small
+            \begin{itemize}\setlength{\itemsep}{3pt}
+                \item \textbf{Tensão na Base}: Suporta apenas a ginasta $\implies T_{\text{base}} = m_G g = 490\text{ N}$.
+                \item \textbf{Tensão no Topo}: Suporta a ginasta e a corda $\implies T_{\text{topo}} = (m_G + m_C)g = (52{,}0)(9{,}80) = 509{,}6\text{ N}$.
+            \end{itemize}
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 6: EXEMPLO 5.3 ---
 \begin{frame}{Exemplo 5.3: Equilíbrio 2D --- Motor Suspenso por Correntes}
     \begin{block}{Enunciado do Problema}
         \small
-        Um motor de automóvel com peso $p$ está suspenso por uma corrente ligada por um anel $O$ a duas outras correntes, uma amarrada ao teto ($60^\circ$ com a horizontal) e a outra presa à parede. Ache as tensões $T_1$, $T_2$ e $T_3$ nas três correntes em função de $p$.
+        Um motor de peso $p$ está suspenso por um anel $O$ ligado a três correntes. Uma vai ao teto ($60^\circ$) e outra à parede. Ache as tensões $T_1$, $T_2$ e $T_3$.
     \end{block}
-
     \begin{columns}[T]
         \column{0.40\textwidth}
         \begin{center}
         \begin{tikzpicture}[scale=0.65]
-            % Anel O
             \fill[navyblue] (2,1.5) circle (0.1) node[below left] {$O$};
-            % DCL no Anel
             \draw[ultra thick,-{Latex},redaccent] (2,1.5) -- (2,0.2) node[right] {\small $T_1 = p$};
             \draw[ultra thick,-{Latex},golddark] (2,1.5) -- (0.5,1.5) node[above] {\small $T_2$};
             \draw[ultra thick,-{Latex},emeraldgreen] (2,1.5) -- (3.3,2.8) node[right] {\small $T_3$};
             \draw[dashed,gray] (2,1.5) -- (3.3,1.5);
             \node at (2.7,1.8) {\small $60^\circ$};
-            \node at (2,-0.3) {\small DCL no Anel $O$};
         \end{tikzpicture}
         \end{center}
-
         \column{0.54\textwidth}
         \begin{exampleblock}{Resolução no Anel $O$}
             \small
-            \begin{itemize}\setlength{\itemsep}{4pt}
-                \item \textbf{Motor}: $\sum F_y = T_1 - p = 0 \implies T_1 = p$
-                \item \textbf{Anel $O$ ($y$)}:\\
-                $T_3 \sin 60^\circ - T_1 = 0 \implies T_3 = \frac{p}{\sin 60^\circ} \approx 1{,}155 \, p$
-                \item \textbf{Anel $O$ ($x$)}:\\
-                $T_3 \cos 60^\circ - T_2 = 0 \implies T_2 = 0{,}577 \, p$
+            \begin{itemize}\setlength{\itemsep}{3pt}
+                \item \textbf{Eixo $y$}: $T_3 \sin 60^\circ - p = 0 \implies T_3 = \frac{p}{\sin 60^\circ} \approx 1{,}155 \, p$
+                \item \textbf{Eixo $x$}: $T_3 \cos 60^\circ - T_2 = 0 \implies T_2 = 0{,}577 \, p$
+                \item \textbf{Corda Vertical}: $T_1 = p$
             \end{itemize}
         \end{exampleblock}
     \end{columns}
 \end{frame}
 
-% --- SLIDE 6: EXEMPLO 5.4 - PLANO INCLINADO EM EQUILÍBRIO ---
+% --- SLIDE 7: EXEMPLO 5.4 ---
 \begin{frame}{Exemplo 5.4: Plano Inclinado sem Atrito em Equilíbrio}
     \begin{block}{Enunciado do Problema}
         \small
-        Um carro de peso $p$ está em repouso sobre a rampa de um rebocador inclinada de um ângulo $\alpha$. Somente um cabo impede o carro de deslizar rampa abaixo. Ache a tensão $T$ no cabo e a força normal $n$ exercida pela rampa.
+        Um carro de peso $p$ repousa em uma rampa inclinada de $\alpha$. Um cabo impede o deslize. Ache a tensão $T$ no cabo e a força normal $n$.
     \end{block}
-
     \begin{columns}[T]
         \column{0.40\textwidth}
         \begin{center}
         \begin{tikzpicture}[scale=0.68]
             \draw[thick] (0,0) -- (3.5,0) -- (3.5,2) -- cycle;
-            \node at (0.8,0.2) {\small $\alpha$};
-            % Eixos inclinados
-            \draw[gray,dashed,-{Latex}] (1.75,1) -- (3.25,1.86) node[above] {$x$};
-            \draw[gray,dashed,-{Latex}] (1.75,1) -- (0.89,2.5) node[left] {$y$};
             \fill[cyandark] (1.75,1) circle (0.12);
-            % Forças
             \draw[ultra thick,-{Latex},redaccent] (1.75,1) -- (2.61,1.5) node[above] {\small $\vec{T}$};
             \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {\small $\vec{p}$};
-            \node at (1.75,-0.9) {\small DCL do Carro};
         \end{tikzpicture}
         \end{center}
-
         \column{0.54\textwidth}
-        \begin{exampleblock}{Resolução com Eixos Rotacionados}
+        \begin{exampleblock}{Resolução}
             \small
-            Decomposição do peso $\vec{p}$:
-            $$p_x = -p \sin\alpha, \quad p_y = -p \cos\alpha$$
-            Equações de Equilíbrio:
+            Rotacionando os eixos para o plano inclinado:
             \begin{align*}
                 \sum F_x &= T - p \sin\alpha = 0 \implies T = p \sin\alpha \\
                 \sum F_y &= n - p \cos\alpha = 0 \implies n = p \cos\alpha
@@ -218,26 +219,48 @@
     \end{columns}
 \end{frame}
 
-% --- SLIDE 7: 5.2 SEGUNDA LEI (DINÂMICA) E ALERTA ---
+% --- SLIDE 8: EXEMPLO 5.5 ---
+\begin{frame}{Exemplo 5.5: Corpos Acoplados em Equilíbrio (Rampa e Peso Suspenso)}
+    \begin{block}{Enunciado do Problema}
+        \small
+        Um bloco de peso $w_1$ sobre rampa sem atrito ($\alpha$) é mantido em equilíbrio por um peso $w_2$ suspenso ligado por um fio sobre polia. Ache $w_2$ e $n_1$.
+    \end{block}
+    \begin{columns}[T]
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.65]
+            \draw[thick] (0,0) -- (3,0) -- (3,1.8) -- cycle;
+            \draw[thick,fill=cyan!30] (1.5,0.9) circle (0.15) node[above] {$w_1$};
+            \draw[thick] (1.5,0.9) -- (3,1.8);
+            \draw[thick,fill=orange!30] (3.3,0.5) circle (0.15) node[right] {$w_2$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
+            \small
+            \begin{itemize}\setlength{\itemsep}{3pt}
+                \item \textbf{Corpo Suspenso 2}: $T - w_2 = 0 \implies T = w_2$
+                \item \textbf{Bloco na Rampa 1}: $T - w_1 \sin\alpha = 0 \implies w_2 = w_1 \sin\alpha$
+                \item \textbf{Normal}: $n_1 = w_1 \cos\alpha$
+            \end{itemize}
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 9: 5.2 SEGUNDA LEI (DINÂMICA) ---
 \begin{frame}{5.2 Uso da Segunda Lei de Newton: Dinâmica das Partículas}
     \begin{columns}[T]
         \column{0.50\textwidth}
         \begin{block}{Segunda Lei de Newton ($\vec{a} \neq 0$)}
             \small
-            Quando a força resultante sobre a partícula não é nula, o corpo acelera com $\vec{a}$:
             $$\sum \vec{F} = m \vec{a} \iff \begin{cases} \sum F_x = m a_x \\ \sum F_y = m a_y \end{cases}$$
         \end{block}
-
-        \begin{alertblock}{ALERTA DIDÁTICO CRUCIAL!}
+        \begin{alertblock}{ALERTA CRUCIAL!}
             \small
-            \begin{itemize}\setlength{\itemsep}{2pt}
-                \item O produto $m\vec{a}$ \textbf{NÃO É UMA FORÇA}!
-                \item Nunca desenhe $m\vec{a}$ dentro do DCL.
-                \item Desenhe o vetor $\vec{a}$ \textbf{AO LADO} do corpo.
-            \end{itemize}
+            $m\vec{a}$ \textbf{NÃO É UMA FORÇA}! Nunca desenhe $m\vec{a}$ dentro do DCL. Desenhe $\vec{a}$ ao lado!
         \end{alertblock}
 
-        \column{0.44\textwidth}
+        \column{0.46\textwidth}
         \begin{center}
         \begin{tikzpicture}[scale=0.75]
             \node[draw=redaccent,thick,fill=redaccent!10,inner sep=4pt] at (0,1.0) {
@@ -252,13 +275,87 @@
     \end{columns}
 \end{frame}
 
-% --- SLIDE 8: EXEMPLO 5.8 & 5.9 - ELEVADOR E PESO APARENTE ---
-\begin{frame}{Exemplo 5.8 \& 5.9: Elevador e Peso Aparente}
+% --- SLIDE 10: EXEMPLO 5.6 ---
+\begin{frame}{Exemplo 5.6: Aceleração em Linha Reta --- Carro de Corridas}
     \begin{block}{Enunciado do Problema}
         \small
-        Um elevador de $m = 800\text{ kg}$ descendo a $10{,}0\text{ m/s}$ para em $25{,}0\text{ m}$. Ache a tensão no cabo. Qual é a leitura da balança para uma passageira de $50{,}0\text{ kg}$ durante a frenagem?
+        Um carro de corrida de $m = 1000\text{ kg}$ acelera em linha reta de $0$ a $30\text{ m/s}$ em $6{,}0\text{ s}$. Qual a força resultante horizontal exercida sobre ele?
     \end{block}
+    \begin{columns}[T]
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.65]
+            \fill[navyblue] (1.5,1) circle (0.15);
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1) -- (3.0,1) node[above] {\small $\sum \vec{F}_x$};
+            \draw[thick,-{Latex},blue] (1.5,1.8) -- (2.8,1.8) node[above] {\small $\vec{a}_x$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
+            \small
+            \begin{enumerate}\setlength{\itemsep}{3pt}
+                \item Aceleração média: $a_x = \frac{\Delta v_x}{\Delta t} = \frac{30 - 0}{6{,}0} = 5{,}0\text{ m/s}^2$
+                \item Segunda Lei: $F_x = m a_x = (1000\text{ kg})(5{,}0\text{ m/s}^2) = 5000\text{ N}$
+            \end{enumerate}
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
 
+% --- SLIDE 11: EXEMPLO 5.7 ---
+\begin{frame}{Exemplo 5.7: Força Variável com o Tempo em Foguete de Teste}
+    \begin{block}{Enunciado do Problema}
+        \small
+        Um foguete de massa $m$ parte do repouso em $t=0$ sob ação de força horizontal $F_x(t) = A t^2$. Ache a velocidade $v_x(t)$ e a posição $x(t)$.
+    \end{block}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Aceleração em Função do Tempo}
+            \small
+            $$a_x(t) = \frac{F_x(t)}{m} = \frac{A}{m} t^2$$
+        \end{block}
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Integração}
+            \small
+            $$v_x(t) = \int_0^t a_x(t') dt' = \frac{A}{3m} t^3$$
+            $$x(t) = \int_0^t v_x(t') dt' = \frac{A}{12m} t^4$$
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 12: EXEMPLO 5.8 ---
+\begin{frame}{Exemplo 5.8: Elevador em Frenagem --- Tensão no Cabo}
+    \begin{block}{Enunciado do Problema}
+        \small
+        Um elevador de $m = 800\text{ kg}$ descendo a $10{,}0\text{ m/s}$ para em $25{,}0\text{ m}$. Ache a tensão $T$ no cabo durante a frenagem.
+    \end{block}
+    \begin{columns}[T]
+        \column{0.40\textwidth}
+        \begin{center}
+        \begin{tikzpicture}[scale=0.68]
+            \fill[navyblue] (1.5,1.5) circle (0.15);
+            \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1.5) -- (1.5,2.8) node[left] {\small $\vec{T}$};
+            \draw[ultra thick,-{Latex},redaccent] (1.5,1.5) -- (1.5,0.2) node[left] {\small $\vec{p}$};
+            \draw[ultra thick,-{Latex},blue] (2.3,1.5) -- (2.3,2.5) node[right] {\small $\vec{a}_y$};
+        \end{tikzpicture}
+        \end{center}
+        \column{0.54\textwidth}
+        \begin{exampleblock}{Resolução}
+            \small
+            \begin{itemize}\setlength{\itemsep}{3pt}
+                \item Aceleração: $v_y^2 = v_{0y}^2 + 2a_y \Delta y \implies a_y = +2{,}0\text{ m/s}^2$
+                \item Segunda Lei: $\sum F_y = T - mg = m a_y$
+                \item $T = m(g + a_y) = 800(9{,}80 + 2{,}0) = 9440\text{ N}$
+            \end{itemize}
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 13: EXEMPLO 5.9 ---
+\begin{frame}{Exemplo 5.9: Peso Aparente de Passageira na Balança no Elevador}
+    \begin{block}{Enunciado do Problema}
+        \small
+        A mesma aceleração para cima ($a_y = +2{,}0\text{ m/s}^2$) atua em uma passageira de $50{,}0\text{ kg}$ sobre uma balança no elevador. Qual a leitura da balança?
+    \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
         \begin{center}
@@ -267,32 +364,26 @@
             \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1.5) -- (1.5,2.8) node[left] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},redaccent] (1.5,1.5) -- (1.5,0.2) node[left] {\small $\vec{p}$};
             \draw[ultra thick,-{Latex},blue] (2.3,1.5) -- (2.3,2.5) node[right] {\small $\vec{a}_y$};
-            \node at (1.5,-0.3) {\small DCL na Balança};
         \end{tikzpicture}
         \end{center}
-
         \column{0.54\textwidth}
         \begin{exampleblock}{Resolução}
             \small
             \begin{itemize}\setlength{\itemsep}{3pt}
-                \item \textbf{Aceleração de Frenagem}:\\
-                $v_y^2 = v_{0y}^2 + 2a_y \Delta y \implies a_y = +2{,}0\text{ m/s}^2$
-                \item \textbf{Tensão no Cabo}:\\
-                $T = m(g + a_y) = 800(9{,}80 + 2{,}0) = 9440\text{ N}$
-                \item \textbf{Peso Aparente Passageira}:\\
-                $n = m_G(g + a_y) = 50(9{,}80 + 2{,}0) = 590\text{ N}$
+                \item Força Normal $n$ é a leitura da balança:
+                $$n - m_G g = m_G a_y \implies n = m_G(g + a_y)$$
+                \item $n = 50(9{,}80 + 2{,}0) = 590\text{ N}$ (Sensação de estar mais pesada!)
             \end{itemize}
         \end{exampleblock}
     \end{columns}
 \end{frame}
 
-% --- SLIDE 9: EXEMPLO 5.10 - TOBOGÃ SEM ATRITO ---
+% --- SLIDE 14: EXEMPLO 5.10 ---
 \begin{frame}{Exemplo 5.10: Tobogã Descendo Encosta sem Atrito}
     \begin{block}{Enunciado do Problema}
         \small
-        Um tobogã cheio de estudantes (peso total $p$) escorrega para baixo em uma encosta coberta de neve sem atrito com inclinação constante $\alpha$. Qual é a aceleração do tobogã?
+        Um tobogã cheio de estudantes (peso $p$) escorrega para baixo em encosta sem atrito com inclinação constante $\alpha$. Qual é a sua aceleração?
     \end{block}
-
     \begin{columns}[T]
         \column{0.40\textwidth}
         \begin{center}
@@ -302,28 +393,46 @@
             \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {\small $\vec{p}$};
             \draw[ultra thick,-{Latex},blue] (2.2,1.26) -- (3.06,1.76) node[above] {\small $\vec{a}_x$};
-            \node at (1.75,-0.9) {\small DCL do Tobogã};
         \end{tikzpicture}
         \end{center}
-
         \column{0.54\textwidth}
         \begin{exampleblock}{Resolução}
             \small
-            Equações de movimento no plano inclinado:
             $$\sum F_x = mg \sin\alpha = m a_x \implies a_x = g \sin\alpha$$
             $$\sum F_y = n - mg \cos\alpha = 0 \implies n = mg \cos\alpha$$
-            \textbf{Conclusão}: A aceleração independe da massa total do tobogã ou dos passageiros!
+            \textbf{Conclusão}: A aceleração independe da massa total do tobogã!
         \end{exampleblock}
     \end{columns}
 \end{frame}
 
-% --- SLIDE 10: EXEMPLO 5.12 - MÁQUINA DE ATWOOD HORIZONTAL ---
+% --- SLIDE 15: EXEMPLO 5.11 ---
+\begin{frame}{Exemplo 5.11: Tobogã Subindo Encosta sem Atrito}
+    \begin{block}{Enunciado do Problema}
+        \small
+        O mesmo tobogã é lançado para cima na encosta sem atrito com velocidade inicial $v_0$. Qual a aceleração e até onde ele sobe antes de parar?
+    \end{block}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Aceleração no Eixo $x$}
+            \small
+            $$\sum F_x = -mg \sin\alpha = m a_x \implies a_x = -g \sin\alpha$$
+            A aceleração aponta para baixo na rampa!
+        \end{block}
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Distância Percorrida $d$}
+            \small
+            $$v_x^2 = v_0^2 + 2 a_x d = 0$$
+            $$d = \frac{v_0^2}{2g \sin\alpha}$$
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 16: EXEMPLO 5.12 ---
 \begin{frame}{Exemplo 5.12: Dois Corpos Acoplados (Máquina de Atwood Horizontal)}
     \begin{block}{Enunciado do Problema}
         \small
-        Um cavaleiro de massa $m_1$ desliza sobre um trilho de ar horizontal sem atrito ligado a um peso de massa $m_2$ suspenso por um fio leve sem massa que passa por uma polia sem atrito. Calcule a aceleração do sistema e a tensão no fio.
+        Cavaleiro $m_1$ no trilho sem atrito ligado a peso $m_2$ suspenso. Calcule a aceleração $a$ do sistema e a tensão $T$ no fio.
     \end{block}
-
     \begin{columns}[T]
         \column{0.40\textwidth}
         \begin{center}
@@ -334,57 +443,48 @@
             \draw[thick] (1.5,2.3) -- (2.5,2.2);
             \draw[thick] (2.7,2.0) -- (2.7,0.8);
             \draw[thick,fill=orange!30] (2.4,0.2) rectangle (3.0,0.8) node[pos=0.5] {$m_2$};
-            \draw[thick,-{Stealth},blue] (1.0,2.9) -- (1.8,2.9) node[above] {$\vec{a}$};
-            \draw[thick,-{Stealth},blue] (3.3,0.8) -- (3.3,0.2) node[right] {$\vec{a}$};
         \end{tikzpicture}
         \end{center}
-
         \column{0.54\textwidth}
         \begin{exampleblock}{Resolução}
             \small
-            Equações de Segunda Lei de Newton:
+            Equações de movimento:
             $$\text{Corpo 1: } T = m_1 a, \quad \text{Corpo 2: } m_2 g - T = m_2 a$$
-            Somando as equações:
             $$a = \left(\frac{m_2}{m_1 + m_2}\right) g, \quad T = \left(\frac{m_1 m_2}{m_1 + m_2}\right) g$$
         \end{exampleblock}
     \end{columns}
 \end{frame}
 
-% --- SLIDE 11: 5.3 FORÇAS DE ATRITO ---
-\begin{frame}{5.3 Forças de Atrito: Estático vs Cinético}
+% --- SLIDE 17: 5.3 FORÇAS DE ATRITO ---
+\begin{frame}{5.3 Forças de Atrito: Estático, Cinético e Rolamento}
     \begin{columns}[T]
         \column{0.50\textwidth}
-        \begin{block}{Modelagem das Forças de Atrito}
+        \begin{block}{Modelagem do Atrito}
             \small
             \begin{itemize}\setlength{\itemsep}{3pt}
-                \item \textbf{Atrito Estático ($f_s$)}: Previne deslizamento:
-                $$f_s \le \mu_s n \implies (f_s)_{\text{máx}} = \mu_s n$$
-                \item \textbf{Atrito Cinético ($f_c$)}: Atua no deslizamento:
-                $$f_c = \mu_c n \quad (\text{com } \mu_c < \mu_s)$$
+                \item \textbf{Estático ($f_s$)}: $f_s \le \mu_s n \implies (f_s)_{\text{máx}} = \mu_s n$
+                \item \textbf{Cinético ($f_c$)}: $f_c = \mu_c n \quad (\mu_c < \mu_s)$
+                \item \textbf{Rolamento ($f_r$)}: $f_r = \mu_r n \quad (\mu_r \ll \mu_c)$
             \end{itemize}
         \end{block}
-
         \column{0.44\textwidth}
         \begin{center}
         \begin{tikzpicture}[scale=0.62]
-            \draw[-{Latex}] (0,0) -- (4.2,0) node[below] {\small $T$ (Força Aplicada)};
-            \draw[-{Latex}] (0,0) -- (0,3.2) node[left] {\small $f$ (Atrito)};
-            \draw[ultra thick,cyandark] (0,0) -- (2.2,2.2) node[midway,above,sloped] {\tiny Estático ($f_s=T$)};
-            \draw[dashed] (2.2,0) -- (2.2,2.2) node[above] {\tiny $(f_s)_{\text{máx}}$};
-            \draw[ultra thick,redaccent] (2.2,1.6) -- (3.8,1.6) node[right] {\tiny Cinético ($f_c = \mu_c n$)};
-            \draw[dotted] (2.2,2.2) -- (2.2,1.6);
+            \draw[-{Latex}] (0,0) -- (4.2,0) node[below] {\small $T$};
+            \draw[-{Latex}] (0,0) -- (0,3.2) node[left] {\small $f$};
+            \draw[ultra thick,cyandark] (0,0) -- (2.2,2.2) node[midway,above,sloped] {\tiny Estático};
+            \draw[ultra thick,redaccent] (2.2,1.6) -- (3.8,1.6) node[right] {\tiny Cinético};
         \end{tikzpicture}
         \end{center}
     \end{columns}
 \end{frame}
 
-% --- SLIDE 12: EXEMPLO 5.13 & 5.14 - COEFICIENTES DE ATRITO ---
-\begin{frame}{Exemplo 5.13 \& 5.14: Atrito Estático e Cinético em Engradado}
+% --- SLIDE 18: EXEMPLO 5.13 ---
+\begin{frame}{Exemplo 5.13: Coeficiente de Atrito Estático em Engradado}
     \begin{block}{Enunciado do Problema}
         \small
-        Um engradado de peso $p = 500\text{ N}$ exige uma força horizontal de $230\text{ N}$ para iniciar o movimento e $200\text{ N}$ para mantê-lo com velocidade constante. Ache $\mu_s$ e $\mu_c$. Qual a força de atrito se aplicarmos $50\text{ N}$ com ele em repouso?
+        Um engradado de peso $p = 500\text{ N}$ exige força horizontal de $230\text{ N}$ para iniciar o movimento. Ache o coeficiente de atrito estático $\mu_s$.
     \end{block}
-
     \begin{columns}[T]
         \column{0.40\textwidth}
         \begin{center}
@@ -392,77 +492,147 @@
             \fill[navyblue] (2,1.5) circle (0.15);
             \draw[ultra thick,-{Latex},emeraldgreen] (2,1.5) -- (3.5,1.5) node[above] {\small $T = 230\text{ N}$};
             \draw[ultra thick,-{Latex},redaccent] (2,1.5) -- (0.5,1.5) node[above] {\small $(f_s)_{\text{máx}}$};
-            \draw[ultra thick,-{Latex},cyandark] (2,1.5) -- (2,3.0) node[right] {\small $n = 500\text{ N}$};
-            \draw[ultra thick,-{Latex},golddark] (2,1.5) -- (2,0.0) node[right] {\small $p = 500\text{ N}$};
-            \node at (2,-0.3) {\small DCL no Limite};
         \end{tikzpicture}
         \end{center}
-
         \column{0.54\textwidth}
         \begin{exampleblock}{Resolução}
             \small
-            \begin{itemize}\setlength{\itemsep}{3pt}
-                \item \textbf{Coeficiente Estático $\mu_s$}:\\
-                $\mu_s = \frac{(f_s)_{\text{máx}}}{n} = \frac{230\text{ N}}{500\text{ N}} = 0{,}46$
-                \item \textbf{Coeficiente Cinético $\mu_c$}:\\
-                $\mu_c = \frac{f_c}{n} = \frac{200\text{ N}}{500\text{ N}} = 0{,}40$
-                \item \textbf{Atrito com $T = 50\text{ N}$}:\\
-                $50\text{ N} < 230\text{ N} \implies f_s = 50\text{ N}$ (Repouso)
-            \end{itemize}
+            No limite do movimento:
+            $$(f_s)_{\text{máx}} = T = 230\text{ N}, \quad n = p = 500\text{ N}$$
+            $$\mu_s = \frac{(f_s)_{\text{máx}}}{n} = \frac{230\text{ N}}{500\text{ N}} = 0{,}46$$
         \end{exampleblock}
     \end{columns}
 \end{frame}
 
-% --- SLIDE 13: EXEMPLO 5.16 & 5.17 - TOBOGÃ COM ATRITO ---
-\begin{frame}{Exemplo 5.16 \& 5.17: Tobogã em Plano Inclinado com Atrito}
+% --- SLIDE 19: EXEMPLO 5.14 ---
+\begin{frame}{Exemplo 5.14: Coeficiente de Atrito Cinético em Engradado}
     \begin{block}{Enunciado do Problema}
         \small
-        Deduza o ângulo $\alpha$ para um tobogã deslizar com velocidade constante em uma encosta com coeficiente de atrito cinético $\mu_c$. Em uma encosta mais íngreme de ângulo $\alpha$, qual é a sua aceleração $a_x$?
+        Para manter o engradado de $500\text{ N}$ em velocidade constante após iniciar o movimento, é necessária força de $200\text{ N}$. Ache $\mu_c$.
     \end{block}
-
     \begin{columns}[T]
-        \column{0.46\textwidth}
-        \begin{block}{Velocidade Constante ($\vec{a}=0$)}
-            \small
-            $$\sum F_x = mg \sin\alpha - f_c = 0$$
-            $$\sum F_y = n - mg \cos\alpha = 0$$
-            Como $f_c = \mu_c n = \mu_c mg \cos\alpha$:
-            $$\tan\alpha = \mu_c \implies \alpha = \arctan\mu_c$$
-        \end{block}
-
         \column{0.48\textwidth}
-        \begin{block}{Movimento Acelerado ($\vec{a} \neq 0$)}
+        \begin{block}{Condição de Velocidade Constante}
             \small
-            $$\sum F_x = mg \sin\alpha - \mu_c mg \cos\alpha = m a_x$$
-            Isolando a aceleração $a_x$:
-            $$a_x = g (\sin\alpha - \mu_c \cos\alpha)$$
+            $$\sum F_x = T - f_c = 0 \implies f_c = 200\text{ N}$$
+            $$\sum F_y = n - p = 0 \implies n = 500\text{ N}$$
         \end{block}
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Cálculo de $\mu_c$}
+            \small
+            $$\mu_c = \frac{f_c}{n} = \frac{200\text{ N}}{500\text{ N}} = 0{,}40$$
+            Note que $\mu_c < \mu_s$ ($0{,}40 < 0{,}46$).
+        \end{exampleblock}
     \end{columns}
 \end{frame}
 
-% --- SLIDE 14: EXEMPLO 5.19 - VELOCIDADE TERMINAL ---
-\begin{frame}{Exemplo 5.19: Velocidade Terminal de um Pára-Quedista}
+% --- SLIDE 20: EXEMPLO 5.15 ---
+\begin{frame}{Exemplo 5.15: Puxando Engradado com Ângulo em Relação à Horizontal}
     \begin{block}{Enunciado do Problema}
         \small
-        Para um corpo humano de $m = 50{,}0\text{ kg}$ caindo no ar em posição horizontal, o coeficiente de arraste turbulento é $D \approx 0{,}25\text{ kg/m}$. Ache a sua velocidade terminal $v_t$ em $\text{m/s}$ e em $\text{km/h}$.
+        Puxa-se o engradado com força $\vec{T}$ a um ângulo $\theta$ acima da horizontal. Ache a força $T$ para mover com velocidade constante.
     \end{block}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Equações de Forças}
+            \small
+            $$\sum F_y = n + T \sin\theta - w = 0 \implies n = w - T \sin\theta$$
+            $$\sum F_x = T \cos\theta - f_c = 0$$
+        \end{block}
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Resultado}
+            \small
+            Como $f_c = \mu_c n = \mu_c(w - T \sin\theta)$:
+            $$T = \frac{\mu_c w}{\cos\theta + \mu_c \sin\theta}$$
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
 
+% --- SLIDE 21: EXEMPLO 5.16 ---
+\begin{frame}{Exemplo 5.16: Tobogã em MRU em Plano Inclinado com Atrito}
+    \begin{block}{Enunciado do Problema}
+        \small
+        Deduza o ângulo $\alpha$ da encosta para um tobogã deslizar com velocidade constante sob atrito cinético $\mu_c$.
+    \end{block}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Equações}
+            \small
+            $$\sum F_x = mg \sin\alpha - f_c = 0$$
+            $$\sum F_y = n - mg \cos\alpha = 0$$
+        \end{block}
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Resultado Didático}
+            \small
+            Como $f_c = \mu_c mg \cos\alpha$:
+            $$mg \sin\alpha = \mu_c mg \cos\alpha \implies \tan\alpha = \mu_c$$
+            $$\alpha = \arctan\mu_c$$
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 22: EXEMPLO 5.17 ---
+\begin{frame}{Exemplo 5.17: Tobogã Acelerando em Plano Inclinado com Atrito}
+    \begin{block}{Enunciado do Problema}
+        \small
+        Em uma encosta de ângulo $\alpha$ maior do que $\arctan\mu_c$, qual é a aceleração $a_x$ do tobogã?
+    \end{block}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Segunda Lei no Eixo $x$}
+            \small
+            $$\sum F_x = mg \sin\alpha - f_c = m a_x$$
+            $$mg \sin\alpha - \mu_c mg \cos\alpha = m a_x$$
+        \end{block}
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Aceleração Resultante}
+            \small
+            $$a_x = g (\sin\alpha - \mu_c \cos\alpha)$$
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 23: EXEMPLO 5.18 ---
+\begin{frame}{Exemplo 5.18: Força de Atrito de Rolamento em Automóvel}
+    \begin{block}{Enunciado do Problema}
+        \small
+        Um carro de $1000\text{ kg}$ rola em pista plana com coeficiente de rolamento $\mu_r = 0{,}003$. Qual a força de resistência e a desaceleração?
+    \end{block}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Força de Rolamento}
+            \small
+            $$f_r = \mu_r n = \mu_r mg$$
+            $$f_r = (0{,}003)(1000)(9{,}80) = 29{,}4\text{ N}$$
+        \end{block}
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Desaceleração}
+            \small
+            $$a_x = -\mu_r g = -(0{,}003)(9{,}80) = -0{,}0294\text{ m/s}^2$$
+            O rolamento é ordens de grandeza menor que o atrito cinético!
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 24: EXEMPLO 5.19 ---
+\begin{frame}{Exemplo 5.19: Velocidade Terminal de Pára-Quedista}
+    \begin{block}{Enunciado do Problema}
+        \small
+        Um skydiver de $m = 50{,}0\text{ kg}$ cai sob arraste $f = D v^2$ com $D = 0{,}25\text{ kg/m}$. Ache a velocidade terminal $v_t$.
+    \end{block}
     \begin{columns}[T]
         \column{0.40\textwidth}
         \begin{center}
         \begin{tikzpicture}[scale=0.68]
             \fill[navyblue] (1,2) circle (0.15);
-            \draw[ultra thick,-{Latex},emeraldgreen] (1,2) -- (1,3.3) node[above] {$\vec{f}_{\text{arraste}} = D v_t^2$};
-            \draw[ultra thick,-{Latex},redaccent] (1,2) -- (1,0.5) node[below] {$\vec{p} = m\vec{g}$};
-            \node at (1,-0.3) {\small DCL na Vel. Terminal};
+            \draw[ultra thick,-{Latex},emeraldgreen] (1,2) -- (1,3.3) node[above] {\small $\vec{f}_{\text{arraste}}$};
+            \draw[ultra thick,-{Latex},redaccent] (1,2) -- (1,0.5) node[below] {\small $\vec{p}$};
         \end{tikzpicture}
         \end{center}
-
         \column{0.54\textwidth}
         \begin{exampleblock}{Resolução}
             \small
-            Na velocidade terminal, $a_y = 0$:
-            $$\sum F_y = mg - D v_t^2 = 0 \implies D v_t^2 = mg$$
+            Na velocidade terminal, $a_y = 0 \implies D v_t^2 = mg$:
             \begin{align*}
                 v_t &= \sqrt{\frac{mg}{D}} = \sqrt{\frac{(50{,}0)(9{,}80)}{0{,}25}} \\
                     &= 44{,}3\text{ m/s} \approx 160\text{ km/h}
@@ -471,108 +641,141 @@
     \end{columns}
 \end{frame}
 
-% --- SLIDE 15: 5.4 MOVIMENTO CIRCULAR UNIFORME ---
+% --- SLIDE 25: 5.4 MOVIMENTO CIRCULAR UNIFORME ---
 \begin{frame}{5.4 Dinâmica do Movimento Circular Uniforme}
     \begin{columns}[T]
         \column{0.50\textwidth}
         \begin{block}{Aceleração Centrípeta / Radial}
             \small
-            No MCU, a velocidade $v$ é constante em módulo, mas a \textbf{direção de $\vec{v}$ muda continuamente}:
             $$a_{\text{rad}} = \frac{v^2}{R} = \frac{4\pi^2 R}{T^2}$$
-            apontando para o \textbf{centro da trajetória}.
-        \end{block}
-
-        \begin{block}{Segunda Lei no MCU}
-            \small
             $$F_{\text{rad, resultante}} = m a_{\text{rad}} = m \frac{v^2}{R}$$
         \end{block}
-
+        \begin{alertblock}{A Falácia Centrífuga}
+            \small
+            Não existe "força centrífuga" puxando para fora em referenciais inerciais!
+        \end{alertblock}
         \column{0.44\textwidth}
         \begin{center}
         \begin{tikzpicture}[scale=0.80]
             \draw[dashed,thick] (0,0) circle (1.5);
-            \fill[black] (0,0) circle (0.05) node[below] {$O$};
             \fill[navyblue] (1.06,1.06) circle (0.12);
             \draw[ultra thick,-{Latex},emeraldgreen] (1.06,1.06) -- (0.35,1.77) node[above left] {$\vec{v}$};
             \draw[ultra thick,-{Latex},redaccent] (1.06,1.06) -- (0.2,0.2) node[below right] {$\vec{a}_{\text{rad}}$};
-            \draw[thick,-{Latex},cyandark] (1.06,1.06) -- (0.4,0.4) node[above right] {$\sum \vec{F}$};
         \end{tikzpicture}
         \end{center}
     \end{columns}
 \end{frame}
 
-% --- SLIDE 16: FALÁCIA CENTRÍFUGA ---
-\begin{frame}{ALERTA DIDÁTICO: A Falácia da "Força Centrífuga"}
-    \begin{columns}[T]
-        \column{0.50\textwidth}
-        \begin{alertblock}{Por que NÃO existe força centrífuga?}
-            \small
-            \begin{itemize}\setlength{\itemsep}{3pt}
-                \item Em um \textbf{referencial inercial}, não há força puxando para fora do círculo!
-                \item A tendência de sair pela tangente é consequência da \textbf{inércia} ($1^{\text{a}}$ Lei).
-                \item $m \frac{v^2}{R}$ é o produto $m a_{\text{rad}}$, \textbf{NUNCA uma força} no DCL.
-            \end{itemize}
-        \end{alertblock}
-
-        \column{0.44\textwidth}
-        \begin{center}
-        \begin{tikzpicture}[scale=0.75]
-            \draw[dashed] (0,0) arc (180:90:2);
-            \fill (0,0) circle (0.05);
-            \draw[thick,dotted] (0,0) -- (0,2);
-            \node at (0.2,1.0) {\small Fio rompe!};
-            \fill[redaccent] (0,2) circle (0.12);
-            \draw[ultra thick,-{Latex},emeraldgreen] (0,2) -- (2.2,2) node[right] {\small $\vec{v}$ (MRU)};
-        \end{tikzpicture}
-        \end{center}
-    \end{columns}
-\end{frame}
-
-% --- SLIDE 17: EXEMPLO 5.22 & 5.23 - CURVAS PLANAS E INCLINADAS ---
-\begin{frame}{Exemplo 5.22 \& 5.23: Curva Plana vs Curva Inclinada}
-    \begin{columns}[T]
-        \column{0.46\textwidth}
-        \begin{block}{Exemplo 5.22: Curva Plana com Atrito}
-            \small
-            \textbf{Enunciado}: Velocidade máxima sem derrapar em curva plana de raio $R$ ($\mu_s$).
-            $$f_s = m \frac{v^2}{R} \le \mu_s mg \implies v_{\text{máx}} = \sqrt{\mu_s g R}$$
-        \end{block}
-
-        \column{0.48\textwidth}
-        \begin{block}{Exemplo 5.23: Curva Inclinada sem Atrito}
-            \small
-            \textbf{Enunciado}: Ângulo $\beta$ para fazer a curva com velocidade $v$ sem atrito.
-            $$n \sin\beta = m \frac{v^2}{R}, \quad n \cos\beta = mg$$
-            $$\implies \tan\beta = \frac{v^2}{gR}$$
-        \end{block}
-    \end{columns}
-\end{frame}
-
-% --- SLIDE 18: EXEMPLO 5.24 - RODA-GIGANTE EM PLANO VERTICAL ---
-\begin{frame}{Exemplo 5.24: Movimento Circular em Círculo Vertical}
+% --- SLIDE 26: EXEMPLO 5.20 ---
+\begin{frame}{Exemplo 5.20: Trenó em Movimento Circular em Pista Horizontal}
     \begin{block}{Enunciado do Problema}
         \small
-        Um passageiro na roda-gigante de raio $R$ move-se em um círculo vertical com velocidade constante $v$. Deduza expressões para a força normal exercida pelo assento no topo do círculo e no ponto inferior (base).
+        Um trenó de $m = 200\text{ kg}$ amarrado a um posto por uma corda de $R = 5{,}0\text{ m}$ gira a $v = 10\text{ m/s}$ sem atrito. Ache a tensão na corda.
     \end{block}
-
     \begin{columns}[T]
-        \column{0.46\textwidth}
-        \begin{block}{Topo da Trajetória ($a_y = -v^2/R$)}
-            \small
-            $$n_T - mg = -m \frac{v^2}{R} \implies n_T = m\left(g - \frac{v^2}{R}\right)$$
-            \textbf{Resultado}: Sensação de peso menor no topo!
-        \end{block}
-
         \column{0.48\textwidth}
-        \begin{block}{Base da Trajetória ($a_y = +v^2/R$)}
+        \begin{block}{Segunda Lei Radial}
             \small
-            $$n_B - mg = +m \frac{v^2}{R} \implies n_B = m\left(g + \frac{v^2}{R}\right)$$
-            \textbf{Resultado}: Sensação de peso maior na base!
+            $$\sum F_{\text{rad}} = T = m a_{\text{rad}} = m \frac{v^2}{R}$$
+        \end{block}
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Cálculo}
+            \small
+            $$T = (200\text{ kg}) \frac{(10\text{ m/s})^2}{5{,}0\text{ m}} = 4000\text{ N}$$
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 27: EXEMPLO 5.21 ---
+\begin{frame}{Exemplo 5.21: Pêndulo Cônico}
+    \begin{block}{Enunciado do Problema}
+        \small
+        Uma massa $m$ gira em círculo horizontal de raio $R$ presa a um fio de comprimento $L$ formando ângulo $\beta$ com a vertical. Ache $T$ e $v$.
+    \end{block}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Componentes de Força}
+            \small
+            $$T \cos\beta = mg \implies T = \frac{mg}{\cos\beta}$$
+            $$T \sin\beta = m \frac{v^2}{R}$$
+        \end{block}
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Velocidade e Período}
+            \small
+            $$\tan\beta = \frac{v^2}{gR} \implies v = \sqrt{g R \tan\beta}$$
+            $$P = 2\pi \sqrt{\frac{L \cos\beta}{g}}$$
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 28: EXEMPLO 5.22 ---
+\begin{frame}{Exemplo 5.22: Curva Plana com Atrito em Rodovia}
+    \begin{block}{Enunciado do Problema}
+        \small
+        Ache a velocidade máxima $v_{\text{máx}}$ para um carro não derrapar em curva plana de raio $R$ sob atrito estático $\mu_s$.
+    \end{block}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Condição de Atrito Estático}
+            \small
+            $$f_s = m \frac{v^2}{R} \le (f_s)_{\text{máx}} = \mu_s mg$$
+        \end{block}
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Velocidade Máxima}
+            \small
+            $$m \frac{v_{\text{máx}}^2}{R} = \mu_s mg \implies v_{\text{máx}} = \sqrt{\mu_s g R}$$
+            A massa do veículo se cancela!
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 29: EXEMPLO 5.23 ---
+\begin{frame}{Exemplo 5.23: Curva Inclinada sem Atrito em Rodovia}
+    \begin{block}{Enunciado do Problema}
+        \small
+        Qual o ângulo de inclinação $\beta$ da pista para fazer curva de raio $R$ a velocidade $v$ sem depender de atrito?
+    \end{block}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Decomposição da Normal}
+            \small
+            $$n \sin\beta = m \frac{v^2}{R} \quad (\text{componente radial})$$
+            $$n \cos\beta = mg \quad (\text{componente vertical})$$
+        \end{block}
+        \column{0.48\textwidth}
+        \begin{exampleblock}{Ângulo de Sobre-elevação}
+            \small
+            Dividindo as duas equações:
+            $$\tan\beta = \frac{v^2}{gR} \implies \beta = \arctan\left(\frac{v^2}{gR}\right)$$
+        \end{exampleblock}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 30: EXEMPLO 5.24 ---
+\begin{frame}{Exemplo 5.24: Movimento Circular em Círculo Vertical (Roda-Gigante)}
+    \begin{block}{Enunciado do Problema}
+        \small
+        Um passageiro na roda-gigante de raio $R$ move-se em círculo vertical com velocidade $v$. Ache a normal $n$ no topo e na base.
+    \end{block}
+    \begin{columns}[T]
+        \column{0.48\textwidth}
+        \begin{block}{Topo ($a_y = -v^2/R$)}
+            \small
+            $$n_T - mg = -m \frac{v^2}{R}$$
+            $$n_T = m\left(g - \frac{v^2}{R}\right)$$
+            Sensação de peso menor!
+        \end{block}
+        \column{0.48\textwidth}
+        \begin{block}{Base ($a_y = +v^2/R$)}
+            \small
+            $$n_B - mg = +m \frac{v^2}{R}$$
+            $$n_B = m\left(g + \frac{v^2}{R}\right)$$
+            Sensação de peso maior!
         \end{block}
     \end{columns}
 \end{frame}
 
-% --- SLIDE 19: 5.5 AS QUATRO FORÇAS FUNDAMENTAIS ---
+% --- SLIDE 31: 5.5 AS QUATRO FORÇAS FUNDAMENTAIS ---
 \begin{frame}{5.5 As Quatro Forças Fundamentais da Natureza}
     \begin{center}
     \resizebox{0.92\textwidth}{!}{%
@@ -588,16 +791,15 @@
     \end{center}
 \end{frame}
 
-% --- SLIDE 20: CONCLUSÃO E CHECKLIST ---
+% --- SLIDE 32: RESUMO E CHECKLIST ---
 \begin{frame}{Resumo Didático e Checklist do Estudante}
     \begin{columns}[T]
         \column{0.52\textwidth}
         \begin{block}{Checklist para a Prova}
             \small
             \begin{enumerate}\setlength{\itemsep}{2pt}
-                \item Identificou se o problema é de \textbf{Equilíbrio} ($\sum\vec{F}=0$) ou \textbf{Dinâmica} ($\sum\vec{F}=m\vec{a}$)?
-                \item Isolou o corpo e fez o \textbf{DCL} sem incluir forças falsas ou $m\vec{a}$?
-                \item Decompôs as forças nos eixos corretos?
+                \item Identificou se é \textbf{Equilíbrio} ($\sum\vec{F}=0$) ou \textbf{Dinâmica} ($\sum\vec{F}=m\vec{a}$)?
+                \item Isolou o corpo e fez o \textbf{DCL} sem incluir $m\vec{a}$?
                 \item Distinguiu atrito estático ($f_s \le \mu_s n$) e cinético ($f_c = \mu_c n$)?
                 \item No MCU, direcionou a resultante para o centro ($m v^2/R$)?
             \end{enumerate}
