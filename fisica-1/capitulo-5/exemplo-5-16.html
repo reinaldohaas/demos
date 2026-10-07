@@ -463,14 +463,14 @@ $$rac{mg \sinlpha}{mg \coslpha} = rac{\mu_c n}{n} \implies 	anlpha = \mu_c 
             ctx.fillText('DCL do Tobogã (v_x constante)', ox - 60, oy - 25);
 
             const rad = 30 * Math.PI / 180;
-            // Friction (up slope)
+            // Atrito cinético f_c (rampa acima, opondo-se ao movimento)
             const fx = ox - 160 * Math.cos(rad);
             const fy = oy - 160 * Math.sin(rad);
-            drawVector(ctx, ox, oy, fx, fy, '#ef4444', 'f_c = μ_c n (2x)');
+            drawVector(ctx, ox, oy, fx, fy, '#ef4444', 'f_c = μ_c n (rampa acima)');
 
-            // Normal n
-            const nx = ox - 160 * Math.sin(-rad);
-            const ny = oy + 160 * Math.cos(-rad);
+            // Normal n (perpendicular à rampa para cima)
+            const nx = ox - 160 * Math.sin(rad);
+            const ny = oy - 160 * Math.cos(rad);
             drawVector(ctx, ox, oy, nx, ny, '#3b82f6', 'n = mg cos α (2x)');
 
             // Peso p

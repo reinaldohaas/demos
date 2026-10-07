@@ -362,7 +362,7 @@
         \begin{exampleblock}{Resolução}
             \small
             \begin{itemize}\setlength{\itemsep}{3pt}
-                \item Aceleração: $v_y^2 = v_{0y}^2 + 2a_y \Delta y \implies a_y = +2{,}0\text{ m/s}^2$
+                \item Aceleração: $v_y^2 = v_{0y}^2 + 2a_y \Delta y \implies a_y = +2{,}0\text{ m/s}^2$ (para cima)
                 \item Segunda Lei: $\sum F_y = T - mg = m a_y$
                 \item $T = m(g + a_y) = 800(9{,}80 + 2{,}0) = 9440\text{ N}$
             \end{itemize}
@@ -412,13 +412,14 @@
             \fill[cyandark] (1.75,1) circle (0.12);
             \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {\small $\vec{p}$};
-            \draw[ultra thick,-{Latex},blue] (2.2,1.26) -- (3.06,1.76) node[above] {\small $\vec{a}_x$};
+            % Aceleração aponta RAMPA ABAIXO (para baixo e para a esquerda, rumo à base)
+            \draw[ultra thick,-{Latex},blue] (1.3,0.74) -- (0.44,0.24) node[below left] {\small $\vec{a}_x$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
         \begin{exampleblock}{Resolução}
             \small
-            $$\sum F_x = mg \sin\alpha = m a_x \implies a_x = g \sin\alpha$$
+            $$\sum F_x = mg \sin\alpha = m a_x \implies a_x = g \sin\alpha \quad (\text{rampa abaixo})$$
             $$\sum F_y = n - mg \cos\alpha = 0 \implies n = mg \cos\alpha$$
             \textbf{Conclusão}: A aceleração independe da massa total do tobogã!
         \end{exampleblock}
@@ -440,13 +441,13 @@
             \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {\small $\vec{p}$};
             \draw[thick,-{Latex},gray] (1.75,1) -- (2.61,1.5) node[above] {\small $\vec{v}_0$};
-            \draw[thick,-{Latex},blue] (2.2,1.26) -- (1.34,0.76) node[below] {\small $\vec{a}_x$};
+            \draw[thick,-{Latex},blue] (1.3,0.74) -- (0.44,0.24) node[below left] {\small $\vec{a}_x$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
         \begin{exampleblock}{Resolução}
             \small
-            $$\sum F_x = -mg \sin\alpha = m a_x \implies a_x = -g \sin\alpha$$
+            $$\sum F_x = -mg \sin\alpha = m a_x \implies a_x = -g \sin\alpha \quad (\text{frenagem})$$
             $$v_x^2 = v_0^2 + 2 a_x d = 0 \implies d = \frac{v_0^2}{2g \sin\alpha}$$
         \end{exampleblock}
     \end{columns}
@@ -468,6 +469,9 @@
             \draw[thick] (1.5,2.3) -- (2.5,2.2);
             \draw[thick] (2.7,2.0) -- (2.7,0.8);
             \draw[thick,fill=orange!30] (2.4,0.2) rectangle (3.0,0.8) node[pos=0.5] {$m_2$};
+            % Acelerações indicadas
+            \draw[thick,-{Latex},blue] (1.0,2.9) -- (1.8,2.9) node[above] {\small $\vec{a}$};
+            \draw[thick,-{Latex},blue] (3.3,0.5) -- (3.3,-0.2) node[right] {\small $\vec{a}$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
@@ -599,7 +603,8 @@
             \fill[cyandark] (1.75,1) circle (0.12);
             \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {\small $\vec{p}$};
-            \draw[ultra thick,-{Latex},redaccent] (1.75,1) -- (0.89,0.5) node[below left] {\small $f_c$};
+            % Atrito aponta RAMPA ACIMA opondo-se ao movimento descendente
+            \draw[ultra thick,-{Latex},redaccent] (1.75,1) -- (2.61,1.5) node[above] {\small $f_c$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
@@ -625,15 +630,17 @@
             \fill[cyandark] (1.75,1) circle (0.12);
             \draw[ultra thick,-{Latex},emeraldgreen] (1.75,1) -- (1.0,2.3) node[above] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.75,1) -- (1.75,-0.5) node[below] {\small $\vec{p}$};
-            \draw[ultra thick,-{Latex},redaccent] (1.75,1) -- (0.89,0.5) node[below left] {\small $f_c$};
-            \draw[ultra thick,-{Latex},blue] (2.2,1.26) -- (3.06,1.76) node[above] {\small $\vec{a}_x$};
+            % Atrito aponta RAMPA ACIMA
+            \draw[ultra thick,-{Latex},redaccent] (1.75,1) -- (2.61,1.5) node[above] {\small $f_c$};
+            % Aceleração aponta RAMPA ABAIXO
+            \draw[ultra thick,-{Latex},blue] (1.3,0.74) -- (0.44,0.24) node[below left] {\small $\vec{a}_x$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
         \begin{exampleblock}{Resolução}
             \small
             $$\sum F_x = mg \sin\alpha - \mu_c mg \cos\alpha = m a_x$$
-            $$a_x = g (\sin\alpha - \mu_c \cos\alpha)$$
+            $$a_x = g (\sin\alpha - \mu_c \cos\alpha) \quad (\text{rampa abaixo})$$
         \end{exampleblock}
     \end{columns}
 \end{frame}
@@ -653,6 +660,7 @@
             \draw[ultra thick,-{Latex},redaccent] (1.5,0.7) -- (0.3,0.7) node[above] {\small $f_r$};
             \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1.5) -- (1.5,2.7) node[right] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.5,1.5) -- (1.5,0.3) node[right] {\small $\vec{p}$};
+            \draw[thick,-{Latex},blue] (1.5,2.9) -- (0.5,2.9) node[above] {\small $\vec{a}_x$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
@@ -732,6 +740,7 @@
             \fill[navyblue] (1.2,0) circle (0.12);
             \draw[ultra thick,-{Latex},emeraldgreen] (1.2,0) -- (0.3,0) node[above] {\small $\vec{T}$};
             \draw[thick,-{Latex},blue] (1.2,0) -- (1.2,1.0) node[right] {\small $\vec{v}$};
+            \draw[thick,-{Latex},blue] (0.8,-0.4) -- (0.1,-0.4) node[below] {\small $\vec{a}_{\text{rad}}$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
@@ -761,6 +770,7 @@
             \fill[navyblue] (1.2,1.0) circle (0.12);
             \draw[ultra thick,-{Latex},emeraldgreen] (1.2,1.0) -- (0.6,2.0) node[above right] {\small $\vec{T}$};
             \draw[ultra thick,-{Latex},redaccent] (1.2,1.0) -- (1.2,-0.2) node[right] {\small $\vec{p}$};
+            \draw[thick,-{Latex},blue] (1.0,0.4) -- (0.2,0.4) node[below] {\small $\vec{a}_{\text{rad}}$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
@@ -787,6 +797,7 @@
             \draw[ultra thick,-{Latex},emeraldgreen] (1.5,1) -- (0.3,1) node[above] {\small $(f_s)_{\text{máx}}$};
             \draw[ultra thick,-{Latex},cyandark] (1.5,1) -- (1.5,2.3) node[right] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.5,1) -- (1.5,-0.2) node[right] {\small $\vec{p}$};
+            \draw[thick,-{Latex},blue] (1.2,0.4) -- (0.3,0.4) node[below] {\small $\vec{a}_{\text{rad}}$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
@@ -813,6 +824,8 @@
             \fill[cyandark] (1.5,0.75) circle (0.12);
             \draw[ultra thick,-{Latex},emeraldgreen] (1.5,0.75) -- (0.9,1.95) node[above] {\small $\vec{n}$};
             \draw[ultra thick,-{Latex},golddark] (1.5,0.75) -- (1.5,-0.35) node[below] {\small $\vec{p}$};
+            % Aceleração centrípeta estritamente horizontal
+            \draw[thick,-{Latex},blue] (1.2,0.75) -- (0.2,0.75) node[above] {\small $\vec{a}_{\text{rad}}$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}
@@ -838,11 +851,13 @@
             % Topo
             \fill[navyblue] (1.5,2.7) circle (0.1);
             \draw[thick,-{Latex},emeraldgreen] (1.5,2.7) -- (1.5,3.3) node[above] {\tiny $n_T$};
-            \draw[thick,-{Latex},redaccent] (1.5,2.7) -- (1.5,2.0) node[right] {\tiny $p$};
+            \draw[thick,-{Latex},redaccent] (1.5,2.7) -- (1.5,2.0) node[left] {\tiny $p$};
+            \draw[thick,-{Latex},blue] (1.8,2.7) -- (1.8,2.1) node[right] {\tiny $\vec{a}_{\text{rad}}$};
             % Base
             \fill[navyblue] (1.5,0.3) circle (0.1);
             \draw[thick,-{Latex},emeraldgreen] (1.5,0.3) -- (1.5,1.1) node[above] {\tiny $n_B$};
             \draw[thick,-{Latex},redaccent] (1.5,0.3) -- (1.5,-0.3) node[below] {\tiny $p$};
+            \draw[thick,-{Latex},blue] (1.8,0.3) -- (1.8,0.9) node[right] {\tiny $\vec{a}_{\text{rad}}$};
         \end{tikzpicture}
         \end{center}
         \column{0.54\textwidth}

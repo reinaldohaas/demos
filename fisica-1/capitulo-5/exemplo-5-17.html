@@ -463,14 +463,14 @@ $$mg \sinlpha - \mu_c mg \coslpha = m a_x$$</div>
             ctx.fillText('DCL do Tobogã Acelerado (a_x > 0)', ox - 70, oy - 25);
 
             const rad = 40 * Math.PI / 180;
-            // Friction
-            drawVector(ctx, ox, oy, ox - 120 * Math.cos(rad), oy - 120 * Math.sin(rad), '#ef4444', 'f_c (2x)');
-            // Normal
-            drawVector(ctx, ox, oy, ox - 160 * Math.sin(-rad), oy + 160 * Math.cos(-rad), '#3b82f6', 'n (2x)');
-            // Peso
+            // Atrito cinético (rampa acima)
+            drawVector(ctx, ox, oy, ox - 140 * Math.cos(rad), oy - 140 * Math.sin(rad), '#ef4444', 'f_c (rampa acima)');
+            // Normal (perpendicular para cima)
+            drawVector(ctx, ox, oy, ox - 160 * Math.sin(rad), oy - 160 * Math.cos(rad), '#3b82f6', 'n (2x)');
+            // Peso (para baixo)
             drawVector(ctx, ox, oy, ox, oy + 200, '#d97706', 'p = mg (2x)');
-            // Acceleration
-            drawVector(ctx, ox + 40, oy + 30, ox + 180 * Math.cos(rad), oy + 180 * Math.sin(rad), '#10b981', 'a_x (2x)');
+            // Aceleração a_x (rampa abaixo)
+            drawVector(ctx, ox + 30, oy - 20, ox + 170 * Math.cos(rad) + 30, oy + 170 * Math.sin(rad) - 20, '#10b981', 'a_x (rampa abaixo)');
         
         }
 

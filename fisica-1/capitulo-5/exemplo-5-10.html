@@ -461,18 +461,18 @@
             ctx.fillText('DCL do Tobogã (Sem Atrito)', ox - 50, oy - 25);
 
             const rad = 30 * Math.PI / 180;
-            // Normal n (2x size)
-            const nx = ox - 180 * Math.sin(-rad);
-            const ny = oy + 180 * Math.cos(-rad);
+            // Normal n perpendicular para fora da rampa (para cima)
+            const nx = ox - 180 * Math.sin(rad);
+            const ny = oy - 180 * Math.cos(rad);
             drawVector(ctx, ox, oy, nx, ny, '#3b82f6', 'n = mg cos α (2x)');
 
-            // Peso p (2x size)
+            // Peso p (para baixo)
             drawVector(ctx, ox, oy, ox, oy + 200, '#ef4444', 'p = mg (2x)');
 
-            // Acceleration a_x (down slope)
-            const ax_end_x = ox + 150 * Math.cos(rad);
-            const ax_end_y = oy + 150 * Math.sin(rad);
-            drawVector(ctx, ox, oy, ax_end_x, ax_end_y, '#10b981', 'a_x = g sen α (2x)');
+            // Aceleração a_x rampa abaixo (para a direita e para baixo na rampa)
+            const ax_end_x = ox + 160 * Math.cos(rad);
+            const ax_end_y = oy + 160 * Math.sin(rad);
+            drawVector(ctx, ox + 20, oy - 20, ax_end_x + 20, ax_end_y - 20, '#10b981', 'a_x = g sen α (rampa abaixo)');
         
         }
 
