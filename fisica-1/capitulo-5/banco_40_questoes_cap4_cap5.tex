@@ -1,10 +1,9 @@
 \documentclass[11pt,a4paper]{article}
-
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage[brazil]{babel}
-\usepackage{amsmath,amssymb,amsfonts}
+\usepackage[brazilian]{babel}
+\usepackage{amsmath,amssymb}
 \usepackage{geometry}
 \geometry{top=2.0cm, bottom=2.0cm, left=2.0cm, right=2.0cm}
 \usepackage{enumitem}
@@ -14,324 +13,314 @@
 
 \pagestyle{fancy}
 \fancyhf{}
-\lhead{\textbf{FSC5101 --- Física I (Mecânica Clássica)}}
-\rhead{\textbf{Capítulos 4 e 5: Leis de Newton e Aplicações}}
-\cfoot{\thepage}
+\fancyhead[L]{\small\textbf{FSC5101 -- Física I} $\vert$ UFSC}
+\fancyhead[R]{\small\textbf{Banco de Questões para Prova} $\vert$ Capítulos 4 e 5}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
 
-\titleformat{\section}{\large\bfseries\color{blue!70!black}}{\thesection}{1em}{}[{\titlerule[0.8pt]}]
-
-\newcounter{questcount}
-\newcommand{\questao}[1]{%
-    \stepcounter{questcount}%
-    \vspace{0.45cm}%
-    \noindent\textbf{Questão \thequestcount\ (#1)}%
-    \vspace{0.15cm}\\%
-}
+\titleformat{\section}{\large\bfseries\color{blue!70!black}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\bfseries\color{black}}{}{0em}{}
 
 \begin{document}
 
 \begin{center}
-    {\LARGE \textbf{Universidade Federal de Santa Catarina --- UFSC}}\\[0.2cm]
-    {\large \textbf{Departamento de Física --- FSC5101 Física I}}\\[0.15cm]
-    {\Large \textbf{Banco de 40 Questões para Prova --- Capítulos 4 e 5}}\\[0.15cm]
-    {\small \textit{Livro-texto: Sears \& Zemansky / Young \& Freedman (12ª Edição)}}\\[0.1cm]
-    {\footnotesize \textbf{Distribuição: 10 Fáceis $\cdot$ 15 Médias $\cdot$ 15 Difíceis}}
+    {\LARGE \textbf{UNIVERSIDADE FEDERAL DE SANTA CATARINA}}\\[0.2cm]
+    {\large \textbf{Departamento de Física -- FSC5101: Física I}}\\[0.3cm]
+    {\Large \textbf{Banco de 40 Questões Selecionadas para Avaliação}}\\[0.2cm]
+    {\normalsize \textbf{Fonte:} Sears \& Zemansky -- Física I: Mecânica (Young \& Freedman, 12ª Edição)}\\[0.1cm]
+    {\small \textit{Capítulo 4: Leis de Newton do Movimento \quad $\vert$ \quad Capítulo 5: Aplicações das Leis de Newton}}\\[0.2cm]
+    \rule{\textwidth}{0.8pt}
 \end{center}
 
 \vspace{0.2cm}
-\hrule height 1pt
+\noindent
+\textbf{Orientações Gerais:}\\
+Este documento contém uma seleção de 40 questões autênticas extraídas diretamente dos Capítulos 4 e 5 do livro-texto \textit{Sears \& Zemansky (Física I, 12ª Ed.)}, divididas por nível de complexidade (10 Fáceis, 15 Médias e 15 Difíceis), destinadas à elaboração e composição de provas. Em todos os cálculos numéricos, adote $g = 9,80\text{ m/s}^2$, exceto quando indicado em contrário no enunciado.
+
 \vspace{0.4cm}
 
-\section*{Parte I --- Questões Fáceis (10 Questões)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{PARTE I: QUESTÕES FÁCEIS (10 QUESTÕES)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\questao{Exercício 4.4}
-Duas forças, $\vec{F}_1$ e $\vec{F}_2$, atuam sobre um ponto. O módulo de $\vec{F}_1$ é $9{,}00\text{ N}$ e sua direção faz um ângulo de $60{,}0^\circ$ acima do eixo $+x$ no primeiro quadrante. O módulo de $\vec{F}_2$ é $6{,}00\text{ N}$ e sua direção faz um ângulo de $53{,}1^\circ$ abaixo do eixo $+x$ no quarto quadrante.
-\begin{enumerate}[label=(\alph*)]
-    \item Ache as componentes $x$ e $y$ da força resultante.
-    \item Ache o módulo e a direção da força resultante.
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=0.45cm]
+
+% 1
+\item \textbf{[Sears 4.7]} Se uma força resultante horizontal de $132\text{ N}$ é aplicada a uma pessoa com massa de $60\text{ kg}$ em repouso na beira de uma piscina, qual é a aceleração produzida?
+
+% 2
+\item \textbf{[Sears 4.8]} Qual o módulo da força necessária para imprimir uma aceleração de $1,40\text{ m/s}^2$ em uma geladeira com massa de $135\text{ kg}$?
+
+% 3
+\item \textbf{[Sears 4.9]} Uma caixa está em repouso sobre um lago congelado, que é uma superfície horizontal sem atrito. Se um pescador aplica uma força horizontal de módulo $48,0\text{ N}$ sobre a caixa e produz uma aceleração de $3,00\text{ m/s}^2$, qual é a massa da caixa?
+
+% 4
+\item \textbf{[Sears 4.10]} Um portuário aplica uma força horizontal constante de $80,0\text{ N}$ a um bloco de gelo sobre uma superfície horizontal lisa. A força de atrito é desprezível. O bloco parte do repouso e se move $11,0\text{ m}$ em $5,0\text{ s}$.
+\begin{enumerate}[label=\alph*)]
+    \item Qual é a massa do bloco de gelo?
+    \item Se o portuário parar de empurrar o bloco depois de $5,0\text{ s}$, qual será a distância percorrida pelo bloco nos $5,0\text{ s}$ posteriores?
 \end{enumerate}
 
-\questao{Exercício 4.7}
-Um caixote de $68{,}5\text{ kg}$ que está em repouso sobre uma superfície horizontal sem atrito é puxado por uma força horizontal constante de $140\text{ N}$.
-\begin{enumerate}[label=(\alph*)]
-    \item Qual é a aceleração do caixote?
-    \item Se a força for aplicada durante $5{,}00\text{ s}$, qual será a velocidade do caixote ao final desse intervalo?
-    \item Que distância o caixote percorrerá nesses $5{,}00\text{ s}$?
+% 5
+\item \textbf{[Sears 4.19]} Na superfície de Io, uma das luas de Júpiter, a aceleração da gravidade é $g = 1,81\text{ m/s}^2$. Uma melancia pesa $44,0\text{ N}$ na superfície da Terra (onde $g = 9,80\text{ m/s}^2$).
+\begin{enumerate}[label=\alph*)]
+    \item Qual é a massa da melancia na superfície da Terra?
+    \item Qual é a sua massa e o seu peso na superfície de Io?
 \end{enumerate}
 
-\questao{Exercício 4.13}
-Uma melancia de $4{,}80\text{ kg}$ tem um peso de $47{,}0\text{ N}$ na superfície da Terra.
-\begin{enumerate}[label=(\alph*)]
-    \item Qual é o valor local de $g$ onde o peso foi medido?
-    \item Se a melancia for levada para a superfície de Io (lua de Júpiter), onde a aceleração da gravidade é $1{,}81\text{ m/s}^2$, quais serão sua massa e seu peso?
+% 6
+\item \textbf{[Sears 4.20]} A mochila de uma astronauta pesa $17,5\text{ N}$ quando ela está na superfície terrestre, mas somente $3,24\text{ N}$ na superfície de um asteroide.
+\begin{enumerate}[label=\alph*)]
+    \item Qual é a aceleração da gravidade nesse asteroide?
+    \item Qual é a massa da mochila no asteroide?
 \end{enumerate}
 
-\questao{Exercício 4.19}
-Uma garrafa de cerveja repousa sobre uma mesa.
-\begin{enumerate}[label=(\alph*)]
-    \item Identifique todas as forças que atuam \textbf{sobre} a garrafa e desenhe o diagrama do corpo livre (DCL).
-    \item Para cada força que atua sobre a garrafa, indique a respectiva força de reação e identifique em que corpo ela atua.
-    \item As forças normal e peso que atuam na garrafa formam um par ação-reação da Terceira Lei de Newton? Explique.
+% 7
+\item \textbf{[Sears 4.24]} O piso de um elevador exerce uma força normal de $620\text{ N}$ de baixo para cima sobre um passageiro que pesa $650\text{ N}$.
+\begin{enumerate}[label=\alph*)]
+    \item Quais são as reações dessas duas forças no sentido da Terceira Lei de Newton?
+    \item O passageiro está sendo acelerado? Em caso afirmativo, determine o módulo, a direção e o sentido da aceleração.
 \end{enumerate}
 
-\questao{Exercício 4.29}
-Um carro de passeio de $1000\text{ kg}$ viaja a $20{,}0\text{ m/s}$ ao longo de uma estrada reta quando o motorista aciona os freios, parando completamente em uma distância de $40{,}0\text{ m}$.
-\begin{enumerate}[label=(\alph*)]
-    \item Calcule a aceleração do carro (supondo-a constante).
-    \item Calcule a força resultante necessária para pará-lo.
+% 8
+\item \textbf{[Sears 5.1]} Dois pesos de $25,0\text{ N}$ estão suspensos nas extremidades opostas de uma corda leve que passa sobre uma polia sem atrito. O centro da polia está ligado a uma corrente presa ao teto.
+\begin{enumerate}[label=\alph*)]
+    \item Qual é a tensão na corda?
+    \item Qual é a tensão na corrente presa ao teto?
 \end{enumerate}
 
-\questao{Exercício 5.1}
-Um bloco de peso $w = 65{,}0\text{ N}$ está suspenso em repouso por cabos de aço presos ao teto.
-\begin{enumerate}[label=(\alph*)]
-    \item Se o peso estiver suspenso por um único cabo vertical, qual é a tensão no cabo?
-    \item Se o peso for sustentado por dois cabos verticais idênticos em paralelo, qual é a tensão em cada cabo?
+% 9
+\item \textbf{[Sears 5.11]} Um homem empurra um piano de $180\text{ kg}$, de modo que ele desliza com velocidade constante para baixo de uma rampa inclinada de $11,0^\circ$ acima da horizontal. Despreze o atrito que atua sobre o piano. Calcule o módulo da força aplicada pelo homem se ela for:
+\begin{enumerate}[label=\alph*)]
+    \item paralela ao plano inclinado;
+    \item paralela ao piso horizontal.
 \end{enumerate}
 
-\questao{Exercício 5.5}
-Uma mulher de $50{,}0\text{ kg}$ fica de pé sobre uma balança de mola instalada no chão de um elevador.
-\begin{enumerate}[label=(\alph*)]
-    \item O que a balança indica quando o elevador sobe com velocidade constante de $4{,}00\text{ m/s}$?
-    \item O que a balança indica quando o elevador desce com velocidade constante de $4{,}00\text{ m/s}$?
+% 10
+\item \textbf{[Sears 5.28]} Uma caixa de $25,0\text{ kg}$ com livros repousa sobre uma mesa horizontal. O coeficiente de atrito estático entre a caixa e a mesa é $0,40$ e o coeficiente de atrito cinético é $0,20$.
+\begin{enumerate}[label=\alph*)]
+    \item Qual é o peso da caixa e o módulo da força normal exercida pela mesa sobre ela?
+    \item Qual força horizontal é necessária para iniciar o movimento da caixa?
+    \item Qual força horizontal é necessária para manter a caixa em movimento com velocidade constante uma vez iniciado o deslizamento?
 \end{enumerate}
 
-\questao{Exercício 5.23}
-Um caixote de $25{,}0\text{ kg}$ está sobre um piso plano horizontal. Os coeficientes de atrito entre o caixote e o piso são $\mu_s = 0{,}400$ e $\mu_c = 0{,}300$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Que força horizontal mínima deve ser aplicada ao caixote para colocá-lo em movimento?
-    \item Uma vez em movimento, qual é o módulo da força de atrito cinético?
-\end{enumerate}
-
-\questao{Exercício 5.37}
-Uma pedra de $0{,}800\text{ kg}$ amarrada à extremidade de um cordão gira em um círculo horizontal de raio $0{,}900\text{ m}$ sobre uma mesa sem atrito a uma velocidade constante de $4{,}50\text{ m/s}$.
-\begin{enumerate}[label=(\alph*)]
-    \item Calcule a aceleração radial da pedra.
-    \item Calcule a tensão no cordão.
-\end{enumerate}
-
-\questao{Exercício 5.41}
-Um carro esportivo de $1200\text{ kg}$ trafega em uma curva horizontal de raio $R = 50{,}0\text{ m}$. O coeficiente de atrito estático entre os pneus e a pista seca é $\mu_s = 0{,}800$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Qual é a força física responsável por manter o carro na curva, atuando como resultante centrípeta?
-    \item Qual é a velocidade máxima com que o carro pode fazer a curva sem derrapar?
 \end{enumerate}
 
 \newpage
-\section*{Parte II --- Questões Médias (15 Questões)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{PARTE II: QUESTÕES MÉDIAS (15 QUESTÕES)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\questao{Exercício 4.25}
-Dois blocos de massas $m_1 = 4{,}00\text{ kg}$ e $m_2 = 6{,}00\text{ kg}$ estão em contato sobre uma mesa horizontal sem atrito. Uma força horizontal externa de módulo $F = 20{,}0\text{ N}$ é aplicada ao bloco $m_1$ empurrando-o contra $m_2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Calcule a aceleração do conjunto.
-    \item Calcule o módulo da força de contato entre o bloco 1 e o bloco 2.
-    \item Se a mesma força $F$ fosse aplicada no bloco $m_2$ empurrando-o para a esquerda contra $m_1$, a força de contato entre eles continuaria a mesma? Justifique.
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=0.45cm, resume]
+
+% 11
+\item \textbf{[Sears 4.5]} Dois cachorros puxam horizontalmente cordas amarradas a um poste; o ângulo entre as duas cordas é igual a $60,0^\circ$. Se o cachorro A exerce uma força de $270\text{ N}$ e o cachorro B exerce uma força de $300\text{ N}$, ache o módulo da força resultante sobre o poste e o ângulo que ela forma com a corda puxada pelo cachorro A.
+
+% 12
+\item \textbf{[Sears 4.11]} Um disco de hóquei com massa de $0,160\text{ kg}$ está em repouso na origem ($x = 0$) em uma superfície horizontal sem atrito da pista. No instante $t = 0$, um jogador aplica uma força constante de $0,250\text{ N}$ sobre o disco, paralela ao eixo $Ox$. Ele continua a aplicar essa força até o instante $t = 2,00\text{ s}$.
+\begin{enumerate}[label=\alph*)]
+    \item Qual é a posição e a velocidade do disco no instante $t = 2,00\text{ s}$?
+    \item Se a mesma força for aplicada novamente no instante $t = 5,00\text{ s}$ no mesmo sentido, qual será a posição e a velocidade do disco no instante $t = 7,00\text{ s}$?
 \end{enumerate}
 
-\questao{Exercício 4.35}
-Uma partícula de massa $m = 2{,}00\text{ kg}$ move-se em uma linha reta com velocidade dada por $v(t) = (3{,}00\text{ m/s}^3) t^2 - (4{,}00\text{ m/s})$.
-\begin{enumerate}[label=(\alph*)]
-    \item Ache a força resultante que atua sobre a partícula em função do tempo.
-    \item Qual é o valor da força resultante em $t = 3{,}00\text{ s}$?
+% 13
+\item \textbf{[Sears 4.17]} Uma caixa com massa de $5,0\text{ kg}$ é puxada por uma corda ao longo de uma superfície horizontal lisa sem atrito. A tensão na corda é de $40,0\text{ N}$ e ela faz um ângulo de $30,0^\circ$ acima da horizontal.
+\begin{enumerate}[label=\alph*)]
+    \item Qual é a aceleração horizontal da caixa?
+    \item Qual é o módulo da força normal que a superfície exerce sobre a caixa?
 \end{enumerate}
 
-\questao{Exercício 4.41}
-Um elevador carregado de massa total $m = 1600\text{ kg}$ desce a uma taxa inicial de $12{,}0\text{ m/s}$ e é parado em uma distância de $42{,}0\text{ m}$ com aceleração constante. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Determine a magnitude e o sentido da aceleração durante a frenagem.
-    \item Calcule a tensão no cabo de sustentação durante a frenagem.
+% 14
+\item \textbf{[Sears 4.25]} Uma estudante com massa de $45\text{ kg}$ pula de um trampolim elevado. Considerando a massa da Terra como $6,0 \times 10^{24}\text{ kg}$, qual é a aceleração da Terra no sentido da estudante quando ela se acelera no sentido da Terra com $9,80\text{ m/s}^2$? Suponha que a força resultante sobre a Terra seja a força gravitacional que a estudante exerce sobre ela.
+
+% 15
+\item \textbf{[Sears 4.36]} Um estudante de física com $550\text{ N}$ de peso sobe em uma balança de mola apoiada no chão de um elevador. Conforme o elevador se move, a balança registra uma leitura de peso aparente de $450\text{ N}$.
+\begin{enumerate}[label=\alph*)]
+    \item Determine o módulo, a direção e o sentido da aceleração do elevador.
+    \item Se a balança registrar $670\text{ N}$, qual será a aceleração do elevador?
+    \item Se a leitura da balança for nula, o que se pode concluir sobre o movimento do elevador?
 \end{enumerate}
 
-\questao{Exercício 5.7}
-Um semáforo de peso $w = 250\text{ N}$ está pendurado em um ponto central ligado a dois cabos: o cabo 1 faz um ângulo de $37{,}0^\circ$ com a horizontal e o cabo 2 faz um ângulo de $53{,}0^\circ$ com a horizontal.
-\begin{enumerate}[label=(\alph*)]
-    \item Escreva as equações de equilíbrio para o nó central.
-    \item Calcule a tensão em cada cabo.
+% 16
+\item \textbf{[Sears 4.39]} Dois blocos de massas $m_1 = 4,0\text{ kg}$ e $m_2 = 6,0\text{ kg}$ estão apoiados lado a lado em contato mútuo sobre uma superfície horizontal sem atrito. Uma força horizontal constante $F = 30,0\text{ N}$ é aplicada ao bloco $m_1$, empurrando-o contra o bloco $m_2$.
+\begin{enumerate}[label=\alph*)]
+    \item Desenhe o diagrama do corpo livre para cada um dos blocos.
+    \item Qual é a aceleração do sistema formado pelos dois blocos?
+    \item Qual é o módulo da força de contato exercida entre os dois blocos?
 \end{enumerate}
 
-\questao{Exercício 5.9}
-Um bloco de $8{,}00\text{ kg}$ repousa em uma rampa inclinada sem atrito que faz um ângulo de $30{,}0^\circ$ com a horizontal. O bloco é mantido em equilíbrio por uma corda paralela à rampa. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Desenhe o diagrama do corpo livre (DCL) do bloco.
-    \item Calcule a tensão na corda e a força normal exercida pela rampa sobre o bloco.
+% 17
+\item \textbf{[Sears 5.3]} Um quadro está suspenso em uma parede por meio de dois fios presos aos seus cantos superiores. Cada fio forma um ângulo de $30,0^\circ$ com a vertical. Se a massa total do quadro for de $1,50\text{ kg}$, calcule a tensão em cada um dos fios.
+
+% 18
+\item \textbf{[Sears 5.9]} Um carro de $1000\text{ kg}$ está sobre uma rampa sem atrito inclinada de $20,0^\circ$ em relação à horizontal, sendo sustentado por um cabo de aço paralelo à rampa.
+\begin{enumerate}[label=\alph*)]
+    \item Se o carro sobe a rampa com velocidade constante de $15,0\text{ m/s}$, qual é a tensão no cabo?
+    \item Se o carro sobe a rampa acelerando a uma taxa de $2,00\text{ m/s}^2$, qual é a tensão no cabo?
 \end{enumerate}
 
-\questao{Exercício 5.13}
-Dois pesos de massas $m_1 = 2{,}00\text{ kg}$ e $m_2 = 5{,}00\text{ kg}$ estão conectados por uma corda sem massa que passa sobre uma polia sem atrito (máquina de Atwood). Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Calcule a aceleração de cada massa quando o sistema é liberado do repouso.
-    \item Calcule a tensão na corda durante o movimento.
+% 19
+\item \textbf{[Sears 5.17]} Um bloco de gelo de $8,00\text{ kg}$, liberado a partir do repouso no topo de uma rampa sem atrito com $1,50\text{ m}$ de comprimento, desliza para baixo, alcançando uma velocidade escalar de $2,50\text{ m/s}$ na base da rampa.
+\begin{enumerate}[label=\alph*)]
+    \item Qual é o ângulo de inclinação da rampa com a horizontal?
+    \item Qual seria a velocidade escalar do bloco na base se ele fosse lançado para cima a partir da base ao longo da mesma rampa com velocidade inicial de $2,50\text{ m/s}$?
 \end{enumerate}
 
-\questao{Exercício 5.17}
-Um planador de massa $m_1 = 0{,}500\text{ kg}$ está sobre um trilho de ar horizontal sem atrito conectado por uma linha leve a um peso suspenso $m_2 = 0{,}200\text{ kg}$ por meio de uma polia ideal. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Ache a aceleração do planador.
-    \item Ache a tensão na linha.
+% 20
+\item \textbf{[Sears 5.19]} \textbf{Máquina de Atwood.} Uma carga de tijolos com massa de $15,0\text{ kg}$ é suspensa pela extremidade de uma corda leve que passa sobre uma pequena polia fixa sem atrito. Um contrapeso de $28,0\text{ kg}$ está preso na outra extremidade da corda. O sistema é liberado a partir do repouso.
+\begin{enumerate}[label=\alph*)]
+    \item Desenhe o diagrama do corpo livre para a carga de tijolos e outro para o contrapeso.
+    \item Qual é o módulo da aceleração do sistema?
+    \item Qual é a tensão na corda durante o movimento acelerado?
 \end{enumerate}
 
-\questao{Exercício 5.25}
-Um caixote de $500\text{ N}$ é puxado sobre um piso horizontal por uma corda que faz um ângulo de $30{,}0^\circ$ acima da horizontal. O coeficiente de atrito cinético entre o caixote e o piso é $\mu_c = 0{,}250$.
-\begin{enumerate}[label=(\alph*)]
-    \item Determine a tensão $T$ na corda para puxar o caixote com velocidade constante.
-    \item Qual é o módulo da força normal exercida pelo piso sobre o caixote nesta condição?
+% 21
+\item \textbf{[Sears 5.23]} Um tobogã com massa de $75,0\text{ kg}$ desce uma encosta coberta de neve inclinada de $25,0^\circ$ com a horizontal. O coeficiente de atrito cinético entre os patins do tobogã e a neve é $\mu_c = 0,12$.
+\begin{enumerate}[label=\alph*)]
+    \item Desenhe o diagrama do corpo livre para o tobogã.
+    \item Calcule o módulo da força normal exercida pela encosta sobre o tobogã.
+    \item Calcule a aceleração do tobogã ao longo da encosta.
 \end{enumerate}
 
-\questao{Exercício 5.29}
-Um tobogã com crianças (peso total $w = 400\text{ N}$) desce uma colina de neve com inclinação constante de $37{,}0^\circ$. O coeficiente de atrito cinético entre os patins e a neve é $\mu_c = 0{,}150$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Escreva a equação da Segunda Lei de Newton ao longo da encosta.
-    \item Calcule a aceleração do tobogã encosta abaixo.
+% 22
+\item \textbf{[Sears 5.31]} Uma caixa de ferramentas de $45,0\text{ kg}$ está em repouso sobre um piso horizontal. Você exerce sobre ela uma força de puxar horizontal que aumenta gradualmente e observa que a caixa só começa a se mover quando a sua força ultrapassa $313\text{ N}$. A partir daí, você deve reduzir sua força de puxar para $208\text{ N}$ para mantê-la em movimento com velocidade constante de $25,0\text{ cm/s}$.
+\begin{enumerate}[label=\alph*)]
+    \item Quais são os coeficientes de atrito estático ($\mu_e$) e cinético ($\mu_c$) entre a caixa e o piso?
+    \item Que força horizontal de puxar você deve exercer para imprimir à caixa uma aceleração de $1,10\text{ m/s}^2$?
+    \item Suponha que você realize essa experiência na Lua ($g = 1,62\text{ m/s}^2$). Qual seria a força necessária para iniciar o movimento?
 \end{enumerate}
 
-\questao{Exercício 5.33}
-Um bloco de pedra é colocado sobre uma prancha de madeira inclinável. O ângulo de inclinação da prancha é aumentado lentamente a partir de zero até que, em $\theta = 35{,}0^\circ$, o bloco começa a deslizar.
-\begin{enumerate}[label=(\alph*)]
-    \item Mostre que na iminência do movimento o coeficiente de atrito estático satisfaz $\mu_s = \tan\theta$ e calcule o valor de $\mu_s$.
-    \item Se uma vez iniciado o movimento o bloco deslizar com velocidade constante sob uma inclinação de $\theta' = 28{,}0^\circ$, calcule o coeficiente de atrito cinético $\mu_c$.
+% 23
+\item \textbf{[Sears 5.33]} Um engradado de $48,0\text{ kg}$ está sobre um piso horizontal rugoso com coeficiente de atrito cinético $\mu_c = 0,30$. Você puxa o engradado por meio de uma corda que faz um ângulo de $30,0^\circ$ acima da horizontal. Se a tensão na corda for de $250\text{ N}$:
+\begin{enumerate}[label=\alph*)]
+    \item Calcule o módulo da força normal exercida pelo piso sobre o engradado.
+    \item Calcule a força de atrito cinético exercida sobre o engradado.
+    \item Calcule a aceleração horizontal do engradado.
 \end{enumerate}
 
-\questao{Exercício 5.39}
-Uma pequena bola de massa $m = 0{,}250\text{ kg}$ gira em um círculo horizontal na extremidade de um fio leve de comprimento $L = 0{,}800\text{ m}$ (pêndulo cônico). O fio faz um ângulo $\beta = 30{,}0^\circ$ com a vertical. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Determine a tensão no fio.
-    \item Calcule o período de rotação do movimento.
+% 24
+\item \textbf{[Sears 5.43]} Uma curva plana em uma rodovia possui raio de curvatura igual a $220\text{ m}$. Em um dia chuvoso, o coeficiente de atrito estático entre os pneus de um veículo e o asfalto é $\mu_e = 0,40$. Qual é a velocidade máxima com que um automóvel pode realizar essa curva sem derrapar lateralmente (expresse a resposta em m/s e em km/h)?
+
+% 25
+\item \textbf{[Sears 5.47]} \textbf{Pêndulo Cônico.} Uma pequena esfera pesada de massa $m$ está presa à extremidade de uma corda leve de comprimento $L = 1,20\text{ m}$. A esfera gira com velocidade constante em uma trajetória circular horizontal de raio $r = 0,50\text{ m}$, de modo que a corda descreve a superfície de um cone reto formando um ângulo $\beta$ com a vertical.
+\begin{enumerate}[label=\alph*)]
+    \item Determine o valor do ângulo $\beta$.
+    \item Calcule a velocidade escalar constante da esfera ao longo do círculo.
+    \item Determine o período de revolução $T$ do movimento circular.
 \end{enumerate}
 
-\questao{Exercício 5.45}
-Uma curva de rodovia com raio $R = 120\text{ m}$ é inclinada (sobreelevada) para uma velocidade de projeto de $v = 20{,}0\text{ m/s}$ ($72{,}0\text{ km/h}$). Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Qual deve ser o ângulo de inclinação $\beta$ da pista para que os veículos façam a curva sem depender de atrito?
-    \item Se um carro fizer a curva a essa velocidade, qual é o módulo da força normal exercida pela pista sobre um passageiro de $60{,}0\text{ kg}$?
-\end{enumerate}
-
-\questao{Exercício 5.49}
-Um passageiro de $70{,}0\text{ kg}$ anda em uma roda-gigante vertical de raio $R = 12{,}0\text{ m}$ que gira com velocidade tangencial constante $v = 4{,}00\text{ m/s}$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Calcule o peso aparente do passageiro no ponto mais baixo da trajetória (base).
-    \item Calcule o peso aparente do passageiro no ponto mais alto da trajetória (topo).
-\end{enumerate}
-
-\questao{Exercício 5.51}
-Uma pequena esfera cai através de um líquido viscoso onde a força de resistência é linear: $F_{\text{arraste}} = -kv$. A massa da esfera é $m = 2{,}00\times 10^{-3}\text{ kg}$ e a velocidade terminal observada é $v_t = 0{,}800\text{ m/s}$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Deduza a expressão da velocidade terminal e encontre o valor numérico da constante $k$.
-    \item Qual é a aceleração da esfera quando sua velocidade é metade da velocidade terminal ($v = 0{,}400\text{ m/s}$)?
-\end{enumerate}
-
-\questao{Exercício 5.53}
-Um paraquedista de $80{,}0\text{ kg}$ salta de uma aeronave. A força de resistência do ar em queda livre tem o modelo quadrático $f = D v^2$, com constante de arraste $D = 0{,}250\text{ kg/m}$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Determine a velocidade terminal atingida pelo paraquedista em queda livre.
-    \item Qual é a aceleração do paraquedista no instante em que sua velocidade de queda for de $30{,}0\text{ m/s}$?
 \end{enumerate}
 
 \newpage
-\section*{Parte III --- Questões Difíceis (15 Questões)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{PARTE III: QUESTÕES DIFÍCEIS -- PROBLEMAS (15 QUESTÕES)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\questao{Problema 4.45}
-Um objeto de $3{,}00\text{ kg}$ está inicialmente em repouso na origem de coordenadas. Em $t = 0$, passa a atuar uma força resultante dada por $\vec{F}(t) = (8{,}00 t)\hat{i} + (3{,}00 t^2)\hat{j}$ (em Newtons).
-\begin{enumerate}[label=(\alph*)]
-    \item Calcule o vetor aceleração $\vec{a}(t)$ e o vetor velocidade $\vec{v}(t)$ para qualquer instante $t$.
-    \item Calcule o vetor posição da partícula e o módulo de sua velocidade no instante $t = 2{,}00\text{ s}$.
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=*, itemsep=0.45cm, resume]
+
+% 26
+\item \textbf{[Sears 4.45]} Para estudar o dano que a colisão com grandes pássaros pode causar a um avião, projeta-se uma arma de teste pneumática que acelera projéteis ao longo de um cano cilíndrico reto, de modo que a posição do projétil em função do tempo é dada por:
+\[ x(t) = (9,0 \times 10^3\text{ m/s}^2)\,t^2 - (8,0 \times 10^4\text{ m/s}^3)\,t^3 \]
+O projétil de massa $m = 1,50\text{ kg}$ deixa a boca do cano no instante $t = 0,025\text{ s}$.
+\begin{enumerate}[label=\alph*)]
+    \item Qual deve ser o comprimento do cano da arma de teste?
+    \item Qual é a velocidade escalar do projétil no instante em que ele emerge do cano?
+    \item Qual é o módulo da força resultante que atua sobre o projétil em: i) $t = 0$; ii) $t = 0,025\text{ s}$?
 \end{enumerate}
 
-\questao{Problema 4.49}
-Uma pessoa de $65{,}0\text{ kg}$ está sobre uma balança de mola apoiada no piso de um veículo que sobe uma encosta de inclinação $\alpha = 30{,}0^\circ$ com a horizontal. O veículo acelera encosta acima com aceleração constante $a = 2{,}00\text{ m/s}^2$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Desenhe o DCL da pessoa decompondo em eixos horizontal e vertical.
-    \item Determine a força normal (leitura da balança) exercida sobre a pessoa e a força de atrito que os sapatos dela devem suportar para que ela não escorregue.
+% 27
+\item \textbf{[Sears 4.47]} Um instrumento científico de $6,50\text{ kg}$ está pendurado por um cabo vertical no interior de uma espaçonave de teste que está sendo lançada verticalmente a partir da superfície terrestre. O foguete parte do repouso e atinge a altitude de $276\text{ m}$ em $15,0\text{ s}$ com aceleração vertical constante.
+\begin{enumerate}[label=\alph*)]
+    \item Desenhe o diagrama do corpo livre para o instrumento durante essa fase do voo, indicando claramente qual força possui maior módulo.
+    \item Calcule o módulo da força de tração que o cabo vertical exerce sobre o instrumento.
 \end{enumerate}
 
-\questao{Problema 4.53}
-Um pêndulo simples é pendurado no teto de um vagão que acelera horizontalmente para a direita com aceleração constante $a$. O fio do pêndulo inclina-se para trás, fazendo um ângulo estável de $20{,}0^\circ$ com a vertical. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Mostre que a aceleração do vagão independe da massa do pêndulo e calcule o valor numérico de $a$.
-    \item Se a massa da esfera for $0{,}500\text{ kg}$, calcule a tensão no fio do pêndulo.
+% 28
+\item \textbf{[Sears 4.53]} Um paraquedista com massa total de $75,0\text{ kg}$ pula de uma aeronave a grande altitude. Durante a queda vertical antes de abrir o paraquedas, a força de resistência do ar oposta à velocidade é dada por $F_{\text{res}} = -k v^2$, onde $k = 0,250\text{ kg/m}$.
+\begin{enumerate}[label=\alph*)]
+    \item Obtenha o valor da velocidade terminal $v_t$ atingida pelo paraquedista.
+    \item Determine a aceleração instantânea de queda quando a sua velocidade for igual a metade da velocidade terminal ($v = v_t / 2$).
 \end{enumerate}
 
-\questao{Problema 5.61}
-Três blocos estão conectados por fios leves e inextensíveis sobre uma mesa horizontal: o bloco 1 ($1{,}00\text{ kg}$), o bloco 2 ($2{,}00\text{ kg}$) e o bloco 3 ($3{,}00\text{ kg}$). O coeficiente de atrito cinético entre todos os blocos e a mesa é $\mu_c = 0{,}200$. Uma força horizontal $F = 30{,}0\text{ N}$ puxa o bloco 3 para a direita. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Determine a aceleração do sistema.
-    \item Calcule a tensão no fio entre os blocos 1 e 2 ($T_{12}$) e no fio entre os blocos 2 e 3 ($T_{23}$).
+% 29
+\item \textbf{[Sears 4.59]} Um objeto com massa $m$ move-se em linha reta ao longo do eixo $Ox$. Sua coordenada de posição em função do tempo é descrita por $x(t) = A t - B t^3$, onde $A$ e $B$ são constantes positivas conhecidas.
+\begin{enumerate}[label=\alph*)]
+    \item Obtenha as expressões algébricas para a velocidade $v(t)$ e a aceleração $a(t)$ do objeto.
+    \item Encontre a expressão analítica da força resultante $F(t)$ exercida sobre o corpo.
+    \item Em qual instante de tempo a força resultante sobre o corpo se anula?
 \end{enumerate}
 
-\questao{Problema 5.67}
-Um bloco $A$ de massa $m_A = 2{,}00\text{ kg}$ repousa sobre um bloco $B$ de massa $m_B = 5{,}00\text{ kg}$. O coeficiente de atrito estático entre $A$ e $B$ é $\mu_s = 0{,}400$. O bloco $B$ repousa sobre uma mesa horizontal sem atrito. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Qual é a aceleração máxima que o bloco $B$ pode ter sem que o bloco $A$ deslize sobre ele?
-    \item Qual é o valor máximo da força horizontal $F$ que pode ser aplicada ao bloco $B$ para acelerar o conjunto sem haver deslizamento relativo entre $A$ e $B$?
+% 30
+\item \textbf{[Sears 5.57]} Um trabalhador de $80,0\text{ kg}$ está de pé sobre uma plataforma suspensa de $25,0\text{ kg}$ e puxa uma corda leve que passa por uma polia presa ao teto, de modo que ele e a plataforma aceleram juntos para cima com taxa constante de $1,20\text{ m/s}^2$. Despreze o atrito e as massas das polias e da corda.
+\begin{enumerate}[label=\alph*)]
+    \item Desenhe os diagramas do corpo livre separados para o homem e para a plataforma.
+    \item Calcule a força de tração que o homem deve exercer sobre a corda.
+    \item Calcule o módulo da força normal que atua entre os pés do homem e a plataforma.
 \end{enumerate}
 
-\questao{Problema 5.71}
-O bloco $A$ ($m_A = 4{,}00\text{ kg}$) repousa sobre o bloco $B$ ($m_B = 8{,}00\text{ kg}$). O bloco $A$ está amarrado a uma parede vertical fixa por um cabo horizontal. O coeficiente de atrito cinético entre todas as superfícies (entre $A$ e $B$, e entre $B$ e a mesa) é $\mu_c = 0{,}250$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Desenhe os diagramas do corpo livre de ambos os blocos.
-    \item Determine a força horizontal $F$ necessária para puxar o bloco $B$ para a direita com velocidade constante.
+% 31
+\item \textbf{[Sears 5.63]} \textbf{Corda com massa.} Em problemas de mecânica, as massas dos cabos e cordas costumam ser desprezadas. Quando uma corda pesada e flexível de massa $M$ está suspensa horizontalmente entre dois apoios fixados à mesma altura, suas extremidades formam um ângulo $\theta$ com a linha horizontal.
+\begin{enumerate}[label=\alph*)]
+    \item Determine a tensão $T_1$ nas extremidades da corda em função de $M$, $g$ e $\theta$.
+    \item Determine a tensão $T_0$ no ponto mais baixo (ponto médio inferior) da corda.
+    \item Explique por que é fisicamente impossível que o ângulo $\theta$ seja rigorosamente igual a zero para uma corda com massa sob a ação da gravidade.
 \end{enumerate}
 
-\questao{Problema 5.75}
-Dois blocos repousam sobre duas faces de uma cunha fixa: o bloco $A$ ($m_A = 4{,}00\text{ kg}$) em uma face inclinada de $30{,}0^\circ$ e o bloco $B$ ($m_B = 2{,}00\text{ kg}$) na outra face inclinada de $53{,}0^\circ$. Os blocos estão conectados por um fio que passa por uma polia ideal no vértice da cunha. O coeficiente de atrito cinético em ambas as faces é $\mu_c = 0{,}100$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Determine se o sistema entra em movimento e qual seria o sentido do movimento.
-    \item Calcule a aceleração do sistema (ou mostre que ele permanece estático) e determine a tensão no fio.
+% 32
+\item \textbf{[Sears 5.70]} Um foguete de pesquisa de $25\,000\text{ kg}$ é lançado verticalmente da superfície terrestre com aceleração constante dirigida para cima de $2,50\text{ m/s}^2$. Durante a fase inicial do movimento, adote $g = 9,80\text{ m/s}^2$.
+\begin{enumerate}[label=\alph*)]
+    \item Qual é o módulo da força total de propulsão exercida pelos motores sobre o foguete?
+    \item Um sensor experimental de $15,0\text{ kg}$ está apoiado no assoalho da câmara de carga do foguete. Calcule a força normal que o piso exerce sobre o sensor durante essa subida acelerada.
 \end{enumerate}
 
-\questao{Problema 5.79}
-Um bloco de massa $m_1 = 12{,}0\text{ kg}$ está sobre uma mesa horizontal sem atrito conectado a um fio ideal que passa por uma polia fixa e em seguida por uma polia móvel leve sustentando uma massa suspensa $m_2 = 5{,}00\text{ kg}$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Estabeleça a relação entre a aceleração $a_1$ do bloco na mesa e a aceleração $a_2$ do bloco suspenso através do vínculo cinemático do fio.
-    \item Calcule a aceleração de cada bloco e a tensão no fio.
+% 33
+\item \textbf{[Sears 5.71]} Dois blocos retangulares de massas $m_A = 2,0\text{ kg}$ e $m_B = 4,0\text{ kg}$ estão sobrepostos: o bloco A está apoiado diretamente sobre o bloco B. O coeficiente de atrito estático entre as superfícies em contato dos blocos A e B é $\mu_e = 0,30$. A superfície da mesa horizontal sobre a qual o bloco B se apoia é perfeitamente lisa (sem atrito). Uma força horizontal $F$ é aplicada diretamente sobre o bloco inferior B.
+\begin{enumerate}[label=\alph*)]
+    \item Qual é a aceleração máxima que o bloco A pode ter antes de começar a escorregar sobre o bloco B?
+    \item Qual é o módulo máximo da força horizontal $F$ que pode ser aplicada ao bloco B para que os blocos A e B se acelerem juntos sem que haja deslizamento entre eles?
 \end{enumerate}
 
-\questao{Problema 5.83}
-Uma curva de rodovia com raio $R = 70{,}0\text{ m}$ tem inclinação (sobreelevação) de $\beta = 15{,}0^\circ$. O coeficiente de atrito estático entre os pneus e a pista molhada é $\mu_s = 0{,}200$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Calcule a velocidade máxima $v_{\text{máx}}$ com que um carro pode fazer a curva sem derrapar rampa acima.
-    \item Calcule a velocidade mínima $v_{\text{mín}}$ para o carro não escorregar rampa abaixo.
+% 34
+\item \textbf{[Sears 5.77]} Um bloco com massa $m = 3,00\text{ kg}$ está sobre uma rampa inclinada de $37,0^\circ$ com a horizontal. O coeficiente de atrito cinético entre o bloco e a rampa é $\mu_c = 0,30$. O bloco é lançado para cima ao longo da rampa com velocidade inicial $v_0 = 8,00\text{ m/s}$.
+\begin{enumerate}[label=\alph*)]
+    \item Calcule a distância que o bloco percorre rampa acima até parar momentaneamente.
+    \item Verifique se o bloco, após parar no ponto mais alto, permanece em repouso ou desliza de volta para baixo, sabendo que $\mu_e = 0,40$. Em caso afirmativo, determine sua velocidade ao retornar à base.
 \end{enumerate}
 
-\questao{Problema 5.87}
-Em um parque de diversões, as pessoas entram em um cilindro vertical de raio $R = 4{,}00\text{ m}$ (o ``Rotor''). O cilindro gira em torno do seu eixo vertical e, ao atingir certa velocidade, o piso é rebaixado, deixando os passageiros suspensos encostados na parede. O coeficiente de atrito estático entre as roupas e a parede é $\mu_s = 0{,}350$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Faça o diagrama do corpo livre do passageiro preso à parede.
-    \item Calcule a velocidade angular mínima $\omega_{\text{mín}}$ (em $\text{rad/s}$ e em $\text{rpm}$) para que ninguém escorregue para baixo.
+% 35
+\item \textbf{[Sears 5.85]} Três blocos estão conectados por meio de fios leves e polias ideais sem atrito: o bloco A de massa $m_A = 4,0\text{ kg}$ está suspenso verticalmente na extremidade esquerda; o bloco B de massa $m_B = 12,0\text{ kg}$ desliza sobre uma mesa horizontal com coeficiente de atrito cinético $\mu_c = 0,25$; e o bloco C está suspenso verticalmente na extremidade direita. O bloco B está se movendo para a direita com uma aceleração constante de $2,00\text{ m/s}^2$.
+\begin{enumerate}[label=\alph*)]
+    \item Determine a tensão na corda que conecta o bloco A ao bloco B.
+    \item Determine a massa necessária para o bloco pendente C.
 \end{enumerate}
 
-\questao{Problema 5.91}
-Um carrinho de montanha-russa de massa $m$ passa por um loop vertical circular de raio $R = 15{,}0\text{ m}$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Qual é a velocidade mínima que o carrinho deve ter no topo do loop para não perder o contato com os trilhos?
-    \item Se a velocidade no topo for $v_{\text{topo}} = 16{,}0\text{ m/s}$ e a massa do passageiro for $60{,}0\text{ kg}$, qual é a força normal exercida pelo assento sobre o passageiro no topo?
+% 36
+\item \textbf{[Sears 5.89]} Dois objetos com massas de $5,0\text{ kg}$ e $2,0\text{ kg}$ estão suspensos a $0,600\text{ m}$ acima do solo, presos nas extremidades opostas de uma corda leve de $6,0\text{ m}$ que passa sobre uma polia fixa sem atrito. Os dois corpos partem do repouso. O objeto mais pesado desce até colidir com o solo e permanecer em repouso. Calcule a altura máxima que o objeto de $2,0\text{ kg}$ atinge acima do solo.
+
+% 37
+\item \textbf{[Sears 5.91]} Um bloco A com massa $m$ é pressionado contra a face vertical dianteira de um carrinho de transporte. O coeficiente de atrito estático entre o bloco e a face vertical do carrinho é $\mu_e$.
+\begin{enumerate}[label=\alph*)]
+    \item Qual deve ser a aceleração mínima do carrinho para que o bloco A não escorregue para baixo em relação à parede vertical do carrinho?
+    \item Descreva como as forças sobre o bloco são justificadas e compreendidas por um passageiro situado em repouso dentro do referencial do carrinho acelerado.
 \end{enumerate}
 
-\questao{Problema 5.95}
-Uma esfera de $1{,}50\text{ kg}$ está presa por dois fios leves de mesmo comprimento $L = 1{,}00\text{ m}$ a uma haste vertical giratória. Os pontos de fixação dos fios na haste distam $1{,}20\text{ m}$ entre si. O sistema gira em torno da haste com velocidade angular constante $\omega$. Adote $g = 9{,}80\text{ m/s}^2$.
-\begin{enumerate}[label=(\alph*)]
-    \item Calcule o raio $R$ da trajetória circular e o ângulo $\theta$ que cada fio faz com a vertical.
-    \item Calcule a velocidade angular mínima $\omega_{\text{mín}}$ para que o fio inferior permaneça esticado.
-    \item Se $\omega = 6{,}00\text{ rad/s}$, determine a tensão no fio superior e no fio inferior.
+% 38
+\item \textbf{[Sears 5.95]} \textbf{Curva inclinada com atrito.} Uma curva com raio de curvatura igual a $120\text{ m}$ em uma estrada possui uma sobrelevação (ângulo de inclinação lateral $\theta$) projetada para que veículos a uma velocidade escalar de $20,0\text{ m/s}$ contornem a curva sem depender de nenhuma força de atrito lateral.
+\begin{enumerate}[label=\alph*)]
+    \item Calcule o ângulo de sobrelevação lateral $\theta$ da rodovia.
+    \item Se um veículo contornar essa mesma curva com velocidade de $30,0\text{ m/s}$, qual deve ser o coeficiente de atrito estático mínimo ($\mu_e$) entre os pneus e a pista para que o carro não derrape para fora da curva?
 \end{enumerate}
 
-\questao{Problema 5.99}
-Um projétil de massa $m$ é disparado verticalmente para cima com velocidade inicial $v_0$ e sofre uma força de resistência do ar linear $F_{\text{res}} = -kv$.
-\begin{enumerate}[label=(\alph*)]
-    \item Escreva a equação diferencial de Newton para a subida do projétil adotando o eixo para cima como positivo.
-    \item Integre a equação diferencial para obter a velocidade $v(t)$ em função do tempo até o ponto mais alto da trajetória.
+% 39
+\item \textbf{[Sears 5.106]} \textbf{Resistência de fluidos.} Uma pequena esfera pesada move-se no interior de um fluido viscoso, sofrendo uma força de resistência proporcional à velocidade escalar instantânea: $F_{\text{res}} = -k v$. Sabe-se que a velocidade terminal de descida da esfera é $v_t = 2,00\text{ m/s}$. A esfera é projetada verticalmente de baixo para cima dentro do fluido a partir da origem com velocidade inicial $v_0 = 6,00\text{ m/s}$. Despreze o empuxo.
+\begin{enumerate}[label=\alph*)]
+    \item Na ausência de resistência do fluido, qual seria a altura máxima atingida pela esfera e quanto tempo ela levaria para atingir o topo?
+    \item Levando em conta a resistência proporcional do fluido, deduza a equação da velocidade em função do tempo $v(t)$ e calcule a altura máxima atingida pela esfera no fluido.
 \end{enumerate}
 
-\questao{Problema 5.107}
-Uma cunha triangular de massa $M$ e ângulo de inclinação $\alpha$ repousa sobre uma mesa horizontal sem atrito. Um bloco de massa $m$ repousa sobre a face inclinada da cunha, também sem atrito.
-\begin{enumerate}[label=(\alph*)]
-    \item Faça o diagrama do corpo livre do bloco e da cunha.
-    \item Que força horizontal constante $F$ deve ser aplicada à cunha para que o bloco não escorregue para cima nem para baixo na rampa?
-\end{enumerate}
+% 40
+\item \textbf{[Sears 5.121]} Uma cunha triangular de massa $M$ e ângulo de inclinação $\alpha$ repousa sobre uma superfície horizontal perfeitamente lisa sem atrito. Um pequeno bloco de massa $m$ é colocado sobre a rampa da cunha, também sem atrito entre o bloco e a cunha. Uma força horizontal constante $F$ é aplicada à cunha. Qual deve ser o módulo da força $F$ para que o bloco permaneça em repouso em relação à cunha (isto é, mantendo-se a uma altura constante em relação à base e sem deslizar rampa acima nem rampa abaixo)?
 
-\questao{Problema 5.115}
-Um pequeno objeto de massa $m$ gira no interior de um cone oco invertido cujas paredes fazem um ângulo $\alpha$ com o eixo vertical. O objeto descreve um círculo horizontal de raio $R$ a uma distância vertical fixa do vértice. O coeficiente de atrito estático entre o objeto e a parede interna do cone é $\mu_s$.
-\begin{enumerate}[label=(\alph*)]
-    \item Deduza a expressão literal para a velocidade angular máxima $\omega_{\text{máx}}$ com que o cone pode girar sem que o bloco suba a parede.
-    \item Deduza a expressão literal para a velocidade angular mínima $\omega_{\text{mín}}$ para que o bloco não escorregue em direção ao vértice.
 \end{enumerate}
 
 \end{document}
