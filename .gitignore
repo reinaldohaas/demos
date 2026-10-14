@@ -13,3 +13,7 @@ Thumbs.db
 .idea/
 *.tmp
 *.log
+
+# Gabaritos (somente locais)
+*gabarito*
+
