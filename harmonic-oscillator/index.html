@@ -384,6 +384,18 @@
             border: 1px solid rgba(244, 63, 94, 0.4);
         }
 
+        .regime-instability {
+            background: rgba(239, 68, 68, 0.22);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.7);
+            animation: pulse-danger 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-danger {
+            0%, 100% { box-shadow: 0 0 6px rgba(239, 68, 68, 0.3); }
+            50% { box-shadow: 0 0 16px rgba(239, 68, 68, 0.75); }
+        }
+
         /* MAIN STAGE */
         .stage-area {
             display: flex;
@@ -572,6 +584,261 @@
             color: var(--accent-cyan);
             text-decoration: none;
         }
+
+        /* GEOPHYSICS MODULE & CONTROLS */
+        .geo-card {
+            background: linear-gradient(135deg, rgba(8, 25, 48, 0.95), rgba(6, 14, 30, 0.95));
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .geo-header-title {
+            color: #38bdf8;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .unit-toggle-group {
+            display: flex;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            padding: 3px;
+            gap: 4px;
+        }
+
+        .unit-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .unit-btn.active {
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: #040816;
+            font-weight: 700;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+        }
+
+        .geo-pills-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 6px;
+        }
+
+        .geo-pill {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #bae6fd;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-family: 'Fira Code', monospace;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .geo-pill:hover, .geo-pill.active {
+            background: rgba(56, 189, 248, 0.3);
+            border-color: #38bdf8;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .instability-btn {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(185, 28, 28, 0.3));
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            padding: 6px 12px;
+            border-radius: 7px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .instability-btn:hover {
+            background: rgba(239, 68, 68, 0.4);
+            border-color: #ef4444;
+            color: #fff;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+        }
+
+        .instability-btn.active {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.7);
+        }
+
+        /* TECHNICAL EXPLANATION SECTION */
+        .tech-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 18px;
+            margin-top: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .tech-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tech-header h2 {
+            font-size: 1.05rem;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tech-tabs {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+        }
+
+        .tech-tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tech-tab-btn:hover {
+            background: rgba(56, 189, 248, 0.15);
+            color: #fff;
+            border-color: var(--accent-cyan);
+        }
+
+        .tech-tab-btn.active {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(16, 185, 129, 0.2));
+            border-color: var(--accent-cyan);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .tech-tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tech-tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .callout-geo {
+            background: linear-gradient(135deg, rgba(14, 30, 60, 0.7), rgba(8, 16, 36, 0.8));
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            font-size: 0.84rem;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+
+        .callout-instability {
+            background: linear-gradient(135deg, rgba(60, 16, 24, 0.7), rgba(36, 8, 14, 0.8));
+            border-left: 4px solid var(--accent-red);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            font-size: 0.84rem;
+            line-height: 1.5;
+            color: #fecdd3;
+        }
+
+        .tech-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 12px 0;
+        }
+
+        @media (max-width: 900px) {
+            .tech-grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tech-box {
+            background: rgba(10, 16, 32, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .tech-box h3 {
+            font-size: 0.88rem;
+            color: var(--accent-cyan);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tech-box p, .tech-box li {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .tech-box ul {
+            padding-left: 18px;
+            margin: 6px 0;
+        }
+
+        .formula-box {
+            background: rgba(4, 7, 17, 0.9);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 8px 0;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            overflow-x: auto;
+        }
     </style>
 </head>
 <body>
@@ -595,13 +862,19 @@
 
     <!-- PRESETS BAR -->
     <nav class="presets-bar">
-        <span class="preset-label">Exemplos Rápidos:</span>
+        <span class="preset-label">Clássicos:</span>
         <button class="btn-preset active" id="preset-under">🌀 Subamortecido (\(b=0.5\))</button>
-        <button class="btn-preset" id="preset-crit">🎯 Amortecimento Crítico (\(b=2\sqrt{km}\))</button>
-        <button class="btn-preset" id="preset-over">🛡️ Superamortecido (\(b=3.5\))</button>
-        <button class="btn-preset" id="preset-undamped">〰️ Harmônico Simples (\(b=0\))</button>
-        <button class="btn-preset" id="preset-resonance">⚡ Ressonância Forçada (\(F = 1.5\cos(t)\))</button>
-        <button class="btn-preset" id="preset-beats">🎵 Batimentos (\(F = 1.2\cos(1.15t)\))</button>
+        <button class="btn-preset" id="preset-crit">🎯 Amortecimento Crítico</button>
+        <button class="btn-preset" id="preset-over">🛡️ Superamortecido</button>
+        <button class="btn-preset" id="preset-undamped">〰️ Harmônico Simples</button>
+        <button class="btn-preset" id="preset-resonance">⚡ Ressonância Forçada</button>
+        <button class="btn-preset" id="preset-beats">🎵 Batimentos</button>
+        
+        <span class="preset-label" style="margin-left: 8px; color: #fbbf24;">Geofísica & Instabilidade:</span>
+        <button class="btn-preset" id="preset-lat2996" style="border-color: #38bdf8; color: #bae6fd;">🌎 Lat -29.96° (Ressonância 24h)</button>
+        <button class="btn-preset" id="preset-geo-beats" style="border-color: #34d399; color: #a7f3d0;">🌊 Batimentos Costeiros (Lat -27.5°)</button>
+        <button class="btn-preset" id="preset-instability" style="border-color: #f87171; color: #fca5a5;">💥 Instabilidade Livre (\(\omega^2 < 0\))</button>
+        <button class="btn-preset" id="preset-instability-forced" style="border-color: #fb7185; color: #fecdd3;">🌪️ Instabilidade Forçada (\(\omega^2 < 0\))</button>
     </nav>
 
     <!-- MAIN APP LAYOUT -->
@@ -626,26 +899,32 @@
 
                 <div class="control-group">
                     
+                    <!-- Time Unit Selector -->
+                    <div class="unit-toggle-group">
+                        <button class="unit-btn active" id="btn-unit-s">⏱️ Tempo em Segundos (s)</button>
+                        <button class="unit-btn" id="btn-unit-h">⏳ Tempo em Horas (h)</button>
+                    </div>
+
                     <!-- m, b, k -->
                     <div class="control-grid-2">
                         <div class="control-item">
                             <label class="control-label-row"><span>Massa \(m\) (kg):</span></label>
-                            <input type="number" id="inp-m" value="1.0" min="0.01" step="0.1">
+                            <input type="number" id="inp-m" value="1.0" min="0.001" step="0.1">
                         </div>
                         <div class="control-item">
                             <label class="control-label-row"><span>Amortecimento \(b\):</span></label>
-                            <input type="number" id="inp-b" value="0.5" min="0.0" step="0.1">
+                            <input type="number" id="inp-b" value="0.5" min="0.0" step="0.01">
                         </div>
                     </div>
 
                     <div class="control-grid-2">
                         <div class="control-item">
-                            <label class="control-label-row"><span>Constante \(k\) (N/m):</span></label>
-                            <input type="number" id="inp-k" value="1.0" min="0.01" step="0.1">
+                            <label class="control-label-row"><span id="lbl-k">Constante \(k\) (\(\text{N/m}\)):</span></label>
+                            <input type="number" id="inp-k" value="1.0" step="0.01">
                         </div>
                         <div class="control-item">
-                            <label class="control-label-row"><span>Tempo Final \(t_f\) (s):</span></label>
-                            <input type="number" id="inp-tf" value="40.0" min="1.0" step="5.0">
+                            <label class="control-label-row"><span id="lbl-tf">Tempo Final \(t_f\) (s):</span></label>
+                            <input type="number" id="inp-tf" value="40.0" min="0.1" step="5.0">
                         </div>
                     </div>
 
@@ -656,7 +935,7 @@
                             <input type="number" id="inp-x0" value="1.0" step="0.1">
                         </div>
                         <div class="control-item">
-                            <label class="control-label-row"><span>Velocidade \(v_0\) (m/s):</span></label>
+                            <label class="control-label-row"><span id="lbl-v0">Velocidade \(v_0\) (m/s):</span></label>
                             <input type="number" id="inp-v0" value="0.0" step="0.1">
                         </div>
                     </div>
@@ -665,13 +944,75 @@
                     <div class="control-item">
                         <label class="control-label-row">
                             <span>Força Externa \(F(t)\):</span>
-                            <span style="font-size:0.68rem; color:var(--text-dim);">ex: 0, 5*cos(2*t), sin(t)</span>
+                            <span style="font-size:0.68rem; color:var(--text-dim);">ex: 0, 5*cos(2*t), 1.2*cos(0.2618*t)</span>
                         </label>
                         <input type="text" id="inp-f" value="0" placeholder="Ex: 5*cos(2*t) ou 0">
                     </div>
 
+                    <!-- Instability Toggle Button -->
+                    <button id="btn-toggle-instability" class="instability-btn" type="button">
+                        <span>💥</span> Ativar Instabilidade Dinâmica (\(\omega^2 < 0\))
+                    </button>
+
                     <button id="btn-solve" class="btn-solve">
                         <span>🚀</span> Resolver e Graficar (RK4)
+                    </button>
+                </div>
+            </div>
+
+            <!-- GEOPHYSICS & CORIOLIS MODULE -->
+            <div class="card geo-card" id="geo-card">
+                <div class="card-header" style="border-bottom-color: rgba(56, 189, 248, 0.25);">
+                    <h2 class="geo-header-title">🌍 Módulo Geofísica (Coriolis & Brisas)</h2>
+                    <span id="geo-mode-status" style="font-size:0.68rem; color:#38bdf8; background:rgba(56,189,248,0.15); padding:2px 7px; border-radius:4px; border:1px solid rgba(56,189,248,0.3); font-family:'Fira Code';">Inercial</span>
+                </div>
+                
+                <div class="control-group" style="gap: 8px;">
+                    <!-- Latitude slider -->
+                    <div class="control-item">
+                        <div class="control-label-row">
+                            <span>Latitude \(\phi\) (Sul):</span>
+                            <span class="control-val" id="disp-latitude" style="color:#fbbf24;">-29.96°</span>
+                        </div>
+                        <input type="range" id="slider-latitude" min="-35.0" max="-20.0" step="0.01" value="-29.96">
+                        <div style="display:flex; justify-content:space-between; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">
+                            <span>-35° (Sul do RS)</span>
+                            <span style="color:var(--accent-gold); font-weight:700;">-30° (Crítica)</span>
+                            <span>-20° (Sudeste)</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Latitude Pills -->
+                    <div class="geo-pills-row">
+                        <button class="geo-pill active" id="pill-lat-2996" title="Porto Alegre / Litoral Norte do RS (Tramandaí)">📍 Lat -29.96° (RS)</button>
+                        <button class="geo-pill" id="pill-lat-3000" title="Latitude Crítica Exata para Forçante Diurna (24h)">🎯 Lat -30.00°</button>
+                        <button class="geo-pill" id="pill-lat-2750" title="Santa Catarina / Florianópolis">🌊 Lat -27.50° (SC)</button>
+                        <button class="geo-pill" id="pill-lat-2500" title="Paraná / Litoral de São Paulo">🌊 Lat -25.00° (SP/PR)</button>
+                    </div>
+
+                    <!-- Coriolis Telemetry Preview Box -->
+                    <div style="background:rgba(4,7,17,0.75); border:1px solid rgba(56,189,248,0.22); border-radius:8px; padding:8px 10px; margin-top:4px; display:flex; flex-direction:column; gap:4px; font-size:0.72rem;">
+                        <div style="display:flex; justify-content:space-between;">
+                            <span style="color:var(--text-muted);">Coriolis \(f = 2\Omega\sin\phi\):</span>
+                            <span id="geo-f-val" style="font-family:'Fira Code'; color:#38bdf8; font-weight:600;">-0.2615 rad/h</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between;">
+                            <span style="color:var(--text-muted);">Período Inercial \(T_i = \frac{12}{|\sin\phi|}\):</span>
+                            <span id="geo-ti-val" style="font-family:'Fira Code'; color:#fbbf24; font-weight:700;">24.03 h (≈ 24h)</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between;">
+                            <span style="color:var(--text-muted);">Forçante Diurna (Brisa):</span>
+                            <span id="geo-tf-val" style="font-family:'Fira Code'; color:#c084fc; font-weight:600;">T = 24.00 h (S₁)</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between;">
+                            <span style="color:var(--text-muted);">Período de Batimento \(T_{\text{beat}}\):</span>
+                            <span id="geo-tbeat-val" style="font-family:'Fira Code'; color:#34d399; font-weight:700;">∞ (Ressonância Exata!)</span>
+                        </div>
+                    </div>
+
+                    <!-- Sync Sea Breeze Button -->
+                    <button id="btn-sync-breeze" class="btn-secondary" style="border-color:rgba(192,132,252,0.4); color:#e9d5ff; padding:6px; font-size:0.75rem; display:flex; align-items:center; justify-content:center; gap:6px; margin-top:2px;">
+                        <span>🌬️</span> Aplicar Brisa Diurna (24h) na Latitude Atual
                     </button>
                 </div>
             </div>
@@ -784,6 +1125,190 @@
 
             </div>
 
+            <!-- TECHNICAL EXPLANATION & GEOPHYSICAL ANALYSIS CARD -->
+            <div class="card tech-card" id="tech-card">
+                <div class="tech-header">
+                    <h2>📚 Fundamentação Teórica: Ressonância & Instabilidade em Geofísica</h2>
+                    <span style="font-size:0.75rem; color:var(--accent-cyan); font-family:'Fira Code';">Meteorologia & Oceanografia Física</span>
+                </div>
+
+                <!-- TABS NAVIGATION -->
+                <div class="tech-tabs">
+                    <button class="tech-tab-btn active" onclick="switchTechTab('tab-res-inercial')">🌊 1. Ressonância Inercial & Lat -29.96°</button>
+                    <button class="tech-tab-btn" onclick="switchTechTab('tab-batimentos')">🎵 2. Batimentos Costeiros (-30° a -25°)</button>
+                    <button class="tech-tab-btn" onclick="switchTechTab('tab-instabilidade')">🌪️ 3. Instabilidades Dinâmicas (\(\omega^2 < 0\))</button>
+                    <button class="tech-tab-btn" onclick="switchTechTab('tab-forcado-instavel')">⚡ 4. Dinâmica Forçada em Meios Instáveis</button>
+                </div>
+
+                <!-- TAB 1: RESSONÂNCIA INERCIAL -->
+                <div class="tech-tab-content active" id="tab-res-inercial">
+                    <div class="callout-geo">
+                        <strong>Por que a Latitude -29.96° (Porto Alegre / Litoral Norte do RS) é especial?</strong><br>
+                        Na latitude \(\phi = -30^\circ\) (e praticamente idêntica em \(-29.96^\circ\)), o período de oscilação inercial natural da Terra é exatamente igual a <strong>24 horas</strong>. Quando os ventos diurnos (como a brisa marítima ou o ciclo térmico solar \(S_1\)) forçam o oceano com esse mesmo período de 24h, o sistema entra em <strong>ressonância exata</strong>.
+                    </div>
+
+                    <div class="tech-grid-2">
+                        <div class="tech-box">
+                            <h3>📐 Dedução a partir das Equações Primitivas</h3>
+                            <p>Na camada de mistura oceânica (equações de Ekman horizontal), o movimento sob a aproximação de plano-\(f\) e atrito linear de Rayleigh \(r\) obedece a:</p>
+                            <div class="formula-box">
+                                \(\frac{\partial u}{\partial t} - f v = \frac{\tau_x}{\rho H} - r u, \quad \frac{\partial v}{\partial t} + f u = \frac{\tau_y}{\rho H} - r v\)
+                            </div>
+                            <p>Derivando a primeira equação no tempo e substituindo \(v\) da segunda, obtemos:</p>
+                            <div class="formula-box">
+                                \(\frac{d^2 u}{dt^2} + 2r \frac{du}{dt} + (f^2 + r^2)u = \frac{1}{\rho H}\left(\frac{\partial \tau_x}{\partial t} + f \tau_y + r \tau_x\right)\)
+                            </div>
+                            <p>Esta é <strong>rigorosamente a equação do oscilador harmônico forçado amortecido</strong>: \(m\ddot{x} + b\dot{x} + kx = F(t)\), com massa unitária \(m=1\), constante restauradora \(k \approx f^2\) e frequência natural \(\omega_0 = |f|\).</p>
+                        </div>
+
+                        <div class="tech-box">
+                            <h3>🌎 O Período Inercial e a Latitude Crítica de 30°</h3>
+                            <p>O parâmetro de Coriolis \(f\) depende exclusivamente da velocidade angular da Terra \(\Omega = \frac{2\pi}{24\text{ h}} \approx 7.292 \times 10^{-5}\text{ rad/s}\) e da latitude \(\phi\):</p>
+                            <div class="formula-box">
+                                \(f = 2\Omega \sin\phi \implies T_i = \frac{2\pi}{|f|} = \frac{12\text{ h}}{|\sin\phi|}\)
+                            </div>
+                            <ul>
+                                <li>Para \(\phi = -30.00^\circ\): \(|\sin(-30^\circ)| = 0.5 \implies T_i = \frac{12}{0.5} = \mathbf{24.00\text{ horas}}\).</li>
+                                <li>Para \(\phi = -29.96^\circ\) (Porto Alegre / Tramandaí): \(|\sin(-29.96^\circ)| = 0.499398 \implies T_i = \mathbf{24.029\text{ horas}} \approx \mathbf{24\text{ h}}\).</li>
+                            </ul>
+                            <p><strong>Impactos Oceanográficos & Meteorológicos:</strong></p>
+                            <ul>
+                                <li><strong>Ondas Inerciais Gigantes:</strong> A brisa marítima diurna alimenta continuamente a rotação inercial, amplificando as correntes da camada superficial.</li>
+                                <li><strong>Ressurgência Costeira Forçada:</strong> O bombeamento de Ekman ressonante promove transporte vertical vigoroso de nutrientes na termoclina costeira do RS.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: BATIMENTOS COSTEIROS -->
+                <div class="tech-tab-content" id="tab-batimentos">
+                    <div class="callout-geo">
+                        <strong>Batimentos e Modulação da Corrente entre -30° e -25° de Latitude</strong><br>
+                        Ao longo do litoral centro-sul do Brasil (RS, SC, PR, SP), o período inercial varia de 24h a 28.4h. Sob a forçante diurna persistente de 24h, a diferença de frequências gera <strong>batimentos modulados</strong> nas correntes oceânicas e ventos com períodos de 6 a 13 dias.
+                    </div>
+
+                    <div class="tech-grid-2">
+                        <div class="tech-box">
+                            <h3>🎵 Mecanismo de Interferência e Batimentos</h3>
+                            <p>Quando a frequência inercial \(\omega_0 = |f(\phi)|\) se desvia ligeiramente da frequência da forçante da brisa \(\omega_f = \frac{2\pi}{24\text{ h}}\), a solução livre e a forçada interferem:</p>
+                            <div class="formula-box">
+                                \(x(t) \approx 2 A \cos\left(\frac{\omega_0 - \omega_f}{2} t\right) \cos\left(\frac{\omega_0 + \omega_f}{2} t\right)\)
+                            </div>
+                            <p>O envelope de amplitude é modulado pela semi-diferença das frequências, definindo o <strong>Período de Batimento</strong>:</p>
+                            <div class="formula-box">
+                                \(T_{\text{beat}} = \frac{2\pi}{|\omega_0 - \omega_f|} = \frac{1}{\left|\frac{1}{T_i} - \frac{1}{T_f}\right|}\)
+                            </div>
+                        </div>
+
+                        <div class="tech-box">
+                            <h3>📊 Tabela Comparativa de Latitudes da Costa Brasileira</h3>
+                            <ul style="list-style:none; padding-left:0;">
+                                <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+                                    <strong style="color:var(--accent-gold);">• Lat -30.00° / -29.96° (RS):</strong> \(T_i \approx 24.0\text{ h}\) | \(\Delta\omega \approx 0\) | <strong>\(T_{\text{beat}} \to \infty\) (Ressonância Pura)</strong>
+                                </li>
+                                <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+                                    <strong style="color:#38bdf8;">• Lat -28.50° (Litoral SC Sul):</strong> \(T_i = 25.15\text{ h}\) | \(\Delta\omega = 0.0120\text{ rad/h}\) | <strong>\(T_{\text{beat}} \approx 524\text{ h (21.8 dias)}\)</strong>
+                                </li>
+                                <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
+                                    <strong style="color:#34d399;">• Lat -27.50° (Florianópolis / SC):</strong> \(T_i = 25.99\text{ h}\) | \(\Delta\omega = 0.0200\text{ rad/h}\) | <strong>\(T_{\text{beat}} \approx 314\text{ h (13.1 dias)}\)</strong>
+                                </li>
+                                <li style="padding:6px 0;">
+                                    <strong style="color:#c084fc;">• Lat -25.00° (Paranaguá / Santos):</strong> \(T_i = 28.39\text{ h}\) | \(\Delta\omega = 0.0405\text{ rad/h}\) | <strong>\(T_{\text{beat}} \approx 155\text{ h (6.5 dias)}\)</strong>
+                                </li>
+                            </ul>
+                            <p style="margin-top:8px;">Oceanógrafos operacionais identificam que correntes costeiras de superfície alternam semanas de picos violentos com semanas de calmaria, puramente governadas por este envelope de batimento.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: INSTABILIDADES DINÂMICAS -->
+                <div class="tech-tab-content" id="tab-instabilidade">
+                    <div class="callout-instability">
+                        <strong>Autovalores Imaginários (\(\omega^2 < 0\)) & Crescimento Exponencial Catastrófico</strong><br>
+                        Quando a rigidez do sistema torna-se negativa (\(k < 0\)), o quadrado da frequência \(\omega_0^2 = k/m < 0\) assume valores imaginários \(\omega_0 = \pm i \sigma\). A mola deixa de restaurar e passa a <strong>repelir</strong>, transformando o oscilador num modelo universal de <strong>convecção profunda, ciclogênese baroclínica e instabilidade inercial</strong>.
+                    </div>
+
+                    <div class="tech-grid-2">
+                        <div class="tech-box">
+                            <h3>💥 Análise Espectral e Autovalores Reais Positivos</h3>
+                            <p>A equação homogênea com \(\omega_0^2 = -\sigma^2 < 0\) torna-se:</p>
+                            <div class="formula-box">
+                                \(\ddot{x} + 2\gamma \dot{x} - \sigma^2 x = 0\)
+                            </div>
+                            <p>A equação característica \(\lambda^2 + 2\gamma \lambda - \sigma^2 = 0\) possui raízes reais:</p>
+                            <div class="formula-box">
+                                \(\lambda_{1,2} = -\gamma \pm \sqrt{\gamma^2 + \sigma^2}\)
+                            </div>
+                            <p>Como \(\sqrt{\gamma^2 + \sigma^2} > \gamma\), a raiz \(\lambda_1\) é <strong>estritamente positiva</strong>, gerando a solução:</p>
+                            <div class="formula-box">
+                                \(x(t) = C_1 e^{\lambda_1 t} + C_2 e^{\lambda_2 t} \approx C_1 e^{+\lambda_1 t}\)
+                            </div>
+                            <p>No espaço de fases, o ponto \((0,0)\) é um <strong>ponto de sela hiperbólico (saddle point)</strong>, onde qualquer perturbação sai disparada ao longo da variedade instável (\(v = \lambda_1 x\)). O tempo de duplicação da amplitude é \(T_{\text{dup}} = \frac{\ln 2}{\lambda_1}\).</p>
+                        </div>
+
+                        <div class="tech-box">
+                            <h3>🌪️ Três Grandes Manifestações em Meteorologia & Oceanografia</h3>
+                            <ul>
+                                <li style="margin-bottom:8px;">
+                                    <strong>1. Instabilidade Convectiva (Tempestades / Cumulonimbus):</strong><br>
+                                    A equação vertical de uma parcela atmosférica é \(\ddot{z}' + N^2 z' = 0\), onde \(N^2 = \frac{g}{\theta_v}\frac{\partial \theta_v}{\partial z}\) é a frequência de Brunt-Väisälä. Quando há ar quente/úmido na base (gradiente superadiabático), \(N^2 < 0 \implies \omega^2 < 0\). A flutuabilidade acelera a parcela exponencialmente para cima, gerando convecção severa.
+                                </li>
+                                <li style="margin-bottom:8px;">
+                                    <strong>2. Instabilidade Baroclínica (Ciclogênese nas Latitudes Médias):</strong><br>
+                                    Pelo modelo de Eady para a atmosfera baroclínica, o cisalhamento vertical do vento térmico gera uma velocidade de fase com parte imaginária \(c = c_r \pm i c_i\), tornando a frequência \(\omega = k c\) complexa. A onda de Rossby amplifica exponencialmente alimentada pela energia potencial disponível (APE), originando os ciclones extratropicais que atingem o Sul do Brasil.
+                                </li>
+                                <li>
+                                    <strong>3. Instabilidade Inercial:</strong><br>
+                                    Ocorre quando a vorticidade potencial absoluta muda de sinal e \(f(f + \zeta) < 0\) no lado anticiclônico de correntes de jato ou vórtices oceânicos.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: DINÂMICA FORÇADA EM MEIOS INSTÁVEIS -->
+                <div class="tech-tab-content" id="tab-forcado-instavel">
+                    <div class="callout-instability">
+                        <strong>Comportamento de Sistemas Forçados em Regime Instável (\(\omega^2 < 0\) com \(F(t)\))</strong><br>
+                        Como reage a atmosfera ou o oceano quando uma forçante periódica (marés, brisas ou pulsos de ondas curtas) atua sobre uma massa de ar já propensa à instabilidade convectiva ou baroclínica?
+                    </div>
+
+                    <div class="tech-grid-2">
+                        <div class="tech-box">
+                            <h3>⚡ Superposição de Forçamento e Divergência Exponencial</h3>
+                            <p>A EDO completa forçada em regime instável é:</p>
+                            <div class="formula-box">
+                                \(\ddot{x} + 2\gamma \dot{x} - \sigma^2 x = \frac{F_0}{m}\cos(\omega_f t)\)
+                            </div>
+                            <p>A solução analítica combina a resposta oscilatória particular e a fuga exponencial homogênea:</p>
+                            <div class="formula-box">
+                                \(x(t) = C_1 e^{\lambda_1 t} + C_2 e^{\lambda_2 t} + \frac{F_0/m}{\sqrt{(\sigma^2 + \omega_f^2)^2 + 4\gamma^2\omega_f^2}}\cos(\omega_f t - \delta)\)
+                            </div>
+                            <p><strong>Comportamento no Espaço de Fases:</strong> O termo oscilatório faz a trajetória descrever pequenas rotações elípticas, mas a componente \(e^{\lambda_1 t}\) estica e expele violentamente a órbita para longe do equilíbrio, seguindo as variedades assintóticas instáveis.</p>
+                        </div>
+
+                        <div class="tech-box">
+                            <h3>🌀 Exemplos Práticos de Aplicação</h3>
+                            <ul>
+                                <li style="margin-bottom:8px;">
+                                    <strong>Disparo de Ciclogênese Explosiva ("Ciclone Bomba"):</strong><br>
+                                    Um cavado em altos níveis (forçante de vorticidade \(F(t)\)) atinge uma região baroclinicamente instável (\(\omega^2 < 0\)) sobre o Atlântico Sul, deflagrando aprofundamento de mais de 24 hPa em 24 horas.
+                                </li>
+                                <li style="margin-bottom:8px;">
+                                    <strong>Gatilho de Convecção Diurna por Brisas:</strong><br>
+                                    A brisa marítima penetra sobre o continente quente à tarde. A forçante mecânica de convergência de brisa excita a camada instável com \(N^2 < 0\), gerando linhas de instabilidade de mesoescala.
+                                </li>
+                                <li>
+                                    <strong>Marés de Tempestade (Meteotsunamis & Ressacas):</strong><br>
+                                    Perturbações de pressão atmosférica rápida ressoando com ondas oceânicas em águas rasas sob condições de divergência dinâmica.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </section>
 
     </main>
@@ -800,7 +1325,7 @@
 
     <!-- ENGINE JAVASCRIPT -->
     <script>
-        // APPLICATION PARAMETERS
+        // APPLICATION PARAMETERS & STATE
         const params = {
             m: 1.0,
             b: 0.5,
@@ -809,7 +1334,10 @@
             tf: 40.0,
             x0: 1.0,
             v0: 0.0,
-            fString: "0"
+            fString: "0",
+            timeUnit: "s", // 's' (seconds) or 'h' (hours)
+            latitude: -29.96,
+            isInstability: false
         };
 
         // ANIMATION & TIMELINE STATE
@@ -827,7 +1355,31 @@
         const phaseCanvas = document.getElementById('phase-canvas');
         const phaseCtx = phaseCanvas.getContext('2d');
 
-        // DPI SETUP
+        // TECHNICAL TAB SWITCHER
+        function switchTechTab(tabId) {
+            document.querySelectorAll('.tech-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tech-tab-content').forEach(content => content.classList.remove('active'));
+            
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+
+            const tabMap = {
+                'tab-res-inercial': 0,
+                'tab-batimentos': 1,
+                'tab-instabilidade': 2,
+                'tab-forcado-instavel': 3
+            };
+            const idx = tabMap[tabId];
+            const btns = document.querySelectorAll('.tech-tab-btn');
+            if (btns[idx]) btns[idx].classList.add('active');
+
+            if (window.renderMathInElement && target) {
+                renderMathInElement(target, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}]});
+            }
+        }
+        window.switchTechTab = switchTechTab;
+
+        // DPI SETUP & RESIZE HANDLER
         function setupDPI(canvas, ctx) {
             const rect = canvas.getBoundingClientRect();
             const dpr = window.devicePixelRatio || 1;
@@ -851,7 +1403,6 @@
             let sanitized = exprStr.trim();
             if (!sanitized) return (t) => 0;
 
-            // Replace common python / math syntax
             sanitized = sanitized.replace(/\bnp\.sin\b/g, 'Math.sin')
                                  .replace(/\bnp\.cos\b/g, 'Math.cos')
                                  .replace(/\bnp\.tan\b/g, 'Math.tan')
@@ -870,7 +1421,6 @@
 
             try {
                 const fn = new Function('t', `try { return Number(${sanitized}); } catch(e) { return 0; }`);
-                // Test run
                 const test = fn(0);
                 if (isNaN(test)) return (t) => 0;
                 return fn;
@@ -878,6 +1428,173 @@
                 console.warn('Erro na expressão de F(t), usando 0:', e);
                 return (t) => 0;
             }
+        }
+
+        // TIME UNIT MANAGEMENT (s vs h)
+        function setUnit(unit) {
+            params.timeUnit = unit;
+            const btnS = document.getElementById('btn-unit-s');
+            const btnH = document.getElementById('btn-unit-h');
+            const lblK = document.getElementById('lbl-k');
+            const lblTf = document.getElementById('lbl-tf');
+            const lblV0 = document.getElementById('lbl-v0');
+
+            if (unit === 'h') {
+                if (btnH) btnH.classList.add('active');
+                if (btnS) btnS.classList.remove('active');
+                if (lblK) lblK.innerHTML = 'Constante \\(k\\) (\\(\\text{kg/h}^2\\)):';
+                if (lblTf) lblTf.innerHTML = 'Tempo Final \\(t_f\\) (h):';
+                if (lblV0) lblV0.innerHTML = 'Velocidade \\(v_0\\) (m/h):';
+            } else {
+                if (btnS) btnS.classList.add('active');
+                if (btnH) btnH.classList.remove('active');
+                if (lblK) lblK.innerHTML = 'Constante \\(k\\) (\\(\\text{N/m}\\)):';
+                if (lblTf) lblTf.innerHTML = 'Tempo Final \\(t_f\\) (s):';
+                if (lblV0) lblV0.innerHTML = 'Velocidade \\(v_0\\) (m/s):';
+            }
+
+            if (window.renderMathInElement) {
+                renderMathInElement(document.querySelector('.control-group'), {delimiters: [{left: '\\(', right: '\\)', display: false}]});
+            }
+            updateGeoModuleUI();
+        }
+
+        // CORIOLIS & GEOPHYSICS COMPUTATION
+        function calcCoriolis(latDeg, unit = params.timeUnit) {
+            const rad = latDeg * (Math.PI / 180.0);
+            const sinPhi = Math.sin(rad);
+            const absSin = Math.abs(sinPhi);
+
+            if (unit === 'h') {
+                const Omega = (2.0 * Math.PI) / 24.0; // rad/h ≈ 0.261799
+                const f = 2.0 * Omega * sinPhi; // rad/h
+                const absF = Math.abs(f);
+                const Ti = absSin > 1e-5 ? (2.0 * Math.PI) / absF : Infinity; // hours = 12 / absSin
+                const kEq = absF * absF * params.m; // kg/h^2
+                return { f, absF, Ti, kEq, Omega, unit: 'h' };
+            } else {
+                const Omega = 7.292115e-5; // rad/s
+                const f = 2.0 * Omega * sinPhi; // rad/s
+                const absF = Math.abs(f);
+                const Ti = absSin > 1e-5 ? (2.0 * Math.PI) / absF : Infinity; // s
+                const kEq = absF * absF * params.m; // N/m
+                return { f, absF, Ti, kEq, Omega, unit: 's' };
+            }
+        }
+
+        function updateGeoModuleUI() {
+            const lat = params.latitude;
+            const c = calcCoriolis(lat, params.timeUnit);
+            
+            const dispLat = document.getElementById('disp-latitude');
+            if (dispLat) dispLat.textContent = `${lat.toFixed(2)}°`;
+
+            const slider = document.getElementById('slider-latitude');
+            if (slider && Math.abs(parseFloat(slider.value) - lat) > 0.005) {
+                slider.value = lat.toFixed(2);
+            }
+
+            const fUnit = params.timeUnit === 'h' ? 'rad/h' : 'rad/s';
+            const fDisplay = params.timeUnit === 'h' ? c.f.toFixed(4) : c.f.toExponential(3);
+
+            const geoF = document.getElementById('geo-f-val');
+            if (geoF) geoF.textContent = `${fDisplay} ${fUnit}`;
+
+            const geoTi = document.getElementById('geo-ti-val');
+            const tiHours = params.timeUnit === 'h' ? c.Ti : c.Ti / 3600;
+            const isRes = Math.abs(tiHours - 24.0) < 0.08;
+            if (geoTi) {
+                geoTi.textContent = `${tiHours.toFixed(2)} h ${isRes ? '(≈ 24h, Ressonância!)' : ''}`;
+                geoTi.style.color = isRes ? '#fbbf24' : '#38bdf8';
+            }
+
+            const geoTf = document.getElementById('geo-tf-val');
+            if (geoTf) {
+                geoTf.textContent = `T = 24.00 h (Brisa Diurna)`;
+            }
+
+            const geoTbeat = document.getElementById('geo-tbeat-val');
+            if (geoTbeat) {
+                if (isRes) {
+                    geoTbeat.textContent = '∞ (Ressonância Exata!)';
+                    geoTbeat.style.color = '#fbbf24';
+                } else {
+                    const deltaFreq = Math.abs((2.0 * Math.PI / tiHours) - (2.0 * Math.PI / 24.0));
+                    const tBeatH = (2.0 * Math.PI) / deltaFreq;
+                    const tBeatDays = tBeatH / 24.0;
+                    geoTbeat.textContent = `${tBeatH.toFixed(1)} h (${tBeatDays.toFixed(1)} dias)`;
+                    geoTbeat.style.color = '#34d399';
+                }
+            }
+
+            const pills = [
+                { id: 'pill-lat-2996', target: -29.96 },
+                { id: 'pill-lat-3000', target: -30.00 },
+                { id: 'pill-lat-2750', target: -27.50 },
+                { id: 'pill-lat-2500', target: -25.00 }
+            ];
+            pills.forEach(p => {
+                const el = document.getElementById(p.id);
+                if (el) {
+                    if (Math.abs(lat - p.target) < 0.06) el.classList.add('active');
+                    else el.classList.remove('active');
+                }
+            });
+        }
+
+        function applyLatitude(lat, autoSyncForce = true) {
+            params.latitude = lat;
+            setUnit('h');
+            const c = calcCoriolis(lat, 'h');
+            params.k = c.kEq;
+            document.getElementById('inp-k').value = c.kEq.toFixed(6);
+
+            if (autoSyncForce) {
+                const omegaBreeze = ((2.0 * Math.PI) / 24.0).toFixed(4); // 0.2618 rad/h
+                params.b = 0.015;
+                document.getElementById('inp-b').value = "0.015";
+                params.tf = 180.0;
+                document.getElementById('inp-tf').value = "180.0";
+                params.fString = `0.8*cos(${omegaBreeze}*t)`;
+                document.getElementById('inp-f').value = params.fString;
+                params.x0 = 0.0;
+                document.getElementById('inp-x0').value = "0.0";
+                params.v0 = 0.0;
+                document.getElementById('inp-v0').value = "0.0";
+            }
+
+            updateGeoModuleUI();
+            solveODE();
+        }
+
+        // INSTABILITY TOGGLE FUNCTION
+        function toggleInstability(forceState = null) {
+            let makeInstable = forceState !== null ? forceState : (params.k >= 0);
+            const instBtn = document.getElementById('btn-toggle-instability');
+
+            if (makeInstable) {
+                if (params.k >= 0) {
+                    params.k = -Math.abs(params.k || 1.0);
+                }
+                document.getElementById('inp-k').value = params.k.toFixed(3);
+                if (instBtn) {
+                    instBtn.classList.add('active');
+                    instBtn.innerHTML = '<span>💥</span> Modo Instabilidade ATIVADO (\\(\\omega^2 < 0\\))';
+                }
+            } else {
+                if (params.k < 0) {
+                    params.k = Math.abs(params.k);
+                }
+                document.getElementById('inp-k').value = params.k.toFixed(3);
+                if (instBtn) {
+                    instBtn.classList.remove('active');
+                    instBtn.innerHTML = '<span>💥</span> Ativar Instabilidade Dinâmica (\\(\\omega^2 < 0\\))';
+                }
+            }
+            if (window.renderMathInElement && instBtn) {
+                renderMathInElement(instBtn, {delimiters: [{left: '\\(', right: '\\)', display: false}]});
+            }
+            solveODE();
         }
 
         // RUNGE-KUTTA 4TH ORDER SOLVER (RK4)
@@ -918,6 +1635,17 @@
             fArr[0] = F_fn(t);
 
             for (let i = 0; i < numSteps; i++) {
+                // Safeguard against numerical overflow in unstable regimes
+                if (Math.abs(x) > 1e5 || Math.abs(v) > 1e5 || isNaN(x)) {
+                    for (let j = i + 1; j <= numSteps; j++) {
+                        tArr[j] = t0 + j * dt;
+                        xArr[j] = Math.sign(x || 1) * 1e5;
+                        vArr[j] = Math.sign(v || 1) * 1e5;
+                        fArr[j] = F_fn(tArr[j]);
+                    }
+                    break;
+                }
+
                 // k1
                 const k1 = f_ode(t, x, v);
 
@@ -959,24 +1687,63 @@
             const m = params.m;
             const b = params.b;
             const k = params.k;
+            const u = params.timeUnit || 's';
+            const invU = u === 'h' ? 'h⁻¹' : 's⁻¹';
 
+            const badge = document.getElementById('regime-badge');
+
+            // CASE 1: INSTABILITY REGIME (k < 0, w0^2 < 0 => w0 is imaginary)
+            if (k < 0) {
+                const sigma = Math.sqrt(-k / m);
+                const gamma = b / (2.0 * m);
+                // Eigenvalues: lambda1,2 = -gamma ± sqrt(gamma^2 + sigma^2)
+                const disc = Math.sqrt(gamma * gamma + sigma * sigma);
+                const lambda1 = -gamma + disc; // Positive root (unstable mode)
+                const tDup = lambda1 > 1e-6 ? Math.log(2) / lambda1 : Infinity;
+
+                document.getElementById('tel-w0').textContent = `± i·${sigma.toFixed(3)} rad/${u}`;
+                document.getElementById('tel-w0').nextElementSibling.textContent = `(Freq. Imaginária: ω² = ${(k/m).toFixed(3)})`;
+
+                document.getElementById('tel-gamma').textContent = `${gamma.toFixed(3)} ${invU}`;
+                document.getElementById('tel-gamma').nextElementSibling.textContent = `γ = b/(2m)`;
+
+                document.getElementById('tel-wd').textContent = `λ₁ = +${lambda1.toFixed(3)} ${invU}`;
+                document.getElementById('tel-wd').nextElementSibling.textContent = `Taxa de Crescimento Exp.`;
+
+                document.getElementById('tel-q').textContent = isFinite(tDup) ? `${tDup.toFixed(2)} ${u}` : "∞";
+                document.getElementById('tel-q').nextElementSibling.textContent = `T_dup (Tempo de Duplicação)`;
+
+                badge.className = "regime-badge regime-instability";
+                badge.textContent = `💥 INSTABILIDADE DINÂMICA (ω² = ${(k/m).toFixed(3)} < 0, Autovalor Real λ₁ > 0)`;
+                return;
+            }
+
+            // CASE 2: CLASSICAL OSCILLATOR (k >= 0)
             const w0 = Math.sqrt(k / m);
             const gamma = b / (2.0 * m);
-            const zeta = b / (2.0 * Math.sqrt(k * m));
-            const Q = w0 / (2.0 * gamma);
+            const zeta = w0 > 0 ? b / (2.0 * Math.sqrt(k * m)) : (b > 0 ? Infinity : 0);
+            const Q = (gamma > 0 && w0 > 0) ? w0 / (2.0 * gamma) : Infinity;
 
             let wdStr = "-";
             if (w0 > gamma) {
                 const wd = Math.sqrt(w0 * w0 - gamma * gamma);
-                wdStr = wd.toFixed(3) + " rad/s";
+                wdStr = `${wd.toFixed(3)} rad/${u}`;
             }
 
-            document.getElementById('tel-w0').textContent = w0.toFixed(3) + " rad/s";
-            document.getElementById('tel-gamma').textContent = gamma.toFixed(3) + " s⁻¹";
-            document.getElementById('tel-wd').textContent = wdStr;
-            document.getElementById('tel-q').textContent = isFinite(Q) ? Q.toFixed(2) : "∞ (Sem Amort.)";
+            const f0Hz = u === 's' ? `${(w0 / (2 * Math.PI)).toFixed(3)} Hz` : `T₀ = ${(2 * Math.PI / (w0 || 1e-9)).toFixed(2)} h`;
 
-            const badge = document.getElementById('regime-badge');
+            document.getElementById('tel-w0').textContent = `${w0.toFixed(3)} rad/${u}`;
+            document.getElementById('tel-w0').nextElementSibling.textContent = f0Hz;
+
+            document.getElementById('tel-gamma').textContent = `${gamma.toFixed(3)} ${invU}`;
+            document.getElementById('tel-gamma').nextElementSibling.textContent = `γ = b/(2m)`;
+
+            document.getElementById('tel-wd').textContent = wdStr;
+            document.getElementById('tel-wd').nextElementSibling.textContent = `√(ω₀² - γ²)`;
+
+            document.getElementById('tel-q').textContent = isFinite(Q) ? Q.toFixed(2) : "∞ (Sem Amort.)";
+            document.getElementById('tel-q').nextElementSibling.textContent = `Q = ω₀ m / b`;
+
             if (b === 0) {
                 badge.className = "regime-badge regime-under";
                 badge.textContent = "〰️ NÃO-AMORTECIDO (MHS Puro, ζ = 0)";
@@ -1050,9 +1817,11 @@
             const currentV = state.v;
             const currentF = state.f;
 
-            // Coordinate mapping (scale factor: 1 meter = 40 pixels)
+            // Coordinate mapping (scale factor: 1 meter = 45 pixels)
             const eqX = W * 0.48;
-            const massX = eqX + currentX * 45;
+            const visualLimit = W * 0.42;
+            const clampedVisualX = Math.max(-visualLimit, Math.min(visualLimit, currentX * 45));
+            const massX = eqX + clampedVisualX;
             const massW = 55;
             const massH = 45;
 
@@ -1076,7 +1845,7 @@
             const springLen = Math.max(20, springEndX - springStartX);
             const coils = 12;
 
-            springCtx.strokeStyle = '#38bdf8';
+            springCtx.strokeStyle = params.k < 0 ? '#f87171' : '#38bdf8';
             springCtx.lineWidth = 2.5;
             springCtx.beginPath();
             springCtx.moveTo(springStartX, springY);
@@ -1097,7 +1866,6 @@
             const cylStartX = wallX;
             const pistonEndX = massX - massW / 2;
 
-            // Damper Cylinder Housing
             springCtx.strokeStyle = '#94a3b8';
             springCtx.lineWidth = 2;
             springCtx.beginPath();
@@ -1119,13 +1887,11 @@
             springCtx.lineTo(pistonEndX, damperY);
             springCtx.stroke();
 
-            // Piston head
             springCtx.fillStyle = '#94a3b8';
             springCtx.fillRect(pistonHeadX - 2, damperY - 8, 4, 16);
 
             // Mass Block
-            springCtx.fillStyle = 'linear-gradient(135deg, #1e293b, #0f172a)';
-            springCtx.fillStyle = '#38bdf8';
+            springCtx.fillStyle = params.k < 0 ? '#ef4444' : '#38bdf8';
             springCtx.strokeStyle = '#fff';
             springCtx.lineWidth = 2;
             springCtx.fillRect(massX - massW / 2, groundY - massH, massW, massH);
@@ -1133,7 +1899,7 @@
 
             // Mass label
             springCtx.fillStyle = '#050814';
-            springCtx.font = 'bold 12px Fira Code';
+            springCtx.font = 'bold 11px Fira Code';
             springCtx.textAlign = 'center';
             springCtx.fillText(`m=${params.m}kg`, massX, groundY - massH / 2 + 4);
 
@@ -1146,10 +1912,9 @@
             springCtx.fill();
             springCtx.stroke();
 
-            // Force & Velocity Vectors on Mass
             // Velocity Vector (Green)
             if (Math.abs(currentV) > 0.02) {
-                const vArrLen = currentV * 25;
+                const vArrLen = Math.max(-120, Math.min(120, currentV * 25));
                 springCtx.strokeStyle = '#10b981';
                 springCtx.lineWidth = 3;
                 springCtx.beginPath();
@@ -1157,15 +1922,16 @@
                 springCtx.lineTo(massX + vArrLen, groundY - massH - 12);
                 springCtx.stroke();
 
+                const vUnit = params.timeUnit === 'h' ? 'm/h' : 'm/s';
                 springCtx.fillStyle = '#34d399';
                 springCtx.font = 'bold 10px Fira Code';
                 springCtx.textAlign = currentV >= 0 ? 'left' : 'right';
-                springCtx.fillText(`v = ${currentV.toFixed(2)} m/s`, massX + vArrLen + (currentV >= 0 ? 6 : -6), groundY - massH - 9);
+                springCtx.fillText(`v = ${currentV.toFixed(2)} ${vUnit}`, massX + vArrLen + (currentV >= 0 ? 6 : -6), groundY - massH - 9);
             }
 
             // External Force Vector F(t) (Purple)
             if (Math.abs(currentF) > 0.05) {
-                const fArrLen = currentF * 20;
+                const fArrLen = Math.max(-100, Math.min(100, currentF * 20));
                 springCtx.strokeStyle = '#c084fc';
                 springCtx.lineWidth = 2.5;
                 springCtx.beginPath();
@@ -1177,6 +1943,14 @@
                 springCtx.font = 'bold 10px Fira Code';
                 springCtx.textAlign = currentF >= 0 ? 'left' : 'right';
                 springCtx.fillText(`F(t) = ${currentF.toFixed(2)} N`, massX + fArrLen + (currentF >= 0 ? 6 : -6), groundY - massH - 25);
+            }
+
+            // Divergence warning banner if escaping
+            if (Math.abs(currentX) > 4.0 && params.k < 0) {
+                springCtx.fillStyle = 'rgba(239, 68, 68, 0.9)';
+                springCtx.font = 'bold 11px Inter';
+                springCtx.textAlign = 'center';
+                springCtx.fillText('💥 DIVERGÊNCIA EXPONENCIAL (|x| > 4m - Convecção/Baroclinia)', W / 2, 38);
             }
 
             // Metric Scale at ground
@@ -1200,11 +1974,14 @@
             }
 
             // Live telemetry update
+            const u = params.timeUnit || 's';
+            const vU = u === 'h' ? 'm/h' : 'm/s';
             const energy = 0.5 * params.m * currentV * currentV + 0.5 * params.k * currentX * currentX;
+            
             document.getElementById('tel-cur-x').textContent = (currentX >= 0 ? '+' : '') + currentX.toFixed(3) + " m";
-            document.getElementById('tel-cur-v').textContent = (currentV >= 0 ? '+' : '') + currentV.toFixed(3) + " m/s";
-            document.getElementById('tel-cur-t').textContent = `em t = ${animTime.toFixed(2)} s`;
-            document.getElementById('tel-cur-energy').textContent = `E = ${energy.toFixed(3)} J`;
+            document.getElementById('tel-cur-v').textContent = (currentV >= 0 ? '+' : '') + currentV.toFixed(3) + " " + vU;
+            document.getElementById('tel-cur-t').textContent = `em t = ${animTime.toFixed(2)} ${u}`;
+            document.getElementById('tel-cur-energy').textContent = params.k < 0 ? `E_cin = ${(0.5*params.m*currentV*currentV).toFixed(2)} J` : `E = ${energy.toFixed(3)} J`;
         }
 
         // 2. RENDER TIME DOMAIN GRAPH (x(t), v(t) and F(t) vs t)
@@ -1231,12 +2008,19 @@
                 if (solution.v[i] < yMin) yMin = solution.v[i];
                 if (solution.v[i] > yMax) yMax = solution.v[i];
             }
+            // Clamp extremes for graph readability in exponential divergence
+            if (yMin < -50) yMin = -50;
+            if (yMax > 50) yMax = 50;
+
             const margin = (yMax - yMin) * 0.15 || 0.5;
             yMin -= margin;
             yMax += margin;
 
             function toX(t) { return pL + ((t - tMin) / (tMax - tMin)) * gW; }
-            function toY(y) { return pT + gH - ((y - yMin) / (yMax - yMin)) * gH; }
+            function toY(y) { 
+                const clamped = Math.max(yMin, Math.min(yMax, y));
+                return pT + gH - ((clamped - yMin) / (yMax - yMin)) * gH; 
+            }
 
             // Grid & Box
             timeCtx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
@@ -1275,8 +2059,8 @@
             timeCtx.stroke();
             timeCtx.setLineDash([]);
 
-            // Curve: Position x(t) (cyan solid)
-            timeCtx.strokeStyle = '#38bdf8';
+            // Curve: Position x(t) (cyan or red if unstable)
+            timeCtx.strokeStyle = params.k < 0 ? '#f87171' : '#38bdf8';
             timeCtx.lineWidth = 2.5;
             timeCtx.beginPath();
             for (let i = 0; i < solution.count; i++) {
@@ -1296,7 +2080,7 @@
             timeCtx.stroke();
 
             const curState = getStateAtTime(animTime);
-            timeCtx.fillStyle = '#38bdf8';
+            timeCtx.fillStyle = params.k < 0 ? '#f87171' : '#38bdf8';
             timeCtx.beginPath();
             timeCtx.arc(curSX, toY(curState.x), 5, 0, Math.PI * 2);
             timeCtx.fill();
@@ -1307,11 +2091,12 @@
             timeCtx.fill();
 
             // Axis labels
+            const u = params.timeUnit || 's';
             timeCtx.fillStyle = '#94a3b8';
             timeCtx.font = '10px Inter';
             timeCtx.fillText('Amplitude', pL, pT - 6);
             timeCtx.textAlign = 'right';
-            timeCtx.fillText('Tempo t (s)', pL + gW, pT + gH + 20);
+            timeCtx.fillText(`Tempo t (${u})`, pL + gW, pT + gH + 20);
             timeCtx.textAlign = 'left';
         }
 
@@ -1336,13 +2121,24 @@
                 if (solution.v[i] < vMin) vMin = solution.v[i];
                 if (solution.v[i] > vMax) vMax = solution.v[i];
             }
+            if (xMin < -40) xMin = -40;
+            if (xMax > 40) xMax = 40;
+            if (vMin < -40) vMin = -40;
+            if (vMax > 40) vMax = 40;
+
             const marginX = (xMax - xMin) * 0.15 || 0.5;
             const marginV = (vMax - vMin) * 0.15 || 0.5;
             xMin -= marginX; xMax += marginX;
             vMin -= marginV; vMax += marginV;
 
-            function toX(x) { return pL + ((x - xMin) / (xMax - xMin)) * gW; }
-            function toY(v) { return pT + gH - ((v - vMin) / (vMax - vMin)) * gH; }
+            function toX(x) { 
+                const cx = Math.max(xMin, Math.min(xMax, x));
+                return pL + ((cx - xMin) / (xMax - xMin)) * gW; 
+            }
+            function toY(v) { 
+                const cv = Math.max(vMin, Math.min(vMax, v));
+                return pT + gH - ((cv - vMin) / (vMax - vMin)) * gH; 
+            }
 
             // Grid
             phaseCtx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
@@ -1351,12 +2147,38 @@
             // Axes (x=0 and v=0)
             phaseCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
             phaseCtx.beginPath();
-            phaseCtx.moveTo(pL, toY(0)); phaseCtx.lineTo(pL + gW, toY(0)); // x-axis
-            phaseCtx.moveTo(toX(0), pT); phaseCtx.lineTo(toX(0), pT + gH); // v-axis
-            springCtx.stroke();
+            phaseCtx.moveTo(pL, toY(0)); phaseCtx.lineTo(pL + gW, toY(0));
+            phaseCtx.moveTo(toX(0), pT); phaseCtx.lineTo(toX(0), pT + gH);
+            phaseCtx.stroke();
+
+            // Saddle Point Manifolds for Instability (k < 0)
+            if (params.k < 0) {
+                const sigma = Math.sqrt(-params.k / params.m);
+                const gamma = params.b / (2.0 * params.m);
+                const disc = Math.sqrt(gamma * gamma + sigma * sigma);
+                const lambda1 = -gamma + disc; // Unstable direction
+                const lambda2 = -gamma - disc; // Stable direction
+
+                // Unstable manifold: v = lambda1 * x (Red dashed)
+                phaseCtx.strokeStyle = 'rgba(248, 113, 113, 0.4)';
+                phaseCtx.lineWidth = 1.5;
+                phaseCtx.setLineDash([4, 4]);
+                phaseCtx.beginPath();
+                phaseCtx.moveTo(toX(xMin), toY(lambda1 * xMin));
+                phaseCtx.lineTo(toX(xMax), toY(lambda1 * xMax));
+                phaseCtx.stroke();
+
+                // Stable manifold: v = lambda2 * x (Cyan dashed)
+                phaseCtx.strokeStyle = 'rgba(56, 189, 248, 0.35)';
+                phaseCtx.beginPath();
+                phaseCtx.moveTo(toX(xMin), toY(lambda2 * xMin));
+                phaseCtx.lineTo(toX(xMax), toY(lambda2 * xMax));
+                phaseCtx.stroke();
+                phaseCtx.setLineDash([]);
+            }
 
             // Phase Trajectory Curve
-            phaseCtx.strokeStyle = '#34d399';
+            phaseCtx.strokeStyle = params.k < 0 ? '#f43f5e' : '#34d399';
             phaseCtx.lineWidth = 2.2;
             phaseCtx.beginPath();
             for (let i = 0; i < solution.count; i++) {
@@ -1395,11 +2217,12 @@
             phaseCtx.stroke();
 
             // Labels
+            const u = params.timeUnit || 's';
             phaseCtx.fillStyle = '#94a3b8';
             phaseCtx.font = '10px Inter';
-            phaseCtx.fillText('Velocidade v = dx/dt', pL, pT - 6);
+            phaseCtx.fillText(`Velocidade v = dx/dt (m/${u})`, pL, pT - 6);
             phaseCtx.textAlign = 'right';
-            phaseCtx.fillText('Posição x(t)', pL + gW, pT + gH + 20);
+            phaseCtx.fillText('Posição x (m)', pL + gW, pT + gH + 20);
             phaseCtx.textAlign = 'left';
         }
 
@@ -1433,24 +2256,99 @@
         function syncParamsFromDOM() {
             params.m = parseFloat(document.getElementById('inp-m').value) || 1.0;
             params.b = parseFloat(document.getElementById('inp-b').value) || 0.0;
-            params.k = parseFloat(document.getElementById('inp-k').value) || 1.0;
+            params.k = parseFloat(document.getElementById('inp-k').value) || 0.0;
             params.tf = parseFloat(document.getElementById('inp-tf').value) || 40.0;
             params.x0 = parseFloat(document.getElementById('inp-x0').value) || 0.0;
             params.v0 = parseFloat(document.getElementById('inp-v0').value) || 0.0;
             params.fString = document.getElementById('inp-f').value || "0";
+
+            // Update instability button status
+            const instBtn = document.getElementById('btn-toggle-instability');
+            if (instBtn) {
+                if (params.k < 0) {
+                    instBtn.classList.add('active');
+                    instBtn.innerHTML = '<span>💥</span> Modo Instabilidade ATIVADO (\\(\\omega^2 < 0\\))';
+                } else {
+                    instBtn.classList.remove('active');
+                    instBtn.innerHTML = '<span>💥</span> Ativar Instabilidade Dinâmica (\\(\\omega^2 < 0\\))';
+                }
+                if (window.renderMathInElement) {
+                    renderMathInElement(instBtn, {delimiters: [{left: '\\(', right: '\\)', display: false}]});
+                }
+            }
+
+            updateGeoModuleUI();
             solveODE();
         }
 
-        // EVENT LISTENERS
-        document.getElementById('btn-solve').addEventListener('click', () => {
-            syncParamsFromDOM();
-        });
+        function syncDOMFromParams() {
+            document.getElementById('inp-m').value = params.m;
+            document.getElementById('inp-b').value = params.b;
+            document.getElementById('inp-k').value = params.k;
+            document.getElementById('inp-tf').value = params.tf;
+            document.getElementById('inp-x0').value = params.x0;
+            document.getElementById('inp-v0').value = params.v0;
+            document.getElementById('inp-f').value = params.fString;
+            updateGeoModuleUI();
+        }
 
-        // Auto solve on input changes
+        // EVENT LISTENERS
+        document.getElementById('btn-solve').addEventListener('click', syncParamsFromDOM);
+
         ['inp-m', 'inp-b', 'inp-k', 'inp-tf', 'inp-x0', 'inp-v0', 'inp-f'].forEach(id => {
             document.getElementById(id).addEventListener('change', syncParamsFromDOM);
         });
 
+        // Time unit buttons
+        document.getElementById('btn-unit-s').addEventListener('click', () => {
+            setUnit('s');
+            solveODE();
+        });
+        document.getElementById('btn-unit-h').addEventListener('click', () => {
+            setUnit('h');
+            solveODE();
+        });
+
+        // Instability button
+        document.getElementById('btn-toggle-instability').addEventListener('click', () => {
+            toggleInstability();
+        });
+
+        // Latitude slider
+        const latSlider = document.getElementById('slider-latitude');
+        if (latSlider) {
+            latSlider.addEventListener('input', (e) => {
+                const lat = parseFloat(e.target.value);
+                params.latitude = lat;
+                applyLatitude(lat, false);
+            });
+        }
+
+        // Quick latitude pills
+        const pillMap = {
+            'pill-lat-2996': -29.96,
+            'pill-lat-3000': -30.00,
+            'pill-lat-2750': -27.50,
+            'pill-lat-2500': -25.00
+        };
+        Object.keys(pillMap).forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('click', () => {
+                    applyLatitude(pillMap[id], true);
+                });
+            }
+        });
+
+        // Sync Sea Breeze button
+        const btnSyncBreeze = document.getElementById('btn-sync-breeze');
+        if (btnSyncBreeze) {
+            btnSyncBreeze.addEventListener('click', () => {
+                applyLatitude(params.latitude, true);
+            });
+        }
+
+        // Animation buttons
         document.getElementById('btn-play').addEventListener('click', () => {
             if (animTime >= params.tf) animTime = 0;
             isPlaying = !isPlaying;
@@ -1474,27 +2372,97 @@
         });
 
         document.getElementById('btn-reset').addEventListener('click', () => {
-            document.getElementById('inp-m').value = "1.0";
-            document.getElementById('inp-b').value = "0.5";
-            document.getElementById('inp-k').value = "1.0";
-            document.getElementById('inp-tf').value = "40.0";
-            document.getElementById('inp-x0').value = "1.0";
-            document.getElementById('inp-v0').value = "0.0";
-            document.getElementById('inp-f').value = "0";
+            setUnit('s');
+            params.m = 1.0;
+            params.b = 0.5;
+            params.k = 1.0;
+            params.tf = 40.0;
+            params.x0 = 1.0;
+            params.v0 = 0.0;
+            params.fString = "0";
+            params.latitude = -29.96;
+            syncDOMFromParams();
             animTime = 0;
             isPlaying = false;
             document.getElementById('btn-play').innerHTML = '▶ Iniciar Animação';
-            syncParamsFromDOM();
+            solveODE();
         });
 
-        // PRESET BUTTONS
+        // PRESET ACTIONS MAPPING
         const presets = {
-            'preset-under': { m: 1.0, b: 0.5, k: 1.0, tf: 40.0, x0: 1.0, v0: 0.0, f: "0" },
-            'preset-crit': { m: 1.0, b: 2.0, k: 1.0, tf: 20.0, x0: 1.0, v0: 0.0, f: "0" },
-            'preset-over': { m: 1.0, b: 3.5, k: 1.0, tf: 25.0, x0: 1.0, v0: 0.0, f: "0" },
-            'preset-undamped': { m: 1.0, b: 0.0, k: 1.0, tf: 30.0, x0: 1.0, v0: 0.0, f: "0" },
-            'preset-resonance': { m: 1.0, b: 0.1, k: 1.0, tf: 50.0, x0: 0.0, v0: 0.0, f: "1.5*cos(t)" },
-            'preset-beats': { m: 1.0, b: 0.02, k: 1.0, tf: 80.0, x0: 0.0, v0: 0.0, f: "1.2*cos(1.15*t)" }
+            'preset-under': () => {
+                setUnit('s');
+                params.m = 1.0; params.b = 0.5; params.k = 1.0; params.tf = 40.0; params.x0 = 1.0; params.v0 = 0.0; params.fString = "0";
+                syncDOMFromParams();
+                solveODE();
+            },
+            'preset-crit': () => {
+                setUnit('s');
+                params.m = 1.0; params.b = 2.0; params.k = 1.0; params.tf = 20.0; params.x0 = 1.0; params.v0 = 0.0; params.fString = "0";
+                syncDOMFromParams();
+                solveODE();
+            },
+            'preset-over': () => {
+                setUnit('s');
+                params.m = 1.0; params.b = 3.5; params.k = 1.0; params.tf = 25.0; params.x0 = 1.0; params.v0 = 0.0; params.fString = "0";
+                syncDOMFromParams();
+                solveODE();
+            },
+            'preset-undamped': () => {
+                setUnit('s');
+                params.m = 1.0; params.b = 0.0; params.k = 1.0; params.tf = 30.0; params.x0 = 1.0; params.v0 = 0.0; params.fString = "0";
+                syncDOMFromParams();
+                solveODE();
+            },
+            'preset-resonance': () => {
+                setUnit('s');
+                params.m = 1.0; params.b = 0.1; params.k = 1.0; params.tf = 50.0; params.x0 = 0.0; params.v0 = 0.0; params.fString = "1.5*cos(t)";
+                syncDOMFromParams();
+                solveODE();
+            },
+            'preset-beats': () => {
+                setUnit('s');
+                params.m = 1.0; params.b = 0.02; params.k = 1.0; params.tf = 80.0; params.x0 = 0.0; params.v0 = 0.0; params.fString = "1.2*cos(1.15*t)";
+                syncDOMFromParams();
+                solveODE();
+            },
+            'preset-lat2996': () => {
+                applyLatitude(-29.96, true);
+                switchTechTab('tab-res-inercial');
+            },
+            'preset-geo-beats': () => {
+                applyLatitude(-27.50, true);
+                params.tf = 240.0; // 10 days to see 2 full beat lobes
+                document.getElementById('inp-tf').value = "240.0";
+                solveODE();
+                switchTechTab('tab-batimentos');
+            },
+            'preset-instability': () => {
+                setUnit('s');
+                params.m = 1.0;
+                params.b = 0.4;
+                params.k = -1.0;
+                params.tf = 20.0;
+                params.x0 = 0.1;
+                params.v0 = 0.0;
+                params.fString = "0";
+                syncDOMFromParams();
+                toggleInstability(true);
+                switchTechTab('tab-instabilidade');
+            },
+            'preset-instability-forced': () => {
+                setUnit('s');
+                params.m = 1.0;
+                params.b = 0.5;
+                params.k = -1.0;
+                params.tf = 25.0;
+                params.x0 = 0.0;
+                params.v0 = 0.0;
+                params.fString = "1.5*cos(1.2*t)";
+                syncDOMFromParams();
+                toggleInstability(true);
+                switchTechTab('tab-forcado-instavel');
+            }
         };
 
         Object.keys(presets).forEach(btnId => {
@@ -1503,18 +2471,8 @@
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.btn-preset').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-
-                const p = presets[btnId];
-                document.getElementById('inp-m').value = p.m;
-                document.getElementById('inp-b').value = p.b;
-                document.getElementById('inp-k').value = p.k;
-                document.getElementById('inp-tf').value = p.tf;
-                document.getElementById('inp-x0').value = p.x0;
-                document.getElementById('inp-v0').value = p.v0;
-                document.getElementById('inp-f').value = p.f;
-
                 animTime = 0;
-                syncParamsFromDOM();
+                presets[btnId]();
             });
         });
 
