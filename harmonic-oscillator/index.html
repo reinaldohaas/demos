@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solucionador do Oscilador Harmônico: m·x'' + b·x' + k·x = F(t)</title>
+    <title>Oscilador Harmônico & Dinâmica Geofísica Interativa</title>
     
     <!-- Google Fonts & KaTeX -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,10 +16,10 @@
 
     <style>
         :root {
-            --bg-dark: #050813;
-            --card-bg: rgba(13, 20, 38, 0.94);
-            --card-border: rgba(56, 189, 248, 0.25);
-            --card-border-hover: rgba(56, 189, 248, 0.6);
+            --bg-dark: #040711;
+            --card-bg: rgba(11, 18, 34, 0.95);
+            --card-border: rgba(56, 189, 248, 0.22);
+            --card-border-hover: rgba(56, 189, 248, 0.5);
             --accent-cyan: #38bdf8;
             --accent-gold: #fbbf24;
             --accent-amber: #f59e0b;
@@ -39,7 +39,7 @@
         }
 
         body {
-            background: radial-gradient(circle at 50% 0%, #0c1836 0%, var(--bg-dark) 100%);
+            background: radial-gradient(circle at 50% 0%, #0b1733 0%, var(--bg-dark) 100%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
@@ -47,17 +47,17 @@
             overflow-x: hidden;
         }
 
-        /* TOP HEADER */
+        /* COMPACT HEADER */
         header {
-            padding: 12px 24px;
-            background: rgba(8, 14, 28, 0.95);
+            padding: 8px 18px;
+            background: rgba(8, 14, 28, 0.96);
             border-bottom: 1px solid var(--card-border);
-            backdrop-filter: blur(14px);
+            backdrop-filter: blur(12px);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -66,70 +66,103 @@
         .header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .header-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(192, 132, 252, 0.25));
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(192, 132, 252, 0.25));
             border: 1px solid var(--accent-cyan);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+            font-size: 1.2rem;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
         }
 
         .header-left h1 {
-            font-size: 1.2rem;
+            font-size: 1.02rem;
             font-weight: 800;
-            background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc, #fbbf24);
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #fbbf24);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.01em;
         }
 
         .header-left p {
-            font-size: 0.78rem;
+            font-size: 0.72rem;
             color: var(--text-muted);
         }
 
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .unit-toggle-compact {
+            display: flex;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 6px;
+            padding: 2px;
+            gap: 2px;
+        }
+
+        .unit-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .unit-btn.active {
+            background: linear-gradient(135deg, #38bdf8, #0284c7);
+            color: #040816;
+            font-weight: 700;
+        }
+
         .nav-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             color: #f8fafc;
-            padding: 6px 14px;
-            font-size: 0.8rem;
+            padding: 4px 10px;
+            font-size: 0.74rem;
             font-weight: 500;
-            border-radius: 8px;
+            border-radius: 6px;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
+            gap: 5px;
+            transition: all 0.15s;
         }
 
         .nav-btn:hover {
-            background: rgba(56, 189, 248, 0.25);
+            background: rgba(56, 189, 248, 0.2);
             border-color: var(--accent-cyan);
         }
 
-        /* PRESETS BAR */
+        /* SLIM PRESETS BAR */
         .presets-bar {
-            background: rgba(10, 16, 32, 0.9);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 8px 16px;
+            background: rgba(7, 12, 24, 0.92);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 5px 14px;
             display: flex;
-            gap: 8px;
+            gap: 6px;
             overflow-x: auto;
             align-items: center;
         }
 
         .preset-label {
-            font-size: 0.75rem;
-            font-weight: 600;
+            font-size: 0.68rem;
+            font-weight: 700;
             color: var(--accent-cyan);
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -137,19 +170,16 @@
         }
 
         .btn-preset {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--text-muted);
-            padding: 5px 11px;
-            border-radius: 6px;
-            font-size: 0.75rem;
+            padding: 3px 9px;
+            border-radius: 5px;
+            font-size: 0.72rem;
             font-weight: 500;
             cursor: pointer;
             white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
 
         .btn-preset:hover {
@@ -159,291 +189,303 @@
         }
 
         .btn-preset.active {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(192, 132, 252, 0.25));
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(16, 185, 129, 0.25));
             border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
+            color: #38bdf8;
             font-weight: 700;
         }
 
-        /* MAIN LAYOUT */
+        /* MAIN APP LAYOUT (OPTIMIZED DENSITY) */
         .main-layout {
             display: grid;
-            grid-template-columns: 380px 1fr;
-            gap: 16px;
-            padding: 16px;
-            max-width: 1780px;
+            grid-template-columns: 340px 1fr;
+            gap: 12px;
+            padding: 10px 14px;
+            max-width: 1800px;
             margin: 0 auto;
             width: 100%;
             flex: 1;
         }
 
-        @media (max-width: 1100px) {
+        @media (max-width: 1024px) {
             .main-layout {
                 grid-template-columns: 1fr;
             }
         }
 
-        /* CARDS */
+        /* COMPACT CARD */
         .card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 14px;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .card-header h2 {
-            font-size: 0.92rem;
-            font-weight: 700;
-            color: var(--accent-cyan);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            border-radius: 10px;
+            padding: 10px 12px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
         }
 
         .sidebar {
             display: flex;
             flex-direction: column;
-            gap: 14px;
-        }
-
-        .formula-card {
-            background: linear-gradient(135deg, rgba(16, 28, 58, 0.9), rgba(10, 16, 32, 0.95));
-            border: 1px solid rgba(56, 189, 248, 0.35);
-            border-radius: 10px;
-            padding: 12px 14px;
-            text-align: center;
-        }
-
-        .formula-highlight {
-            font-size: 1.15rem;
-            color: var(--accent-gold);
-            margin: 4px 0;
-            font-weight: 600;
-            font-family: 'Fira Code', monospace;
-        }
-
-        /* FORM CONTROLS */
-        .control-group {
-            display: flex;
-            flex-direction: column;
             gap: 10px;
         }
 
-        .control-grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .control-item {
+        /* SIDEBAR MODE TABS */
+        .mode-tabs {
             display: flex;
-            flex-direction: column;
+            background: rgba(10, 16, 32, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 3px;
             gap: 4px;
         }
 
-        .control-label-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.78rem;
-            color: var(--text-muted);
-        }
-
-        .control-val {
-            font-family: 'Fira Code', monospace;
-            font-weight: 600;
-            color: var(--accent-cyan);
-        }
-
-        input[type="number"], input[type="text"] {
-            background: #0d1527;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            color: #fff;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 0.82rem;
-            font-family: 'Fira Code', monospace;
-            outline: none;
-            width: 100%;
-            transition: all 0.2s;
-        }
-
-        input[type="number"]:focus, input[type="text"]:focus {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 5px;
-            border-radius: 3px;
-            background: #1e293b;
-            outline: none;
-            accent-color: var(--accent-cyan);
-            cursor: pointer;
-        }
-
-        .btn-solve {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: #fff;
+        .mode-tab-btn {
+            flex: 1;
+            background: transparent;
             border: none;
-            font-weight: 700;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 0.74rem;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 5px;
+            transition: all 0.15s;
+        }
+
+        .mode-tab-btn.active {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(2, 132, 199, 0.35));
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            color: #fff;
+            font-weight: 700;
+        }
+
+        /* SLIDER COMPONENT STYLES */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
             gap: 8px;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-            margin-top: 4px;
         }
 
-        .btn-solve:hover {
-            box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
-            transform: translateY(-1px);
-        }
-
-        /* TELEMETRY */
-        .telemetry-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .meter-box {
-            background: rgba(10, 16, 30, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            padding: 8px 10px;
+        .slider-row {
             display: flex;
             flex-direction: column;
             gap: 2px;
         }
 
-        .meter-title {
-            font-size: 0.66rem;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            letter-spacing: 0.04em;
-        }
-
-        .meter-value {
-            font-size: 1.05rem;
-            font-weight: 700;
-            font-family: 'Fira Code', monospace;
-            color: #fff;
-        }
-
-        .meter-sub {
-            font-size: 0.65rem;
+        .slider-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.72rem;
             color: var(--text-muted);
         }
 
-        /* REGIME BADGE */
-        .regime-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.76rem;
-            font-weight: 700;
+        .slider-val {
             font-family: 'Fira Code', monospace;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            background: rgba(56, 189, 248, 0.08);
+            padding: 1px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .slider-val.negative {
+            color: #f87171;
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: #1e293b;
+            outline: none;
+            accent-color: var(--accent-cyan);
+            cursor: pointer;
+            transition: accent-color 0.2s;
+        }
+
+        input[type="range"]:hover {
+            accent-color: var(--accent-gold);
+        }
+
+        input[type="range"].range-danger {
+            accent-color: var(--accent-red);
+        }
+
+        /* QUICK FORCING CHIPS */
+        .force-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
             margin-top: 4px;
         }
 
+        .force-chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            font-family: 'Fira Code', monospace;
+            padding: 2px 7px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .force-chip:hover, .force-chip.active {
+            background: rgba(192, 132, 252, 0.2);
+            border-color: var(--accent-purple);
+            color: #e9d5ff;
+        }
+
+        /* LATITUDE PILLS */
+        .geo-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .geo-pill {
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            color: #bae6fd;
+            padding: 3px 7px;
+            border-radius: 5px;
+            font-size: 0.68rem;
+            font-family: 'Fira Code', monospace;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .geo-pill:hover, .geo-pill.active {
+            background: rgba(56, 189, 248, 0.3);
+            border-color: #38bdf8;
+            color: #fff;
+        }
+
+        /* COMPACT TELEMETRY */
+        .regime-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            font-family: 'Fira Code', monospace;
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 6px;
+        }
+
         .regime-under {
-            background: rgba(56, 189, 248, 0.15);
+            background: rgba(56, 189, 248, 0.12);
             color: var(--accent-cyan);
-            border: 1px solid rgba(56, 189, 248, 0.4);
+            border: 1px solid rgba(56, 189, 248, 0.35);
         }
 
         .regime-critical {
-            background: rgba(251, 191, 36, 0.15);
+            background: rgba(251, 191, 36, 0.12);
             color: var(--accent-gold);
-            border: 1px solid rgba(251, 191, 36, 0.4);
+            border: 1px solid rgba(251, 191, 36, 0.35);
         }
 
         .regime-over {
-            background: rgba(244, 63, 94, 0.15);
+            background: rgba(244, 63, 94, 0.12);
             color: var(--accent-red);
-            border: 1px solid rgba(244, 63, 94, 0.4);
+            border: 1px solid rgba(244, 63, 94, 0.35);
         }
 
         .regime-instability {
             background: rgba(239, 68, 68, 0.22);
             color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.7);
-            animation: pulse-danger 2s infinite ease-in-out;
+            border: 1px solid rgba(239, 68, 68, 0.6);
+            animation: pulse-danger 1.8s infinite ease-in-out;
         }
 
         @keyframes pulse-danger {
-            0%, 100% { box-shadow: 0 0 6px rgba(239, 68, 68, 0.3); }
-            50% { box-shadow: 0 0 16px rgba(239, 68, 68, 0.75); }
+            0%, 100% { box-shadow: 0 0 4px rgba(239, 68, 68, 0.25); }
+            50% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.6); }
+        }
+
+        .telemetry-mini-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .meter-mini {
+            background: rgba(6, 10, 22, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            padding: 5px 7px;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .meter-mini-title {
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            letter-spacing: 0.03em;
+        }
+
+        .meter-mini-val {
+            font-size: 0.84rem;
+            font-weight: 700;
+            font-family: 'Fira Code', monospace;
+            color: #fff;
+        }
+
+        .meter-mini-sub {
+            font-size: 0.62rem;
+            color: var(--text-muted);
+        }
+
+        /* LIVE BAR */
+        .live-bar {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(4, 7, 16, 0.9);
+            border: 1px solid rgba(56, 189, 248, 0.18);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.68rem;
+            font-family: 'Fira Code', monospace;
+            margin-top: 6px;
         }
 
         /* MAIN STAGE */
         .stage-area {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 10px;
         }
 
-        .concept-banner {
-            background: linear-gradient(90deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 10px;
-            padding: 10px 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .concept-icon {
-            font-size: 1.6rem;
-        }
-
-        .concept-text h4 {
-            font-size: 0.88rem;
-            color: var(--accent-gold);
-            margin-bottom: 2px;
-        }
-
-        .concept-text p {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            line-height: 1.35;
-        }
-
-        /* MASS SPRING CANVAS */
+        /* COMPACT MASS SPRING CANVAS */
         .simulation-container {
             background: #040711;
             border: 1px solid var(--card-border);
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             display: flex;
             flex-direction: column;
         }
 
         .sim-header {
-            padding: 8px 14px;
-            background: rgba(10, 16, 32, 0.9);
+            padding: 5px 10px;
+            background: rgba(10, 16, 30, 0.9);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
             justify-content: space-between;
@@ -451,18 +493,18 @@
         }
 
         .sim-title {
-            font-size: 0.82rem;
+            font-size: 0.74rem;
             font-weight: 700;
             color: var(--accent-gold);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .sim-controls {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .btn-play {
@@ -470,29 +512,29 @@
             color: #030712;
             border: none;
             font-weight: 700;
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 0.78rem;
+            padding: 3px 9px;
+            border-radius: 5px;
+            font-size: 0.72rem;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
 
         .btn-play:hover {
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
             color: var(--text-main);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 5px 9px;
-            border-radius: 6px;
-            font-size: 0.78rem;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 3px 7px;
+            border-radius: 5px;
+            font-size: 0.72rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
 
         .btn-secondary:hover {
@@ -501,18 +543,18 @@
 
         #mass-spring-canvas {
             width: 100%;
-            height: 180px;
+            height: 140px;
             display: block;
         }
 
-        /* GRAPHS GRID */
+        /* DUAL GRAPHS GRID */
         .graphs-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 14px;
+            gap: 10px;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 860px) {
             .graphs-grid {
                 grid-template-columns: 1fr;
             }
@@ -521,15 +563,15 @@
         .graph-box {
             background: #040711;
             border: 1px solid var(--card-border);
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
         .graph-header {
-            padding: 7px 12px;
-            background: rgba(10, 16, 32, 0.85);
+            padding: 5px 10px;
+            background: rgba(10, 16, 30, 0.85);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
             justify-content: space-between;
@@ -537,344 +579,246 @@
         }
 
         .graph-header h3 {
-            font-size: 0.8rem;
+            font-size: 0.72rem;
             font-weight: 700;
             color: var(--text-main);
         }
 
         .graph-legend {
             display: flex;
-            gap: 8px;
-            font-size: 0.7rem;
+            gap: 6px;
+            font-size: 0.65rem;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
 
         .legend-dot {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
         }
 
         .graph-canvas {
             width: 100%;
-            height: 280px;
+            height: 230px;
             display: block;
         }
 
-        footer {
-            margin-top: auto;
-            padding: 12px 24px;
-            background: rgba(6, 10, 20, 0.9);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.74rem;
-            color: var(--text-dim);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        footer a {
-            color: var(--accent-cyan);
-            text-decoration: none;
-        }
-
-        /* GEOPHYSICS MODULE & CONTROLS */
-        .geo-card {
-            background: linear-gradient(135deg, rgba(8, 25, 48, 0.95), rgba(6, 14, 30, 0.95));
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            border-radius: 12px;
-            padding: 14px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        .geo-header-title {
-            color: #38bdf8;
-            font-size: 0.9rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .unit-toggle-group {
-            display: flex;
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 8px;
-            padding: 3px;
-            gap: 4px;
-        }
-
-        .unit-btn {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.74rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .unit-btn.active {
-            background: linear-gradient(135deg, #38bdf8, #0284c7);
-            color: #040816;
-            font-weight: 700;
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
-        }
-
-        .geo-pills-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-top: 6px;
-        }
-
-        .geo-pill {
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            color: #bae6fd;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.72rem;
-            font-family: 'Fira Code', monospace;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .geo-pill:hover, .geo-pill.active {
-            background: rgba(56, 189, 248, 0.3);
-            border-color: #38bdf8;
-            color: #fff;
-            transform: translateY(-1px);
-        }
-
-        .instability-btn {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(185, 28, 28, 0.3));
-            border: 1px solid rgba(239, 68, 68, 0.5);
-            color: #fca5a5;
-            padding: 6px 12px;
-            border-radius: 7px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: all 0.2s;
-            width: 100%;
-        }
-
-        .instability-btn:hover {
-            background: rgba(239, 68, 68, 0.4);
-            border-color: #ef4444;
-            color: #fff;
-            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
-        }
-
-        .instability-btn.active {
-            background: linear-gradient(135deg, #ef4444, #b91c1c);
-            color: #fff;
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.7);
-        }
-
-        /* TECHNICAL EXPLANATION SECTION */
-        .tech-card {
+        /* COLLAPSIBLE THEORY DRAWER */
+        .theory-drawer {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 18px;
-            margin-top: 14px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 4px;
         }
 
-        .tech-header {
+        .theory-header-toggle {
+            padding: 8px 12px;
+            background: rgba(8, 14, 28, 0.95);
+            cursor: pointer;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+            user-select: none;
+            transition: background 0.2s;
         }
 
-        .tech-header h2 {
-            font-size: 1.05rem;
+        .theory-header-toggle:hover {
+            background: rgba(16, 26, 50, 0.95);
+        }
+
+        .theory-title {
+            font-size: 0.8rem;
+            font-weight: 700;
             color: var(--accent-gold);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+        }
+
+        .theory-body {
+            padding: 12px;
+            display: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            animation: fadeIn 0.25s ease-in-out;
+        }
+
+        .theory-body.open {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-3px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .tech-tabs {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 8px;
-            margin-bottom: 16px;
+            padding-bottom: 6px;
+            margin-bottom: 12px;
             overflow-x: auto;
         }
 
         .tech-tab-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--text-muted);
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.72rem;
             font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .tech-tab-btn:hover {
-            background: rgba(56, 189, 248, 0.15);
-            color: #fff;
-            border-color: var(--accent-cyan);
+            transition: all 0.15s;
         }
 
         .tech-tab-btn.active {
             background: linear-gradient(135deg, rgba(56, 189, 248, 0.25), rgba(16, 185, 129, 0.2));
             border-color: var(--accent-cyan);
             color: #fff;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
         }
 
         .tech-tab-content {
             display: none;
-            animation: fadeIn 0.3s ease-in-out;
         }
 
         .tech-tab-content.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .callout-geo {
             background: linear-gradient(135deg, rgba(14, 30, 60, 0.7), rgba(8, 16, 36, 0.8));
-            border-left: 4px solid var(--accent-cyan);
-            border-radius: 8px;
-            padding: 12px 16px;
-            margin: 12px 0;
-            font-size: 0.84rem;
-            line-height: 1.5;
+            border-left: 3px solid var(--accent-cyan);
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-size: 0.78rem;
+            line-height: 1.45;
             color: #cbd5e1;
         }
 
         .callout-instability {
             background: linear-gradient(135deg, rgba(60, 16, 24, 0.7), rgba(36, 8, 14, 0.8));
-            border-left: 4px solid var(--accent-red);
-            border-radius: 8px;
-            padding: 12px 16px;
-            margin: 12px 0;
-            font-size: 0.84rem;
-            line-height: 1.5;
+            border-left: 3px solid var(--accent-red);
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-size: 0.78rem;
+            line-height: 1.45;
             color: #fecdd3;
         }
 
         .tech-grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin: 12px 0;
+            gap: 12px;
+            margin: 8px 0;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 860px) {
             .tech-grid-2 {
                 grid-template-columns: 1fr;
             }
         }
 
         .tech-box {
-            background: rgba(10, 16, 32, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 14px;
+            background: rgba(10, 16, 32, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 10px;
         }
 
         .tech-box h3 {
-            font-size: 0.88rem;
+            font-size: 0.78rem;
             color: var(--accent-cyan);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            margin-bottom: 6px;
         }
 
         .tech-box p, .tech-box li {
-            font-size: 0.82rem;
+            font-size: 0.74rem;
             color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .tech-box ul {
-            padding-left: 18px;
-            margin: 6px 0;
+            line-height: 1.4;
         }
 
         .formula-box {
             background: rgba(4, 7, 17, 0.9);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            border-radius: 8px;
-            padding: 10px;
-            margin: 8px 0;
+            border: 1px solid rgba(56, 189, 248, 0.18);
+            border-radius: 6px;
+            padding: 6px;
+            margin: 6px 0;
             text-align: center;
             font-family: 'Fira Code', monospace;
+            font-size: 0.82rem;
             overflow-x: auto;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 8px 18px;
+            background: rgba(6, 10, 20, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer a {
+            color: var(--accent-cyan);
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
 
-    <!-- TOP HEADER -->
+    <!-- COMPACT HEADER -->
     <header>
         <div class="header-left">
             <div class="header-icon">🌀</div>
             <div>
-                <h1>Solucionador Interativo para Oscilador Harmônico</h1>
-                <p>Equação Diferencial: \(m\,\ddot{x} + b\,\dot{x} + k\,x = F(t)\) — Sistema Massa-Mola, RK4 & Espaço de Fases</p>
+                <h1>Oscilador Harmônico & Dinâmica Geofísica</h1>
+                <p>\(m\,\ddot{x} + b\,\dot{x} + k\,x = F(t)\) — Coriolis, Ressonância Inercial & Instabilidade</p>
             </div>
         </div>
 
-        <div>
+        <div class="header-actions">
+            <!-- Time Unit Toggle -->
+            <div class="unit-toggle-compact">
+                <button class="unit-btn active" id="btn-unit-s" title="Unidades do SI">⏱️ Segundos (s)</button>
+                <button class="unit-btn" id="btn-unit-h" title="Escala Geofísica em Horas">⏳ Horas (h)</button>
+            </div>
+
+            <button id="btn-reset" class="btn-secondary" title="Redefinir Valores Padrão">↺ Reset</button>
+            
             <a href="../../index.html" class="nav-btn">
-                <span>🏠</span> Catálogo Geral
+                <span>🏠</span> Catálogo
             </a>
         </div>
     </header>
 
-    <!-- PRESETS BAR -->
+    <!-- SLIM PRESETS BAR -->
     <nav class="presets-bar">
-        <span class="preset-label">Clássicos:</span>
-        <button class="btn-preset active" id="preset-under">🌀 Subamortecido (\(b=0.5\))</button>
-        <button class="btn-preset" id="preset-crit">🎯 Amortecimento Crítico</button>
+        <span class="preset-label">Exemplos:</span>
+        <button class="btn-preset active" id="preset-under">🌀 Subamortecido</button>
+        <button class="btn-preset" id="preset-crit">🎯 Crítico</button>
         <button class="btn-preset" id="preset-over">🛡️ Superamortecido</button>
-        <button class="btn-preset" id="preset-undamped">〰️ Harmônico Simples</button>
-        <button class="btn-preset" id="preset-resonance">⚡ Ressonância Forçada</button>
+        <button class="btn-preset" id="preset-undamped">〰️ MHS Puro</button>
+        <button class="btn-preset" id="preset-resonance">⚡ Ressonância</button>
         <button class="btn-preset" id="preset-beats">🎵 Batimentos</button>
         
-        <span class="preset-label" style="margin-left: 8px; color: #fbbf24;">Geofísica & Instabilidade:</span>
+        <span class="preset-label" style="margin-left: 6px; color: #fbbf24;">Geofísica:</span>
         <button class="btn-preset" id="preset-lat2996" style="border-color: #38bdf8; color: #bae6fd;">🌎 Lat -29.96° (Ressonância 24h)</button>
-        <button class="btn-preset" id="preset-geo-beats" style="border-color: #34d399; color: #a7f3d0;">🌊 Batimentos Costeiros (Lat -27.5°)</button>
-        <button class="btn-preset" id="preset-instability" style="border-color: #f87171; color: #fca5a5;">💥 Instabilidade Livre (\(\omega^2 < 0\))</button>
-        <button class="btn-preset" id="preset-instability-forced" style="border-color: #fb7185; color: #fecdd3;">🌪️ Instabilidade Forçada (\(\omega^2 < 0\))</button>
+        <button class="btn-preset" id="preset-geo-beats" style="border-color: #34d399; color: #a7f3d0;">🌊 Batimentos (-27.5°)</button>
+        <button class="btn-preset" id="preset-instability" style="border-color: #f87171; color: #fca5a5;">💥 Instabilidade (\(\omega^2 < 0\))</button>
+        <button class="btn-preset" id="preset-instability-forced" style="border-color: #fb7185; color: #fecdd3;">🌪️ Instabilidade Forçada</button>
     </nav>
 
     <!-- MAIN APP LAYOUT -->
@@ -883,184 +827,175 @@
         <!-- SIDEBAR CONTROLS & DIAGNOSTICS -->
         <aside class="sidebar">
             
-            <!-- FORMULA CARD -->
-            <div class="formula-card">
-                <div style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em;">EDO de 2ª Ordem</div>
-                <div class="formula-highlight">\(m\ddot{x} + b\dot{x} + kx = F(t)\)</div>
-                <div style="font-size:0.7rem; color:var(--text-dim);">Sistema de 1ª Ordem: \(\dot{x} = v, \quad \dot{v} = \frac{F(t) - bv - kx}{m}\)</div>
+            <!-- MODE TABS (OSCILADOR GERAL VS GEOFÍSICA) -->
+            <div class="mode-tabs">
+                <button class="mode-tab-btn active" id="tab-btn-classic">
+                    <span>⚙️</span> Físico Geral
+                </button>
+                <button class="mode-tab-btn" id="tab-btn-geophysic">
+                    <span>🌍</span> Geofísica (Coriolis)
+                </button>
             </div>
 
             <!-- CONTROLS CARD -->
             <div class="card">
-                <div class="card-header">
-                    <h2>⚙️ Parâmetros Físicos & Condições</h2>
-                    <button id="btn-reset" class="btn-secondary" style="padding:2px 8px; font-size:0.72rem;">Resetar</button>
-                </div>
-
-                <div class="control-group">
-                    
-                    <!-- Time Unit Selector -->
-                    <div class="unit-toggle-group">
-                        <button class="unit-btn active" id="btn-unit-s">⏱️ Tempo em Segundos (s)</button>
-                        <button class="unit-btn" id="btn-unit-h">⏳ Tempo em Horas (h)</button>
-                    </div>
-
-                    <!-- m, b, k -->
-                    <div class="control-grid-2">
-                        <div class="control-item">
-                            <label class="control-label-row"><span>Massa \(m\) (kg):</span></label>
-                            <input type="number" id="inp-m" value="1.0" min="0.001" step="0.1">
-                        </div>
-                        <div class="control-item">
-                            <label class="control-label-row"><span>Amortecimento \(b\):</span></label>
-                            <input type="number" id="inp-b" value="0.5" min="0.0" step="0.01">
-                        </div>
-                    </div>
-
-                    <div class="control-grid-2">
-                        <div class="control-item">
-                            <label class="control-label-row"><span id="lbl-k">Constante \(k\) (\(\text{N/m}\)):</span></label>
-                            <input type="number" id="inp-k" value="1.0" step="0.01">
-                        </div>
-                        <div class="control-item">
-                            <label class="control-label-row"><span id="lbl-tf">Tempo Final \(t_f\) (s):</span></label>
-                            <input type="number" id="inp-tf" value="40.0" min="0.1" step="5.0">
-                        </div>
-                    </div>
-
-                    <!-- x0, v0 -->
-                    <div class="control-grid-2">
-                        <div class="control-item">
-                            <label class="control-label-row"><span>Posição Inicial \(x_0\) (m):</span></label>
-                            <input type="number" id="inp-x0" value="1.0" step="0.1">
-                        </div>
-                        <div class="control-item">
-                            <label class="control-label-row"><span id="lbl-v0">Velocidade \(v_0\) (m/s):</span></label>
-                            <input type="number" id="inp-v0" value="0.0" step="0.1">
-                        </div>
-                    </div>
-
-                    <!-- External Force String -->
-                    <div class="control-item">
-                        <label class="control-label-row">
-                            <span>Força Externa \(F(t)\):</span>
-                            <span style="font-size:0.68rem; color:var(--text-dim);">ex: 0, 5*cos(2*t), 1.2*cos(0.2618*t)</span>
-                        </label>
-                        <input type="text" id="inp-f" value="0" placeholder="Ex: 5*cos(2*t) ou 0">
-                    </div>
-
-                    <!-- Instability Toggle Button -->
-                    <button id="btn-toggle-instability" class="instability-btn" type="button">
-                        <span>💥</span> Ativar Instabilidade Dinâmica (\(\omega^2 < 0\))
-                    </button>
-
-                    <button id="btn-solve" class="btn-solve">
-                        <span>🚀</span> Resolver e Graficar (RK4)
-                    </button>
-                </div>
-            </div>
-
-            <!-- GEOPHYSICS & CORIOLIS MODULE -->
-            <div class="card geo-card" id="geo-card">
-                <div class="card-header" style="border-bottom-color: rgba(56, 189, 248, 0.25);">
-                    <h2 class="geo-header-title">🌍 Módulo Geofísica (Coriolis & Brisas)</h2>
-                    <span id="geo-mode-status" style="font-size:0.68rem; color:#38bdf8; background:rgba(56,189,248,0.15); padding:2px 7px; border-radius:4px; border:1px solid rgba(56,189,248,0.3); font-family:'Fira Code';">Inercial</span>
-                </div>
                 
-                <div class="control-group" style="gap: 8px;">
-                    <!-- Latitude slider -->
-                    <div class="control-item">
-                        <div class="control-label-row">
-                            <span>Latitude \(\phi\) (Sul):</span>
-                            <span class="control-val" id="disp-latitude" style="color:#fbbf24;">-29.96°</span>
+                <!-- PANEL 1: CLASSICAL OSCILLATOR SLIDERS -->
+                <div id="panel-classic" class="slider-group">
+                    
+                    <!-- Massa m -->
+                    <div class="slider-row">
+                        <div class="slider-label-line">
+                            <span>Massa \(m\)</span>
+                            <span class="slider-val" id="disp-m">1.0 kg</span>
                         </div>
-                        <input type="range" id="slider-latitude" min="-35.0" max="-20.0" step="0.01" value="-29.96">
-                        <div style="display:flex; justify-content:space-between; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">
-                            <span>-35° (Sul do RS)</span>
-                            <span style="color:var(--accent-gold); font-weight:700;">-30° (Crítica)</span>
-                            <span>-20° (Sudeste)</span>
+                        <input type="range" id="sl-m" min="0.1" max="5.0" step="0.1" value="1.0">
+                    </div>
+
+                    <!-- Amortecimento b -->
+                    <div class="slider-row">
+                        <div class="slider-label-line">
+                            <span>Amortecimento \(b\)</span>
+                            <span class="slider-val" id="disp-b">0.50</span>
                         </div>
+                        <input type="range" id="sl-b" min="0.0" max="3.0" step="0.02" value="0.5">
+                    </div>
+
+                    <!-- Constante k (permite k < 0 para instabilidade) -->
+                    <div class="slider-row">
+                        <div class="slider-label-line">
+                            <span id="lbl-sl-k">Constante \(k\) (N/m)</span>
+                            <span class="slider-val" id="disp-k">1.00</span>
+                        </div>
+                        <input type="range" id="sl-k" min="-2.0" max="4.0" step="0.02" value="1.0">
+                    </div>
+
+                    <!-- Tempo Final tf -->
+                    <div class="slider-row">
+                        <div class="slider-label-line">
+                            <span id="lbl-sl-tf">Janela Temporal \(t_f\) (s)</span>
+                            <span class="slider-val" id="disp-tf">40 s</span>
+                        </div>
+                        <input type="range" id="sl-tf" min="5" max="240" step="5" value="40">
+                    </div>
+
+                    <!-- Posição Inicial x0 -->
+                    <div class="slider-row">
+                        <div class="slider-label-line">
+                            <span>Posição Inicial \(x_0\)</span>
+                            <span class="slider-val" id="disp-x0">+1.0 m</span>
+                        </div>
+                        <input type="range" id="sl-x0" min="-3.0" max="3.0" step="0.1" value="1.0">
+                    </div>
+
+                    <!-- Velocidade Inicial v0 -->
+                    <div class="slider-row">
+                        <div class="slider-label-line">
+                            <span id="lbl-sl-v0">Velocidade Inicial \(v_0\) (m/s)</span>
+                            <span class="slider-val" id="disp-v0">0.0 m/s</span>
+                        </div>
+                        <input type="range" id="sl-v0" min="-4.0" max="4.0" step="0.1" value="0.0">
+                    </div>
+
+                    <!-- Força Externa F(t) -->
+                    <div class="slider-row" style="margin-top: 2px;">
+                        <div class="slider-label-line">
+                            <span>Força Externa \(F(t)\)</span>
+                            <span class="slider-val" id="disp-f-text" style="color:var(--accent-purple);">0</span>
+                        </div>
+                        <div class="force-chips">
+                            <button class="force-chip active" data-f="0">F=0 (Livre)</button>
+                            <button class="force-chip" data-f="1.5*cos(t)">1.5·cos(t)</button>
+                            <button class="force-chip" data-f="1.2*cos(1.15*t)">1.2·cos(1.15t)</button>
+                            <button class="force-chip" data-f="0.8*cos(0.2618*t)">Brisa 24h</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- PANEL 2: GEOPHYSICAL CORIOLIS SLIDERS -->
+                <div id="panel-geophysic" class="slider-group" style="display: none;">
+                    
+                    <!-- Latitude Slider -->
+                    <div class="slider-row">
+                        <div class="slider-label-line">
+                            <span>Latitude \(\phi\) (Sul)</span>
+                            <span class="slider-val" id="disp-latitude" style="color:#fbbf24;">-29.96°</span>
+                        </div>
+                        <input type="range" id="sl-latitude" min="-35.0" max="-20.0" step="0.01" value="-29.96">
                     </div>
 
                     <!-- Quick Latitude Pills -->
-                    <div class="geo-pills-row">
-                        <button class="geo-pill active" id="pill-lat-2996" title="Porto Alegre / Litoral Norte do RS (Tramandaí)">📍 Lat -29.96° (RS)</button>
-                        <button class="geo-pill" id="pill-lat-3000" title="Latitude Crítica Exata para Forçante Diurna (24h)">🎯 Lat -30.00°</button>
-                        <button class="geo-pill" id="pill-lat-2750" title="Santa Catarina / Florianópolis">🌊 Lat -27.50° (SC)</button>
-                        <button class="geo-pill" id="pill-lat-2500" title="Paraná / Litoral de São Paulo">🌊 Lat -25.00° (SP/PR)</button>
+                    <div class="geo-pills">
+                        <button class="geo-pill active" id="pill-lat-2996">📍 -29.96° (RS)</button>
+                        <button class="geo-pill" id="pill-lat-3000">🎯 -30.00° (Crítica)</button>
+                        <button class="geo-pill" id="pill-lat-2750">🌊 -27.50° (SC)</button>
+                        <button class="geo-pill" id="pill-lat-2500">🌊 -25.00° (SP)</button>
                     </div>
 
-                    <!-- Coriolis Telemetry Preview Box -->
-                    <div style="background:rgba(4,7,17,0.75); border:1px solid rgba(56,189,248,0.22); border-radius:8px; padding:8px 10px; margin-top:4px; display:flex; flex-direction:column; gap:4px; font-size:0.72rem;">
+                    <!-- Coriolis Telemetry Box -->
+                    <div style="background:rgba(5,9,20,0.8); border:1px solid rgba(56,189,248,0.2); border-radius:6px; padding:6px 8px; margin-top:4px; display:flex; flex-direction:column; gap:3px; font-size:0.7rem;">
                         <div style="display:flex; justify-content:space-between;">
-                            <span style="color:var(--text-muted);">Coriolis \(f = 2\Omega\sin\phi\):</span>
+                            <span style="color:var(--text-dim);">Coriolis \(f\):</span>
                             <span id="geo-f-val" style="font-family:'Fira Code'; color:#38bdf8; font-weight:600;">-0.2615 rad/h</span>
                         </div>
                         <div style="display:flex; justify-content:space-between;">
-                            <span style="color:var(--text-muted);">Período Inercial \(T_i = \frac{12}{|\sin\phi|}\):</span>
-                            <span id="geo-ti-val" style="font-family:'Fira Code'; color:#fbbf24; font-weight:700;">24.03 h (≈ 24h)</span>
+                            <span style="color:var(--text-dim);">Período Inercial \(T_i\):</span>
+                            <span id="geo-ti-val" style="font-family:'Fira Code'; color:#fbbf24; font-weight:700;">24.03 h</span>
                         </div>
                         <div style="display:flex; justify-content:space-between;">
-                            <span style="color:var(--text-muted);">Forçante Diurna (Brisa):</span>
-                            <span id="geo-tf-val" style="font-family:'Fira Code'; color:#c084fc; font-weight:600;">T = 24.00 h (S₁)</span>
+                            <span style="color:var(--text-dim);">Forçante Diurna:</span>
+                            <span style="font-family:'Fira Code'; color:#c084fc;">T = 24.00 h (S₁)</span>
                         </div>
                         <div style="display:flex; justify-content:space-between;">
-                            <span style="color:var(--text-muted);">Período de Batimento \(T_{\text{beat}}\):</span>
-                            <span id="geo-tbeat-val" style="font-family:'Fira Code'; color:#34d399; font-weight:700;">∞ (Ressonância Exata!)</span>
+                            <span style="color:var(--text-dim);">Batimento \(T_{\text{beat}}\):</span>
+                            <span id="geo-tbeat-val" style="font-family:'Fira Code'; color:#34d399; font-weight:700;">∞ (Ressonância!)</span>
                         </div>
                     </div>
 
                     <!-- Sync Sea Breeze Button -->
-                    <button id="btn-sync-breeze" class="btn-secondary" style="border-color:rgba(192,132,252,0.4); color:#e9d5ff; padding:6px; font-size:0.75rem; display:flex; align-items:center; justify-content:center; gap:6px; margin-top:2px;">
-                        <span>🌬️</span> Aplicar Brisa Diurna (24h) na Latitude Atual
+                    <button id="btn-sync-breeze" class="btn-secondary" style="border-color:rgba(192,132,252,0.4); color:#e9d5ff; padding:5px; font-size:0.72rem; display:flex; align-items:center; justify-content:center; gap:5px; margin-top:2px;">
+                        <span>🌬️</span> Sincronizar Brisa Diurna (24h)
                     </button>
+
                 </div>
+
             </div>
 
-            <!-- ANALYTICAL DIAGNOSTICS & TELEMETRY -->
+            <!-- ANALYTICAL DIAGNOSTICS & TELEMETRY CARD -->
             <div class="card">
-                <div class="card-header">
-                    <h2>📊 Diagnóstico Analítico & Telemetria</h2>
-                </div>
-                
-                <div id="regime-container" style="margin-bottom:8px;">
-                    <div class="regime-badge regime-under" id="regime-badge">🌀 SUBAMORTECIDO (ζ < 1)</div>
+                <div class="regime-badge regime-under" id="regime-badge">
+                    🌀 SUBAMORTECIDO (ζ < 1)
                 </div>
 
-                <div class="telemetry-grid">
-                    <div class="meter-box">
-                        <span class="meter-title">Freq. Natural \(\omega_0\)</span>
-                        <span class="meter-value" id="tel-w0" style="color:#38bdf8;">1.000 rad/s</span>
-                        <span class="meter-sub">\(f_0 = 0.159\text{ Hz}\)</span>
+                <div class="telemetry-mini-grid">
+                    <div class="meter-mini">
+                        <span class="meter-mini-title">Freq. Natural \(\omega_0\)</span>
+                        <span class="meter-mini-val" id="tel-w0" style="color:#38bdf8;">1.00 rad/s</span>
+                        <span class="meter-mini-sub" id="tel-w0-sub">f₀ = 0.16 Hz</span>
                     </div>
-                    <div class="meter-box">
-                        <span class="meter-title">Fator Amortecimento \(\gamma\)</span>
-                        <span class="meter-value" id="tel-gamma" style="color:#fbbf24;">0.250 s⁻¹</span>
-                        <span class="meter-sub">\(\gamma = b/(2m)\)</span>
+                    <div class="meter-mini">
+                        <span class="meter-mini-title">Amortecimento \(\gamma\)</span>
+                        <span class="meter-mini-val" id="tel-gamma" style="color:#fbbf24;">0.25 s⁻¹</span>
+                        <span class="meter-mini-sub">γ = b/(2m)</span>
                     </div>
-                    <div class="meter-box">
-                        <span class="meter-title">Freq. Amortecida \(\omega_d\)</span>
-                        <span class="meter-value" id="tel-wd" style="color:#34d399;">0.968 rad/s</span>
-                        <span class="meter-sub">\(\sqrt{\omega_0^2 - \gamma^2}\)</span>
+                    <div class="meter-mini">
+                        <span class="meter-mini-title" id="tel-title-wd">Freq. Amortecida</span>
+                        <span class="meter-mini-val" id="tel-wd" style="color:#34d399;">0.97 rad/s</span>
+                        <span class="meter-mini-sub" id="tel-wd-sub">√(ω₀² - γ²)</span>
                     </div>
-                    <div class="meter-box">
-                        <span class="meter-title">Fator de Qualidade \(Q\)</span>
-                        <span class="meter-value" id="tel-q" style="color:#c084fc;">2.000</span>
-                        <span class="meter-sub">\(Q = \omega_0 m / b\)</span>
+                    <div class="meter-mini">
+                        <span class="meter-mini-title" id="tel-title-q">Fator Qualidade</span>
+                        <span class="meter-mini-val" id="tel-q" style="color:#c084fc;">2.00</span>
+                        <span class="meter-mini-sub" id="tel-q-sub">Q = ω₀ m / b</span>
                     </div>
                 </div>
 
-                <div class="telemetry-grid" style="margin-top:8px;">
-                    <div class="meter-box">
-                        <span class="meter-title">Posição Atual \(x(t)\)</span>
-                        <span class="meter-value" id="tel-cur-x" style="color:#38bdf8;">1.000 m</span>
-                        <span class="meter-sub" id="tel-cur-t">em t = 0.00 s</span>
-                    </div>
-                    <div class="meter-box">
-                        <span class="meter-title">Velocidade \(\dot{x}(t)\)</span>
-                        <span class="meter-value" id="tel-cur-v" style="color:#fbbf24;">0.000 m/s</span>
-                        <span class="meter-sub" id="tel-cur-energy">E = 0.500 J</span>
-                    </div>
+                <!-- Live State Bar -->
+                <div class="live-bar">
+                    <span id="tel-cur-x" style="color:#38bdf8;">x = +1.00 m</span>
+                    <span id="tel-cur-v" style="color:#fbbf24;">v = 0.00 m/s</span>
+                    <span id="tel-cur-energy" style="color:#34d399;">E = 0.50 J</span>
                 </div>
             </div>
 
@@ -1069,25 +1004,14 @@
         <!-- MAIN STAGE -->
         <section class="stage-area">
             
-            <!-- CONCEPT BANNER -->
-            <div class="concept-banner">
-                <div class="concept-icon">💡</div>
-                <div class="concept-text">
-                    <h4>Espaço de Fases & Dinâmica Não-Linear do Oscilador</h4>
-                    <p>
-                        O <strong>Espaço de Fases</strong> mapeia a velocidade \(\dot{x}\) em função da posição \(x\). Sistemas sem amortecimento formam elipses fechadas conservativas (energia constante), enquanto o amortecimento atrai as trajetórias em espiral até o repouso no ponto de equilíbrio \((0,0)\). Forçamentos periódicos induzem ciclos limite e fenômenos de ressonância.
-                    </p>
-                </div>
-            </div>
-
             <!-- PHYSICAL MASS-SPRING SIMULATION CANVAS -->
             <div class="simulation-container">
                 <div class="sim-header">
                     <div class="sim-title">
-                        <span>⚙️</span> Sistema Físico Massa-Mola-Amortecedor em Tempo Real
+                        <span>⚙️</span> Sistema Massa-Mola & Força de Coriolis
                     </div>
                     <div class="sim-controls">
-                        <button id="btn-play" class="btn-play">▶ Iniciar Animação</button>
+                        <button id="btn-play" class="btn-play">▶ Iniciar</button>
                         <button id="btn-restart" class="btn-secondary">↺ Reiniciar</button>
                         <button id="btn-speed" class="btn-secondary">1.0x</button>
                     </div>
@@ -1095,17 +1019,17 @@
                 <canvas id="mass-spring-canvas"></canvas>
             </div>
 
-            <!-- DUAL GRAPHS -->
+            <!-- DUAL GRAPHS (TIME DOMAIN & PHASE SPACE) -->
             <div class="graphs-grid">
                 
                 <!-- GRAPH 1: TIME DOMAIN (x and v vs t) -->
                 <div class="graph-box">
                     <div class="graph-header">
-                        <h3>Posição \(x(t)\) e Velocidade \(\dot{x}(t)\) vs Tempo</h3>
+                        <h3>Posição \(x(t)\) e Velocidade \(\dot{x}(t)\)</h3>
                         <div class="graph-legend">
-                            <div class="legend-item"><div class="legend-dot" style="background:#38bdf8;"></div> Posição \(x\)</div>
-                            <div class="legend-item"><div class="legend-dot" style="background:#fbbf24;"></div> Velocidade \(\dot{x}\)</div>
-                            <div class="legend-item"><div class="legend-dot" style="background:rgba(192,132,252,0.6);"></div> Força \(F(t)\)</div>
+                            <div class="legend-item"><div class="legend-dot" style="background:#38bdf8;"></div> x</div>
+                            <div class="legend-item"><div class="legend-dot" style="background:#fbbf24;"></div> v</div>
+                            <div class="legend-item"><div class="legend-dot" style="background:rgba(192,132,252,0.6);"></div> F(t)</div>
                         </div>
                     </div>
                     <canvas id="time-canvas" class="graph-canvas"></canvas>
@@ -1114,10 +1038,10 @@
                 <!-- GRAPH 2: PHASE SPACE (v vs x) -->
                 <div class="graph-box">
                     <div class="graph-header">
-                        <h3>Diagrama do Espaço de Fases (\(\dot{x}\) vs \(x\))</h3>
+                        <h3>Espaço de Fases (\(\dot{x}\) vs \(x\))</h3>
                         <div class="graph-legend">
-                            <div class="legend-item"><div class="legend-dot" style="background:#34d399;"></div> Trajetória de Fase</div>
-                            <div class="legend-item"><div class="legend-dot" style="background:#f43f5e;"></div> Condição Inicial \((x_0, v_0)\)</div>
+                            <div class="legend-item"><div class="legend-dot" style="background:#34d399;"></div> Trajetória</div>
+                            <div class="legend-item"><div class="legend-dot" style="background:#f43f5e;"></div> (x₀, v₀)</div>
                         </div>
                     </div>
                     <canvas id="phase-canvas" class="graph-canvas"></canvas>
@@ -1125,208 +1049,130 @@
 
             </div>
 
-            <!-- TECHNICAL EXPLANATION & GEOPHYSICAL ANALYSIS CARD -->
-            <div class="card tech-card" id="tech-card">
-                <div class="tech-header">
-                    <h2>📚 Fundamentação Teórica: Ressonância & Instabilidade em Geofísica</h2>
-                    <span style="font-size:0.75rem; color:var(--accent-cyan); font-family:'Fira Code';">Meteorologia & Oceanografia Física</span>
+            <!-- COLLAPSIBLE THEORY DRAWER -->
+            <div class="theory-drawer">
+                <div class="theory-header-toggle" id="theory-toggle">
+                    <div class="theory-title">
+                        <span>📚</span> Fundamentação Teórica: Ressonância Inercial & Instabilidades Geofísicas
+                    </div>
+                    <span id="theory-arrow" style="font-size:0.75rem; color:var(--accent-cyan); font-family:'Fira Code';">▼ Expandir</span>
                 </div>
 
-                <!-- TABS NAVIGATION -->
-                <div class="tech-tabs">
-                    <button class="tech-tab-btn active" onclick="switchTechTab('tab-res-inercial')">🌊 1. Ressonância Inercial & Lat -29.96°</button>
-                    <button class="tech-tab-btn" onclick="switchTechTab('tab-batimentos')">🎵 2. Batimentos Costeiros (-30° a -25°)</button>
-                    <button class="tech-tab-btn" onclick="switchTechTab('tab-instabilidade')">🌪️ 3. Instabilidades Dinâmicas (\(\omega^2 < 0\))</button>
-                    <button class="tech-tab-btn" onclick="switchTechTab('tab-forcado-instavel')">⚡ 4. Dinâmica Forçada em Meios Instáveis</button>
+                <div class="theory-body" id="theory-content">
+                    
+                    <!-- TABS NAVIGATION -->
+                    <div class="tech-tabs">
+                        <button class="tech-tab-btn active" onclick="switchTechTab('tab-res-inercial')">🌊 1. Ressonância & Lat -29.96°</button>
+                        <button class="tech-tab-btn" onclick="switchTechTab('tab-batimentos')">🎵 2. Batimentos (-30° a -25°)</button>
+                        <button class="tech-tab-btn" onclick="switchTechTab('tab-instabilidade')">🌪️ 3. Instabilidades (\(\omega^2 < 0\))</button>
+                        <button class="tech-tab-btn" onclick="switchTechTab('tab-forcado-instavel')">⚡ 4. Dinâmica Forçada</button>
+                    </div>
+
+                    <!-- TAB 1: RESSONÂNCIA INERCIAL -->
+                    <div class="tech-tab-content active" id="tab-res-inercial">
+                        <div class="callout-geo">
+                            <strong>Latitude Crítica -29.96° (Porto Alegre / Litoral Norte do RS):</strong><br>
+                            Na latitude \(\phi = -30^\circ\) (e quase identicamente em \(-29.96^\circ\)), o período inercial da rotação da Terra é de exatamente <strong>24 horas</strong>. A brisa marítima diurna de 24h atua em <strong>ressonância exata</strong>, amplificando as correntes da camada superficial oceânica e promovendo bombeamento de Ekman vigoroso.
+                        </div>
+
+                        <div class="tech-grid-2">
+                            <div class="tech-box">
+                                <h3>📐 Equivalência Matemática</h3>
+                                <p>Na camada de mistura oceânica sob aproximação de plano-\(f\) e atrito linear \(r\):</p>
+                                <div class="formula-box">
+                                    \(\frac{d^2 u}{dt^2} + 2r \frac{du}{dt} + (f^2 + r^2)u = \frac{1}{\rho H}\left(\frac{\partial \tau_x}{\partial t} + f \tau_y + r \tau_x\right)\)
+                                </div>
+                                <p>É rigorosamente um oscilador harmônico com massa unitária \(m=1\), constante elástica \(k = f^2\) e frequência natural \(\omega_0 = |f|\).</p>
+                            </div>
+
+                            <div class="tech-box">
+                                <h3>🌎 Parâmetro de Coriolis</h3>
+                                <div class="formula-box">
+                                    \(f = 2\Omega \sin\phi \implies T_i = \frac{12\text{ h}}{|\sin\phi|}\)
+                                </div>
+                                <p>Para \(\phi = -29.96^\circ\): \(|\sin(-29.96^\circ)| = 0.4994 \implies T_i \approx \mathbf{24.03\text{ h}}\). Em \(-30.00^\circ\): \(T_i = \mathbf{24.00\text{ h}}\).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: BATIMENTOS COSTEIROS -->
+                    <div class="tech-tab-content" id="tab-batimentos">
+                        <div class="callout-geo">
+                            <strong>Batimentos Costeiros entre -30° e -25° de Latitude:</strong><br>
+                            Conforme nos deslocamos de Tramandaí (-30°) em direção a Santa Catarina (-27.5°) e São Paulo (-25°), o período inercial aumenta para 26h e 28.4h. Sob a forçante diurna constante de 24h, a interferência gera envelopes de batimento quinzenais e semanais nas correntes costeiras.
+                        </div>
+
+                        <div class="tech-grid-2">
+                            <div class="tech-box">
+                                <h3>🎵 Frequência e Período de Batimento</h3>
+                                <div class="formula-box">
+                                    \(T_{\text{beat}} = \frac{1}{\left|\frac{1}{T_i} - \frac{1}{T_f}\right|}\)
+                                </div>
+                                <p>A amplitude oscilatória é modulada ciclicamente com o período \(T_{\text{beat}}\), alternando picos e calmaria.</p>
+                            </div>
+
+                            <div class="tech-box">
+                                <h3>📊 Tabela Comparativa Costeira</h3>
+                                <p>• <strong>-30.00° / -29.96° (RS):</strong> \(T_i \approx 24.0\text{ h} \implies T_{\text{beat}} \to \infty\) (Ressonância Pura)<br>
+                                • <strong>-27.50° (SC):</strong> \(T_i = 25.99\text{ h} \implies T_{\text{beat}} \approx 314\text{ h (13.1 dias)}\)<br>
+                                • <strong>-25.00° (SP/PR):</strong> \(T_i = 28.39\text{ h} \implies T_{\text{beat}} \approx 155\text{ h (6.5 dias)}\)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: INSTABILIDADES DINÂMICAS -->
+                    <div class="tech-tab-content" id="tab-instabilidade">
+                        <div class="callout-instability">
+                            <strong>Autovalores Imaginários (\(\omega^2 < 0\)) & Crescimento Exponencial:</strong><br>
+                            Quando \(k < 0\), a mola torna-se repulsora (\(\omega_0 = \pm i\sigma\)). O ponto fixo \((0,0)\) torna-se uma sela hiperbólica com autovalor real positivo \(\lambda_1 = -\gamma + \sqrt{\gamma^2 + \sigma^2} > 0\), modelando convecção profunda (\(N^2 < 0\)) e ciclogênese baroclínica.
+                        </div>
+
+                        <div class="tech-grid-2">
+                            <div class="tech-box">
+                                <h3>💥 Convecção Atmosférica (\(N^2 < 0\))</h3>
+                                <div class="formula-box">
+                                    \(\frac{d^2 z'}{dt^2} + N^2 z' = 0, \quad N^2 = \frac{g}{\theta_v}\frac{\partial \theta_v}{\partial z}\)
+                                </div>
+                                <p>Com gradiente superadiabático, \(N^2 < 0 \implies \omega^2 < 0\), e a parcela acelera verticalmente com taxa \(e^{\sigma t}\), formando tempestades severas.</p>
+                            </div>
+
+                            <div class="tech-box">
+                                <h3>🌪️ Ciclogênese Baroclínica</h3>
+                                <p>No Modelo de Eady, o cisalhamento vertical do vento térmico nas latitudes médias torna a velocidade de fase das ondas de Rossby complexa (\(c = c_r \pm i c_i\)), convertendo energia potencial disponível em ciclones extratropicais.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: DINÂMICA FORÇADA -->
+                    <div class="tech-tab-content" id="tab-forcado-instavel">
+                        <div class="callout-instability">
+                            <strong>Sistemas Forçados em Meio Instável (\(\omega^2 < 0\) com \(F(t)\)):</strong><br>
+                            Quando uma forçante periódica (ondas curtas em altitude ou marés) atua sobre uma massa de ar propensa à instabilidade, a resposta oscilatória é rapidamente ejetada ao longo da variedade instável.
+                        </div>
+
+                        <div class="tech-box">
+                            <h3>⚡ Aplicação Prática</h3>
+                            <p>Explica o disparo de <strong>Ciclogênese Explosiva ("Ciclone Bomba")</strong> no Atlântico Sul, onde um cavado superior (forçante \(F\)) atinge uma atmosfera baroclínica instável (\(\omega^2 < 0\)), aprofundando o centro de baixa pressão em mais de 24 hPa/24h.</p>
+                        </div>
+                    </div>
+
                 </div>
-
-                <!-- TAB 1: RESSONÂNCIA INERCIAL -->
-                <div class="tech-tab-content active" id="tab-res-inercial">
-                    <div class="callout-geo">
-                        <strong>Por que a Latitude -29.96° (Porto Alegre / Litoral Norte do RS) é especial?</strong><br>
-                        Na latitude \(\phi = -30^\circ\) (e praticamente idêntica em \(-29.96^\circ\)), o período de oscilação inercial natural da Terra é exatamente igual a <strong>24 horas</strong>. Quando os ventos diurnos (como a brisa marítima ou o ciclo térmico solar \(S_1\)) forçam o oceano com esse mesmo período de 24h, o sistema entra em <strong>ressonância exata</strong>.
-                    </div>
-
-                    <div class="tech-grid-2">
-                        <div class="tech-box">
-                            <h3>📐 Dedução a partir das Equações Primitivas</h3>
-                            <p>Na camada de mistura oceânica (equações de Ekman horizontal), o movimento sob a aproximação de plano-\(f\) e atrito linear de Rayleigh \(r\) obedece a:</p>
-                            <div class="formula-box">
-                                \(\frac{\partial u}{\partial t} - f v = \frac{\tau_x}{\rho H} - r u, \quad \frac{\partial v}{\partial t} + f u = \frac{\tau_y}{\rho H} - r v\)
-                            </div>
-                            <p>Derivando a primeira equação no tempo e substituindo \(v\) da segunda, obtemos:</p>
-                            <div class="formula-box">
-                                \(\frac{d^2 u}{dt^2} + 2r \frac{du}{dt} + (f^2 + r^2)u = \frac{1}{\rho H}\left(\frac{\partial \tau_x}{\partial t} + f \tau_y + r \tau_x\right)\)
-                            </div>
-                            <p>Esta é <strong>rigorosamente a equação do oscilador harmônico forçado amortecido</strong>: \(m\ddot{x} + b\dot{x} + kx = F(t)\), com massa unitária \(m=1\), constante restauradora \(k \approx f^2\) e frequência natural \(\omega_0 = |f|\).</p>
-                        </div>
-
-                        <div class="tech-box">
-                            <h3>🌎 O Período Inercial e a Latitude Crítica de 30°</h3>
-                            <p>O parâmetro de Coriolis \(f\) depende exclusivamente da velocidade angular da Terra \(\Omega = \frac{2\pi}{24\text{ h}} \approx 7.292 \times 10^{-5}\text{ rad/s}\) e da latitude \(\phi\):</p>
-                            <div class="formula-box">
-                                \(f = 2\Omega \sin\phi \implies T_i = \frac{2\pi}{|f|} = \frac{12\text{ h}}{|\sin\phi|}\)
-                            </div>
-                            <ul>
-                                <li>Para \(\phi = -30.00^\circ\): \(|\sin(-30^\circ)| = 0.5 \implies T_i = \frac{12}{0.5} = \mathbf{24.00\text{ horas}}\).</li>
-                                <li>Para \(\phi = -29.96^\circ\) (Porto Alegre / Tramandaí): \(|\sin(-29.96^\circ)| = 0.499398 \implies T_i = \mathbf{24.029\text{ horas}} \approx \mathbf{24\text{ h}}\).</li>
-                            </ul>
-                            <p><strong>Impactos Oceanográficos & Meteorológicos:</strong></p>
-                            <ul>
-                                <li><strong>Ondas Inerciais Gigantes:</strong> A brisa marítima diurna alimenta continuamente a rotação inercial, amplificando as correntes da camada superficial.</li>
-                                <li><strong>Ressurgência Costeira Forçada:</strong> O bombeamento de Ekman ressonante promove transporte vertical vigoroso de nutrientes na termoclina costeira do RS.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 2: BATIMENTOS COSTEIROS -->
-                <div class="tech-tab-content" id="tab-batimentos">
-                    <div class="callout-geo">
-                        <strong>Batimentos e Modulação da Corrente entre -30° e -25° de Latitude</strong><br>
-                        Ao longo do litoral centro-sul do Brasil (RS, SC, PR, SP), o período inercial varia de 24h a 28.4h. Sob a forçante diurna persistente de 24h, a diferença de frequências gera <strong>batimentos modulados</strong> nas correntes oceânicas e ventos com períodos de 6 a 13 dias.
-                    </div>
-
-                    <div class="tech-grid-2">
-                        <div class="tech-box">
-                            <h3>🎵 Mecanismo de Interferência e Batimentos</h3>
-                            <p>Quando a frequência inercial \(\omega_0 = |f(\phi)|\) se desvia ligeiramente da frequência da forçante da brisa \(\omega_f = \frac{2\pi}{24\text{ h}}\), a solução livre e a forçada interferem:</p>
-                            <div class="formula-box">
-                                \(x(t) \approx 2 A \cos\left(\frac{\omega_0 - \omega_f}{2} t\right) \cos\left(\frac{\omega_0 + \omega_f}{2} t\right)\)
-                            </div>
-                            <p>O envelope de amplitude é modulado pela semi-diferença das frequências, definindo o <strong>Período de Batimento</strong>:</p>
-                            <div class="formula-box">
-                                \(T_{\text{beat}} = \frac{2\pi}{|\omega_0 - \omega_f|} = \frac{1}{\left|\frac{1}{T_i} - \frac{1}{T_f}\right|}\)
-                            </div>
-                        </div>
-
-                        <div class="tech-box">
-                            <h3>📊 Tabela Comparativa de Latitudes da Costa Brasileira</h3>
-                            <ul style="list-style:none; padding-left:0;">
-                                <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
-                                    <strong style="color:var(--accent-gold);">• Lat -30.00° / -29.96° (RS):</strong> \(T_i \approx 24.0\text{ h}\) | \(\Delta\omega \approx 0\) | <strong>\(T_{\text{beat}} \to \infty\) (Ressonância Pura)</strong>
-                                </li>
-                                <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
-                                    <strong style="color:#38bdf8;">• Lat -28.50° (Litoral SC Sul):</strong> \(T_i = 25.15\text{ h}\) | \(\Delta\omega = 0.0120\text{ rad/h}\) | <strong>\(T_{\text{beat}} \approx 524\text{ h (21.8 dias)}\)</strong>
-                                </li>
-                                <li style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.06);">
-                                    <strong style="color:#34d399;">• Lat -27.50° (Florianópolis / SC):</strong> \(T_i = 25.99\text{ h}\) | \(\Delta\omega = 0.0200\text{ rad/h}\) | <strong>\(T_{\text{beat}} \approx 314\text{ h (13.1 dias)}\)</strong>
-                                </li>
-                                <li style="padding:6px 0;">
-                                    <strong style="color:#c084fc;">• Lat -25.00° (Paranaguá / Santos):</strong> \(T_i = 28.39\text{ h}\) | \(\Delta\omega = 0.0405\text{ rad/h}\) | <strong>\(T_{\text{beat}} \approx 155\text{ h (6.5 dias)}\)</strong>
-                                </li>
-                            </ul>
-                            <p style="margin-top:8px;">Oceanógrafos operacionais identificam que correntes costeiras de superfície alternam semanas de picos violentos com semanas de calmaria, puramente governadas por este envelope de batimento.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 3: INSTABILIDADES DINÂMICAS -->
-                <div class="tech-tab-content" id="tab-instabilidade">
-                    <div class="callout-instability">
-                        <strong>Autovalores Imaginários (\(\omega^2 < 0\)) & Crescimento Exponencial Catastrófico</strong><br>
-                        Quando a rigidez do sistema torna-se negativa (\(k < 0\)), o quadrado da frequência \(\omega_0^2 = k/m < 0\) assume valores imaginários \(\omega_0 = \pm i \sigma\). A mola deixa de restaurar e passa a <strong>repelir</strong>, transformando o oscilador num modelo universal de <strong>convecção profunda, ciclogênese baroclínica e instabilidade inercial</strong>.
-                    </div>
-
-                    <div class="tech-grid-2">
-                        <div class="tech-box">
-                            <h3>💥 Análise Espectral e Autovalores Reais Positivos</h3>
-                            <p>A equação homogênea com \(\omega_0^2 = -\sigma^2 < 0\) torna-se:</p>
-                            <div class="formula-box">
-                                \(\ddot{x} + 2\gamma \dot{x} - \sigma^2 x = 0\)
-                            </div>
-                            <p>A equação característica \(\lambda^2 + 2\gamma \lambda - \sigma^2 = 0\) possui raízes reais:</p>
-                            <div class="formula-box">
-                                \(\lambda_{1,2} = -\gamma \pm \sqrt{\gamma^2 + \sigma^2}\)
-                            </div>
-                            <p>Como \(\sqrt{\gamma^2 + \sigma^2} > \gamma\), a raiz \(\lambda_1\) é <strong>estritamente positiva</strong>, gerando a solução:</p>
-                            <div class="formula-box">
-                                \(x(t) = C_1 e^{\lambda_1 t} + C_2 e^{\lambda_2 t} \approx C_1 e^{+\lambda_1 t}\)
-                            </div>
-                            <p>No espaço de fases, o ponto \((0,0)\) é um <strong>ponto de sela hiperbólico (saddle point)</strong>, onde qualquer perturbação sai disparada ao longo da variedade instável (\(v = \lambda_1 x\)). O tempo de duplicação da amplitude é \(T_{\text{dup}} = \frac{\ln 2}{\lambda_1}\).</p>
-                        </div>
-
-                        <div class="tech-box">
-                            <h3>🌪️ Três Grandes Manifestações em Meteorologia & Oceanografia</h3>
-                            <ul>
-                                <li style="margin-bottom:8px;">
-                                    <strong>1. Instabilidade Convectiva (Tempestades / Cumulonimbus):</strong><br>
-                                    A equação vertical de uma parcela atmosférica é \(\ddot{z}' + N^2 z' = 0\), onde \(N^2 = \frac{g}{\theta_v}\frac{\partial \theta_v}{\partial z}\) é a frequência de Brunt-Väisälä. Quando há ar quente/úmido na base (gradiente superadiabático), \(N^2 < 0 \implies \omega^2 < 0\). A flutuabilidade acelera a parcela exponencialmente para cima, gerando convecção severa.
-                                </li>
-                                <li style="margin-bottom:8px;">
-                                    <strong>2. Instabilidade Baroclínica (Ciclogênese nas Latitudes Médias):</strong><br>
-                                    Pelo modelo de Eady para a atmosfera baroclínica, o cisalhamento vertical do vento térmico gera uma velocidade de fase com parte imaginária \(c = c_r \pm i c_i\), tornando a frequência \(\omega = k c\) complexa. A onda de Rossby amplifica exponencialmente alimentada pela energia potencial disponível (APE), originando os ciclones extratropicais que atingem o Sul do Brasil.
-                                </li>
-                                <li>
-                                    <strong>3. Instabilidade Inercial:</strong><br>
-                                    Ocorre quando a vorticidade potencial absoluta muda de sinal e \(f(f + \zeta) < 0\) no lado anticiclônico de correntes de jato ou vórtices oceânicos.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 4: DINÂMICA FORÇADA EM MEIOS INSTÁVEIS -->
-                <div class="tech-tab-content" id="tab-forcado-instavel">
-                    <div class="callout-instability">
-                        <strong>Comportamento de Sistemas Forçados em Regime Instável (\(\omega^2 < 0\) com \(F(t)\))</strong><br>
-                        Como reage a atmosfera ou o oceano quando uma forçante periódica (marés, brisas ou pulsos de ondas curtas) atua sobre uma massa de ar já propensa à instabilidade convectiva ou baroclínica?
-                    </div>
-
-                    <div class="tech-grid-2">
-                        <div class="tech-box">
-                            <h3>⚡ Superposição de Forçamento e Divergência Exponencial</h3>
-                            <p>A EDO completa forçada em regime instável é:</p>
-                            <div class="formula-box">
-                                \(\ddot{x} + 2\gamma \dot{x} - \sigma^2 x = \frac{F_0}{m}\cos(\omega_f t)\)
-                            </div>
-                            <p>A solução analítica combina a resposta oscilatória particular e a fuga exponencial homogênea:</p>
-                            <div class="formula-box">
-                                \(x(t) = C_1 e^{\lambda_1 t} + C_2 e^{\lambda_2 t} + \frac{F_0/m}{\sqrt{(\sigma^2 + \omega_f^2)^2 + 4\gamma^2\omega_f^2}}\cos(\omega_f t - \delta)\)
-                            </div>
-                            <p><strong>Comportamento no Espaço de Fases:</strong> O termo oscilatório faz a trajetória descrever pequenas rotações elípticas, mas a componente \(e^{\lambda_1 t}\) estica e expele violentamente a órbita para longe do equilíbrio, seguindo as variedades assintóticas instáveis.</p>
-                        </div>
-
-                        <div class="tech-box">
-                            <h3>🌀 Exemplos Práticos de Aplicação</h3>
-                            <ul>
-                                <li style="margin-bottom:8px;">
-                                    <strong>Disparo de Ciclogênese Explosiva ("Ciclone Bomba"):</strong><br>
-                                    Um cavado em altos níveis (forçante de vorticidade \(F(t)\)) atinge uma região baroclinicamente instável (\(\omega^2 < 0\)) sobre o Atlântico Sul, deflagrando aprofundamento de mais de 24 hPa em 24 horas.
-                                </li>
-                                <li style="margin-bottom:8px;">
-                                    <strong>Gatilho de Convecção Diurna por Brisas:</strong><br>
-                                    A brisa marítima penetra sobre o continente quente à tarde. A forçante mecânica de convergência de brisa excita a camada instável com \(N^2 < 0\), gerando linhas de instabilidade de mesoescala.
-                                </li>
-                                <li>
-                                    <strong>Marés de Tempestade (Meteotsunamis & Ressacas):</strong><br>
-                                    Perturbações de pressão atmosférica rápida ressoando com ondas oceânicas em águas rasas sob condições de divergência dinâmica.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
         </section>
 
     </main>
 
-    <!-- FOOTER -->
+    <!-- COMPACT FOOTER -->
     <footer>
-        <div>
-            Adaptado e expandido a partir do <strong>Google Colab: Solucionador Interativo do Oscilador Harmônico</strong>.
-        </div>
-        <div>
-            Autor: <a href="https://github.com/reinaldohaas" target="_blank">Reinaldo Haas</a>
-        </div>
+        <div>Oscilador Harmônico & Dinâmica Geofísica | Física I & Meteorologia</div>
+        <div>Autor: <a href="https://github.com/reinaldohaas" target="_blank">Reinaldo Haas</a></div>
     </footer>
 
-    <!-- ENGINE JAVASCRIPT -->
+    <!-- ENGINE JAVASCRIPT (REACTIVE COMPONENT ARCHITECTURE) -->
     <script>
-        // APPLICATION PARAMETERS & STATE
-        const params = {
+        // APPLICATION STATE STORE (REACTIVE)
+        const state = {
             m: 1.0,
             b: 0.5,
             k: 1.0,
@@ -1335,17 +1181,18 @@
             x0: 1.0,
             v0: 0.0,
             fString: "0",
-            timeUnit: "s", // 's' (seconds) or 'h' (hours)
+            timeUnit: "s", // 's' or 'h'
             latitude: -29.96,
-            isInstability: false
+            activeMode: 'classic' // 'classic' or 'geophysic'
         };
 
-        // ANIMATION & TIMELINE STATE
-        let solution = null; // Contains t, x, v, f arrays
+        // ANIMATION & TIMELINE
+        let solution = null;
         let animTime = 0.0;
         let isPlaying = false;
         let playbackSpeed = 1.0;
         let lastTimestamp = null;
+        let scheduledFrame = null;
 
         // CANVAS ELEMENTS
         const springCanvas = document.getElementById('mass-spring-canvas');
@@ -1355,31 +1202,7 @@
         const phaseCanvas = document.getElementById('phase-canvas');
         const phaseCtx = phaseCanvas.getContext('2d');
 
-        // TECHNICAL TAB SWITCHER
-        function switchTechTab(tabId) {
-            document.querySelectorAll('.tech-tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tech-tab-content').forEach(content => content.classList.remove('active'));
-            
-            const target = document.getElementById(tabId);
-            if (target) target.classList.add('active');
-
-            const tabMap = {
-                'tab-res-inercial': 0,
-                'tab-batimentos': 1,
-                'tab-instabilidade': 2,
-                'tab-forcado-instavel': 3
-            };
-            const idx = tabMap[tabId];
-            const btns = document.querySelectorAll('.tech-tab-btn');
-            if (btns[idx]) btns[idx].classList.add('active');
-
-            if (window.renderMathInElement && target) {
-                renderMathInElement(target, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}]});
-            }
-        }
-        window.switchTechTab = switchTechTab;
-
-        // DPI SETUP & RESIZE HANDLER
+        // DPI SETUP & RESIZE
         function setupDPI(canvas, ctx) {
             const rect = canvas.getBoundingClientRect();
             const dpr = window.devicePixelRatio || 1;
@@ -1400,8 +1223,8 @@
 
         // SAFE MATH PARSER FOR F(t)
         function createForceFunction(exprStr) {
-            let sanitized = exprStr.trim();
-            if (!sanitized) return (t) => 0;
+            let sanitized = (exprStr || "0").trim();
+            if (!sanitized || sanitized === "0") return () => 0;
 
             sanitized = sanitized.replace(/\bnp\.sin\b/g, 'Math.sin')
                                  .replace(/\bnp\.cos\b/g, 'Math.cos')
@@ -1422,195 +1245,47 @@
             try {
                 const fn = new Function('t', `try { return Number(${sanitized}); } catch(e) { return 0; }`);
                 const test = fn(0);
-                if (isNaN(test)) return (t) => 0;
+                if (isNaN(test)) return () => 0;
                 return fn;
             } catch (e) {
-                console.warn('Erro na expressão de F(t), usando 0:', e);
-                return (t) => 0;
+                return () => 0;
             }
         }
 
-        // TIME UNIT MANAGEMENT (s vs h)
-        function setUnit(unit) {
-            params.timeUnit = unit;
-            const btnS = document.getElementById('btn-unit-s');
-            const btnH = document.getElementById('btn-unit-h');
-            const lblK = document.getElementById('lbl-k');
-            const lblTf = document.getElementById('lbl-tf');
-            const lblV0 = document.getElementById('lbl-v0');
-
-            if (unit === 'h') {
-                if (btnH) btnH.classList.add('active');
-                if (btnS) btnS.classList.remove('active');
-                if (lblK) lblK.innerHTML = 'Constante \\(k\\) (\\(\\text{kg/h}^2\\)):';
-                if (lblTf) lblTf.innerHTML = 'Tempo Final \\(t_f\\) (h):';
-                if (lblV0) lblV0.innerHTML = 'Velocidade \\(v_0\\) (m/h):';
-            } else {
-                if (btnS) btnS.classList.add('active');
-                if (btnH) btnH.classList.remove('active');
-                if (lblK) lblK.innerHTML = 'Constante \\(k\\) (\\(\\text{N/m}\\)):';
-                if (lblTf) lblTf.innerHTML = 'Tempo Final \\(t_f\\) (s):';
-                if (lblV0) lblV0.innerHTML = 'Velocidade \\(v_0\\) (m/s):';
-            }
-
-            if (window.renderMathInElement) {
-                renderMathInElement(document.querySelector('.control-group'), {delimiters: [{left: '\\(', right: '\\)', display: false}]});
-            }
-            updateGeoModuleUI();
-        }
-
-        // CORIOLIS & GEOPHYSICS COMPUTATION
-        function calcCoriolis(latDeg, unit = params.timeUnit) {
+        // CORIOLIS CALCULATOR
+        function calcCoriolis(latDeg, unit = state.timeUnit) {
             const rad = latDeg * (Math.PI / 180.0);
             const sinPhi = Math.sin(rad);
             const absSin = Math.abs(sinPhi);
 
             if (unit === 'h') {
-                const Omega = (2.0 * Math.PI) / 24.0; // rad/h ≈ 0.261799
-                const f = 2.0 * Omega * sinPhi; // rad/h
+                const Omega = (2.0 * Math.PI) / 24.0; // rad/h
+                const f = 2.0 * Omega * sinPhi;
                 const absF = Math.abs(f);
-                const Ti = absSin > 1e-5 ? (2.0 * Math.PI) / absF : Infinity; // hours = 12 / absSin
-                const kEq = absF * absF * params.m; // kg/h^2
+                const Ti = absSin > 1e-5 ? (2.0 * Math.PI) / absF : Infinity; // hours
+                const kEq = absF * absF * state.m;
                 return { f, absF, Ti, kEq, Omega, unit: 'h' };
             } else {
                 const Omega = 7.292115e-5; // rad/s
-                const f = 2.0 * Omega * sinPhi; // rad/s
+                const f = 2.0 * Omega * sinPhi;
                 const absF = Math.abs(f);
-                const Ti = absSin > 1e-5 ? (2.0 * Math.PI) / absF : Infinity; // s
-                const kEq = absF * absF * params.m; // N/m
+                const Ti = absSin > 1e-5 ? (2.0 * Math.PI) / absF : Infinity; // seconds
+                const kEq = absF * absF * state.m;
                 return { f, absF, Ti, kEq, Omega, unit: 's' };
             }
         }
 
-        function updateGeoModuleUI() {
-            const lat = params.latitude;
-            const c = calcCoriolis(lat, params.timeUnit);
-            
-            const dispLat = document.getElementById('disp-latitude');
-            if (dispLat) dispLat.textContent = `${lat.toFixed(2)}°`;
-
-            const slider = document.getElementById('slider-latitude');
-            if (slider && Math.abs(parseFloat(slider.value) - lat) > 0.005) {
-                slider.value = lat.toFixed(2);
-            }
-
-            const fUnit = params.timeUnit === 'h' ? 'rad/h' : 'rad/s';
-            const fDisplay = params.timeUnit === 'h' ? c.f.toFixed(4) : c.f.toExponential(3);
-
-            const geoF = document.getElementById('geo-f-val');
-            if (geoF) geoF.textContent = `${fDisplay} ${fUnit}`;
-
-            const geoTi = document.getElementById('geo-ti-val');
-            const tiHours = params.timeUnit === 'h' ? c.Ti : c.Ti / 3600;
-            const isRes = Math.abs(tiHours - 24.0) < 0.08;
-            if (geoTi) {
-                geoTi.textContent = `${tiHours.toFixed(2)} h ${isRes ? '(≈ 24h, Ressonância!)' : ''}`;
-                geoTi.style.color = isRes ? '#fbbf24' : '#38bdf8';
-            }
-
-            const geoTf = document.getElementById('geo-tf-val');
-            if (geoTf) {
-                geoTf.textContent = `T = 24.00 h (Brisa Diurna)`;
-            }
-
-            const geoTbeat = document.getElementById('geo-tbeat-val');
-            if (geoTbeat) {
-                if (isRes) {
-                    geoTbeat.textContent = '∞ (Ressonância Exata!)';
-                    geoTbeat.style.color = '#fbbf24';
-                } else {
-                    const deltaFreq = Math.abs((2.0 * Math.PI / tiHours) - (2.0 * Math.PI / 24.0));
-                    const tBeatH = (2.0 * Math.PI) / deltaFreq;
-                    const tBeatDays = tBeatH / 24.0;
-                    geoTbeat.textContent = `${tBeatH.toFixed(1)} h (${tBeatDays.toFixed(1)} dias)`;
-                    geoTbeat.style.color = '#34d399';
-                }
-            }
-
-            const pills = [
-                { id: 'pill-lat-2996', target: -29.96 },
-                { id: 'pill-lat-3000', target: -30.00 },
-                { id: 'pill-lat-2750', target: -27.50 },
-                { id: 'pill-lat-2500', target: -25.00 }
-            ];
-            pills.forEach(p => {
-                const el = document.getElementById(p.id);
-                if (el) {
-                    if (Math.abs(lat - p.target) < 0.06) el.classList.add('active');
-                    else el.classList.remove('active');
-                }
-            });
-        }
-
-        function applyLatitude(lat, autoSyncForce = true) {
-            params.latitude = lat;
-            setUnit('h');
-            const c = calcCoriolis(lat, 'h');
-            params.k = c.kEq;
-            document.getElementById('inp-k').value = c.kEq.toFixed(6);
-
-            if (autoSyncForce) {
-                const omegaBreeze = ((2.0 * Math.PI) / 24.0).toFixed(4); // 0.2618 rad/h
-                params.b = 0.015;
-                document.getElementById('inp-b').value = "0.015";
-                params.tf = 180.0;
-                document.getElementById('inp-tf').value = "180.0";
-                params.fString = `0.8*cos(${omegaBreeze}*t)`;
-                document.getElementById('inp-f').value = params.fString;
-                params.x0 = 0.0;
-                document.getElementById('inp-x0').value = "0.0";
-                params.v0 = 0.0;
-                document.getElementById('inp-v0').value = "0.0";
-            }
-
-            updateGeoModuleUI();
-            solveODE();
-        }
-
-        // INSTABILITY TOGGLE FUNCTION
-        function toggleInstability(forceState = null) {
-            let makeInstable = forceState !== null ? forceState : (params.k >= 0);
-            const instBtn = document.getElementById('btn-toggle-instability');
-
-            if (makeInstable) {
-                if (params.k >= 0) {
-                    params.k = -Math.abs(params.k || 1.0);
-                }
-                document.getElementById('inp-k').value = params.k.toFixed(3);
-                if (instBtn) {
-                    instBtn.classList.add('active');
-                    instBtn.innerHTML = '<span>💥</span> Modo Instabilidade ATIVADO (\\(\\omega^2 < 0\\))';
-                }
-            } else {
-                if (params.k < 0) {
-                    params.k = Math.abs(params.k);
-                }
-                document.getElementById('inp-k').value = params.k.toFixed(3);
-                if (instBtn) {
-                    instBtn.classList.remove('active');
-                    instBtn.innerHTML = '<span>💥</span> Ativar Instabilidade Dinâmica (\\(\\omega^2 < 0\\))';
-                }
-            }
-            if (window.renderMathInElement && instBtn) {
-                renderMathInElement(instBtn, {delimiters: [{left: '\\(', right: '\\)', display: false}]});
-            }
-            solveODE();
-        }
-
-        // RUNGE-KUTTA 4TH ORDER SOLVER (RK4)
+        // RUNGE-KUTTA 4TH ORDER SOLVER (RK4 - AUTO EXECUTED)
         function solveODE() {
-            const m = params.m;
-            const b = params.b;
-            const k = params.k;
-            const t0 = params.t0;
-            const tf = params.tf;
-            const x0 = params.x0;
-            const v0 = params.v0;
-            const F_fn = createForceFunction(params.fString);
+            const m = state.m;
+            const b = state.b;
+            const k = state.k;
+            const t0 = state.t0;
+            const tf = state.tf;
+            const x0 = state.x0;
+            const v0 = state.v0;
+            const F_fn = createForceFunction(state.fString);
 
-            // ODE System:
-            // dxdt = v
-            // dvdt = (F(t) - b*v - k*x) / m
             const f_ode = (t, x, v) => {
                 const force = F_fn(t);
                 const dv = (force - b * v - k * x) / m;
@@ -1635,7 +1310,7 @@
             fArr[0] = F_fn(t);
 
             for (let i = 0; i < numSteps; i++) {
-                // Safeguard against numerical overflow in unstable regimes
+                // Safeguard against numerical divergence in unstable mode
                 if (Math.abs(x) > 1e5 || Math.abs(v) > 1e5 || isNaN(x)) {
                     for (let j = i + 1; j <= numSteps; j++) {
                         tArr[j] = t0 + j * dt;
@@ -1646,26 +1321,10 @@
                     break;
                 }
 
-                // k1
                 const k1 = f_ode(t, x, v);
-
-                // k2
-                const t_k2 = t + 0.5 * dt;
-                const x_k2 = x + 0.5 * dt * k1.dx;
-                const v_k2 = v + 0.5 * dt * k1.dv;
-                const k2 = f_ode(t_k2, x_k2, v_k2);
-
-                // k3
-                const t_k3 = t + 0.5 * dt;
-                const x_k3 = x + 0.5 * dt * k2.dx;
-                const v_k3 = v + 0.5 * dt * k2.dv;
-                const k3 = f_ode(t_k3, x_k3, v_k3);
-
-                // k4
-                const t_k4 = t + dt;
-                const x_k4 = x + dt * k3.dx;
-                const v_k4 = v + dt * k3.dv;
-                const k4 = f_ode(t_k4, x_k4, v_k4);
+                const k2 = f_ode(t + 0.5 * dt, x + 0.5 * dt * k1.dx, v + 0.5 * dt * k1.dv);
+                const k3 = f_ode(t + 0.5 * dt, x + 0.5 * dt * k2.dx, v + 0.5 * dt * k2.dv);
+                const k4 = f_ode(t + dt, x + dt * k3.dx, v + dt * k3.dv);
 
                 x += (dt / 6.0) * (k1.dx + 2.0 * k2.dx + 2.0 * k3.dx + k4.dx);
                 v += (dt / 6.0) * (k1.dv + 2.0 * k2.dv + 2.0 * k3.dv + k4.dv);
@@ -1682,43 +1341,60 @@
             renderAll();
         }
 
-        // UPDATE ANALYTICAL METRICS
+        // REACTIVE DISPATCHER (SCHEDULES SOLVE)
+        function scheduleUpdate() {
+            if (scheduledFrame) cancelAnimationFrame(scheduledFrame);
+            scheduledFrame = requestAnimationFrame(() => {
+                solveODE();
+                scheduledFrame = null;
+            });
+        }
+
+        // UPDATE ANALYTICAL DIAGNOSTICS & TELEMETRY
         function updateDiagnostics() {
-            const m = params.m;
-            const b = params.b;
-            const k = params.k;
-            const u = params.timeUnit || 's';
+            const m = state.m;
+            const b = state.b;
+            const k = state.k;
+            const u = state.timeUnit;
             const invU = u === 'h' ? 'h⁻¹' : 's⁻¹';
 
             const badge = document.getElementById('regime-badge');
+            const slK = document.getElementById('sl-k');
+            const dispK = document.getElementById('disp-k');
 
-            // CASE 1: INSTABILITY REGIME (k < 0, w0^2 < 0 => w0 is imaginary)
+            // CASE 1: INSTABILITY (k < 0, w0^2 < 0)
             if (k < 0) {
                 const sigma = Math.sqrt(-k / m);
                 const gamma = b / (2.0 * m);
-                // Eigenvalues: lambda1,2 = -gamma ± sqrt(gamma^2 + sigma^2)
                 const disc = Math.sqrt(gamma * gamma + sigma * sigma);
-                const lambda1 = -gamma + disc; // Positive root (unstable mode)
+                const lambda1 = -gamma + disc; // Unstable root
                 const tDup = lambda1 > 1e-6 ? Math.log(2) / lambda1 : Infinity;
 
-                document.getElementById('tel-w0').textContent = `± i·${sigma.toFixed(3)} rad/${u}`;
-                document.getElementById('tel-w0').nextElementSibling.textContent = `(Freq. Imaginária: ω² = ${(k/m).toFixed(3)})`;
+                document.getElementById('tel-w0').textContent = `± i·${sigma.toFixed(2)}`;
+                document.getElementById('tel-w0-sub').textContent = `ω² = ${(k/m).toFixed(2)}`;
 
-                document.getElementById('tel-gamma').textContent = `${gamma.toFixed(3)} ${invU}`;
-                document.getElementById('tel-gamma').nextElementSibling.textContent = `γ = b/(2m)`;
+                document.getElementById('tel-gamma').textContent = `${gamma.toFixed(2)} ${invU}`;
 
-                document.getElementById('tel-wd').textContent = `λ₁ = +${lambda1.toFixed(3)} ${invU}`;
-                document.getElementById('tel-wd').nextElementSibling.textContent = `Taxa de Crescimento Exp.`;
+                document.getElementById('tel-title-wd').textContent = "Taxa Cresc. λ₁";
+                document.getElementById('tel-wd').textContent = `+${lambda1.toFixed(2)} ${invU}`;
+                document.getElementById('tel-wd-sub').textContent = "Modo Instável";
 
-                document.getElementById('tel-q').textContent = isFinite(tDup) ? `${tDup.toFixed(2)} ${u}` : "∞";
-                document.getElementById('tel-q').nextElementSibling.textContent = `T_dup (Tempo de Duplicação)`;
+                document.getElementById('tel-title-q').textContent = "Tempo Duplic.";
+                document.getElementById('tel-q').textContent = isFinite(tDup) ? `${tDup.toFixed(1)} ${u}` : "∞";
+                document.getElementById('tel-q-sub').textContent = "T_dup = ln(2)/λ₁";
 
                 badge.className = "regime-badge regime-instability";
-                badge.textContent = `💥 INSTABILIDADE DINÂMICA (ω² = ${(k/m).toFixed(3)} < 0, Autovalor Real λ₁ > 0)`;
+                badge.textContent = `💥 INSTABILIDADE (ω² < 0, λ₁ > 0)`;
+
+                if (slK) slK.classList.add('range-danger');
+                if (dispK) dispK.classList.add('negative');
                 return;
             }
 
             // CASE 2: CLASSICAL OSCILLATOR (k >= 0)
+            if (slK) slK.classList.remove('range-danger');
+            if (dispK) dispK.classList.remove('negative');
+
             const w0 = Math.sqrt(k / m);
             const gamma = b / (2.0 * m);
             const zeta = w0 > 0 ? b / (2.0 * Math.sqrt(k * m)) : (b > 0 ? Infinity : 0);
@@ -1727,41 +1403,146 @@
             let wdStr = "-";
             if (w0 > gamma) {
                 const wd = Math.sqrt(w0 * w0 - gamma * gamma);
-                wdStr = `${wd.toFixed(3)} rad/${u}`;
+                wdStr = `${wd.toFixed(2)} rad/${u}`;
             }
 
-            const f0Hz = u === 's' ? `${(w0 / (2 * Math.PI)).toFixed(3)} Hz` : `T₀ = ${(2 * Math.PI / (w0 || 1e-9)).toFixed(2)} h`;
+            document.getElementById('tel-w0').textContent = `${w0.toFixed(2)} rad/${u}`;
+            document.getElementById('tel-w0-sub').textContent = u === 's' ? `f₀ = ${(w0/(2*Math.PI)).toFixed(2)} Hz` : `T₀ = ${(2*Math.PI/(w0||1e-9)).toFixed(1)} h`;
 
-            document.getElementById('tel-w0').textContent = `${w0.toFixed(3)} rad/${u}`;
-            document.getElementById('tel-w0').nextElementSibling.textContent = f0Hz;
+            document.getElementById('tel-gamma').textContent = `${gamma.toFixed(2)} ${invU}`;
 
-            document.getElementById('tel-gamma').textContent = `${gamma.toFixed(3)} ${invU}`;
-            document.getElementById('tel-gamma').nextElementSibling.textContent = `γ = b/(2m)`;
-
+            document.getElementById('tel-title-wd').textContent = "Freq. Amortecida";
             document.getElementById('tel-wd').textContent = wdStr;
-            document.getElementById('tel-wd').nextElementSibling.textContent = `√(ω₀² - γ²)`;
+            document.getElementById('tel-wd-sub').textContent = "√(ω₀² - γ²)";
 
+            document.getElementById('tel-title-q').textContent = "Fator Qualidade";
             document.getElementById('tel-q').textContent = isFinite(Q) ? Q.toFixed(2) : "∞ (Sem Amort.)";
-            document.getElementById('tel-q').nextElementSibling.textContent = `Q = ω₀ m / b`;
+            document.getElementById('tel-q-sub').textContent = "Q = ω₀ m / b";
 
             if (b === 0) {
                 badge.className = "regime-badge regime-under";
-                badge.textContent = "〰️ NÃO-AMORTECIDO (MHS Puro, ζ = 0)";
-            } else if (Math.abs(zeta - 1.0) < 0.01) {
+                badge.textContent = "〰️ NÃO-AMORTECIDO (MHS, ζ = 0)";
+            } else if (Math.abs(zeta - 1.0) < 0.02) {
                 badge.className = "regime-badge regime-critical";
-                badge.textContent = "🎯 CRITICAMENTE AMORTECIDO (ζ = 1.0)";
+                badge.textContent = "🎯 CRÍTICO (ζ = 1.0)";
             } else if (zeta < 1.0) {
                 badge.className = "regime-badge regime-under";
-                badge.textContent = `🌀 SUBAMORTECIDO (ζ = ${zeta.toFixed(2)} < 1)`;
+                badge.textContent = `🌀 SUBAMORTECIDO (ζ = ${zeta.toFixed(2)})`;
             } else {
                 badge.className = "regime-badge regime-over";
-                badge.textContent = `🛡️ SUPERAMORTECIDO (ζ = ${zeta.toFixed(2)} > 1)`;
+                badge.textContent = `🛡️ SUPERAMORTECIDO (ζ = ${zeta.toFixed(2)})`;
             }
         }
 
-        // GET STATE AT TIME T VIA INTERPOLATION
+        // UPDATE GEOPHYSICAL CARD
+        function updateGeoUI() {
+            const lat = state.latitude;
+            const c = calcCoriolis(lat, state.timeUnit);
+
+            const dispLat = document.getElementById('disp-latitude');
+            if (dispLat) dispLat.textContent = `${lat.toFixed(2)}°`;
+
+            const slLat = document.getElementById('sl-latitude');
+            if (slLat && Math.abs(parseFloat(slLat.value) - lat) > 0.005) {
+                slLat.value = lat.toFixed(2);
+            }
+
+            const fUnit = state.timeUnit === 'h' ? 'rad/h' : 'rad/s';
+            const fDisp = state.timeUnit === 'h' ? c.f.toFixed(4) : c.f.toExponential(3);
+
+            const geoF = document.getElementById('geo-f-val');
+            if (geoF) geoF.textContent = `${fDisp} ${fUnit}`;
+
+            const geoTi = document.getElementById('geo-ti-val');
+            const tiHours = state.timeUnit === 'h' ? c.Ti : c.Ti / 3600;
+            const isRes = Math.abs(tiHours - 24.0) < 0.08;
+            if (geoTi) {
+                geoTi.textContent = `${tiHours.toFixed(2)} h ${isRes ? '(≈ 24h, Ressonância!)' : ''}`;
+                geoTi.style.color = isRes ? '#fbbf24' : '#38bdf8';
+            }
+
+            const geoTbeat = document.getElementById('geo-tbeat-val');
+            if (geoTbeat) {
+                if (isRes) {
+                    geoTbeat.textContent = '∞ (Ressonância Exata!)';
+                    geoTbeat.style.color = '#fbbf24';
+                } else {
+                    const deltaFreq = Math.abs((2.0 * Math.PI / tiHours) - (2.0 * Math.PI / 24.0));
+                    const tBeatH = (2.0 * Math.PI) / deltaFreq;
+                    const tBeatDays = tBeatH / 24.0;
+                    geoTbeat.textContent = `${tBeatH.toFixed(1)} h (${tBeatDays.toFixed(1)} d)`;
+                    geoTbeat.style.color = '#34d399';
+                }
+            }
+
+            // Pills highlighting
+            const pills = [
+                { id: 'pill-lat-2996', target: -29.96 },
+                { id: 'pill-lat-3000', target: -30.00 },
+                { id: 'pill-lat-2750', target: -27.50 },
+                { id: 'pill-lat-2500', target: -25.00 }
+            ];
+            pills.forEach(p => {
+                const el = document.getElementById(p.id);
+                if (el) {
+                    if (Math.abs(lat - p.target) < 0.06) el.classList.add('active');
+                    else el.classList.remove('active');
+                }
+            });
+        }
+
+        // APPLY LATITUDE HELPER
+        function applyLatitude(lat, autoBreeze = true) {
+            state.latitude = lat;
+            setUnit('h');
+            const c = calcCoriolis(lat, 'h');
+            state.k = c.kEq;
+
+            if (autoBreeze) {
+                const omegaBreeze = ((2.0 * Math.PI) / 24.0).toFixed(4); // 0.2618
+                state.b = 0.015;
+                state.tf = 180.0;
+                state.fString = `0.8*cos(${omegaBreeze}*t)`;
+                state.x0 = 0.0;
+                state.v0 = 0.0;
+            }
+            syncSlidersFromState();
+            updateGeoUI();
+            scheduleUpdate();
+        }
+
+        // TIME UNIT MANAGEMENT
+        function setUnit(u) {
+            state.timeUnit = u;
+            const btnS = document.getElementById('btn-unit-s');
+            const btnH = document.getElementById('btn-unit-h');
+            const lblK = document.getElementById('lbl-sl-k');
+            const lblTf = document.getElementById('lbl-sl-tf');
+            const lblV0 = document.getElementById('lbl-sl-v0');
+
+            if (u === 'h') {
+                if (btnH) btnH.classList.add('active');
+                if (btnS) btnS.classList.remove('active');
+                if (lblK) lblK.innerHTML = 'Constante \\(k\\) (\\(\\text{kg/h}^2\\))';
+                if (lblTf) lblTf.innerHTML = 'Janela Temporal \\(t_f\\) (h)';
+                if (lblV0) lblV0.innerHTML = 'Velocidade Inicial \\(v_0\\) (m/h)';
+            } else {
+                if (btnS) btnS.classList.add('active');
+                if (btnH) btnH.classList.remove('active');
+                if (lblK) lblK.innerHTML = 'Constante \\(k\\) (\\(\\text{N/m}\\))';
+                if (lblTf) lblTf.innerHTML = 'Janela Temporal \\(t_f\\) (s)';
+                if (lblV0) lblV0.innerHTML = 'Velocidade Inicial \\(v_0\\) (m/s)';
+            }
+
+            if (window.renderMathInElement) {
+                renderMathInElement(document.querySelector('.sidebar'), {delimiters: [{left: '\\(', right: '\\)', display: false}]});
+            }
+            updateGeoUI();
+        }
+
+        // GET STATE AT TIME T
         function getStateAtTime(timeT) {
-            if (!solution) return { x: params.x0, v: params.v0, f: 0 };
+            if (!solution) return { x: state.x0, v: state.v0, f: 0 };
             const count = solution.count;
             const tArr = solution.t;
             if (timeT <= tArr[0]) return { x: solution.x[0], v: solution.v[0], f: solution.f[0] };
@@ -1778,7 +1559,7 @@
             return { x, v, f };
         }
 
-        // 1. RENDER PHYSICAL ANIMATION (MASS-SPRING-DAMPER)
+        // 1. RENDER PHYSICAL ANIMATION (COMPACT)
         function renderMassSpring() {
             const rect = springCanvas.getBoundingClientRect();
             const W = rect.width;
@@ -1786,205 +1567,139 @@
 
             springCtx.clearRect(0, 0, W, H);
 
-            // Background
-            springCtx.fillStyle = '#060a16';
+            springCtx.fillStyle = '#050914';
             springCtx.fillRect(0, 0, W, H);
 
-            const groundY = H - 35;
-            const wallX = 60;
-            const cy = groundY - 45;
+            const groundY = H - 28;
+            const wallX = 45;
+            const cy = groundY - 35;
 
             // Ground & Wall
             springCtx.fillStyle = '#1e293b';
             springCtx.fillRect(0, groundY, W, H - groundY);
 
-            // Wall on the left
             springCtx.fillStyle = '#334155';
-            springCtx.fillRect(0, 20, wallX, groundY - 20);
-            // Wall stripes
+            springCtx.fillRect(0, 15, wallX, groundY - 15);
             springCtx.strokeStyle = 'rgba(255,255,255,0.15)';
-            springCtx.lineWidth = 2;
-            for (let y = 30; y < groundY; y += 16) {
+            springCtx.lineWidth = 1.5;
+            for (let y = 20; y < groundY; y += 14) {
                 springCtx.beginPath();
-                springCtx.moveTo(wallX - 18, y + 10);
+                springCtx.moveTo(wallX - 14, y + 8);
                 springCtx.lineTo(wallX, y);
                 springCtx.stroke();
             }
 
-            // Current State
-            const state = getStateAtTime(animTime);
-            const currentX = state.x;
-            const currentV = state.v;
-            const currentF = state.f;
+            const curState = getStateAtTime(animTime);
+            const currentX = curState.x;
+            const currentV = curState.v;
+            const currentF = curState.f;
 
-            // Coordinate mapping (scale factor: 1 meter = 45 pixels)
             const eqX = W * 0.48;
             const visualLimit = W * 0.42;
-            const clampedVisualX = Math.max(-visualLimit, Math.min(visualLimit, currentX * 45));
+            const clampedVisualX = Math.max(-visualLimit, Math.min(visualLimit, currentX * 42));
             const massX = eqX + clampedVisualX;
-            const massW = 55;
-            const massH = 45;
+            const massW = 48;
+            const massH = 38;
 
-            // Equilibrium Reference Line
+            // Equilibrium line
             springCtx.strokeStyle = 'rgba(251, 191, 36, 0.35)';
-            springCtx.setLineDash([4, 4]);
+            springCtx.setLineDash([3, 3]);
             springCtx.beginPath();
-            springCtx.moveTo(eqX, 20);
-            springCtx.lineTo(eqX, groundY + 15);
+            springCtx.moveTo(eqX, 12);
+            springCtx.lineTo(eqX, groundY + 10);
             springCtx.stroke();
             springCtx.setLineDash([]);
-            springCtx.fillStyle = '#fbbf24';
-            springCtx.font = '10px Fira Code';
-            springCtx.textAlign = 'center';
-            springCtx.fillText('x = 0 (Equilíbrio)', eqX, 16);
 
-            // Coiled Spring (Top half: cy - 14)
-            const springY = cy - 14;
+            // Spring
+            const springY = cy - 10;
             const springStartX = wallX;
             const springEndX = massX - massW / 2;
-            const springLen = Math.max(20, springEndX - springStartX);
-            const coils = 12;
+            const springLen = Math.max(16, springEndX - springStartX);
+            const coils = 11;
 
-            springCtx.strokeStyle = params.k < 0 ? '#f87171' : '#38bdf8';
-            springCtx.lineWidth = 2.5;
+            springCtx.strokeStyle = state.k < 0 ? '#f87171' : '#38bdf8';
+            springCtx.lineWidth = 2.2;
             springCtx.beginPath();
             springCtx.moveTo(springStartX, springY);
-            const coilStep = (springLen - 16) / coils;
-            springCtx.lineTo(springStartX + 8, springY);
+            const coilStep = (springLen - 12) / coils;
+            springCtx.lineTo(springStartX + 6, springY);
             for (let c = 0; c < coils; c++) {
-                const cx = springStartX + 8 + (c + 0.5) * coilStep;
-                const cyOffset = (c % 2 === 0 ? -12 : 12);
+                const cx = springStartX + 6 + (c + 0.5) * coilStep;
+                const cyOffset = (c % 2 === 0 ? -9 : 9);
                 springCtx.lineTo(cx, springY + cyOffset);
             }
-            springCtx.lineTo(springEndX - 8, springY);
+            springCtx.lineTo(springEndX - 6, springY);
             springCtx.lineTo(springEndX, springY);
             springCtx.stroke();
 
-            // Hydraulic Damper (Bottom half: cy + 14)
-            const damperY = cy + 14;
-            const cylinderW = 60;
+            // Damper
+            const damperY = cy + 10;
+            const cylinderW = 48;
             const cylStartX = wallX;
             const pistonEndX = massX - massW / 2;
 
-            springCtx.strokeStyle = '#94a3b8';
-            springCtx.lineWidth = 2;
-            springCtx.beginPath();
-            springCtx.moveTo(cylStartX, damperY);
-            springCtx.lineTo(cylStartX + 20, damperY);
-            springCtx.stroke();
-
-            springCtx.fillStyle = 'rgba(30, 41, 59, 0.8)';
             springCtx.strokeStyle = '#64748b';
-            springCtx.strokeRect(cylStartX + 20, damperY - 10, cylinderW, 20);
-            springCtx.fillRect(cylStartX + 20, damperY - 10, cylinderW, 20);
+            springCtx.lineWidth = 1.8;
+            springCtx.strokeRect(cylStartX + 12, damperY - 7, cylinderW, 14);
 
-            // Damper Piston Rod
-            const pistonHeadX = Math.max(cylStartX + 25, Math.min(cylStartX + 15 + cylinderW - 6, cylStartX + 20 + (pistonEndX - (cylStartX + 20)) * 0.4));
+            const pistonHeadX = Math.max(cylStartX + 16, Math.min(cylStartX + 10 + cylinderW - 5, cylStartX + 12 + (pistonEndX - (cylStartX + 12)) * 0.4));
             springCtx.strokeStyle = '#cbd5e1';
-            springCtx.lineWidth = 2.5;
+            springCtx.lineWidth = 2;
             springCtx.beginPath();
             springCtx.moveTo(pistonHeadX, damperY);
             springCtx.lineTo(pistonEndX, damperY);
             springCtx.stroke();
 
-            springCtx.fillStyle = '#94a3b8';
-            springCtx.fillRect(pistonHeadX - 2, damperY - 8, 4, 16);
-
             // Mass Block
-            springCtx.fillStyle = params.k < 0 ? '#ef4444' : '#38bdf8';
+            springCtx.fillStyle = state.k < 0 ? '#ef4444' : '#38bdf8';
             springCtx.strokeStyle = '#fff';
-            springCtx.lineWidth = 2;
+            springCtx.lineWidth = 1.8;
             springCtx.fillRect(massX - massW / 2, groundY - massH, massW, massH);
             springCtx.strokeRect(massX - massW / 2, groundY - massH, massW, massH);
 
-            // Mass label
             springCtx.fillStyle = '#050814';
-            springCtx.font = 'bold 11px Fira Code';
+            springCtx.font = 'bold 10px Fira Code';
             springCtx.textAlign = 'center';
-            springCtx.fillText(`m=${params.m}kg`, massX, groundY - massH / 2 + 4);
+            springCtx.fillText(`${state.m}kg`, massX, groundY - massH / 2 + 4);
 
-            // Wheels on Mass
+            // Wheels
             springCtx.fillStyle = '#0f172a';
             springCtx.strokeStyle = '#64748b';
             springCtx.beginPath();
-            springCtx.arc(massX - 16, groundY - 3, 5, 0, Math.PI * 2);
-            springCtx.arc(massX + 16, groundY - 3, 5, 0, Math.PI * 2);
+            springCtx.arc(massX - 14, groundY - 3, 4, 0, Math.PI * 2);
+            springCtx.arc(massX + 14, groundY - 3, 4, 0, Math.PI * 2);
             springCtx.fill();
             springCtx.stroke();
 
             // Velocity Vector (Green)
             if (Math.abs(currentV) > 0.02) {
-                const vArrLen = Math.max(-120, Math.min(120, currentV * 25));
+                const vArrLen = Math.max(-100, Math.min(100, currentV * 20));
                 springCtx.strokeStyle = '#10b981';
-                springCtx.lineWidth = 3;
-                springCtx.beginPath();
-                springCtx.moveTo(massX, groundY - massH - 12);
-                springCtx.lineTo(massX + vArrLen, groundY - massH - 12);
-                springCtx.stroke();
-
-                const vUnit = params.timeUnit === 'h' ? 'm/h' : 'm/s';
-                springCtx.fillStyle = '#34d399';
-                springCtx.font = 'bold 10px Fira Code';
-                springCtx.textAlign = currentV >= 0 ? 'left' : 'right';
-                springCtx.fillText(`v = ${currentV.toFixed(2)} ${vUnit}`, massX + vArrLen + (currentV >= 0 ? 6 : -6), groundY - massH - 9);
-            }
-
-            // External Force Vector F(t) (Purple)
-            if (Math.abs(currentF) > 0.05) {
-                const fArrLen = Math.max(-100, Math.min(100, currentF * 20));
-                springCtx.strokeStyle = '#c084fc';
                 springCtx.lineWidth = 2.5;
                 springCtx.beginPath();
-                springCtx.moveTo(massX, groundY - massH - 28);
-                springCtx.lineTo(massX + fArrLen, groundY - massH - 28);
+                springCtx.moveTo(massX, groundY - massH - 10);
+                springCtx.lineTo(massX + vArrLen, groundY - massH - 10);
                 springCtx.stroke();
-
-                springCtx.fillStyle = '#c084fc';
-                springCtx.font = 'bold 10px Fira Code';
-                springCtx.textAlign = currentF >= 0 ? 'left' : 'right';
-                springCtx.fillText(`F(t) = ${currentF.toFixed(2)} N`, massX + fArrLen + (currentF >= 0 ? 6 : -6), groundY - massH - 25);
             }
 
-            // Divergence warning banner if escaping
-            if (Math.abs(currentX) > 4.0 && params.k < 0) {
+            // Divergence Alert
+            if (Math.abs(currentX) > 3.5 && state.k < 0) {
                 springCtx.fillStyle = 'rgba(239, 68, 68, 0.9)';
-                springCtx.font = 'bold 11px Inter';
+                springCtx.font = 'bold 10px Inter';
                 springCtx.textAlign = 'center';
-                springCtx.fillText('💥 DIVERGÊNCIA EXPONENCIAL (|x| > 4m - Convecção/Baroclinia)', W / 2, 38);
+                springCtx.fillText('💥 DIVERGÊNCIA EXPONENCIAL (Instabilidade)', W / 2, 25);
             }
 
-            // Metric Scale at ground
-            springCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            springCtx.beginPath();
-            springCtx.moveTo(eqX - 150, groundY + 12);
-            springCtx.lineTo(eqX + 150, groundY + 12);
-            springCtx.stroke();
-
-            for (let d = -3; d <= 3; d++) {
-                const mx = eqX + d * 45;
-                springCtx.beginPath();
-                springCtx.moveTo(mx, groundY + 12);
-                springCtx.lineTo(mx, groundY + 18);
-                springCtx.stroke();
-
-                springCtx.fillStyle = '#94a3b8';
-                springCtx.font = '9px Fira Code';
-                springCtx.textAlign = 'center';
-                springCtx.fillText(`${d > 0 ? '+' : ''}${d}m`, mx, groundY + 28);
-            }
-
-            // Live telemetry update
-            const u = params.timeUnit || 's';
+            // Live metrics update
+            const u = state.timeUnit;
             const vU = u === 'h' ? 'm/h' : 'm/s';
-            const energy = 0.5 * params.m * currentV * currentV + 0.5 * params.k * currentX * currentX;
-            
-            document.getElementById('tel-cur-x').textContent = (currentX >= 0 ? '+' : '') + currentX.toFixed(3) + " m";
-            document.getElementById('tel-cur-v').textContent = (currentV >= 0 ? '+' : '') + currentV.toFixed(3) + " " + vU;
-            document.getElementById('tel-cur-t').textContent = `em t = ${animTime.toFixed(2)} ${u}`;
-            document.getElementById('tel-cur-energy').textContent = params.k < 0 ? `E_cin = ${(0.5*params.m*currentV*currentV).toFixed(2)} J` : `E = ${energy.toFixed(3)} J`;
+            const energy = 0.5 * state.m * currentV * currentV + 0.5 * state.k * currentX * currentX;
+            document.getElementById('tel-cur-x').textContent = `x = ${(currentX >= 0 ? '+' : '') + currentX.toFixed(2)} m`;
+            document.getElementById('tel-cur-v').textContent = `v = ${(currentV >= 0 ? '+' : '') + currentV.toFixed(2)} ${vU}`;
+            document.getElementById('tel-cur-energy').textContent = state.k < 0 ? `E_cin = ${(0.5*state.m*currentV*currentV).toFixed(2)} J` : `E = ${energy.toFixed(2)} J`;
         }
 
-        // 2. RENDER TIME DOMAIN GRAPH (x(t), v(t) and F(t) vs t)
+        // 2. RENDER TIME DOMAIN GRAPH (COMPACT)
         function renderTimeGraph() {
             const rect = timeCanvas.getBoundingClientRect();
             const W = rect.width;
@@ -1993,14 +1708,13 @@
             timeCtx.clearRect(0, 0, W, H);
             if (!solution) return;
 
-            const pL = 46, pR = 20, pT = 20, pB = 30;
+            const pL = 38, pR = 15, pT = 15, pB = 24;
             const gW = W - pL - pR;
             const gH = H - pT - pB;
 
-            const tMin = params.t0;
-            const tMax = params.tf;
+            const tMin = state.t0;
+            const tMax = state.tf;
 
-            // Find bounds for Y
             let yMin = -2.0, yMax = 2.0;
             for (let i = 0; i < solution.count; i++) {
                 if (solution.x[i] < yMin) yMin = solution.x[i];
@@ -2008,13 +1722,11 @@
                 if (solution.v[i] < yMin) yMin = solution.v[i];
                 if (solution.v[i] > yMax) yMax = solution.v[i];
             }
-            // Clamp extremes for graph readability in exponential divergence
-            if (yMin < -50) yMin = -50;
-            if (yMax > 50) yMax = 50;
+            if (yMin < -40) yMin = -40;
+            if (yMax > 40) yMax = 40;
 
-            const margin = (yMax - yMin) * 0.15 || 0.5;
-            yMin -= margin;
-            yMax += margin;
+            const margin = (yMax - yMin) * 0.15 || 0.4;
+            yMin -= margin; yMax += margin;
 
             function toX(t) { return pL + ((t - tMin) / (tMax - tMin)) * gW; }
             function toY(y) { 
@@ -2022,22 +1734,20 @@
                 return pT + gH - ((clamped - yMin) / (yMax - yMin)) * gH; 
             }
 
-            // Grid & Box
-            timeCtx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+            // Grid & Zero line
+            timeCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
             timeCtx.strokeRect(pL, pT, gW, gH);
 
-            // Zero line
             if (yMin < 0 && yMax > 0) {
-                timeCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                timeCtx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
                 timeCtx.beginPath();
-                timeCtx.moveTo(pL, toY(0));
-                timeCtx.lineTo(pL + gW, toY(0));
+                timeCtx.moveTo(pL, toY(0)); timeCtx.lineTo(pL + gW, toY(0));
                 timeCtx.stroke();
             }
 
-            // Curve: F(t) Force (translucent purple)
-            timeCtx.strokeStyle = 'rgba(192, 132, 252, 0.45)';
-            timeCtx.lineWidth = 1.5;
+            // F(t) curve
+            timeCtx.strokeStyle = 'rgba(192, 132, 252, 0.4)';
+            timeCtx.lineWidth = 1.4;
             timeCtx.beginPath();
             for (let i = 0; i < solution.count; i++) {
                 const sx = toX(solution.t[i]);
@@ -2046,10 +1756,10 @@
             }
             timeCtx.stroke();
 
-            // Curve: Velocity v(t) (dashed gold)
+            // v(t) curve
             timeCtx.strokeStyle = '#fbbf24';
-            timeCtx.lineWidth = 2;
-            timeCtx.setLineDash([4, 3]);
+            timeCtx.lineWidth = 1.8;
+            timeCtx.setLineDash([3, 2]);
             timeCtx.beginPath();
             for (let i = 0; i < solution.count; i++) {
                 const sx = toX(solution.t[i]);
@@ -2059,9 +1769,9 @@
             timeCtx.stroke();
             timeCtx.setLineDash([]);
 
-            // Curve: Position x(t) (cyan or red if unstable)
-            timeCtx.strokeStyle = params.k < 0 ? '#f87171' : '#38bdf8';
-            timeCtx.lineWidth = 2.5;
+            // x(t) curve
+            timeCtx.strokeStyle = state.k < 0 ? '#f87171' : '#38bdf8';
+            timeCtx.lineWidth = 2.2;
             timeCtx.beginPath();
             for (let i = 0; i < solution.count; i++) {
                 const sx = toX(solution.t[i]);
@@ -2070,37 +1780,30 @@
             }
             timeCtx.stroke();
 
-            // Vertical Time Scrubber Line
+            // Vertical Time Scrubber
             const curSX = toX(animTime);
             timeCtx.strokeStyle = 'rgba(236, 72, 153, 0.85)';
-            timeCtx.lineWidth = 2;
+            timeCtx.lineWidth = 1.8;
             timeCtx.beginPath();
-            timeCtx.moveTo(curSX, pT);
-            timeCtx.lineTo(curSX, pT + gH);
+            timeCtx.moveTo(curSX, pT); timeCtx.lineTo(curSX, pT + gH);
             timeCtx.stroke();
 
             const curState = getStateAtTime(animTime);
-            timeCtx.fillStyle = params.k < 0 ? '#f87171' : '#38bdf8';
+            timeCtx.fillStyle = state.k < 0 ? '#f87171' : '#38bdf8';
             timeCtx.beginPath();
-            timeCtx.arc(curSX, toY(curState.x), 5, 0, Math.PI * 2);
+            timeCtx.arc(curSX, toY(curState.x), 4, 0, Math.PI * 2);
             timeCtx.fill();
 
-            timeCtx.fillStyle = '#fbbf24';
-            timeCtx.beginPath();
-            timeCtx.arc(curSX, toY(curState.v), 4.5, 0, Math.PI * 2);
-            timeCtx.fill();
-
-            // Axis labels
-            const u = params.timeUnit || 's';
-            timeCtx.fillStyle = '#94a3b8';
-            timeCtx.font = '10px Inter';
-            timeCtx.fillText('Amplitude', pL, pT - 6);
+            // Labels
+            const u = state.timeUnit;
+            timeCtx.fillStyle = '#64748b';
+            timeCtx.font = '9px Inter';
             timeCtx.textAlign = 'right';
-            timeCtx.fillText(`Tempo t (${u})`, pL + gW, pT + gH + 20);
+            timeCtx.fillText(`t (${u})`, pL + gW, pT + gH + 16);
             timeCtx.textAlign = 'left';
         }
 
-        // 3. RENDER PHASE SPACE GRAPH (v vs x)
+        // 3. RENDER PHASE SPACE GRAPH (COMPACT)
         function renderPhaseGraph() {
             const rect = phaseCanvas.getBoundingClientRect();
             const W = rect.width;
@@ -2109,7 +1812,7 @@
             phaseCtx.clearRect(0, 0, W, H);
             if (!solution) return;
 
-            const pL = 46, pR = 20, pT = 20, pB = 30;
+            const pL = 38, pR = 15, pT = 15, pB = 24;
             const gW = W - pL - pR;
             const gH = H - pT - pB;
 
@@ -2121,13 +1824,13 @@
                 if (solution.v[i] < vMin) vMin = solution.v[i];
                 if (solution.v[i] > vMax) vMax = solution.v[i];
             }
-            if (xMin < -40) xMin = -40;
-            if (xMax > 40) xMax = 40;
-            if (vMin < -40) vMin = -40;
-            if (vMax > 40) vMax = 40;
+            if (xMin < -35) xMin = -35;
+            if (xMax > 35) xMax = 35;
+            if (vMin < -35) vMin = -35;
+            if (vMax > 35) vMax = 35;
 
-            const marginX = (xMax - xMin) * 0.15 || 0.5;
-            const marginV = (vMax - vMin) * 0.15 || 0.5;
+            const marginX = (xMax - xMin) * 0.15 || 0.4;
+            const marginV = (vMax - vMin) * 0.15 || 0.4;
             xMin -= marginX; xMax += marginX;
             vMin -= marginV; vMax += marginV;
 
@@ -2140,36 +1843,33 @@
                 return pT + gH - ((cv - vMin) / (vMax - vMin)) * gH; 
             }
 
-            // Grid
-            phaseCtx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+            // Grid & Axes
+            phaseCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
             phaseCtx.strokeRect(pL, pT, gW, gH);
 
-            // Axes (x=0 and v=0)
-            phaseCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            phaseCtx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
             phaseCtx.beginPath();
             phaseCtx.moveTo(pL, toY(0)); phaseCtx.lineTo(pL + gW, toY(0));
             phaseCtx.moveTo(toX(0), pT); phaseCtx.lineTo(toX(0), pT + gH);
             phaseCtx.stroke();
 
-            // Saddle Point Manifolds for Instability (k < 0)
-            if (params.k < 0) {
-                const sigma = Math.sqrt(-params.k / params.m);
-                const gamma = params.b / (2.0 * params.m);
+            // Saddle Point Manifolds for Instability
+            if (state.k < 0) {
+                const sigma = Math.sqrt(-state.k / state.m);
+                const gamma = state.b / (2.0 * state.m);
                 const disc = Math.sqrt(gamma * gamma + sigma * sigma);
                 const lambda1 = -gamma + disc; // Unstable direction
                 const lambda2 = -gamma - disc; // Stable direction
 
-                // Unstable manifold: v = lambda1 * x (Red dashed)
-                phaseCtx.strokeStyle = 'rgba(248, 113, 113, 0.4)';
-                phaseCtx.lineWidth = 1.5;
-                phaseCtx.setLineDash([4, 4]);
+                phaseCtx.strokeStyle = 'rgba(248, 113, 113, 0.35)';
+                phaseCtx.lineWidth = 1.3;
+                phaseCtx.setLineDash([3, 3]);
                 phaseCtx.beginPath();
                 phaseCtx.moveTo(toX(xMin), toY(lambda1 * xMin));
                 phaseCtx.lineTo(toX(xMax), toY(lambda1 * xMax));
                 phaseCtx.stroke();
 
-                // Stable manifold: v = lambda2 * x (Cyan dashed)
-                phaseCtx.strokeStyle = 'rgba(56, 189, 248, 0.35)';
+                phaseCtx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
                 phaseCtx.beginPath();
                 phaseCtx.moveTo(toX(xMin), toY(lambda2 * xMin));
                 phaseCtx.lineTo(toX(xMax), toY(lambda2 * xMax));
@@ -2177,9 +1877,9 @@
                 phaseCtx.setLineDash([]);
             }
 
-            // Phase Trajectory Curve
-            phaseCtx.strokeStyle = params.k < 0 ? '#f43f5e' : '#34d399';
-            phaseCtx.lineWidth = 2.2;
+            // Trajectory
+            phaseCtx.strokeStyle = state.k < 0 ? '#f43f5e' : '#34d399';
+            phaseCtx.lineWidth = 1.8;
             phaseCtx.beginPath();
             for (let i = 0; i < solution.count; i++) {
                 const sx = toX(solution.x[i]);
@@ -2188,45 +1888,29 @@
             }
             phaseCtx.stroke();
 
-            // Initial Condition (x0, v0) - Red Marker
-            const initSX = toX(params.x0);
-            const initSY = toY(params.v0);
+            // Initial Condition
+            const initSX = toX(state.x0);
+            const initSY = toY(state.v0);
             phaseCtx.fillStyle = '#f43f5e';
             phaseCtx.beginPath();
-            phaseCtx.arc(initSX, initSY, 5.5, 0, Math.PI * 2);
+            phaseCtx.arc(initSX, initSY, 4.5, 0, Math.PI * 2);
             phaseCtx.fill();
-            phaseCtx.strokeStyle = '#fff';
-            phaseCtx.lineWidth = 1.5;
-            phaseCtx.stroke();
 
-            phaseCtx.fillStyle = '#f43f5e';
-            phaseCtx.font = '9.5px Fira Code';
-            phaseCtx.fillText(`(x0, v0)`, initSX + 8, initSY - 6);
-
-            // Current State Marker
+            // Current State
             const curState = getStateAtTime(animTime);
-            const curSX = toX(curState.x);
-            const curSY = toY(curState.v);
-
             phaseCtx.fillStyle = '#ec4899';
             phaseCtx.beginPath();
-            phaseCtx.arc(curSX, curSY, 6, 0, Math.PI * 2);
+            phaseCtx.arc(toX(curState.x), toY(curState.v), 5, 0, Math.PI * 2);
             phaseCtx.fill();
-            phaseCtx.strokeStyle = '#fff';
-            phaseCtx.lineWidth = 2;
-            phaseCtx.stroke();
 
             // Labels
-            const u = params.timeUnit || 's';
-            phaseCtx.fillStyle = '#94a3b8';
-            phaseCtx.font = '10px Inter';
-            phaseCtx.fillText(`Velocidade v = dx/dt (m/${u})`, pL, pT - 6);
+            phaseCtx.fillStyle = '#64748b';
+            timeCtx.font = '9px Inter';
             phaseCtx.textAlign = 'right';
-            phaseCtx.fillText('Posição x (m)', pL + gW, pT + gH + 20);
+            phaseCtx.fillText('x (m)', pL + gW, pT + gH + 16);
             phaseCtx.textAlign = 'left';
         }
 
-        // RENDER ALL
         function renderAll() {
             renderMassSpring();
             renderTimeGraph();
@@ -2241,8 +1925,8 @@
                 lastTimestamp = timestamp;
 
                 animTime += dtSec * playbackSpeed;
-                if (animTime >= params.tf) {
-                    animTime = params.tf;
+                if (animTime >= state.tf) {
+                    animTime = state.tf;
                     isPlaying = false;
                     document.getElementById('btn-play').innerHTML = '▶ Reiniciar';
                 }
@@ -2252,79 +1936,99 @@
         }
         requestAnimationFrame(runAnimation);
 
-        // SYNC PARAMS FROM DOM
-        function syncParamsFromDOM() {
-            params.m = parseFloat(document.getElementById('inp-m').value) || 1.0;
-            params.b = parseFloat(document.getElementById('inp-b').value) || 0.0;
-            params.k = parseFloat(document.getElementById('inp-k').value) || 0.0;
-            params.tf = parseFloat(document.getElementById('inp-tf').value) || 40.0;
-            params.x0 = parseFloat(document.getElementById('inp-x0').value) || 0.0;
-            params.v0 = parseFloat(document.getElementById('inp-v0').value) || 0.0;
-            params.fString = document.getElementById('inp-f').value || "0";
+        // SYNC SLIDERS FROM STATE
+        function syncSlidersFromState() {
+            const u = state.timeUnit;
+            const vU = u === 'h' ? 'm/h' : 'm/s';
 
-            // Update instability button status
-            const instBtn = document.getElementById('btn-toggle-instability');
-            if (instBtn) {
-                if (params.k < 0) {
-                    instBtn.classList.add('active');
-                    instBtn.innerHTML = '<span>💥</span> Modo Instabilidade ATIVADO (\\(\\omega^2 < 0\\))';
-                } else {
-                    instBtn.classList.remove('active');
-                    instBtn.innerHTML = '<span>💥</span> Ativar Instabilidade Dinâmica (\\(\\omega^2 < 0\\))';
-                }
-                if (window.renderMathInElement) {
-                    renderMathInElement(instBtn, {delimiters: [{left: '\\(', right: '\\)', display: false}]});
-                }
-            }
+            document.getElementById('sl-m').value = state.m;
+            document.getElementById('disp-m').textContent = `${state.m.toFixed(1)} kg`;
 
-            updateGeoModuleUI();
-            solveODE();
+            document.getElementById('sl-b').value = state.b;
+            document.getElementById('disp-b').textContent = state.b.toFixed(2);
+
+            document.getElementById('sl-k').value = state.k;
+            document.getElementById('disp-k').textContent = state.k.toFixed(2);
+
+            document.getElementById('sl-tf').value = state.tf;
+            document.getElementById('disp-tf').textContent = `${state.tf} ${u}`;
+
+            document.getElementById('sl-x0').value = state.x0;
+            document.getElementById('disp-x0').textContent = `${(state.x0 >= 0 ? '+' : '') + state.x0.toFixed(1)} m`;
+
+            document.getElementById('sl-v0').value = state.v0;
+            document.getElementById('disp-v0').textContent = `${(state.v0 >= 0 ? '+' : '') + state.v0.toFixed(1)} ${vU}`;
+
+            document.getElementById('disp-f-text').textContent = state.fString;
         }
 
-        function syncDOMFromParams() {
-            document.getElementById('inp-m').value = params.m;
-            document.getElementById('inp-b').value = params.b;
-            document.getElementById('inp-k').value = params.k;
-            document.getElementById('inp-tf').value = params.tf;
-            document.getElementById('inp-x0').value = params.x0;
-            document.getElementById('inp-v0').value = params.v0;
-            document.getElementById('inp-f').value = params.fString;
-            updateGeoModuleUI();
-        }
+        // BIND SLIDERS (INSTANT REACTIVE ON INPUT)
+        function bindSliders() {
+            const u = () => state.timeUnit;
+            const vU = () => state.timeUnit === 'h' ? 'm/h' : 'm/s';
 
-        // EVENT LISTENERS
-        document.getElementById('btn-solve').addEventListener('click', syncParamsFromDOM);
+            // Massa
+            document.getElementById('sl-m').addEventListener('input', (e) => {
+                state.m = parseFloat(e.target.value);
+                document.getElementById('disp-m').textContent = `${state.m.toFixed(1)} kg`;
+                scheduleUpdate();
+            });
 
-        ['inp-m', 'inp-b', 'inp-k', 'inp-tf', 'inp-x0', 'inp-v0', 'inp-f'].forEach(id => {
-            document.getElementById(id).addEventListener('change', syncParamsFromDOM);
-        });
+            // Amortecimento
+            document.getElementById('sl-b').addEventListener('input', (e) => {
+                state.b = parseFloat(e.target.value);
+                document.getElementById('disp-b').textContent = state.b.toFixed(2);
+                scheduleUpdate();
+            });
 
-        // Time unit buttons
-        document.getElementById('btn-unit-s').addEventListener('click', () => {
-            setUnit('s');
-            solveODE();
-        });
-        document.getElementById('btn-unit-h').addEventListener('click', () => {
-            setUnit('h');
-            solveODE();
-        });
+            // Constante k
+            document.getElementById('sl-k').addEventListener('input', (e) => {
+                state.k = parseFloat(e.target.value);
+                document.getElementById('disp-k').textContent = state.k.toFixed(2);
+                scheduleUpdate();
+            });
 
-        // Instability button
-        document.getElementById('btn-toggle-instability').addEventListener('click', () => {
-            toggleInstability();
-        });
+            // Janela tf
+            document.getElementById('sl-tf').addEventListener('input', (e) => {
+                state.tf = parseFloat(e.target.value);
+                document.getElementById('disp-tf').textContent = `${state.tf} ${u()}`;
+                scheduleUpdate();
+            });
 
-        // Latitude slider
-        const latSlider = document.getElementById('slider-latitude');
-        if (latSlider) {
-            latSlider.addEventListener('input', (e) => {
+            // x0
+            document.getElementById('sl-x0').addEventListener('input', (e) => {
+                state.x0 = parseFloat(e.target.value);
+                document.getElementById('disp-x0').textContent = `${(state.x0 >= 0 ? '+' : '') + state.x0.toFixed(1)} m`;
+                scheduleUpdate();
+            });
+
+            // v0
+            document.getElementById('sl-v0').addEventListener('input', (e) => {
+                state.v0 = parseFloat(e.target.value);
+                document.getElementById('disp-v0').textContent = `${(state.v0 >= 0 ? '+' : '') + state.v0.toFixed(1)} ${vU()}`;
+                scheduleUpdate();
+            });
+
+            // Latitude
+            document.getElementById('sl-latitude').addEventListener('input', (e) => {
                 const lat = parseFloat(e.target.value);
-                params.latitude = lat;
+                state.latitude = lat;
                 applyLatitude(lat, false);
             });
         }
 
-        // Quick latitude pills
+        // BIND QUICK FORCE CHIPS
+        document.querySelectorAll('.force-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.force-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                state.fString = chip.getAttribute('data-f');
+                document.getElementById('disp-f-text').textContent = state.fString;
+                scheduleUpdate();
+            });
+        });
+
+        // BIND LATITUDE PILLS
         const pillMap = {
             'pill-lat-2996': -29.96,
             'pill-lat-3000': -30.00,
@@ -2340,27 +2044,96 @@
             }
         });
 
-        // Sync Sea Breeze button
-        const btnSyncBreeze = document.getElementById('btn-sync-breeze');
-        if (btnSyncBreeze) {
-            btnSyncBreeze.addEventListener('click', () => {
-                applyLatitude(params.latitude, true);
-            });
-        }
+        // BIND SYNC BREEZE
+        document.getElementById('btn-sync-breeze').addEventListener('click', () => {
+            applyLatitude(state.latitude, true);
+        });
 
-        // Animation buttons
+        // MODE TABS SWITCHER (CLASSIC VS GEOPHYSIC)
+        const tabClassic = document.getElementById('tab-btn-classic');
+        const tabGeo = document.getElementById('tab-btn-geophysic');
+        const panelClassic = document.getElementById('panel-classic');
+        const panelGeo = document.getElementById('panel-geophysic');
+
+        tabClassic.addEventListener('click', () => {
+            tabClassic.classList.add('active');
+            tabGeo.classList.remove('active');
+            panelClassic.style.display = 'flex';
+            panelGeo.style.display = 'none';
+            state.activeMode = 'classic';
+        });
+
+        tabGeo.addEventListener('click', () => {
+            tabGeo.classList.add('active');
+            tabClassic.classList.remove('active');
+            panelGeo.style.display = 'flex';
+            panelClassic.style.display = 'none';
+            state.activeMode = 'geophysic';
+            updateGeoUI();
+        });
+
+        // TIME UNIT TOGGLE
+        document.getElementById('btn-unit-s').addEventListener('click', () => {
+            setUnit('s');
+            syncSlidersFromState();
+            scheduleUpdate();
+        });
+        document.getElementById('btn-unit-h').addEventListener('click', () => {
+            setUnit('h');
+            syncSlidersFromState();
+            scheduleUpdate();
+        });
+
+        // COLLAPSIBLE THEORY DRAWER
+        const theoryToggle = document.getElementById('theory-toggle');
+        const theoryContent = document.getElementById('theory-content');
+        const theoryArrow = document.getElementById('theory-arrow');
+
+        theoryToggle.addEventListener('click', () => {
+            const isOpen = theoryContent.classList.toggle('open');
+            theoryArrow.textContent = isOpen ? '▲ Recolher' : '▼ Expandir';
+            if (isOpen && window.renderMathInElement) {
+                renderMathInElement(theoryContent, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}]});
+            }
+        });
+
+        // THEORY TABS
+        function switchTechTab(tabId) {
+            document.querySelectorAll('.tech-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tech-tab-content').forEach(content => content.classList.remove('active'));
+            
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+
+            const tabMap = {
+                'tab-res-inercial': 0,
+                'tab-batimentos': 1,
+                'tab-instabilidade': 2,
+                'tab-forcado-instavel': 3
+            };
+            const idx = tabMap[tabId];
+            const btns = document.querySelectorAll('.tech-tab-btn');
+            if (btns[idx]) btns[idx].classList.add('active');
+
+            if (window.renderMathInElement && target) {
+                renderMathInElement(target, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '\\(', right: '\\)', display: false}]});
+            }
+        }
+        window.switchTechTab = switchTechTab;
+
+        // ANIMATION CONTROLS
         document.getElementById('btn-play').addEventListener('click', () => {
-            if (animTime >= params.tf) animTime = 0;
+            if (animTime >= state.tf) animTime = 0;
             isPlaying = !isPlaying;
             lastTimestamp = null;
-            document.getElementById('btn-play').innerHTML = isPlaying ? '⏸ Pausar' : '▶ Iniciar Animação';
+            document.getElementById('btn-play').innerHTML = isPlaying ? '⏸ Pausar' : '▶ Iniciar';
         });
 
         document.getElementById('btn-restart').addEventListener('click', () => {
             animTime = 0;
             isPlaying = false;
             lastTimestamp = null;
-            document.getElementById('btn-play').innerHTML = '▶ Iniciar Animação';
+            document.getElementById('btn-play').innerHTML = '▶ Iniciar';
             renderAll();
         });
 
@@ -2373,95 +2146,112 @@
 
         document.getElementById('btn-reset').addEventListener('click', () => {
             setUnit('s');
-            params.m = 1.0;
-            params.b = 0.5;
-            params.k = 1.0;
-            params.tf = 40.0;
-            params.x0 = 1.0;
-            params.v0 = 0.0;
-            params.fString = "0";
-            params.latitude = -29.96;
-            syncDOMFromParams();
+            state.m = 1.0;
+            state.b = 0.5;
+            state.k = 1.0;
+            state.tf = 40.0;
+            state.x0 = 1.0;
+            state.v0 = 0.0;
+            state.fString = "0";
+            state.latitude = -29.96;
+            syncSlidersFromState();
             animTime = 0;
             isPlaying = false;
-            document.getElementById('btn-play').innerHTML = '▶ Iniciar Animação';
-            solveODE();
+            document.getElementById('btn-play').innerHTML = '▶ Iniciar';
+            scheduleUpdate();
         });
 
-        // PRESET ACTIONS MAPPING
+        // PRESETS MAP
         const presets = {
             'preset-under': () => {
                 setUnit('s');
-                params.m = 1.0; params.b = 0.5; params.k = 1.0; params.tf = 40.0; params.x0 = 1.0; params.v0 = 0.0; params.fString = "0";
-                syncDOMFromParams();
-                solveODE();
+                state.m = 1.0; state.b = 0.5; state.k = 1.0; state.tf = 40.0; state.x0 = 1.0; state.v0 = 0.0; state.fString = "0";
+                tabClassic.click();
+                syncSlidersFromState();
+                scheduleUpdate();
             },
             'preset-crit': () => {
                 setUnit('s');
-                params.m = 1.0; params.b = 2.0; params.k = 1.0; params.tf = 20.0; params.x0 = 1.0; params.v0 = 0.0; params.fString = "0";
-                syncDOMFromParams();
-                solveODE();
+                state.m = 1.0; state.b = 2.0; state.k = 1.0; state.tf = 20.0; state.x0 = 1.0; state.v0 = 0.0; state.fString = "0";
+                tabClassic.click();
+                syncSlidersFromState();
+                scheduleUpdate();
             },
             'preset-over': () => {
                 setUnit('s');
-                params.m = 1.0; params.b = 3.5; params.k = 1.0; params.tf = 25.0; params.x0 = 1.0; params.v0 = 0.0; params.fString = "0";
-                syncDOMFromParams();
-                solveODE();
+                state.m = 1.0; state.b = 3.0; state.k = 1.0; state.tf = 25.0; state.x0 = 1.0; state.v0 = 0.0; state.fString = "0";
+                tabClassic.click();
+                syncSlidersFromState();
+                scheduleUpdate();
             },
             'preset-undamped': () => {
                 setUnit('s');
-                params.m = 1.0; params.b = 0.0; params.k = 1.0; params.tf = 30.0; params.x0 = 1.0; params.v0 = 0.0; params.fString = "0";
-                syncDOMFromParams();
-                solveODE();
+                state.m = 1.0; state.b = 0.0; state.k = 1.0; state.tf = 30.0; state.x0 = 1.0; state.v0 = 0.0; state.fString = "0";
+                tabClassic.click();
+                syncSlidersFromState();
+                scheduleUpdate();
             },
             'preset-resonance': () => {
                 setUnit('s');
-                params.m = 1.0; params.b = 0.1; params.k = 1.0; params.tf = 50.0; params.x0 = 0.0; params.v0 = 0.0; params.fString = "1.5*cos(t)";
-                syncDOMFromParams();
-                solveODE();
+                state.m = 1.0; state.b = 0.1; state.k = 1.0; state.tf = 50.0; state.x0 = 0.0; state.v0 = 0.0; state.fString = "1.5*cos(t)";
+                tabClassic.click();
+                syncSlidersFromState();
+                scheduleUpdate();
             },
             'preset-beats': () => {
                 setUnit('s');
-                params.m = 1.0; params.b = 0.02; params.k = 1.0; params.tf = 80.0; params.x0 = 0.0; params.v0 = 0.0; params.fString = "1.2*cos(1.15*t)";
-                syncDOMFromParams();
-                solveODE();
+                state.m = 1.0; state.b = 0.02; state.k = 1.0; state.tf = 80.0; state.x0 = 0.0; state.v0 = 0.0; state.fString = "1.2*cos(1.15*t)";
+                tabClassic.click();
+                syncSlidersFromState();
+                scheduleUpdate();
             },
             'preset-lat2996': () => {
+                tabGeo.click();
                 applyLatitude(-29.96, true);
+                theoryContent.classList.add('open');
+                theoryArrow.textContent = '▲ Recolher';
                 switchTechTab('tab-res-inercial');
             },
             'preset-geo-beats': () => {
+                tabGeo.click();
                 applyLatitude(-27.50, true);
-                params.tf = 240.0; // 10 days to see 2 full beat lobes
-                document.getElementById('inp-tf').value = "240.0";
-                solveODE();
+                state.tf = 240.0;
+                syncSlidersFromState();
+                theoryContent.classList.add('open');
+                theoryArrow.textContent = '▲ Recolher';
                 switchTechTab('tab-batimentos');
             },
             'preset-instability': () => {
                 setUnit('s');
-                params.m = 1.0;
-                params.b = 0.4;
-                params.k = -1.0;
-                params.tf = 20.0;
-                params.x0 = 0.1;
-                params.v0 = 0.0;
-                params.fString = "0";
-                syncDOMFromParams();
-                toggleInstability(true);
+                state.m = 1.0;
+                state.b = 0.4;
+                state.k = -1.0;
+                state.tf = 20.0;
+                state.x0 = 0.1;
+                state.v0 = 0.0;
+                state.fString = "0";
+                tabClassic.click();
+                syncSlidersFromState();
+                theoryContent.classList.add('open');
+                theoryArrow.textContent = '▲ Recolher';
                 switchTechTab('tab-instabilidade');
+                scheduleUpdate();
             },
             'preset-instability-forced': () => {
                 setUnit('s');
-                params.m = 1.0;
-                params.b = 0.5;
-                params.k = -1.0;
-                params.tf = 25.0;
-                params.x0 = 0.0;
-                params.v0 = 0.0;
-                params.fString = "1.5*cos(1.2*t)";
-                syncDOMFromParams();
-                toggleInstability(true);
+                state.m = 1.0;
+                state.b = 0.5;
+                state.k = -1.0;
+                state.tf = 25.0;
+                state.x0 = 0.0;
+                state.v0 = 0.0;
+                state.fString = "1.5*cos(1.2*t)";
+                tabClassic.click();
+                syncSlidersFromState();
+                theoryContent.classList.add('open');
+                theoryArrow.textContent = '▲ Recolher';
                 switchTechTab('tab-forcado-instavel');
+                scheduleUpdate();
             }
         };
 
@@ -2476,9 +2266,11 @@
             });
         });
 
-        // INITIAL LOAD
+        // INITIALIZATION
+        bindSliders();
         handleResize();
-        syncParamsFromDOM();
+        syncSlidersFromState();
+        solveODE();
     </script>
 </body>
 </html>
