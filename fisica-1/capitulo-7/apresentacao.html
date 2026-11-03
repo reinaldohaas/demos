@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Física I - Capítulo 7 Completo: Energia Potencial e Conservação da Energia</title>
+  <style>
+    :root {
+      --bg-canvas: #0f172a;
+      --primary: #6366f1;
+      --secondary: #06b6d4;
+      --accent-yellow: #f59e0b;
+      --accent-red: #ef4444;
+      --accent-green: #10b981;
+      --font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--bg-canvas);
+      color: #1e293b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    #deck-container {
+      position: relative;
+      width: 95vw;
+      max-width: 1260px;
+      height: 84vh;
+      max-height: 750px;
+      border-radius: 28px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      display: flex;
+      background: #ffffff;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 40px 60px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      transform: translateX(20px);
+    }
+
+    .slide.active {
+      display: flex;
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .slide-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid rgba(0,0,0,0.06);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+
+    .slide-badge {
+      font-size: 20px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 6px 20px;
+      border-radius: 9999px;
+      letter-spacing: 1px;
+      color: white;
+    }
+
+    .slide-title {
+      font-size: 34px;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 22px;
+      line-height: 1.45;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 22px;
+      width: 100%;
+    }
+
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      width: 100%;
+    }
+
+    .card {
+      background: #f8fafc;
+      border-radius: 20px;
+      padding: 22px 26px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      border-left: 8px solid var(--primary);
+    }
+
+    .card h3 {
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
+
+    .card p, .card li {
+      font-size: 21px;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .card ul {
+      list-style-type: disc;
+      padding-left: 24px;
+    }
+
+    .formula-banner {
+      color: #ffffff;
+      padding: 14px 22px;
+      border-radius: 18px;
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      letter-spacing: 0.5px;
+    }
+
+    .banner-cyan { background: linear-gradient(135deg, #0284c7, #38bdf8); }
+    .banner-emerald { background: linear-gradient(135deg, #059669, #34d399); }
+    .banner-purple { background: linear-gradient(135deg, #4f46e5, #818cf8); }
+    .banner-amber { background: linear-gradient(135deg, #d97706, #fbbf24); color: #0f172a; }
+    .banner-coral { background: linear-gradient(135deg, #dc2626, #f87171); }
+
+    #nav-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 95vw;
+      max-width: 1260px;
+      margin-top: 16px;
+      color: #e2e8f0;
+      font-size: 22px;
+    }
+
+    .btn {
+      background: #4f46e5;
+      color: white;
+      border: none;
+      padding: 12px 26px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .btn:hover {
+      background: #4338ca;
+      transform: translateY(-2px);
+    }
+
+    .progress-bar-container {
+      flex: 1;
+      height: 10px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      margin: 0 20px;
+      overflow: hidden;
+    }
+
+    #progress-fill {
+      height: 100%;
+      width: 2.5%;
+      background: linear-gradient(90deg, #06b6d4, #f59e0b, #ef4444);
+      transition: width 0.25s ease;
+    }
+
+    .theme-purple { background: linear-gradient(135deg, #f5f3ff 0%, #ffffff 100%); }
+    .theme-blue { background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%); }
+    .theme-mint { background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%); }
+    .theme-warm { background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%); }
+    .theme-rose { background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%); }
+
+    @media print {
+      body { background: white; }
+      #deck-container { width: 100%; height: 100%; box-shadow: none; border-radius: 0; }
+      #nav-controls { display: none; }
+      .slide { display: flex !important; opacity: 1 !important; page-break-after: always; position: relative; height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="deck-container">
+
+    <!-- SLIDE 1: CAPA -->
+    <div class="slide active theme-purple" style="justify-content: center; text-align: center; background: linear-gradient(135deg, #4f46e5 0%, #0284c7 100%); color: white;">
+      <div style="font-size: 26px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.95;">FÍSICA I – MECÂNICA</div>
+      <h1 style="font-size: 48px; font-weight: 900; margin: 22px 0; line-height: 1.15; color: #fbbf24; text-shadow: 0 4px 15px rgba(0,0,0,0.3);">⚡ CAPÍTULO 7<br>Energia Potencial e Conservação da Energia</h1>
+      <p style="font-size: 28px; max-width: 900px; margin: 0 auto 20px; opacity: 0.95; font-weight: 600;">Prof. Reinaldo Haas • Sears | Zemansky | Young & Freedman</p>
+      <p style="font-size: 24px; max-width: 850px; margin: 0 auto 30px; opacity: 0.9;">Apresentação Completa e Vibrante: Fenômenos do Cotidiano, Teoria e Todos os 11 Exemplos Resolvidos!</p>
+      <div style="display: inline-block; background: rgba(255,255,255,0.2); padding: 12px 30px; border-radius: 50px; font-size: 22px; font-weight: bold;">
+        42 Slides Detalhados • Todos os 11 Exemplos
+      </div>
+    </div>
+
+    <!-- SLIDE 2: 🚌 Transformações de Energia no Cotidiano -->
+    <div class="slide theme-blue">
+      <div class="slide-header">
+        <h2 class="slide-title">🚌 Transformações de Energia no Cotidiano</h2>
+        <span class="slide-badge" style="background: #0284c7;">FENÔMENO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-cyan">A energia nunca desaparece: ela troca continuamente de forma!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">A Cadeia Energética no Ônibus</h3>
+              <ul><li><strong>1. Bateria:</strong> Transforma energia química em energia elétrica para acionar o motor de arranque.</li><li><strong>2. Cilindros:</strong> A explosão da mistura ar-gasolina gera alta energia térmica nos gases.</li><li><strong>3. Pistões e Rodas:</strong> A energia térmica expande os pistões e gera energia cinética nas rodas.</li><li>O ônibus se move e ganha velocidade na pista!</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">Para Onde Vai o Movimento?</h3>
+              <ul><li>• <strong>Atrito com solo e ar:</strong> Parte da energia cinética se converte em calor no asfalto e na atmosfera.</li><li>• <strong>Frenagem:</strong> Ao frear, a energia cinética vira energia térmica nos discos de freio e energia sonora (derrapagem/ruído).</li><li>• <strong>Princípio Central:</strong> Em nossa vivência, estamos sempre em contato com transformações de energia!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: 🎢 O Enigma da Montanha-Russa -->
+    <div class="slide theme-mint">
+      <div class="slide-header">
+        <h2 class="slide-title">🎢 O Enigma da Montanha-Russa</h2>
+        <span class="slide-badge" style="background: #059669;">CONSERVATIVO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-emerald">Por que o carrinho da montanha-russa não precisa de motor durante a viagem?</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">A Altura da Primeira Descida</h3>
+              <ul><li>• Você já reparou que a primeira rampa é sempre a maior de todas?</li><li>• O carrinho nunca atinge essa mesma altura em nenhuma outra ocasião posterior.</li><li>• No início, uma esteira mecânica eleva o carrinho até o topo mais alto, acumulando Energia Potencial Gravitacional!</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">O Cenário Ideal Sem Atrito</h3>
+              <ul><li>• Se alguém conseguisse eliminar totalmente o atrito dos trilhos e o arrasto do ar:</li><li>• O carrinho subiria e desceria infinitas vezes sem nunca parar!</li><li>• Os passageiros embarcariam em uma viagem sem fim, pois a Energia Mecânica se conservaria 100%!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: ⚡ Equações da Montanha-Russa Ideal -->
+    <div class="slide theme-blue">
+      <div class="slide-header">
+        <h2 class="slide-title">⚡ Equações da Montanha-Russa Ideal</h2>
+        <span class="slide-badge" style="background: #0284c7;">SISTEMA IDEAL</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-cyan">E_mecânica = K + U = CONSTANTE em todos os pontos!</div>
+        <div class="cards-grid-3">
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">🏔️ Ponto A (Topo)</h3>
+              <ul><li>• Altura máxima: hA ≠ 0</li><li>• Velocidade nula: vA = 0</li><li>• Energia Cinética: ECA = 0</li><li>• Energia Potencial: EpgA = m g hA</li><li>• <strong>EMA = EpgA (100% Potencial)</strong></li></ul>
+            </div>
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">⚡ Ponto B (Rampa)</h3>
+              <ul><li>• Altura média: hB ≠ 0</li><li>• Em movimento: vB ≠ 0</li><li>• Energia Cinética: ECB > 0</li><li>• Energia Potencial: EpgB > 0</li><li>• <strong>EMB = ECB + EpgB (Mista)</strong></li></ul>
+            </div>
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">🚀 Ponto C (Solo)</h3>
+              <ul><li>• No solo: hC = 0</li><li>• Velocidade máxima: vC</li><li>• Energia Potencial: EpgC = 0</li><li>• Energia Cinética: ECC máxima</li><li>• <strong>EMC = ECC (100% Cinética)</strong></li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: 🛑 Sistemas Dissipativos: O Mundo Real -->
+    <div class="slide theme-rose">
+      <div class="slide-header">
+        <h2 class="slide-title">🛑 Sistemas Dissipativos: O Mundo Real</h2>
+        <span class="slide-badge" style="background: #dc2626;">DISSIPATIVO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-coral">τ = Ef - Ei  ⟹  τ = ΔEM < 0  (Trabalho Resistente do Atrito)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #dc2626;">
+              <h3 style="color: #dc2626;">Atrito e Perda de Altura</h3>
+              <ul><li>• Na montanha-russa real, o atrito realiza trabalho resistente durante todo o percurso.</li><li>• A energia potencial da descida não é totalmente transformada em cinética: parte vira energia térmica nos trilhos e no ar.</li><li>• A soma K + U torna-se cada vez menor. Por isso o carrinho não consegue subir rampas da mesma altura da inicial!</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">Exemplos Cotidianos</h3>
+              <ul><li>• <strong>Cama elástica:</strong> sem impulsão voluntária dos músculos, os saltos amortecem e você para.</li><li>• <strong>Brinquedos giratórios:</strong> precisam de motores contínuos para vencer o atrito resistente.</li><li>• Em nosso cotidiano, quase a totalidade dos movimentos ocorre em sistemas dissipativos!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: 📐 Energia Gravitacional e Energia Elástica -->
+    <div class="slide theme-purple">
+      <div class="slide-header">
+        <h2 class="slide-title">📐 Energia Gravitacional e Energia Elástica</h2>
+        <span class="slide-badge" style="background: #6366f1;">FÓRMULAS</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-purple">Trabalho de Forças Conservativas:  W = - ΔU = U_inicial - U_final</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">Energia Potencial Gravitacional</h3>
+              <ul><li>• Força gravitacional constante perto da superfície terrestre.</li><li>• <strong>Fórmula:</strong>  U_grav = m g y</li><li>• Propriedade compartilhada entre a partícula e o planeta Terra.</li><li>• <strong>Trabalho da gravidade:</strong><br>W_grav = m g y1 - m g y2 = - ΔU_grav</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Energia Potencial Elástica</h3>
+              <ul><li>• Mola ideal com constante elástica k.</li><li>• Lei de Hooke:  Fx = - k x</li><li>• <strong>Fórmula:</strong>  U_el = ½ k x²</li><li>• <strong>Trabalho da mola:</strong><br>W_el = ½ k x1² - ½ k x2² = - ΔU_el</li><li>• Como x está ao quadrado, U_el é SEMPRE ≥ 0!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: ⚖️ Movimento Vertical e Sinais do Trabalho -->
+    <div class="slide theme-warm">
+      <div class="slide-header">
+        <h2 class="slide-title">⚖️ Movimento Vertical e Sinais do Trabalho</h2>
+        <span class="slide-badge" style="background: #d97706;">CONVENÇÃO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-amber">Atenção Rigorosa aos Sinais:  W_grav = - ΔU_grav</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">⬇️ (a) De Cima para Baixo</h3>
+              <ul><li>• Deslocamento: y2 - y1 < 0 (descendo).</li><li>• O peso p e o deslocamento apontam no MESMO sentido (para baixo).</li><li>• <strong>Trabalho do peso é POSITIVO:</strong> W_grav > 0.</li><li>• A energia potencial diminui: ΔU_grav < 0.</li><li>• O corpo ganha energia cinética e acelera!</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #dc2626;">
+              <h3 style="color: #dc2626;">⬆️ (b) De Baixo para Cima</h3>
+              <ul><li>• Deslocamento: y2 - y1 > 0 (subindo).</li><li>• O peso p aponta para baixo, OPOSTO ao movimento do corpo.</li><li>• <strong>Trabalho do peso é NEGATIVO:</strong> W_grav < 0.</li><li>• A energia potencial aumenta: ΔU_grav > 0.</li><li>• O corpo perde energia cinética e desacelera!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: 🏃 Salto do Atleta: Conservação no Ar -->
+    <div class="slide theme-blue">
+      <div class="slide-header">
+        <h2 class="slide-title">🏃 Salto do Atleta: Conservação no Ar</h2>
+        <span class="slide-badge" style="background: #0284c7;">VOO LIVRE</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-cyan">No ar, somente a gravidade realiza trabalho sobre o atleta!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">Fase de Subida do Voo</h3>
+              <ul><li>• Movimento de baixo para cima.</li><li>• Energia Cinética (K) diminui.</li><li>• Energia Potencial Gravitacional (U_grav) aumenta.</li><li>• <strong>Energia Mecânica Total:</strong> E = K + U_grav NÃO VARIA!</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">Fase de Queda até a Areia</h3>
+              <ul><li>• Movimento de cima para baixo.</li><li>• Energia Cinética (K) aumenta.</li><li>• Energia Potencial Gravitacional (U_grav) diminui.</li><li>• <strong>Energia Mecânica Total:</strong> E = K + U_grav permanece rigorosamente constante!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: ⚾ Exemplo 7.1: Altura da Bola de Beisebol -->
+    <div class="slide theme-blue">
+      <div class="slide-header">
+        <h2 class="slide-title">⚾ Exemplo 7.1: Altura da Bola de Beisebol</h2>
+        <span class="slide-badge" style="background: #0284c7;">EXEMPLO 7.1</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-cyan">Enunciado Oficial (Sears & Zemansky)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">Enunciado</h3>
+              <ul><li>Você arremessa uma bola de beisebol de <strong>0,145 kg</strong> verticalmente de baixo para cima, fornecendo-lhe uma velocidade inicial de <strong>20,0 m/s</strong>.</li><li>Usando a conservação da energia, calcule a altura máxima que ela atinge, supondo que a resistência do ar seja desprezível.</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Dados e Condição no Topo</h3>
+              <ul><li>• Massa: m = 0,145 kg</li><li>• Velocidade de lançamento: v1 = 20,0 m/s</li><li>• Ponto 1 (Solo): y1 = 0 ⟹ U_grav,1 = 0</li><li>• Ponto 2 (Ápice): a bola para momentaneamente ⟹ v2 = 0 ⟹ K2 = 0</li><li>• Toda energia cinética vira potencial no topo!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: ⚾ Exemplo 7.1: Resolução Passo a Passo -->
+    <div class="slide theme-mint">
+      <div class="slide-header">
+        <h2 class="slide-title">⚾ Exemplo 7.1: Resolução Passo a Passo</h2>
+        <span class="slide-badge" style="background: #059669;">RESOLUÇÃO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-emerald">y2 = v1² / (2g) = (20,0)² / (2 × 9,80) = 20,4 metros!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Cálculo Numérico Direto</h3>
+              <ul><li>1. Ponto 1 (Solo, y1 = 0):<br>K1 = ½ m v1² = ½ (0,145 kg)(20,0 m/s)² = <strong>29,0 J</strong></li><li>2. Ponto 2 (Ápice, v2 = 0):<br>K2 = 0 ; U_grav,2 = m g y2</li><li>3. Conservação:<br>K1 + U1 = K2 + U2 ⟹ 29,0 J = m g y2</li><li>y2 = 29,0 J / (0,145 kg × 9,80 m/s²) = <strong>20,4 m</strong></li></ul>
+            </div>
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">Formulação Algébrica Elegante</h3>
+              <ul><li>½ m v1² = m g y2</li><li>Cancelando a massa m dos dois lados:<br><strong>y2 = v1² / (2g)</strong></li><li>y2 = (20,0 m/s)² / (2 × 9,80 m/s²) = <strong>20,4 m</strong></li><li>• A altura máxima independe da massa da bola!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: 🪂 Pára-quedista e Velocidade Terminal -->
+    <div class="slide theme-rose">
+      <div class="slide-header">
+        <h2 class="slide-title">🪂 Pára-quedista e Velocidade Terminal</h2>
+        <span class="slide-badge" style="background: #dc2626;">RESISTÊNCIA</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-coral">Velocidade constante + Perda de altura = Energia Mecânica decrescente!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #dc2626;">
+              <h3 style="color: #dc2626;">Trabalho Negativo do Ar</h3>
+              <ul><li>• O pára-quedista se move de cima para baixo.</li><li>• A força de resistência do ar atua de baixo para cima.</li><li>• Essa força resistente realiza trabalho negativo: <strong>W_outra < 0</strong>.</li><li>• O atrito com o ar retira energia mecânica do corpo!</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">Velocidade Terminal Atingida</h3>
+              <ul><li>• Ao atingir a velocidade terminal, a velocidade escalar e a energia cinética K ficam constantes.</li><li>• Porém, a altura diminui, fazendo a energia potencial U diminuir continuamente.</li><li>• Portanto, a energia mecânica total E = K + U diminui, dissipando-se em calor no ar!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: 💪 Exemplo 7.2: Força no Arremesso -->
+    <div class="slide theme-purple">
+      <div class="slide-header">
+        <h2 class="slide-title">💪 Exemplo 7.2: Força no Arremesso</h2>
+        <span class="slide-badge" style="background: #6366f1;">EXEMPLO 7.2</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-purple">Enunciado Oficial (Sears & Zemansky)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Enunciado Completo</h3>
+              <ul><li>No Exemplo 7.1, suponha que sua mão se desloque <strong>0,50 m para cima</strong> ao arremessar a bola, que deixa sua mão a <strong>20,0 m/s</strong>. Ar desprezível.</li><li><strong>a)</strong> Supondo que sua mão exerça força constante, ache o módulo dessa força.</li><li><strong>b)</strong> Ache a velocidade da bola a 15,0 m acima do ponto onde deixou sua mão.</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">Os 3 Pontos de Análise</h3>
+              <ul><li>• <strong>Ponto 1:</strong> Mão no ponto mais baixo antes do arremesso (repouso, v1 = 0, y1 = -0,50 m).</li><li>• <strong>Ponto 2:</strong> Bola deixa a mão (v2 = 20,0 m/s, y2 = 0).</li><li>• <strong>Ponto 3:</strong> Bola em voo livre a uma altura y3 = +15,0 m.</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 13: 💪 Exemplo 7.2 (a): Força Aplicada pela Mão -->
+    <div class="slide theme-blue">
+      <div class="slide-header">
+        <h2 class="slide-title">💪 Exemplo 7.2 (a): Força Aplicada pela Mão</h2>
+        <span class="slide-badge" style="background: #0284c7;">PARTE (A)</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-cyan">F = 29,7 J / 0,50 m = 59 N  (~40 vezes o peso da bola!)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Energias nos Pontos 1 e 2</h3>
+              <ul><li>• Ponto 1 (y1 = -0,50 m):<br>K1 = 0<br>U_grav,1 = (0,145 kg)(9,80 m/s²)(-0,50 m) = <strong>-0,71 J</strong></li><li>• Ponto 2 (y2 = 0):<br>K2 = ½ (0,145 kg)(20,0 m/s)² = <strong>29,0 J</strong><br>U_grav,2 = 0</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">Cálculo da Força F</h3>
+              <ul><li>W_outra = (K2 - K1) + (U_grav,2 - U_grav,1)</li><li>W_outra = (29,0 - 0) + (0 - (-0,71)) = <strong>29,7 J</strong></li><li>Como a mão exerce força constante para cima:<br>W_outra = F (y2 - y1) = F (0,50 m)</li><li><strong>F = 29,7 J / 0,50 m = 59 N</strong></li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 14: 💪 Exemplo 7.2 (b): Velocidade a 15 metros -->
+    <div class="slide theme-mint">
+      <div class="slide-header">
+        <h2 class="slide-title">💪 Exemplo 7.2 (b): Velocidade a 15 metros</h2>
+        <span class="slide-badge" style="background: #059669;">PARTE (B)</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-emerald">v3y = ± 10 m/s  (+10 m/s na subida e -10 m/s na descida!)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">Conservação entre Pontos 2 e 3</h3>
+              <ul><li>• Após deixar a mão, somente a gravidade atua (W_outra = 0).</li><li>• K2 + U_grav,2 = K3 + U_grav,3</li><li>• Em y3 = 15,0 m:<br>U_grav,3 = (0,145 kg)(9,80 m/s²)(15,0 m) = <strong>21,3 J</strong></li><li>• K3 = (29,0 J + 0) - 21,3 J = <strong>7,7 J</strong></li></ul>
+            </div>
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">Cálculo da Velocidade Escalar</h3>
+              <ul><li>K3 = ½ m v3y²</li><li>v3y = ± √(2 K3 / m) = ± √(2 × 7,7 J / 0,145 kg)</li><li><strong>v3y = ± 10 m/s</strong></li><li>• O sinal positivo (+10 m/s) ocorre durante a subida.</li><li>• O sinal negativo (-10 m/s) ocorre quando a bola passa pelo mesmo ponto na queda!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 15: 📐 Gravidade em Trajetórias Curvas -->
+    <div class="slide theme-warm">
+      <div class="slide-header">
+        <h2 class="slide-title">📐 Gravidade em Trajetórias Curvas</h2>
+        <span class="slide-badge" style="background: #d97706;">TRAJETÓRIA</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-amber">O trabalho da gravidade depende SOMENTE do desnível vertical Δy!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Decomposição Vetorial Elementar</h3>
+              <ul><li>• Considere um deslocamento elementar dℓ com componentes Δx (horizontal) e Δy (vertical).</li><li>• A força peso é vertical: p = - m g j.</li><li>• Produto escalar: p · dℓ = (0)(Δx) + (-mg)(Δy) = - mg Δy.</li><li>• O componente horizontal Δx não realiza trabalho algum!</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">Independência Total do Caminho</h3>
+              <ul><li>• Seja uma linha reta inclinada, uma parábola ou uma curva complexa:</li><li>• <strong>W_grav = - m g (y2 - y1) = - ΔU_grav</strong></li><li>• Isso comprova matematicamente que a força gravitacional é CONSERVATIVA!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 16: 🎯 Exemplo Conceitual 7.3: Projéteis -->
+    <div class="slide theme-mint">
+      <div class="slide-header">
+        <h2 class="slide-title">🎯 Exemplo Conceitual 7.3: Projéteis</h2>
+        <span class="slide-badge" style="background: #059669;">EXEMPLO 7.3</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-emerald">v = √(v0² - 2gh) ⟹ Ambas possuem a MESMA velocidade escalar na altura h!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">O Enigma dos Ângulos Diferentes</h3>
+              <ul><li>• Um jogador bate duas bolas idênticas com a mesma velocidade inicial v0, mas com dois ângulos diferentes (ex: 30° e 60°).</li><li>• Para uma dada altura h, qual possui maior velocidade escalar?</li><li>• Sem atrito com o ar, a energia mecânica é estritamente conservada!</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">Demonstração Energética</h3>
+              <ul><li>½ m v0² + 0 = ½ m v² + m g h</li><li>Dividindo por m e isolando v:<br><strong>v = √(v0² - 2gh)</strong></li><li>• O ângulo inicial altera a trajetória espacial e as componentes vx e vy, mas o módulo escalar v depende apenas de v0 e h!</li><li>• Logo, ambas cruzam a altura h com exatamente a mesma velocidade escalar!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 17: 🛹 Exemplo 7.4: Tobias Radical no Skate -->
+    <div class="slide theme-blue">
+      <div class="slide-header">
+        <h2 class="slide-title">🛹 Exemplo 7.4: Tobias Radical no Skate</h2>
+        <span class="slide-badge" style="background: #0284c7;">EXEMPLO 7.4</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-cyan">Enunciado Oficial (Sears & Zemansky)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">Enunciado Completo</h3>
+              <ul><li>Tobias pratica skate descendo uma rampa circular de raio <strong>R = 3,00 m</strong> (um quarto de círculo).</li><li>A massa total de Tobias e seu skate é <strong>25,0 kg</strong>. Ele parte do repouso e não existe nenhum atrito.</li><li><strong>a)</strong> Calcule sua velocidade na parte inferior da rampa.</li><li><strong>b)</strong> Calcule a força normal na parte inferior da curva.</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Condições dos Pontos 1 e 2</h3>
+              <ul><li>• <strong>Ponto 1 (Topo):</strong> v1 = 0 ⟹ K1 = 0 ; y1 = R = 3,00 m</li><li>• <strong>Ponto 2 (Base):</strong> y2 = 0 ⟹ U_grav,2 = 0 ; velocidade máxima v2</li><li>• A força normal é perpendicular à trajetória em todos os pontos, portanto W_normal = 0!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 18: 🛹 Exemplo 7.4 (a): Velocidade na Base -->
+    <div class="slide theme-mint">
+      <div class="slide-header">
+        <h2 class="slide-title">🛹 Exemplo 7.4 (a): Velocidade na Base</h2>
+        <span class="slide-badge" style="background: #059669;">PARTE (A)</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-emerald">v2 = √(2gR) = √(2 × 9,80 × 3,00) = 7,67 m/s (~27,6 km/h)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">Balanço Energético</h3>
+              <ul><li>• Ponto 1: K1 = 0 ; U_grav,1 = m g R</li><li>• Ponto 2: K2 = ½ m v2² ; U_grav,2 = 0</li><li>• Conservação:<br>0 + m g R = ½ m v2² + 0</li><li><strong>v2 = √(2 g R)</strong></li></ul>
+            </div>
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">Propriedade Extraordinária</h3>
+              <ul><li>• A velocidade na base independe do formato circular da rampa!</li><li>• Seja uma rampa circular, parabólica ou inclinada, a velocidade na base é sempre v2 = √(2gR).</li><li>• Independe também da massa m de Tobias!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 19: 🛹 Exemplo 7.4 (b): Força Normal na Base -->
+    <div class="slide theme-purple">
+      <div class="slide-header">
+        <h2 class="slide-title">🛹 Exemplo 7.4 (b): Força Normal na Base</h2>
+        <span class="slide-badge" style="background: #6366f1;">PARTE (B)</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-purple">n = 3 mg = 735 N  (Tobias sente o TRIPLO do seu próprio peso!)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Dinâmica Circular</h3>
+              <ul><li>• Na base da rampa, o skate descreve curva de raio R com v2 = √(2gR).</li><li>• Aceleração centrípeta (radial):<br><strong>a_rad = v2² / R = (2gR) / R = 2g</strong></li><li>• Forças verticais: normal n (para cima) e peso p = mg (para baixo).</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">2ª Lei de Newton</h3>
+              <ul><li>∑ Fy = n - p = m a_rad</li><li>n - m g = m (2 g)</li><li><strong>n = m g + 2 m g = 3 m g</strong></li><li>n = 3 (25,0 kg)(9,80 m/s²) = <strong>735 N</strong></li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 20: ⚠️ Exemplo 7.5: Tobias com Atrito -->
+    <div class="slide theme-rose">
+      <div class="slide-header">
+        <h2 class="slide-title">⚠️ Exemplo 7.5: Tobias com Atrito</h2>
+        <span class="slide-badge" style="background: #dc2626;">EXEMPLO 7.5</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-coral">Enunciado Oficial (Sears & Zemansky)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #dc2626;">
+              <h3 style="color: #dc2626;">Enunciado Completo</h3>
+              <ul><li>No Exemplo 7.4, suponha que a rampa possua atrito e que a velocidade de Tobias na base seja igual a <strong>6,0 m/s</strong>.</li><li>Qual é o trabalho realizado pela força de atrito sobre ele?</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">Comparação das Energias</h3>
+              <ul><li>• Sem atrito, ele chegaria com 7,67 m/s (K = 735 J).</li><li>• Com atrito real, sua velocidade foi de apenas 6,0 m/s.</li><li>• Ponto 1 (Topo): E1 = m g R = (25)(9,8)(3,0) = <strong>735 J</strong></li><li>• Ponto 2 (Base): K2 = ½ (25 kg)(6,0 m/s)² = <strong>450 J</strong></li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 21: ⚠️ Exemplo 7.5: Trabalho do Atrito -->
+    <div class="slide theme-rose">
+      <div class="slide-header">
+        <h2 class="slide-title">⚠️ Exemplo 7.5: Trabalho do Atrito</h2>
+        <span class="slide-badge" style="background: #dc2626;">RESOLUÇÃO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-coral">W_atrito = 450 J - 735 J = - 285 Joules Dissipados!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #dc2626;">
+              <h3 style="color: #dc2626;">Teorema Trabalho-Energia</h3>
+              <ul><li>W_f = ΔEM = EM,2 - EM,1</li><li>W_f = (K2 + U_grav,2) - (K1 + U_grav,1)</li><li>W_f = (450 J + 0) - (0 + 735 J)</li><li><strong>W_f = - 285 J</strong></li></ul>
+            </div>
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">Por que o Trabalho é Negativo?</h3>
+              <ul><li>• A força de atrito cinético atua tangencialmente em sentido contrário ao vetor deslocamento do skate.</li><li>• Portanto, o produto escalar F_atrito · dℓ é estritamente negativo.</li><li>• Esses 285 J foram dissipados como energia térmica nas rodinhas e na pista de skate!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 22: 📦 Exemplo 7.6: Caixa no Plano Inclinado -->
+    <div class="slide theme-warm">
+      <div class="slide-header">
+        <h2 class="slide-title">📦 Exemplo 7.6: Caixa no Plano Inclinado</h2>
+        <span class="slide-badge" style="background: #d97706;">EXEMPLO 7.6</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-amber">Enunciado Oficial (Sears & Zemansky)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">Enunciado Completo</h3>
+              <ul><li>Caixa de <strong>12 kg</strong> lançada na base de rampa inclinada de <strong>30°</strong> com velocidade de <strong>5,0 m/s</strong>.</li><li>A caixa desliza <strong>1,6 m subindo a rampa</strong>, para e desliza retornando para baixo.</li><li><strong>a)</strong> Supondo atrito constante, calcule seu módulo.</li><li><strong>b)</strong> Qual a velocidade da caixa ao atingir a base de volta?</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Três Momentos de Análise</h3>
+              <ul><li>• <strong>Ponto 1:</strong> Lançamento na base com v1 = 5,0 m/s (y1 = 0).</li><li>• <strong>Ponto 2:</strong> Parada no topo do trecho de 1,6 m (v2 = 0).</li><li>• <strong>Ponto 3:</strong> Retorno à base da rampa (y3 = 0, velocidade v3).</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 23: 📦 Exemplo 7.6 (a): Módulo da Força de Atrito -->
+    <div class="slide theme-warm">
+      <div class="slide-header">
+        <h2 class="slide-title">📦 Exemplo 7.6 (a): Módulo da Força de Atrito</h2>
+        <span class="slide-badge" style="background: #d97706;">PARTE (A)</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-amber">f = 56 J / 1,6 m = 35 N  (Trabalho do atrito na subida = -56 J)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Energias na Subida</h3>
+              <ul><li>• Ponto 1 (Base): K1 = ½ (12)(5,0)² = <strong>150 J</strong> ; U1 = 0</li><li>• Altura ganha: h = (1,6 m) sen(30°) = <strong>0,80 m</strong></li><li>• Ponto 2 (Parada): K2 = 0</li><li>  U2 = m g h = (12 kg)(9,80 m/s²)(0,80 m) = <strong>94 J</strong></li></ul>
+            </div>
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">Cálculo do Atrito f</h3>
+              <ul><li>K1 + U1 + W_outra = K2 + U2</li><li>150 J + 0 + (- f d) = 0 + 94 J</li><li>- f (1,6 m) = 94 J - 150 J = - 56 J</li><li><strong>f = 56 J / 1,6 m = 35 N</strong></li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 24: 📦 Exemplo 7.6 (b): Velocidade no Retorno -->
+    <div class="slide theme-rose">
+      <div class="slide-header">
+        <h2 class="slide-title">📦 Exemplo 7.6 (b): Velocidade no Retorno</h2>
+        <span class="slide-badge" style="background: #dc2626;">PARTE (B)</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-coral">v3 = √(2 × 38 / 12) = 2,5 m/s  (metade da velocidade inicial!)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #dc2626;">
+              <h3 style="color: #dc2626;">Trabalho Total de Ida e Volta</h3>
+              <ul><li>• Na descida, o atrito se inverte, mas o movimento também se inverte!</li><li>• Logo, o atrito continua realizando trabalho negativo: -56 J na descida.</li><li>• Trabalho total do atrito (ida + volta):<br><strong>W_outra = - 2 f d = - 2(35 N)(1,6 m) = - 112 J</strong></li></ul>
+            </div>
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">Energia Cinética Final e Velocidade</h3>
+              <ul><li>K3 = K1 + U1 + W_outra - U3</li><li>K3 = 150 J + 0 + (-112 J) - 0 = <strong>38 J</strong></li><li>v3 = √(2 K3 / m) = √(2 × 38 J / 12 kg)</li><li><strong>v3 = 2,5 m/s</strong></li><li>• Por causa da dissipação contínua de 112 J, a velocidade de retorno caiu para a metade da velocidade inicial!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 25: 🏃 Biofísica: O Tendão de Aquiles como Mola -->
+    <div class="slide theme-purple">
+      <div class="slide-header">
+        <h2 class="slide-title">🏃 Biofísica: O Tendão de Aquiles como Mola</h2>
+        <span class="slide-badge" style="background: #ec4899;">MOLA VIVA</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-purple">A evolução biológica projetou molas perfeitas no corpo humano!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #ec4899;">
+              <h3 style="color: #ec4899;">O Mecanismo da Corrida</h3>
+              <ul><li>• O tendão de Aquiles une a parte de trás do tornozelo ao osso do calcanhar.</li><li>• Ao pisar no chão durante a corrida, o tendão se estica, absorvendo o impacto do corpo.</li><li>• Esse estiramento armazena Energia Potencial Elástica: <strong>U_el = ½ k x²</strong>.</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Devolução de Energia de Graça</h3>
+              <ul><li>• Na fase de impulsão (quando o pé deixa o solo), o tendão relaxa rapidamente.</li><li>• Ele libera a energia elástica acumulada, impulsionando o corpo para a frente.</li><li>• Essa ação de mola natural reduz drasticamente o esforço e a fadiga muscular!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 26: 🌀 Trabalho da Mola nos 4 Estados -->
+    <div class="slide theme-purple">
+      <div class="slide-header">
+        <h2 class="slide-title">🌀 Trabalho da Mola nos 4 Estados</h2>
+        <span class="slide-badge" style="background: #6366f1;">MOLA IDEAL</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-purple">Fx = - k x  ⟹  Força Restauradora que busca sempre x = 0</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">(a) e (b): Mola Esticando</h3>
+              <ul><li>• <strong>(a) Relaxada (x = 0):</strong> Fx = 0 ; U_el = 0.</li><li>• <strong>(b) Esticando (x > 0):</strong> Deslocamento para a direita (+x), mas a mola puxa para a esquerda (Fx < 0).</li><li>• O trabalho da mola é <strong>NEGATIVO</strong>!</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">(c) e (d): Mola Relaxando</h3>
+              <ul><li>• <strong>(c) Esticada relaxando:</strong> O bloco volta em direção a x = 0. A força e o movimento têm mesmo sentido ⟹ Trabalho <strong>POSITIVO</strong>!</li><li>• <strong>(d) Comprimida relaxando:</strong> O bloco vai de x < 0 em direção a 0. A mola empurra para a direita ⟹ Trabalho <strong>POSITIVO</strong>!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 27: 💨 Exemplo 7.7: Cavaleiro no Trilho de Ar -->
+    <div class="slide theme-blue">
+      <div class="slide-header">
+        <h2 class="slide-title">💨 Exemplo 7.7: Cavaleiro no Trilho de Ar</h2>
+        <span class="slide-badge" style="background: #0284c7;">EXEMPLO 7.7</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-cyan">Enunciado Oficial (Sears & Zemansky)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">Enunciado Completo</h3>
+              <ul><li>Cavaleiro com massa <strong>m = 0,200 kg</strong> em trilho de ar sem atrito, ligado a mola com <strong>k = 5,0 N/m</strong>.</li><li>Puxa-se o cavaleiro alongando a mola em <strong>0,100 m</strong> e o liberta sem velocidade inicial.</li><li>Qual é a velocidade do cavaleiro no ponto <strong>x = 0,080 m</strong>?</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Condições dos Pontos 1 e 2</h3>
+              <ul><li>• <strong>Ponto 1 (Alongamento máximo):</strong> x1 = 0,100 m ; v1 = 0 ⟹ K1 = 0</li><li>• <strong>Ponto 2:</strong> x2 = 0,080 m (voltando para o centro)</li><li>• Sem atrito: a energia mecânica elástica se conserva integralmente!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 28: 💨 Exemplo 7.7: Resolução da Velocidade -->
+    <div class="slide theme-mint">
+      <div class="slide-header">
+        <h2 class="slide-title">💨 Exemplo 7.7: Resolução da Velocidade</h2>
+        <span class="slide-badge" style="background: #059669;">RESOLUÇÃO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-emerald">v2x = - 0,30 m/s  (o sinal negativo indica sentido -x, voltando ao centro!)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Cálculo das Energias Elásticas</h3>
+              <ul><li>• Ponto 1 (x1 = 0,100 m):<br>K1 = 0<br>U1 = ½ (5,0 N/m)(0,100 m)² = <strong>0,0250 J</strong></li><li>• Ponto 2 (x2 = 0,080 m):<br>U2 = ½ (5,0 N/m)(0,080 m)² = <strong>0,0160 J</strong></li><li>K2 = U1 - U2 = 0,0250 J - 0,0160 J = <strong>0,0090 J</strong></li></ul>
+            </div>
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">Determinação do Sinal de v2x</h3>
+              <ul><li>K2 = ½ m v2x²</li><li>v2x = ± √(2 K2 / m) = ± √(2 × 0,0090 J / 0,200 kg)</li><li>v2x = ± 0,30 m/s</li><li>• O cavaleiro foi liberado em x = +0,100 m e está se movendo para a esquerda (no sentido -x).</li><li>• <strong>Portanto: v2x = - 0,30 m/s</strong></li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 29: 📈 Parábola da Energia Elástica U_el -->
+    <div class="slide theme-blue">
+      <div class="slide-header">
+        <h2 class="slide-title">📈 Parábola da Energia Elástica U_el</h2>
+        <span class="slide-badge" style="background: #0284c7;">GRÁFICO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-cyan">U_el = ½ k x² é sempre uma parábola com vértice em x = 0!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">Simetria Perfeita</h3>
+              <ul><li>• Mola comprimida (x < 0): x² > 0 ⟹ U_el > 0.</li><li>• Ponto de equilíbrio (x = 0): U_el = 0 (mínimo absoluto).</li><li>• Mola alongada (x > 0): x² > 0 ⟹ U_el > 0.</li><li>• A energia potencial elástica NUNCA pode ser negativa!</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Bungee Jumping (Fig. 7.15)</h3>
+              <ul><li>• Na queda inicial: Gravitacional vira Cinética.</li><li>• Quando a corda estica: Cinética e Gravitacional viram Elástica.</li><li>• Na máxima extensão: toda energia vira Elástica.</li><li>• O atrito do ar e amortecimento interno da corda dissipam energia até o repouso final.</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 30: ⚡ Exemplo 7.8: Força Externa na Mola -->
+    <div class="slide theme-purple">
+      <div class="slide-header">
+        <h2 class="slide-title">⚡ Exemplo 7.8: Força Externa na Mola</h2>
+        <span class="slide-badge" style="background: #6366f1;">EXEMPLO 7.8</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-purple">Enunciado Oficial (Sears & Zemansky)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Enunciado Completo</h3>
+              <ul><li>Cavaleiro em repouso em x = 0 (mola indeformada).</li><li>Aplica-se sobre ele força constante <strong>F = 0,610 N</strong> no sentido +x.</li><li>Qual a velocidade do cavaleiro no ponto <strong>x = 0,100 m</strong>?</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">Condições Iniciais</h3>
+              <ul><li>• Posição inicial: x1 = 0 ⟹ U1 = 0</li><li>• Repouso inicial: v1 = 0 ⟹ K1 = 0</li><li>• Energia mecânica inicial total = 0!</li><li>• A força F realiza trabalho positivo contínuo, injetando energia mecânica no sistema!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 31: ⚡ Exemplo 7.8: Resolução Completa -->
+    <div class="slide theme-mint">
+      <div class="slide-header">
+        <h2 class="slide-title">⚡ Exemplo 7.8: Resolução Completa</h2>
+        <span class="slide-badge" style="background: #059669;">RESOLUÇÃO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-emerald">v2x = + 0,60 m/s  (raiz positiva: movimento no sentido +x!)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Trabalho Injetado e Energia da Mola</h3>
+              <ul><li>• Trabalho de F:<br>W_outra = F · d = (0,610 N)(0,100 m) = <strong>0,0610 J</strong></li><li>• Energia absorvida pela mola:<br>U2 = ½ k x2² = ½ (5,0)(0,100)² = <strong>0,0250 J</strong></li><li>• Balanço:<br>K1 + U1 + W_outra = K2 + U2<br>0 + 0 + 0,0610 J = K2 + 0,0250 J</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">Energia Cinética e Velocidade</h3>
+              <ul><li>K2 = 0,0610 J - 0,0250 J = <strong>0,0360 J</strong></li><li>v2x = + √(2 K2 / m)</li><li>v2x = √(2 × 0,0360 J / 0,200 kg) = √(0,36)</li><li><strong>v2x = + 0,60 m/s</strong></li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 32: 🛗 Exemplo 7.9: Emergência no Elevador! -->
+    <div class="slide theme-rose">
+      <div class="slide-header">
+        <h2 class="slide-title">🛗 Exemplo 7.9: Emergência no Elevador!</h2>
+        <span class="slide-badge" style="background: #dc2626;">EXEMPLO 7.9</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-coral">Enunciado Oficial (Sears & Zemansky)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #dc2626;">
+              <h3 style="color: #dc2626;">Cenário de Pior Caso</h3>
+              <ul><li>Elevador de <strong>2000 kg</strong> com cabo quebrado cai a <strong>4,0 m/s</strong> sobre mola de amortecimento no fundo do poço.</li><li>A mola deve fazer o elevador parar ao comprimir <strong>2,0 m</strong>.</li><li>Freios de segurança exercem atrito constante de <strong>17000 N</strong>.</li><li>Como consultor do projeto, determine a constante k da mola a ser usada.</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">Dados Críticos do Projeto</h3>
+              <ul><li>• Massa: m = 2000 kg</li><li>• Velocidade de impacto: v1 = 4,0 m/s</li><li>• Compressão máxima da mola: y2 = - 2,0 m</li><li>• Velocidade final: v2 = 0 ⟹ K2 = 0</li><li>• Força de atrito resistente: f = 17000 N (para cima)</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 33: 🛗 Exemplo 7.9: Cálculo da Constante da Mola -->
+    <div class="slide theme-mint">
+      <div class="slide-header">
+        <h2 class="slide-title">🛗 Exemplo 7.9: Cálculo da Constante da Mola</h2>
+        <span class="slide-badge" style="background: #059669;">RESOLUÇÃO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-emerald">k = 1,06 × 10⁴ N/m  (Mola dimensionada com sucesso!)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Balanço das Parcelas Energéticas</h3>
+              <ul><li>• Cinética inicial: K1 = ½ (2000)(4,0)² = <strong>16000 J</strong></li><li>• Trabalho do atrito (2,0 m): W_outra = -(17000)(2,0) = <strong>-34000 J</strong></li><li>• Gravidade descendo 2,0 m: m g y2 = (2000)(9,8)(-2,0) = <strong>-39200 J</strong></li><li>• Energia elástica: U_el,2 = ½ k (-2,0)² = 2 k</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">Equação Geral e Rigidez k</h3>
+              <ul><li>K1 + U1 + W_outra = K2 + U2</li><li>16000 + 0 + (-34000) = 0 + (-39200 + 2k)</li><li>- 18000 = - 39200 + 2k</li><li>2k = 39200 - 18000 = 21200</li><li><strong>k = 1,06 × 10⁴ N/m</strong></li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 34: 📚 Resumo das 3 Leis de Conservação -->
+    <div class="slide theme-blue">
+      <div class="slide-header">
+        <h2 class="slide-title">📚 Resumo das 3 Leis de Conservação</h2>
+        <span class="slide-badge" style="background: #0284c7;">TEORIA</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-cyan">Da Mecânica Pura à Termodinâmica Universal</div>
+        <div class="cards-grid-3">
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">1. Conservativo</h3>
+              <ul><li>• Apenas peso e mola atuam.</li><li>• E = K + U = constante.</li><li>• <strong>K1 + U1 = K2 + U2</strong></li><li>• Reversibilidade total!</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">2. Dissipativo</h3>
+              <ul><li>• Há atrito ou resistência do ar.</li><li>• <strong>W_outra = ΔEM</strong></li><li>• A energia mecânica total diminui.</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #dc2626;">
+              <h3 style="color: #dc2626;">3. Lei Geral</h3>
+              <ul><li>• Inclui a Energia Interna:</li><li>• <strong>ΔK + ΔU + ΔU_int = 0</strong></li><li>• A energia do universo se conserva!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 35: 🧭 7.3 Forças Conservativas e Trajetória -->
+    <div class="slide theme-warm">
+      <div class="slide-header">
+        <h2 class="slide-title">🧭 7.3 Forças Conservativas e Trajetória</h2>
+        <span class="slide-badge" style="background: #d97706;">CONCEITO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-amber">O trabalho da gravidade é o mesmo para as 3 trajetórias!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Os 3 Corredores na Colina</h3>
+              <ul><li>• Três corredores partem da mesma posição inicial e chegam à mesma posição final:</li><li>  1. Corredor 1: sobe pelo cume alto e desce.</li><li>  2. Corredor 2: vai direto pela rampa intermediária.</li><li>  3. Corredor 3: desce pelo vale e sobe.</li><li>• O trabalho da gravidade é <strong>RIGOROSAMENTE IGUAL</strong> para os três!</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">Critérios da Força Conservativa</h3>
+              <ul><li>1. O trabalho entre dois pontos independe da trajetória percorrida.</li><li>2. Em qualquer ciclo fechado (ida e volta), o trabalho total é ZERO:<br><strong>∮ F · dℓ = 0</strong></li><li>3. O trabalho é reversível e pode ser expresso por uma função potencial: W = - ΔU.</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 36: 🛋️ Exemplo 7.10: O Sofá e o Atrito -->
+    <div class="slide theme-warm">
+      <div class="slide-header">
+        <h2 class="slide-title">🛋️ Exemplo 7.10: O Sofá e o Atrito</h2>
+        <span class="slide-badge" style="background: #d97706;">EXEMPLO 7.10</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-amber">Enunciado Oficial (Sears & Zemansky)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">Enunciado Completo</h3>
+              <ul><li>Desloca-se um sofá de <strong>40,0 kg</strong> por <strong>2,50 m</strong> pela sala. A linha reta é bloqueada por uma pesada mesa.</li><li>Em vez disso, você move o sofá em dois trechos ortogonais em 'L' (<strong>2,0 m</strong> e <strong>1,50 m</strong>).</li><li>Qual o trabalho excedente em relação à linha reta? (μc = 0,200)</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Comparação de Distâncias</h3>
+              <ul><li>• <strong>Rota 1 (Linha Reta):</strong> d1 = 2,50 m.</li><li>• <strong>Rota 2 (Em 'L'):</strong> d2 = 2,0 m + 1,50 m = 3,50 m.</li><li>• Como o piso é horizontal: normal n = mg.</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 37: 🛋️ Exemplo 7.10: Trabalho Excedente -->
+    <div class="slide theme-rose">
+      <div class="slide-header">
+        <h2 class="slide-title">🛋️ Exemplo 7.10: Trabalho Excedente</h2>
+        <span class="slide-badge" style="background: #dc2626;">RESOLUÇÃO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-coral">Trabalho Excedente = 274 J - 196 J = 78 Joules!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Trabalho nas Duas Rotas</h3>
+              <ul><li>• Força de atrito: fc = μc m g = (0,200)(40,0)(9,80) = <strong>78,4 N</strong></li><li>• Rota Retilínea (2,50 m):<br>W_reto = (78,4 N)(2,50 m) = <strong>196 J</strong></li><li>• Rota Ortogonal (3,50 m):<br>W_ortogonal = (78,4 N)(3,50 m) = <strong>274 J</strong></li></ul>
+            </div>
+            <div class="card" style="border-left-color: #dc2626;">
+              <h3 style="color: #dc2626;">Conclusão Física Crucial</h3>
+              <ul><li>• W_excedente = 274 J - 196 J = <strong>78 J</strong></li><li>• Por que houve trabalho excedente?</li><li>• Porque o atrito é <strong>NÃO CONSERVATIVO</strong>: seu trabalho depende do comprimento do caminho!</li><li>• Caminhos mais longos sempre dissipam mais energia!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 38: 🚗 Energia Interna e Combustão -->
+    <div class="slide theme-warm">
+      <div class="slide-header">
+        <h2 class="slide-title">🚗 Energia Interna e Combustão</h2>
+        <span class="slide-badge" style="background: #d97706;">COMBUSTÃO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-amber">1 Litro de Gasolina libera:  ΔU_int = - 3,3 × 10⁷ Joules!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #d97706;">
+              <h3 style="color: #d97706;">Queima de Gasolina no Motor</h3>
+              <ul><li>• Ao queimar no motor, cada litro de gasolina libera 3,3 × 10⁷ J de energia química.</li><li>• O sinal negativo indica que a energia química acumulada diminuiu.</li><li>• Essa energia liberada expande os gases e empurra os pistões do motor.</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Aplicações Úteis</h3>
+              <ul><li>• <strong>Energia Cinética:</strong> acelera o automóvel na rodovia.</li><li>• <strong>Energia Potencial:</strong> permite que o carro vença a gravidade e suba montanhas.</li><li>• O balanço total é sempre regido pela conservação universal da energia!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 39: 🔄 Exemplo 7.11: Conservativa ou Não? -->
+    <div class="slide theme-purple">
+      <div class="slide-header">
+        <h2 class="slide-title">🔄 Exemplo 7.11: Conservativa ou Não?</h2>
+        <span class="slide-badge" style="background: #6366f1;">EXEMPLO 7.11</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-purple">Enunciado Oficial (Sears & Zemansky)</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Enunciado Completo</h3>
+              <ul><li>Uma força que atua sobre um elétron é dada por <strong>F = Cx j</strong> (C > 0).</li><li>O elétron percorre trajetória quadrada no sentido anti-horário: vértices (0,0), (L,0), (L,L) e (0,L).</li><li>Calcule o trabalho da força no percurso fechado. Essa força é conservativa ou não conservativa?</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">Os 4 Trechos do Quadrado</h3>
+              <ul><li>• <strong>Trecho 1:</strong> (0,0) até (L,0) ao longo do eixo x.</li><li>• <strong>Trecho 2:</strong> (L,0) até (L,L) subindo paralelo ao eixo y.</li><li>• <strong>Trecho 3:</strong> (L,L) até (0,L) voltando paralelo a x.</li><li>• <strong>Trecho 4:</strong> (0,L) até (0,0) descendo pelo eixo y.</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 40: 🔄 Exemplo 7.11: Resolução Integral -->
+    <div class="slide theme-rose">
+      <div class="slide-header">
+        <h2 class="slide-title">🔄 Exemplo 7.11: Resolução Integral</h2>
+        <span class="slide-badge" style="background: #dc2626;">RESOLUÇÃO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-coral">W_total = C L² ≠ 0  ⟹  A Força é NÃO CONSERVATIVA!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Integração nos 4 Trechos</h3>
+              <ul><li>• Trecho 1: F = Cx j ⊥ dℓ = dx i ⟹ <strong>W1 = 0</strong></li><li>• Trecho 2: x = L (constante), dℓ = dy j<br>W2 = ∫₀ᴸ CL dy = <strong>C L²</strong></li><li>• Trecho 3: F = Cx j ⊥ dℓ = -dx i ⟹ <strong>W3 = 0</strong></li><li>• Trecho 4: x = 0 ⟹ F = C(0) j = 0 ⟹ <strong>W4 = 0</strong></li></ul>
+            </div>
+            <div class="card" style="border-left-color: #dc2626;">
+              <h3 style="color: #dc2626;">Classificação da Força</h3>
+              <ul><li>• Trabalho no ciclo fechado:<br>W = W1 + W2 + W3 + W4 = <strong>C L² ≠ 0</strong></li><li>• Em um caminho fechado, o trabalho NÃO foi nulo!</li><li>• Logo, a força <strong>F = Cx j é NÃO CONSERVATIVA</strong> e NÃO pode ser representada por uma energia potencial!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 41: ⚡ A Derivada Negativa: F = - dU/dx -->
+    <div class="slide theme-purple">
+      <div class="slide-header">
+        <h2 class="slide-title">⚡ A Derivada Negativa: F = - dU/dx</h2>
+        <span class="slide-badge" style="background: #6366f1;">CÁLCULO</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-purple">Fx = - dU/dx  ⟹  A força aponta sempre para onde a energia potencial diminui!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #0284c7;">
+              <h3 style="color: #0284c7;">Caso 1: Mola Ideal</h3>
+              <ul><li>• U_el = ½ k x²</li><li>• Fx = - dU/dx = - d/dx (½ k x²) = <strong>- k x</strong></li><li>• Para x > 0: Fx < 0 (empurra de volta para zero).</li><li>• Para x < 0: Fx > 0 (empurra de volta para zero).</li><li>• O ponto x = 0 é de energia mínima e equilíbrio estável!</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">Caso 2: Força Gravitacional</h3>
+              <ul><li>• U_grav = m g y</li><li>• Fy = - dU/dy = - d/dy (m g y) = <strong>- m g</strong></li><li>• Para qualquer altitude y: Fy = - mg (aponta sempre para baixo).</li><li>• A força gravitacional empurra sempre na direção que diminui a energia potencial!</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 42: 🏆 Grande Resumo do Capítulo 7 -->
+    <div class="slide theme-mint">
+      <div class="slide-header">
+        <h2 class="slide-title">🏆 Grande Resumo do Capítulo 7</h2>
+        <span class="slide-badge" style="background: #059669;">REVISÃO FINAL</span>
+      </div>
+      <div class="slide-body">
+        <div class="formula-banner banner-emerald">🎉 Parabéns! Você Dominou 100% do Capítulo 7 de Física I!</div>
+        <div class="cards-grid">
+            <div class="card" style="border-left-color: #059669;">
+              <h3 style="color: #059669;">Fórmulas Fundamentais</h3>
+              <ul><li>1. <strong>Energia Mecânica:</strong> EM = K + U</li><li>2. <strong>Conservação Pura:</strong> K1 + U1 = K2 + U2</li><li>3. <strong>Sistemas com Dissipação:</strong> W_outra = ΔEM</li><li>4. <strong>Gravitacional:</strong> U_grav = m g y</li><li>5. <strong>Elástica:</strong> U_el = ½ k x²</li><li>6. <strong>Força e Potencial:</strong> Fx = - dU/dx</li></ul>
+            </div>
+            <div class="card" style="border-left-color: #6366f1;">
+              <h3 style="color: #6366f1;">Todos os 11 Exemplos Concluídos!</h3>
+              <ul><li>✔ Ex. 7.1: Bola de beisebol (y2 = 20,4 m)</li><li>✔ Ex. 7.2: Força no arremesso (F = 59 N, v = ±10 m/s)</li><li>✔ Ex. 7.3: Projéteis em ângulos distintos (v igual)</li><li>✔ Ex. 7.4: Tobias skate sem atrito (v = 7,67 m/s, n = 3mg)</li><li>✔ Ex. 7.5: Tobias com atrito (W_atrito = -285 J)</li><li>✔ Ex. 7.6: Caixa na rampa (f = 35 N, volta a 2,5 m/s)</li><li>✔ Ex. 7.7 e 7.8: Cavaleiro na mola (-0,30 e +0,60 m/s)</li><li>✔ Ex. 7.9: Elevador de emergência (k = 1,06 × 10⁴ N/m)</li><li>✔ Ex. 7.10 e 7.11: Sofá (78 J) e Integral no Quadrado (CL²)</li></ul>
+            </div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONTROLES DE NAVEGAÇÃO -->
+  <div id="nav-controls">
+    <button class="btn" id="prev-btn" onclick="prevSlide()">&#8592; Anterior</button>
+    <div class="progress-bar-container">
+      <div id="progress-fill"></div>
+    </div>
+    <span id="counter" style="font-weight: bold; min-width: 160px; text-align: center;">Slide 1 de 42</span>
+    <button class="btn" id="next-btn" onclick="nextSlide()" style="margin-left: 15px;">Próximo &#8594;</button>
+    <button class="btn" onclick="toggleFullScreen()" style="background: #1e293b; margin-left: 10px;">⛶ Tela Cheia</button>
+    <a href="index.html" class="btn" style="background: #475569; margin-left: 10px;">Catálogo ↩</a>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('counter');
+    const progressFill = document.getElementById('progress-fill');
+
+    function showSlide(index) {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (index + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+      
+      counter.innerText = `Slide ${currentSlide + 1} de ${slides.length}`;
+      progressFill.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+    }
+
+    function nextSlide() { showSlide(currentSlide + 1); }
+    function prevSlide() { showSlide(currentSlide - 1); }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => alert(err.message));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullScreen();
+      }
+    });
+  </script>
+</body>
+</html>
