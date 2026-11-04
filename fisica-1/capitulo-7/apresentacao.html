@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Física I - Capítulo 7 Completo: Energia Potencial e Conservação da Energia</title>
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
   <style>
     :root {
       --font-scale: 1.0;
@@ -318,7 +328,7 @@
         <span class="slide-badge" style="background: #dc2626;">DISSIPATIVO</span>
       </div>
       <div class="slide-body">
-        <div class="formula-banner banner-coral">τ = Ef - Ei  ⟹  τ = ΔEM < 0  (Trabalho Resistente do Atrito)</div>
+        <div class="formula-banner banner-coral">$W_{\text{atrito}} = E_f - E_i = \Delta E_M < 0$ (Trabalho Resistente do Atrito)</div>
         <div class="cards-grid">
             <div class="card" style="border-left-color: #dc2626;">
               <h3 style="color: #dc2626;">Atrito e Perda de Altura</h3>
@@ -338,15 +348,15 @@
         <span class="slide-badge" style="background: #6366f1;">FÓRMULAS</span>
       </div>
       <div class="slide-body">
-        <div class="formula-banner banner-purple">Trabalho de Forças Conservativas:  W = - ΔU = U_inicial - U_final</div>
+        <div class="formula-banner banner-purple">Trabalho de Forças Conservativas: $W = -\Delta U = U_i - U_f$</div>
         <div class="cards-grid">
             <div class="card" style="border-left-color: #059669;">
               <h3 style="color: #059669;">Energia Potencial Gravitacional</h3>
-              <ul><li>• Força gravitacional constante perto da superfície terrestre.</li><li>• <strong>Fórmula:</strong>  U_grav = m g y</li><li>• Propriedade compartilhada entre a partícula e o planeta Terra.</li><li>• <strong>Trabalho da gravidade:</strong><br>W_grav = m g y1 - m g y2 = - ΔU_grav</li></ul>
+              <ul><li>• Força gravitacional constante perto da superfície terrestre.</li><li>• <strong>Fórmula:</strong>  $U_{\text{grav}} = mgy$</li><li>• Propriedade compartilhada entre a partícula e o planeta Terra.</li><li>• <strong>Trabalho da gravidade:</strong><br>$W_{\text{grav}} = mgy_1 - mgy_2 = -\Delta U_{\text{grav}}$</li></ul>
             </div>
             <div class="card" style="border-left-color: #6366f1;">
               <h3 style="color: #6366f1;">Energia Potencial Elástica</h3>
-              <ul><li>• Mola ideal com constante elástica k.</li><li>• Lei de Hooke:  Fx = - k x</li><li>• <strong>Fórmula:</strong>  U_el = ½ k x²</li><li>• <strong>Trabalho da mola:</strong><br>W_el = ½ k x1² - ½ k x2² = - ΔU_el</li><li>• Como x está ao quadrado, U_el é SEMPRE ≥ 0!</li></ul>
+              <ul><li>• Mola ideal com constante elástica k.</li><li>• Lei de Hooke:  $F_x = -kx$</li><li>• <strong>Fórmula:</strong>  $U_{\text{el}} = \tfrac{1}{2}kx^2$</li><li>• <strong>Trabalho da mola:</strong><br>$W_{\text{el}} = \tfrac{1}{2}kx_1^2 - \tfrac{1}{2}kx_2^2 = -\Delta U_{\text{el}}$</li><li>• Como x está ao quadrado, U_el é SEMPRE ≥ 0!</li></ul>
             </div></div>
       </div>
     </div>
@@ -358,15 +368,15 @@
         <span class="slide-badge" style="background: #d97706;">CONVENÇÃO</span>
       </div>
       <div class="slide-body">
-        <div class="formula-banner banner-amber">Atenção Rigorosa aos Sinais:  W_grav = - ΔU_grav</div>
+        <div class="formula-banner banner-amber">Atenção Rigorosa aos Sinais:  $W_{\text{grav}} = -\Delta U_{\text{grav}}$</div>
         <div class="cards-grid">
             <div class="card" style="border-left-color: #059669;">
               <h3 style="color: #059669;">⬇️ (a) De Cima para Baixo</h3>
-              <ul><li>• Deslocamento: y2 - y1 < 0 (descendo).</li><li>• O peso p e o deslocamento apontam no MESMO sentido (para baixo).</li><li>• <strong>Trabalho do peso é POSITIVO:</strong> W_grav > 0.</li><li>• A energia potencial diminui: ΔU_grav < 0.</li><li>• O corpo ganha energia cinética e acelera!</li></ul>
+              <ul><li>• Deslocamento: $y_2 - y_1 < 0$ (descendo).</li><li>• O peso p e o deslocamento apontam no MESMO sentido (para baixo).</li><li>• <strong>Trabalho do peso é POSITIVO:</strong> $W_{\text{grav}} > 0$.</li><li>• A energia potencial diminui: $\Delta U_{\text{grav}} < 0$.</li><li>• O corpo ganha energia cinética e acelera!</li></ul>
             </div>
             <div class="card" style="border-left-color: #dc2626;">
               <h3 style="color: #dc2626;">⬆️ (b) De Baixo para Cima</h3>
-              <ul><li>• Deslocamento: y2 - y1 > 0 (subindo).</li><li>• O peso p aponta para baixo, OPOSTO ao movimento do corpo.</li><li>• <strong>Trabalho do peso é NEGATIVO:</strong> W_grav < 0.</li><li>• A energia potencial aumenta: ΔU_grav > 0.</li><li>• O corpo perde energia cinética e desacelera!</li></ul>
+              <ul><li>• Deslocamento: $y_2 - y_1 > 0$ (subindo).</li><li>• O peso p aponta para baixo, OPOSTO ao movimento do corpo.</li><li>• <strong>Trabalho do peso é NEGATIVO:</strong> $W_{\text{grav}} < 0$.</li><li>• A energia potencial aumenta: $\Delta U_{\text{grav}} > 0$.</li><li>• O corpo perde energia cinética e desacelera!</li></ul>
             </div></div>
       </div>
     </div>
@@ -382,11 +392,11 @@
         <div class="cards-grid">
             <div class="card" style="border-left-color: #0284c7;">
               <h3 style="color: #0284c7;">Fase de Subida do Voo</h3>
-              <ul><li>• Movimento de baixo para cima.</li><li>• Energia Cinética (K) diminui.</li><li>• Energia Potencial Gravitacional (U_grav) aumenta.</li><li>• <strong>Energia Mecânica Total:</strong> E = K + U_grav NÃO VARIA!</li></ul>
+              <ul><li>• Movimento de baixo para cima.</li><li>• Energia Cinética (K) diminui.</li><li>• Energia Potencial Gravitacional (U_grav) aumenta.</li><li>• <strong>Energia Mecânica Total:</strong> $E = K + U_{\text{grav}}$ NÃO VARIA!</li></ul>
             </div>
             <div class="card" style="border-left-color: #059669;">
               <h3 style="color: #059669;">Fase de Queda até a Areia</h3>
-              <ul><li>• Movimento de cima para baixo.</li><li>• Energia Cinética (K) aumenta.</li><li>• Energia Potencial Gravitacional (U_grav) diminui.</li><li>• <strong>Energia Mecânica Total:</strong> E = K + U_grav permanece rigorosamente constante!</li></ul>
+              <ul><li>• Movimento de cima para baixo.</li><li>• Energia Cinética (K) aumenta.</li><li>• Energia Potencial Gravitacional (U_grav) diminui.</li><li>• <strong>Energia Mecânica Total:</strong> $E = K + U_{\text{grav}}$ permanece rigorosamente constante!</li></ul>
             </div></div>
       </div>
     </div>
@@ -422,7 +432,7 @@
         <div class="cards-grid">
             <div class="card" style="border-left-color: #6366f1;">
               <h3 style="color: #6366f1;">Cálculo Numérico Direto</h3>
-              <ul><li>1. Ponto 1 (Solo, y1 = 0):<br>K1 = ½ m v1² = ½ (0,145 kg)(20,0 m/s)² = <strong>29,0 J</strong></li><li>2. Ponto 2 (Ápice, v2 = 0):<br>K2 = 0 ; U_grav,2 = m g y2</li><li>3. Conservação:<br>K1 + U1 = K2 + U2 ⟹ 29,0 J = m g y2</li><li>y2 = 29,0 J / (0,145 kg × 9,80 m/s²) = <strong>20,4 m</strong></li></ul>
+              <ul><li>1. Ponto 1 (Solo, y1 = 0):<br>K1 = ½ m v1² = ½ (0,145 kg)(20,0 m/s)² = <strong>29,0 J</strong></li><li>2. Ponto 2 (Ápice, v2 = 0):<br>K2 = 0 ; U_grav,2 = m g y2</li><li>3. Conservação:<br>$K_1 + U_1 = K_2 + U_2$ ⟹ 29,0 J = m g y2</li><li>y2 = 29,0 J / (0,145 kg × 9,80 m/s²) = <strong>20,4 m</strong></li></ul>
             </div>
             <div class="card" style="border-left-color: #059669;">
               <h3 style="color: #059669;">Formulação Algébrica Elegante</h3>
@@ -722,7 +732,7 @@
         <div class="cards-grid">
             <div class="card" style="border-left-color: #ec4899;">
               <h3 style="color: #ec4899;">O Mecanismo da Corrida</h3>
-              <ul><li>• O tendão de Aquiles une a parte de trás do tornozelo ao osso do calcanhar.</li><li>• Ao pisar no chão durante a corrida, o tendão se estica, absorvendo o impacto do corpo.</li><li>• Esse estiramento armazena Energia Potencial Elástica: <strong>U_el = ½ k x²</strong>.</li></ul>
+              <ul><li>• O tendão de Aquiles une a parte de trás do tornozelo ao osso do calcanhar.</li><li>• Ao pisar no chão durante a corrida, o tendão se estica, absorvendo o impacto do corpo.</li><li>• Esse estiramento armazena Energia Potencial Elástica: <strong>$U_{\text{el}} = \tfrac{1}{2}kx^2$</strong>.</li></ul>
             </div>
             <div class="card" style="border-left-color: #6366f1;">
               <h3 style="color: #6366f1;">Devolução de Energia de Graça</h3>
@@ -738,7 +748,7 @@
         <span class="slide-badge" style="background: #6366f1;">MOLA IDEAL</span>
       </div>
       <div class="slide-body">
-        <div class="formula-banner banner-purple">Fx = - k x  ⟹  Força Restauradora que busca sempre x = 0</div>
+        <div class="formula-banner banner-purple">$F_x = -kx$  ⟹  Força Restauradora que busca sempre x = 0</div>
         <div class="cards-grid">
             <div class="card" style="border-left-color: #0284c7;">
               <h3 style="color: #0284c7;">(a) e (b): Mola Esticando</h3>
@@ -798,7 +808,7 @@
         <span class="slide-badge" style="background: #0284c7;">GRÁFICO</span>
       </div>
       <div class="slide-body">
-        <div class="formula-banner banner-cyan">U_el = ½ k x² é sempre uma parábola com vértice em x = 0!</div>
+        <div class="formula-banner banner-cyan">$U_{\text{el}} = \tfrac{1}{2}kx^2$ é sempre uma parábola com vértice em x = 0!</div>
         <div class="cards-grid">
             <div class="card" style="border-left-color: #0284c7;">
               <h3 style="color: #0284c7;">Simetria Perfeita</h3>
@@ -902,11 +912,11 @@
         <div class="cards-grid-3">
             <div class="card" style="border-left-color: #059669;">
               <h3 style="color: #059669;">1. Conservativo</h3>
-              <ul><li>• Apenas peso e mola atuam.</li><li>• E = K + U = constante.</li><li>• <strong>K1 + U1 = K2 + U2</strong></li><li>• Reversibilidade total!</li></ul>
+              <ul><li>• Apenas peso e mola atuam.</li><li>• E = K + U = constante.</li><li>• <strong>$K_1 + U_1 = K_2 + U_2$</strong></li><li>• Reversibilidade total!</li></ul>
             </div>
             <div class="card" style="border-left-color: #d97706;">
               <h3 style="color: #d97706;">2. Dissipativo</h3>
-              <ul><li>• Há atrito ou resistência do ar.</li><li>• <strong>W_outra = ΔEM</strong></li><li>• A energia mecânica total diminui.</li></ul>
+              <ul><li>• Há atrito ou resistência do ar.</li><li>• <strong>$W_{\text{outra}} = \Delta E_M$</strong></li><li>• A energia mecânica total diminui.</li></ul>
             </div>
             <div class="card" style="border-left-color: #dc2626;">
               <h3 style="color: #dc2626;">3. Lei Geral</h3>
@@ -1042,15 +1052,15 @@
         <span class="slide-badge" style="background: #6366f1;">CÁLCULO</span>
       </div>
       <div class="slide-body">
-        <div class="formula-banner banner-purple">Fx = - dU/dx  ⟹  A força aponta sempre para onde a energia potencial diminui!</div>
+        <div class="formula-banner banner-purple">$F_x = -\dfrac{dU}{dx}$  ⟹  A força aponta sempre para onde a energia potencial diminui!</div>
         <div class="cards-grid">
             <div class="card" style="border-left-color: #0284c7;">
               <h3 style="color: #0284c7;">Caso 1: Mola Ideal</h3>
-              <ul><li>• U_el = ½ k x²</li><li>• Fx = - dU/dx = - d/dx (½ k x²) = <strong>- k x</strong></li><li>• Para x > 0: Fx < 0 (empurra de volta para zero).</li><li>• Para x < 0: Fx > 0 (empurra de volta para zero).</li><li>• O ponto x = 0 é de energia mínima e equilíbrio estável!</li></ul>
+              <ul><li>• $U_{\text{el}} = \tfrac{1}{2}kx^2$</li><li>• $F_x = -\dfrac{dU}{dx}$ = - d/dx (½ k x²) = <strong>- k x</strong></li><li>• Para x > 0: Fx < 0 (empurra de volta para zero).</li><li>• Para x < 0: Fx > 0 (empurra de volta para zero).</li><li>• O ponto x = 0 é de energia mínima e equilíbrio estável!</li></ul>
             </div>
             <div class="card" style="border-left-color: #059669;">
               <h3 style="color: #059669;">Caso 2: Força Gravitacional</h3>
-              <ul><li>• U_grav = m g y</li><li>• Fy = - dU/dy = - d/dy (m g y) = <strong>- m g</strong></li><li>• Para qualquer altitude y: Fy = - mg (aponta sempre para baixo).</li><li>• A força gravitacional empurra sempre na direção que diminui a energia potencial!</li></ul>
+              <ul><li>• $U_{\text{grav}} = mgy$</li><li>• Fy = - dU/dy = - d/dy (m g y) = <strong>- m g</strong></li><li>• Para qualquer altitude y: Fy = - mg (aponta sempre para baixo).</li><li>• A força gravitacional empurra sempre na direção que diminui a energia potencial!</li></ul>
             </div></div>
       </div>
     </div>
@@ -1066,7 +1076,7 @@
         <div class="cards-grid">
             <div class="card" style="border-left-color: #059669;">
               <h3 style="color: #059669;">Fórmulas Fundamentais</h3>
-              <ul><li>1. <strong>Energia Mecânica:</strong> EM = K + U</li><li>2. <strong>Conservação Pura:</strong> K1 + U1 = K2 + U2</li><li>3. <strong>Sistemas com Dissipação:</strong> W_outra = ΔEM</li><li>4. <strong>Gravitacional:</strong> U_grav = m g y</li><li>5. <strong>Elástica:</strong> U_el = ½ k x²</li><li>6. <strong>Força e Potencial:</strong> Fx = - dU/dx</li></ul>
+              <ul><li>1. <strong>Energia Mecânica:</strong> $E_M = K + U$</li><li>2. <strong>Conservação Pura:</strong> $K_1 + U_1 = K_2 + U_2$</li><li>3. <strong>Sistemas com Dissipação:</strong> $W_{\text{outra}} = \Delta E_M$</li><li>4. <strong>Gravitacional:</strong> $U_{\text{grav}} = mgy$</li><li>5. <strong>Elástica:</strong> $U_{\text{el}} = \tfrac{1}{2}kx^2$</li><li>6. <strong>Força e Potencial:</strong> $F_x = -\dfrac{dU}{dx}$</li></ul>
             </div>
             <div class="card" style="border-left-color: #6366f1;">
               <h3 style="color: #6366f1;">Todos os 11 Exemplos Concluídos!</h3>
