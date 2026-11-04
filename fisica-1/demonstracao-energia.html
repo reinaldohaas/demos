@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demonstração Interativa: E = K + U (Gravitacional e Massa-Mola) | FSC5101 Física I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --font-scale: 1.0;
+      --bg-dark: #070a14;
+      --bg-panel: rgba(15, 23, 42, 0.94);
+      --bg-card: rgba(30, 41, 59, 0.85);
+      --border-glow: rgba(56, 189, 248, 0.35);
+      --accent-cyan: #38bdf8;
+      --accent-gold: #fbbf24;
+      --accent-green: #22c55e;
+      --accent-blue: #3b82f6;
+      --accent-red: #ef4444;
+      --accent-purple: #a855f7;
+      --accent-orange: #f97316;
+      --text-main: #f8fafc;
+      --text-sub: #cbd5e1;
+      --font-outfit: 'Outfit', sans-serif;
+      --font-inter: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-inter);
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.16) 0%, transparent 40%);
+      background-attachment: fixed;
+      padding: 24px 20px;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    /* Top Navigation */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-glow);
+      color: var(--accent-cyan);
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent-cyan);
+      color: #020617;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
+    }
+
+    /* Header Banner */
+    .header-banner {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.18) 0%, rgba(168, 85, 247, 0.18) 100%);
+      border: 2px solid var(--border-glow);
+      border-radius: 20px;
+      padding: 28px 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-badge {
+      display: inline-block;
+      background: linear-gradient(90deg, #f59e0b, #ef4444);
+      color: #ffffff;
+      font-family: var(--font-outfit);
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+    }
+
+    .header-banner h1 {
+      font-family: var(--font-outfit);
+      font-size: 38px;
+      font-weight: 900;
+      background: linear-gradient(90deg, #38bdf8, #a855f7, #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
+
+    .header-banner p {
+      font-size: 21px;
+      color: var(--text-sub);
+      line-height: 1.6;
+      max-width: 1100px;
+    }
+
+    /* System Tabs & Mode Selector */
+    .controls-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+      background: var(--bg-panel);
+      padding: 16px 20px;
+      border-radius: 16px;
+      border: 1px solid var(--border-glow);
+    }
+
+    .system-tabs {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      font-family: var(--font-outfit);
+      font-size: 21px;
+      font-weight: 800;
+      padding: 12px 26px;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      background: rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
+      color: #ffffff;
+      border-color: #38bdf8;
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.35);
+    }
+
+    .mode-switch-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mode-label {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent-gold);
+    }
+
+    .toggle-switch-btn {
+      font-family: var(--font-outfit);
+      font-size: 19px;
+      font-weight: 800;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .toggle-switch-btn.conservative {
+      background: #10b981;
+      color: #022c22;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+    }
+
+    .toggle-switch-btn.dissipative {
+      background: #ef4444;
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+    }
+
+    /* Main Grid Layout */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 440px;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 1100px) {
+      .main-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Canvas Stage Area */
+    .stage-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-glow);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .stage-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .stage-title {
+      font-family: var(--font-outfit);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+    }
+
+    .stage-badge {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent-gold);
+    }
+
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      height: 480px;
+      background: #090d1a;
+      border-radius: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      cursor: grab;
+    }
+
+    .canvas-container:active {
+      cursor: grabbing;
+    }
+
+    #simCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Overlay Help / Drag Hint */
+    .canvas-hint {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #38bdf8;
+      pointer-events: none;
+      backdrop-filter: blur(4px);
+    }
+
+    /* Animation & Control Buttons Bar */
+    .sim-controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .action-btn {
+      font-family: var(--font-outfit);
+      font-size: 20px;
+      font-weight: 800;
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-play {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-play:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    .btn-reset {
+      background: rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-reset:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
+
+    .btn-voice {
+      background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+      margin-left: auto;
+    }
+
+    .btn-voice:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+    }
+
+    /* Side Panel: Bars and Numerical Meters */
+    .side-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-glow);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+
+    .panel-title {
+      font-family: var(--font-outfit);
+      font-size: 23px;
+      font-weight: 800;
+      color: var(--accent-gold);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Live Energy Vertical/Horizontal Bars */
+    .bars-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .bar-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .bar-label-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .bar-track {
+      height: 24px;
+      background: #111827;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 0.05s linear;
+      position: relative;
+    }
+
+    .bar-fill-k {
+      background: linear-gradient(90deg, #10b981, #34d399);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    .bar-fill-u {
+      background: linear-gradient(90deg, #0284c7, #38bdf8);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    }
+
+    .bar-fill-w {
+      background: linear-gradient(90deg, #dc2626, #f87171);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    }
+
+    .bar-fill-emec {
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    }
+
+    .bar-fill-etot {
+      background: linear-gradient(90deg, #9333ea, #c084fc);
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+    }
+
+    /* Equation Live Display Box */
+    .equation-box {
+      background: rgba(10, 16, 30, 0.95);
+      border: 2px solid rgba(56, 189, 248, 0.4);
+      border-radius: 14px;
+      padding: 18px;
+      font-family: var(--font-mono);
+      font-size: 21px;
+      line-height: 1.6;
+    }
+
+    .eq-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 6px 0;
+    }
+
+    .eq-row:last-child {
+      border-bottom: none;
+      padding-top: 10px;
+      font-weight: 800;
+    }
+
+    .eq-name { color: #94a3b8; }
+    .eq-val { font-weight: 700; color: #f8fafc; }
+
+    /* Sliders and Configuration */
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .slider-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text-sub);
+    }
+
+    .slider-label span:last-child {
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 10px;
+      background: #1e293b;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+      border: 2px solid #ffffff;
+      transition: transform 0.1s;
+    }
+
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    /* History Time Graph Card */
+    .history-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-glow);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      margin-bottom: 24px;
+    }
+
+    .graph-canvas-container {
+      width: 100%;
+      height: 240px;
+      background: #090d1a;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+    }
+
+    #graphCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .graph-legend {
+      display: flex;
+      gap: 20px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .legend-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+    }
+
+    /* Educational Theory Section */
+    .theory-section {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-glow);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 30px;
+    }
+
+    .theory-section h2 {
+      font-family: var(--font-outfit);
+      font-size: 32px;
+      color: var(--accent-gold);
+      margin-bottom: 20px;
+    }
+
+    .theory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 24px;
+    }
+
+    .theory-box {
+      background: var(--bg-card);
+      border-left: 6px solid var(--accent-cyan);
+      border-radius: 14px;
+      padding: 24px;
+    }
+
+    .theory-box.dissipative {
+      border-left-color: var(--accent-red);
+    }
+
+    .theory-box h3 {
+      font-family: var(--font-outfit);
+      font-size: 24px;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+
+    .theory-box p {
+      font-size: 20px;
+      color: var(--text-sub);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .theory-formula {
+      background: rgba(0,0,0,0.4);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 21px;
+      color: var(--accent-gold);
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div style="display: flex; gap: 12px; align-items: center;">
+        <a href="index.html" class="nav-btn">← Catálogo Capítulo 7</a>
+        <a href="apresentacao.html" class="nav-btn" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.4);">⚡ Apresentação (42 Slides)</a>
+      </div>
+
+      <!-- ZOOM DE FONTE EM TEMPO REAL -->
+      <div style="display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); padding: 6px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);">
+        <span style="font-size: 19px; font-weight: 700; color: #38bdf8;">🔍 Fonte:</span>
+        <button onclick="changeFontSize(-0.1)" style="padding: 6px 12px; font-size: 18px; font-weight: 800; background: #334155; color: white; border: none; border-radius: 8px; cursor: pointer;">A-</button>
+        <span id="font-scale-indicator" style="font-size: 19px; font-weight: 800; min-width: 55px; text-align: center; color: #fbbf24;">100%</span>
+        <button onclick="changeFontSize(0.1)" style="padding: 6px 12px; font-size: 18px; font-weight: 800; background: #334155; color: white; border: none; border-radius: 8px; cursor: pointer;">A+</button>
+        <button onclick="resetFontSize()" style="padding: 6px 12px; font-size: 16px; font-weight: 700; background: #1e293b; color: #cbd5e1; border: none; border-radius: 8px; cursor: pointer;">100%</button>
+      </div>
+    </div>
+
+    <!-- Header Banner -->
+    <div class="header-banner">
+      <span class="header-badge">LABORATÓRIO INTERATIVO • TEORIA & DEMONSTRAÇÃO</span>
+      <h1>Conservação e Dissipação da Energia: $E = K + U$</h1>
+      <p>
+        Compare em tempo real as transformações energéticas entre <strong>Energia Cinética ($K$)</strong> e <strong>Energia Potencial ($U$)</strong> nos dois pilares da Mecânica Clássica: <strong>Gravitacional ($U_g = mgy$)</strong> e <strong>Massa-Mola Elástico ($U_{el} = \frac{1}{2}kx^2$)</strong>, tanto no regime <strong>Conservativo (Sem Atrito)</strong> quanto no regime <strong>Dissipativo (Com Atrito / Amortecimento)</strong>.
+      </p>
+    </div>
+
+    <!-- System Selector & Mode Selector -->
+    <div class="controls-header">
+      <div class="system-tabs">
+        <button class="tab-btn active" id="tabGrav" onclick="selectSystem('grav')">
+          <span>🛹</span> 1. Sistema Gravitacional (Rampa Curva)
+        </button>
+        <button class="tab-btn" id="tabSpring" onclick="selectSystem('spring')">
+          <span>🌀</span> 2. Sistema Massa-Mola (Oscilador Elástico)
+        </button>
+      </div>
+
+      <div class="mode-switch-group">
+        <span class="mode-label">Regime:</span>
+        <button class="toggle-switch-btn conservative" id="btnToggleMode" onclick="toggleFrictionMode()">
+          🟢 Sem Atrito (Conservativo)
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Workspace Grid -->
+    <div class="main-grid">
+      <!-- Left: Simulation Canvas -->
+      <div class="stage-card">
+        <div class="stage-header">
+          <div class="stage-title" id="stageTitle">🛹 Rampa Gravitacional em U</div>
+          <div class="stage-badge" id="systemStateBadge">ESTADO: CONSERVATIVO (E = CONSTANTE)</div>
+        </div>
+
+        <div class="canvas-container" id="canvasBox">
+          <div class="canvas-hint">🖐️ Clique e arraste o corpo para mudar a posição inicial</div>
+          <canvas id="simCanvas"></canvas>
+        </div>
+
+        <!-- Animation Controls Bar -->
+        <div class="sim-controls-bar">
+          <button class="action-btn btn-play" id="btnPlayPause" onclick="togglePlayPause()">
+            ⏸️ Pausar
+          </button>
+          <button class="action-btn btn-reset" onclick="resetSimulation()">
+            🔄 Reiniciar Posição
+          </button>
+          <button class="action-btn btn-reset" onclick="stepSimulation()">
+            ⏭️ Passo a Passo
+          </button>
+          <button class="action-btn btn-voice" id="btnVoice" onclick="speakExplanation()">
+            🔊 Ouvir Explicação da Física
+          </button>
+        </div>
+      </div>
+
+      <!-- Right: Live Energy Bars & Equations -->
+      <div class="side-panel">
+        <!-- Live Bars Card -->
+        <div class="card-panel">
+          <div class="panel-title">
+            <span>⚡ Barras de Energia em Tempo Real</span>
+          </div>
+
+          <div class="bars-container">
+            <!-- K Bar -->
+            <div class="bar-row">
+              <div class="bar-label-line">
+                <span style="color: #34d399;">Cinética $K = \frac{1}{2}mv^2$</span>
+                <span id="labelKVal" style="color: #34d399; font-family: var(--font-mono);">0,00 J</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill-k" id="barK" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- U Bar -->
+            <div class="bar-row">
+              <div class="bar-label-line">
+                <span id="labelUTitle" style="color: #38bdf8;">Potencial Gravitacional $U_g = mgy$</span>
+                <span id="labelUVal" style="color: #38bdf8; font-family: var(--font-mono);">0,00 J</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill-u" id="barU" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <!-- Thermal Energy Bar (Dissipated by Friction) -->
+            <div class="bar-row" id="rowThermal" style="display: none;">
+              <div class="bar-label-line">
+                <span style="color: #f87171;">Energia Térmica (Atrito) $E_{\text{térmica}}$</span>
+                <span id="labelEthVal" style="color: #f87171; font-family: var(--font-mono);">0,00 J</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill-w" id="barEth" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- Mechanical Energy Bar -->
+            <div class="bar-row">
+              <div class="bar-label-line">
+                <span style="color: #fbbf24;">Energia Mecânica $E_{\text{mec}} = K + U$</span>
+                <span id="labelEmecVal" style="color: #fbbf24; font-family: var(--font-mono);">0,00 J</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill-emec" id="barEmec" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <!-- Total System Energy Bar -->
+            <div class="bar-row">
+              <div class="bar-label-line">
+                <span style="color: #c084fc;">Energia Total $E_{\text{tot}} = E_{\text{mec}} + E_{\text{térm}}$</span>
+                <span id="labelEtotVal" style="color: #c084fc; font-family: var(--font-mono);">0,00 J</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill-etot" id="barEtot" style="width: 100%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Equation Box -->
+          <div class="equation-box">
+            <div class="eq-row">
+              <span class="eq-name">Posição ($y$ ou $x$):</span>
+              <span class="eq-val" id="valPos">0,00 m</span>
+            </div>
+            <div class="eq-row">
+              <span class="eq-name">Velocidade escalar ($v$):</span>
+              <span class="eq-val" id="valVel">0,00 m/s</span>
+            </div>
+            <div class="eq-row">
+              <span class="eq-name">Aceleração instantânea ($a$):</span>
+              <span class="eq-val" id="valAcc">0,00 m/s²</span>
+            </div>
+            <div class="eq-row">
+              <span class="eq-name" id="eqLawName">Teorema da Conservação:</span>
+              <span class="eq-val" id="valLaw" style="color: #10b981;">$\Delta E_M = 0$</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Parameters Sliders Card -->
+        <div class="card-panel">
+          <div class="panel-title">
+            <span>⚙️ Parâmetros Físicos</span>
+          </div>
+
+          <div class="slider-group">
+            <!-- Parameter 1 (massa) -->
+            <div class="slider-item">
+              <div class="slider-label">
+                <span>Massa do Corpo ($m$):</span>
+                <span id="dispMass">2,0 kg</span>
+              </div>
+              <input type="range" id="slMass" min="0.5" max="10.0" step="0.5" value="2.0" oninput="updateSliders()">
+            </div>
+
+            <!-- Parameter 2 (Gravidade g ou Constante da mola k) -->
+            <div class="slider-item" id="boxParam2">
+              <div class="slider-label">
+                <span id="nameParam2">Aceleração da Gravidade ($g$):</span>
+                <span id="dispParam2">9,8 m/s²</span>
+              </div>
+              <input type="range" id="slParam2" min="1.0" max="25.0" step="0.5" value="9.8" oninput="updateSliders()">
+            </div>
+
+            <!-- Parameter 3 (Atrito / Amortecimento) -->
+            <div class="slider-item" id="boxFrictionSlider" style="display: none;">
+              <div class="slider-label">
+                <span id="nameFriction">Coeficiente de Atrito ($\mu_k$):</span>
+                <span id="dispFriction">0,15</span>
+              </div>
+              <input type="range" id="slFriction" min="0.01" max="0.50" step="0.01" value="0.15" oninput="updateSliders()">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Graph: K(t), U(t), E(t) -->
+    <div class="history-card">
+      <div class="stage-header">
+        <div class="stage-title">📈 Evolução Temporal das Energias: $K(t)$, $U(t)$ e $E_{\text{mec}}(t)$</div>
+      </div>
+      <div class="graph-canvas-container">
+        <canvas id="graphCanvas"></canvas>
+      </div>
+      <div class="graph-legend">
+        <div class="legend-item"><div class="legend-dot" style="background: #22c55e;"></div><span>Verde: Energia Cinética $K(t)$</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background: #38bdf8;"></div><span>Azul: Energia Potencial $U(t)$</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background: #fbbf24;"></div><span>Dourado: Energia Mecânica $E_{\text{mec}}(t) = K + U$</span></div>
+        <div class="legend-item" id="legEth" style="display: none;"><div class="legend-dot" style="background: #ef4444;"></div><span>Vermelho: Energia Térmica Dissipada $E_{\text{term}}(t)$</span></div>
+      </div>
+    </div>
+
+    <!-- Theoretical Explanation & Direct Comparison -->
+    <div class="theory-section">
+      <h2>📘 Fundamentos Teóricos: Conservação vs. Dissipação</h2>
+      <div class="theory-grid">
+        <div class="theory-box">
+          <h3>1. Regime Conservativo (Sem Atrito)</h3>
+          <p>
+            Quando apenas forças conservativas (gravidade ou força elástica da mola) realizam trabalho, o trabalho de outras forças é estritamente nulo:
+          </p>
+          <div class="theory-formula">$$W_{\text{outras}} = 0 \implies \Delta K + \Delta U = 0 \implies E = K + U = \text{constante}$$</div>
+          <p>
+            A energia cinética e a energia potencial trocam de papel continuamente. A energia mecânica total permanece 100% inalterada ao longo do tempo.
+          </p>
+        </div>
+
+        <div class="theory-box dissipative">
+          <h3>2. Regime Dissipativo (Com Atrito / Amortecimento)</h3>
+          <p>
+            O atrito realiza trabalho negativo ($W_{\text{atrito}} < 0$), retirando energia mecânica do sistema e transformando-a irreversivelmente em calor:
+          </p>
+          <div class="theory-formula">$$W_{\text{atrito}} = \Delta E_{\text{mec}} \implies E_{\text{mec}}(t) = E_0 - E_{\text{térmica}}$$</div>
+          <p>
+            A energia mecânica diminui até o repouso. No entanto, a <strong>Energia Total do Universo</strong> ($E_{\text{tot}} = K + U + E_{\text{térmica}}$) é rigorosamente conservada!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- ESTADO GLOBAL DA SIMULAÇÃO ---
+    
+    // Zoom dinâmico de fonte
+    let fontScale = 1.0;
+    function changeFontSize(delta) {
+      fontScale = Math.max(0.8, Math.min(1.8, Math.round((fontScale + delta) * 10) / 10));
+      document.documentElement.style.setProperty('--font-scale', fontScale);
+      document.getElementById('font-scale-indicator').innerText = Math.round(fontScale * 100) + '%';
+    }
+    function resetFontSize() {
+      fontScale = 1.0;
+      document.documentElement.style.setProperty('--font-scale', fontScale);
+      document.getElementById('font-scale-indicator').innerText = '100%';
+    }
+
+    let currentSystem = 'grav';     // 'grav' ou 'spring'
+    let frictionEnabled = false;   // false = sem atrito, true = com atrito
+    let isPlaying = true;
+    let isDragging = false;
+
+    // Constantes e Parâmetros Físicos
+    let mass = 2.0;          // kg
+    let gravity = 9.8;       // m/s^2 (para gravidade)
+    let springK = 25.0;      // N/m (para mola)
+    let frictionCoeff = 0.15;// mu para atrito
+
+    // Variáveis Dinâmicas
+    // Sistema Gravitacional: Rampa parabólica y(x) = C * x^2
+    const rampWidth = 6.0;   // de x = -3m a +3m
+    const rampHeight = 3.0;  // altura máxima 3m
+    const C_curve = rampHeight / Math.pow(rampWidth / 2, 2); // y = C * x^2 => 3.0 / 9 = 0.3333
+
+    let simX = -2.5;         // posição x atual (m)
+    let simV = 0.0;          // velocidade tangencial / linear (m/s)
+    let simEth = 0.0;        // Energia térmica dissipada acumulada (J)
+    let initialTotalE = 0.0; // Energia total inicial para referência
+
+    // Histórico para o gráfico de linhas (últimos 300 quadros)
+    let historyData = [];
+    const maxHistory = 300;
+
+    // Canvas elements & context
+    const simCanvas = document.getElementById('simCanvas');
+    const simCtx = simCanvas.getContext('2d');
+    const graphCanvas = document.getElementById('graphCanvas');
+    const graphCtx = graphCanvas.getContext('2d');
+
+    // Dimensionamento responsivo
+    function resizeCanvases() {
+      const box = document.getElementById('canvasBox');
+      simCanvas.width = box.clientWidth;
+      simCanvas.height = box.clientHeight;
+
+      const gBox = graphCanvas.parentElement;
+      graphCanvas.width = gBox.clientWidth;
+      graphCanvas.height = gBox.clientHeight;
+    }
+    window.addEventListener('resize', () => {
+      resizeCanvases();
+      drawSimulation();
+      drawGraph();
+    });
+
+    // --- SELEÇÃO DE SISTEMA ---
+    function selectSystem(sys) {
+      currentSystem = sys;
+      document.getElementById('tabGrav').classList.toggle('active', sys === 'grav');
+      document.getElementById('tabSpring').classList.toggle('active', sys === 'spring');
+
+      if (sys === 'grav') {
+        document.getElementById('stageTitle').innerHTML = '🛹 Rampa Gravitacional em U';
+        document.getElementById('labelUTitle').innerHTML = 'Potencial Gravitacional $U_g = mgy$';
+        document.getElementById('nameParam2').innerHTML = 'Aceleração da Gravidade ($g$):';
+        document.getElementById('dispParam2').innerHTML = gravity.toFixed(1) + ' m/s²';
+        document.getElementById('slParam2').min = "1.0";
+        document.getElementById('slParam2').max = "25.0";
+        document.getElementById('slParam2').value = gravity;
+        document.getElementById('nameFriction').innerHTML = 'Coeficiente de Atrito da Rampa ($\\mu_k$):';
+        simX = -2.5;
+        simV = 0.0;
+      } else {
+        document.getElementById('stageTitle').innerHTML = '🌀 Oscilador Massa-Mola Horizontal';
+        document.getElementById('labelUTitle').innerHTML = 'Potencial Elástico $U_{el} = \\frac{1}{2}kx^2$';
+        document.getElementById('nameParam2').innerHTML = 'Constante Elástica da Mola ($k$):';
+        document.getElementById('dispParam2').innerHTML = springK.toFixed(1) + ' N/m';
+        document.getElementById('slParam2').min = "5.0";
+        document.getElementById('slParam2').max = "80.0";
+        document.getElementById('slParam2').value = springK;
+        document.getElementById('nameFriction').innerHTML = 'Coeficiente de Amortecimento / Atrito ($\\mu_k$):';
+        simX = 1.8; // amplitude inicial 1.8m
+        simV = 0.0;
+      }
+
+      simEth = 0.0;
+      historyData = [];
+      calcInitialEnergy();
+      if (window.MathJax) MathJax.typesetPromise();
+      updateMeters();
+      drawSimulation();
+      drawGraph();
+    }
+
+    // --- ALTERNAR MODO COM/SEM ATRITO ---
+    function toggleFrictionMode() {
+      frictionEnabled = !frictionEnabled;
+      const btn = document.getElementById('btnToggleMode');
+      const badge = document.getElementById('systemStateBadge');
+      const rowEth = document.getElementById('rowThermal');
+      const legEth = document.getElementById('legEth');
+      const boxFriction = document.getElementById('boxFrictionSlider');
+
+      if (frictionEnabled) {
+        btn.className = 'toggle-switch-btn dissipative';
+        btn.innerHTML = '🔴 Com Atrito (Dissipativo)';
+        badge.innerHTML = 'ESTADO: DISSIPATIVO (W_atrito = ΔE_M < 0)';
+        badge.style.color = '#ef4444';
+        badge.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+        badge.style.background = 'rgba(239, 68, 68, 0.15)';
+        rowEth.style.display = 'flex';
+        legEth.style.display = 'flex';
+        boxFriction.style.display = 'flex';
+        document.getElementById('eqLawName').innerHTML = 'Trabalho Dissipativo:';
+        document.getElementById('valLaw').style.color = '#ef4444';
+      } else {
+        btn.className = 'toggle-switch-btn conservative';
+        btn.innerHTML = '🟢 Sem Atrito (Conservativo)';
+        badge.innerHTML = 'ESTADO: CONSERVATIVO (E = CONSTANTE)';
+        badge.style.color = '#fbbf24';
+        badge.style.borderColor = 'rgba(56, 189, 248, 0.3)';
+        badge.style.background = 'rgba(56, 189, 248, 0.15)';
+        rowEth.style.display = 'none';
+        legEth.style.display = 'none';
+        boxFriction.style.display = 'none';
+        document.getElementById('eqLawName').innerHTML = 'Teorema da Conservação:';
+        document.getElementById('valLaw').style.color = '#10b981';
+        simEth = 0.0;
+      }
+      calcInitialEnergy();
+      updateMeters();
+    }
+
+    // Atualização dos Sliders
+    function updateSliders() {
+      mass = parseFloat(document.getElementById('slMass').value);
+      document.getElementById('dispMass').innerHTML = mass.toFixed(1) + ' kg';
+
+      const val2 = parseFloat(document.getElementById('slParam2').value);
+      if (currentSystem === 'grav') {
+        gravity = val2;
+        document.getElementById('dispParam2').innerHTML = gravity.toFixed(1) + ' m/s²';
+      } else {
+        springK = val2;
+        document.getElementById('dispParam2').innerHTML = springK.toFixed(1) + ' N/m';
+      }
+
+      frictionCoeff = parseFloat(document.getElementById('slFriction').value);
+      document.getElementById('dispFriction').innerHTML = frictionCoeff.toFixed(2);
+
+      calcInitialEnergy();
+    }
+
+    // Calcular energia inicial de referência
+    function calcInitialEnergy() {
+      let U0 = 0.0;
+      if (currentSystem === 'grav') {
+        const y = C_curve * simX * simX;
+        U0 = mass * gravity * y;
+      } else {
+        U0 = 0.5 * springK * simX * simX;
+      }
+      const K0 = 0.5 * mass * simV * simV;
+      initialTotalE = Math.max(0.1, K0 + U0 + simEth);
+    }
+
+    // --- INTEGRADOR FÍSICO (VELOCITY VERLET) ---
+    // Garante conservação simplética rigorosa da energia sem acúmulo de erro numérico
+    function getAcceleration(x, v) {
+      if (currentSystem === 'grav') {
+        // y(x) = C * x^2 => dy/dx = 2Cx.
+        // Inclinação da curva: theta = atan(2Cx)
+        // Força tangencial da gravidade: F_tang = - m * g * sin(theta)
+        // Normal: N = m * g * cos(theta) + m * v^2 / R (centrípeta)
+        const slope = 2 * C_curve * x;
+        const theta = Math.atan(slope);
+        const cosTheta = Math.cos(theta);
+        const sinTheta = Math.sin(theta);
+
+        let a_tang = - gravity * sinTheta;
+
+        // Atrito cinético ao longo da rampa
+        if (frictionEnabled && Math.abs(v) > 0.001) {
+          const N = mass * gravity * cosTheta;
+          const f_atrito = frictionCoeff * N;
+          const a_friction = - Math.sign(v) * (f_atrito / mass);
+          a_tang += a_friction;
+        }
+        return { a: a_tang, theta: theta };
+      } else {
+        // Massa-Mola: F_el = - k * x
+        let F = - springK * x;
+        if (frictionEnabled && Math.abs(v) > 0.001) {
+          // Atrito seco F_atrito = mu * m * g
+          const f_atrito = frictionCoeff * mass * 9.8;
+          F += - Math.sign(v) * f_atrito;
+        }
+        return { a: F / mass, theta: 0 };
+      }
+    }
+
+    function physicsStep(dt) {
+      if (isDragging) return;
+
+      // Se atrito estiver ativado e velocidade for minúscula perto do equilíbrio, frear para repouso
+      if (frictionEnabled && Math.abs(simV) < 0.02) {
+        if (currentSystem === 'grav') {
+          const slope = 2 * C_curve * simX;
+          const sinTheta = Math.sin(Math.atan(slope));
+          const maxStaticFriction = frictionCoeff * Math.cos(Math.atan(slope));
+          if (Math.abs(sinTheta) < maxStaticFriction) {
+            simV = 0;
+            return;
+          }
+        } else {
+          const maxStaticSpring = frictionCoeff * mass * 9.8;
+          if (Math.abs(springK * simX) < maxStaticSpring) {
+            simV = 0;
+            return;
+          }
+        }
+      }
+
+      // Velocity Verlet Step
+      const { a: a1 } = getAcceleration(simX, simV);
+      simX += simV * dt + 0.5 * a1 * dt * dt;
+
+      // Limites da rampa ou do trilho
+      if (currentSystem === 'grav') {
+        const xLimit = rampWidth / 2 - 0.1;
+        if (simX > xLimit) { simX = xLimit; simV = -Math.abs(simV) * 0.7; }
+        if (simX < -xLimit) { simX = -xLimit; simV = Math.abs(simV) * 0.7; }
+      } else {
+        const xLimit = 2.4;
+        if (simX > xLimit) { simX = xLimit; simV = -Math.abs(simV) * 0.7; }
+        if (simX < -xLimit) { simX = -xLimit; simV = Math.abs(simV) * 0.7; }
+      }
+
+      const { a: a2 } = getAcceleration(simX, simV);
+      const prevV = simV;
+      simV += 0.5 * (a1 + a2) * dt;
+
+      // Acumular energia térmica dissipada pelo atrito
+      if (frictionEnabled) {
+        let dDissipated = 0.0;
+        if (currentSystem === 'grav') {
+          const slope = 2 * C_curve * simX;
+          const cosTheta = Math.cos(Math.atan(slope));
+          const N = mass * gravity * cosTheta;
+          const f_atrito = frictionCoeff * N;
+          dDissipated = f_atrito * Math.abs(prevV) * dt;
+        } else {
+          const f_atrito = frictionCoeff * mass * 9.8;
+          dDissipated = f_atrito * Math.abs(prevV) * dt;
+        }
+        simEth += dDissipated;
+      }
+    }
+
+    // --- ATUALIZAÇÃO DOS MEDIDORES E BARRAS ---
+    function updateMeters() {
+      let U = 0.0;
+      let posStr = '';
+      if (currentSystem === 'grav') {
+        const y = C_curve * simX * simX;
+        U = mass * gravity * y;
+        posStr = `x = ${simX.toFixed(2)} m, y = ${y.toFixed(2)} m`;
+      } else {
+        U = 0.5 * springK * simX * simX;
+        posStr = `x = ${simX.toFixed(2)} m`;
+      }
+
+      const K = 0.5 * mass * simV * simV;
+      const Emec = K + U;
+      const Etot = Emec + (frictionEnabled ? simEth : 0.0);
+
+      // Normalização das barras
+      const maxE = Math.max(initialTotalE, Etot, 0.5);
+
+      const pctK = Math.min(100, Math.max(0, (K / maxE) * 100));
+      const pctU = Math.min(100, Math.max(0, (U / maxE) * 100));
+      const pctEth = Math.min(100, Math.max(0, (simEth / maxE) * 100));
+      const pctEmec = Math.min(100, Math.max(0, (Emec / maxE) * 100));
+      const pctEtot = Math.min(100, Math.max(0, (Etot / maxE) * 100));
+
+      document.getElementById('barK').style.width = pctK + '%';
+      document.getElementById('barU').style.width = pctU + '%';
+      document.getElementById('barEth').style.width = pctEth + '%';
+      document.getElementById('barEmec').style.width = pctEmec + '%';
+      document.getElementById('barEtot').style.width = pctEtot + '%';
+
+      document.getElementById('labelKVal').innerText = K.toFixed(2) + ' J';
+      document.getElementById('labelUVal').innerText = U.toFixed(2) + ' J';
+      document.getElementById('labelEthVal').innerText = simEth.toFixed(2) + ' J';
+      document.getElementById('labelEmecVal').innerText = Emec.toFixed(2) + ' J';
+      document.getElementById('labelEtotVal').innerText = Etot.toFixed(2) + ' J';
+
+      document.getElementById('valPos').innerText = posStr;
+      document.getElementById('valVel').innerText = simV.toFixed(2) + ' m/s';
+
+      const { a } = getAcceleration(simX, simV);
+      document.getElementById('valAcc').innerText = a.toFixed(2) + ' m/s²';
+
+      if (frictionEnabled) {
+        document.getElementById('valLaw').innerText = `W_atrito = -${simEth.toFixed(2)} J`;
+      } else {
+        document.getElementById('valLaw').innerText = `E = ${Emec.toFixed(2)} J (Cte)`;
+      }
+
+      // Adicionar ponto ao histórico do gráfico
+      historyData.push({ K: K, U: U, Emec: Emec, Eth: simEth, maxE: maxE });
+      if (historyData.length > maxHistory) {
+        historyData.shift();
+      }
+    }
+
+    // --- DESENHO NO CANVAS DE SIMULAÇÃO ---
+    function drawSimulation() {
+      const W = simCanvas.width;
+      const H = simCanvas.height;
+      simCtx.clearRect(0, 0, W, H);
+
+      // Fundo em grade suave
+      simCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      simCtx.lineWidth = 1;
+      const gridSpacing = 40;
+      for (let x = 0; x < W; x += gridSpacing) {
+        simCtx.beginPath(); simCtx.moveTo(x, 0); simCtx.lineTo(x, H); simCtx.stroke();
+      }
+      for (let y = 0; y < H; y += gridSpacing) {
+        simCtx.beginPath(); simCtx.moveTo(0, y); simCtx.lineTo(W, y); simCtx.stroke();
+      }
+
+      if (currentSystem === 'grav') {
+        drawGravitationalScene(W, H);
+      } else {
+        drawSpringScene(W, H);
+      }
+    }
+
+    // Cena 1: Rampa Gravitacional
+    function drawGravitationalScene(W, H) {
+      const originX = W / 2;
+      const originY = H * 0.82;
+      const scaleX = (W * 0.75) / rampWidth;  // pixels por metro
+      const scaleY = (H * 0.65) / rampHeight; // pixels por metro
+
+      // Desenhar Pista / Solo
+      simCtx.beginPath();
+      simCtx.strokeStyle = '#38bdf8';
+      simCtx.lineWidth = 8;
+      simCtx.lineCap = 'round';
+
+      const step = 0.05;
+      for (let x = -rampWidth / 2; x <= rampWidth / 2; x += step) {
+        const y = C_curve * x * x;
+        const px = originX + x * scaleX;
+        const py = originY - y * scaleY;
+        if (x === -rampWidth / 2) simCtx.moveTo(px, py);
+        else simCtx.lineTo(px, py);
+      }
+      simCtx.stroke();
+
+      // Linha de Referência y = 0
+      simCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      simCtx.setLineDash([5, 5]);
+      simCtx.lineWidth = 2;
+      simCtx.beginPath();
+      simCtx.moveTo(originX - (rampWidth / 2) * scaleX, originY);
+      simCtx.lineTo(originX + (rampWidth / 2) * scaleX, originY);
+      simCtx.stroke();
+      simCtx.setLineDash([]);
+
+      simCtx.fillStyle = '#94a3b8';
+      simCtx.font = '16px Outfit, sans-serif';
+      simCtx.fillText('Nível de Referência: y = 0 (U_g = 0)', originX - 120, originY + 24);
+
+      // Posição do corpo
+      const curY = C_curve * simX * simX;
+      const bodyPx = originX + simX * scaleX;
+      const bodyPy = originY - curY * scaleY;
+      const bodyRadius = 24 + Math.min(10, mass * 1.5);
+
+      // Sombra
+      simCtx.beginPath();
+      simCtx.arc(bodyPx, bodyPy, bodyRadius + 4, 0, Math.PI * 2);
+      simCtx.fillStyle = 'rgba(56, 189, 248, 0.25)';
+      simCtx.fill();
+
+      // Esfera / Skatista
+      const grad = simCtx.createRadialGradient(bodyPx - 6, bodyPy - 6, 2, bodyPx, bodyPy, bodyRadius);
+      grad.addColorStop(0, '#fef08a');
+      grad.addColorStop(0.6, '#f59e0b');
+      grad.addColorStop(1, '#b45309');
+
+      simCtx.beginPath();
+      simCtx.arc(bodyPx, bodyPy, bodyRadius, 0, Math.PI * 2);
+      simCtx.fillStyle = grad;
+      simCtx.fill();
+      simCtx.lineWidth = 3;
+      simCtx.strokeStyle = '#ffffff';
+      simCtx.stroke();
+
+      // Letra m no corpo
+      simCtx.fillStyle = '#0f172a';
+      simCtx.font = 'bold 18px Outfit, sans-serif';
+      simCtx.textAlign = 'center';
+      simCtx.textBaseline = 'middle';
+      simCtx.fillText(`${mass.toFixed(1)}kg`, bodyPx, bodyPy);
+
+      // --- VETORES AMPLIADOS 2X COM LEGENDAS ---
+      const slope = 2 * C_curve * simX;
+      const theta = Math.atan(slope);
+
+      // Vetor Velocidade (Ciano)
+      if (Math.abs(simV) > 0.05) {
+        const vLen = simV * 18; // escala visual ampliada 2x
+        const vx = vLen * Math.cos(theta);
+        const vy = - vLen * Math.sin(theta);
+        drawVector(simCtx, bodyPx, bodyPy, bodyPx + vx, bodyPy + vy, '#38bdf8', `v = ${Math.abs(simV).toFixed(1)} m/s`, 4);
+      }
+
+      // Vetor Força Gravidade / Peso (Amarelo)
+      const pLen = 60;
+      drawVector(simCtx, bodyPx, bodyPy, bodyPx, bodyPy + pLen, '#fbbf24', `P = ${(mass * gravity).toFixed(0)} N`, 3);
+
+      // Vetor Força de Atrito (Vermelho) quando ativo
+      if (frictionEnabled && Math.abs(simV) > 0.05) {
+        const fLen = - Math.sign(simV) * 45;
+        const fx = fLen * Math.cos(theta);
+        const fy = - fLen * Math.sin(theta);
+        drawVector(simCtx, bodyPx, bodyPy, bodyPx + fx, bodyPy + fy, '#ef4444', 'f_atrito', 3);
+      }
+    }
+
+    // Cena 2: Sistema Massa-Mola
+    function drawSpringScene(W, H) {
+      const originX = W * 0.5;
+      const originY = H * 0.6;
+      const wallX = W * 0.12;
+      const scaleX = (W * 0.35) / 2.0; // pixels por metro
+
+      // Parede de fixação
+      simCtx.fillStyle = '#334155';
+      simCtx.fillRect(wallX - 20, originY - 100, 20, 160);
+      simCtx.strokeStyle = '#64748b';
+      simCtx.lineWidth = 4;
+      simCtx.strokeRect(wallX - 20, originY - 100, 20, 160);
+
+      // Hachuras na parede
+      simCtx.strokeStyle = 'rgba(255,255,255,0.2)';
+      simCtx.lineWidth = 2;
+      for (let y = originY - 90; y < originY + 50; y += 15) {
+        simCtx.beginPath();
+        simCtx.moveTo(wallX - 20, y);
+        simCtx.lineTo(wallX, y + 15);
+        simCtx.stroke();
+      }
+
+      // Superfície horizontal (Trilho)
+      simCtx.strokeStyle = '#94a3b8';
+      simCtx.lineWidth = 6;
+      simCtx.beginPath();
+      simCtx.moveTo(wallX - 20, originY + 40);
+      simCtx.lineTo(W * 0.95, originY + 40);
+      simCtx.stroke();
+
+      // Ponto de equilíbrio x = 0
+      simCtx.strokeStyle = 'rgba(251, 191, 36, 0.4)';
+      simCtx.setLineDash([6, 6]);
+      simCtx.lineWidth = 2;
+      simCtx.beginPath();
+      simCtx.moveTo(originX, originY - 120);
+      simCtx.lineTo(originX, originY + 70);
+      simCtx.stroke();
+      simCtx.setLineDash([]);
+
+      simCtx.fillStyle = '#fbbf24';
+      simCtx.font = '16px Outfit, sans-serif';
+      simCtx.textAlign = 'center';
+      simCtx.fillText('x = 0 (Equilíbrio / U_el = 0)', originX, originY - 130);
+
+      // Posição do bloco
+      const blockPx = originX + simX * scaleX;
+      const blockW = 70 + Math.min(20, mass * 3);
+      const blockH = 60;
+      const blockPy = originY + 40 - blockH;
+
+      // Desenhar Mola em Zig-Zag realista
+      simCtx.beginPath();
+      simCtx.strokeStyle = '#38bdf8';
+      simCtx.lineWidth = 5;
+      simCtx.lineCap = 'round';
+      simCtx.lineJoin = 'round';
+
+      const springStartX = wallX;
+      const springEndX = blockPx - blockW / 2;
+      const coils = 16;
+      const coilAmp = 20;
+
+      simCtx.moveTo(springStartX, originY + 10);
+      simCtx.lineTo(springStartX + 15, originY + 10);
+
+      const activeLength = (springEndX - (springStartX + 15)) - 15;
+      for (let i = 0; i <= coils; i++) {
+        const cx = springStartX + 15 + (i / coils) * activeLength;
+        const cy = originY + 10 + (i % 2 === 0 ? -coilAmp : coilAmp);
+        simCtx.lineTo(cx, cy);
+      }
+      simCtx.lineTo(springEndX, originY + 10);
+      simCtx.stroke();
+
+      // Desenhar Bloco
+      simCtx.fillStyle = 'rgba(168, 85, 247, 0.2)';
+      simCtx.fillRect(blockPx - blockW / 2 - 4, blockPy - 4, blockW + 8, blockH + 8);
+
+      const bGrad = simCtx.createLinearGradient(blockPx - blockW / 2, blockPy, blockPx + blockW / 2, blockPy + blockH);
+      bGrad.addColorStop(0, '#c084fc');
+      bGrad.addColorStop(1, '#7e22ce');
+
+      simCtx.fillStyle = bGrad;
+      simCtx.fillRect(blockPx - blockW / 2, blockPy, blockW, blockH);
+      simCtx.strokeStyle = '#ffffff';
+      simCtx.lineWidth = 3;
+      simCtx.strokeRect(blockPx - blockW / 2, blockPy, blockW, blockH);
+
+      // Texto no Bloco
+      simCtx.fillStyle = '#ffffff';
+      simCtx.font = 'bold 20px Outfit, sans-serif';
+      simCtx.textAlign = 'center';
+      simCtx.textBaseline = 'middle';
+      simCtx.fillText(`${mass.toFixed(1)}kg`, blockPx, blockPy + blockH / 2);
+
+      // --- VETORES AMPLIADOS 2X COM LEGENDAS ---
+      // Vetor Velocidade (Ciano)
+      if (Math.abs(simV) > 0.05) {
+        const vLen = simV * 24;
+        drawVector(simCtx, blockPx, blockPy - 15, blockPx + vLen, blockPy - 15, '#38bdf8', `v = ${simV.toFixed(2)} m/s`, 4);
+      }
+
+      // Vetor Força Restauradora da Mola (Amarelo)
+      const F_spring = - springK * simX;
+      if (Math.abs(F_spring) > 0.5) {
+        const fLen = F_spring * 1.5;
+        drawVector(simCtx, blockPx, blockPy + blockH + 20, blockPx + fLen, blockPy + blockH + 20, '#fbbf24', `F_mola = ${F_spring.toFixed(1)} N`, 3);
+      }
+
+      // Vetor Força de Atrito (Vermelho)
+      if (frictionEnabled && Math.abs(simV) > 0.05) {
+        const fLen = - Math.sign(simV) * 45;
+        drawVector(simCtx, blockPx, blockPy + blockH / 2, blockPx + fLen, blockPy + blockH / 2, '#ef4444', 'f_atrito', 3);
+      }
+    }
+
+    // Função utilitária para desenhar setas/vetores com rótulos
+    function drawVector(ctx, fromX, fromY, toX, toY, color, label, width = 3) {
+      const headlen = 12;
+      const dx = toX - fromX;
+      const dy = toY - fromY;
+      const angle = Math.atan2(dy, dx);
+      const len = Math.sqrt(dx * dx + dy * dy);
+      if (len < 5) return;
+
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = width;
+
+      // Linha principal
+      ctx.beginPath();
+      ctx.moveTo(fromX, fromY);
+      ctx.lineTo(toX, toY);
+      ctx.stroke();
+
+      // Ponta da seta
+      ctx.beginPath();
+      ctx.moveTo(toX, toY);
+      ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+
+      // Legenda
+      if (label) {
+        ctx.font = 'bold 16px JetBrains Mono, monospace';
+        ctx.fillStyle = color;
+        ctx.textAlign = 'center';
+        ctx.fillText(label, toX + 15 * Math.cos(angle), toY + 15 * Math.sin(angle) - 6);
+      }
+      ctx.restore();
+    }
+
+    // --- DESENHO DO GRÁFICO TEMPORAL K(t), U(t), E(t) ---
+    function drawGraph() {
+      const W = graphCanvas.width;
+      const H = graphCanvas.height;
+      graphCtx.clearRect(0, 0, W, H);
+
+      if (historyData.length < 2) return;
+
+      const padX = 50;
+      const padY = 25;
+      const plotW = W - padX - 20;
+      const plotH = H - padY * 2;
+
+      // Escala vertical
+      const curMaxE = Math.max(0.1, historyData[historyData.length - 1].maxE);
+
+      // Eixos
+      graphCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      graphCtx.lineWidth = 1;
+      graphCtx.beginPath();
+      graphCtx.moveTo(padX, padY);
+      graphCtx.lineTo(padX, H - padY);
+      graphCtx.lineTo(W - 20, H - padY);
+      graphCtx.stroke();
+
+      // Rótulos do Eixo Y
+      graphCtx.fillStyle = '#94a3b8';
+      graphCtx.font = '14px JetBrains Mono, monospace';
+      graphCtx.textAlign = 'right';
+      graphCtx.fillText(`${curMaxE.toFixed(1)} J`, padX - 8, padY + 6);
+      graphCtx.fillText('0 J', padX - 8, H - padY);
+
+      // Função auxiliar para plotar linha
+      function plotLine(key, color, lineWidth = 2) {
+        graphCtx.beginPath();
+        graphCtx.strokeStyle = color;
+        graphCtx.lineWidth = lineWidth;
+        for (let i = 0; i < historyData.length; i++) {
+          const px = padX + (i / maxHistory) * plotW;
+          const val = historyData[i][key];
+          const py = (H - padY) - (val / curMaxE) * plotH;
+          if (i === 0) graphCtx.moveTo(px, py);
+          else graphCtx.lineTo(px, py);
+        }
+        graphCtx.stroke();
+      }
+
+      // 1. K(t) em Verde
+      plotLine('K', '#22c55e', 2.5);
+
+      // 2. U(t) em Azul
+      plotLine('U', '#38bdf8', 2.5);
+
+      // 3. Emec(t) em Dourado
+      plotLine('Emec', '#fbbf24', 3);
+
+      // 4. Se com atrito, Eth(t) em Vermelho
+      if (frictionEnabled) {
+        plotLine('Eth', '#ef4444', 2);
+      }
+    }
+
+    // --- CONTROLE DE MOUSE E ARRASTO ---
+    function setupInteractivity() {
+      function getSimCoords(evt) {
+        const rect = simCanvas.getBoundingClientRect();
+        const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+        const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+        const px = clientX - rect.left;
+        const py = clientY - rect.top;
+
+        const W = simCanvas.width;
+        const H = simCanvas.height;
+
+        if (currentSystem === 'grav') {
+          const originX = W / 2;
+          const scaleX = (W * 0.75) / rampWidth;
+          const simMouseX = (px - originX) / scaleX;
+          return { x: Math.max(-rampWidth / 2 + 0.2, Math.min(rampWidth / 2 - 0.2, simMouseX)) };
+        } else {
+          const originX = W * 0.5;
+          const scaleX = (W * 0.35) / 2.0;
+          const simMouseX = (px - originX) / scaleX;
+          return { x: Math.max(-2.2, Math.min(2.2, simMouseX)) };
+        }
+      }
+
+      function onPointerDown(evt) {
+        isDragging = true;
+        const coords = getSimCoords(evt);
+        simX = coords.x;
+        simV = 0.0;
+        simEth = 0.0;
+        calcInitialEnergy();
+        updateMeters();
+        drawSimulation();
+        drawGraph();
+      }
+
+      function onPointerMove(evt) {
+        if (!isDragging) return;
+        const coords = getSimCoords(evt);
+        simX = coords.x;
+        simV = 0.0;
+        calcInitialEnergy();
+        updateMeters();
+        drawSimulation();
+        drawGraph();
+      }
+
+      function onPointerUp() {
+        if (isDragging) {
+          isDragging = false;
+          simV = 0.0;
+          calcInitialEnergy();
+        }
+      }
+
+      simCanvas.addEventListener('mousedown', onPointerDown);
+      window.addEventListener('mousemove', onPointerMove);
+      window.addEventListener('mouseup', onPointerUp);
+
+      simCanvas.addEventListener('touchstart', onPointerDown, { passive: false });
+      window.addEventListener('touchmove', onPointerMove, { passive: false });
+      window.addEventListener('touchend', onPointerUp);
+    }
+
+    // --- CONTROLES DE ANIMAÇÃO ---
+    function togglePlayPause() {
+      isPlaying = !isPlaying;
+      const btn = document.getElementById('btnPlayPause');
+      btn.innerHTML = isPlaying ? '⏸️ Pausar' : '▶️ Continuar';
+      btn.className = isPlaying ? 'action-btn btn-play' : 'action-btn btn-reset';
+    }
+
+    function resetSimulation() {
+      if (currentSystem === 'grav') {
+        simX = -2.5;
+      } else {
+        simX = 1.8;
+      }
+      simV = 0.0;
+      simEth = 0.0;
+      historyData = [];
+      calcInitialEnergy();
+      updateMeters();
+      drawSimulation();
+      drawGraph();
+    }
+
+    function stepSimulation() {
+      isPlaying = false;
+      document.getElementById('btnPlayPause').innerHTML = '▶️ Continuar';
+      document.getElementById('btnPlayPause').className = 'action-btn btn-reset';
+      physicsStep(0.016);
+      updateMeters();
+      drawSimulation();
+      drawGraph();
+    }
+
+    // --- NARRAÇÃO POR VOZ (WEB SPEECH API) ---
+    function speakExplanation() {
+      if (!('speechSynthesis' in window)) {
+        alert('Seu navegador não suporta a Web Speech API.');
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+
+      let text = '';
+      if (currentSystem === 'grav' && !frictionEnabled) {
+        text = 'Demonstração da conservação da energia mecânica no campo gravitacional. Sem atrito, o trabalho de forças não-conservativas é nulo. A energia potencial gravitacional converte-se integralmente em energia cinética no fundo da rampa, e a velocidade atinge seu valor máximo. Em seguida, a energia cinética se reconverte totalmente em potencial, fazendo o corpo subir exatamente até a mesma altura inicial. A soma K mais U é perfeitamente constante.';
+      } else if (currentSystem === 'grav' && frictionEnabled) {
+        text = 'Demonstração do sistema gravitacional com atrito. A força de atrito atua sempre no sentido oposto ao vetor velocidade, realizando trabalho resistente negativo. Esse trabalho drena a energia mecânica do corpo e a transforma em energia térmica. A cada oscilação, a altura máxima atingida diminui até o repouso final. A energia mecânica decai, mas a energia total que inclui a energia térmica permanece rigorosamente constante.';
+      } else if (currentSystem === 'spring' && !frictionEnabled) {
+        text = 'Demonstração do oscilador harmônico simples massa-mola sem atrito. Nos extremos do movimento, a velocidade é nula e a energia potencial elástica é máxima. Ao passar pelo ponto de equilíbrio x igual a zero, a mola está relaxada e toda a energia está na forma cinética. A troca entre energia cinética e elástica é contínua e sem perdas, mantendo a energia mecânica invariável.';
+      } else {
+        text = 'Demonstração do oscilador massa-mola com atrito e amortecimento. O atrito com a superfície dissipa energia mecânica continuamente. A amplitude das oscilações diminui a cada ciclo até que o bloco fique retido no repouso. A energia mecânica inicial foi completamente transferida para energia térmica.';
+      }
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'pt-BR';
+      utterance.rate = 1.05;
+
+      const btn = document.getElementById('btnVoice');
+      btn.innerHTML = '🔊 Narrando...';
+      utterance.onend = () => {
+        btn.innerHTML = '🔊 Ouvir Explicação da Física';
+      };
+      utterance.onerror = () => {
+        btn.innerHTML = '🔊 Ouvir Explicação da Física';
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // --- LOOP PRINCIPAL DE ANIMAÇÃO ---
+    let lastTime = performance.now();
+    function animationLoop(timestamp) {
+      const dt = Math.min(0.033, (timestamp - lastTime) / 1000);
+      lastTime = timestamp;
+
+      if (isPlaying && !isDragging) {
+        // Sub-steps para precisão numérica extra
+        const subSteps = 4;
+        const subDt = dt / subSteps;
+        for (let i = 0; i < subSteps; i++) {
+          physicsStep(subDt);
+        }
+        updateMeters();
+      }
+
+      drawSimulation();
+      drawGraph();
+      requestAnimationFrame(animationLoop);
+    }
+
+    // Inicialização ao carregar
+    window.addEventListener('DOMContentLoaded', () => {
+      resizeCanvases();
+      setupInteractivity();
+      calcInitialEnergy();
+      updateMeters();
+      requestAnimationFrame(animationLoop);
+    });
+  </script>
+</body>
+</html>

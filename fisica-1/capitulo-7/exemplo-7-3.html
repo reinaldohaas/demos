@@ -232,8 +232,20 @@
 <body>
 
     <div class="top-nav">
-        <a href="index.html" class="back-btn">← Voltar ao Catálogo do Capítulo</a>
-        <span style="font-size:0.85rem; color:var(--text-sub);">Capítulo 7 • Sears & Zemansky / Young & Freedman</span>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <a href="index.html" class="back-btn">← Voltar ao Catálogo</a>
+            <a href="apresentacao.html" class="back-btn" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.4);">⚡ Apresentação (42 Slides)</a>
+            <a href="demonstracao-energia.html" class="back-btn" style="color: #34d399; border-color: rgba(52, 211, 153, 0.4);">🌀 Simulação E=K+U</a>
+        </div>
+        
+        <!-- ZOOM DE FONTE DINÂMICO -->
+        <div style="display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); padding: 6px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);">
+            <span style="font-size: 19px; font-weight: 700; color: #38bdf8;">🔍 Fonte:</span>
+            <button onclick="changeFontSize(-0.1)" style="padding: 6px 12px; font-size: 18px; font-weight: 800; background: #334155; color: white; border: none; border-radius: 8px; cursor: pointer;">A-</button>
+            <span id="font-scale-indicator" style="font-size: 19px; font-weight: 800; min-width: 55px; text-align: center; color: #fbbf24;">100%</span>
+            <button onclick="changeFontSize(0.1)" style="padding: 6px 12px; font-size: 18px; font-weight: 800; background: #334155; color: white; border: none; border-radius: 8px; cursor: pointer;">A+</button>
+            <button onclick="resetFontSize()" style="padding: 6px 12px; font-size: 16px; font-weight: 700; background: #1e293b; color: #cbd5e1; border: none; border-radius: 8px; cursor: pointer;">100%</button>
+        </div>
     </div>
 
     <div class="statement-box">
@@ -241,30 +253,30 @@
             <h2>Exemplo Conceitual 7.3: Projétil em Ângulos Diferentes</h2>
             <p><strong>Enunciado Oficial:</strong> Um jogador bate duas bolas idênticas com a mesma velocidade escalar inicial v₀, mas formando dois ângulos iniciais diferentes (por exemplo, 30° e 60°). Prove que para uma dada altura h as duas bolas possuem a mesma velocidade escalar, supondo que a resistência do ar seja desprezível.</p>
         
-            <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
-                <div style="display: flex; gap: 6px; align-items: center;">
-                    <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
-                        🔊 Ouvir Voz
+            <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.15); border: 2px solid rgba(168, 85, 247, 0.4); border-radius: 12px; padding: 12px 18px; margin-top: 14px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 800; font-size: 19px; padding: 10px 18px; border-radius: 10px; cursor: pointer;">
+                        🔊 Ouvir Explicação da Física
                     </button>
-                    <button id="btn-voice-pause" onclick="pauseVoiceNarration()" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
-                        ⏸️ Pausar
+                    <button id="btn-voice-pause" onclick="pauseVoiceNarration()" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; font-weight: 700; font-size: 19px; padding: 10px 14px; border-radius: 10px; cursor: pointer;">
+                        ⏸️
                     </button>
-                    <button id="btn-voice-stop" onclick="stopVoiceNarration()" style="background: #ef4444; color: white; border: none; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
-                        ⏹️ Parar
+                    <button id="btn-voice-stop" onclick="stopVoiceNarration()" style="background: #ef4444; color: white; border: none; font-weight: 700; font-size: 19px; padding: 10px 14px; border-radius: 10px; cursor: pointer;">
+                        ⏹️
                     </button>
                 </div>
                 
-                <div style="display: flex; gap: 6px; align-items: center;">
-                    <label style="font-size: 0.82rem; font-weight: 700; color: #d8b4fe;">⏩ Vel:</label>
-                    <select id="voice-rate-select" onchange="changeVoiceRate()" style="background: #0f172a; color: #38bdf8; border: 1px solid #38bdf8; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <label style="font-size: 19px; font-weight: 800; color: #d8b4fe;">⏩ Velocidade:</label>
+                    <select id="voice-rate-select" onchange="changeVoiceRate()" style="background: #0f172a; color: #38bdf8; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 8px; font-weight: 800; font-size: 18px; cursor: pointer;">
                         <option value="0.75">0.75x</option>
-                        <option value="1.0" selected>1.0x (Normal)</option>
+                        <option value="1.0" selected>1.0x</option>
                         <option value="1.25">1.25x</option>
                         <option value="1.5">1.5x</option>
                     </select>
                 </div>
                 
-                <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
+                <span id="voice-status-text" style="font-size: 19px; color: #cbd5e1; font-weight: 700;">Status: Pronto</span>
             </div>
         </div>
         <div class="formula-badge">$$\frac{1}{2} m v_0^2 = \frac{1}{2} m v^2 + m g h \implies v = \sqrt{v_0^2 - 2gh}$$</div>
@@ -383,7 +395,7 @@
             if (label) {
                 const labelX = x + dx * 0.5;
                 const labelY = y + dy + (dy < 0 ? -16 : 22);
-                ctx.font = 'bold 13px Inter';
+                ctx.font = 'bold 18px Outfit, sans-serif';
                 const textWidth = ctx.measureText(label).width;
                 ctx.fillStyle = 'rgba(5, 8, 17, 0.92)';
                 ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 14, textWidth + 12, 18);
@@ -443,7 +455,7 @@
             if (canvasType === "beisebol_7_1") {
                 const groundY = h - 60;
                 ctx.fillStyle = "#1e293b"; ctx.fillRect(40, groundY, w - 80, 8);
-                ctx.fillStyle = "#94a3b8"; ctx.font = "bold 13px Inter"; ctx.fillText("Solo (y₁ = 0)", 40, groundY + 26);
+                ctx.fillStyle = "#94a3b8"; ctx.font = "bold 18px Outfit, sans-serif"; ctx.fillText("Solo (y₁ = 0)", 40, groundY + 26);
 
                 const maxH = 260;
                 const curH = (Math.sin(animProgress) * 0.5 + 0.5) * maxH;
@@ -472,7 +484,7 @@
             } else if (canvasType === "beisebol_7_2") {
                 const groundY = h - 140;
                 ctx.fillStyle = "#1e293b"; ctx.fillRect(40, groundY, w - 80, 4);
-                ctx.fillStyle = "#94a3b8"; ctx.font = "bold 13px Inter"; ctx.fillText("y = 0 (Bola deixa a mão)", 40, groundY + 20);
+                ctx.fillStyle = "#94a3b8"; ctx.font = "bold 18px Outfit, sans-serif"; ctx.fillText("y = 0 (Bola deixa a mão)", 40, groundY + 20);
 
                 const ballX = w * 0.35;
                 const handY = groundY + 60;
@@ -497,7 +509,7 @@
                 ctx.strokeStyle = "#fbbf24"; ctx.setLineDash([6, 6]);
                 ctx.beginPath(); ctx.moveTo(40, hLine); ctx.lineTo(w - 40, hLine); ctx.stroke();
                 ctx.setLineDash([]);
-                ctx.fillStyle = "#fbbf24"; ctx.font = "bold 13px Inter"; ctx.fillText("Altura h (v é igual nas duas!)", w - 240, hLine - 10);
+                ctx.fillStyle = "#fbbf24"; ctx.font = "bold 18px Outfit, sans-serif"; ctx.fillText("Altura h (v é igual nas duas!)", w - 240, hLine - 10);
 
                 // Parábola 1 (60°)
                 ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 3;
@@ -556,7 +568,7 @@
                 ctx.beginPath(); ctx.moveTo(rampX1, rampY1); ctx.lineTo(rampX2, rampY2); ctx.lineTo(rampX2, groundY); ctx.closePath();
                 ctx.fillStyle = "rgba(15, 23, 42, 0.6)"; ctx.fill(); ctx.stroke();
 
-                ctx.fillStyle = "#fbbf24"; ctx.font = "bold 13px Inter"; ctx.fillText("30°", rampX1 + 40, rampY1 - 8);
+                ctx.fillStyle = "#fbbf24"; ctx.font = "bold 18px Outfit, sans-serif"; ctx.fillText("30°", rampX1 + 40, rampY1 - 8);
 
                 const prog = (Math.sin(animProgress) * 0.5 + 0.5);
                 const bx = rampX1 + (rampX2 - rampX1) * 0.65 * prog;
@@ -640,7 +652,7 @@
                 // Linha reta direta
                 ctx.strokeStyle = "#10b981"; ctx.lineWidth = 4;
                 ctx.beginPath(); ctx.moveTo(p1x, p1y); ctx.lineTo(p2x, p2y); ctx.stroke();
-                ctx.fillStyle = "#10b981"; ctx.font = "bold 13px Inter"; ctx.fillText("Linha Reta (2,5 m) • 196 J", (p1x + p2x) / 2 - 40, (p1y + p2y) / 2 - 14);
+                ctx.fillStyle = "#10b981"; ctx.font = "bold 18px Outfit, sans-serif"; ctx.fillText("Linha Reta (2,5 m) • 196 J", (p1x + p2x) / 2 - 40, (p1y + p2y) / 2 - 14);
 
                 // Caminho ortogonal em L
                 ctx.strokeStyle = "#ef4444"; ctx.lineWidth = 4; ctx.setLineDash([6, 6]);
@@ -665,7 +677,7 @@
                 ctx.strokeStyle = "#475569"; ctx.lineWidth = 2;
                 ctx.beginPath(); ctx.moveTo(ox - 30, oy); ctx.lineTo(ox + L + 60, oy); ctx.stroke();
                 ctx.beginPath(); ctx.moveTo(ox, oy + 30); ctx.lineTo(ox, oy - L - 60); ctx.stroke();
-                ctx.fillStyle = "#94a3b8"; ctx.font = "bold 13px Inter";
+                ctx.fillStyle = "#94a3b8"; ctx.font = "bold 18px Outfit, sans-serif";
                 ctx.fillText("x", ox + L + 50, oy + 20); ctx.fillText("y", ox - 20, oy - L - 50);
 
                 // Trajetória quadrada
@@ -695,7 +707,7 @@
             ctx.fillRect(bx - 20, by - 30, 160, maxH + 70);
             ctx.strokeStyle = "rgba(56, 189, 248, 0.3)"; ctx.strokeRect(bx - 20, by - 30, 160, maxH + 70);
 
-            ctx.fillStyle = "#38bdf8"; ctx.font = "bold 12px Inter"; ctx.fillText("Energias (J)", bx + 15, by - 12);
+            ctx.fillStyle = "#38bdf8"; ctx.font = "bold 18px Outfit, sans-serif"; ctx.fillText("Energias (J)", bx + 15, by - 12);
 
             // Barra K (Cinética)
             const kH = Math.max(2, Math.min(maxH, kNorm * maxH));
