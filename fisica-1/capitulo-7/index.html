@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capítulo 7: Energia Potencial e Conservação da Energia | Young & Freedman 12ª ed.</title>
+    <title>Capítulo 7: Energia Potencial e Conservação da Energia | Sears & Zemansky / Young & Freedman</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
@@ -46,7 +46,7 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
         }
-        .header p { font-size: 1.1rem; color: var(--text-sub); max-width: 800px; margin: 0 auto; line-height: 1.6; }
+        .header p { font-size: 1.1rem; color: var(--text-sub); max-width: 850px; margin: 0 auto; line-height: 1.6; }
         .back-nav { max-width: 1200px; margin: 0 auto 20px; }
         .back-btn {
             background: rgba(255, 255, 255, 0.08); border: 1px solid var(--bg-card-border);
@@ -54,7 +54,7 @@
         }
         .catalog-grid {
             max-width: 1200px; margin: 0 auto;
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px;
         }
         .example-card {
             background: var(--bg-card); border: 1px solid var(--bg-card-border);
@@ -77,10 +77,11 @@
 
     <div class="header">
         <h1>Capítulo 7: Energia Potencial e Conservação da Energia</h1>
-        <p>Catálogo dos Exemplos Oficiais do Livro Young & Freedman 12ª ed., com conservação de energia, mola, gráficos U(x) e MathJax.</p>
+        <p>Catálogo Completo dos 11 Exemplos Oficiais do livro Sears & Zemansky / Young & Freedman (Exemplos 7.1 ao 7.11), com diagramas, vetores ampliados, conservação de energia, sistemas dissipativos, molas e MathJax.</p>
     </div>
 
     <div class="catalog-grid">
+        
         <a href="apresentacao.html" class="example-card" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(99, 102, 241, 0.28), rgba(2, 132, 199, 0.28)); border: 2px solid #38bdf8; box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2);">
             <div class="card-badge" style="color: #fbbf24; font-size: 0.9rem;">✨ APRESENTAÇÃO DE SLIDES OFICIAL (42 SLIDES)</div>
             <h3 class="card-title" style="font-size: 1.5rem; color: #ffffff;">⚡ Capítulo 7 Completo: Energia Potencial e Conservação da Energia</h3>
@@ -92,47 +93,117 @@
                 <span class="view-btn" style="font-size: 1.05rem; color: #38bdf8; font-weight: 800;">Iniciar Apresentação ⛶ →</span>
             </div>
         </a>
-        
+
         <a href="exemplo-7-1.html" class="example-card">
-            <div class="card-badge">EXEMPLO 7.1</div>
-            <h3 class="card-title">Exemplo 7.1: Conservação da Energia Gravitacional — Queda e Arremesso</h3>
-            <p class="card-desc">Uma bola de m = 0,50 kg é lançada verticalmente para cima do topo de um edifício de h = 20 m com v₁ = 10 m/s. Desprezand...</p>
+            <div class="card-badge">EXEMPLO 7.1 • CONSERVAÇÃO DA ENERGIA</div>
+            <h3 class="card-title">Exemplo 7.1: Altura Máxima de uma Bola de Beisebol</h3>
+            <p class="card-desc">Arremesso vertical de bola de beisebol (m = 0,145 kg, v₁ = 20,0 m/s). Cálculo da altura máxima através da conversão integral de energia cinética em energia potencial gravitacional.</p>
             <div class="card-footer">
-                <span class="formula">$$E_1 = E_2 \implies m g h_1 + \frac{1}{2} m v_1^2 = \frac{1}{2} m v_2^2$$</span>
+                <span class="formula">$$E_1 = E_2 \implies \frac{1}{2} m v_1^2 = m g y_2 \implies y_2 = \frac{v_1^2}{2g} = 20,4\text{ m}$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
-        
+    
         <a href="exemplo-7-2.html" class="example-card">
-            <div class="card-badge">EXEMPLO 7.2</div>
-            <h3 class="card-title">Exemplo 7.2: Conservação com Força de Atrito — Rampa Inclinada</h3>
-            <p class="card-desc">Um bloco de m = 2,0 kg parte do repouso do topo de uma rampa inclinada de h = 1,5 m. Devido ao atrito, ele chega à base ...</p>
+            <div class="card-badge">EXEMPLO 7.2 • TRABALHO DE OUTRAS FORÇAS</div>
+            <h3 class="card-title">Exemplo 7.2: Trabalho e Energia no Arremesso de Beisebol</h3>
+            <p class="card-desc">A mão atua ao longo de 0,50 m aplicando força constante para acelerar a bola até 20 m/s. Cálculo da força média da mão (59 N) e da velocidade a 15 m de altura.</p>
             <div class="card-footer">
-                <span class="formula">$$E_1 + W_{\text{outras}} = E_2 \implies m g h + W_{\text{atrito}} = \frac{1}{2} m v^2$$</span>
+                <span class="formula">$$W_{\text{outra}} = \Delta K + \Delta U \implies F = 59\text{ N}, \quad v_3 = \pm 10\text{ m/s}$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
-        
+    
         <a href="exemplo-7-3.html" class="example-card">
-            <div class="card-badge">EXEMPLO 7.3</div>
-            <h3 class="card-title">Exemplo 7.3: Conservação da Energia Elástica de uma Mola</h3>
-            <p class="card-desc">Um bloco de m = 0,20 kg é pressionado contra uma mola de k = 500 N/m, comprimindo-a de x = 0,10 m. Quando solto, o bloco...</p>
+            <div class="card-badge">EXEMPLO 7.3 • INDEPENDÊNCIA DA TRAJETÓRIA</div>
+            <h3 class="card-title">Exemplo Conceitual 7.3: Projétil em Ângulos Diferentes</h3>
+            <p class="card-desc">Duas bolas disparadas com o mesmo módulo de velocidade sob ângulos de 30° e 60°. Demonstração de que a velocidade escalar na mesma altura h é rigorosamente idêntica.</p>
             <div class="card-footer">
-                <span class="formula">$$\frac{1}{2} k x^2 = \frac{1}{2} m v^2 \implies v = x \sqrt{\frac{k}{m}}$$</span>
+                <span class="formula">$$\frac{1}{2} m v_0^2 = \frac{1}{2} m v^2 + m g h \implies v = \sqrt{v_0^2 - 2gh}$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
-        
+    
         <a href="exemplo-7-4.html" class="example-card">
-            <div class="card-badge">EXEMPLO 7.4</div>
-            <h3 class="card-title">Exemplo 7.4: Diagramas de Energia Potencial U(x) e Pontos de Equilíbrio</h3>
-            <p class="card-desc">Uma partícula move-se ao longo do eixo x sob a ação de uma força conservativa com energia potencial U(x) = a/x² - b/x. D...</p>
+            <div class="card-badge">EXEMPLO 7.4 • DINÂMICA CIRCULAR & ENERGIA</div>
+            <h3 class="card-title">Exemplo 7.4: Tobias no Skate em Círculo Vertical sem Atrito</h3>
+            <p class="card-desc">Descida em rampa circular sem atrito (R = 3,00 m, m = 25,0 kg). Conservação da energia mecânica para determinar a velocidade (7,67 m/s) e a força normal na base (3mg = 735 N).</p>
             <div class="card-footer">
-                <span class="formula">$$F_x = -\frac{dU}{dx}, \quad \frac{dU}{dx} = 0 \implies \text{Equilíbrio}$$</span>
+                <span class="formula">$$v_2 = \sqrt{2gR} = 7,67\text{ m/s}, \quad n = 3mg = 735\text{ N}$$</span>
                 <span class="view-btn">Ver Exemplo →</span>
             </div>
         </a>
-        
+    
+        <a href="exemplo-7-5.html" class="example-card">
+            <div class="card-badge">EXEMPLO 7.5 • SISTEMA DISSIPATIVO</div>
+            <h3 class="card-title">Exemplo 7.5: Tobias no Skate com Atrito</h3>
+            <p class="card-desc">Com atrito na rampa, a velocidade na base cai para 6,0 m/s. Balanço de energia mecânica comprovando que o atrito realizou -285 J de trabalho dissipativo.</p>
+            <div class="card-footer">
+                <span class="formula">$$W_{\text{atrito}} = \Delta E_M = K_2 - U_1 = 450\text{ J} - 735\text{ J} = -285\text{ J}$$</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+    
+        <a href="exemplo-7-6.html" class="example-card">
+            <div class="card-badge">EXEMPLO 7.6 • PLANO INCLINADO COM ATRITO</div>
+            <h3 class="card-title">Exemplo 7.6: Caixa no Plano Inclinado com Atrito</h3>
+            <p class="card-desc">Caixa lançada em rampa de 30° com 5,0 m/s. Sobe 1,6 m até parar. Cálculo da força de atrito constante (35 N) e da velocidade reduzida de retorno (2,5 m/s).</p>
+            <div class="card-footer">
+                <span class="formula">$$f = 35\text{ N}, \quad v_3 = \sqrt{\frac{2K_3}{m}} = 2,5\text{ m/s}$$</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+    
+        <a href="exemplo-7-7.html" class="example-card">
+            <div class="card-badge">EXEMPLO 7.7 • FORÇA RESTAURADORA & MOLA</div>
+            <h3 class="card-title">Exemplo 7.7: Movimento com Energia Potencial Elástica</h3>
+            <p class="card-desc">Cavaleiro em trilho de ar (m = 0,200 kg, k = 5,0 N/m) solto do repouso em x = 0,100 m. Cálculo da velocidade ao passar por x = 0,080 m retornando ao centro (-0,30 m/s).</p>
+            <div class="card-footer">
+                <span class="formula">$$K_1 + U_1 = K_2 + U_2 \implies v_{2x} = - 0,30\text{ m/s}$$</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+    
+        <a href="exemplo-7-8.html" class="example-card">
+            <div class="card-badge">EXEMPLO 7.8 • TRABALHO EXTERNO NA MOLA</div>
+            <h3 class="card-title">Exemplo 7.8: Energia Elástica e Força Externa</h3>
+            <p class="card-desc">Cavaleiro puxado por força constante externa F = 0,610 N a partir do repouso em x = 0. Balanço entre o trabalho injetado e a energia elástica acumulada.</p>
+            <div class="card-footer">
+                <span class="formula">$$W_{\text{outra}} = \Delta K + \Delta U \implies v_{2x} = + 0,60\text{ m/s}$$</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+    
+        <a href="exemplo-7-9.html" class="example-card">
+            <div class="card-badge">EXEMPLO 7.9 • FORÇAS CONJUGADAS</div>
+            <h3 class="card-title">Exemplo 7.9: Emergência no Poço do Elevador</h3>
+            <p class="card-desc">Elevador em queda livre amortecido simultaneamente por atrito constante de 17000 N e compressão de 2,0 m de uma mola. Cálculo da rigidez k = 1,06 × 10⁴ N/m.</p>
+            <div class="card-footer">
+                <span class="formula">$$K_1 + W_{\text{atrito}} = mgy_2 + \frac{1}{2}ky_2^2 \implies k = 1,06 \times 10^4\text{ N/m}$$</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+    
+        <a href="exemplo-7-10.html" class="example-card">
+            <div class="card-badge">EXEMPLO 7.10 • FORÇA NÃO CONSERVATIVA</div>
+            <h3 class="card-title">Exemplo 7.10: O Trabalho do Atrito Depende da Trajetória</h3>
+            <p class="card-desc">Comparação entre empurrar um sofá de 40 kg em linha reta (2,50 m) e contornando uma mesa em 'L' (3,50 m). Demonstração prática da dependência do caminho.</p>
+            <div class="card-footer">
+                <span class="formula">$$W_{\text{excedente}} = W_{\text{ortogonal}} - W_{\text{reto}} = 274\text{ J} - 196\text{ J} = 78\text{ J}$$</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+    
+        <a href="exemplo-7-11.html" class="example-card">
+            <div class="card-badge">EXEMPLO 7.11 • CÁLCULO INTEGRAL EM CICLO FECHADO</div>
+            <h3 class="card-title">Exemplo 7.11: Força Conservativa ou Não Conservativa?</h3>
+            <p class="card-desc">Elétron movendo-se sob a força F = Cx j em circuito quadrado fechado. Demonstração de que a integral de linha de ciclo fechado não é nula (W = CL²), provando que a força não é conservativa.</p>
+            <div class="card-footer">
+                <span class="formula">$$\oint \vec{F} \cdot d\vec{l} = C L^2 \neq 0 \implies \text{Força NÃO CONSERVATIVA}$$</span>
+                <span class="view-btn">Ver Exemplo →</span>
+            </div>
+        </a>
+    
     </div>
 </body>
 </html>

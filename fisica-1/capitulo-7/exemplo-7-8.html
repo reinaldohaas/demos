@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo 7.8: Energia Elástica e Força Externa | FSC5101 Física I</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <style>
+        :root {
+            --bg-dark: #070a12;
+            --bg-card: rgba(15, 23, 42, 0.88);
+            --bg-card-border: rgba(56, 189, 248, 0.25);
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
+            --accent-emerald: #10b981;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.15) 0%, transparent 45%);
+            background-attachment: fixed;
+            padding: 20px;
+        }
+
+        .top-nav {
+            max-width: 1300px;
+            margin: 0 auto 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--bg-card-border);
+            color: var(--accent-cyan);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); }
+
+        .statement-box {
+            background: rgba(10, 16, 30, 0.92);
+            border-left: 5px solid var(--accent-cyan);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .statement-title h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-cyan);
+            margin-bottom: 6px;
+        }
+
+        .statement-title p { font-size: 0.95rem; color: #cbd5e1; line-height: 1.6; max-width: 900px; }
+
+        .formula-badge {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-family: 'Outfit', monospace;
+            font-size: 1.15rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .presentation-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 440px 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 960px) {
+            .presentation-container { grid-template-columns: 1fr; }
+        }
+
+        .slide-deck {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 420px;
+        }
+
+        .slide-stepper {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .slide-step-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-sub);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .slide-step-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .presentation-slide { display: none; flex-direction: column; gap: 10px; }
+        .presentation-slide.active { display: flex; }
+
+        .slide-badge {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--accent-cyan);
+            letter-spacing: 0.05em;
+        }
+
+        .slide-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .slide-formula {
+            font-size: 1.05rem;
+            color: var(--accent-gold);
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 14px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 4px 0;
+        }
+
+        .slide-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--accent-emerald);
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 12px 14px;
+            border-radius: 8px;
+        }
+
+        .slide-nav-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: #1e293b;
+            color: var(--text-main);
+        }
+
+        .nav-btn:hover { background: rgba(56, 189, 248, 0.2); color: var(--accent-cyan); }
+
+        .interactive-stage {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .canvas-holder {
+            width: 100%;
+            height: 480px;
+            background: #050811;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        canvas { width: 100%; height: 100%; display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <a href="index.html" class="back-btn">← Voltar ao Catálogo do Capítulo</a>
+        <span style="font-size:0.85rem; color:var(--text-sub);">Capítulo 7 • Sears & Zemansky / Young & Freedman</span>
+    </div>
+
+    <div class="statement-box">
+        <div class="statement-title">
+            <h2>Exemplo 7.8: Energia Elástica e Força Externa</h2>
+            <p><strong>Enunciado Oficial:</strong> Para o sistema do Exemplo 7.7, suponha que o cavaleiro esteja em repouso na posição inicial x = 0 (mola indeformada). Aplicamos sobre ele uma força constante F = 0,610 N no sentido +x. Qual a velocidade do cavaleiro no ponto x = 0,100 m?</p>
+        
+            <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px; padding: 8px 14px; margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 700; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
+                        🔊 Ouvir Voz
+                    </button>
+                    <button id="btn-voice-pause" onclick="pauseVoiceNarration()" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
+                        ⏸️ Pausar
+                    </button>
+                    <button id="btn-voice-stop" onclick="stopVoiceNarration()" style="background: #ef4444; color: white; border: none; font-weight: 600; font-size: 0.82rem; padding: 6px 10px; border-radius: 6px; cursor: pointer;">
+                        ⏹️ Parar
+                    </button>
+                </div>
+                
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <label style="font-size: 0.82rem; font-weight: 700; color: #d8b4fe;">⏩ Vel:</label>
+                    <select id="voice-rate-select" onchange="changeVoiceRate()" style="background: #0f172a; color: #38bdf8; border: 1px solid #38bdf8; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 0.82rem; cursor: pointer;">
+                        <option value="0.75">0.75x</option>
+                        <option value="1.0" selected>1.0x (Normal)</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                    </select>
+                </div>
+                
+                <span id="voice-status-text" style="font-size: 0.82rem; color: #94a3b8; font-weight: 600;">Status: Pronto</span>
+            </div>
+        </div>
+        <div class="formula-badge">$$W_{\text{outra}} = \Delta K + \Delta U \implies v_{2x} = + 0,60\text{ m/s}$$</div>
+    </div>
+
+    <div class="presentation-container">
+        <div class="slide-deck">
+            <div>
+                <div style="font-size:0.8rem; font-weight:700; color:var(--accent-cyan); margin-bottom:10px;">
+                    📺 APRESENTAÇÃO DIDÁTICA PASSO A PASSO
+                </div>
+                <div class="slide-stepper">
+                    <button class="slide-step-btn active" onclick="goToSlide(1)">Slide 1</button>
+<button class="slide-step-btn " onclick="goToSlide(2)">Slide 2</button>
+
+                </div>
+
+                
+        <div class="presentation-slide active" id="slide-1">
+            <div class="slide-badge">SLIDE 1 DE 2 • TRABALHO DA FORÇA EXTERNA</div>
+            <div class="slide-title">Energia Injetada no Sistema</div>
+            <div class="slide-formula">$$W_{\text{outra}} = F \cdot d = (0,610\text{ N})(0,100\text{ m}) = 0,0610\text{ J}$$</div>
+            <div class="slide-desc">A força externa constante realiza trabalho positivo de 0,0610 J, alimentando simultaneamente a energia cinética do bloco e a deformação da mola.</div>
+        </div>
+        
+        <div class="presentation-slide " id="slide-2">
+            <div class="slide-badge">SLIDE 2 DE 2 • VELOCIDADE FINAL</div>
+            <div class="slide-title">Cálculo da Velocidade em x = 0,100 m</div>
+            <div class="slide-formula">$$K_2 = W_{\text{outra}} - U_2 = 0,0610 - 0,0250 = 0,0360\text{ J} \implies v_{2x} = + 0,60\text{ m/s}$$</div>
+            <div class="slide-desc">A velocidade é positiva (+0,60 m/s), pois a força puxa o bloco acelerando-o no sentido +x.</div>
+        </div>
+        
+            </div>
+
+            <div class="slide-nav-controls">
+                <button class="nav-btn" onclick="prevSlide()">◄ Anterior</button>
+                <button class="nav-btn" onclick="nextSlide()">Próximo ►</button>
+            </div>
+        </div>
+
+        <div class="interactive-stage">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-weight:700; font-size:0.9rem; color:var(--text-sub);">📊 Diagrama & Vetores (Tamanho Ampliado 2x)</span>
+                <button class="nav-btn" style="padding:4px 12px; font-size:0.75rem;" onclick="resetDemo()">↺ Resetar</button>
+            </div>
+
+            <div class="canvas-holder">
+                <canvas id="stage-canvas"></canvas>
+            </div>
+        
+            <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 10px; padding: 14px; margin-top: 14px;">
+                <div style="font-size:0.85rem; font-weight:800; color:#38bdf8; margin-bottom:8px;">🌐 RECURSOS DO CAPÍTULO 7:</div>
+                <ul style="font-size:0.85rem; color:#cbd5e1; padding-left:18px; line-height:1.8;">
+                    <li><a href="apresentacao.html" style="color:#fbbf24; font-weight:700; text-decoration:underline;">✨ Ver Apresentação Completa de 42 Slides do Capítulo 7</a></li>
+                    <li><a href="https://phet.colorado.edu/sims/html/energy-skate-park-basics/latest/energy-skate-park-basics_all.html" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-weight:700; text-decoration:underline;">🔗 PhET Colorado - Conservação de Energia (Skate Park)</a></li>
+                    <li><a href="https://phet.colorado.edu/sims/html/hookes-law/latest/hookes-law_all.html" target="_blank" rel="noopener noreferrer" style="color:#a855f7; font-weight:700; text-decoration:underline;">🔗 PhET Colorado - Lei de Hooke & Energia Potencial Elástica</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isSpeaking = false, isPaused = false, currentUtterance = null;
+
+        function playVoiceNarration() {
+            if (!('speechSynthesis' in window)) return alert('Navegador sem suporte a voz.');
+            const statusLabel = document.getElementById('voice-status-text');
+            if (isPaused) {
+                window.speechSynthesis.resume(); isPaused = false; isSpeaking = true;
+                if (statusLabel) statusLabel.innerText = '🔊 Reproduzindo...'; return;
+            }
+            window.speechSynthesis.cancel();
+            const stmt = document.querySelector('.statement-title p')?.innerText || '';
+            const items = Array.from(document.querySelectorAll('.slide-desc')).map(el => el.innerText).join('. ');
+            currentUtterance = new SpeechSynthesisUtterance(stmt + '. ' + items);
+            currentUtterance.lang = 'pt-BR';
+            const speedSelect = document.getElementById('voice-rate-select');
+            if (speedSelect) currentUtterance.rate = parseFloat(speedSelect.value) || 1.0;
+            currentUtterance.onstart = () => { isSpeaking = true; isPaused = false; if (statusLabel) statusLabel.innerText = '🔊 Lendo...'; };
+            currentUtterance.onend = () => { isSpeaking = false; isPaused = false; if (statusLabel) statusLabel.innerText = '✅ Concluído.'; };
+            window.speechSynthesis.speak(currentUtterance);
+        }
+
+        function pauseVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window && isSpeaking && !isPaused) {
+                window.speechSynthesis.pause(); isPaused = true;
+                if (statusLabel) statusLabel.innerText = '⏸️ Pausado.';
+            }
+        }
+
+        function stopVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); isSpeaking = false; isPaused = false;
+                if (statusLabel) statusLabel.innerText = '⏹️ Parado.';
+            }
+        }
+
+        function changeVoiceRate() { if (isSpeaking && !isPaused) { stopVoiceNarration(); playVoiceNarration(); } }
+
+        function drawVectorArrow(ctx, x, y, dx, dy, color, label) {
+            const len = Math.hypot(dx, dy);
+            if (len < 2) return;
+            const angle = Math.atan2(dy, dx);
+            const headLen = Math.min(18, Math.max(12, len * 0.3));
+
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); ctx.stroke();
+
+            ctx.beginPath(); ctx.moveTo(x + dx, y + dy);
+            ctx.lineTo(x + dx - headLen * Math.cos(angle - Math.PI / 6), y + dy - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(x + dx - headLen * Math.cos(angle + Math.PI / 6), y + dy - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath(); ctx.fill();
+
+            if (label) {
+                const labelX = x + dx * 0.5;
+                const labelY = y + dy + (dy < 0 ? -16 : 22);
+                ctx.font = 'bold 13px Inter';
+                const textWidth = ctx.measureText(label).width;
+                ctx.fillStyle = 'rgba(5, 8, 17, 0.92)';
+                ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 14, textWidth + 12, 18);
+                ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+                ctx.strokeRect(labelX - textWidth / 2 - 6, labelY - 14, textWidth + 12, 18);
+
+                ctx.fillStyle = color; ctx.textAlign = 'center';
+                ctx.fillText(label, labelX, labelY);
+            }
+        }
+
+        let currentSlide = 1;
+        const totalSlides = 2;
+
+        function goToSlide(idx) {
+            currentSlide = idx;
+            document.querySelectorAll('.presentation-slide').forEach((s, i) => s.classList.toggle('active', i === (idx - 1)));
+            document.querySelectorAll('.slide-step-btn').forEach((b, i) => b.classList.toggle('active', i === (idx - 1)));
+            drawStage();
+        }
+
+        function nextSlide() { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); else goToSlide(1); }
+        function prevSlide() { if (currentSlide > 1) goToSlide(currentSlide - 1); else goToSlide(totalSlides); }
+
+        function resetDemo() { animProgress = 0; drawStage(); }
+
+        function getCanvasCtx(id) {
+            const canvas = document.getElementById(id);
+            if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
+            const rect = canvas.getBoundingClientRect();
+            const w = rect.width > 0 ? rect.width : 600;
+            const h = rect.height > 0 ? rect.height : 480;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = Math.floor(w * dpr);
+            canvas.height = Math.floor(h * dpr);
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return { canvas, ctx, w, h };
+        }
+
+        
+        const canvasType = "mola_7_8";
+        let animProgress = 0;
+        let isAnimating = true;
+
+        function drawStage() {
+            const { canvas, ctx, w, h } = getCanvasCtx('stage-canvas');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
+
+            // Grade de fundo suave
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.04)";
+            ctx.lineWidth = 1;
+            for (let x = 0; x < w; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+            for (let y = 0; y < h; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+
+            if (canvasType === "beisebol_7_1") {
+                const groundY = h - 60;
+                ctx.fillStyle = "#1e293b"; ctx.fillRect(40, groundY, w - 80, 8);
+                ctx.fillStyle = "#94a3b8"; ctx.font = "bold 13px Inter"; ctx.fillText("Solo (y₁ = 0)", 40, groundY + 26);
+
+                const maxH = 260;
+                const curH = (Math.sin(animProgress) * 0.5 + 0.5) * maxH;
+                const ballX = w * 0.35;
+                const ballY = groundY - curH - 15;
+
+                // Linha de altura máxima
+                ctx.strokeStyle = "rgba(56, 189, 248, 0.4)"; ctx.setLineDash([6, 6]);
+                ctx.beginPath(); ctx.moveTo(ballX - 60, groundY - maxH); ctx.lineTo(ballX + 220, groundY - maxH); ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = "#38bdf8"; ctx.fillText("y₂ = 20,4 m (v = 0)", ballX + 70, groundY - maxH - 8);
+
+                // Bola
+                ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.arc(ballX, ballY, 14, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = "#ef4444"; ctx.lineWidth = 2; ctx.stroke();
+
+                // Vetor Peso
+                drawVectorArrow(ctx, ballX, ballY, 0, 45, "#ef4444", "P = mg");
+                // Vetor Velocidade (se subindo)
+                const vy = (1 - curH / maxH) * -60;
+                if (Math.abs(vy) > 5) drawVectorArrow(ctx, ballX, ballY, 0, vy, "#10b981", "v");
+
+                // Gráfico de Barras de Energia
+                drawEnergyBars(ctx, w * 0.72, h * 0.35, 1 - curH / maxH, curH / maxH, 1.0);
+
+            } else if (canvasType === "beisebol_7_2") {
+                const groundY = h - 140;
+                ctx.fillStyle = "#1e293b"; ctx.fillRect(40, groundY, w - 80, 4);
+                ctx.fillStyle = "#94a3b8"; ctx.font = "bold 13px Inter"; ctx.fillText("y = 0 (Bola deixa a mão)", 40, groundY + 20);
+
+                const ballX = w * 0.35;
+                const handY = groundY + 60;
+                ctx.strokeStyle = "#a855f7"; ctx.setLineDash([4, 4]);
+                ctx.strokeRect(ballX - 30, groundY - 10, 60, 70);
+                ctx.setLineDash([]);
+                ctx.fillStyle = "#c084fc"; ctx.fillText("Δy = 0,50 m (Aceleração da mão)", ballX + 40, groundY + 40);
+
+                ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.arc(ballX, groundY, 14, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = "#ef4444"; ctx.lineWidth = 2; ctx.stroke();
+
+                drawVectorArrow(ctx, ballX, groundY, 0, -85, "#10b981", "F_mão = 59 N");
+                drawVectorArrow(ctx, ballX, groundY, 0, 35, "#ef4444", "P = 1,42 N");
+
+                drawEnergyBars(ctx, w * 0.72, h * 0.35, 0.75, 0.25, 1.0);
+
+            } else if (canvasType === "projetil_7_3") {
+                const groundY = h - 60;
+                ctx.fillStyle = "#1e293b"; ctx.fillRect(40, groundY, w - 80, 6);
+
+                const hLine = groundY - 140;
+                ctx.strokeStyle = "#fbbf24"; ctx.setLineDash([6, 6]);
+                ctx.beginPath(); ctx.moveTo(40, hLine); ctx.lineTo(w - 40, hLine); ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = "#fbbf24"; ctx.font = "bold 13px Inter"; ctx.fillText("Altura h (v é igual nas duas!)", w - 240, hLine - 10);
+
+                // Parábola 1 (60°)
+                ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 3;
+                ctx.beginPath();
+                for (let x = 60; x <= 280; x += 5) {
+                    const norm = (x - 60) / 220;
+                    const y = groundY - 4 * 220 * norm * (1 - norm);
+                    if (x === 60) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+
+                // Parábola 2 (30°)
+                ctx.strokeStyle = "#a855f7"; ctx.lineWidth = 3;
+                ctx.beginPath();
+                for (let x = 60; x <= 460; x += 5) {
+                    const norm = (x - 60) / 400;
+                    const y = groundY - 4 * 145 * norm * (1 - norm);
+                    if (x === 60) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+
+                ctx.fillStyle = "#38bdf8"; ctx.fillText("Trajetória 1 (60°)", 140, groundY - 210);
+                ctx.fillStyle = "#a855f7"; ctx.fillText("Trajetória 2 (30°)", 340, groundY - 130);
+
+            } else if (canvasType === "tobias_7_4" || canvasType === "tobias_7_5") {
+                const cx = 120, cy = 90, R = 280;
+                ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 6;
+                ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI / 2); ctx.stroke();
+
+                const theta = (Math.sin(animProgress) * 0.5 + 0.5) * (Math.PI / 2);
+                const bx = cx + R * Math.cos(theta);
+                const by = cy + R * Math.sin(theta);
+
+                ctx.fillStyle = "#ffffff"; ctx.beginPath(); ctx.arc(bx, by, 16, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = "#6366f1"; ctx.lineWidth = 3; ctx.stroke();
+
+                const nx = -Math.cos(theta) * 60;
+                const ny = -Math.sin(theta) * 60;
+                drawVectorArrow(ctx, bx, by, nx, ny, "#38bdf8", "Normal n");
+                drawVectorArrow(ctx, bx, by, 0, 50, "#ef4444", "Peso P");
+
+                if (canvasType === "tobias_7_5") {
+                    const fx = Math.sin(theta) * 35;
+                    const fy = -Math.cos(theta) * 35;
+                    drawVectorArrow(ctx, bx, by, fx, fy, "#f59e0b", "Atrito f");
+                    drawEnergyBars(ctx, w * 0.72, h * 0.35, 0.61, 0.0, 0.61, 0.39);
+                } else {
+                    drawEnergyBars(ctx, w * 0.72, h * 0.35, Math.sin(theta), Math.cos(theta), 1.0);
+                }
+
+            } else if (canvasType === "caixa_7_6") {
+                const groundY = h - 70;
+                const rampX1 = 80, rampY1 = groundY;
+                const rampX2 = 420, rampY2 = groundY - 180;
+                ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 5;
+                ctx.beginPath(); ctx.moveTo(rampX1, rampY1); ctx.lineTo(rampX2, rampY2); ctx.lineTo(rampX2, groundY); ctx.closePath();
+                ctx.fillStyle = "rgba(15, 23, 42, 0.6)"; ctx.fill(); ctx.stroke();
+
+                ctx.fillStyle = "#fbbf24"; ctx.font = "bold 13px Inter"; ctx.fillText("30°", rampX1 + 40, rampY1 - 8);
+
+                const prog = (Math.sin(animProgress) * 0.5 + 0.5);
+                const bx = rampX1 + (rampX2 - rampX1) * 0.65 * prog;
+                const by = rampY1 + (rampY2 - rampY1) * 0.65 * prog;
+
+                ctx.save();
+                ctx.translate(bx, by);
+                ctx.rotate(-Math.PI / 6);
+                ctx.fillStyle = "#f59e0b"; ctx.fillRect(-20, -35, 40, 35);
+                ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 2; ctx.strokeRect(-20, -35, 40, 35);
+                ctx.restore();
+
+                drawEnergyBars(ctx, w * 0.72, h * 0.35, (1 - prog) * 0.62, prog * 0.62, 0.62 + 0.38 * prog, 0.38 * prog);
+
+            } else if (canvasType === "mola_7_7" || canvasType === "mola_7_8") {
+                const centerY = h * 0.45;
+                const wallX = 80;
+                ctx.fillStyle = "#334155"; ctx.fillRect(wallX - 15, centerY - 60, 15, 120);
+
+                const x0 = 240;
+                const amp = (canvasType === "mola_7_8" ? 140 : 100);
+                const curX = x0 + Math.sin(animProgress) * amp;
+
+                // Desenho da mola em ziguezague
+                ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 3;
+                ctx.beginPath(); ctx.moveTo(wallX, centerY);
+                const coils = 12;
+                const coilLen = (curX - wallX) / coils;
+                for (let i = 1; i <= coils; i++) {
+                    const mx = wallX + coilLen * (i - 0.5);
+                    const my = centerY + (i % 2 === 0 ? -18 : 18);
+                    ctx.lineTo(mx, my);
+                }
+                ctx.lineTo(curX, centerY); ctx.stroke();
+
+                // Bloco cavaleiro
+                ctx.fillStyle = "#6366f1"; ctx.fillRect(curX, centerY - 25, 50, 50);
+                ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 2; ctx.strokeRect(curX, centerY - 25, 50, 50);
+
+                if (canvasType === "mola_7_8") {
+                    drawVectorArrow(ctx, curX + 50, centerY, 55, 0, "#10b981", "F = 0,610 N");
+                }
+
+                drawVectorArrow(ctx, curX, centerY, (x0 - curX) * 0.4, 0, "#ef4444", "F_mola");
+                drawEnergyBars(ctx, w * 0.72, h * 0.35, Math.abs(Math.cos(animProgress)), Math.abs(Math.sin(animProgress)), 1.0);
+
+            } else if (canvasType === "elevador_7_9") {
+                const shaftX = 140, shaftW = 160;
+                ctx.strokeStyle = "#64748b"; ctx.lineWidth = 3;
+                ctx.strokeRect(shaftX, 40, shaftW, h - 80);
+
+                const groundY = h - 40;
+                const prog = Math.sin(animProgress) * 0.5 + 0.5;
+                const elevY = 60 + prog * 160;
+
+                // Mola vertical de amortecimento no fundo
+                ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 3;
+                ctx.beginPath(); ctx.moveTo(shaftX + shaftW / 2, groundY);
+                const coils = 10;
+                const compH = 100 - prog * 40;
+                for (let i = 1; i <= coils; i++) {
+                    const my = groundY - (compH / coils) * i;
+                    const mx = shaftX + shaftW / 2 + (i % 2 === 0 ? -15 : 15);
+                    ctx.lineTo(mx, my);
+                }
+                ctx.stroke();
+
+                // Cabine
+                ctx.fillStyle = "#475569"; ctx.fillRect(shaftX + 15, elevY, shaftW - 30, 80);
+                ctx.strokeStyle = "#f8fafc"; ctx.lineWidth = 2; ctx.strokeRect(shaftX + 15, elevY, shaftW - 30, 80);
+
+                drawVectorArrow(ctx, shaftX + shaftW / 2, elevY + 40, 0, -60, "#ef4444", "f_atrito = 17 kN");
+                drawVectorArrow(ctx, shaftX + shaftW / 2, elevY + 40, 0, 45, "#fbbf24", "P = mg");
+
+                drawEnergyBars(ctx, w * 0.72, h * 0.35, 1 - prog, prog * 0.5, 1.0, prog * 0.5);
+
+            } else if (canvasType === "sofa_7_10") {
+                const p1x = 100, p1y = 120;
+                const p2x = 360, p2y = 320;
+
+                // Linha reta direta
+                ctx.strokeStyle = "#10b981"; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(p1x, p1y); ctx.lineTo(p2x, p2y); ctx.stroke();
+                ctx.fillStyle = "#10b981"; ctx.font = "bold 13px Inter"; ctx.fillText("Linha Reta (2,5 m) • 196 J", (p1x + p2x) / 2 - 40, (p1y + p2y) / 2 - 14);
+
+                // Caminho ortogonal em L
+                ctx.strokeStyle = "#ef4444"; ctx.lineWidth = 4; ctx.setLineDash([6, 6]);
+                ctx.beginPath(); ctx.moveTo(p1x, p1y); ctx.lineTo(p1x, p2y); ctx.lineTo(p2x, p2y); ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = "#ef4444"; ctx.fillText("Em L: 2,0 m + 1,5 m (3,5 m) • 274 J (+78 J)", p1x + 10, p2y + 24);
+
+                // Mesa no centro
+                ctx.fillStyle = "#64748b"; ctx.fillRect(160, 180, 110, 80);
+                ctx.strokeStyle = "#94a3b8"; ctx.strokeRect(160, 180, 110, 80);
+                ctx.fillStyle = "#ffffff"; ctx.fillText("MESA PESADA", 175, 225);
+
+                // Posições
+                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(p1x, p1y, 10, 0, Math.PI * 2); ctx.fill();
+                ctx.fillText("Sofá (Início)", p1x - 30, p1y - 14);
+                ctx.fillStyle = "#fbbf24"; ctx.beginPath(); ctx.arc(p2x, p2y, 10, 0, Math.PI * 2); ctx.fill();
+                ctx.fillText("Destino", p2x + 14, p2y + 4);
+
+            } else if (canvasType === "eletron_7_11") {
+                const ox = 120, oy = h - 100, L = 220;
+                // Eixos cartesianos
+                ctx.strokeStyle = "#475569"; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(ox - 30, oy); ctx.lineTo(ox + L + 60, oy); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(ox, oy + 30); ctx.lineTo(ox, oy - L - 60); ctx.stroke();
+                ctx.fillStyle = "#94a3b8"; ctx.font = "bold 13px Inter";
+                ctx.fillText("x", ox + L + 50, oy + 20); ctx.fillText("y", ox - 20, oy - L - 50);
+
+                // Trajetória quadrada
+                ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 4;
+                ctx.strokeRect(ox, oy - L, L, L);
+
+                // Campo de Força F = Cx j
+                for (let x = 40; x <= L; x += 45) {
+                    const fy = -(x / L) * 55;
+                    drawVectorArrow(ctx, ox + x, oy, 0, fy, "rgba(245, 158, 11, 0.7)", "");
+                    drawVectorArrow(ctx, ox + x, oy - L, 0, fy, "rgba(245, 158, 11, 0.7)", "");
+                }
+
+                ctx.fillStyle = "#fbbf24"; ctx.fillText("Campo de Força F = Cx ĵ", ox + 40, oy - L - 25);
+                ctx.fillStyle = "#10b981"; ctx.fillText("W = CL² ≠ 0 (Não Conservativa)", ox + 30, oy - L / 2);
+            }
+
+            if (isAnimating) {
+                animProgress += 0.03;
+                requestAnimationFrame(drawStage);
+            }
+        }
+
+        function drawEnergyBars(ctx, bx, by, kNorm, uNorm, eNorm, dissNorm = 0) {
+            const barW = 28, maxH = 120;
+            ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+            ctx.fillRect(bx - 20, by - 30, 160, maxH + 70);
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.3)"; ctx.strokeRect(bx - 20, by - 30, 160, maxH + 70);
+
+            ctx.fillStyle = "#38bdf8"; ctx.font = "bold 12px Inter"; ctx.fillText("Energias (J)", bx + 15, by - 12);
+
+            // Barra K (Cinética)
+            const kH = Math.max(2, Math.min(maxH, kNorm * maxH));
+            ctx.fillStyle = "#10b981"; ctx.fillRect(bx, by + maxH - kH, barW, kH);
+            ctx.fillText("K", bx + 8, by + maxH + 16);
+
+            // Barra U (Potencial)
+            const uH = Math.max(2, Math.min(maxH, uNorm * maxH));
+            ctx.fillStyle = "#6366f1"; ctx.fillRect(bx + 40, by + maxH - uH, barW, uH);
+            ctx.fillText("U", bx + 48, by + maxH + 16);
+
+            // Barra E (Mecânica Total)
+            const eH = Math.max(2, Math.min(maxH, eNorm * maxH));
+            ctx.fillStyle = "#fbbf24"; ctx.fillRect(bx + 80, by + maxH - eH, barW, eH);
+            ctx.fillText("E", bx + 88, by + maxH + 16);
+        }
+    
+
+        window.addEventListener('load', () => { drawStage(); });
+        window.addEventListener('resize', () => { drawStage(); });
+    </script>
+</body>
+</html>
