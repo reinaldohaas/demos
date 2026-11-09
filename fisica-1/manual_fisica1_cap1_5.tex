@@ -1,0 +1,468 @@
+\documentclass[9pt,a4paper,landscape]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage[landscape,margin=0.4cm,top=0.35cm,bottom=0.35cm]{geometry}
+\usepackage{multicol}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\linespread{0.89}\selectfont
+
+% Configurações de Cores
+\definecolor{primaryblue}{HTML}{0f172a}
+\definecolor{accentcyan}{HTML}{0284c7}
+\definecolor{accentrose}{HTML}{e11d48}
+\definecolor{accentgreen}{HTML}{059669}
+\definecolor{accentamber}{HTML}{d97706}
+\definecolor{boxbg}{HTML}{f8fafc}
+\definecolor{rosebg}{HTML}{fff1f2}
+\definecolor{greenbg}{HTML}{ecfdf5}
+
+% Estilo tcolorbox
+\tcbuselibrary{skins,breakable}
+\tcbset{
+    enhanced,
+    breakable,
+    fonttitle=\bfseries\sffamily\scriptsize,
+    boxrule=0.4pt,
+    arc=2.5pt,
+    top=1pt,bottom=1pt,left=2.5pt,right=2.5pt,
+    boxsep=0pt,
+    before skip=1.5pt,after skip=1.5pt
+}
+
+\newtcolorbox{topicbox}[1]{
+    colback=boxbg,
+    colframe=accentcyan,
+    coltitle=white,
+    title={#1},
+    colbacktitle=accentcyan
+}
+
+\newtcolorbox{greenbox}[1]{
+    colback=greenbg,
+    colframe=accentgreen,
+    coltitle=white,
+    title={#1},
+    colbacktitle=accentgreen
+}
+
+\newtcolorbox{alertbox}[1]{
+    colback=rosebg,
+    colframe=accentrose,
+    coltitle=white,
+    title={#1},
+    colbacktitle=accentrose
+}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.4pt}
+\setlength{\columnsep}{6pt}
+\setlist{nosep,leftmargin=*}
+\AtBeginDocument{%
+  \setlength{\abovedisplayskip}{1.5pt}\setlength{\belowdisplayskip}{1.5pt}%
+  \setlength{\abovedisplayshortskip}{1pt}\setlength{\belowdisplayshortskip}{1pt}}
+
+\newcommand{\cabecalho}[1]{%
+\begin{tcolorbox}[colback=primaryblue,colframe=accentcyan,arc=3pt,top=1.5pt,bottom=1.5pt,coltext=white,halign=center,breakable=false]
+    {\bfseries\sffamily\normalsize FSC5101 FÍSICA I --- MANUAL DE FÓRMULAS, CONCEITOS \& TÉCNICAS}\\[0.5pt]
+    {\scriptsize \textbf{#1} \quad $\bullet$ \quad Sears \& Zemansky / Young \& Freedman (12ª ed.) \quad $\bullet$ \quad Prof. Reinaldo Haas}
+\end{tcolorbox}\vspace{-2pt}}
+
+\begin{document}
+
+% =================================================================
+% PÁGINA 1: CAPÍTULOS 1 A 4
+% =================================================================
+\cabecalho{PARTE 1: Vetores, Cinemática 1D/2D/3D e Leis de Newton do Movimento (Capítulos 1 a 4)}
+\begin{multicols*}{4}
+
+% --- COLUNA 1: CAPÍTULO 1 ---
+\begin{topicbox}{Capítulo 1: Medição, Vetores e Trigonometria}
+\textbf{1. Unidades SI e Ordens de Grandeza}
+\begin{itemize}
+    \item \textbf{Base SI}: Comprimento $[L]$ (m), Massa $[M]$ (kg), Tempo $[T]$ (s).
+    \item \textbf{Prefixos}: $k=10^3, M=10^6, G=10^9, c=10^{-2}, m=10^{-3}, \mu=10^{-6}, n=10^{-9}$.
+    \item \textbf{Análise Dimensional}: $[v]=LT^{-1}, [a]=LT^{-2}, [F]=MLT^{-2}, [W]=ML^2T^{-2}$.
+    \item \textbf{Algarismos Significativos}: mult/div $\to$ menor número de sig.; soma/sub $\to$ menor número de casas decimais.
+\end{itemize}
+
+\textbf{2. Trigonometria Fundamental (SOH CAH TOA)}
+Para triângulo retângulo com hipotenusa $H$, oposto $O$, adjacente $A$:
+\begin{equation*}
+    \sin\theta = \frac{O}{H}, \quad \cos\theta = \frac{A}{H}, \quad \tan\theta = \frac{O}{A}
+\end{equation*}
+$\sin^2\theta + \cos^2\theta = 1$. Se $H=10, \theta=30^\circ$: $O=5, A=5\sqrt{3}$.
+\begin{itemize}
+    \item \textbf{Lei dos Cossenos}: $C^2 = A^2 + B^2 - 2AB\cos\phi$.
+    \item \textbf{Lei dos Senos}: $\frac{A}{\sin a} = \frac{B}{\sin b} = \frac{C}{\sin c}$.
+\end{itemize}
+
+\textbf{3. Vetores em 2D e 3D}
+\begin{itemize}
+    \item \textbf{Forma Cartesiana}: $\vec{A} = A_x \hat{i} + A_y \hat{j} + A_z \hat{k}$.
+    \item \textbf{Módulo}: $|\vec{A}| = A = \sqrt{A_x^2 + A_y^2 + A_z^2}$.
+    \item \textbf{Decomposição 2D}: $A_x = A\cos\theta, A_y = A\sin\theta$.
+    \item \textbf{Ângulo}: $\theta = \arctan(A_y / A_x)$ (+ $180^\circ$ se $A_x < 0$).
+    \item \textbf{Vetor Unitário}: $\hat{u}_A = \vec{A}/|\vec{A}|$, com $|\hat{u}_A| = 1$.
+    \item \textbf{Soma Vetorial}: $\vec{R} = \vec{A}+\vec{B} \implies R_i = A_i + B_i$.
+\end{itemize}
+
+\textbf{4. Produtos Vetoriais}
+\begin{itemize}
+    \item \textbf{Produto Escalar (Escalar)}:
+    \begin{equation*}
+        \vec{A} \cdot \vec{B} = AB\cos\phi = A_x B_x + A_y B_y + A_z B_z
+    \end{equation*}
+    $\vec{A} \perp \vec{B} \iff \vec{A}\cdot\vec{B}=0$. Ângulo: $\cos\phi = \frac{\vec{A}\cdot\vec{B}}{AB}$.
+    \item \textbf{Produto Vetorial (Vetor)}: $\vec{C} = \vec{A} \times \vec{B}$, módulo $|\vec{C}| = AB\sin\phi$ (Regra da Mão Direita); anti-comutativo: $\vec{B}\times\vec{A} = -(\vec{A}\times\vec{B})$.
+    \begin{equation*}
+        \vec{A} \times \vec{B} = \begin{vmatrix} \hat{i} & \hat{j} & \hat{k} \\ A_x & A_y & A_z \\ B_x & B_y & B_z \end{vmatrix}
+    \end{equation*}
+    $\vec{A} \parallel \vec{B} \iff \vec{A}\times\vec{B} = \vec{0}$. $\hat{i}\times\hat{j}=\hat{k}, \hat{j}\times\hat{k}=\hat{i}, \hat{k}\times\hat{i}=\hat{j}$.
+\end{itemize}
+\end{topicbox}
+
+% --- COLUNA 2: CAPÍTULO 2 ---
+\begin{topicbox}{Capítulo 2: Cinemática 1D e Regras do Monômio}
+\textbf{1. Posição, Velocidade e Aceleração}
+\begin{itemize}
+    \item \textbf{Deslocamento}: $\Delta x = x_2 - x_1$. Rapidez média: $d_{\text{tot}}/\Delta t$.
+    \item \textbf{Velocidade Média e Instantânea}:
+    \begin{equation*}
+        v_{\text{méd}} = \frac{\Delta x}{\Delta t}, \qquad v(t) = \frac{dx}{dt} = \lim_{\Delta t \to 0} \frac{\Delta x}{\Delta t}
+    \end{equation*}
+    \item \textbf{Aceleração Média e Instantânea}:
+    \begin{equation*}
+        a_{\text{méd}} = \frac{\Delta v}{\Delta t}, \qquad a(t) = \frac{dv}{dt} = \frac{d^2 x}{dt^2}
+    \end{equation*}
+\end{itemize}
+
+\textbf{2. Regras de Derivada e Integral (Monômio)}
+\begin{itemize}
+    \item \textbf{Derivada do Monômio}: $\frac{d}{dt}(c t^n) = c \cdot n \, t^{n-1}$.
+    \item \textbf{Integral do Monômio}: $\int c t^n dt = \frac{c \, t^{n+1}}{n+1} + C \quad (n \neq -1)$.
+    \item \textbf{Integral de $t^{-1}$}: $\int \frac{c}{t} dt = c \ln|t| + C$.
+    \item \textbf{Cinemática por Integração}:
+    \begin{equation*}
+        v(t) = v_0 + \int_0^t a(t') dt', \quad x(t) = x_0 + \int_0^t v(t') dt'
+    \end{equation*}
+\end{itemize}
+
+\textbf{3. Movimento com Aceleração Constante (MRUV)}
+\begin{align*}
+    v(t) &= v_0 + at, \qquad x(t) = x_0 + v_0 t + \tfrac{1}{2} a t^2 \\
+    v^2 &= v_0^2 + 2a\Delta x \quad \textbf{(Torricelli)} \\
+    \Delta x &= \left(\frac{v_0 + v}{2}\right) t, \qquad \Delta x = v t - \tfrac{1}{2} a t^2
+\end{align*}
+MRU ($a=0$): $x(t) = x_0 + v t$.
+
+\textbf{4. Queda Livre Vertical ($a = -g$, $g \approx 9{,}80\text{ m/s}^2$)}
+\begin{equation*}
+    v_y(t) = v_0 - gt, \quad y(t) = y_0 + v_0 t - \tfrac{1}{2} gt^2
+\end{equation*}
+\begin{equation*}
+    v_y^2 = v_0^2 - 2g\Delta y, \quad h_{\text{máx}} = \frac{v_0^2}{2g}, \quad t_{\text{sub}} = \frac{v_0}{g}
+\end{equation*}
+
+\textbf{5. Análise de Gráficos Cinemáticos}
+\begin{itemize}
+    \item $x \times t$: inclinação da reta tangente = $v(t)$; concavidade $\cup \implies a > 0$; $\cap \implies a < 0$.
+    \item $v \times t$: inclinação = $a(t)$; área sob curva = $\Delta x$.
+    \item $a \times t$: área sob curva = $\Delta v = v_2 - v_1$.
+\end{itemize}
+\end{topicbox}
+
+% --- COLUNA 3: CAPÍTULO 3 ---
+\begin{topicbox}{Capítulo 3: Cinemática 2D/3D e Projéteis}
+\textbf{1. Vetores Cinemáticos em 2D/3D}
+\begin{align*}
+    \vec{r}(t) &= x\hat{i} + y\hat{j} + z\hat{k} \\
+    \vec{v}(t) &= \frac{d\vec{r}}{dt} = v_x\hat{i} + v_y\hat{j} + v_z\hat{k}, \quad v = |\vec{v}| \\
+    \vec{a}(t) &= \frac{d\vec{v}}{dt} = a_x\hat{i} + a_y\hat{j} + a_z\hat{k}, \quad a = |\vec{a}|
+\end{align*}
+
+\textbf{2. Lançamento de Projéteis (Sem Resistência do Ar)}
+Eixo $x$: $a_x = 0$ (MRU); Eixo $y$: $a_y = -g$ (MRUV, $y$ para cima).
+\begin{itemize}
+    \item \textbf{Início}: $v_{0x} = v_0\cos\theta_0, \quad v_{0y} = v_0\sin\theta_0$.
+    \item \textbf{Velocidades}: $v_x(t) = v_{0x}, \quad v_y(t) = v_{0y} - gt$.
+    \item \textbf{Posições}: $x(t) = x_0 + v_{0x} t, \quad y(t) = y_0 + v_{0y} t - \tfrac{1}{2} gt^2$.
+    \item \textbf{Equação da Trajetória}:
+    \begin{equation*}
+        y(x) = (\tan\theta_0) x - \frac{g x^2}{2(v_0\cos\theta_0)^2}
+    \end{equation*}
+    \item \textbf{Tempo de Subida e Voo}: $t_{\text{sub}} = \frac{v_0\sin\theta_0}{g}, \quad t_{\text{voo}} = 2 t_{\text{sub}}$.
+    \item \textbf{Altura e Alcance} (para $y_0 = 0$ no solo):
+    \begin{equation*}
+        h_{\text{máx}} = \frac{v_0^2\sin^2\theta_0}{2g}, \qquad R = \frac{v_0^2\sin(2\theta_0)}{g}
+    \end{equation*}
+    Alcance máximo ocorre para $\theta_0 = 45^\circ$.
+\end{itemize}
+
+\textbf{3. Movimento Circular Uniforme (MCU)}
+$v = \text{constante}$ em módulo, direção gira continuamente.
+\begin{itemize}
+    \item \textbf{Período e Frequência}: $T = 1/f$, $f = 1/T$ ($1\text{ Hz} = 1\text{ s}^{-1}$).
+    \item \textbf{Velocidade Angular}: $\omega = \frac{2\pi}{T} = 2\pi f$, $\quad v = \omega R$.
+    \item \textbf{Aceleração Centrípeta/Radial} ($\vec{a}_{\text{rad}} \perp \vec{v}$, para o centro):
+    \begin{equation*}
+        a_{\text{rad}} = a_c = \frac{v^2}{R} = \omega^2 R = \frac{4\pi^2 R}{T^2}
+    \end{equation*}
+\end{itemize}
+
+\textbf{4. Movimento Circular Não-Uniforme}
+$\vec{a} = \vec{a}_{\text{rad}} + \vec{a}_{\text{tan}}$, onde $a_{\text{tan}} = \frac{dv}{dt} = \alpha R$ e $a = \sqrt{a_{\text{rad}}^2 + a_{\text{tan}}^2}$.
+
+\textbf{5. Velocidade Relativa (Galileu)}
+\begin{equation*}
+    \vec{r}_{P/A} = \vec{r}_{P/B} + \vec{r}_{B/A} \implies \vec{v}_{P/A} = \vec{v}_{P/B} + \vec{v}_{B/A}
+\end{equation*}
+\end{topicbox}
+
+% --- COLUNA 4: CAPÍTULO 4 ---
+\begin{topicbox}{Capítulo 4: Leis de Newton do Movimento}
+\textbf{1. Força, Massa e Primeira Lei (Inércia)}
+\begin{itemize}
+    \item \textbf{Força}: grandeza vetorial ($[F] = 1\text{ N} = 1\text{ kg}\cdot\text{m/s}^2$).
+    \item \textbf{Princípio da Superposição}: $\vec{F}_{\text{res}} = \sum \vec{F} = \vec{F}_1 + \vec{F}_2 + \dots$
+    \item \textbf{1ª Lei de Newton}: Em referencial inercial, corpo sem força resultante mantém velocidade constante:
+    \begin{equation*}
+        \sum \vec{F} = \vec{0} \iff \vec{v} = \text{constante} \quad (\vec{a} = \vec{0})
+    \end{equation*}
+\end{itemize}
+
+\textbf{2. Segunda Lei de Newton}
+Aceleração proporcional à resultante e inversa à massa:
+\begin{equation*}
+    \sum \vec{F} = m \vec{a} \iff \begin{cases} \sum F_x = m a_x \\ \sum F_y = m a_y \\ \sum F_z = m a_z \end{cases}
+\end{equation*}
+
+\textbf{3. Terceira Lei de Newton (Ação e Reação)}
+Se corpo $A$ exerce força sobre $B$, $B$ exerce força oposta sobre $A$:
+\begin{equation*}
+    \vec{F}_{A \to B} = -\vec{F}_{B \to A} \quad (|\vec{F}_{A \to B}| = |\vec{F}_{B \to A}|)
+\end{equation*}
+\textbf{Atenção}: Ação e reação \emph{nunca se anulam}, pois atuam em corpos distintos!
+
+\textbf{4. Forças Comuns no Diagrama de Corpo Livre (DCL)}
+\begin{itemize}
+    \item \textbf{Força Peso}: $\vec{P} = m\vec{g}$ (atração gravitacional, para baixo).
+    \item \textbf{Massa vs. Peso}: Massa $m$ é intrínseca (kg); peso $P=mg$ depende do campo gravitacional local (N).
+    \item \textbf{Força Normal $\vec{n}$}: contato perpendicular à superfície. Atenção: $n$ \emph{não é sempre} igual a $mg$!
+    \item \textbf{Tensão $\vec{T}$}: transmitida por corda ideal sem massa; puxa o corpo ao longo da linha do fio.
+    \item \textbf{Peso Aparente no Elevador}:
+    $\sum F_y = n - mg = m a_y \implies n = m(g + a_y)$.
+    Subindo acelerado / descendo freando ($a_y > 0$): $n = m(g+a) > mg$.
+    Subindo freando / descendo acelerado ($a_y < 0$): $n = m(g-a) < mg$.
+    Cabo partido (queda livre, $a_y = -g$): $n = 0$ (imponderabilidade).
+\end{itemize}
+\end{topicbox}
+
+\end{multicols*}
+
+% =================================================================
+% PÁGINA 2: CAPÍTULOS 5 A 7
+% =================================================================
+\newpage
+\cabecalho{PARTE 2: Aplicações de Newton, Trabalho, Energia Cinética, Energia Potencial e Conservação (Capítulos 5 a 7)}
+\begin{multicols*}{4}
+
+% --- COLUNA 1: CAPÍTULO 5 ---
+\begin{topicbox}{Capítulo 5: Aplicações das Leis de Newton}
+\textbf{1. Estratégia Geral com DCL}
+\begin{enumerate}
+    \item Isole cada corpo e desenhe o \textbf{Diagrama de Corpo Livre}.
+    \item Escolha eixos ($x$ paralelo à aceleração, $y$ perpendicular).
+    \item Decomponha as forças e aplique $\sum F_x = ma_x$ e $\sum F_y = 0$.
+\end{enumerate}
+
+\textbf{2. Plano Inclinado de Ângulo $\alpha$}
+\begin{equation*}
+    P_{\parallel} = mg\sin\alpha, \qquad P_{\perp} = mg\cos\alpha
+\end{equation*}
+Sem outras forças perpendiculares: $n = mg\cos\alpha$.
+\begin{itemize}
+    \item \textbf{Sem atrito}: $a_{\parallel} = g\sin\alpha$ (descendo).
+    \item \textbf{Com atrito}: $f = \mu n = \mu mg\cos\alpha$.
+    Subindo: $a = -g(\sin\alpha + \mu_k\cos\alpha)$.
+    Descendo: $a = g(\sin\alpha - \mu_k\cos\alpha)$.
+    Ângulo crítico de repouso: $\tan\alpha_c = \mu_s$.
+\end{itemize}
+
+\textbf{3. Forças de Atrito (Superfícies Sólidas)}
+\begin{itemize}
+    \item \textbf{Atrito Estático}: corpo sem deslizamento relativo:
+    \begin{equation*}
+        0 \le f_s \le f_{s,\text{máx}} = \mu_s n \quad (\text{auto-ajustável})
+    \end{equation*}
+    \item \textbf{Atrito Cinético}: corpo em deslizamento:
+    \begin{equation*}
+        f_k = \mu_k n \quad (\text{sentido oposto ao deslizamento})
+    \end{equation*}
+    Em geral: $\mu_k < \mu_s$. Coeficientes $\mu$ são adimensionais.
+\end{itemize}
+
+\textbf{4. Sistemas Ligados e Polias Ideais}
+\begin{itemize}
+    \item Fio inextensível: módulos das acelerações iguais ($a_1 = a_2 = a$).
+    \item Análise global: $\sum F_{\text{ext}} = M_{\text{tot}} a$ (tensões internas cancelam).
+\end{itemize}
+
+\textbf{5. Dinâmica do Movimento Circular}
+A força resultante radial fornece a aceleração centrípeta:
+\begin{equation*}
+    \sum F_{\text{rad}} = m \frac{v^2}{R} = m \omega^2 R
+\end{equation*}
+\begin{itemize}
+    \item \textbf{Curva Plana}: $f_s = m v^2/R \implies v_{\text{máx}} = \sqrt{\mu_s g R}$.
+    \item \textbf{Curva Compensada ($\theta$)}: $n\sin\theta = mv^2/R, n\cos\theta = mg \implies \tan\theta = \frac{v^2}{gR}$.
+    \item \textbf{Pêndulo Cônico}: $T\cos\beta = mg, T\sin\beta = m v^2/R \implies v = \sqrt{g R \tan\beta}$.
+    \item \textbf{Looping Vertical (raio $R$)}:
+    No topo: $n_{\text{topo}} + mg = mv^2/R \implies v_{\text{mín}} = \sqrt{gR}$.
+    Na base: $n_{\text{base}} - mg = mv^2/R$.
+\end{itemize}
+\end{topicbox}
+
+% --- COLUNA 2: CAPÍTULO 6 ---
+\begin{greenbox}{Capítulo 6: Trabalho e Energia Cinética}
+\textbf{1. Trabalho de Força Constante}
+Trabalho realizado por $\vec{F}$ no deslocamento $\vec{s}$:
+\begin{equation*}
+    W = \vec{F} \cdot \vec{s} = F s \cos\phi = F_x \Delta x + F_y \Delta y + F_z \Delta z
+\end{equation*}
+Unidade SI: $1\text{ Joule (J)} = 1\text{ N}\cdot\text{m} = 1\text{ kg}\cdot\text{m}^2/\text{s}^2$.
+\begin{itemize}
+    \item $\phi < 90^\circ \implies W > 0$ (trabalho motor, injeta energia).
+    \item $\phi = 90^\circ \implies W = 0$ (força perpendicular, ex: normal).
+    \item $\phi > 90^\circ \implies W < 0$ (trabalho resistente/dissipativo).
+\end{itemize}
+
+\textbf{2. Trabalho de Força Variável 1D}
+Área sob o gráfico de $F_x(x)$ de $x_1$ a $x_2$:
+\begin{equation*}
+    W = \int_{x_1}^{x_2} F_x(x) \, dx
+\end{equation*}
+Em 3D (trajetória curva): $W = \int_{P_1}^{P_2} \vec{F} \cdot d\vec{l} = \int (F_x dx + F_y dy + F_z dz)$.
+
+\textbf{3. Força Elástica e Trabalho da Mola (Lei de Hooke)}
+Força restauradora da mola: $F_x = -k x$.
+\begin{equation*}
+    W_{\text{mola}} = \int_{x_1}^{x_2} (-kx) dx = \frac{1}{2} k x_1^2 - \frac{1}{2} k x_2^2
+\end{equation*}
+Trabalho de força externa para deformar de 0 a $x$: $W_{\text{ext}} = +\frac{1}{2} k x^2$.
+
+\textbf{4. Energia Cinética e Teorema Trabalho-Energia}
+\begin{itemize}
+    \item \textbf{Energia Cinética}: $K = \frac{1}{2} m v^2 \ge 0$.
+    \item \textbf{Teorema do Trabalho e Energia (Total)}:
+    \begin{equation*}
+        W_{\text{tot}} = \Delta K = K_2 - K_1 = \frac{1}{2} m v_2^2 - \frac{1}{2} m v_1^2
+    \end{equation*}
+    $W_{\text{tot}}$ inclui o trabalho de \emph{todas} as forças atuantes (conservativas e dissipativas). Válido mesmo com aceleração variável!
+\end{itemize}
+
+\textbf{5. Potência Mecânica}
+Taxa temporal de trabalho ($[P] = 1\text{ Watt (W)} = 1\text{ J/s}$):
+\begin{itemize}
+    \item \textbf{Potência Média}: $P_{\text{méd}} = \frac{\Delta W}{\Delta t}$.
+    \item \textbf{Potência Instantânea}:
+    \begin{equation*}
+        P = \frac{dW}{dt} = \vec{F} \cdot \vec{v} = F v \cos\phi
+    \end{equation*}
+    \item \textbf{Conversões Úteis}: $1\text{ hp} = 746\text{ W}$; $1\text{ cv} = 735{,}5\text{ W}$; $1\text{ kWh} = 3{,}6 \times 10^6\text{ J} = 3{,}6\text{ MJ}$.
+\end{itemize}
+\end{greenbox}
+
+% --- COLUNA 3: CAPÍTULO 7 ---
+\begin{greenbox}{Capítulo 7: Energia Potencial e Conservação}
+\textbf{1. Forças Conservativas e Energia Potencial}
+Uma força é conservativa se o trabalho independe da trajetória: $W_{\text{cons}} = -\Delta U = -(U_2 - U_1) = U_1 - U_2$.
+\begin{itemize}
+    \item \textbf{Energia Potencial Gravitacional} ($y$ para cima):
+    \begin{equation*}
+        U_{\text{grav}} = mgy, \quad W_{\text{grav}} = -\Delta U = mg(y_1 - y_2)
+    \end{equation*}
+    \item \textbf{Energia Potencial Elástica} ($x$ = deformação):
+    \begin{equation*}
+        U_{\text{el}} = \tfrac{1}{2} k x^2, \quad W_{\text{el}} = -\Delta U = \tfrac{1}{2} k x_1^2 - \tfrac{1}{2} k x_2^2
+    \end{equation*}
+    Potencial total: $U = U_{\text{grav}} + U_{\text{el}} = mgy + \frac{1}{2}kx^2$.
+\end{itemize}
+
+\textbf{2. Conservação da Energia Mecânica (Sem Atrito)}
+Se apenas forças conservativas realizam trabalho ($W_{\text{outras}} = 0$):
+\begin{equation*}
+    E = K + U = \text{constante} \implies K_1 + U_1 = K_2 + U_2
+\end{equation*}
+$\frac{1}{2}mv_1^2 + mgy_1 + \frac{1}{2}kx_1^2 = \frac{1}{2}mv_2^2 + mgy_2 + \frac{1}{2}kx_2^2$.
+
+\textbf{3. Forças Não-Conservativas e Teorema Geral}
+Quando atuam outras forças (atrito $f_k$, tração, força externa):
+\begin{equation*}
+    K_1 + U_1 + W_{\text{outras}} = K_2 + U_2 \iff W_{\text{outras}} = \Delta E_{\text{mec}}
+\end{equation*}
+\begin{itemize}
+    \item Se $W_{\text{outras}} < 0$ (atrito/ar), energia mecânica diminui.
+    \item Se $W_{\text{outras}} > 0$ (motor/mão), energia mecânica é injetada.
+\end{itemize}
+
+\textbf{4. Atrito, Energia Interna e 1ª Lei Termodinâmica}
+Trabalho do atrito: $W_{\text{atrito}} = -f_k s$. Dissipa mecânica em \textbf{energia interna térmica} $\Delta U_{\text{int}} = +f_k s$:
+\begin{equation*}
+    \Delta K + \Delta U + \Delta U_{\text{int}} = 0 \quad (\text{Energia Total Conservada})
+\end{equation*}
+A energia total do universo é rigorosamente constante!
+\end{greenbox}
+
+% --- COLUNA 4: CAPÍTULO 7 (CONT) & CHECKLIST ---
+\begin{topicbox}{Capítulo 7 (cont.): Força e Energia Potencial}
+\textbf{5. Determinação da Força a partir de $U$}
+A força conservativa é o gradiente negativo da energia potencial (aponta sempre no sentido em que $U$ decresce):
+\begin{itemize}
+    \item \textbf{Em 1D}:
+    \begin{equation*}
+        F_x(x) = -\frac{dU(x)}{dx}
+    \end{equation*}
+    Exemplos: $U = \frac{1}{2}kx^2 \implies F_x = -kx$; $U = mgy \implies F_y = -mg$; $U = C/x \implies F_x = +C/x^2$.
+    \item \textbf{Em 2D e 3D (Gradiente)}:
+    \begin{equation*}
+        \vec{F} = -\vec{\nabla} U = -\left(\frac{\partial U}{\partial x}\hat{i} + \frac{\partial U}{\partial y}\hat{j} + \frac{\partial U}{\partial z}\hat{k}\right)
+    \end{equation*}
+    Se $U(x,y) = \frac{1}{2}k(x^2+y^2) \implies \vec{F} = -k\vec{r}$, força central com módulo $F = kr$.
+\end{itemize}
+
+\textbf{6. Diagramas de Energia $U(x)$ e Estabilidade}
+\begin{itemize}
+    \item Força nula: $F_x = -\frac{dU}{dx} = 0$ (pontos de equilíbrio).
+    \item \textbf{Equilíbrio Estável}: $d^2U/dx^2 > 0$ (mínimo local, concavidade $\cup$). Força atua como restauradora.
+    \item \textbf{Equilíbrio Instável}: $d^2U/dx^2 < 0$ (máximo local, concavidade $\cap$). Perturbação afasta o corpo.
+    \item \textbf{Equilíbrio Indiferente}: $dU/dx = 0$ e $d^2U/dx^2 = 0$.
+    \item \textbf{Pontos de Retorno}: onde $E = U(x) \implies K = 0$ ($v=0$).
+\end{itemize}
+
+\textbf{7. Critério para Força Conservativa}
+$\vec{F}$ é conservativa se o trabalho em circuito fechado for nulo:
+\begin{equation*}
+    \oint \vec{F} \cdot d\vec{l} = 0 \iff \vec{\nabla} \times \vec{F} = \vec{0} \quad (\text{rotacional nulo})
+\end{equation*}
+\end{topicbox}
+
+\begin{alertbox}{CHECKLIST PRÁTICO PARA PROVAS (CAP. 1 A 7)}
+\begin{enumerate}[itemsep=0.8pt]
+    \item \textbf{Vetores e Eixos}: escolha referencial antes de calcular. Decomponha forças em eixos mutuamente perpendiculares ($x, y$).
+    \item \textbf{Força Normal}: nunca assuma $n=mg$. Em rampa, $n=mg\cos\alpha$. Com aceleração vertical, $n=m(g\pm a)$.
+    \item \textbf{Cinemática vs. Energia}: se o problema pede velocidade ou posição sem envolver o tempo $t$, prefira sempre \textbf{Conservação de Energia}!
+    \item \textbf{Trabalho da Mola}: use $\frac{1}{2}kx_1^2 - \frac{1}{2}kx_2^2$, e não $F\cdot x$, pois a força da mola varia linearmente com $x$.
+    \item \textbf{Sinal de $W_{\text{atrito}}$}: o trabalho do atrito cinético é estritamente negativo ($W_f = -f_k s$), reduzindo a energia mecânica.
+    \item \textbf{Força da Energia Potencial}: lembre-se do sinal de menos: $F_x = -dU/dx$.
+\end{enumerate}
+\end{alertbox}
+
+\end{multicols*}
+
+\end{document}
