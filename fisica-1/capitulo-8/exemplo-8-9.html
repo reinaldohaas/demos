@@ -3,565 +3,1183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo 8.9: Propulsão de Foguete no Espaço Sideral - Física I</title>
-    
-    <!-- Google Fonts -->
+    <title>Exemplo 8.9: Análise da Colisão de um Automóvel em 2D | FSC5101 Física I</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    
-    <!-- MathJax 3 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
     <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']],
-        processEscapes: true
-      },
-      options: {
-        ignoreHtmlClass: 'tex2jax_ignore',
-        processHtmlClass: 'tex2jax_process'
-      }
-    };
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: { fontCache: 'global' }
+        };
     </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --card-border: #334155;
-            --accent-color: #3b82f6;
-            --accent-hover: #2563eb;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
+            --bg-dark: #070a12;
+            --bg-card: rgba(15, 23, 42, 0.94);
+            --bg-card-border: rgba(56, 189, 248, 0.3);
+            --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
+            --accent-emerald: #10b981;
+            --accent-rose: #f43f5e;
+            --text-main: #f8fafc;
+            --text-sub: #cbd5e1;
+            --font-scale: 1.0;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            line-height: 1.6;
-            padding: 20px;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(139, 92, 246, 0.15) 0%, transparent 45%);
+            background-attachment: fixed;
+            padding: 24px;
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        /* Header Navigation */
-        .nav-header {
+        .top-nav {
+            max-width: 1400px;
+            margin: 0 auto 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--card-border);
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
-        .chapter-badge {
-            background: rgba(59, 130, 246, 0.15);
-            color: var(--accent-color);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid rgba(59, 130, 246, 0.3);
+        .back-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--bg-card-border);
+            color: var(--accent-cyan);
+            padding: 10px 20px;
+            border-radius: 10px;
             text-decoration: none;
-            display: inline-block;
+            font-weight: 700;
+            font-size: calc(18px * var(--font-scale));
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .nav-buttons {
+        .back-btn:hover { background: rgba(56, 189, 248, 0.2); border-color: var(--accent-cyan); transform: translateY(-2px); }
+
+        .statement-box {
+            max-width: 1400px;
+            margin: 0 auto 24px;
+            background: rgba(10, 16, 30, 0.94);
+            border-left: 6px solid var(--accent-cyan);
+            border-radius: 16px;
+            padding: 26px 30px;
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
-        .btn-nav {
-            background-color: var(--card-bg);
-            color: var(--text-primary);
-            border: 1px solid var(--card-border);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-decoration: none;
+        .statement-title h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: calc(28px * var(--font-scale));
+            font-weight: 800;
+            color: var(--accent-cyan);
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .statement-subtitle {
+            font-size: calc(20px * var(--font-scale));
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .statement-title p {
+            font-size: calc(20px * var(--font-scale));
+            color: #e2e8f0;
+            line-height: 1.7;
+            max-width: 1050px;
+        }
+
+        .formula-badge {
+            background: rgba(56, 189, 248, 0.12);
+            border: 2px solid rgba(56, 189, 248, 0.4);
+            padding: 14px 22px;
+            border-radius: 12px;
+            font-family: 'Outfit', monospace;
+            font-size: calc(22px * var(--font-scale));
+            color: var(--accent-gold);
+            font-weight: 700;
+            align-self: center;
+        }
+
+        .presentation-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 480px 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 1080px) {
+            .presentation-container { grid-template-columns: 1fr; }
+        }
+
+        .slide-deck {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 18px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 480px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .slide-stepper {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .slide-step-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-sub);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: calc(16px * var(--font-scale));
+            font-weight: 700;
+            cursor: pointer;
             transition: all 0.2s;
         }
 
-        .btn-nav:hover:not(.disabled) {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
+        .slide-step-btn.active {
+            background: var(--primary-gradient);
             color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
         }
 
-        .btn-nav.disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
+        .presentation-slide { display: none; flex-direction: column; gap: 14px; }
+        .presentation-slide.active { display: flex; }
+
+        .slide-badge {
+            font-size: calc(15px * var(--font-scale));
+            font-weight: 800;
+            color: var(--accent-cyan);
+            letter-spacing: 0.05em;
         }
 
-        /* Title Area */
-        .example-header {
-            margin-bottom: 25px;
+        .slide-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: calc(24px * var(--font-scale));
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.3;
         }
 
-        .example-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 5px;
+        .slide-formula {
+            font-size: calc(19px * var(--font-scale));
+            color: var(--accent-gold);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px 18px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 6px 0;
+            border-left: 4px solid var(--accent-gold);
+            overflow-x: auto;
         }
 
-        .example-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-        }
-
-        /* Voice Panel */
-        .voice-panel {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 15px 20px;
-            margin-bottom: 25px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .voice-title {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: var(--accent-color);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .voice-controls {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .btn-voice {
-            background: #334155;
-            color: white;
-            border: none;
-            padding: 7px 14px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-voice:hover {
-            background: var(--accent-color);
-        }
-
-        .voice-rate {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        /* Content Grid */
-        .grid-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-        }
-
-        @media (min-width: 900px) {
-            .grid-container {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 20px;
-        }
-
-        .card-header {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            color: var(--accent-color);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 1px solid var(--card-border);
-            padding-bottom: 10px;
-        }
-
-        .enunciado-text {
-            font-size: 1rem;
-            color: var(--text-primary);
+        .slide-desc {
+            font-size: calc(19px * var(--font-scale));
             line-height: 1.7;
+            color: var(--accent-emerald);
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 16px 18px;
+            border-radius: 10px;
         }
 
-        /* Interactive Canvas */
-        .canvas-container {
-            position: relative;
+        .slide-nav-controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 800;
+            font-size: calc(18px * var(--font-scale));
+            cursor: pointer;
+            background: #1e293b;
+            color: var(--text-main);
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover { background: rgba(56, 189, 248, 0.25); color: var(--accent-cyan); }
+
+        .interactive-stage {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 18px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .canvas-holder {
             width: 100%;
-            height: 380px;
-            background: #090d16;
-            border-radius: 8px;
+            height: 480px;
+            background: #050811;
+            border-radius: 14px;
             overflow: hidden;
-            border: 1px solid var(--card-border);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
+        canvas { width: 100%; height: 100%; display: block; }
+
+        /* Resolução Completa Passo a Passo */
+        .solution-section {
+            max-width: 1400px;
+            margin: 36px auto 0;
         }
 
-        /* Presentation Deck Steps */
+        .solution-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .solution-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: calc(30px * var(--font-scale));
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .solution-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-emerald);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: calc(16px * var(--font-scale));
+            font-weight: 800;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
         .steps-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-top: 25px;
+            gap: 20px;
         }
 
         .step-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 10px;
-            padding: 18px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 16px;
+            padding: 26px 30px;
             display: flex;
-            gap: 15px;
+            gap: 22px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+            transition: all 0.25s ease;
+        }
+
+        .step-card:hover {
+            border-color: var(--accent-cyan);
+            transform: translateX(4px);
         }
 
         .step-number {
-            background-color: var(--accent-color);
+            background: linear-gradient(135deg, #38bdf8, #6366f1);
             color: white;
-            width: 32px;
-            height: 32px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 0.95rem;
+            font-weight: 900;
+            font-size: calc(22px * var(--font-scale));
             flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
         }
 
-        .step-content {
-            flex: 1;
-        }
+        .step-content { flex: 1; overflow-x: auto; }
 
         .step-title {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: calc(24px * var(--font-scale));
+            font-weight: 800;
+            color: var(--accent-cyan);
+            margin-bottom: 14px;
+            line-height: 1.35;
         }
 
         .step-desc {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
+            color: #cbd5e1;
+            font-size: calc(20px * var(--font-scale));
+            line-height: 1.8;
         }
 
-        /* External Interactive Links */
-        .links-panel {
-            margin-top: 25px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
+        .step-desc strong { color: #ffffff; }
 
-        .ext-link {
-            background: #1e293b;
-            border: 1px solid var(--card-border);
-            padding: 12px 18px;
-            border-radius: 8px;
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
+        .footer-nav {
+            max-width: 1400px;
+            margin: 40px auto 20px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .ext-link:hover {
-            background: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
-        }
-
-        /* Footer */
-        footer {
-            margin-top: 40px;
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            border-top: 1px solid var(--card-border);
-            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 24px;
+            flex-wrap: wrap;
+            gap: 14px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header Nav -->
-        <header class="nav-header">
-            <a href="index.html" class="chapter-badge">← Capítulo 8: Momento Linear e Colisões</a>
-            <div class="nav-buttons">
-                <a href="exemplo-8-8.html" class="btn-nav">← Anterior</a>
-                <a href="index.html" class="btn-nav">Todos os Exemplos</a>
-                <span class="btn-nav disabled">Próximo →</span>
-            </div>
-        </header>
 
-        <!-- Title -->
-        <div class="example-header">
-            <h1 class="example-title">Exemplo 8.9: Propulsão de Foguete no Espaço Sideral</h1>
-            <p class="example-subtitle">Empuxo \(F\), Aceleração \(a\) e Equação do Foguete</p>
-        </div>
-
-        <!-- Voice Control Panel -->
-        <div class="voice-panel">
-            <div class="voice-title">🔊 Controle de Voz</div>
-            <div class="voice-controls">
-                <button class="btn-voice" onclick="playVoice()">▶️ Ouvir Exemplo</button>
-                <button class="btn-voice" onclick="pauseVoice()">⏸️ Pausar</button>
-                <button class="btn-voice" onclick="stopVoice()">⏹️ Parar</button>
-            </div>
-            <div class="voice-rate">
-                <label for="rate">Velocidade:</label>
-                <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="1.0" onchange="updateRate()">
-                <span id="rate-val">1.0x</span>
-            </div>
-            <span id="voice-status" style="font-size: 0.85rem; color: var(--text-secondary);">Pronto</span>
-        </div>
-
-        <!-- Content Grid -->
-        <div class="grid-container">
-            <!-- Left: Enunciado -->
-            <div class="card">
-                <div class="card-header">📖 Enunciado Oficial (Young & Freedman)</div>
-                <div class="enunciado-text">
-                    Um foguete no espaço sideral (sem gravidade ou atrito) tem massa total inicial $m_0 = 21.000\text{ kg}$ (sendo $15.000\text{ kg}$ de combustível). O motor queima combustível a uma taxa constante de $R = \left|\frac{dm}{dt}\right| = 150\text{ kg/s}$ com velocidade de exaustão dos gases de $v_{\text{ex}} = 2400\text{ m/s}$ em relação ao foguete.<br><br>
-(a) Determine o empuxo $F$ (força de propulsão) exercido pelos gases sobre o foguete.<br>
-(b) Qual é a aceleração inicial do foguete e a sua aceleração logo antes do combustível esgotar-se (massa residual $m = 6.000\text{ kg}$)?<br>
-(c) Qual é a velocidade final do foguete partindo do repouso após o consumo total do combustível?
-                </div>
-            </div>
-
-            <!-- Right: Interactive Canvas Stage -->
-            <div class="card">
-                <div class="card-header">🎨 Diagrama Interativo e Vetores (2x Tamanho)</div>
-                <div class="canvas-container">
-                    <canvas id="stageCanvas" width="700" height="380"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Step-by-Step Presentation Deck -->
-        <h2 style="margin-top: 30px; font-size: 1.3rem; color: var(--text-primary);">📝 Resolução Passo a Passo</h2>
-        <div class="steps-container">
-            
-        <div class="step-card">
-            <div class="step-number">1</div>
-            <div class="step-content">
-                <h3 class="step-title">Cálculo do Empuxo (Força de Propulsão)</h3>
-                <div class="step-desc">$$F = v_{\text{ex}} \left|\frac{dm}{dt}\right| = (2400\text{ m/s})(150\text{ kg/s}) = 360.000\text{ N} = 360\text{ kN}$$
-O empuxo permanece constante enquanto a taxa de queima e a velocidade de exaustão forem constantes.</div>
-            </div>
+    <div class="top-nav">
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <a href="index.html" class="back-btn">← Voltar ao Catálogo do Capítulo 8</a>
+            <a href="demonstracao-colisoes.html" class="back-btn" style="color: #34d399; border-color: rgba(52, 211, 153, 0.4);">💥 Laboratório de Colisões &amp; Momento</a>
+            <a href="../index.html" class="back-btn" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.4);">📘 Hub Física I</a>
         </div>
         
-        <div class="step-card">
-            <div class="step-number">2</div>
-            <div class="step-content">
-                <h3 class="step-title">Aceleração Inicial e Aceleração Final</h3>
-                <div class="step-desc">Aceleração inicial ($m_0 = 21.000\text{ kg}$):<br>
-$$a_0 = \frac{F}{m_0} = \frac{360.000\text{ N}}{21.000\text{ kg}} = 17,14\text{ m/s}^2 \approx 1,75\text{ g}$$
-Aceleração final logo antes do esgotamento ($m = 6.000\text{ kg}$):<br>
-$$a_f = \frac{F}{m} = \frac{360.000\text{ N}}{6.000\text{ kg}} = 60,0\text{ m/s}^2 \approx 6,12\text{ g}$$
-A aceleração aumenta substancialmente à medida que a massa reduz!</div>
-            </div>
+        <!-- ZOOM DE FONTE DINÂMICO -->
+        <div style="display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); padding: 8px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15);">
+            <span style="font-size: 19px; font-weight: 700; color: #38bdf8;">🔍 Fonte:</span>
+            <button onclick="changeFontSize(-0.1)" style="padding: 6px 14px; font-size: 18px; font-weight: 800; background: #334155; color: white; border: none; border-radius: 8px; cursor: pointer;">A-</button>
+            <span id="font-scale-indicator" style="font-size: 19px; font-weight: 800; min-width: 55px; text-align: center; color: #fbbf24;">100%</span>
+            <button onclick="changeFontSize(0.1)" style="padding: 6px 14px; font-size: 18px; font-weight: 800; background: #334155; color: white; border: none; border-radius: 8px; cursor: pointer;">A+</button>
+            <button onclick="resetFontSize()" style="padding: 6px 14px; font-size: 16px; font-weight: 700; background: #1e293b; color: #cbd5e1; border: none; border-radius: 8px; cursor: pointer;">100%</button>
         </div>
-        
-        <div class="step-card">
-            <div class="step-number">3</div>
-            <div class="step-content">
-                <h3 class="step-title">Velocidade Final (Equação do Foguete de Tsiolkovsky)</h3>
-                <div class="step-desc">Integrando a equação do movimento do foguete:<br>
-$$v - v_0 = v_{\text{ex}} \ln\left(\frac{m_0}{m}\right)$$
-Como $v_0 = 0$ (partida do repouso):<br>
-$$v = (2400\text{ m/s}) \ln\left(\frac{21.000\text{ kg}}{6.000\text{ kg}}\right) = (2400\text{ m/s}) \ln(3,5) = (2400)(1,2528) = 3006,6\text{ m/s} \approx 3,01\text{ km/s}$$</div>
-            </div>
-        </div>
-        
-        </div>
-
-        <!-- External Interactive Links -->
-        <div class="links-panel">
-            <a href="https://phet.colorado.edu/sims/html/lunar-lander/latest/lunar-lander_pt_BR.html" target="_blank" class="ext-link">🧪 Pouso Lunar e Propulsão (PhET)</a>
-            <a href="https://www.geogebra.org/m/z7t8r9kp" target="_blank" class="ext-link">📐 Propulsão de Foguete (GeoGebra)</a>
-        </div>
-
-        <!-- Footer -->
-        <footer>
-            <p>Física I - Young & Freedman (12ª Edição) | Departamento de Física - UFSC</p>
-        </footer>
     </div>
 
-    <!-- Canvas Drawing Script & Helper -->
+    <div class="statement-box">
+        <div class="statement-title">
+            <div class="statement-subtitle">EXEMPLO 8.9 • SEÇÃO 8.3</div>
+            <h2>Exemplo 8.9: Análise da Colisão de um Automóvel em 2D</h2>
+            <p><strong>Enunciado Oficial (Young &amp; Freedman 12ª ed.):</strong> Um carro compacto com massa de 1000 kg está se deslocando do sul para o norte em linha reta a uma velocidade de 15 m/s quando colide contra um caminhão de massa 2000 kg que se desloca de oeste para leste a 10 m/s. Felizmente, todos os ocupantes usavam cintos de segurança e ninguém se feriu, porém os veículos se engavetaram e passaram a se deslocar, após a colisão, como um único corpo. A seguradora pediu para você calcular a velocidade (módulo e direção) dos carros unidos imediatamente após a colisão, bem como a perda de energia cinética.</p>
+        
+            <div class="voice-control-panel" style="background: rgba(168, 85, 247, 0.15); border: 2px solid rgba(168, 85, 247, 0.4); border-radius: 12px; padding: 12px 18px; margin-top: 16px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button id="btn-voice-play" onclick="playVoiceNarration()" style="background: #a855f7; color: white; border: none; font-weight: 800; font-size: 19px; padding: 10px 18px; border-radius: 10px; cursor: pointer;">
+                        🔊 Ouvir Explicação da Física
+                    </button>
+                    <button id="btn-voice-pause" onclick="pauseVoiceNarration()" style="background: #1e293b; color: #f8fafc; border: 1px solid #475569; font-weight: 700; font-size: 19px; padding: 10px 14px; border-radius: 10px; cursor: pointer;">
+                        ⏸️
+                    </button>
+                    <button id="btn-voice-stop" onclick="stopVoiceNarration()" style="background: #ef4444; color: white; border: none; font-weight: 700; font-size: 19px; padding: 10px 14px; border-radius: 10px; cursor: pointer;">
+                        ⏹️
+                    </button>
+                </div>
+                
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <label style="font-size: 19px; font-weight: 800; color: #d8b4fe;">⏩ Velocidade:</label>
+                    <select id="voice-rate-select" onchange="changeVoiceRate()" style="background: #0f172a; color: #38bdf8; border: 2px solid #38bdf8; padding: 6px 12px; border-radius: 8px; font-weight: 800; font-size: 18px; cursor: pointer;">
+                        <option value="0.75">0.75x</option>
+                        <option value="1.0" selected>1.0x (Normal)</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                    </select>
+                </div>
+                
+                <span id="voice-status-text" style="font-size: 19px; color: #cbd5e1; font-weight: 700;">Status: Pronto</span>
+            </div>
+        </div>
+        <div class="formula-badge">$$V = 8,3\text{ m/s}, \quad \theta = 37^\circ \text{ (Norte do Leste)}$$</div>
+    </div>
+
+    <div class="presentation-container">
+        <div class="slide-deck">
+            <div>
+                <div style="font-size: calc(18px * var(--font-scale)); font-weight: 800; color: var(--accent-cyan); margin-bottom: 12px;">
+                    📺 APRESENTAÇÃO DIDÁTICA PASSO A PASSO
+                </div>
+                <div class="slide-stepper">
+                    <button class="slide-step-btn active" onclick="goToSlide(1)">Slide 1</button>
+<button class="slide-step-btn " onclick="goToSlide(2)">Slide 2</button>
+<button class="slide-step-btn " onclick="goToSlide(3)">Slide 3</button>
+                </div>
+
+                
+        <div class="presentation-slide active" id="slide-1">
+            <div class="slide-badge">SLIDE 1 DE 3 • SOMA VETORIAL DOS MOMENTOS INICIAIS</div>
+            <div class="slide-title">Componentes Leste (x) e Norte (y)</div>
+            <div class="slide-formula">$$P_x = m_{\text{Cam}} v_{\text{Cam},x} = 2,0\times 10^4\text{ kg}\cdot\text{m/s}, \quad P_y = m_C v_{Cy} = 1,5\times 10^4\text{ kg}\cdot\text{m/s}$$</div>
+            <div class="slide-desc">O caminhão traz todo o momento na direção leste (+x) e o carro traz todo o momento na direção norte (+y). Formam um triângulo retângulo pitagórico 3-4-5!</div>
+        </div>
+
+        <div class="presentation-slide " id="slide-2">
+            <div class="slide-badge">SLIDE 2 DE 3 • MOMENTO TOTAL E DIREÇÃO</div>
+            <div class="slide-title">Módulo de P e Ângulo θ = 37°</div>
+            <div class="slide-formula">$$P = \sqrt{(2,0)^2 + (1,5)^2}\times 10^4 = 2,5\times 10^4\text{ kg}\cdot\text{m/s}, \quad \theta = \arctan(0,75) = 37^\circ$$</div>
+            <div class="slide-desc">O vetor momento linear total P tem módulo de 25.000 kg·m/s e aponta a 37° ao norte do leste. Imediatamente após o engavetamento, os destroços seguem exatamente nessa direção.</div>
+        </div>
+
+        <div class="presentation-slide " id="slide-3">
+            <div class="slide-badge">SLIDE 3 DE 3 • VELOCIDADE E ENERGIA DISSIPADA</div>
+            <div class="slide-title">Velocidade dos Destroços Unidos (M = 3000 kg)</div>
+            <div class="slide-formula">$$V = \frac{P}{M} = \frac{2,5\times 10^4}{3000} = 8,33\text{ m/s}, \quad K_1 = 2,13\times 10^5\text{ J} \to K_2 = 1,04\times 10^5\text{ J}$$</div>
+            <div class="slide-desc">Os veículos unidos saem a 8,3 m/s (30 km/h). Metade da energia cinética inicial (mais de 108 kJ!) foi consumida amassando a lataria e a estrutura de absorção de impacto.</div>
+        </div>
+            </div>
+
+            <div class="slide-nav-controls">
+                <button class="nav-btn" onclick="prevSlide()">◄ Anterior</button>
+                <button class="nav-btn" onclick="nextSlide()">Próximo ►</button>
+            </div>
+        </div>
+
+        <div class="interactive-stage">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <span style="font-weight: 700; font-size: calc(19px * var(--font-scale)); color: var(--text-sub);">🎬 Simulação Animada &amp; Vetores Dinâmicos</span>
+                <div style="display: flex; gap: 8px;">
+                    <button id="btn-anim-toggle" class="nav-btn" style="padding: 6px 16px; font-size: 16px; background: #10b981; color: #050811;" onclick="toggleAnim()">⏸️ Pausar</button>
+                    <button class="nav-btn" style="padding: 6px 16px; font-size: 16px;" onclick="resetDemo()">↺ Reiniciar</button>
+                </div>
+            </div>
+
+            <div class="canvas-holder">
+                <canvas id="stage-canvas"></canvas>
+            </div>
+        
+            <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 16px;">
+                <div style="font-size: calc(18px * var(--font-scale)); font-weight: 800; color: #38bdf8; margin-bottom: 8px;">🌐 RECURSOS INTERATIVOS DO CAPÍTULO 8:</div>
+                <ul style="font-size: calc(17px * var(--font-scale)); color: #cbd5e1; padding-left: 20px; line-height: 1.8;">
+                    <li><a href="demonstracao-colisoes.html" style="color: #34d399; font-weight: 700; text-decoration: underline;">💥 Abrir Laboratório Interativo de Colisões Elásticas, Inelásticas e Explosões</a></li>
+                    <li><a href="https://phet.colorado.edu/sims/html/collision-lab/latest/collision-lab_all.html" target="_blank" rel="noopener noreferrer" style="color: #fbbf24; font-weight: 700; text-decoration: underline;">🔗 PhET Colorado — Collision Lab (Simulador Oficial de Colisões 1D e 2D)</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESOLUÇÃO COMPLETA PASSO A PASSO (TEXTO INTEGRAL PEDAGÓGICO) -->
+    <div class="solution-section">
+        <div class="solution-header">
+            <h2>📝 Resolução Completa e Desenvolvimento Detalhado</h2>
+            <span class="solution-badge">Passo a Passo Rigoroso</span>
+        </div>
+
+        <div class="steps-container">
+            
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">IDENTIFICAR os Conceitos Relevantes</div>
+                    <div class="step-desc">Trata-se de uma <strong>colisão completamente inelástica em duas dimensões</strong>.<br>
+• Durante o breve instante do choque, as forças internas de deformação estrutural entre os veículos ($\sim 5 \times 10^5\text{ N}$) são cerca de $50$ vezes maiores que a força externa de atrito dos pneus com o asfalto ($\sim 10^4\text{ N}$).<br>
+• Portanto, pela aproximação impulsiva, tratamos o par (carro + caminhão) como um sistema isolado durante a colisão: $\vec{P}_{\text{antes}} = \vec{P}_{\text{depois}} = M \vec{V}$.</div>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">PREPARAR o Sistema de Coordenadas</div>
+                    <div class="step-desc">Definimos o eixo $+Ox$ apontando de oeste para <strong>leste</strong> e o eixo $+Oy$ apontando de sul para <strong>norte</strong>:<br>
+• Caminhão: $m_{\text{Cam}} = 2000\text{ kg}$, $v_{\text{Cam},x} = +10\text{ m/s}$, $v_{\text{Cam},y} = 0$.<br>
+• Carro: $m_C = 1000\text{ kg}$, $v_{Cx} = 0$, $v_{Cy} = +15\text{ m/s}$.<br>
+• Massa total engavetada: $M = m_C + m_{\text{Cam}} = 1000 + 2000 = 3000\text{ kg}$.</div>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">EXECUTAR os Cálculos Vetoriais e de Energia</div>
+                    <div class="step-desc"><strong>1. Componentes do momento linear total $\vec{P}$:</strong>
+$$P_x = m_C v_{Cx} + m_{\text{Cam}} v_{\text{Cam},x} = 0 + (2000\text{ kg})(10\text{ m/s}) = 2,0 \times 10^4\text{ kg}\cdot\text{m/s}$$
+$$P_y = m_C v_{Cy} + m_{\text{Cam}} v_{\text{Cam},y} = (1000\text{ kg})(15\text{ m/s}) + 0 = 1,5 \times 10^4\text{ kg}\cdot\text{m/s}$$
+
+<br><strong>2. Módulo e direção do momento linear total $\vec{P}$:</strong>
+$$P = \sqrt{P_x^2 + P_y^2} = \sqrt{(2,0 \times 10^4)^2 + (1,5 \times 10^4)^2} = \sqrt{4,0 + 2,25} \times 10^4 = 2,5 \times 10^4\text{ kg}\cdot\text{m/s}$$
+$$\tan\theta = \frac{P_y}{P_x} = \frac{1,5 \times 10^4}{2,0 \times 10^4} = 0,75 \implies \theta = \arctan(0,75) = 36,9^\circ \approx 37^\circ$$
+
+<br><strong>3. Velocidade final $\vec{V}$ dos veículos unidos:</strong><br>
+Como $\vec{P} = M \vec{V}$, a direção de $\vec{V}$ é a mesma de $\vec{P}$ ($\theta = 37^\circ$ ao norte do leste), e seu módulo é:
+$$V = \frac{P}{M} = \frac{2,5 \times 10^4\text{ kg}\cdot\text{m/s}}{3000\text{ kg}} = 8,33\text{ m/s} \approx 8,3\text{ m/s}$$
+(Ou em componentes: $V_x = P_x/M = 6,67\text{ m/s}$ e $V_y = P_y/M = 5,00\text{ m/s}$).
+
+<br><strong>4. Cálculo detalhado das energias cinéticas inicial e final:</strong>
+$$K_1 = \frac{1}{2} m_C v_C^2 + \frac{1}{2} m_{\text{Cam}} v_{\text{Cam}}^2 = \frac{1}{2}(1000)(15)^2 + \frac{1}{2}(2000)(10)^2 = 1,125 \times 10^5\text{ J} + 1,00 \times 10^5\text{ J} = 2,125 \times 10^5\text{ J} \approx 2,1 \times 10^5\text{ J}$$
+$$K_2 = \frac{1}{2} M V^2 = \frac{1}{2}(3000\text{ kg})(8,333\text{ m/s})^2 = 1,042 \times 10^5\text{ J} \approx 1,0 \times 10^5\text{ J}$$
+Energia mecânica dissipada na deformação: $|\Delta K| = 1,08 \times 10^5\text{ J}$ ($51\%$ da energia inicial).</div>
+                </div>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <div class="step-title">AVALIAR a Justificativa de Desprezar o Atrito</div>
+                    <div class="step-desc">• <strong>Validação quantitativa da aproximação de sistema isolado:</strong> O caminhão tem peso $P \approx 20000\text{ N}$. Com $\mu_c \approx 0,5$, a força máxima de atrito com o pavimento é $f_{\text{atrito}} \approx 10000\text{ N} = 1,0 \times 10^4\text{ N}$.<br>
+Durante o impacto, a lataria deforma cerca de $\Delta s \approx 0,20\text{ m}$ para absorver $\Delta K \approx -1,0 \times 10^5\text{ J}$, exigindo uma força estrutural interna de $F_{\text{int}} \approx \frac{1,0 \times 10^5\text{ J}}{0,20\text{ m}} = 5,0 \times 10^5\text{ N}$. Como $F_{\text{int}} = 50 \times f_{\text{atrito}}$, desprezar o atrito durante os milissegundos da batida é plenamente justificado!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-nav">
+        <div>
+            <a href="exemplo-8-8.html" class="back-btn">◄ Anterior: EXEMPLO 8.8 • SEÇÃO 8.3</a>
+        </div>
+        <a href="index.html" class="back-btn">📋 Ver Todos os 16 Exemplos</a>
+        <div>
+            <a href="exemplo-8-10.html" class="back-btn" style="color: #38bdf8;">Próximo: EXEMPLO 8.10 • SEÇÃO 8.4 ►</a>
+        </div>
+    </div>
+
     <script>
-        const canvas = document.getElementById('stageCanvas');
-        const ctx = canvas.getContext('2d');
-        const width = canvas.width;
-        const height = canvas.height;
+        // ZOOM DE FONTE DINÂMICO
+        let currentScale = 1.0;
+        function updateFontScale() {
+            document.documentElement.style.setProperty('--font-scale', currentScale);
+            const indicator = document.getElementById('font-scale-indicator');
+            if (indicator) indicator.innerText = Math.round(currentScale * 100) + '%';
+        }
+        function changeFontSize(delta) {
+            currentScale = Math.min(1.6, Math.max(0.7, currentScale + delta));
+            updateFontScale();
+        }
+        function resetFontSize() {
+            currentScale = 1.0;
+            updateFontScale();
+        }
 
-        // Helper vector drawer (2x size arrow head and thick lines)
-        function drawVector(ctx, fromx, fromy, tox, toy, color, label) {
-            const headlen = 14; // doubled arrow head length
-            const dx = tox - fromx;
-            const dy = toy - fromy;
-            const angle = Math.atan2(dy, dx);
+        // VOZ NARRADA SINTÉTICA
+        let isSpeaking = false, isPaused = false, currentUtterance = null;
 
-            ctx.strokeStyle = color;
-            ctx.fillStyle = color;
-            ctx.lineWidth = 4; // doubled line width
+        function playVoiceNarration() {
+            if (!('speechSynthesis' in window)) return alert('Navegador sem suporte à API de Fala.');
+            const statusLabel = document.getElementById('voice-status-text');
+            if (isPaused) {
+                window.speechSynthesis.resume(); isPaused = false; isSpeaking = true;
+                if (statusLabel) statusLabel.innerText = '🔊 Reproduzindo...'; return;
+            }
+            window.speechSynthesis.cancel();
+            const stmt = document.querySelector('.statement-title p')?.innerText || '';
+            const items = Array.from(document.querySelectorAll('.slide-desc')).map(el => el.innerText).join('. ');
+            const stepItems = Array.from(document.querySelectorAll('.step-card')).map(el => {
+                const title = el.querySelector('.step-title')?.innerText || '';
+                const desc = el.querySelector('.step-desc')?.innerText || '';
+                return title + ': ' + desc;
+            }).join('. ');
+            currentUtterance = new SpeechSynthesisUtterance(stmt + '. ' + items + '. ' + stepItems);
+            currentUtterance.lang = 'pt-BR';
+            const speedSelect = document.getElementById('voice-rate-select');
+            if (speedSelect) currentUtterance.rate = parseFloat(speedSelect.value) || 1.0;
+            currentUtterance.onstart = () => { isSpeaking = true; isPaused = false; if (statusLabel) statusLabel.innerText = '🔊 Narrando física...'; };
+            currentUtterance.onend = () => { isSpeaking = false; isPaused = false; if (statusLabel) statusLabel.innerText = '✅ Narração concluída.'; };
+            window.speechSynthesis.speak(currentUtterance);
+        }
 
-            ctx.beginPath();
-            ctx.moveTo(fromx, fromy);
-            ctx.lineTo(tox, toy);
-            ctx.stroke();
-
-            // Arrow head
-            ctx.beginPath();
-            ctx.moveTo(tox, toy);
-            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
-            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
-            ctx.closePath();
-            ctx.fill();
-
-            // Label
-            if (label) {
-                ctx.font = 'bold 13px Inter, sans-serif';
-                ctx.fillText(label, tox + 10, toy - 8);
+        function pauseVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window && isSpeaking && !isPaused) {
+                window.speechSynthesis.pause(); isPaused = true;
+                if (statusLabel) statusLabel.innerText = '⏸️ Pausado.';
             }
         }
+
+        function stopVoiceNarration() {
+            const statusLabel = document.getElementById('voice-status-text');
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); isSpeaking = false; isPaused = false;
+                if (statusLabel) statusLabel.innerText = '⏹️ Parado.';
+            }
+        }
+
+        function changeVoiceRate() { if (isSpeaking && !isPaused) { stopVoiceNarration(); playVoiceNarration(); } }
+
+        function drawVectorArrow(ctx, x, y, dx, dy, color, label) {
+            const len = Math.hypot(dx, dy);
+            if (len < 2) return;
+            const angle = Math.atan2(dy, dx);
+            const headLen = Math.min(18, Math.max(12, len * 0.3));
+
+            ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); ctx.stroke();
+
+            ctx.beginPath(); ctx.moveTo(x + dx, y + dy);
+            ctx.lineTo(x + dx - headLen * Math.cos(angle - Math.PI / 6), y + dy - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(x + dx - headLen * Math.cos(angle + Math.PI / 6), y + dy - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath(); ctx.fill();
+
+            if (label) {
+                const labelX = x + dx * 0.5;
+                const labelY = y + dy + (dy < 0 ? -16 : 24);
+                ctx.font = 'bold 17px Outfit, sans-serif';
+                const textWidth = ctx.measureText(label).width;
+                ctx.fillStyle = 'rgba(5, 8, 17, 0.94)';
+                ctx.fillRect(labelX - textWidth / 2 - 6, labelY - 14, textWidth + 12, 20);
+                ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+                ctx.strokeRect(labelX - textWidth / 2 - 6, labelY - 14, textWidth + 12, 20);
+
+                ctx.fillStyle = color; ctx.textAlign = 'center';
+                ctx.fillText(label, labelX, labelY);
+            }
+        }
+
+        function drawInfoBox(ctx, x, y, title, lines, borderColor="#38bdf8") {
+            const wBox = 240, hBox = 30 + lines.length * 22;
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+            ctx.fillRect(x, y, wBox, hBox);
+            ctx.strokeStyle = borderColor; ctx.lineWidth = 1.8;
+            ctx.strokeRect(x, y, wBox, hBox);
+            ctx.fillStyle = borderColor; ctx.font = 'bold 15px Outfit, sans-serif'; ctx.textAlign = 'left';
+            ctx.fillText(title, x + 12, y + 20);
+            ctx.fillStyle = '#e2e8f0'; ctx.font = '600 14px Inter, sans-serif';
+            lines.forEach((ln, idx) => {
+                ctx.fillText(ln, x + 12, y + 42 + idx * 21);
+            });
+        }
+
+        let currentSlide = 1;
+        const totalSlides = 3;
+
+        function goToSlide(idx) {
+            currentSlide = idx;
+            document.querySelectorAll('.presentation-slide').forEach((s, i) => s.classList.toggle('active', i === (idx - 1)));
+            document.querySelectorAll('.slide-step-btn').forEach((b, i) => b.classList.toggle('active', i === (idx - 1)));
+        }
+
+        function nextSlide() { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); else goToSlide(1); }
+        function prevSlide() { if (currentSlide > 1) goToSlide(currentSlide - 1); else goToSlide(totalSlides); }
+
+        let animProgress = 0, isAnimating = true;
+
+        function toggleAnim() {
+            isAnimating = !isAnimating;
+            const btn = document.getElementById('btn-anim-toggle');
+            if (btn) {
+                btn.innerText = isAnimating ? '⏸️ Pausar' : '▶️ Animar';
+                btn.style.background = isAnimating ? '#10b981' : '#3b82f6';
+            }
+            if (isAnimating) requestAnimationFrame(drawStage);
+        }
+
+        function resetDemo() { animProgress = 0; if (!isAnimating) drawStage(); }
+
+        function getCanvasCtx(id) {
+            const canvas = document.getElementById(id);
+            if (!canvas) return { canvas: null, ctx: null, w: 0, h: 0 };
+            const rect = canvas.getBoundingClientRect();
+            const w = rect.width > 0 ? rect.width : 650;
+            const h = rect.height > 0 ? rect.height : 480;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = Math.floor(w * dpr);
+            canvas.height = Math.floor(h * dpr);
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return { canvas, ctx, w, h };
+        }
+
+        const canvasType = "carros_8_9";
 
         function drawStage() {
-            
-            ctx.clearRect(0, 0, width, height);
+            const { ctx, w, h } = getCanvasCtx('stage-canvas');
+            if (!ctx) return;
+            ctx.clearRect(0, 0, w, h);
 
-            // Rocket body
-            ctx.fillStyle = '#e2e8f0';
-            ctx.beginPath();
-            ctx.moveTo(350, 80);
-            ctx.lineTo(390, 160);
-            ctx.lineTo(390, 240);
-            ctx.lineTo(310, 240);
-            ctx.lineTo(310, 160);
-            ctx.closePath();
-            ctx.fill();
-            ctx.strokeStyle = '#0f172a';
-            ctx.lineWidth = 2;
-            ctx.stroke();
+            // Ciclo normalizado t de 0 a 1 (com pausa no final)
+            const cycle = (animProgress % 3.2) / 2.6;
+            const t = Math.min(1.0, cycle);
 
-            // Exhaust flames (gas exhaust v_ex)
-            ctx.fillStyle = '#f97316';
-            ctx.beginPath();
-            ctx.moveTo(320, 240); ctx.lineTo(350, 320); ctx.lineTo(380, 240);
-            ctx.fill();
+            if (canvasType === "barcos_8_1") {
+                const startX = 90, finishX = w - 280;
+                const dist = finishX - startX;
+                ctx.strokeStyle = "#475569"; ctx.setLineDash([6, 6]); ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(startX, 50); ctx.lineTo(startX, h - 50); ctx.stroke();
+                ctx.strokeStyle = "#fbbf24"; ctx.lineWidth = 3;
+                ctx.beginPath(); ctx.moveTo(finishX, 50); ctx.lineTo(finishX, h - 50); ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = "#94a3b8"; ctx.font = "bold 16px Outfit"; ctx.textAlign = "center";
+                ctx.fillText("Largada (x = 0)", startX, 40);
+                ctx.fillStyle = "#fbbf24"; ctx.fillText("Chegada (x = d)", finishX, 40);
 
-            // Double size thrust vector F (upwards, length 220px 2x)
-            drawVector(ctx, 350, 150, 350, 20, '#10b981', 'Empuxo F = 360 kN (2x)');
+                // Barco 1 (massa m): atinge d em t1 = 0.707
+                const t1 = Math.min(t / 0.707, 1.0);
+                const x1 = startX + dist * (t1 * t1);
+                const y1 = 150;
+                ctx.fillStyle = "#38bdf8"; ctx.fillRect(x1 - 28, y1 - 18, 56, 36);
+                ctx.strokeStyle = "#fff"; ctx.strokeRect(x1 - 28, y1 - 18, 56, 36);
+                ctx.fillStyle = "#050811"; ctx.fillText("m", x1, y1 + 5);
+                drawVectorArrow(ctx, x1 + 28, y1, 55, 0, "#10b981", "F");
+                drawVectorArrow(ctx, x1, y1 - 22, 65 * t1, 0, "#38bdf8", "p₁ = p");
 
-            // Double size exhaust gas speed vector v_ex (downwards, length 180px 2x)
-            drawVector(ctx, 350, 250, 350, 340, '#ef4444', 'v_ex = 2400 m/s (2x)');
+                // Barco 2 (massa 2m): atinge d em t2 = 1.0
+                const x2 = startX + dist * (t * t);
+                const y2 = 320;
+                ctx.fillStyle = "#a855f7"; ctx.fillRect(x2 - 36, y2 - 24, 72, 48);
+                ctx.strokeStyle = "#fff"; ctx.strokeRect(x2 - 36, y2 - 24, 72, 48);
+                ctx.fillStyle = "#fff"; ctx.fillText("2m", x2, y2 + 6);
+                drawVectorArrow(ctx, x2 + 36, y2, 55, 0, "#10b981", "F");
+                drawVectorArrow(ctx, x2, y2 - 28, 92 * t, 0, "#f43f5e", "p₂ = √2 p₁");
 
-            ctx.fillStyle = '#e2e8f0';
-            ctx.font = 'bold 13px Inter, sans-serif';
-            ctx.fillText('Foguete (m₀ = 21.000 kg)', 410, 170);
-            ctx.fillText('Empuxo F = v_ex |dm/dt|', 410, 190);
-        
-        }
+                drawInfoBox(ctx, w - 255, 70, "COMPARAÇÃO NA CHEGADA", [
+                    "Trabalho: W₁ = W₂ = F·d",
+                    "Energia: K₁ = K₂ (Iguais!)",
+                    "Tempo: Δt₂ = √2 Δt₁",
+                    "Momento: p₂ = √2 p₁ (Maior!)"
+                ]);
 
-        window.onload = function() {
-            drawStage();
-        };
+            } else if (canvasType === "parede_8_2") {
+                const wallX = 110;
+                ctx.fillStyle = "#334155"; ctx.fillRect(wallX - 30, 60, 30, h - 120);
+                ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 3; ctx.strokeRect(wallX - 30, 60, 30, h - 120);
 
-        // Web Speech API Voice Implementation
-        let synth = window.speechSynthesis;
-        let utterance = null;
-
-        function playVoice() {
-            if (!synth) return;
-            synth.cancel();
-
-            const textToSpeak = "A propulsão de foguetes baseia-se na terceira lei de Newton e na variação da massa total do sistema. O empuxo F é o produto da taxa de queima R pela velocidade de exaustão vex, resultando em trezentos e sessenta quilonewtons. Conforme o combustível é queimado a aceleração aumenta de dezessete vírgula um para sessenta metros por segundo ao quadrado. A velocidade final é de três mil e doze metros por segundo.";
-            utterance = new SpeechSynthesisUtterance(textToSpeak);
-            utterance.lang = 'pt-BR';
-            utterance.rate = parseFloat(document.getElementById('rate').value);
-
-            utterance.onstart = () => {
-                document.getElementById('voice-status').innerText = '🔊 Reproduzindo...';
-                document.getElementById('voice-status').style.color = '#10b981';
-            };
-
-            utterance.onend = () => {
-                document.getElementById('voice-status').innerText = 'Concluído';
-                document.getElementById('voice-status').style.color = 'var(--text-secondary)';
-            };
-
-            synth.speak(utterance);
-        }
-
-        function pauseVoice() {
-            if (synth && synth.speaking) {
-                if (synth.paused) {
-                    synth.resume();
-                    document.getElementById('voice-status').innerText = '🔊 Reproduzindo...';
+                const cy = h * 0.48;
+                let bx, vx, labelV, colorV;
+                if (t < 0.45) {
+                    const p = t / 0.45;
+                    bx = 420 - p * (420 - wallX - 20);
+                    vx = -95; labelV = "v₁x = -30 m/s (p₁x = -12)"; colorV = "#f43f5e";
+                } else if (t < 0.55) {
+                    bx = wallX + 16;
+                    vx = 0; labelV = "IMPACTO! Δt = 0,010 s"; colorV = "#fbbf24";
+                    drawVectorArrow(ctx, wallX, cy, 130, 0, "#fbbf24", "Fm = +2000 N (Jx = +20 N·s)");
                 } else {
-                    synth.pause();
-                    document.getElementById('voice-status').innerText = '⏸️ Pausado';
-                    document.getElementById('voice-status').style.color = '#f59e0b';
+                    const p = (t - 0.55) / 0.45;
+                    bx = wallX + 20 + p * 260;
+                    vx = +70; labelV = "v₂x = +20 m/s (p₂x = +8,0)"; colorV = "#10b981";
+                }
+
+                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(bx, cy, 20, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = "#fff"; ctx.lineWidth = 2.5; ctx.stroke();
+                if (vx !== 0) drawVectorArrow(ctx, bx, cy, vx, 0, colorV, labelV);
+
+                drawInfoBox(ctx, w - 260, 60, "BALANÇO DE IMPULSO 1D", [
+                    "m = 0,40 kg | Δt = 0,010 s",
+                    "p₁x = -12,0 kg·m/s",
+                    "p₂x = +8,0 kg·m/s",
+                    "Jx = +8,0 - (-12,0) = +20 N·s",
+                    "Fm,x = 20 / 0,010 = +2000 N"
+                ]);
+
+            } else if (canvasType === "futebol_8_3") {
+                const kx = 210, ky = h - 110;
+                ctx.strokeStyle = "#475569"; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(50, ky); ctx.lineTo(w - 50, ky); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(kx, ky + 40); ctx.lineTo(kx, 50); ctx.stroke();
+
+                let bx, by;
+                if (t < 0.45) {
+                    const p = t / 0.45;
+                    bx = 470 - p * (470 - kx);
+                    by = ky;
+                    drawVectorArrow(ctx, bx, by, -80, 0, "#f43f5e", "v₁ = 20 m/s (180°)");
+                } else if (t < 0.55) {
+                    bx = kx; by = ky;
+                    drawVectorArrow(ctx, kx, ky, 110, -56, "#fbbf24", "Fm = 1900 N (27°)");
+                } else {
+                    const p = (t - 0.55) / 0.45;
+                    bx = kx + p * 210;
+                    by = ky - p * 210;
+                    drawVectorArrow(ctx, bx, by, 75, -75, "#10b981", "v₂ = 30 m/s (45°)");
+                }
+
+                ctx.fillStyle = "#f8fafc"; ctx.beginPath(); ctx.arc(bx, by, 18, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 3; ctx.stroke();
+
+                drawInfoBox(ctx, w - 260, 50, "CHUTE 2D (m = 0,40 kg)", [
+                    "v₁ = (-20, 0) m/s",
+                    "v₂ = (+21,2; +21,2) m/s",
+                    "Jx = +16,5 N·s | Jy = +8,5 N·s",
+                    "Fm = (1650 î + 850 ĵ) N",
+                    "|Fm| = 1,9 kN a θ = 27°"
+                ]);
+
+            } else if (canvasType === "rifle_8_4") {
+                const cx = w * 0.42, cy = h * 0.52;
+                ctx.strokeStyle = "#334155"; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(40, cy + 40); ctx.lineTo(w - 40, cy + 40); ctx.stroke();
+
+                const rx = cx - t * 65;
+                const bx = cx + 50 + t * 280;
+
+                // Rifle
+                ctx.fillStyle = "#64748b"; ctx.fillRect(rx - 70, cy - 14, 110, 22);
+                ctx.strokeStyle = "#f8fafc"; ctx.strokeRect(rx - 70, cy - 14, 110, 22);
+                ctx.fillStyle = "#fff"; ctx.font = "bold 14px Inter"; ctx.textAlign = "center";
+                ctx.fillText("Rifle (3,0 kg)", rx - 15, cy + 2);
+
+                // Bala
+                ctx.fillStyle = "#fbbf24"; ctx.beginPath(); ctx.arc(bx, cy - 3, 8, 0, Math.PI * 2); ctx.fill();
+
+                if (t > 0.05) {
+                    drawVectorArrow(ctx, rx - 70, cy - 3, -75, 0, "#f43f5e", "pR = -1,50 kg·m/s (KR = 0,375 J)");
+                    drawVectorArrow(ctx, bx + 10, cy - 3, +75, 0, "#10b981", "pB = +1,50 kg·m/s (KB = 225 J)");
+                }
+
+                drawInfoBox(ctx, w - 265, 55, "RECUO DO RIFLE (Px = 0)", [
+                    "mR = 3,0 kg | mB = 0,005 kg",
+                    "vBx = +300 m/s",
+                    "vRx = -0,500 m/s",
+                    "pBx = +1,50 | pRx = -1,50",
+                    "Razão KB / KR = 600 : 1"
+                ]);
+
+            } else if (canvasType === "trilho_8_5" || canvasType === "inelastica_8_7" || canvasType === "elastica_8_10") {
+                const ty = h * 0.58;
+                ctx.fillStyle = "#1e293b"; ctx.fillRect(40, ty + 28, w - 80, 12);
+                ctx.strokeStyle = "#38bdf8"; ctx.strokeRect(40, ty + 28, w - 80, 12);
+
+                const colX = w * 0.45;
+                let xA, xB, vA, vB;
+                if (t < 0.5) {
+                    const p = t / 0.5;
+                    xA = (colX - 180) + p * 145;
+                    xB = (colX + 180) - p * 145;
+                    vA = +2.0; vB = -2.0;
+                } else {
+                    const p = (t - 0.5) / 0.5;
+                    if (canvasType === "trilho_8_5") {
+                        vA = -0.40; vB = +2.0;
+                    } else if (canvasType === "inelastica_8_7") {
+                        vA = +0.50; vB = +0.50;
+                    } else {
+                        vA = -1.0; vB = +3.0;
+                    }
+                    xA = (colX - 35) + p * (vA * 72);
+                    xB = (colX + 35) + p * (vB * 72);
+                }
+
+                // Bloco A (0,50 kg)
+                ctx.fillStyle = "#3b82f6"; ctx.fillRect(xA - 34, ty - 26, 68, 52);
+                ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.strokeRect(xA - 34, ty - 26, 68, 52);
+                ctx.fillStyle = "#fff"; ctx.font = "bold 15px Outfit"; ctx.textAlign = "center";
+                ctx.fillText("A (0,5 kg)", xA, ty + 5);
+                drawVectorArrow(ctx, xA, ty - 34, vA * 38, 0, "#38bdf8", "vA = " + vA.toFixed(2) + " m/s");
+
+                // Bloco B (0,30 kg)
+                ctx.fillStyle = "#f59e0b"; ctx.fillRect(xB - 28, ty - 22, 56, 48);
+                ctx.strokeStyle = "#fff"; ctx.strokeRect(xB - 28, ty - 22, 56, 48);
+                ctx.fillStyle = "#050811"; ctx.fillText("B (0,3 kg)", xB, ty + 5);
+                drawVectorArrow(ctx, xB, ty + 55, vB * 38, 0, "#fbbf24", "vB = " + vB.toFixed(2) + " m/s");
+
+                if (canvasType === "trilho_8_5") {
+                    drawInfoBox(ctx, w - 265, 45, "EXEMPLO 8.5 (COLISÃO 1D)", [
+                        "Px = +0,40 kg·m/s (constante)",
+                        "Antes: vA = +2,0 | vB = -2,0",
+                        "Depois: vA = -0,40 | vB = +2,0",
+                        "ΔpA = -1,2 | ΔpB = +1,2 N·s"
+                    ]);
+                } else if (canvasType === "inelastica_8_7") {
+                    drawInfoBox(ctx, w - 265, 45, "EXEMPLO 8.7 (INELÁSTICA)", [
+                        "Unidos por Velcro (M = 0,80 kg)",
+                        "v₂x = +0,40 / 0,80 = +0,50 m/s",
+                        "K₁ = 1,0 + 0,60 = 1,60 J",
+                        "K₂ = 0,10 J (Perdeu 15/16!)"
+                    ]);
+                } else {
+                    drawInfoBox(ctx, w - 265, 45, "EXEMPLO 8.10 (ELÁSTICA)", [
+                        "Molas ideais: K₁ = K₂ = 1,60 J",
+                        "vB2x - vA2x = +4,0 m/s",
+                        "vA2x = -1,0 m/s",
+                        "vB2x = +3,0 m/s"
+                    ]);
+                }
+
+            } else if (canvasType === "robos_8_6" || canvasType === "discos_2d_8_12") {
+                const cx = w * 0.40, cy = h * 0.52;
+                ctx.strokeStyle = "#334155"; ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(40, cy); ctx.lineTo(w - 40, cy); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(cx, 40); ctx.lineTo(cx, h - 40); ctx.stroke();
+
+                const is86 = (canvasType === "robos_8_6");
+                const alpha = (is86 ? 30 : 36.9) * Math.PI / 180;
+                const beta = (is86 ? 24 : 26.6) * Math.PI / 180;
+
+                let xA, yA, xB, yB;
+                if (t < 0.45) {
+                    const p = t / 0.45;
+                    xA = cx - 180 + p * 162; yA = cy;
+                    xB = cx + 12; yB = cy;
+                    drawVectorArrow(ctx, xA, yA, 75, 0, "#38bdf8", is86 ? "vA1 = 2,0 m/s" : "vA1 = 4,0 m/s");
+                } else {
+                    const p = (t - 0.45) / 0.55;
+                    xA = cx + p * 140 * Math.cos(alpha);
+                    yA = cy - p * 140 * Math.sin(alpha);
+                    xB = cx + 12 + p * 175 * Math.cos(beta);
+                    yB = cy + p * 175 * Math.sin(beta);
+                    drawVectorArrow(ctx, xA, yA, 60 * Math.cos(alpha), -60 * Math.sin(alpha), "#38bdf8", is86 ? "vA2=1,0 (30°)" : "vA2=2,0 (36,9°)");
+                    drawVectorArrow(ctx, xB, yB, 75 * Math.cos(beta), +75 * Math.sin(beta), "#fbbf24", is86 ? "vB2=2,1 (-24°)" : "vB2=4,47 (-26,6°)");
+                }
+
+                ctx.fillStyle = "#3b82f6"; ctx.beginPath(); ctx.arc(xA, yA, 20, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.stroke();
+                ctx.fillStyle = "#fff"; ctx.font = "bold 14px Outfit"; ctx.textAlign = "center"; ctx.fillText("A", xA, yA + 5);
+
+                ctx.fillStyle = "#f59e0b"; ctx.beginPath(); ctx.arc(xB, yB, 17, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = "#fff"; ctx.stroke();
+                ctx.fillStyle = "#050811"; ctx.fillText("B", xB, yB + 5);
+
+                if (is86) {
+                    drawInfoBox(ctx, w - 260, 45, "ROBÔS 2D (EXEMPLO 8.6)", [
+                        "mA = 20 kg | mB = 12 kg",
+                        "Px = 40 kg·m/s | Py = 0",
+                        "vB2x = +1,89 m/s",
+                        "vB2y = -0,83 m/s",
+                        "vB2 = 2,1 m/s a β = -24°"
+                    ]);
+                } else {
+                    drawInfoBox(ctx, w - 260, 45, "COLISÃO ELÁSTICA 2D (8.12)", [
+                        "mA = 0,50 kg | mB = 0,30 kg",
+                        "K₁ = K₂ ⇒ vB2 = 4,47 m/s",
+                        "cos α = 0,800 ⇒ α = 36,9°",
+                        "sen β = 0,447 ⇒ β = 26,6°"
+                    ]);
+                }
+
+            } else if (canvasType === "pendulo_8_8") {
+                const pivotX = w * 0.42, pivotY = 60, L = 250;
+                ctx.fillStyle = "#64748b"; ctx.fillRect(pivotX - 50, pivotY - 10, 100, 10);
+
+                let angle = 0, bulletX = 80;
+                if (t < 0.35) {
+                    const p = t / 0.35;
+                    bulletX = 70 + p * (pivotX - 110);
+                } else {
+                    const p = (t - 0.35) / 0.65;
+                    angle = Math.sin(p * Math.PI * 0.5) * 0.52;
+                    bulletX = pivotX + L * Math.sin(angle);
+                }
+
+                const bx = pivotX + L * Math.sin(angle);
+                const by = pivotY + L * Math.cos(angle);
+
+                ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 3;
+                ctx.beginPath(); ctx.moveTo(pivotX - 18, pivotY); ctx.lineTo(bx - 18, by); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(pivotX + 18, pivotY); ctx.lineTo(bx + 18, by); ctx.stroke();
+
+                ctx.fillStyle = "#b45309"; ctx.fillRect(bx - 36, by - 22, 72, 44);
+                ctx.strokeStyle = "#fbbf24"; ctx.lineWidth = 2.5; ctx.strokeRect(bx - 36, by - 22, 72, 44);
+
+                if (t < 0.35) {
+                    ctx.fillStyle = "#fbbf24"; ctx.beginPath(); ctx.arc(bulletX, pivotY + L, 7, 0, Math.PI * 2); ctx.fill();
+                    drawVectorArrow(ctx, bulletX + 10, pivotY + L, 85, 0, "#ef4444", "v₁ = 307 m/s");
+                } else {
+                    drawVectorArrow(ctx, bx + 40, by, 50 * Math.cos(angle), -50 * Math.sin(angle), "#10b981", "y = 3,0 cm");
+                }
+
+                drawInfoBox(ctx, w - 265, 50, "PÊNDULO BALÍSTICO (8.8)", [
+                    "1) Colisão: Conserva P_x",
+                    "   v₂ = √(2gy) = 0,767 m/s",
+                    "2) Subida: Conserva E_mec",
+                    "   v₁ = (mB+mM)/mB · v₂",
+                    "   v₁ = 307 m/s (K₁=236 J)"
+                ]);
+
+            } else if (canvasType === "carros_8_9") {
+                const ox = w * 0.38, oy = h * 0.58;
+                ctx.strokeStyle = "#334155"; ctx.lineWidth = 36;
+                ctx.beginPath(); ctx.moveTo(40, oy); ctx.lineTo(w - 40, oy); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(ox, 40); ctx.lineTo(ox, h - 30); ctx.stroke();
+
+                if (t < 0.45) {
+                    const p = t / 0.45;
+                    const tx = (ox - 160) + p * 140;
+                    const cy = (oy + 150) - p * 130;
+                    ctx.fillStyle = "#3b82f6"; ctx.fillRect(tx - 32, oy - 16, 64, 32);
+                    drawVectorArrow(ctx, tx + 32, oy, 60, 0, "#38bdf8", "Caminhão 2000 kg (10 m/s)");
+
+                    ctx.fillStyle = "#f43f5e"; ctx.fillRect(ox - 14, cy - 24, 28, 48);
+                    drawVectorArrow(ctx, ox, cy - 24, 0, -65, "#f43f5e", "Carro 1000 kg (15 m/s)");
+                } else {
+                    const p = (t - 0.45) / 0.55;
+                    const ang = 36.9 * Math.PI / 180;
+                    const wx = ox + p * 165 * Math.cos(ang);
+                    const wy = oy - p * 165 * Math.sin(ang);
+                    ctx.fillStyle = "#a855f7"; ctx.fillRect(wx - 28, wy - 20, 56, 40);
+                    ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.strokeRect(wx - 28, wy - 20, 56, 40);
+                    drawVectorArrow(ctx, wx, wy, 90 * Math.cos(ang), -90 * Math.sin(ang), "#10b981", "V = 8,3 m/s (θ = 37°)");
+                }
+
+                drawInfoBox(ctx, w - 265, 45, "CRUZAMENTO 2D (8.9)", [
+                    "Px = 2,0×10⁴ | Py = 1,5×10⁴",
+                    "P = 2,5×10⁴ kg·m/s (37°)",
+                    "M = 3000 kg ⇒ V = 8,3 m/s",
+                    "K₁ = 213 kJ → K₂ = 104 kJ"
+                ]);
+
+            } else if (canvasType === "moderador_8_11") {
+                const cy = h * 0.52, colX = w * 0.45;
+                let xn, xc;
+                if (t < 0.48) {
+                    const p = t / 0.48;
+                    xn = 80 + p * (colX - 108);
+                    xc = colX + 18;
+                    drawVectorArrow(ctx, xn + 12, cy, 90, 0, "#38bdf8", "vn1 = +2,6×10⁷ m/s");
+                } else {
+                    const p = (t - 0.48) / 0.52;
+                    xn = (colX - 28) - p * 210;
+                    xc = (colX + 18) + p * 55;
+                    drawVectorArrow(ctx, xn - 12, cy, -76, 0, "#f43f5e", "vn2 = -2,2×10⁷ m/s");
+                    drawVectorArrow(ctx, xc + 28, cy, +42, 0, "#10b981", "vC2 = +0,4×10⁷ m/s");
+                }
+
+                ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(xn, cy, 12, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = "#fff"; ctx.font = "bold 13px Outfit"; ctx.textAlign = "center"; ctx.fillText("n (1u)", xn, cy - 18);
+
+                ctx.fillStyle = "#f59e0b"; ctx.beginPath(); ctx.arc(xc, cy, 28, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.stroke();
+                ctx.fillStyle = "#050811"; ctx.fillText("¹²C (12u)", xc, cy + 5);
+
+                drawInfoBox(ctx, w - 265, 45, "MODERADOR NUCLEAR (8.11)", [
+                    "vn2 = (1-12)/(1+12) vn1 = -11/13 vn1",
+                    "vC2 = 2(1)/(1+12) vn1 = +2/13 vn1",
+                    "Kn2 / Kn1 = (11/13)² = 72%",
+                    "Carbono absorve 28% de K!"
+                ]);
+
+            } else if (canvasType === "agua_cm_8_13") {
+                const ox = w * 0.32, oy = h * 0.52, d = 170;
+                const ang = 52.5 * Math.PI / 180;
+                const hx = ox + d * Math.cos(ang);
+                const hy1 = oy - d * Math.sin(ang);
+                const hy2 = oy + d * Math.sin(ang);
+
+                ctx.strokeStyle = "#475569"; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(ox - 60, oy); ctx.lineTo(w - 60, oy); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(ox, 60); ctx.lineTo(ox, h - 60); ctx.stroke();
+
+                ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 6;
+                ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(hx, hy1); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(hx, hy2); ctx.stroke();
+
+                // Oxigênio (16 u)
+                ctx.fillStyle = "#ef4444"; ctx.beginPath(); ctx.arc(ox, oy, 36, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = "#fff"; ctx.lineWidth = 2.5; ctx.stroke();
+                ctx.fillStyle = "#fff"; ctx.font = "bold 15px Outfit"; ctx.textAlign = "center";
+                ctx.fillText("O (16 u)", ox, oy + 5);
+
+                // Hidrogênios (1 u)
+                ctx.fillStyle = "#38bdf8";
+                ctx.beginPath(); ctx.arc(hx, hy1, 18, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+                ctx.beginPath(); ctx.arc(hx, hy2, 18, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = "#050811";
+                ctx.fillText("H (1u)", hx, hy1 + 5); ctx.fillText("H (1u)", hx, hy2 + 5);
+
+                // Centro de Massa
+                const cmX = ox + 0.068 * d * 2.5;
+                const pulse = 7 + Math.sin(animProgress * 3) * 2.5;
+                ctx.fillStyle = "#fbbf24"; ctx.beginPath(); ctx.arc(cmX, oy, pulse, 0, Math.PI * 2); ctx.fill();
+                drawVectorArrow(ctx, cmX, oy + 65, 0, -52, "#fbbf24", "CM (x_cm = 0,068 d)");
+
+                drawInfoBox(ctx, w - 265, 50, "CENTRO DE MASSA H₂O (8.13)", [
+                    "Ângulo H-O-H = 105° (±52,5°)",
+                    "d = 9,57 × 10⁻¹¹ m",
+                    "y_cm = 0 (Eixo de simetria)",
+                    "x_cm = (2·1·d cos 52,5°)/18",
+                    "x_cm = 6,5 × 10⁻¹² m"
+                ]);
+
+            } else if (canvasType === "cabo_gelo_8_14") {
+                const cx = w * 0.46, gy = h * 0.62, scale = 18;
+                ctx.fillStyle = "#bae6fd"; ctx.fillRect(40, gy, w - 80, 8);
+
+                const xJ = (-10 + t * 6.0) * scale + cx;
+                const xR = (+10 - t * 9.0) * scale + cx;
+                const xCM = (-2.0) * scale + cx;
+
+                // Corda
+                ctx.strokeStyle = "#fbbf24"; ctx.lineWidth = 3;
+                ctx.beginPath(); ctx.moveTo(xJ, gy - 28); ctx.lineTo(xR, gy - 28); ctx.stroke();
+
+                // Caneca na origem x = 0
+                ctx.fillStyle = "#10b981"; ctx.fillRect(cx - 8, gy - 22, 16, 22);
+                ctx.fillStyle = "#10b981"; ctx.font = "bold 14px Outfit"; ctx.textAlign = "center";
+                ctx.fillText("Caneca (x=0)", cx, gy + 26);
+
+                // CM fixo em -2,0 m
+                ctx.fillStyle = "#f43f5e"; ctx.beginPath(); ctx.arc(xCM, gy, 7, 0, Math.PI * 2); ctx.fill();
+                ctx.fillText("CM Fixo (-2m)", xCM, gy + 46);
+
+                // Jaime (90 kg)
+                ctx.fillStyle = "#3b82f6"; ctx.fillRect(xJ - 20, gy - 56, 40, 56);
+                ctx.fillStyle = "#fff"; ctx.fillText("Jaime 90kg", xJ, gy - 64);
+
+                // Rui (60 kg)
+                ctx.fillStyle = "#a855f7"; ctx.fillRect(xR - 16, gy - 50, 32, 50);
+                ctx.fillStyle = "#fff"; ctx.fillText("Rui 60kg", xR, gy - 58);
+
+                drawInfoBox(ctx, w - 265, 45, "CABO DE GUERRA NO GELO", [
+                    "x_cm = (-900 + 600)/150 = -2,0 m",
+                    "Jaime anda +6,0 m (até -4,0 m)",
+                    "Rui anda -9,0 m (até +1,0 m)",
+                    "Razão: ΔxJ / ΔxR = mR / mJ = 2/3"
+                ]);
+
+            } else if (canvasType === "foguete_acel_8_15" || canvasType === "foguete_vel_8_16") {
+                const ry = h * 0.52;
+                const rx = 140 + t * 240;
+
+                // Jato de exaustão
+                for (let i = 0; i < 6; i++) {
+                    const gx = rx - 60 - ((animProgress * 90 + i * 25) % 110);
+                    const gy = ry + (i % 2 === 0 ? -8 : 8);
+                    ctx.fillStyle = "rgba(251, 191, 36, 0.75)";
+                    ctx.beginPath(); ctx.arc(gx, gy, 6 + (i % 3) * 2, 0, Math.PI * 2); ctx.fill();
+                }
+
+                // Corpo do foguete
+                ctx.fillStyle = "#e2e8f0"; ctx.fillRect(rx - 50, ry - 18, 90, 36);
+                ctx.fillStyle = "#ef4444";
+                ctx.beginPath(); ctx.moveTo(rx + 40, ry - 18); ctx.lineTo(rx + 75, ry); ctx.lineTo(rx + 40, ry + 18); ctx.closePath(); ctx.fill();
+
+                drawVectorArrow(ctx, rx - 55, ry, -85, 0, "#f59e0b", "v_ex = 2400 m/s");
+                drawVectorArrow(ctx, rx + 75, ry, +95, 0, "#10b981", canvasType === "foguete_acel_8_15" ? "a = +20 m/s²" : "v_final = 3327 m/s");
+
+                if (canvasType === "foguete_acel_8_15") {
+                    drawInfoBox(ctx, w - 265, 45, "ACELERAÇÃO DO FOGUETE", [
+                        "v_ex = 2400 m/s",
+                        "dm/dt = -(m₀ / 120) / 1 s",
+                        "a = -(v_ex / m₀)(dm/dt)",
+                        "a = 2400 / 120 = +20,0 m/s²"
+                    ]);
+                } else {
+                    drawInfoBox(ctx, w - 265, 45, "EQUAÇÃO DE TSIOLKOVSKY", [
+                        "m_final = m₀ / 4 ⇒ m₀/m = 4",
+                        "v = v₀ + v_ex · ln(m₀ / m)",
+                        "v = 2400 · ln(4) = 3327 m/s",
+                        "Gás final: +927 m/s p/ frente!"
+                    ]);
                 }
             }
-        }
 
-        function stopVoice() {
-            if (synth) {
-                synth.cancel();
-                document.getElementById('voice-status').innerText = 'Parado';
-                document.getElementById('voice-status').style.color = 'var(--text-secondary)';
+            if (isAnimating) {
+                animProgress += 0.018;
+                requestAnimationFrame(drawStage);
             }
         }
 
-        function updateRate() {
-            const val = document.getElementById('rate').value;
-            document.getElementById('rate-val').innerText = val + 'x';
-            if (synth && synth.speaking) {
-                playVoice();
-            }
-        }
+        window.addEventListener('load', () => { drawStage(); });
+        window.addEventListener('resize', () => { if (!isAnimating) drawStage(); });
     </script>
 </body>
 </html>

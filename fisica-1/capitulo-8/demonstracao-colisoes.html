@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratório Interativo de Colisões | Capítulo 8 — Física I</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\(', '\)']], displayMath: [['$$', '$$'], ['\[', '\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <style>
+        :root {
+            --bg-dark: #070a12;
+            --bg-card: rgba(15, 23, 42, 0.94);
+            --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
+            --accent-emerald: #10b981;
+            --text-main: #f8fafc;
+            --text-sub: #cbd5e1;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--text-main);
+            padding: 24px; min-height: 100vh;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; flex-wrap: wrap; gap: 12px; }
+        .back-btn {
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(56,189,248,0.3); color: var(--accent-cyan);
+            padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 18px;
+        }
+        .layout { display: grid; grid-template-columns: 380px 1fr; gap: 24px; }
+        @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } }
+        .panel {
+            background: var(--bg-card); border: 1px solid rgba(56,189,248,0.3);
+            border-radius: 18px; padding: 24px;
+        }
+        .control-group { margin-bottom: 18px; }
+        .control-group label { display: flex; justify-content: space-between; font-weight: 700; font-size: 16px; margin-bottom: 6px; color: #e2e8f0; }
+        input[type=range] { width: 100%; accent-color: #38bdf8; cursor: pointer; }
+        .preset-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+        .btn {
+            padding: 10px 16px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer;
+            font-size: 15px; background: #1e293b; color: #fff; transition: 0.2s;
+        }
+        .btn:hover, .btn.active { background: #3b82f6; }
+        canvas { width: 100%; height: 420px; background: #050811; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); display: block; }
+        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 18px; }
+        .metric-card { background: rgba(0,0,0,0.45); border-left: 4px solid var(--accent-cyan); padding: 14px; border-radius: 10px; }
+        .metric-card h4 { font-size: 14px; color: var(--text-sub); margin-bottom: 6px; }
+        .metric-card div { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; color: var(--accent-gold); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <a href="index.html" class="back-btn">← Voltar ao Catálogo do Capítulo 8</a>
+            <h1 style="font-family: 'Outfit', sans-serif; font-size: 28px; color: #38bdf8;">💥 Laboratório Interativo: Momento Linear &amp; Colisões</h1>
+        </div>
+
+        <div class="layout">
+            <div class="panel">
+                <h3 style="font-family:'Outfit'; font-size: 22px; margin-bottom: 14px; color: #fbbf24;">⚙️ Cenários do Livro</h3>
+                <div class="preset-btns">
+                    <button class="btn active" onclick="setPreset(0.5, 2.0, 0.3, -2.0, 1.0)">Ex. 8.10 (Elástica)</button>
+                    <button class="btn" onclick="setPreset(0.5, 2.0, 0.3, -2.0, 0.0)">Ex. 8.7 (Inelástica)</button>
+                    <button class="btn" onclick="setPreset(0.5, 2.0, 0.3, -2.0, 0.6)">Ex. 8.5 (Parcial)</button>
+                    <button class="btn" onclick="setPreset(1.0, 3.0, 1.0, 0.0, 1.0)">Massas Iguais</button>
+                </div>
+
+                <div class="control-group">
+                    <label><span>Massa A ($m_A$):</span> <span id="lbl-mA" style="color:#38bdf8;">0.50 kg</span></label>
+                    <input type="range" id="sl-mA" min="0.1" max="2.0" step="0.1" value="0.5" oninput="updateSimParams()">
+                </div>
+                <div class="control-group">
+                    <label><span>Velocidade Inicial A ($v_{A1x}$):</span> <span id="lbl-vA1" style="color:#38bdf8;">+2.0 m/s</span></label>
+                    <input type="range" id="sl-vA1" min="0.5" max="4.0" step="0.5" value="2.0" oninput="updateSimParams()">
+                </div>
+                <div class="control-group">
+                    <label><span>Massa B ($m_B$):</span> <span id="lbl-mB" style="color:#fbbf24;">0.30 kg</span></label>
+                    <input type="range" id="sl-mB" min="0.1" max="2.0" step="0.1" value="0.3" oninput="updateSimParams()">
+                </div>
+                <div class="control-group">
+                    <label><span>Velocidade Inicial B ($v_{B1x}$):</span> <span id="lbl-vB1" style="color:#fbbf24;">-2.0 m/s</span></label>
+                    <input type="range" id="sl-vB1" min="-4.0" max="0.0" step="0.5" value="-2.0" oninput="updateSimParams()">
+                </div>
+                <div class="control-group">
+                    <label><span>Restituição ($e$: 0=Colados, 1=Elástica):</span> <span id="lbl-e" style="color:#10b981;">1.00</span></label>
+                    <input type="range" id="sl-e" min="0.0" max="1.0" step="0.1" value="1.0" oninput="updateSimParams()">
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top: 20px;">
+                    <button class="btn" style="flex:1; background:#10b981; color:#050811;" onclick="restartLab()">↺ Disparar Colisão</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <canvas id="lab-canvas"></canvas>
+                <div class="metrics">
+                    <div class="metric-card">
+                        <h4>Momento Total ($P_x = 	ext{cte}$)</h4>
+                        <div id="m-px">+0.40 kg·m/s</div>
+                    </div>
+                    <div class="metric-card" style="border-color:#10b981;">
+                        <h4>Velocidades Finais ($v_{A2x}, v_{B2x}$)</h4>
+                        <div id="m-vf" style="color:#10b981;">-1.00 m/s | +3.00 m/s</div>
+                    </div>
+                    <div class="metric-card" style="border-color:#a855f7;">
+                        <h4>Velocidade do Centro de Massa</h4>
+                        <div id="m-vcm" style="color:#d8b4fe;">+0.50 m/s</div>
+                    </div>
+                    <div class="metric-card" style="border-color:#f43f5e;">
+                        <h4>Energia Cinética ($K_1 	o K_2$)</h4>
+                        <div id="m-k" style="color:#f43f5e;">1.60 J → 1.60 J</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let mA = 0.5, vA1 = 2.0, mB = 0.3, vB1 = -2.0, rest = 1.0;
+        let vA2 = -1.0, vB2 = 3.0, tLab = 0;
+
+        function computePhysics() {
+            const Px = mA * vA1 + mB * vB1;
+            const M = mA + mB;
+            const vcm = Px / M;
+            // vB2 - vA2 = -rest * (vB1 - vA1)
+            const vRelAfter = -rest * (vB1 - vA1);
+            vA2 = (Px - mB * vRelAfter) / M;
+            vB2 = vA2 + vRelAfter;
+
+            const K1 = 0.5 * mA * vA1 * vA1 + 0.5 * mB * vB1 * vB1;
+            const K2 = 0.5 * mA * vA2 * vA2 + 0.5 * mB * vB2 * vB2;
+
+            document.getElementById('m-px').innerText = (Px >= 0 ? '+' : '') + Px.toFixed(2) + ' kg·m/s';
+            document.getElementById('m-vf').innerText = (vA2 >= 0 ? '+' : '') + vA2.toFixed(2) + ' | ' + (vB2 >= 0 ? '+' : '') + vB2.toFixed(2) + ' m/s';
+            document.getElementById('m-vcm').innerText = (vcm >= 0 ? '+' : '') + vcm.toFixed(2) + ' m/s';
+            document.getElementById('m-k').innerText = K1.toFixed(2) + ' J → ' + K2.toFixed(2) + ' J';
+        }
+
+        function updateSimParams() {
+            mA = parseFloat(document.getElementById('sl-mA').value);
+            vA1 = parseFloat(document.getElementById('sl-vA1').value);
+            mB = parseFloat(document.getElementById('sl-mB').value);
+            vB1 = parseFloat(document.getElementById('sl-vB1').value);
+            rest = parseFloat(document.getElementById('sl-e').value);
+
+            document.getElementById('lbl-mA').innerText = mA.toFixed(2) + ' kg';
+            document.getElementById('lbl-vA1').innerText = '+' + vA1.toFixed(1) + ' m/s';
+            document.getElementById('lbl-mB').innerText = mB.toFixed(2) + ' kg';
+            document.getElementById('lbl-vB1').innerText = vB1.toFixed(1) + ' m/s';
+            document.getElementById('lbl-e').innerText = rest.toFixed(2);
+            computePhysics();
+            tLab = 0;
+        }
+
+        function setPreset(a, va, b, vb, e) {
+            document.getElementById('sl-mA').value = a;
+            document.getElementById('sl-vA1').value = va;
+            document.getElementById('sl-mB').value = b;
+            document.getElementById('sl-vB1').value = vb;
+            document.getElementById('sl-e').value = e;
+            updateSimParams();
+        }
+
+        function restartLab() { tLab = 0; }
+
+        function renderLab() {
+            const canvas = document.getElementById('lab-canvas');
+            const rect = canvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            const w = rect.width, h = rect.height;
+
+            ctx.clearRect(0, 0, w, h);
+            const ty = h * 0.62;
+            ctx.fillStyle = '#1e293b'; ctx.fillRect(40, ty + 30, w - 80, 12);
+
+            const colX = w * 0.48;
+            const p = (tLab % 3.0) / 2.6;
+            const t = Math.min(1.0, p);
+
+            let xA, xB, curVA, curVB;
+            if (t < 0.45) {
+                const dt = (0.45 - t) * 2.2;
+                xA = colX - 35 - vA1 * dt * 48;
+                xB = colX + 35 - vB1 * dt * 48;
+                curVA = vA1; curVB = vB1;
+            } else {
+                const dt = (t - 0.45) * 2.2;
+                xA = colX - 35 + vA2 * dt * 48;
+                xB = colX + 35 + vB2 * dt * 48;
+                curVA = vA2; curVB = vB2;
+            }
+
+            // Centro de massa
+            const xCM = (mA * xA + mB * xB) / (mA + mB);
+            ctx.fillStyle = '#a855f7';
+            ctx.beginPath(); ctx.arc(xCM, ty + 36, 7, 0, Math.PI * 2); ctx.fill();
+            ctx.font = 'bold 14px Outfit'; ctx.textAlign = 'center';
+            ctx.fillText('CM', xCM, ty + 62);
+
+            // Cavaleiro A
+            ctx.fillStyle = '#3b82f6'; ctx.fillRect(xA - 34, ty - 26, 68, 54);
+            ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.strokeRect(xA - 34, ty - 26, 68, 54);
+            ctx.fillStyle = '#fff'; ctx.fillText('A (' + mA.toFixed(1) + 'kg)', xA, ty + 6);
+
+            // Cavaleiro B
+            ctx.fillStyle = '#f59e0b'; ctx.fillRect(xB - 30, ty - 22, 60, 50);
+            ctx.strokeRect(xB - 30, ty - 22, 60, 50);
+            ctx.fillStyle = '#050811'; ctx.fillText('B (' + mB.toFixed(1) + 'kg)', xB, ty + 6);
+
+            tLab += 0.016;
+            requestAnimationFrame(renderLab);
+        }
+
+        window.addEventListener('load', () => { computePhysics(); renderLab(); });
+    </script>
+</body>
+</html>

@@ -3,161 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capítulo 8: Momento Linear, Impulso e Colisões - Física I</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Capítulo 8: Momento Linear, Impulso e Colisões | Sears &amp; Zemansky / Young &amp; Freedman</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --card-border: #334155;
-            --accent-color: #3b82f6;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
+            --bg-dark: #070a12;
+            --bg-card: rgba(15, 23, 42, 0.94);
+            --bg-card-border: rgba(56, 189, 248, 0.3);
+            --accent-cyan: #38bdf8;
+            --accent-gold: #fbbf24;
+            --accent-emerald: #10b981;
+            --text-main: #f8fafc;
+            --text-sub: #cbd5e1;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            padding: 30px 20px;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(139, 92, 246, 0.15) 0%, transparent 45%);
+            background-attachment: fixed;
+            padding: 30px 24px;
         }
-        .container { max-width: 1100px; margin: 0 auto; }
-        .header {
-            margin-bottom: 35px;
-            border-bottom: 1px solid var(--card-border);
-            padding-bottom: 20px;
+        .header { max-width: 1400px; margin: 0 auto 36px; text-align: center; }
+        .header h1 {
+            font-family: 'Outfit', sans-serif; font-size: 44px; font-weight: 900;
+            background: linear-gradient(135deg, #38bdf8 0%, #a855f7 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 14px;
         }
-        .back-link {
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: inline-block;
-            margin-bottom: 12px;
+        .header p { font-size: 22px; color: var(--text-sub); max-width: 1150px; margin: 0 auto; line-height: 1.6; }
+        .back-nav { max-width: 1400px; margin: 0 auto 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .back-btn {
+            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--bg-card-border);
+            color: var(--accent-cyan); padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 20px;
+            transition: all 0.2s;
         }
-        .title { font-size: 2.2rem; font-weight: 700; margin-bottom: 8px; }
-        .subtitle { color: var(--text-secondary); font-size: 1.1rem; }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
+        .back-btn:hover { background: rgba(56, 189, 248, 0.2); transform: translateY(-2px); }
+        .catalog-grid {
+            max-width: 1400px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 24px;
         }
-        .card-ex {
-            background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            padding: 22px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s, border-color 0.2s;
+        .example-card {
+            background: var(--bg-card); border: 1px solid var(--bg-card-border);
+            border-radius: 18px; padding: 26px; text-decoration: none; color: var(--text-main);
+            display: flex; flex-direction: column; justify-content: space-between; transition: all 0.25s ease;
         }
-        .card-ex:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent-color);
-        }
-        .card-tag {
-            background: rgba(59, 130, 246, 0.15);
-            color: var(--accent-color);
-            font-size: 0.8rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 6px;
-            display: inline-block;
-            margin-bottom: 12px;
-            width: fit-content;
-        }
-        .card-title { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
-        .card-sub { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; flex-grow: 1; }
-        .card-btn {
-            background-color: var(--accent-color);
-            color: white;
-            text-decoration: none;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-        }
-        .card-btn:hover { background-color: #2563eb; }
+        .example-card:hover { transform: translateY(-4px); border-color: var(--accent-cyan); box-shadow: 0 12px 30px rgba(56, 189, 248, 0.2); }
+        .card-badge { font-size: 17px; font-weight: 800; color: var(--accent-cyan); letter-spacing: 0.05em; margin-bottom: 10px; }
+        .card-title { font-family: 'Outfit', sans-serif; font-size: 25px; font-weight: 800; color: #f8fafc; margin-bottom: 12px; line-height: 1.35; }
+        .card-desc { font-size: 19px; color: #cbd5e1; line-height: 1.6; margin-bottom: 18px; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 16px; gap: 10px; flex-wrap: wrap; }
+        .formula { font-family: monospace; font-size: 18px; color: var(--accent-gold); }
+        .view-btn { font-size: 19px; font-weight: 800; color: var(--accent-cyan); }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <a href="../index.html" class="back-link">← Voltar ao Hub Principal (Física I)</a>
-            <h1 class="title">Capítulo 8: Momento Linear, Impulso e Colisões</h1>
-            <p class="subtitle">Exemplos oficiais resolvidos de Young & Freedman (12ª Edição) com Diagramas Interativos, Vetores Ampliados (2x), Voz e MathJax 3</p>
+    <div class="back-nav">
+        <a href="../index.html" class="back-btn">← Voltar ao Índice Geral de Física I</a>
+        <div style="display: flex; gap: 12px;">
+            <a href="demonstracao-colisoes.html" class="back-btn" style="color: #34d399; border-color: rgba(52, 211, 153, 0.4);">💥 Simulador Interativo de Colisões</a>
         </div>
+    </div>
 
-        <div class="grid">
-            
-        <div class="card-ex">
-            <div class="card-tag">Exemplo 8-1</div>
-            <h3 class="card-title">Comparando Momento Linear e Energia Cinética</h3>
-            <p class="card-sub">Carro vs. Caminhão (Definição de \(\vec{p}\) e \(K\))</p>
-            <a href="exemplo-8-1.html" class="card-btn">Ver Exemplo & Diagrama →</a>
-        </div>
+    <div class="header">
+        <h1>Capítulo 8: Momento Linear, Impulso e Colisões</h1>
+        <p>Catálogo Completo dos <strong>16 Exemplos Oficiais</strong> de Sears &amp; Zemansky / Young &amp; Freedman (12ª edição), com todas as deduções algébricas detalhadas, animações físicas interativas em HTML5 Canvas, controle de fonte e narração por voz.</p>
+    </div>
+
+    <div class="catalog-grid">
+
+        <!-- CARD LABORATÓRIO DE COLISÕES -->
+        <a href="demonstracao-colisoes.html" class="example-card" style="grid-column: 1 / -1; background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(59, 130, 246, 0.25)); border: 2px solid #10b981; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);">
+            <div class="card-badge" style="color: #34d399; font-size: 20px;">🔬 LABORATÓRIO INTERATIVO EM TEMPO REAL</div>
+            <h3 class="card-title" style="font-size: 32px; color: #ffffff;">💥 Simulador de Colisões Elásticas, Inelásticas e Pêndulo Balístico</h3>
+            <p class="card-desc" style="font-size: 21px; color: #e2e8f0; line-height: 1.6;">
+                Controle as massas $m_A, m_B$, as velocidades iniciais $v_{A1}, v_{B1}$ e o coeficiente de restituição $e \in [0, 1]$ para visualizar a conservação do momento linear $\vec{P}$, a velocidade do centro de massa $v_{\text{cm}}$ e a variação da energia cinética $\Delta K$ ao vivo!
+            </p>
+            <div class="card-footer" style="border-top-color: rgba(16, 185, 129, 0.3);">
+                <span class="formula" style="font-size: 19px; color: #34d399;">$$m_A \vec{v}_{A1} + m_B \vec{v}_{B1} = m_A \vec{v}_{A2} + m_B \vec{v}_{B2}$$</span>
+                <span class="view-btn" style="font-size: 21px; color: #10b981; font-weight: 800;">Abrir Simulador Interativo 🧪 →</span>
+            </div>
+        </a>
+
         
-        <div class="card-ex">
-            <div class="card-tag">Exemplo 8-2</div>
-            <h3 class="card-title">Impulso e Momento Linear em um Chute</h3>
-            <p class="card-sub">Variação de Momento \(\Delta \vec{p}\) e Força Média \(\vec{F}_{\text{méd}}\)</p>
-            <a href="exemplo-8-2.html" class="card-btn">Ver Exemplo & Diagrama →</a>
-        </div>
-        
-        <div class="card-ex">
-            <div class="card-tag">Exemplo 8-3</div>
-            <h3 class="card-title">Recuo de um Rifle ao Disparar uma Bala</h3>
-            <p class="card-sub">Conservação do Momento Linear em 1D (\(\sum P_x = \text{constante}\))</p>
-            <a href="exemplo-8-3.html" class="card-btn">Ver Exemplo & Diagrama →</a>
-        </div>
-        
-        <div class="card-ex">
-            <div class="card-tag">Exemplo 8-4</div>
-            <h3 class="card-title">Colisão Perfeitamente Inelástica em 1D</h3>
-            <p class="card-sub">Dois Carros Colidindo e Enganchando os Para-choques</p>
-            <a href="exemplo-8-4.html" class="card-btn">Ver Exemplo & Diagrama →</a>
-        </div>
-        
-        <div class="card-ex">
-            <div class="card-tag">Exemplo 8-5</div>
-            <h3 class="card-title">O Pêndulo Balístico</h3>
-            <p class="card-sub">Medida da Velocidade de um Projétil via Colisão Inelástica + Conservação de Energia</p>
-            <a href="exemplo-8-5.html" class="card-btn">Ver Exemplo & Diagrama →</a>
-        </div>
-        
-        <div class="card-ex">
-            <div class="card-tag">Exemplo 8-6</div>
-            <h3 class="card-title">Colisão Elástica em 1D</h3>
-            <p class="card-sub">Duas Esferas em Superfície sem Atrito (Conservação de \(\vec{P}\) e \(K\))</p>
-            <a href="exemplo-8-6.html" class="card-btn">Ver Exemplo & Diagrama →</a>
-        </div>
-        
-        <div class="card-ex">
-            <div class="card-tag">Exemplo 8-7</div>
-            <h3 class="card-title">Colisão em Duas Dimensões em um Cruzamento</h3>
-            <p class="card-sub">Colisão Inelástica 2D com Ângulo de Deslocamento \(\theta\)</p>
-            <a href="exemplo-8-7.html" class="card-btn">Ver Exemplo & Diagrama →</a>
-        </div>
-        
-        <div class="card-ex">
-            <div class="card-tag">Exemplo 8-8</div>
-            <h3 class="card-title">Centro de Massa de um Sistema de Partículas</h3>
-            <p class="card-sub">Posição \(\vec{r}_{\text{cm}}\) e Velocidade \(\vec{v}_{\text{cm}}\) de Carro e Picape</p>
-            <a href="exemplo-8-8.html" class="card-btn">Ver Exemplo & Diagrama →</a>
-        </div>
-        
-        <div class="card-ex">
-            <div class="card-tag">Exemplo 8-9</div>
-            <h3 class="card-title">Propulsão de Foguete no Espaço Sideral</h3>
-            <p class="card-sub">Empuxo \(F\), Aceleração \(a\) e Equação do Foguete</p>
-            <a href="exemplo-8-9.html" class="card-btn">Ver Exemplo & Diagrama →</a>
-        </div>
-        
-        </div>
+        <!-- CARD 8-1 -->
+        <a href="exemplo-8-1.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO CONCEITUAL 8.1 • SEÇÃO 8.1</div>
+                <h3 class="card-title">Exemplo Conceitual 8.1: Momento Linear versus Energia Cinética</h3>
+                <p class="card-desc">Considere novamente a competição entre dois barcos a vela que deslizam sem atrito na superfície de um lago congelado (descrita no Exemplo Conceitual 6.5). Os barcos possuem massas m e 2m, respectivamente, e o vento exerc...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$K_1 = K_2 = Fd, \quad p_{2m} = \sqrt{2}\, p_m$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-2 -->
+        <a href="exemplo-8-2.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.2 • SEÇÃO 8.1</div>
+                <h3 class="card-title">Exemplo 8.2: Uma Bola Colidindo com uma Parede</h3>
+                <p class="card-desc">Suponha que você jogue uma bola de massa igual a 0,40 kg contra uma parede de tijolos. Ela colide com a parede quando está se movendo horizontalmente da direita para a esquerda a 30 m/s, retornando horizontalmente da esq...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$J_x = +20\text{ N}\cdot\text{s}, \quad (F_m)_x = +2000\text{ N}$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-3 -->
+        <a href="exemplo-8-3.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.3 • SEÇÃO 8.1</div>
+                <h3 class="card-title">Exemplo 8.3: Chutando uma Bola de Futebol (Impulso 2D)</h3>
+                <p class="card-desc">A massa de uma bola de futebol é igual a 0,40 kg. Inicialmente ela se desloca horizontalmente da direita para a esquerda a 20 m/s, e a seguir é chutada, deslocando-se com velocidade a 45° para cima e para a direita, com ...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$F_m = 1,9 \times 10^3\text{ N}, \quad \theta = 27^\circ$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-4 -->
+        <a href="exemplo-8-4.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.4 • SEÇÃO 8.2</div>
+                <h3 class="card-title">Exemplo 8.4: Recuo de um Rifle</h3>
+                <p class="card-desc">Um atirador segura um rifle de massa m_R = 3,0 kg frouxamente, de modo que a arma possa recuar livremente ao disparar. Ele atira uma bala de massa m_B = 5,0 g horizontalmente com velocidade relativa ao solo dada por v_Bx...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$v_{Rx} = -0,500\text{ m/s}, \quad \frac{K_B}{K_R} = \frac{m_R}{m_B} = 600$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-5 -->
+        <a href="exemplo-8-5.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.5 • SEÇÃO 8.2</div>
+                <h3 class="card-title">Exemplo 8.5: Colisão ao Longo de uma Linha Reta</h3>
+                <p class="card-desc">Dois cavaleiros se deslocam em sentidos contrários em um trilho de ar linear horizontal sem atrito. O cavaleiro A tem massa m_A = 0,50 kg e velocidade inicial v_A1x = +2,0 m/s (para a direita). O cavaleiro B tem massa m_...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$v_{A2x} = -0,40\text{ m/s}, \quad \Delta p_{Ax} = -\Delta p_{Bx} = -1,2\text{ kg}\cdot\text{m/s}$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-6 -->
+        <a href="exemplo-8-6.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.6 • SEÇÃO 8.2</div>
+                <h3 class="card-title">Exemplo 8.6: Colisão em um Plano Horizontal (Robôs em Combate)</h3>
+                <p class="card-desc">Dois robôs em combate deslizam sobre uma superfície horizontal sem atrito. O robô A, com massa de 20 kg, move-se inicialmente com velocidade de 2,0 m/s paralelamente ao eixo Ox. Ele colide com o robô B, com massa de 12 k...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$v_{B2} = 2,1\text{ m/s}, \quad \beta = -24^\circ$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-7 -->
+        <a href="exemplo-8-7.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.7 • SEÇÃO 8.3</div>
+                <h3 class="card-title">Exemplo 8.7: Uma Colisão Completamente Inelástica</h3>
+                <p class="card-desc">Suponha que na colisão descrita no Exemplo 8.5 os dois cavaleiros possuam tiras de Velcro® nas extremidades, de modo que não sejam rebatidos, mas permaneçam colados após a colisão. As massas e velocidades iniciais são as...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$v_{2x} = +0,50\text{ m/s}, \quad K_2 = \frac{1}{16} K_1 = 0,10\text{ J}$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-8 -->
+        <a href="exemplo-8-8.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.8 • SEÇÃO 8.3</div>
+                <h3 class="card-title">Exemplo 8.8: O Pêndulo Balístico</h3>
+                <p class="card-desc">A Figura 8.18 mostra um pêndulo balístico, um sistema clássico para medir a velocidade de um projétil. Uma bala com massa m_B é disparada horizontalmente contra um bloco de madeira com massa m_M, suspenso como um pêndulo...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$v_1 = \frac{m_B + m_M}{m_B}\sqrt{2gy} = 307\text{ m/s}$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-9 -->
+        <a href="exemplo-8-9.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.9 • SEÇÃO 8.3</div>
+                <h3 class="card-title">Exemplo 8.9: Análise da Colisão de um Automóvel em 2D</h3>
+                <p class="card-desc">Um carro compacto com massa de 1000 kg está se deslocando do sul para o norte em linha reta a uma velocidade de 15 m/s quando colide contra um caminhão de massa 2000 kg que se desloca de oeste para leste a 10 m/s. Felizm...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$V = 8,3\text{ m/s}, \quad \theta = 37^\circ \text{ (Norte do Leste)}$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-10 -->
+        <a href="exemplo-8-10.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.10 • SEÇÃO 8.4</div>
+                <h3 class="card-title">Exemplo 8.10: Uma Colisão Elástica em Linha Reta</h3>
+                <p class="card-desc">Repetimos a experiência do trilho de ar do Exemplo 8.5 (m_A = 0,50 kg com v_A1x = +2,0 m/s e m_B = 0,30 kg com v_B1x = -2,0 m/s), porém agora adicionamos pára-choques de molas ideais nas extremidades dos cavaleiros para ...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$v_{A2x} = -1,0\text{ m/s}, \quad v_{B2x} = +3,0\text{ m/s}$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-11 -->
+        <a href="exemplo-8-11.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.11 • SEÇÃO 8.4</div>
+                <h3 class="card-title">Exemplo 8.11: Moderador Nuclear (Nêutron vs. Carbono-12)</h3>
+                <p class="card-desc">Nêutrons com velocidades elevadas são produzidos em um reator nuclear durante a fissão e precisam ser freados por colisões elásticas com núcleos em um moderador (como o grafite/carbono) para sustentar a reação em cadeia....</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$v_{n2x} = -2,2\times 10^7\text{ m/s}, \quad v_{C2x} = +0,40\times 10^7\text{ m/s}$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-12 -->
+        <a href="exemplo-8-12.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.12 • SEÇÃO 8.4</div>
+                <h3 class="card-title">Exemplo 8.12: Uma Colisão Elástica em Duas Dimensões</h3>
+                <p class="card-desc">A situação descrita na Figura 8.26 é uma colisão elástica oblíqua (não frontal) entre dois discos de hóquei sobre uma mesa de ar sem atrito. O disco A possui massa m_A = 0,500 kg e o disco B possui massa m_B = 0,300 kg. ...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$v_{B2} = 4,47\text{ m/s}, \quad \alpha = 36,9^\circ, \quad \beta = 26,6^\circ$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-13 -->
+        <a href="exemplo-8-13.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.13 • SEÇÃO 8.5</div>
+                <h3 class="card-title">Exemplo 8.13: Centro de Massa da Molécula de Água (H₂O)</h3>
+                <p class="card-desc">A Figura 8.27 mostra a estrutura geométrica simplificada de uma molécula de água (H₂O). A distância entre o átomo de oxigênio e cada átomo de hidrogênio é d = 9,57 × 10^-11 m, e o ângulo entre as duas ligações O–H é de 1...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$x_{\text{cm}} = 0,068\,d = 6,5 \times 10^{-12}\text{ m}, \quad y_{\text{cm}} = 0$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-14 -->
+        <a href="exemplo-8-14.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.14 • SEÇÃO 8.5</div>
+                <h3 class="card-title">Exemplo 8.14: Um Cabo-de-Guerra sobre o Gelo</h3>
+                <p class="card-desc">Jaime está a uma distância de 20,0 m de Rui, e ambos estão em pé em repouso sobre a superfície lisa e sem atrito de um lago congelado. Rui possui massa m_R = 60,0 kg e Jaime possui massa m_J = 90,0 kg. Na metade da distâ...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$x_{\text{cm}} = -2,0\text{ m (fixo)} \implies \Delta x_R = 9,0\text{ m}$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-15 -->
+        <a href="exemplo-8-15.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.15 • SEÇÃO 8.6</div>
+                <h3 class="card-title">Exemplo 8.15: Aceleração Inicial de um Foguete</h3>
+                <p class="card-desc">Um foguete está no espaço sideral, longe de qualquer planeta (sem gravidade nem resistência do ar), quando seu motor é acionado. No primeiro segundo da queima, o foguete ejeta 1/120 da sua massa inicial m_0 como gás quei...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$a = -\frac{v_{\text{ex}}}{m_0}\frac{dm}{dt} = +20\text{ m/s}^2$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
+        <!-- CARD 8-16 -->
+        <a href="exemplo-8-16.html" class="example-card">
+            <div>
+                <div class="card-badge">EXEMPLO 8.16 • SEÇÃO 8.6</div>
+                <h3 class="card-title">Exemplo 8.16: Velocidade Final de um Foguete (Tsiolkovsky)</h3>
+                <p class="card-desc">Suponha que 3/4 da massa inicial m_0 do foguete do Exemplo 8.15 seja de combustível, de modo que sua massa final após a queima completa seja m = m_0 / 4, e imagine que o combustível seja consumido a uma taxa constante em...</p>
+            </div>
+            <div class="card-footer">
+                <span class="formula">$$v = v_0 + v_{\text{ex}} \ln\left(\frac{m_0}{m}\right) = 3327\text{ m/s}$$</span>
+                <span class="view-btn">Ver Resolução &amp; Animação →</span>
+            </div>
+        </a>
+
     </div>
 </body>
 </html>
